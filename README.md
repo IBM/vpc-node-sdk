@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/ibmcloud/vpc-node-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=master)](https://travis-ci.com/ibmcloud/vpc-node-sdk)
+[![Build Status](https://travis-ci.com/IBM/vpc-node-sdk.svg?token=eW5FVD71iyte6tTby8gr&branch=master)](https://travis-ci.com/ibmcloud/vpc-node-sdk)
 
 # IBM Cloud VPC Node.js SDK
 Node.js client library to interact with various [VPC APIs](https://cloud.ibm.com/apidocs?category=vpc).
