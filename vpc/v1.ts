@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.12.1-318e07c8-20200909-152230
+ * IBM OpenAPI SDK Code Generator Version: 3.12.3-81ed37e0-20200929-215851
  */
 
 
@@ -89,7 +89,6 @@ class VpcV1 extends BaseService {
   constructor(options: UserOptions) {
     options = options || {};
 
-    options.version = '2020-08-25';
     options.generation = 2;
     super(options);
     if (options.serviceUrl) {
@@ -97,7 +96,7 @@ class VpcV1 extends BaseService {
     } else {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
-    this.version = options.version;
+    this.version = options.version || '2020-10-06';
     this.generation = options.generation;
   }
 
@@ -126,33 +125,31 @@ class VpcV1 extends BaseService {
   public listVpcs(params?: VpcV1.ListVpcsParams): Promise<VpcV1.Response<VpcV1.VPCCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'resource_group.id': _params.resourceGroupId,
-        'classic_access': _params.classicAccess
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'classic_access': _params.classicAccess
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcs');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcs');
 
-      const parameters = {
-        options: {
-          url: '/vpcs',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -180,38 +177,36 @@ class VpcV1 extends BaseService {
   public createVpc(params?: VpcV1.CreateVpcParams): Promise<VpcV1.Response<VpcV1.VPC>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const body = {
-        'name': _params.name,
-        'address_prefix_management': _params.addressPrefixManagement,
-        'classic_access': _params.classicAccess,
-        'resource_group': _params.resourceGroup
-      };
+    const body = {
+      'name': _params.name,
+      'address_prefix_management': _params.addressPrefixManagement,
+      'classic_access': _params.classicAccess,
+      'resource_group': _params.resourceGroup
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpc');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpc');
 
-      const parameters = {
-        options: {
-          url: '/vpcs',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -231,38 +226,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpc');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpc');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -279,39 +272,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpc');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpc');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -329,45 +320,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpc');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpc');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -385,39 +374,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDefaultNetworkAcl');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDefaultNetworkAcl');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{id}/default_network_acl',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{id}/default_network_acl',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -435,39 +422,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDefaultSecurityGroup');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDefaultSecurityGroup');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{id}/default_security_group',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{id}/default_security_group',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -486,41 +471,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpcId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
 
-      const path = {
-        'vpc_id': _params.vpcId
-      };
+    const path = {
+      'vpc_id': _params.vpcId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcAddressPrefixes');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcAddressPrefixes');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{vpc_id}/address_prefixes',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/address_prefixes',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -548,48 +531,46 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpcId', 'cidr', 'zone'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'cidr': _params.cidr,
-        'zone': _params.zone,
-        'name': _params.name,
-        'is_default': _params.isDefault
-      };
+    const body = {
+      'cidr': _params.cidr,
+      'zone': _params.zone,
+      'name': _params.name,
+      'is_default': _params.isDefault
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpc_id': _params.vpcId
-      };
+    const path = {
+      'vpc_id': _params.vpcId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcAddressPrefix');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcAddressPrefix');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{vpc_id}/address_prefixes',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/address_prefixes',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -608,39 +589,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpcId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpc_id': _params.vpcId,
-        'id': _params.id
-      };
+    const path = {
+      'vpc_id': _params.vpcId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcAddressPrefix');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcAddressPrefix');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{vpc_id}/address_prefixes/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/address_prefixes/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -658,40 +637,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpcId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpc_id': _params.vpcId,
-        'id': _params.id
-      };
+    const path = {
+      'vpc_id': _params.vpcId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcAddressPrefix');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcAddressPrefix');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{vpc_id}/address_prefixes/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/address_prefixes/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -715,56 +692,53 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpcId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'is_default': _params.isDefault
-      };
+    const body = {
+      'name': _params.name,
+      'is_default': _params.isDefault
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpc_id': _params.vpcId,
-        'id': _params.id
-      };
+    const path = {
+      'vpc_id': _params.vpcId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcAddressPrefix');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcAddressPrefix');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{vpc_id}/address_prefixes/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/address_prefixes/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
    * List all routes in the VPC's default routing table.
    *
-   * This request retrieves routes in the VPC's default routing table. For compatibility, routes with `action` values
-   * other than `deliver` are omitted. Each route is zone-specific and directs any packets matching its destination CIDR
-   * block to a `next_hop` IP address. The most specific route matching a packet's destination will be used. If multiple
-   * equally-specific routes exist, traffic will be distributed across them.
+   * This request retrieves routes in the VPC's default routing table. Each route is zone-specific and directs any
+   * packets matching its destination CIDR block to a `next_hop` IP address. The most specific route matching a packet's
+   * destination will be used. If multiple equally-specific routes exist, traffic will be distributed across them.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
@@ -776,40 +750,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpcId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'zone.name': _params.zoneName
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'zone.name': _params.zoneName
+    };
 
-      const path = {
-        'vpc_id': _params.vpcId
-      };
+    const path = {
+      'vpc_id': _params.vpcId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcRoutes');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcRoutes');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{vpc_id}/routes',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/routes',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -835,48 +807,46 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpcId', 'nextHop', 'destination', 'zone'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'next_hop': _params.nextHop,
-        'destination': _params.destination,
-        'zone': _params.zone,
-        'name': _params.name
-      };
+    const body = {
+      'next_hop': _params.nextHop,
+      'destination': _params.destination,
+      'zone': _params.zone,
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpc_id': _params.vpcId
-      };
+    const path = {
+      'vpc_id': _params.vpcId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcRoute');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcRoute');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{vpc_id}/routes',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/routes',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -894,39 +864,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpcId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpc_id': _params.vpcId,
-        'id': _params.id
-      };
+    const path = {
+      'vpc_id': _params.vpcId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcRoute');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcRoute');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{vpc_id}/routes/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/routes/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -944,40 +912,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpcId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpc_id': _params.vpcId,
-        'id': _params.id
-      };
+    const path = {
+      'vpc_id': _params.vpcId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcRoute');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcRoute');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{vpc_id}/routes/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/routes/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -998,46 +964,44 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpcId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpc_id': _params.vpcId,
-        'id': _params.id
-      };
+    const path = {
+      'vpc_id': _params.vpcId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcRoute');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcRoute');
 
-      const parameters = {
-        options: {
-          url: '/vpcs/{vpc_id}/routes/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/routes/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -1061,32 +1025,30 @@ class VpcV1 extends BaseService {
   public listSubnets(params?: VpcV1.ListSubnetsParams): Promise<VpcV1.Response<VpcV1.SubnetCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'resource_group.id': _params.resourceGroupId
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSubnets');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSubnets');
 
-      const parameters = {
-        options: {
-          url: '/subnets',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/subnets',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1105,37 +1067,35 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['subnetPrototype'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.subnetPrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.subnetPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSubnet');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSubnet');
 
-      const parameters = {
-        options: {
-          url: '/subnets',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/subnets',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1156,38 +1116,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSubnet');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSubnet');
 
-      const parameters = {
-        options: {
-          url: '/subnets/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/subnets/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1204,39 +1162,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnet');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnet');
 
-      const parameters = {
-        options: {
-          url: '/subnets/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/subnets/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1259,47 +1215,45 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'network_acl': _params.networkAcl,
-        'public_gateway': _params.publicGateway
-      };
+    const body = {
+      'name': _params.name,
+      'network_acl': _params.networkAcl,
+      'public_gateway': _params.publicGateway
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSubnet');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSubnet');
 
-      const parameters = {
-        options: {
-          url: '/subnets/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/subnets/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1316,39 +1270,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetNetworkAcl');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetNetworkAcl');
 
-      const parameters = {
-        options: {
-          url: '/subnets/{id}/network_acl',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/subnets/{id}/network_acl',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1367,42 +1319,40 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id', 'networkAclIdentity'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.networkAclIdentity;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.networkAclIdentity;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceSubnetNetworkAcl');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceSubnetNetworkAcl');
 
-      const parameters = {
-        options: {
-          url: '/subnets/{id}/network_acl',
-          method: 'PUT',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/subnets/{id}/network_acl',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1419,38 +1369,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'unsetSubnetPublicGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'unsetSubnetPublicGateway');
 
-      const parameters = {
-        options: {
-          url: '/subnets/{id}/public_gateway',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/subnets/{id}/public_gateway',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1467,39 +1415,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetPublicGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetPublicGateway');
 
-      const parameters = {
-        options: {
-          url: '/subnets/{id}/public_gateway',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/subnets/{id}/public_gateway',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1518,42 +1464,40 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id', 'publicGatewayIdentity'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.publicGatewayIdentity;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.publicGatewayIdentity;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'setSubnetPublicGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'setSubnetPublicGateway');
 
-      const parameters = {
-        options: {
-          url: '/subnets/{id}/public_gateway',
-          method: 'PUT',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/subnets/{id}/public_gateway',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -1565,6 +1509,9 @@ class VpcV1 extends BaseService {
    *
    * This request lists all provisionable images available in the region. An image provides source data for a volume.
    * Images are either system-provided, or created from another source, such as importing from object storage.
+   *
+   * The images will be sorted by their `created_at` property values, with the newest first. Images with identical
+   * `created_at` values will be secondarily sorted by ascending `id` property values.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
@@ -1579,34 +1526,32 @@ class VpcV1 extends BaseService {
   public listImages(params?: VpcV1.ListImagesParams): Promise<VpcV1.Response<VpcV1.ImageCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'resource_group.id': _params.resourceGroupId,
-        'name': _params.name,
-        'visibility': _params.visibility
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'name': _params.name,
+      'visibility': _params.visibility
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listImages');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listImages');
 
-      const parameters = {
-        options: {
-          url: '/images',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/images',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1625,37 +1570,35 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['imagePrototype'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.imagePrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.imagePrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createImage');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createImage');
 
-      const parameters = {
-        options: {
-          url: '/images',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/images',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1673,38 +1616,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteImage');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteImage');
 
-      const parameters = {
-        options: {
-          url: '/images/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/images/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1721,39 +1662,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getImage');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getImage');
 
-      const parameters = {
-        options: {
-          url: '/images/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/images/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1774,45 +1713,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateImage');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateImage');
 
-      const parameters = {
-        options: {
-          url: '/images/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/images/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1829,31 +1766,29 @@ class VpcV1 extends BaseService {
   public listOperatingSystems(params?: VpcV1.ListOperatingSystemsParams): Promise<VpcV1.Response<VpcV1.OperatingSystemCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listOperatingSystems');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listOperatingSystems');
 
-      const parameters = {
-        options: {
-          url: '/operating_systems',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/operating_systems',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1870,39 +1805,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['name'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'name': _params.name
-      };
+    const path = {
+      'name': _params.name
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getOperatingSystem');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getOperatingSystem');
 
-      const parameters = {
-        options: {
-          url: '/operating_systems/{name}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/operating_systems/{name}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -1924,30 +1857,28 @@ class VpcV1 extends BaseService {
   public listKeys(params?: VpcV1.ListKeysParams): Promise<VpcV1.Response<VpcV1.KeyCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'resource_group.id': _params.resourceGroupId
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'resource_group.id': _params.resourceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listKeys');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listKeys');
 
-      const parameters = {
-        options: {
-          url: '/keys',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/keys',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -1973,43 +1904,41 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['publicKey'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'public_key': _params.publicKey,
-        'name': _params.name,
-        'type': _params.type,
-        'resource_group': _params.resourceGroup
-      };
+    const body = {
+      'public_key': _params.publicKey,
+      'name': _params.name,
+      'type': _params.type,
+      'resource_group': _params.resourceGroup
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createKey');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createKey');
 
-      const parameters = {
-        options: {
-          url: '/keys',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/keys',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2026,38 +1955,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteKey');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteKey');
 
-      const parameters = {
-        options: {
-          url: '/keys/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/keys/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2074,39 +2001,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getKey');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getKey');
 
-      const parameters = {
-        options: {
-          url: '/keys/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/keys/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2124,45 +2049,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateKey');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateKey');
 
-      const parameters = {
-        options: {
-          url: '/keys/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/keys/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -2172,9 +2095,6 @@ class VpcV1 extends BaseService {
   /**
    * List all instance profiles.
    *
-   * This request lists all instance profiles available in the region. An instance profile specifies the performance
-   * characteristics and pricing model for an instance.
-   *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceProfileCollection>>}
@@ -2182,29 +2102,27 @@ class VpcV1 extends BaseService {
   public listInstanceProfiles(params?: VpcV1.ListInstanceProfilesParams): Promise<VpcV1.Response<VpcV1.InstanceProfileCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceProfiles');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceProfiles');
 
-      const parameters = {
-        options: {
-          url: '/instance/profiles',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance/profiles',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2221,39 +2139,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['name'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'name': _params.name
-      };
+    const path = {
+      'name': _params.name
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceProfile');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceProfile');
 
-      const parameters = {
-        options: {
-          url: '/instance/profiles/{name}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance/profiles/{name}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2266,29 +2182,27 @@ class VpcV1 extends BaseService {
   public listInstanceTemplates(params?: VpcV1.ListInstanceTemplatesParams): Promise<VpcV1.Response<VpcV1.InstanceTemplateCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceTemplates');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceTemplates');
 
-      const parameters = {
-        options: {
-          url: '/instance/templates',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance/templates',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2305,37 +2219,35 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceTemplatePrototype'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.instanceTemplatePrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.instanceTemplatePrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceTemplate');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceTemplate');
 
-      const parameters = {
-        options: {
-          url: '/instance/templates',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance/templates',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2352,38 +2264,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceTemplate');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceTemplate');
 
-      const parameters = {
-        options: {
-          url: '/instance/templates/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance/templates/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2398,39 +2308,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceTemplate');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceTemplate');
 
-      const parameters = {
-        options: {
-          url: '/instance/templates/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance/templates/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2450,45 +2358,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceTemplate');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceTemplate');
 
-      const parameters = {
-        options: {
-          url: '/instance/templates/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance/templates/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2511,36 +2417,34 @@ class VpcV1 extends BaseService {
   public listInstances(params?: VpcV1.ListInstancesParams): Promise<VpcV1.Response<VpcV1.InstanceCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'resource_group.id': _params.resourceGroupId,
-        'name': _params.name,
-        'vpc.id': _params.vpcId,
-        'vpc.crn': _params.vpcCrn,
-        'vpc.name': _params.vpcName
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'name': _params.name,
+      'vpc.id': _params.vpcId,
+      'vpc.crn': _params.vpcCrn,
+      'vpc.name': _params.vpcName
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstances');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstances');
 
-      const parameters = {
-        options: {
-          url: '/instances',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2559,37 +2463,35 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instancePrototype'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.instancePrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.instancePrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstance');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstance');
 
-      const parameters = {
-        options: {
-          url: '/instances',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2608,38 +2510,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstance');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstance');
 
-      const parameters = {
-        options: {
-          url: '/instances/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2656,39 +2556,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstance');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstance');
 
-      const parameters = {
-        options: {
-          url: '/instances/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2708,45 +2606,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstance');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstance');
 
-      const parameters = {
-        options: {
-          url: '/instances/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2764,39 +2660,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceInitialization');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceInitialization');
 
-      const parameters = {
-        options: {
-          url: '/instances/{id}/initialization',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{id}/initialization',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2817,46 +2711,44 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'type'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'type': _params.type,
-        'force': _params.force
-      };
+    const body = {
+      'type': _params.type,
+      'force': _params.force
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceAction');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceAction');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/actions',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/actions',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2876,39 +2768,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceNetworkInterfaces');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceNetworkInterfaces');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/network_interfaces',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_interfaces',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2935,48 +2825,46 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'subnet'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'subnet': _params.subnet,
-        'name': _params.name,
-        'primary_ipv4_address': _params.primaryIpv4Address,
-        'security_groups': _params.securityGroups
-      };
+    const body = {
+      'subnet': _params.subnet,
+      'name': _params.name,
+      'primary_ipv4_address': _params.primaryIpv4Address,
+      'security_groups': _params.securityGroups
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceNetworkInterface');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceNetworkInterface');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/network_interfaces',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_interfaces',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -2996,39 +2884,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceNetworkInterface');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceNetworkInterface');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/network_interfaces/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_interfaces/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3046,40 +2932,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceNetworkInterface');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceNetworkInterface');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/network_interfaces/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_interfaces/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3100,46 +2984,44 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceNetworkInterface');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceNetworkInterface');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/network_interfaces/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_interfaces/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3157,40 +3039,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'networkInterfaceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId,
-        'network_interface_id': _params.networkInterfaceId
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+      'network_interface_id': _params.networkInterfaceId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceNetworkInterfaceFloatingIps');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceNetworkInterfaceFloatingIps');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3209,40 +3089,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId,
-        'network_interface_id': _params.networkInterfaceId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+      'network_interface_id': _params.networkInterfaceId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeInstanceNetworkInterfaceFloatingIp');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeInstanceNetworkInterfaceFloatingIp');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3262,41 +3140,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId,
-        'network_interface_id': _params.networkInterfaceId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+      'network_interface_id': _params.networkInterfaceId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceNetworkInterfaceFloatingIp');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceNetworkInterfaceFloatingIp');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3317,41 +3193,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId,
-        'network_interface_id': _params.networkInterfaceId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+      'network_interface_id': _params.networkInterfaceId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addInstanceNetworkInterfaceFloatingIp');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addInstanceNetworkInterfaceFloatingIp');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
-          method: 'PUT',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
+        method: 'PUT',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3370,39 +3244,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceVolumeAttachments');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceVolumeAttachments');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/volume_attachments',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/volume_attachments',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3415,10 +3287,10 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The instance identifier.
    * @param {VolumeIdentity} params.volume - The identity of the volume to attach to the instance.
-   * @param {string} [params.name] - The user-defined name for this volume attachment. If unspecified, the name will be
-   * a hyphenated list of randomly-selected words.
    * @param {boolean} [params.deleteVolumeOnInstanceDelete] - If set to true, when deleting the instance the volume will
    * also be deleted.
+   * @param {string} [params.name] - The user-defined name for this volume attachment. If unspecified, the name will be
+   * a hyphenated list of randomly-selected words.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeAttachment>>}
    */
@@ -3426,47 +3298,45 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'volume'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'volume': _params.volume,
-        'name': _params.name,
-        'delete_volume_on_instance_delete': _params.deleteVolumeOnInstanceDelete
-      };
+    const body = {
+      'volume': _params.volume,
+      'delete_volume_on_instance_delete': _params.deleteVolumeOnInstanceDelete,
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId
-      };
+    const path = {
+      'instance_id': _params.instanceId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceVolumeAttachment');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceVolumeAttachment');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/volume_attachments',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/volume_attachments',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3484,39 +3354,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceVolumeAttachment');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceVolumeAttachment');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/volume_attachments/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/volume_attachments/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3534,40 +3402,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceVolumeAttachment');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceVolumeAttachment');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/volume_attachments/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/volume_attachments/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3580,9 +3446,9 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The instance identifier.
    * @param {string} params.id - The volume attachment identifier.
-   * @param {string} [params.name] - The user-defined name for this volume attachment.
    * @param {boolean} [params.deleteVolumeOnInstanceDelete] - If set to true, when deleting the instance the volume will
    * also be deleted.
+   * @param {string} [params.name] - The user-defined name for this volume attachment.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeAttachment>>}
    */
@@ -3590,47 +3456,45 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'delete_volume_on_instance_delete': _params.deleteVolumeOnInstanceDelete
-      };
+    const body = {
+      'delete_volume_on_instance_delete': _params.deleteVolumeOnInstanceDelete,
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_id': _params.instanceId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceVolumeAttachment');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceVolumeAttachment');
 
-      const parameters = {
-        options: {
-          url: '/instances/{instance_id}/volume_attachments/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/volume_attachments/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -3649,31 +3513,29 @@ class VpcV1 extends BaseService {
   public listInstanceGroups(params?: VpcV1.ListInstanceGroupsParams): Promise<VpcV1.Response<VpcV1.InstanceGroupCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroups');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroups');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3706,47 +3568,45 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceTemplate', 'subnets'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'instance_template': _params.instanceTemplate,
-        'subnets': _params.subnets,
-        'name': _params.name,
-        'membership_count': _params.membershipCount,
-        'application_port': _params.applicationPort,
-        'load_balancer': _params.loadBalancer,
-        'load_balancer_pool': _params.loadBalancerPool,
-        'resource_group': _params.resourceGroup
-      };
+    const body = {
+      'instance_template': _params.instanceTemplate,
+      'subnets': _params.subnets,
+      'name': _params.name,
+      'membership_count': _params.membershipCount,
+      'application_port': _params.applicationPort,
+      'load_balancer': _params.loadBalancer,
+      'load_balancer_pool': _params.loadBalancerPool,
+      'resource_group': _params.resourceGroup
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroup');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroup');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3764,38 +3624,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroup');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroup');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3812,39 +3670,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroup');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroup');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3876,51 +3732,49 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'membership_count': _params.membershipCount,
-        'instance_template': _params.instanceTemplate,
-        'subnets': _params.subnets,
-        'application_port': _params.applicationPort,
-        'load_balancer': _params.loadBalancer,
-        'load_balancer_pool': _params.loadBalancerPool
-      };
+    const body = {
+      'name': _params.name,
+      'membership_count': _params.membershipCount,
+      'instance_template': _params.instanceTemplate,
+      'subnets': _params.subnets,
+      'application_port': _params.applicationPort,
+      'load_balancer': _params.loadBalancer,
+      'load_balancer_pool': _params.loadBalancerPool
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroup');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroup');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3937,38 +3791,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupLoadBalancer');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupLoadBalancer');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/load_balancer',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/load_balancer',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -3985,39 +3837,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagers');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagers');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/managers',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4036,42 +3886,40 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerPrototype'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.instanceGroupManagerPrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.instanceGroupManagerPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManager');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManager');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/managers',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4089,39 +3937,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManager');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManager');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/managers/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4139,40 +3985,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManager');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManager');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/managers/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4198,51 +4042,49 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'management_enabled': _params.managementEnabled,
-        'aggregation_window': _params.aggregationWindow,
-        'cooldown': _params.cooldown,
-        'max_membership_count': _params.maxMembershipCount,
-        'min_membership_count': _params.minMembershipCount
-      };
+    const body = {
+      'name': _params.name,
+      'management_enabled': _params.managementEnabled,
+      'aggregation_window': _params.aggregationWindow,
+      'cooldown': _params.cooldown,
+      'max_membership_count': _params.maxMembershipCount,
+      'min_membership_count': _params.minMembershipCount
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManager');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManager');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/managers/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4258,40 +4100,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'instance_group_manager_id': _params.instanceGroupManagerId
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'instance_group_manager_id': _params.instanceGroupManagerId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagerPolicies');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagerPolicies');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4311,43 +4151,41 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'instanceGroupManagerPolicyPrototype'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.instanceGroupManagerPolicyPrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.instanceGroupManagerPolicyPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'instance_group_manager_id': _params.instanceGroupManagerId
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'instance_group_manager_id': _params.instanceGroupManagerId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManagerPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManagerPolicy');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4366,40 +4204,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'instance_group_manager_id': _params.instanceGroupManagerId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'instance_group_manager_id': _params.instanceGroupManagerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManagerPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManagerPolicy');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4418,41 +4254,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'instance_group_manager_id': _params.instanceGroupManagerId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'instance_group_manager_id': _params.instanceGroupManagerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManagerPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManagerPolicy');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4475,49 +4309,47 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'metric_type': _params.metricType,
-        'metric_value': _params.metricValue
-      };
+    const body = {
+      'name': _params.name,
+      'metric_type': _params.metricType,
+      'metric_value': _params.metricValue
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'instance_group_manager_id': _params.instanceGroupManagerId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'instance_group_manager_id': _params.instanceGroupManagerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManagerPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManagerPolicy');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4535,38 +4367,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupMemberships');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupMemberships');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/memberships',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/memberships',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4581,39 +4411,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupMemberships');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupMemberships');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/memberships',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/memberships',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4632,39 +4460,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupMembership');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupMembership');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/memberships/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/memberships/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4682,40 +4508,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupMembership');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupMembership');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/memberships/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/memberships/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4735,46 +4559,44 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['instanceGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'instance_group_id': _params.instanceGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupMembership');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupMembership');
 
-      const parameters = {
-        options: {
-          url: '/instance_groups/{instance_group_id}/memberships/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/memberships/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -4796,31 +4618,29 @@ class VpcV1 extends BaseService {
   public listVolumeProfiles(params?: VpcV1.ListVolumeProfilesParams): Promise<VpcV1.Response<VpcV1.VolumeProfileCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumeProfiles');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumeProfiles');
 
-      const parameters = {
-        options: {
-          url: '/volume/profiles',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/volume/profiles',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4837,39 +4657,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['name'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'name': _params.name
-      };
+    const path = {
+      'name': _params.name
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVolumeProfile');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVolumeProfile');
 
-      const parameters = {
-        options: {
-          url: '/volume/profiles/{name}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/volume/profiles/{name}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4889,33 +4707,31 @@ class VpcV1 extends BaseService {
   public listVolumes(params?: VpcV1.ListVolumesParams): Promise<VpcV1.Response<VpcV1.VolumeCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'name': _params.name,
-        'zone.name': _params.zoneName
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'name': _params.name,
+      'zone.name': _params.zoneName
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumes');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumes');
 
-      const parameters = {
-        options: {
-          url: '/volumes',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/volumes',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4933,37 +4749,35 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['volumePrototype'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.volumePrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.volumePrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVolume');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVolume');
 
-      const parameters = {
-        options: {
-          url: '/volumes',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/volumes',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -4981,38 +4795,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVolume');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVolume');
 
-      const parameters = {
-        options: {
-          url: '/volumes/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/volumes/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5029,39 +4841,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVolume');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVolume');
 
-      const parameters = {
-        options: {
-          url: '/volumes/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/volumes/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5080,45 +4890,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVolume');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVolume');
 
-      const parameters = {
-        options: {
-          url: '/volumes/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/volumes/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -5141,29 +4949,27 @@ class VpcV1 extends BaseService {
   public listRegions(params?: VpcV1.ListRegionsParams): Promise<VpcV1.Response<VpcV1.RegionCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listRegions');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listRegions');
 
-      const parameters = {
-        options: {
-          url: '/regions',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/regions',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5180,39 +4986,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['name'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'name': _params.name
-      };
+    const path = {
+      'name': _params.name
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getRegion');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getRegion');
 
-      const parameters = {
-        options: {
-          url: '/regions/{name}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/regions/{name}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5230,39 +5034,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['regionName'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'region_name': _params.regionName
-      };
+    const path = {
+      'region_name': _params.regionName
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listRegionZones');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listRegionZones');
 
-      const parameters = {
-        options: {
-          url: '/regions/{region_name}/zones',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/regions/{region_name}/zones',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5280,40 +5082,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['regionName', 'zoneName'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'region_name': _params.regionName,
-        'zone_name': _params.zoneName
-      };
+    const path = {
+      'region_name': _params.regionName,
+      'zone_name': _params.zoneName
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getRegionZone');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getRegionZone');
 
-      const parameters = {
-        options: {
-          url: '/regions/{region_name}/zones/{zone_name}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/regions/{region_name}/zones/{zone_name}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -5338,32 +5138,30 @@ class VpcV1 extends BaseService {
   public listPublicGateways(params?: VpcV1.ListPublicGatewaysParams): Promise<VpcV1.Response<VpcV1.PublicGatewayCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'resource_group.id': _params.resourceGroupId
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listPublicGateways');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listPublicGateways');
 
-      const parameters = {
-        options: {
-          url: '/public_gateways',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/public_gateways',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5392,44 +5190,42 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpc', 'zone'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'vpc': _params.vpc,
-        'zone': _params.zone,
-        'name': _params.name,
-        'floating_ip': _params.floatingIp,
-        'resource_group': _params.resourceGroup
-      };
+    const body = {
+      'vpc': _params.vpc,
+      'zone': _params.zone,
+      'name': _params.name,
+      'floating_ip': _params.floatingIp,
+      'resource_group': _params.resourceGroup
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createPublicGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createPublicGateway');
 
-      const parameters = {
-        options: {
-          url: '/public_gateways',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/public_gateways',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5448,38 +5244,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePublicGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePublicGateway');
 
-      const parameters = {
-        options: {
-          url: '/public_gateways/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/public_gateways/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5496,39 +5290,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getPublicGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getPublicGateway');
 
-      const parameters = {
-        options: {
-          url: '/public_gateways/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/public_gateways/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5547,45 +5339,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updatePublicGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updatePublicGateway');
 
-      const parameters = {
-        options: {
-          url: '/public_gateways/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/public_gateways/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -5609,32 +5399,30 @@ class VpcV1 extends BaseService {
   public listFloatingIps(params?: VpcV1.ListFloatingIpsParams): Promise<VpcV1.Response<VpcV1.FloatingIPCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'resource_group.id': _params.resourceGroupId
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listFloatingIps');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listFloatingIps');
 
-      const parameters = {
-        options: {
-          url: '/floating_ips',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/floating_ips',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5651,37 +5439,35 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['floatingIpPrototype'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.floatingIpPrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.floatingIpPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createFloatingIp');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createFloatingIp');
 
-      const parameters = {
-        options: {
-          url: '/floating_ips',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/floating_ips',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5699,38 +5485,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteFloatingIp');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteFloatingIp');
 
-      const parameters = {
-        options: {
-          url: '/floating_ips/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/floating_ips/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5747,39 +5531,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getFloatingIp');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getFloatingIp');
 
-      const parameters = {
-        options: {
-          url: '/floating_ips/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/floating_ips/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5801,46 +5583,44 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'target': _params.target
-      };
+    const body = {
+      'name': _params.name,
+      'target': _params.target
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateFloatingIp');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateFloatingIp');
 
-      const parameters = {
-        options: {
-          url: '/floating_ips/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/floating_ips/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -5865,32 +5645,30 @@ class VpcV1 extends BaseService {
   public listNetworkAcls(params?: VpcV1.ListNetworkAclsParams): Promise<VpcV1.Response<VpcV1.NetworkACLCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'resource_group.id': _params.resourceGroupId
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listNetworkAcls');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listNetworkAcls');
 
-      const parameters = {
-        options: {
-          url: '/network_acls',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/network_acls',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5907,32 +5685,30 @@ class VpcV1 extends BaseService {
   public createNetworkAcl(params?: VpcV1.CreateNetworkAclParams): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const body = _params.networkAclPrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.networkAclPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createNetworkAcl');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createNetworkAcl');
 
-      const parameters = {
-        options: {
-          url: '/network_acls',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/network_acls',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5950,38 +5726,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNetworkAcl');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNetworkAcl');
 
-      const parameters = {
-        options: {
-          url: '/network_acls/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/network_acls/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -5998,39 +5772,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getNetworkAcl');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getNetworkAcl');
 
-      const parameters = {
-        options: {
-          url: '/network_acls/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/network_acls/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6049,45 +5821,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateNetworkAcl');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateNetworkAcl');
 
-      const parameters = {
-        options: {
-          url: '/network_acls/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/network_acls/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6108,42 +5878,40 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['networkAclId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'direction': _params.direction
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'direction': _params.direction
+    };
 
-      const path = {
-        'network_acl_id': _params.networkAclId
-      };
+    const path = {
+      'network_acl_id': _params.networkAclId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listNetworkAclRules');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listNetworkAclRules');
 
-      const parameters = {
-        options: {
-          url: '/network_acls/{network_acl_id}/rules',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/network_acls/{network_acl_id}/rules',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6162,42 +5930,40 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['networkAclId', 'networkAclRulePrototype'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.networkAclRulePrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.networkAclRulePrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'network_acl_id': _params.networkAclId
-      };
+    const path = {
+      'network_acl_id': _params.networkAclId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createNetworkAclRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createNetworkAclRule');
 
-      const parameters = {
-        options: {
-          url: '/network_acls/{network_acl_id}/rules',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/network_acls/{network_acl_id}/rules',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6215,39 +5981,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['networkAclId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'network_acl_id': _params.networkAclId,
-        'id': _params.id
-      };
+    const path = {
+      'network_acl_id': _params.networkAclId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNetworkAclRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNetworkAclRule');
 
-      const parameters = {
-        options: {
-          url: '/network_acls/{network_acl_id}/rules/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/network_acls/{network_acl_id}/rules/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6265,40 +6029,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['networkAclId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'network_acl_id': _params.networkAclId,
-        'id': _params.id
-      };
+    const path = {
+      'network_acl_id': _params.networkAclId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getNetworkAclRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getNetworkAclRule');
 
-      const parameters = {
-        options: {
-          url: '/network_acls/{network_acl_id}/rules/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/network_acls/{network_acl_id}/rules/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6334,57 +6096,55 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['networkAclId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'action': _params.action,
-        'destination': _params.destination,
-        'direction': _params.direction,
-        'source': _params.source,
-        'destination_port_max': _params.destinationPortMax,
-        'destination_port_min': _params.destinationPortMin,
-        'source_port_max': _params.sourcePortMax,
-        'source_port_min': _params.sourcePortMin,
-        'code': _params.code,
-        'type': _params.type,
-        'before': _params.before
-      };
+    const body = {
+      'name': _params.name,
+      'action': _params.action,
+      'destination': _params.destination,
+      'direction': _params.direction,
+      'source': _params.source,
+      'destination_port_max': _params.destinationPortMax,
+      'destination_port_min': _params.destinationPortMin,
+      'source_port_max': _params.sourcePortMax,
+      'source_port_min': _params.sourcePortMin,
+      'code': _params.code,
+      'type': _params.type,
+      'before': _params.before
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'network_acl_id': _params.networkAclId,
-        'id': _params.id
-      };
+    const path = {
+      'network_acl_id': _params.networkAclId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateNetworkAclRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateNetworkAclRule');
 
-      const parameters = {
-        options: {
-          url: '/network_acls/{network_acl_id}/rules/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/network_acls/{network_acl_id}/rules/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -6413,35 +6173,33 @@ class VpcV1 extends BaseService {
   public listSecurityGroups(params?: VpcV1.ListSecurityGroupsParams): Promise<VpcV1.Response<VpcV1.SecurityGroupCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'resource_group.id': _params.resourceGroupId,
-        'vpc.id': _params.vpcId,
-        'vpc.crn': _params.vpcCrn,
-        'vpc.name': _params.vpcName
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'vpc.id': _params.vpcId,
+      'vpc.crn': _params.vpcCrn,
+      'vpc.name': _params.vpcName
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroups');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroups');
 
-      const parameters = {
-        options: {
-          url: '/security_groups',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6469,43 +6227,41 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpc'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'vpc': _params.vpc,
-        'name': _params.name,
-        'resource_group': _params.resourceGroup,
-        'rules': _params.rules
-      };
+    const body = {
+      'vpc': _params.vpc,
+      'name': _params.name,
+      'resource_group': _params.resourceGroup,
+      'rules': _params.rules
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroup');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroup');
 
-      const parameters = {
-        options: {
-          url: '/security_groups',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6524,38 +6280,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroup');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroup');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6572,39 +6326,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroup');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroup');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6625,45 +6377,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSecurityGroup');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSecurityGroup');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6683,41 +6433,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['securityGroupId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
 
-      const path = {
-        'security_group_id': _params.securityGroupId
-      };
+    const path = {
+      'security_group_id': _params.securityGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroupNetworkInterfaces');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroupNetworkInterfaces');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{security_group_id}/network_interfaces',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/network_interfaces',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6738,39 +6486,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['securityGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'security_group_id': _params.securityGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'security_group_id': _params.securityGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeSecurityGroupNetworkInterface');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeSecurityGroupNetworkInterface');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{security_group_id}/network_interfaces/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/network_interfaces/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6789,40 +6535,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['securityGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'security_group_id': _params.securityGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'security_group_id': _params.securityGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroupNetworkInterface');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroupNetworkInterface');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{security_group_id}/network_interfaces/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/network_interfaces/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6842,40 +6586,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['securityGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'security_group_id': _params.securityGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'security_group_id': _params.securityGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addSecurityGroupNetworkInterface');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addSecurityGroupNetworkInterface');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{security_group_id}/network_interfaces/{id}',
-          method: 'PUT',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/network_interfaces/{id}',
+        method: 'PUT',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6894,39 +6636,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['securityGroupId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'security_group_id': _params.securityGroupId
-      };
+    const path = {
+      'security_group_id': _params.securityGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroupRules');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroupRules');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{security_group_id}/rules',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/rules',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -6950,42 +6690,40 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['securityGroupId', 'securityGroupRulePrototype'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = _params.securityGroupRulePrototype;
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const body = _params.securityGroupRulePrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'security_group_id': _params.securityGroupId
-      };
+    const path = {
+      'security_group_id': _params.securityGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroupRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroupRule');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{security_group_id}/rules',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/rules',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7004,39 +6742,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['securityGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'security_group_id': _params.securityGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'security_group_id': _params.securityGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroupRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroupRule');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{security_group_id}/rules/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/rules/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7054,40 +6790,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['securityGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'security_group_id': _params.securityGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'security_group_id': _params.securityGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroupRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroupRule');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{security_group_id}/rules/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/rules/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7120,52 +6854,50 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['securityGroupId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'remote': _params.remote,
-        'direction': _params.direction,
-        'ip_version': _params.ipVersion,
-        'code': _params.code,
-        'port_max': _params.portMax,
-        'port_min': _params.portMin,
-        'type': _params.type
-      };
+    const body = {
+      'remote': _params.remote,
+      'direction': _params.direction,
+      'ip_version': _params.ipVersion,
+      'code': _params.code,
+      'port_max': _params.portMax,
+      'port_min': _params.portMin,
+      'type': _params.type
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'security_group_id': _params.securityGroupId,
-        'id': _params.id
-      };
+    const path = {
+      'security_group_id': _params.securityGroupId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSecurityGroupRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSecurityGroupRule');
 
-      const parameters = {
-        options: {
-          url: '/security_groups/{security_group_id}/rules/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/rules/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -7186,31 +6918,29 @@ class VpcV1 extends BaseService {
   public listIkePolicies(params?: VpcV1.ListIkePoliciesParams): Promise<VpcV1.Response<VpcV1.IKEPolicyCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIkePolicies');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIkePolicies');
 
-      const parameters = {
-        options: {
-          url: '/ike_policies',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ike_policies',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7235,46 +6965,44 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['authenticationAlgorithm', 'dhGroup', 'encryptionAlgorithm', 'ikeVersion'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'authentication_algorithm': _params.authenticationAlgorithm,
-        'dh_group': _params.dhGroup,
-        'encryption_algorithm': _params.encryptionAlgorithm,
-        'ike_version': _params.ikeVersion,
-        'name': _params.name,
-        'key_lifetime': _params.keyLifetime,
-        'resource_group': _params.resourceGroup
-      };
+    const body = {
+      'authentication_algorithm': _params.authenticationAlgorithm,
+      'dh_group': _params.dhGroup,
+      'encryption_algorithm': _params.encryptionAlgorithm,
+      'ike_version': _params.ikeVersion,
+      'name': _params.name,
+      'key_lifetime': _params.keyLifetime,
+      'resource_group': _params.resourceGroup
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createIkePolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createIkePolicy');
 
-      const parameters = {
-        options: {
-          url: '/ike_policies',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ike_policies',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7291,38 +7019,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteIkePolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteIkePolicy');
 
-      const parameters = {
-        options: {
-          url: '/ike_policies/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ike_policies/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7339,39 +7065,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getIkePolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getIkePolicy');
 
-      const parameters = {
-        options: {
-          url: '/ike_policies/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ike_policies/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7394,50 +7118,48 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'authentication_algorithm': _params.authenticationAlgorithm,
-        'dh_group': _params.dhGroup,
-        'encryption_algorithm': _params.encryptionAlgorithm,
-        'ike_version': _params.ikeVersion,
-        'key_lifetime': _params.keyLifetime
-      };
+    const body = {
+      'name': _params.name,
+      'authentication_algorithm': _params.authenticationAlgorithm,
+      'dh_group': _params.dhGroup,
+      'encryption_algorithm': _params.encryptionAlgorithm,
+      'ike_version': _params.ikeVersion,
+      'key_lifetime': _params.keyLifetime
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateIkePolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateIkePolicy');
 
-      const parameters = {
-        options: {
-          url: '/ike_policies/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ike_policies/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7454,39 +7176,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIkePolicyConnections');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIkePolicyConnections');
 
-      const parameters = {
-        options: {
-          url: '/ike_policies/{id}/connections',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ike_policies/{id}/connections',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7503,31 +7223,29 @@ class VpcV1 extends BaseService {
   public listIpsecPolicies(params?: VpcV1.ListIpsecPoliciesParams): Promise<VpcV1.Response<VpcV1.IPsecPolicyCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIpsecPolicies');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIpsecPolicies');
 
-      const parameters = {
-        options: {
-          url: '/ipsec_policies',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ipsec_policies',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7551,45 +7269,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['authenticationAlgorithm', 'encryptionAlgorithm', 'pfs'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'authentication_algorithm': _params.authenticationAlgorithm,
-        'encryption_algorithm': _params.encryptionAlgorithm,
-        'pfs': _params.pfs,
-        'name': _params.name,
-        'key_lifetime': _params.keyLifetime,
-        'resource_group': _params.resourceGroup
-      };
+    const body = {
+      'authentication_algorithm': _params.authenticationAlgorithm,
+      'encryption_algorithm': _params.encryptionAlgorithm,
+      'pfs': _params.pfs,
+      'name': _params.name,
+      'key_lifetime': _params.keyLifetime,
+      'resource_group': _params.resourceGroup
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createIpsecPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createIpsecPolicy');
 
-      const parameters = {
-        options: {
-          url: '/ipsec_policies',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ipsec_policies',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7606,38 +7322,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteIpsecPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteIpsecPolicy');
 
-      const parameters = {
-        options: {
-          url: '/ipsec_policies/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ipsec_policies/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7654,39 +7368,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getIpsecPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getIpsecPolicy');
 
-      const parameters = {
-        options: {
-          url: '/ipsec_policies/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ipsec_policies/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7708,49 +7420,47 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'authentication_algorithm': _params.authenticationAlgorithm,
-        'encryption_algorithm': _params.encryptionAlgorithm,
-        'key_lifetime': _params.keyLifetime,
-        'pfs': _params.pfs
-      };
+    const body = {
+      'name': _params.name,
+      'authentication_algorithm': _params.authenticationAlgorithm,
+      'encryption_algorithm': _params.encryptionAlgorithm,
+      'key_lifetime': _params.keyLifetime,
+      'pfs': _params.pfs
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateIpsecPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateIpsecPolicy');
 
-      const parameters = {
-        options: {
-          url: '/ipsec_policies/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ipsec_policies/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7767,39 +7477,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIpsecPolicyConnections');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIpsecPolicyConnections');
 
-      const parameters = {
-        options: {
-          url: '/ipsec_policies/{id}/connections',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/ipsec_policies/{id}/connections',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7818,32 +7526,30 @@ class VpcV1 extends BaseService {
   public listVpnGateways(params?: VpcV1.ListVpnGatewaysParams): Promise<VpcV1.Response<VpcV1.VPNGatewayCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'resource_group.id': _params.resourceGroupId
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGateways');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGateways');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7864,42 +7570,40 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['subnet'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'subnet': _params.subnet,
-        'name': _params.name,
-        'resource_group': _params.resourceGroup
-      };
+    const body = {
+      'subnet': _params.subnet,
+      'name': _params.name,
+      'resource_group': _params.resourceGroup
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpnGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpnGateway');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7917,38 +7621,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnGateway');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -7965,39 +7667,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnGateway');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8015,45 +7715,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpnGateway');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpnGateway');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8071,40 +7769,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'status': _params.status
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'status': _params.status
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnections');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnections');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8133,53 +7829,51 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'peerAddress', 'psk'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'peer_address': _params.peerAddress,
-        'psk': _params.psk,
-        'admin_state_up': _params.adminStateUp,
-        'name': _params.name,
-        'dead_peer_detection': _params.deadPeerDetection,
-        'ike_policy': _params.ikePolicy,
-        'ipsec_policy': _params.ipsecPolicy,
-        'local_cidrs': _params.localCidrs,
-        'peer_cidrs': _params.peerCidrs
-      };
+    const body = {
+      'peer_address': _params.peerAddress,
+      'psk': _params.psk,
+      'admin_state_up': _params.adminStateUp,
+      'name': _params.name,
+      'dead_peer_detection': _params.deadPeerDetection,
+      'ike_policy': _params.ikePolicy,
+      'ipsec_policy': _params.ipsecPolicy,
+      'local_cidrs': _params.localCidrs,
+      'peer_cidrs': _params.peerCidrs
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpnGatewayConnection');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpnGatewayConnection');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8197,39 +7891,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnGatewayConnection');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnGatewayConnection');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8247,40 +7939,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnGatewayConnection');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnGatewayConnection');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8308,52 +7998,50 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'admin_state_up': _params.adminStateUp,
-        'peer_address': _params.peerAddress,
-        'name': _params.name,
-        'psk': _params.psk,
-        'dead_peer_detection': _params.deadPeerDetection,
-        'ike_policy': _params.ikePolicy,
-        'ipsec_policy': _params.ipsecPolicy
-      };
+    const body = {
+      'admin_state_up': _params.adminStateUp,
+      'peer_address': _params.peerAddress,
+      'name': _params.name,
+      'psk': _params.psk,
+      'dead_peer_detection': _params.deadPeerDetection,
+      'ike_policy': _params.ikePolicy,
+      'ipsec_policy': _params.ipsecPolicy
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpnGatewayConnection');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpnGatewayConnection');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8371,40 +8059,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionLocalCidrs');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionLocalCidrs');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8424,41 +8110,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id,
-        'cidr_prefix': _params.cidrPrefix,
-        'prefix_length': _params.prefixLength
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id,
+      'cidr_prefix': _params.cidrPrefix,
+      'prefix_length': _params.prefixLength
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionLocalCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionLocalCidr');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8478,41 +8162,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id,
-        'cidr_prefix': _params.cidrPrefix,
-        'prefix_length': _params.prefixLength
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id,
+      'cidr_prefix': _params.cidrPrefix,
+      'prefix_length': _params.prefixLength
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionLocalCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionLocalCidr');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8533,41 +8215,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id,
-        'cidr_prefix': _params.cidrPrefix,
-        'prefix_length': _params.prefixLength
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id,
+      'cidr_prefix': _params.cidrPrefix,
+      'prefix_length': _params.prefixLength
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionLocalCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionLocalCidr');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
-          method: 'PUT',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
+        method: 'PUT',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8585,40 +8265,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionPeerCidrs');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionPeerCidrs');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8638,41 +8316,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id,
-        'cidr_prefix': _params.cidrPrefix,
-        'prefix_length': _params.prefixLength
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id,
+      'cidr_prefix': _params.cidrPrefix,
+      'prefix_length': _params.prefixLength
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionPeerCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionPeerCidr');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8692,41 +8368,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id,
-        'cidr_prefix': _params.cidrPrefix,
-        'prefix_length': _params.prefixLength
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id,
+      'cidr_prefix': _params.cidrPrefix,
+      'prefix_length': _params.prefixLength
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionPeerCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionPeerCidr');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8747,41 +8421,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'vpn_gateway_id': _params.vpnGatewayId,
-        'id': _params.id,
-        'cidr_prefix': _params.cidrPrefix,
-        'prefix_length': _params.prefixLength
-      };
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id,
+      'cidr_prefix': _params.cidrPrefix,
+      'prefix_length': _params.prefixLength
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionPeerCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionPeerCidr');
 
-      const parameters = {
-        options: {
-          url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
-          method: 'PUT',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
+        method: 'PUT',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -8803,31 +8475,29 @@ class VpcV1 extends BaseService {
   public listLoadBalancerProfiles(params?: VpcV1.ListLoadBalancerProfilesParams): Promise<VpcV1.Response<VpcV1.LoadBalancerProfileCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerProfiles');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerProfiles');
 
-      const parameters = {
-        options: {
-          url: '/load_balancer/profiles',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancer/profiles',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8844,39 +8514,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['name'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'name': _params.name
-      };
+    const path = {
+      'name': _params.name
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerProfile');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerProfile');
 
-      const parameters = {
-        options: {
-          url: '/load_balancer/profiles/{name}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancer/profiles/{name}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8891,29 +8559,27 @@ class VpcV1 extends BaseService {
   public listLoadBalancers(params?: VpcV1.ListLoadBalancersParams): Promise<VpcV1.Response<VpcV1.LoadBalancerCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancers');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancers');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8940,46 +8606,44 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['isPublic', 'subnets'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'is_public': _params.isPublic,
-        'subnets': _params.subnets,
-        'name': _params.name,
-        'listeners': _params.listeners,
-        'pools': _params.pools,
-        'profile': _params.profile,
-        'resource_group': _params.resourceGroup
-      };
+    const body = {
+      'is_public': _params.isPublic,
+      'subnets': _params.subnets,
+      'name': _params.name,
+      'listeners': _params.listeners,
+      'pools': _params.pools,
+      'profile': _params.profile,
+      'resource_group': _params.resourceGroup
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancer');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancer');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -8996,38 +8660,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancer');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancer');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9044,39 +8706,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancer');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancer');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9094,45 +8754,43 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name
-      };
+    const body = {
+      'name': _params.name
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancer');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancer');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9149,39 +8807,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerStatistics');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerStatistics');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{id}/statistics',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{id}/statistics',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9198,39 +8854,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListeners');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListeners');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9256,50 +8910,48 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'port', 'protocol'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'port': _params.port,
-        'protocol': _params.protocol,
-        'connection_limit': _params.connectionLimit,
-        'certificate_instance': _params.certificateInstance,
-        'default_pool': _params.defaultPool,
-        'policies': _params.policies
-      };
+    const body = {
+      'port': _params.port,
+      'protocol': _params.protocol,
+      'connection_limit': _params.connectionLimit,
+      'certificate_instance': _params.certificateInstance,
+      'default_pool': _params.defaultPool,
+      'policies': _params.policies
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListener');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListener');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9317,39 +8969,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListener');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListener');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9367,40 +9017,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListener');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListener');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9426,50 +9074,48 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'connection_limit': _params.connectionLimit,
-        'port': _params.port,
-        'protocol': _params.protocol,
-        'certificate_instance': _params.certificateInstance,
-        'default_pool': _params.defaultPool
-      };
+    const body = {
+      'connection_limit': _params.connectionLimit,
+      'port': _params.port,
+      'protocol': _params.protocol,
+      'certificate_instance': _params.certificateInstance,
+      'default_pool': _params.defaultPool
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListener');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListener');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9487,40 +9133,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'listenerId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'listener_id': _params.listenerId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'listener_id': _params.listenerId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListenerPolicies');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListenerPolicies');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9548,50 +9192,48 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'listenerId', 'priority', 'action'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'priority': _params.priority,
-        'action': _params.action,
-        'name': _params.name,
-        'rules': _params.rules,
-        'target': _params.target
-      };
+    const body = {
+      'priority': _params.priority,
+      'action': _params.action,
+      'name': _params.name,
+      'rules': _params.rules,
+      'target': _params.target
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'listener_id': _params.listenerId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'listener_id': _params.listenerId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListenerPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListenerPolicy');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9610,40 +9252,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'listenerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'listener_id': _params.listenerId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'listener_id': _params.listenerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListenerPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListenerPolicy');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9662,41 +9302,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'listenerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'listener_id': _params.listenerId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'listener_id': _params.listenerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListenerPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListenerPolicy');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9723,49 +9361,47 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'listenerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'priority': _params.priority,
-        'target': _params.target
-      };
+    const body = {
+      'name': _params.name,
+      'priority': _params.priority,
+      'target': _params.target
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'listener_id': _params.listenerId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'listener_id': _params.listenerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListenerPolicy');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListenerPolicy');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9784,41 +9420,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'listenerId', 'policyId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'listener_id': _params.listenerId,
-        'policy_id': _params.policyId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'listener_id': _params.listenerId,
+      'policy_id': _params.policyId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListenerPolicyRules');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListenerPolicyRules');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9841,50 +9475,48 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'condition', 'type', 'value'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'condition': _params.condition,
-        'type': _params.type,
-        'value': _params.value,
-        'field': _params.field
-      };
+    const body = {
+      'condition': _params.condition,
+      'type': _params.type,
+      'value': _params.value,
+      'field': _params.field
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'listener_id': _params.listenerId,
-        'policy_id': _params.policyId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'listener_id': _params.listenerId,
+      'policy_id': _params.policyId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListenerPolicyRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListenerPolicyRule');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9904,41 +9536,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'listener_id': _params.listenerId,
-        'policy_id': _params.policyId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'listener_id': _params.listenerId,
+      'policy_id': _params.policyId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListenerPolicyRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListenerPolicyRule');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -9958,42 +9588,40 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'listener_id': _params.listenerId,
-        'policy_id': _params.policyId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'listener_id': _params.listenerId,
+      'policy_id': _params.policyId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListenerPolicyRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListenerPolicyRule');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10017,51 +9645,49 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'condition': _params.condition,
-        'field': _params.field,
-        'type': _params.type,
-        'value': _params.value
-      };
+    const body = {
+      'condition': _params.condition,
+      'field': _params.field,
+      'type': _params.type,
+      'value': _params.value
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'listener_id': _params.listenerId,
-        'policy_id': _params.policyId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'listener_id': _params.listenerId,
+      'policy_id': _params.policyId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListenerPolicyRule');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListenerPolicyRule');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10078,39 +9704,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerPools');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerPools');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10141,50 +9765,48 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'algorithm', 'protocol', 'healthMonitor'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'algorithm': _params.algorithm,
-        'protocol': _params.protocol,
-        'health_monitor': _params.healthMonitor,
-        'name': _params.name,
-        'members': _params.members,
-        'session_persistence': _params.sessionPersistence
-      };
+    const body = {
+      'algorithm': _params.algorithm,
+      'protocol': _params.protocol,
+      'health_monitor': _params.healthMonitor,
+      'name': _params.name,
+      'members': _params.members,
+      'session_persistence': _params.sessionPersistence
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerPool');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerPool');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10202,39 +9824,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerPool');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerPool');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10252,40 +9872,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerPool');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerPool');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10313,50 +9931,48 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'algorithm': _params.algorithm,
-        'protocol': _params.protocol,
-        'health_monitor': _params.healthMonitor,
-        'session_persistence': _params.sessionPersistence
-      };
+    const body = {
+      'name': _params.name,
+      'algorithm': _params.algorithm,
+      'protocol': _params.protocol,
+      'health_monitor': _params.healthMonitor,
+      'session_persistence': _params.sessionPersistence
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerPool');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerPool');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10374,40 +9990,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'poolId'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'pool_id': _params.poolId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'pool_id': _params.poolId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerPoolMembers');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerPoolMembers');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10432,48 +10046,46 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'poolId', 'port', 'target'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'port': _params.port,
-        'target': _params.target,
-        'weight': _params.weight
-      };
+    const body = {
+      'port': _params.port,
+      'target': _params.target,
+      'weight': _params.weight
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'pool_id': _params.poolId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'pool_id': _params.poolId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerPoolMember');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerPoolMember');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members',
-          method: 'POST',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10492,46 +10104,44 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'poolId', 'members'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'members': _params.members
-      };
+    const body = {
+      'members': _params.members
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'pool_id': _params.poolId
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'pool_id': _params.poolId
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceLoadBalancerPoolMembers');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceLoadBalancerPoolMembers');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members',
-          method: 'PUT',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10550,40 +10160,38 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'poolId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'pool_id': _params.poolId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'pool_id': _params.poolId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerPoolMember');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerPoolMember');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10602,41 +10210,39 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'poolId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'pool_id': _params.poolId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'pool_id': _params.poolId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerPoolMember');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerPoolMember');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10662,49 +10268,47 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['loadBalancerId', 'poolId', 'id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'port': _params.port,
-        'weight': _params.weight,
-        'target': _params.target
-      };
+    const body = {
+      'port': _params.port,
+      'weight': _params.weight,
+      'target': _params.target
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'load_balancer_id': _params.loadBalancerId,
-        'pool_id': _params.poolId,
-        'id': _params.id
-      };
+    const path = {
+      'load_balancer_id': _params.loadBalancerId,
+      'pool_id': _params.poolId,
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerPoolMember');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerPoolMember');
 
-      const parameters = {
-        options: {
-          url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/load_balancers/{load_balancer_id}/pools/{pool_id}/members/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /*************************
@@ -10736,38 +10340,36 @@ class VpcV1 extends BaseService {
   public listFlowLogCollectors(params?: VpcV1.ListFlowLogCollectorsParams): Promise<VpcV1.Response<VpcV1.FlowLogCollectorCollection>> {
     const _params = Object.assign({}, params);
 
-    return new Promise((resolve, reject) => {
-      const query = {
-        'version': this.version,
-        'generation': this.generation,
-        'start': _params.start,
-        'limit': _params.limit,
-        'resource_group.id': _params.resourceGroupId,
-        'name': _params.name,
-        'vpc.id': _params.vpcId,
-        'vpc.crn': _params.vpcCrn,
-        'vpc.name': _params.vpcName,
-        'target.id': _params.targetId,
-        'target.resource_type': _params.targetResourceType
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'name': _params.name,
+      'vpc.id': _params.vpcId,
+      'vpc.crn': _params.vpcCrn,
+      'vpc.name': _params.vpcName,
+      'target.id': _params.targetId,
+      'target.resource_type': _params.targetResourceType
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listFlowLogCollectors');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listFlowLogCollectors');
 
-      const parameters = {
-        options: {
-          url: '/flow_log_collectors',
-          method: 'GET',
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/flow_log_collectors',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10801,44 +10403,42 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['storageBucket', 'target'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'storage_bucket': _params.storageBucket,
-        'target': _params.target,
-        'name': _params.name,
-        'active': _params.active,
-        'resource_group': _params.resourceGroup
-      };
+    const body = {
+      'storage_bucket': _params.storageBucket,
+      'target': _params.target,
+      'name': _params.name,
+      'active': _params.active,
+      'resource_group': _params.resourceGroup
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createFlowLogCollector');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createFlowLogCollector');
 
-      const parameters = {
-        options: {
-          url: '/flow_log_collectors',
-          method: 'POST',
-          body,
-          qs: query,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/flow_log_collectors',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10856,38 +10456,36 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteFlowLogCollector');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteFlowLogCollector');
 
-      const parameters = {
-        options: {
-          url: '/flow_log_collectors/{id}',
-          method: 'DELETE',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/flow_log_collectors/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10904,39 +10502,37 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getFlowLogCollector');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getFlowLogCollector');
 
-      const parameters = {
-        options: {
-          url: '/flow_log_collectors/{id}',
-          method: 'GET',
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/flow_log_collectors/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
   /**
@@ -10958,46 +10554,44 @@ class VpcV1 extends BaseService {
     const _params = Object.assign({}, params);
     const requiredParams = ['id'];
 
-    return new Promise((resolve, reject) => {
-      const missingParams = getMissingParams(_params, requiredParams);
-      if (missingParams) {
-        return reject(missingParams);
-      }
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
 
-      const body = {
-        'name': _params.name,
-        'active': _params.active
-      };
+    const body = {
+      'name': _params.name,
+      'active': _params.active
+    };
 
-      const query = {
-        'version': this.version,
-        'generation': this.generation
-      };
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
 
-      const path = {
-        'id': _params.id
-      };
+    const path = {
+      'id': _params.id
+    };
 
-      const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateFlowLogCollector');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateFlowLogCollector');
 
-      const parameters = {
-        options: {
-          url: '/flow_log_collectors/{id}',
-          method: 'PATCH',
-          body,
-          qs: query,
-          path,
-        },
-        defaultOptions: extend(true, {}, this.baseOptions, {
-          headers: extend(true, sdkHeaders, {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          }, _params.headers),
-        }),
-      };
+    const parameters = {
+      options: {
+        url: '/flow_log_collectors/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
 
-      return resolve(this.createRequest(parameters));
-    });
+    return this.createRequest(parameters);
   };
 
 }
@@ -11714,12 +11308,12 @@ namespace VpcV1 {
     instanceId: string;
     /** The identity of the volume to attach to the instance. */
     volume: VolumeIdentity;
+    /** If set to true, when deleting the instance the volume will also be deleted. */
+    deleteVolumeOnInstanceDelete?: boolean;
     /** The user-defined name for this volume attachment. If unspecified, the name will be a hyphenated list of
      *  randomly-selected words.
      */
     name?: string;
-    /** If set to true, when deleting the instance the volume will also be deleted. */
-    deleteVolumeOnInstanceDelete?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -11747,10 +11341,10 @@ namespace VpcV1 {
     instanceId: string;
     /** The volume attachment identifier. */
     id: string;
-    /** The user-defined name for this volume attachment. */
-    name?: string;
     /** If set to true, when deleting the instance the volume will also be deleted. */
     deleteVolumeOnInstanceDelete?: boolean;
+    /** The user-defined name for this volume attachment. */
+    name?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -14073,6 +13667,14 @@ namespace VpcV1 {
     minimum_provisioned_size?: number;
     /** The resource group for this image. */
     resource_group: ResourceGroupReference;
+    /** The type of encryption used on the image. */
+    encryption: string;
+    /** The key that will be used to encrypt volumes created from this image (unless an
+     *  alternate `encryption_key` is provided at volume creation).
+     *
+     *  This property will be present for images with an `encryption` type of `user_managed`.
+     */
+    encryption_key?: EncryptionKeyReference;
     /** The date and time that the image was created. */
     created_at: string;
     /** Details for the stored image file. */
@@ -14135,6 +13737,24 @@ namespace VpcV1 {
      *  name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
+    /** A base64-encoded, encrypted representation of the key that was used to encrypt the data for this image.
+     *
+     *  That representation is created by wrapping the key's value with the `encryption_key` root key (which must also
+     *  be provided), using either [Key Protect](https://cloud.ibm.com/docs/key-protect?topic=key-protect-wrap-keys) or
+     *  the
+     *  [Hyper Protect Crypto Service](https://cloud.ibm.com/docs/services/hs-crypto?topic=hs-crypto-wrap-keys).
+     *
+     *  If this property is not provided, the imported image is treated as unencrypted.
+     */
+    encrypted_data_key?: string;
+    /** A reference to the root key that was used to wrap the data key (which is ultimately
+     *  represented as `encrypted_data_key`). Additionally, the root key will be used to encrypt
+     *  volumes created from this image (unless an alternate `encryption_key` is provided at
+     *  volume creation).
+     *
+     *  If this property is not provided, the imported image is treated as unencrypted.
+     */
+    encryption_key?: EncryptionKeyReference;
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
      */
@@ -14896,7 +14516,7 @@ namespace VpcV1 {
     /** `LoadBalancerPoolReference` is in the response if `action` is `forward`.
      *  `LoadBalancerListenerPolicyRedirectURL` is in the response if `action` is `redirect`.
      */
-    target?: LoadBalancerListenerPolicyTargetReference;
+    target?: LoadBalancerListenerPolicyTarget;
   }
 
   /** LoadBalancerListenerPolicyCollection. */
@@ -14988,7 +14608,7 @@ namespace VpcV1 {
   }
 
   /** `LoadBalancerPoolReference` is in the response if `action` is `forward`. `LoadBalancerListenerPolicyRedirectURL` is in the response if `action` is `redirect`. */
-  export interface LoadBalancerListenerPolicyTargetReference {
+  export interface LoadBalancerListenerPolicyTarget {
   }
 
   /** LoadBalancerListenerPrototypeLoadBalancerContext. */
@@ -16325,10 +15945,10 @@ namespace VpcV1 {
 
   /** VolumeAttachment. */
   export interface VolumeAttachment {
-    /** The user-defined name for this volume attachment. */
-    name: string;
     /** If set to true, when deleting the instance the volume will also be deleted. */
     delete_volume_on_instance_delete?: boolean;
+    /** The user-defined name for this volume attachment. */
+    name: string;
     /** The unique identifier for this volume attachment. */
     id: string;
     /** The URL for this volume attachment. */
@@ -16362,20 +15982,20 @@ namespace VpcV1 {
 
   /** VolumeAttachmentPrototypeInstanceByImageContext. */
   export interface VolumeAttachmentPrototypeInstanceByImageContext {
-    /** The user-defined name for this volume attachment. */
-    name?: string;
     /** If set to true, when deleting the instance the volume will also be deleted. */
     delete_volume_on_instance_delete?: boolean;
-    /** The identity of the volume to attach to the instance, or a prototype object for a new volume. */
+    /** The user-defined name for this volume attachment. */
+    name?: string;
+    /** A prototype object for a new volume. */
     volume: VolumePrototypeInstanceByImageContext;
   }
 
   /** VolumeAttachmentPrototypeInstanceContext. */
   export interface VolumeAttachmentPrototypeInstanceContext {
-    /** The user-defined name for this volume attachment. */
-    name?: string;
     /** If set to true, when deleting the instance the volume will also be deleted. */
     delete_volume_on_instance_delete?: boolean;
+    /** The user-defined name for this volume attachment. */
+    name?: string;
     /** The identity of the volume to attach to the instance, or a prototype object for a new volume. */
     volume: VolumeAttachmentPrototypeInstanceContextVolume;
   }
@@ -16528,8 +16148,9 @@ namespace VpcV1 {
     profile: VolumeProfileIdentity;
     /** The identity of the root key to use to wrap the data encryption key for the volume.
      *
-     *  If this property is not provided, the `encryption` type for the volume will be
-     *  `provider_managed`.
+     *  If this property is not provided but the image is encrypted, the image's
+     *  `encryption_key` will be used. Otherwise, the `encryption` type for the
+     *  volume will be `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
     /** The capacity of the volume in gigabytes. Note that the specified minimum and maximum capacity values for
@@ -17148,16 +16769,16 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyPrototypeTargetLoadBalancerPoolIdentity extends LoadBalancerListenerPolicyPrototypeTarget {
   }
 
-  /** LoadBalancerListenerPolicyTargetReferenceLoadBalancerListenerPolicyRedirectURL. */
-  export interface LoadBalancerListenerPolicyTargetReferenceLoadBalancerListenerPolicyRedirectURL extends LoadBalancerListenerPolicyTargetReference {
+  /** LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyRedirectURL. */
+  export interface LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyRedirectURL extends LoadBalancerListenerPolicyTarget {
     /** The http status code in the redirect response. */
     http_status_code: number;
     /** The redirect target URL. */
     url: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetReferenceLoadBalancerPoolReference. */
-  export interface LoadBalancerListenerPolicyTargetReferenceLoadBalancerPoolReference extends LoadBalancerListenerPolicyTargetReference {
+  /** LoadBalancerListenerPolicyTargetLoadBalancerPoolReference. */
+  export interface LoadBalancerListenerPolicyTargetLoadBalancerPoolReference extends LoadBalancerListenerPolicyTarget {
     /** The unique identifier for this load balancer pool. */
     id: string;
     /** The pool's canonical URL. */

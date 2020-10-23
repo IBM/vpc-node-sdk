@@ -413,7 +413,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/vpcs/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -949,7 +949,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/vpcs/{vpc_id}/address_prefixes/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['is_default']).toEqual(isDefault);
@@ -1351,7 +1351,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/vpcs/{vpc_id}/routes/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -1748,7 +1748,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/subnets/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['network_acl']).toEqual(networkAcl);
@@ -2240,6 +2240,12 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
+      // EncryptionKeyReference
+      const encryptionKeyReferenceModel = {
+        crn:
+          'crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179',
+      };
+
       // ResourceGroupIdentityById
       const resourceGroupIdentityModel = {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
@@ -2258,6 +2264,8 @@ describe('VpcV1', () => {
       // ImagePrototypeImageByFile
       const imagePrototypeModel = {
         name: 'my-image',
+        encrypted_data_key: 'testString',
+        encryption_key: encryptionKeyReferenceModel,
         resource_group: resourceGroupIdentityModel,
         file: imageFilePrototypeModel,
         operating_system: operatingSystemIdentityModel,
@@ -2494,7 +2502,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/images/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -2968,7 +2976,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/keys/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -3219,8 +3227,8 @@ describe('VpcV1', () => {
 
       // VolumeAttachmentPrototypeInstanceContext
       const volumeAttachmentPrototypeInstanceContextModel = {
-        name: 'my-volume-attachment',
         delete_volume_on_instance_delete: true,
+        name: 'my-volume-attachment',
         volume: volumeAttachmentPrototypeInstanceContextVolumeModel,
       };
 
@@ -3261,8 +3269,8 @@ describe('VpcV1', () => {
 
       // VolumeAttachmentPrototypeInstanceByImageContext
       const volumeAttachmentPrototypeInstanceByImageContextModel = {
-        name: 'my-volume-attachment',
         delete_volume_on_instance_delete: true,
+        name: 'my-volume-attachment',
         volume: volumePrototypeInstanceByImageContextModel,
       };
 
@@ -3518,7 +3526,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/instance/templates/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -3675,8 +3683,8 @@ describe('VpcV1', () => {
 
       // VolumeAttachmentPrototypeInstanceContext
       const volumeAttachmentPrototypeInstanceContextModel = {
-        name: 'my-volume-attachment',
         delete_volume_on_instance_delete: true,
+        name: 'my-volume-attachment',
         volume: volumeAttachmentPrototypeInstanceContextVolumeModel,
       };
 
@@ -3717,8 +3725,8 @@ describe('VpcV1', () => {
 
       // VolumeAttachmentPrototypeInstanceByImageContext
       const volumeAttachmentPrototypeInstanceByImageContextModel = {
-        name: 'my-volume-attachment',
         delete_volume_on_instance_delete: true,
+        name: 'my-volume-attachment',
         volume: volumePrototypeInstanceByImageContextModel,
       };
 
@@ -3974,7 +3982,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/instances/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -4521,7 +4529,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/instances/{instance_id}/network_interfaces/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -4998,13 +5006,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation createInstanceVolumeAttachment
         const instanceId = 'testString';
         const volume = volumeIdentityModel;
-        const name = 'my-volume-attachment';
         const deleteVolumeOnInstanceDelete = true;
+        const name = 'my-volume-attachment';
         const params = {
           instanceId: instanceId,
           volume: volume,
-          name: name,
           deleteVolumeOnInstanceDelete: deleteVolumeOnInstanceDelete,
+          name: name,
         };
 
         const createInstanceVolumeAttachmentResult = vpcService.createInstanceVolumeAttachment(
@@ -5024,10 +5032,10 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['volume']).toEqual(volume);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['delete_volume_on_instance_delete']).toEqual(
           deleteVolumeOnInstanceDelete
         );
+        expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
@@ -5235,13 +5243,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateInstanceVolumeAttachment
         const instanceId = 'testString';
         const id = 'testString';
-        const name = 'my-volume-attachment';
         const deleteVolumeOnInstanceDelete = true;
+        const name = 'my-volume-attachment';
         const params = {
           instanceId: instanceId,
           id: id,
-          name: name,
           deleteVolumeOnInstanceDelete: deleteVolumeOnInstanceDelete,
+          name: name,
         };
 
         const updateInstanceVolumeAttachmentResult = vpcService.updateInstanceVolumeAttachment(
@@ -5258,12 +5266,12 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/instances/{instance_id}/volume_attachments/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['delete_volume_on_instance_delete']).toEqual(
           deleteVolumeOnInstanceDelete
         );
+        expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
@@ -5684,7 +5692,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/instance_groups/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['membership_count']).toEqual(membershipCount);
@@ -6155,7 +6163,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/instance_groups/{instance_group_id}/managers/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['management_enabled']).toEqual(managementEnabled);
@@ -6599,7 +6607,7 @@ describe('VpcV1', () => {
           'PATCH'
         );
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['metric_type']).toEqual(metricType);
@@ -6986,7 +6994,7 @@ describe('VpcV1', () => {
           'PATCH'
         );
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -7488,7 +7496,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/volumes/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -8124,7 +8132,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/public_gateways/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -8491,7 +8499,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/floating_ips/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['target']).toEqual(target);
@@ -8841,7 +8849,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/network_acls/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -9269,7 +9277,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/network_acls/{network_acl_id}/rules/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['action']).toEqual(action);
@@ -9667,7 +9675,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/security_groups/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -10398,7 +10406,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/security_groups/{security_group_id}/rules/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['remote']).toEqual(remote);
         expect(options.body['direction']).toEqual(direction);
@@ -10784,7 +10792,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/ike_policies/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['authentication_algorithm']).toEqual(authenticationAlgorithm);
@@ -11229,7 +11237,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/ipsec_policies/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['authentication_algorithm']).toEqual(authenticationAlgorithm);
@@ -11660,7 +11668,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/vpn_gateways/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -12109,7 +12117,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/vpn_gateways/{vpn_gateway_id}/connections/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['admin_state_up']).toEqual(adminStateUp);
         expect(options.body['peer_address']).toEqual(peerAddress);
@@ -13365,7 +13373,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/load_balancers/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
@@ -13878,7 +13886,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/listeners/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['connection_limit']).toEqual(connectionLimit);
         expect(options.body['port']).toEqual(port);
@@ -14347,7 +14355,7 @@ describe('VpcV1', () => {
           'PATCH'
         );
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['priority']).toEqual(priority);
@@ -14818,7 +14826,7 @@ describe('VpcV1', () => {
           'PATCH'
         );
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['condition']).toEqual(condition);
         expect(options.body['field']).toEqual(field);
@@ -15273,7 +15281,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/pools/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['algorithm']).toEqual(algorithm);
@@ -15818,7 +15826,7 @@ describe('VpcV1', () => {
           'PATCH'
         );
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['port']).toEqual(port);
         expect(options.body['weight']).toEqual(weight);
@@ -16216,7 +16224,7 @@ describe('VpcV1', () => {
 
         checkUrlAndMethod(options, '/flow_log_collectors/{id}', 'PATCH');
         const expectedAccept = 'application/json';
-        const expectedContentType = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['active']).toEqual(active);

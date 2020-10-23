@@ -23,14 +23,18 @@ const authHelper = require('../resources/auth-helper.js');
 const timeout = 200000;
 
 // Location of our config file.
-const configFile = 'vpc.env';
+const configFile = 'vpc_v1.env';
 
 const describe = authHelper.prepareTests(configFile);
 const dict = {};
 const generateName = resourceType => 'nsdk' + resourceType + Math.floor(Date.now() / 1000);
 
 describe('VpcV1_integration', () => {
-  const vpcService = VpcV1.newInstance();
+  const vpcService = VpcV1.newInstance({
+    headers: {
+      'Accept': 'application/json',
+    },
+  });
 
   jest.setTimeout(timeout);
 
@@ -1676,6 +1680,7 @@ describe('VpcV1_integration', () => {
       id: dict.createdInstanceGroupManagerPolicy,
       metric_type: 'cpu',
       metric_value: 33,
+      // name: generateName('igm-policy'),
     };
 
     vpcService
@@ -2878,7 +2883,7 @@ describe('VpcV1_integration', () => {
   });
   test('getLoadBalancerProfile()', done => {
     const params = {
-      name: 'network-small',
+      name: 'network-fixed',
     };
 
     vpcService
