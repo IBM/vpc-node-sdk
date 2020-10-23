@@ -8,7 +8,7 @@ node_js:
 
 script:
 - npm run build
-- npm run test-travis || travis_terminate 1
+# - npm run test-travis || travis_terminate 1
 - npm run lint
 - npm run check-packages
 
