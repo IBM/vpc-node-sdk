@@ -195,14 +195,14 @@ describe('VpcV1', () => {
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createVpc
-        const name = 'my-vpc';
         const addressPrefixManagement = 'manual';
         const classicAccess = false;
+        const name = 'my-vpc';
         const resourceGroup = resourceGroupIdentityModel;
         const params = {
-          name: name,
           addressPrefixManagement: addressPrefixManagement,
           classicAccess: classicAccess,
+          name: name,
           resourceGroup: resourceGroup,
         };
 
@@ -220,9 +220,9 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['address_prefix_management']).toEqual(addressPrefixManagement);
         expect(options.body['classic_access']).toEqual(classicAccess);
+        expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -533,6 +533,76 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('getVpcDefaultRoutingTable', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getVpcDefaultRoutingTable
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const getVpcDefaultRoutingTableResult = vpcService.getVpcDefaultRoutingTable(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getVpcDefaultRoutingTableResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/vpcs/{id}/default_routing_table', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getVpcDefaultRoutingTable(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getVpcDefaultRoutingTable({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getVpcDefaultRoutingTablePromise = vpcService.getVpcDefaultRoutingTable();
+        expectToBePromise(getVpcDefaultRoutingTablePromise);
+
+        getVpcDefaultRoutingTablePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
   describe('getVpcDefaultSecurityGroup', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
@@ -693,14 +763,14 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const cidr = '10.0.0.0/24';
         const zone = zoneIdentityModel;
-        const name = 'my-address-prefix-2';
         const isDefault = true;
+        const name = 'my-address-prefix-2';
         const params = {
           vpcId: vpcId,
           cidr: cidr,
           zone: zone,
-          name: name,
           isDefault: isDefault,
+          name: name,
         };
 
         const createVpcAddressPrefixResult = vpcService.createVpcAddressPrefix(params);
@@ -719,8 +789,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['cidr']).toEqual(cidr);
         expect(options.body['zone']).toEqual(zone);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['is_default']).toEqual(isDefault);
+        expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
@@ -928,13 +998,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateVpcAddressPrefix
         const vpcId = 'testString';
         const id = 'testString';
-        const name = 'my-address-prefix-2';
         const isDefault = false;
+        const name = 'my-address-prefix-2';
         const params = {
           vpcId: vpcId,
           id: id,
-          name: name,
           isDefault: isDefault,
+          name: name,
         };
 
         const updateVpcAddressPrefixResult = vpcService.updateVpcAddressPrefix(params);
@@ -951,8 +1021,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['is_default']).toEqual(isDefault);
+        expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
@@ -1009,9 +1079,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation listVpcRoutes
         const vpcId = 'testString';
         const zoneName = 'testString';
+        const start = 'testString';
+        const limit = 1;
         const params = {
           vpcId: vpcId,
           zoneName: zoneName,
+          start: start,
+          limit: limit,
         };
 
         const listVpcRoutesResult = vpcService.listVpcRoutes(params);
@@ -1031,6 +1105,8 @@ describe('VpcV1', () => {
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.qs['zone.name']).toEqual(zoneName);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
         expect(options.path['vpc_id']).toEqual(vpcId);
       });
 
@@ -1093,15 +1169,17 @@ describe('VpcV1', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createVpcRoute
         const vpcId = 'testString';
-        const nextHop = routeNextHopPrototypeModel;
         const destination = '192.168.3.0/24';
+        const nextHop = routeNextHopPrototypeModel;
         const zone = zoneIdentityModel;
+        const action = 'delegate';
         const name = 'my-route-2';
         const params = {
           vpcId: vpcId,
-          nextHop: nextHop,
           destination: destination,
+          nextHop: nextHop,
           zone: zone,
+          action: action,
           name: name,
         };
 
@@ -1119,9 +1197,10 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['next_hop']).toEqual(nextHop);
         expect(options.body['destination']).toEqual(destination);
+        expect(options.body['next_hop']).toEqual(nextHop);
         expect(options.body['zone']).toEqual(zone);
+        expect(options.body['action']).toEqual(action);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -1131,15 +1210,15 @@ describe('VpcV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const vpcId = 'testString';
-        const nextHop = routeNextHopPrototypeModel;
         const destination = '192.168.3.0/24';
+        const nextHop = routeNextHopPrototypeModel;
         const zone = zoneIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
           vpcId,
-          nextHop,
           destination,
+          nextHop,
           zone,
           headers: {
             Accept: userAccept,
@@ -1404,6 +1483,880 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('listVpcRoutingTables', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listVpcRoutingTables
+        const vpcId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const isDefault = true;
+        const params = {
+          vpcId: vpcId,
+          start: start,
+          limit: limit,
+          isDefault: isDefault,
+        };
+
+        const listVpcRoutingTablesResult = vpcService.listVpcRoutingTables(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listVpcRoutingTablesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routing_tables', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.qs['is_default']).toEqual(isDefault);
+        expect(options.path['vpc_id']).toEqual(vpcId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpcId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          vpcId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listVpcRoutingTables(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.listVpcRoutingTables({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const listVpcRoutingTablesPromise = vpcService.listVpcRoutingTables();
+        expectToBePromise(listVpcRoutingTablesPromise);
+
+        listVpcRoutingTablesPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('createVpcRoutingTable', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // RouteNextHopPrototypeRouteNextHopIP
+      const routeNextHopPrototypeModel = {
+        address: '192.168.3.4',
+      };
+
+      // ZoneIdentityByName
+      const zoneIdentityModel = {
+        name: 'us-south-1',
+      };
+
+      // RoutePrototype
+      const routePrototypeModel = {
+        action: 'delegate',
+        destination: '192.168.3.0/24',
+        name: 'my-route-2',
+        next_hop: routeNextHopPrototypeModel,
+        zone: zoneIdentityModel,
+      };
+
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation createVpcRoutingTable
+        const vpcId = 'testString';
+        const name = 'my-routing-table-2';
+        const routeDirectLinkIngress = true;
+        const routeTransitGatewayIngress = true;
+        const routeVpcZoneIngress = true;
+        const routes = [routePrototypeModel];
+        const params = {
+          vpcId: vpcId,
+          name: name,
+          routeDirectLinkIngress: routeDirectLinkIngress,
+          routeTransitGatewayIngress: routeTransitGatewayIngress,
+          routeVpcZoneIngress: routeVpcZoneIngress,
+          routes: routes,
+        };
+
+        const createVpcRoutingTableResult = vpcService.createVpcRoutingTable(params);
+
+        // all methods should return a Promise
+        expectToBePromise(createVpcRoutingTableResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routing_tables', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['route_direct_link_ingress']).toEqual(routeDirectLinkIngress);
+        expect(options.body['route_transit_gateway_ingress']).toEqual(routeTransitGatewayIngress);
+        expect(options.body['route_vpc_zone_ingress']).toEqual(routeVpcZoneIngress);
+        expect(options.body['routes']).toEqual(routes);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['vpc_id']).toEqual(vpcId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpcId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          vpcId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createVpcRoutingTable(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.createVpcRoutingTable({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const createVpcRoutingTablePromise = vpcService.createVpcRoutingTable();
+        expectToBePromise(createVpcRoutingTablePromise);
+
+        createVpcRoutingTablePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('deleteVpcRoutingTable', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation deleteVpcRoutingTable
+        const vpcId = 'testString';
+        const id = 'testString';
+        const params = {
+          vpcId: vpcId,
+          id: id,
+        };
+
+        const deleteVpcRoutingTableResult = vpcService.deleteVpcRoutingTable(params);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteVpcRoutingTableResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routing_tables/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpcId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          vpcId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteVpcRoutingTable(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deleteVpcRoutingTable({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deleteVpcRoutingTablePromise = vpcService.deleteVpcRoutingTable();
+        expectToBePromise(deleteVpcRoutingTablePromise);
+
+        deleteVpcRoutingTablePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getVpcRoutingTable', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getVpcRoutingTable
+        const vpcId = 'testString';
+        const id = 'testString';
+        const params = {
+          vpcId: vpcId,
+          id: id,
+        };
+
+        const getVpcRoutingTableResult = vpcService.getVpcRoutingTable(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getVpcRoutingTableResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routing_tables/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpcId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          vpcId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getVpcRoutingTable(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getVpcRoutingTable({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getVpcRoutingTablePromise = vpcService.getVpcRoutingTable();
+        expectToBePromise(getVpcRoutingTablePromise);
+
+        getVpcRoutingTablePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateVpcRoutingTable', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateVpcRoutingTable
+        const vpcId = 'testString';
+        const id = 'testString';
+        const name = 'my-routing-table-2';
+        const routeDirectLinkIngress = true;
+        const routeTransitGatewayIngress = true;
+        const routeVpcZoneIngress = true;
+        const params = {
+          vpcId: vpcId,
+          id: id,
+          name: name,
+          routeDirectLinkIngress: routeDirectLinkIngress,
+          routeTransitGatewayIngress: routeTransitGatewayIngress,
+          routeVpcZoneIngress: routeVpcZoneIngress,
+        };
+
+        const updateVpcRoutingTableResult = vpcService.updateVpcRoutingTable(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updateVpcRoutingTableResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routing_tables/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['route_direct_link_ingress']).toEqual(routeDirectLinkIngress);
+        expect(options.body['route_transit_gateway_ingress']).toEqual(routeTransitGatewayIngress);
+        expect(options.body['route_vpc_zone_ingress']).toEqual(routeVpcZoneIngress);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpcId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          vpcId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateVpcRoutingTable(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updateVpcRoutingTable({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateVpcRoutingTablePromise = vpcService.updateVpcRoutingTable();
+        expectToBePromise(updateVpcRoutingTablePromise);
+
+        updateVpcRoutingTablePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('listVpcRoutingTableRoutes', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listVpcRoutingTableRoutes
+        const vpcId = 'testString';
+        const routingTableId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const params = {
+          vpcId: vpcId,
+          routingTableId: routingTableId,
+          start: start,
+          limit: limit,
+        };
+
+        const listVpcRoutingTableRoutesResult = vpcService.listVpcRoutingTableRoutes(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listVpcRoutingTableRoutesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          options,
+          '/vpcs/{vpc_id}/routing_tables/{routing_table_id}/routes',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(options.path['routing_table_id']).toEqual(routingTableId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpcId = 'testString';
+        const routingTableId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          vpcId,
+          routingTableId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listVpcRoutingTableRoutes(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.listVpcRoutingTableRoutes({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const listVpcRoutingTableRoutesPromise = vpcService.listVpcRoutingTableRoutes();
+        expectToBePromise(listVpcRoutingTableRoutesPromise);
+
+        listVpcRoutingTableRoutesPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('createVpcRoutingTableRoute', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // RouteNextHopPrototypeRouteNextHopIP
+      const routeNextHopPrototypeModel = {
+        address: '192.168.3.4',
+      };
+
+      // ZoneIdentityByName
+      const zoneIdentityModel = {
+        name: 'us-south-1',
+      };
+
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation createVpcRoutingTableRoute
+        const vpcId = 'testString';
+        const routingTableId = 'testString';
+        const destination = '192.168.3.0/24';
+        const nextHop = routeNextHopPrototypeModel;
+        const zone = zoneIdentityModel;
+        const action = 'delegate';
+        const name = 'my-route-2';
+        const params = {
+          vpcId: vpcId,
+          routingTableId: routingTableId,
+          destination: destination,
+          nextHop: nextHop,
+          zone: zone,
+          action: action,
+          name: name,
+        };
+
+        const createVpcRoutingTableRouteResult = vpcService.createVpcRoutingTableRoute(params);
+
+        // all methods should return a Promise
+        expectToBePromise(createVpcRoutingTableRouteResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          options,
+          '/vpcs/{vpc_id}/routing_tables/{routing_table_id}/routes',
+          'POST'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['destination']).toEqual(destination);
+        expect(options.body['next_hop']).toEqual(nextHop);
+        expect(options.body['zone']).toEqual(zone);
+        expect(options.body['action']).toEqual(action);
+        expect(options.body['name']).toEqual(name);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(options.path['routing_table_id']).toEqual(routingTableId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpcId = 'testString';
+        const routingTableId = 'testString';
+        const destination = '192.168.3.0/24';
+        const nextHop = routeNextHopPrototypeModel;
+        const zone = zoneIdentityModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          vpcId,
+          routingTableId,
+          destination,
+          nextHop,
+          zone,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createVpcRoutingTableRoute(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.createVpcRoutingTableRoute({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const createVpcRoutingTableRoutePromise = vpcService.createVpcRoutingTableRoute();
+        expectToBePromise(createVpcRoutingTableRoutePromise);
+
+        createVpcRoutingTableRoutePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('deleteVpcRoutingTableRoute', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation deleteVpcRoutingTableRoute
+        const vpcId = 'testString';
+        const routingTableId = 'testString';
+        const id = 'testString';
+        const params = {
+          vpcId: vpcId,
+          routingTableId: routingTableId,
+          id: id,
+        };
+
+        const deleteVpcRoutingTableRouteResult = vpcService.deleteVpcRoutingTableRoute(params);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteVpcRoutingTableRouteResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          options,
+          '/vpcs/{vpc_id}/routing_tables/{routing_table_id}/routes/{id}',
+          'DELETE'
+        );
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(options.path['routing_table_id']).toEqual(routingTableId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpcId = 'testString';
+        const routingTableId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          vpcId,
+          routingTableId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteVpcRoutingTableRoute(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deleteVpcRoutingTableRoute({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deleteVpcRoutingTableRoutePromise = vpcService.deleteVpcRoutingTableRoute();
+        expectToBePromise(deleteVpcRoutingTableRoutePromise);
+
+        deleteVpcRoutingTableRoutePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getVpcRoutingTableRoute', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getVpcRoutingTableRoute
+        const vpcId = 'testString';
+        const routingTableId = 'testString';
+        const id = 'testString';
+        const params = {
+          vpcId: vpcId,
+          routingTableId: routingTableId,
+          id: id,
+        };
+
+        const getVpcRoutingTableRouteResult = vpcService.getVpcRoutingTableRoute(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getVpcRoutingTableRouteResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          options,
+          '/vpcs/{vpc_id}/routing_tables/{routing_table_id}/routes/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(options.path['routing_table_id']).toEqual(routingTableId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpcId = 'testString';
+        const routingTableId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          vpcId,
+          routingTableId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getVpcRoutingTableRoute(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getVpcRoutingTableRoute({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getVpcRoutingTableRoutePromise = vpcService.getVpcRoutingTableRoute();
+        expectToBePromise(getVpcRoutingTableRoutePromise);
+
+        getVpcRoutingTableRoutePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateVpcRoutingTableRoute', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateVpcRoutingTableRoute
+        const vpcId = 'testString';
+        const routingTableId = 'testString';
+        const id = 'testString';
+        const name = 'my-route-2';
+        const params = {
+          vpcId: vpcId,
+          routingTableId: routingTableId,
+          id: id,
+          name: name,
+        };
+
+        const updateVpcRoutingTableRouteResult = vpcService.updateVpcRoutingTableRoute(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updateVpcRoutingTableRouteResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          options,
+          '/vpcs/{vpc_id}/routing_tables/{routing_table_id}/routes/{id}',
+          'PATCH'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['name']).toEqual(name);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(options.path['routing_table_id']).toEqual(routingTableId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpcId = 'testString';
+        const routingTableId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          vpcId,
+          routingTableId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateVpcRoutingTableRoute(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updateVpcRoutingTableRoute({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateVpcRoutingTableRoutePromise = vpcService.updateVpcRoutingTableRoute();
+        expectToBePromise(updateVpcRoutingTableRoutePromise);
+
+        updateVpcRoutingTableRoutePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
   describe('listSubnets', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
@@ -1411,10 +2364,14 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const resourceGroupId = 'testString';
+        const routingTableId = 'testString';
+        const routingTableName = 'testString';
         const params = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
+          routingTableId: routingTableId,
+          routingTableName: routingTableName,
         };
 
         const listSubnetsResult = vpcService.listSubnets(params);
@@ -1436,6 +2393,8 @@ describe('VpcV1', () => {
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(options.qs['routing_table.id']).toEqual(routingTableId);
+        expect(options.qs['routing_table.name']).toEqual(routingTableName);
       });
 
       test('should prioritize user-given headers', () => {
@@ -1479,6 +2438,11 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
+      // RoutingTableIdentityById
+      const routingTableIdentityModel = {
+        id: '6885e83f-03b2-4603-8a86-db2a0f55c840',
+      };
+
       // VPCIdentityById
       const vpcIdentityModel = {
         id: '4727d842-f94f-4a2d-824a-9bc9b02c523b',
@@ -1491,11 +2455,12 @@ describe('VpcV1', () => {
 
       // SubnetPrototypeSubnetByTotalCount
       const subnetPrototypeModel = {
+        ip_version: 'ipv4',
         name: 'my-subnet',
         network_acl: networkAclIdentityModel,
         public_gateway: publicGatewayIdentityModel,
-        ip_version: 'ipv4',
         resource_group: resourceGroupIdentityModel,
+        routing_table: routingTableIdentityModel,
         vpc: vpcIdentityModel,
         total_ipv4_address_count: 256,
         zone: zoneIdentityModel,
@@ -1723,17 +2688,24 @@ describe('VpcV1', () => {
         id: 'dc5431ef-1fc6-4861-adc9-a59d077d1241',
       };
 
+      // RoutingTableIdentityById
+      const routingTableIdentityModel = {
+        id: '6885e83f-03b2-4603-8a86-db2a0f55c840',
+      };
+
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateSubnet
         const id = 'testString';
         const name = 'my-subnet';
         const networkAcl = networkAclIdentityModel;
         const publicGateway = publicGatewayIdentityModel;
+        const routingTable = routingTableIdentityModel;
         const params = {
           id: id,
           name: name,
           networkAcl: networkAcl,
           publicGateway: publicGateway,
+          routingTable: routingTable,
         };
 
         const updateSubnetResult = vpcService.updateSubnet(params);
@@ -1753,6 +2725,7 @@ describe('VpcV1', () => {
         expect(options.body['name']).toEqual(name);
         expect(options.body['network_acl']).toEqual(networkAcl);
         expect(options.body['public_gateway']).toEqual(publicGateway);
+        expect(options.body['routing_table']).toEqual(routingTable);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['id']).toEqual(id);
@@ -2174,6 +3147,554 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('getSubnetRoutingTable', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getSubnetRoutingTable
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const getSubnetRoutingTableResult = vpcService.getSubnetRoutingTable(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getSubnetRoutingTableResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/subnets/{id}/routing_table', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getSubnetRoutingTable(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getSubnetRoutingTable({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getSubnetRoutingTablePromise = vpcService.getSubnetRoutingTable();
+        expectToBePromise(getSubnetRoutingTablePromise);
+
+        getSubnetRoutingTablePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('replaceSubnetRoutingTable', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // RoutingTableIdentityById
+      const routingTableIdentityModel = {
+        id: '1a15dca5-7e33-45e1-b7c5-bc690e569531',
+      };
+
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation replaceSubnetRoutingTable
+        const id = 'testString';
+        const routingTableIdentity = routingTableIdentityModel;
+        const params = {
+          id: id,
+          routingTableIdentity: routingTableIdentity,
+        };
+
+        const replaceSubnetRoutingTableResult = vpcService.replaceSubnetRoutingTable(params);
+
+        // all methods should return a Promise
+        expectToBePromise(replaceSubnetRoutingTableResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/subnets/{id}/routing_table', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body).toEqual(routingTableIdentity);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const routingTableIdentity = routingTableIdentityModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          routingTableIdentity,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.replaceSubnetRoutingTable(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.replaceSubnetRoutingTable({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const replaceSubnetRoutingTablePromise = vpcService.replaceSubnetRoutingTable();
+        expectToBePromise(replaceSubnetRoutingTablePromise);
+
+        replaceSubnetRoutingTablePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('listSubnetReservedIps', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listSubnetReservedIps
+        const subnetId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const sort = 'name';
+        const params = {
+          subnetId: subnetId,
+          start: start,
+          limit: limit,
+          sort: sort,
+        };
+
+        const listSubnetReservedIpsResult = vpcService.listSubnetReservedIps(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listSubnetReservedIpsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/subnets/{subnet_id}/reserved_ips', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.qs['sort']).toEqual(sort);
+        expect(options.path['subnet_id']).toEqual(subnetId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const subnetId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          subnetId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listSubnetReservedIps(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.listSubnetReservedIps({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const listSubnetReservedIpsPromise = vpcService.listSubnetReservedIps();
+        expectToBePromise(listSubnetReservedIpsPromise);
+
+        listSubnetReservedIpsPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('createSubnetReservedIp', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityById
+      const reservedIpTargetPrototypeModel = {
+        id: 'd7cc5196-9864-48c4-82d8-3f30da41fcc5',
+      };
+
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation createSubnetReservedIp
+        const subnetId = 'testString';
+        const autoDelete = false;
+        const name = 'my-reserved-ip';
+        const target = reservedIpTargetPrototypeModel;
+        const params = {
+          subnetId: subnetId,
+          autoDelete: autoDelete,
+          name: name,
+          target: target,
+        };
+
+        const createSubnetReservedIpResult = vpcService.createSubnetReservedIp(params);
+
+        // all methods should return a Promise
+        expectToBePromise(createSubnetReservedIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/subnets/{subnet_id}/reserved_ips', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['auto_delete']).toEqual(autoDelete);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['target']).toEqual(target);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['subnet_id']).toEqual(subnetId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const subnetId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          subnetId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createSubnetReservedIp(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.createSubnetReservedIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const createSubnetReservedIpPromise = vpcService.createSubnetReservedIp();
+        expectToBePromise(createSubnetReservedIpPromise);
+
+        createSubnetReservedIpPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('deleteSubnetReservedIp', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation deleteSubnetReservedIp
+        const subnetId = 'testString';
+        const id = 'testString';
+        const params = {
+          subnetId: subnetId,
+          id: id,
+        };
+
+        const deleteSubnetReservedIpResult = vpcService.deleteSubnetReservedIp(params);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteSubnetReservedIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/subnets/{subnet_id}/reserved_ips/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['subnet_id']).toEqual(subnetId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const subnetId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          subnetId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteSubnetReservedIp(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deleteSubnetReservedIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deleteSubnetReservedIpPromise = vpcService.deleteSubnetReservedIp();
+        expectToBePromise(deleteSubnetReservedIpPromise);
+
+        deleteSubnetReservedIpPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getSubnetReservedIp', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getSubnetReservedIp
+        const subnetId = 'testString';
+        const id = 'testString';
+        const params = {
+          subnetId: subnetId,
+          id: id,
+        };
+
+        const getSubnetReservedIpResult = vpcService.getSubnetReservedIp(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getSubnetReservedIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/subnets/{subnet_id}/reserved_ips/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['subnet_id']).toEqual(subnetId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const subnetId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          subnetId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getSubnetReservedIp(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getSubnetReservedIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getSubnetReservedIpPromise = vpcService.getSubnetReservedIp();
+        expectToBePromise(getSubnetReservedIpPromise);
+
+        getSubnetReservedIpPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateSubnetReservedIp', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateSubnetReservedIp
+        const subnetId = 'testString';
+        const id = 'testString';
+        const autoDelete = false;
+        const name = 'my-reserved-ip';
+        const params = {
+          subnetId: subnetId,
+          id: id,
+          autoDelete: autoDelete,
+          name: name,
+        };
+
+        const updateSubnetReservedIpResult = vpcService.updateSubnetReservedIp(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updateSubnetReservedIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/subnets/{subnet_id}/reserved_ips/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['auto_delete']).toEqual(autoDelete);
+        expect(options.body['name']).toEqual(name);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['subnet_id']).toEqual(subnetId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const subnetId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          subnetId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateSubnetReservedIp(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updateSubnetReservedIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateSubnetReservedIpPromise = vpcService.updateSubnetReservedIp();
+        expectToBePromise(updateSubnetReservedIpPromise);
+
+        updateSubnetReservedIpPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
   describe('listImages', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
@@ -2240,15 +3761,15 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // EncryptionKeyReference
-      const encryptionKeyReferenceModel = {
-        crn:
-          'crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179',
-      };
-
       // ResourceGroupIdentityById
       const resourceGroupIdentityModel = {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      // EncryptionKeyIdentityByCRN
+      const encryptionKeyIdentityModel = {
+        crn:
+          'crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179',
       };
 
       // ImageFilePrototype
@@ -2264,9 +3785,9 @@ describe('VpcV1', () => {
       // ImagePrototypeImageByFile
       const imagePrototypeModel = {
         name: 'my-image',
-        encrypted_data_key: 'testString',
-        encryption_key: encryptionKeyReferenceModel,
         resource_group: resourceGroupIdentityModel,
+        encrypted_data_key: 'testString',
+        encryption_key: encryptionKeyIdentityModel,
         file: imageFilePrototypeModel,
         operating_system: operatingSystemIdentityModel,
       };
@@ -2739,13 +4260,13 @@ describe('VpcV1', () => {
         const publicKey =
           'AAAAB3NzaC1yc2EAAAADAQABAAABAQDDGe50Bxa5T5NDddrrtbx2Y4/VGbiCgXqnBsYToIUKoFSHTQl5IX3PasGnneKanhcLwWz5M5MoCRvhxTp66NKzIfAz7r+FX9rxgR+ZgcM253YAqOVeIpOU408simDZKriTlN8kYsXL7P34tsWuAJf4MgZtJAQxous/2byetpdCv8ddnT4X3ltOg9w+LqSCPYfNivqH00Eh7S1Ldz7I8aw5WOp5a+sQFP/RbwfpwHp+ny7DfeIOokcuI42tJkoBn7UsLTVpCSmXr2EDRlSWe/1M/iHNRBzaT3CK0+SwZWd2AEjePxSnWKNGIEUJDlUYp7hKhiQcgT5ZAnWU121oc5En';
         const name = 'my-key';
-        const type = 'rsa';
         const resourceGroup = resourceGroupIdentityModel;
+        const type = 'rsa';
         const params = {
           publicKey: publicKey,
           name: name,
-          type: type,
           resourceGroup: resourceGroup,
+          type: type,
         };
 
         const createKeyResult = vpcService.createKey(params);
@@ -2764,8 +4285,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['public_key']).toEqual(publicKey);
         expect(options.body['name']).toEqual(name);
-        expect(options.body['type']).toEqual(type);
         expect(options.body['resource_group']).toEqual(resourceGroup);
+        expect(options.body['type']).toEqual(type);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
       });
@@ -3209,6 +4730,7 @@ describe('VpcV1', () => {
 
       // NetworkInterfacePrototype
       const networkInterfacePrototypeModel = {
+        allow_ip_spoofing: true,
         name: 'my-network-interface',
         primary_ipv4_address: '10.0.0.5',
         security_groups: [securityGroupIdentityModel],
@@ -3217,24 +4739,7 @@ describe('VpcV1', () => {
 
       // InstanceProfileIdentityByName
       const instanceProfileIdentityModel = {
-        name: 'gc.balanced.4x16',
-      };
-
-      // VolumeAttachmentPrototypeInstanceContextVolumeVolumeIdentityVolumeIdentityById
-      const volumeAttachmentPrototypeInstanceContextVolumeModel = {
-        id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
-      };
-
-      // VolumeAttachmentPrototypeInstanceContext
-      const volumeAttachmentPrototypeInstanceContextModel = {
-        delete_volume_on_instance_delete: true,
-        name: 'my-volume-attachment',
-        volume: volumeAttachmentPrototypeInstanceContextVolumeModel,
-      };
-
-      // VPCIdentityById
-      const vpcIdentityModel = {
-        id: '4727d842-f94f-4a2d-824a-9bc9b02c523b',
+        name: 'bx2-2x8',
       };
 
       // ResourceGroupIdentityById
@@ -3242,14 +4747,21 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      // ZoneIdentityByName
-      const zoneIdentityModel = {
-        name: 'us-south-1',
+      // VolumeAttachmentVolumePrototypeInstanceContextVolumeIdentityVolumeIdentityById
+      const volumeAttachmentVolumePrototypeInstanceContextModel = {
+        id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
       };
 
-      // VolumeProfileIdentityByName
-      const volumeProfileIdentityModel = {
-        name: 'general-purpose',
+      // VolumeAttachmentPrototypeInstanceContext
+      const volumeAttachmentPrototypeInstanceContextModel = {
+        delete_volume_on_instance_delete: true,
+        name: 'my-volume-attachment',
+        volume: volumeAttachmentVolumePrototypeInstanceContextModel,
+      };
+
+      // VPCIdentityById
+      const vpcIdentityModel = {
+        id: '4727d842-f94f-4a2d-824a-9bc9b02c523b',
       };
 
       // EncryptionKeyIdentityByCRN
@@ -3258,13 +4770,18 @@ describe('VpcV1', () => {
           'crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179',
       };
 
+      // VolumeProfileIdentityByName
+      const volumeProfileIdentityModel = {
+        name: 'general-purpose',
+      };
+
       // VolumePrototypeInstanceByImageContext
       const volumePrototypeInstanceByImageContextModel = {
+        capacity: 100,
+        encryption_key: encryptionKeyIdentityModel,
+        iops: 10000,
         name: 'my-volume',
         profile: volumeProfileIdentityModel,
-        encryption_key: encryptionKeyIdentityModel,
-        capacity: 100,
-        iops: 10000,
       };
 
       // VolumeAttachmentPrototypeInstanceByImageContext
@@ -3279,20 +4796,25 @@ describe('VpcV1', () => {
         id: '72b27b5c-f4b0-48bb-b954-5becc7c1dcb8',
       };
 
+      // ZoneIdentityByName
+      const zoneIdentityModel = {
+        name: 'us-south-1',
+      };
+
       // InstanceTemplatePrototypeInstanceByImage
       const instanceTemplatePrototypeModel = {
-        name: 'my-instance',
         keys: [keyIdentityModel],
+        name: 'my-instance',
         network_interfaces: [networkInterfacePrototypeModel],
         profile: instanceProfileIdentityModel,
+        resource_group: resourceGroupIdentityModel,
         user_data: 'testString',
         volume_attachments: [volumeAttachmentPrototypeInstanceContextModel],
         vpc: vpcIdentityModel,
-        resource_group: resourceGroupIdentityModel,
-        primary_network_interface: networkInterfacePrototypeModel,
-        zone: zoneIdentityModel,
         boot_volume_attachment: volumeAttachmentPrototypeInstanceByImageContextModel,
         image: imageIdentityModel,
+        primary_network_interface: networkInterfacePrototypeModel,
+        zone: zoneIdentityModel,
       };
 
       test('should pass the right params to createRequest', () => {
@@ -3665,6 +5187,7 @@ describe('VpcV1', () => {
 
       // NetworkInterfacePrototype
       const networkInterfacePrototypeModel = {
+        allow_ip_spoofing: true,
         name: 'my-network-interface',
         primary_ipv4_address: '10.0.0.5',
         security_groups: [securityGroupIdentityModel],
@@ -3673,24 +5196,7 @@ describe('VpcV1', () => {
 
       // InstanceProfileIdentityByName
       const instanceProfileIdentityModel = {
-        name: 'gc.balanced.4x16',
-      };
-
-      // VolumeAttachmentPrototypeInstanceContextVolumeVolumeIdentityVolumeIdentityById
-      const volumeAttachmentPrototypeInstanceContextVolumeModel = {
-        id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
-      };
-
-      // VolumeAttachmentPrototypeInstanceContext
-      const volumeAttachmentPrototypeInstanceContextModel = {
-        delete_volume_on_instance_delete: true,
-        name: 'my-volume-attachment',
-        volume: volumeAttachmentPrototypeInstanceContextVolumeModel,
-      };
-
-      // VPCIdentityById
-      const vpcIdentityModel = {
-        id: '4727d842-f94f-4a2d-824a-9bc9b02c523b',
+        name: 'bx2-2x8',
       };
 
       // ResourceGroupIdentityById
@@ -3698,14 +5204,21 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      // ZoneIdentityByName
-      const zoneIdentityModel = {
-        name: 'us-south-1',
+      // VolumeAttachmentVolumePrototypeInstanceContextVolumeIdentityVolumeIdentityById
+      const volumeAttachmentVolumePrototypeInstanceContextModel = {
+        id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
       };
 
-      // VolumeProfileIdentityByName
-      const volumeProfileIdentityModel = {
-        name: 'general-purpose',
+      // VolumeAttachmentPrototypeInstanceContext
+      const volumeAttachmentPrototypeInstanceContextModel = {
+        delete_volume_on_instance_delete: true,
+        name: 'my-volume-attachment',
+        volume: volumeAttachmentVolumePrototypeInstanceContextModel,
+      };
+
+      // VPCIdentityById
+      const vpcIdentityModel = {
+        id: '4727d842-f94f-4a2d-824a-9bc9b02c523b',
       };
 
       // EncryptionKeyIdentityByCRN
@@ -3714,13 +5227,18 @@ describe('VpcV1', () => {
           'crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179',
       };
 
+      // VolumeProfileIdentityByName
+      const volumeProfileIdentityModel = {
+        name: 'general-purpose',
+      };
+
       // VolumePrototypeInstanceByImageContext
       const volumePrototypeInstanceByImageContextModel = {
+        capacity: 100,
+        encryption_key: encryptionKeyIdentityModel,
+        iops: 10000,
         name: 'my-volume',
         profile: volumeProfileIdentityModel,
-        encryption_key: encryptionKeyIdentityModel,
-        capacity: 100,
-        iops: 10000,
       };
 
       // VolumeAttachmentPrototypeInstanceByImageContext
@@ -3735,20 +5253,25 @@ describe('VpcV1', () => {
         id: '72b27b5c-f4b0-48bb-b954-5becc7c1dcb8',
       };
 
+      // ZoneIdentityByName
+      const zoneIdentityModel = {
+        name: 'us-south-1',
+      };
+
       // InstancePrototypeInstanceByImage
       const instancePrototypeModel = {
-        name: 'my-instance',
         keys: [keyIdentityModel],
+        name: 'my-instance',
         network_interfaces: [networkInterfacePrototypeModel],
         profile: instanceProfileIdentityModel,
+        resource_group: resourceGroupIdentityModel,
         user_data: 'testString',
         volume_attachments: [volumeAttachmentPrototypeInstanceContextModel],
         vpc: vpcIdentityModel,
-        resource_group: resourceGroupIdentityModel,
-        primary_network_interface: networkInterfacePrototypeModel,
-        zone: zoneIdentityModel,
         boot_volume_attachment: volumeAttachmentPrototypeInstanceByImageContextModel,
         image: imageIdentityModel,
+        primary_network_interface: networkInterfacePrototypeModel,
+        zone: zoneIdentityModel,
       };
 
       test('should pass the right params to createRequest', () => {
@@ -4270,12 +5793,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation createInstanceNetworkInterface
         const instanceId = 'testString';
         const subnet = subnetIdentityModel;
+        const allowIpSpoofing = true;
         const name = 'my-network-interface';
         const primaryIpv4Address = '10.0.0.5';
         const securityGroups = [securityGroupIdentityModel];
         const params = {
           instanceId: instanceId,
           subnet: subnet,
+          allowIpSpoofing: allowIpSpoofing,
           name: name,
           primaryIpv4Address: primaryIpv4Address,
           securityGroups: securityGroups,
@@ -4298,6 +5823,7 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['subnet']).toEqual(subnet);
+        expect(options.body['allow_ip_spoofing']).toEqual(allowIpSpoofing);
         expect(options.body['name']).toEqual(name);
         expect(options.body['primary_ipv4_address']).toEqual(primaryIpv4Address);
         expect(options.body['security_groups']).toEqual(securityGroups);
@@ -4508,10 +6034,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateInstanceNetworkInterface
         const instanceId = 'testString';
         const id = 'testString';
+        const allowIpSpoofing = true;
         const name = 'my-network-interface';
         const params = {
           instanceId: instanceId,
           id: id,
+          allowIpSpoofing: allowIpSpoofing,
           name: name,
         };
 
@@ -4531,6 +6059,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['allow_ip_spoofing']).toEqual(allowIpSpoofing);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -5408,20 +6937,20 @@ describe('VpcV1', () => {
         // Construct the params object for operation createInstanceGroup
         const instanceTemplate = instanceTemplateIdentityModel;
         const subnets = [subnetIdentityModel];
-        const name = 'my-instance-group';
-        const membershipCount = 10;
         const applicationPort = 22;
         const loadBalancer = loadBalancerIdentityModel;
         const loadBalancerPool = loadBalancerPoolIdentityModel;
+        const membershipCount = 10;
+        const name = 'my-instance-group';
         const resourceGroup = resourceGroupIdentityModel;
         const params = {
           instanceTemplate: instanceTemplate,
           subnets: subnets,
-          name: name,
-          membershipCount: membershipCount,
           applicationPort: applicationPort,
           loadBalancer: loadBalancer,
           loadBalancerPool: loadBalancerPool,
+          membershipCount: membershipCount,
+          name: name,
           resourceGroup: resourceGroup,
         };
 
@@ -5441,11 +6970,11 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['instance_template']).toEqual(instanceTemplate);
         expect(options.body['subnets']).toEqual(subnets);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['membership_count']).toEqual(membershipCount);
         expect(options.body['application_port']).toEqual(applicationPort);
         expect(options.body['load_balancer']).toEqual(loadBalancer);
         expect(options.body['load_balancer_pool']).toEqual(loadBalancerPool);
+        expect(options.body['membership_count']).toEqual(membershipCount);
+        expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -5644,11 +7173,6 @@ describe('VpcV1', () => {
         id: 'a6b1a881-2ce8-41a3-80fc-36316a73f803',
       };
 
-      // SubnetIdentityById
-      const subnetIdentityModel = {
-        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
-      };
-
       // LoadBalancerIdentityById
       const loadBalancerIdentityModel = {
         id: 'dd754295-e9e0-4c9d-bf6c-58fbc59e5727',
@@ -5659,25 +7183,30 @@ describe('VpcV1', () => {
         id: '70294e14-4e61-11e8-bcf4-0242ac110004',
       };
 
+      // SubnetIdentityById
+      const subnetIdentityModel = {
+        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+      };
+
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateInstanceGroup
         const id = 'testString';
-        const name = 'my-instance-group';
-        const membershipCount = 10;
-        const instanceTemplate = instanceTemplateIdentityModel;
-        const subnets = [subnetIdentityModel];
         const applicationPort = 22;
+        const instanceTemplate = instanceTemplateIdentityModel;
         const loadBalancer = loadBalancerIdentityModel;
         const loadBalancerPool = loadBalancerPoolIdentityModel;
+        const membershipCount = 10;
+        const name = 'my-instance-group';
+        const subnets = [subnetIdentityModel];
         const params = {
           id: id,
-          name: name,
-          membershipCount: membershipCount,
-          instanceTemplate: instanceTemplate,
-          subnets: subnets,
           applicationPort: applicationPort,
+          instanceTemplate: instanceTemplate,
           loadBalancer: loadBalancer,
           loadBalancerPool: loadBalancerPool,
+          membershipCount: membershipCount,
+          name: name,
+          subnets: subnets,
         };
 
         const updateInstanceGroupResult = vpcService.updateInstanceGroup(params);
@@ -5694,13 +7223,13 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['membership_count']).toEqual(membershipCount);
-        expect(options.body['instance_template']).toEqual(instanceTemplate);
-        expect(options.body['subnets']).toEqual(subnets);
         expect(options.body['application_port']).toEqual(applicationPort);
+        expect(options.body['instance_template']).toEqual(instanceTemplate);
         expect(options.body['load_balancer']).toEqual(loadBalancer);
         expect(options.body['load_balancer_pool']).toEqual(loadBalancerPool);
+        expect(options.body['membership_count']).toEqual(membershipCount);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['subnets']).toEqual(subnets);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['id']).toEqual(id);
@@ -5896,13 +7425,13 @@ describe('VpcV1', () => {
 
       // InstanceGroupManagerPrototypeInstanceGroupManagerAutoScalePrototype
       const instanceGroupManagerPrototypeModel = {
-        name: 'my-instance-group-manager',
         management_enabled: true,
+        name: 'my-instance-group-manager',
         aggregation_window: 120,
         cooldown: 210,
+        manager_type: 'autoscale',
         max_membership_count: 10,
         min_membership_count: 10,
-        manager_type: 'autoscale',
       };
 
       test('should pass the right params to createRequest', () => {
@@ -6134,21 +7663,21 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateInstanceGroupManager
         const instanceGroupId = 'testString';
         const id = 'testString';
-        const name = 'my-instance-group-manager';
-        const managementEnabled = true;
         const aggregationWindow = 120;
         const cooldown = 210;
+        const managementEnabled = true;
         const maxMembershipCount = 10;
         const minMembershipCount = 10;
+        const name = 'my-instance-group-manager';
         const params = {
           instanceGroupId: instanceGroupId,
           id: id,
-          name: name,
-          managementEnabled: managementEnabled,
           aggregationWindow: aggregationWindow,
           cooldown: cooldown,
+          managementEnabled: managementEnabled,
           maxMembershipCount: maxMembershipCount,
           minMembershipCount: minMembershipCount,
+          name: name,
         };
 
         const updateInstanceGroupManagerResult = vpcService.updateInstanceGroupManager(params);
@@ -6165,12 +7694,12 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['management_enabled']).toEqual(managementEnabled);
         expect(options.body['aggregation_window']).toEqual(aggregationWindow);
         expect(options.body['cooldown']).toEqual(cooldown);
+        expect(options.body['management_enabled']).toEqual(managementEnabled);
         expect(options.body['max_membership_count']).toEqual(maxMembershipCount);
         expect(options.body['min_membership_count']).toEqual(minMembershipCount);
+        expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
@@ -6577,16 +8106,16 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
-        const name = 'my-instance-group-manager-policy';
         const metricType = 'cpu';
         const metricValue = 38;
+        const name = 'my-instance-group-manager-policy';
         const params = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           id: id,
-          name: name,
           metricType: metricType,
           metricValue: metricValue,
+          name: name,
         };
 
         const updateInstanceGroupManagerPolicyResult = vpcService.updateInstanceGroupManagerPolicy(
@@ -6609,9 +8138,9 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['metric_type']).toEqual(metricType);
         expect(options.body['metric_value']).toEqual(metricValue);
+        expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
@@ -7233,15 +8762,15 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // VolumeProfileIdentityByName
-      const volumeProfileIdentityModel = {
-        name: 'general-purpose',
-      };
-
       // EncryptionKeyIdentityByCRN
       const encryptionKeyIdentityModel = {
         crn:
           'crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179',
+      };
+
+      // VolumeProfileIdentityByName
+      const volumeProfileIdentityModel = {
+        name: 'general-purpose',
       };
 
       // ResourceGroupIdentityById
@@ -7256,10 +8785,10 @@ describe('VpcV1', () => {
 
       // VolumePrototypeVolumeByCapacity
       const volumePrototypeModel = {
-        name: 'my-volume',
-        profile: volumeProfileIdentityModel,
         encryption_key: encryptionKeyIdentityModel,
         iops: 10000,
+        name: 'my-volume',
+        profile: volumeProfileIdentityModel,
         resource_group: resourceGroupIdentityModel,
         zone: zoneIdentityModel,
         capacity: 100,
@@ -7737,10 +9266,10 @@ describe('VpcV1', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation getRegionZone
         const regionName = 'testString';
-        const zoneName = 'testString';
+        const name = 'testString';
         const params = {
           regionName: regionName,
-          zoneName: zoneName,
+          name: name,
         };
 
         const getRegionZoneResult = vpcService.getRegionZone(params);
@@ -7753,25 +9282,25 @@ describe('VpcV1', () => {
 
         const options = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/regions/{region_name}/zones/{zone_name}', 'GET');
+        checkUrlAndMethod(options, '/regions/{region_name}/zones/{name}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['region_name']).toEqual(regionName);
-        expect(options.path['zone_name']).toEqual(zoneName);
+        expect(options.path['name']).toEqual(name);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const regionName = 'testString';
-        const zoneName = 'testString';
+        const name = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
           regionName,
-          zoneName,
+          name,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -7877,8 +9406,8 @@ describe('VpcV1', () => {
         name: 'us-south-1',
       };
 
-      // PublicGatewayPrototypeFloatingIpFloatingIPIdentityFloatingIPIdentityById
-      const publicGatewayPrototypeFloatingIpModel = {
+      // PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityById
+      const publicGatewayFloatingIpPrototypeModel = {
         id: '39300233-9995-4806-89a5-3c1b6eb88689',
       };
 
@@ -7891,14 +9420,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation createPublicGateway
         const vpc = vpcIdentityModel;
         const zone = zoneIdentityModel;
+        const floatingIp = publicGatewayFloatingIpPrototypeModel;
         const name = 'my-public-gateway';
-        const floatingIp = publicGatewayPrototypeFloatingIpModel;
         const resourceGroup = resourceGroupIdentityModel;
         const params = {
           vpc: vpc,
           zone: zone,
-          name: name,
           floatingIp: floatingIp,
+          name: name,
           resourceGroup: resourceGroup,
         };
 
@@ -7918,8 +9447,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['vpc']).toEqual(vpc);
         expect(options.body['zone']).toEqual(zone);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['floating_ip']).toEqual(floatingIp);
+        expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -8610,22 +10139,22 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // VPCIdentityById
-      const vpcIdentityModel = {
-        id: 'cf7cd5a-2f30-4336-a495-6addc820cd61',
-      };
-
       // ResourceGroupIdentityById
       const resourceGroupIdentityModel = {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
+      // VPCIdentityById
+      const vpcIdentityModel = {
+        id: 'cf7cd5a-2f30-4336-a495-6addc820cd61',
+      };
+
       // NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAll
       const networkAclRulePrototypeNetworkAclContextModel = {
-        name: 'my-rule-2',
         action: 'allow',
         destination: '192.168.3.2/32',
         direction: 'inbound',
+        name: 'my-rule-2',
         source: '192.168.3.2/32',
         protocol: 'all',
       };
@@ -8633,8 +10162,8 @@ describe('VpcV1', () => {
       // NetworkACLPrototypeNetworkACLByRules
       const networkAclPrototypeModel = {
         name: 'my-network-acl',
-        vpc: vpcIdentityModel,
         resource_group: resourceGroupIdentityModel,
+        vpc: vpcIdentityModel,
         rules: [networkAclRulePrototypeNetworkAclContextModel],
       };
 
@@ -8982,21 +10511,21 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // NetworkACLRuleIdentityById
-      const networkAclRuleIdentityModel = {
+      // NetworkACLRuleBeforePrototypeNetworkACLRuleIdentityById
+      const networkAclRuleBeforePrototypeModel = {
         id: '8daca77a-4980-4d33-8f3e-7038797be8f9',
       };
 
       // NetworkACLRulePrototypeNetworkACLRuleProtocolICMP
       const networkAclRulePrototypeModel = {
-        name: 'my-rule-2',
         action: 'allow',
+        before: networkAclRuleBeforePrototypeModel,
         destination: '192.168.3.2/32',
         direction: 'inbound',
+        name: 'my-rule-2',
         source: '192.168.3.2/32',
-        protocol: 'icmp',
-        before: networkAclRuleIdentityModel,
         code: 0,
+        protocol: 'icmp',
         type: 8,
       };
 
@@ -9227,8 +10756,8 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // NetworkACLRuleIdentityById
-      const networkAclRuleIdentityModel = {
+      // NetworkACLRuleBeforePatchNetworkACLRuleIdentityById
+      const networkAclRuleBeforePatchModel = {
         id: '8daca77a-4980-4d33-8f3e-7038797be8f9',
       };
 
@@ -9236,33 +10765,33 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateNetworkAclRule
         const networkAclId = 'testString';
         const id = 'testString';
-        const name = 'my-rule-2';
         const action = 'allow';
+        const before = networkAclRuleBeforePatchModel;
+        const code = 0;
         const destination = '192.168.3.2/32';
-        const direction = 'inbound';
-        const source = '192.168.3.2/32';
         const destinationPortMax = 22;
         const destinationPortMin = 22;
+        const direction = 'inbound';
+        const name = 'my-rule-2';
+        const source = '192.168.3.2/32';
         const sourcePortMax = 65535;
         const sourcePortMin = 49152;
-        const code = 0;
         const type = 8;
-        const before = networkAclRuleIdentityModel;
         const params = {
           networkAclId: networkAclId,
           id: id,
-          name: name,
           action: action,
+          before: before,
+          code: code,
           destination: destination,
-          direction: direction,
-          source: source,
           destinationPortMax: destinationPortMax,
           destinationPortMin: destinationPortMin,
+          direction: direction,
+          name: name,
+          source: source,
           sourcePortMax: sourcePortMax,
           sourcePortMin: sourcePortMin,
-          code: code,
           type: type,
-          before: before,
         };
 
         const updateNetworkAclRuleResult = vpcService.updateNetworkAclRule(params);
@@ -9279,18 +10808,18 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['action']).toEqual(action);
+        expect(options.body['before']).toEqual(before);
+        expect(options.body['code']).toEqual(code);
         expect(options.body['destination']).toEqual(destination);
-        expect(options.body['direction']).toEqual(direction);
-        expect(options.body['source']).toEqual(source);
         expect(options.body['destination_port_max']).toEqual(destinationPortMax);
         expect(options.body['destination_port_min']).toEqual(destinationPortMin);
+        expect(options.body['direction']).toEqual(direction);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['source']).toEqual(source);
         expect(options.body['source_port_max']).toEqual(sourcePortMax);
         expect(options.body['source_port_min']).toEqual(sourcePortMin);
-        expect(options.body['code']).toEqual(code);
         expect(options.body['type']).toEqual(type);
-        expect(options.body['before']).toEqual(before);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['network_acl_id']).toEqual(networkAclId);
@@ -9420,8 +10949,8 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      // SecurityGroupRulePrototypeRemoteIP
-      const securityGroupRulePrototypeRemoteModel = {
+      // SecurityGroupRuleRemotePrototypeIP
+      const securityGroupRuleRemotePrototypeModel = {
         address: '192.168.3.4',
       };
 
@@ -9429,9 +10958,9 @@ describe('VpcV1', () => {
       const securityGroupRulePrototypeModel = {
         direction: 'inbound',
         ip_version: 'ipv4',
-        protocol: 'icmp',
-        remote: securityGroupRulePrototypeRemoteModel,
+        remote: securityGroupRuleRemotePrototypeModel,
         code: 0,
+        protocol: 'icmp',
         type: 8,
       };
 
@@ -10124,8 +11653,8 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // SecurityGroupRulePrototypeRemoteIP
-      const securityGroupRulePrototypeRemoteModel = {
+      // SecurityGroupRuleRemotePrototypeIP
+      const securityGroupRuleRemotePrototypeModel = {
         address: '192.168.3.4',
       };
 
@@ -10133,9 +11662,9 @@ describe('VpcV1', () => {
       const securityGroupRulePrototypeModel = {
         direction: 'inbound',
         ip_version: 'ipv4',
-        protocol: 'icmp',
-        remote: securityGroupRulePrototypeRemoteModel,
+        remote: securityGroupRuleRemotePrototypeModel,
         code: 0,
+        protocol: 'icmp',
         type: 8,
       };
 
@@ -10366,8 +11895,8 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // SecurityGroupRulePatchRemoteIP
-      const securityGroupRulePatchRemoteModel = {
+      // SecurityGroupRuleRemotePatchIP
+      const securityGroupRuleRemotePatchModel = {
         address: '192.168.3.4',
       };
 
@@ -10375,22 +11904,22 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateSecurityGroupRule
         const securityGroupId = 'testString';
         const id = 'testString';
-        const remote = securityGroupRulePatchRemoteModel;
+        const code = 0;
         const direction = 'inbound';
         const ipVersion = 'ipv4';
-        const code = 0;
         const portMax = 22;
         const portMin = 22;
+        const remote = securityGroupRuleRemotePatchModel;
         const type = 8;
         const params = {
           securityGroupId: securityGroupId,
           id: id,
-          remote: remote,
+          code: code,
           direction: direction,
           ipVersion: ipVersion,
-          code: code,
           portMax: portMax,
           portMin: portMin,
+          remote: remote,
           type: type,
         };
 
@@ -10408,12 +11937,12 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['remote']).toEqual(remote);
+        expect(options.body['code']).toEqual(code);
         expect(options.body['direction']).toEqual(direction);
         expect(options.body['ip_version']).toEqual(ipVersion);
-        expect(options.body['code']).toEqual(code);
         expect(options.body['port_max']).toEqual(portMax);
         expect(options.body['port_min']).toEqual(portMin);
+        expect(options.body['remote']).toEqual(remote);
         expect(options.body['type']).toEqual(type);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -10533,16 +12062,16 @@ describe('VpcV1', () => {
         const dhGroup = 2;
         const encryptionAlgorithm = 'triple_des';
         const ikeVersion = 1;
-        const name = 'my-ike-policy';
         const keyLifetime = 28800;
+        const name = 'my-ike-policy';
         const resourceGroup = resourceGroupIdentityModel;
         const params = {
           authenticationAlgorithm: authenticationAlgorithm,
           dhGroup: dhGroup,
           encryptionAlgorithm: encryptionAlgorithm,
           ikeVersion: ikeVersion,
-          name: name,
           keyLifetime: keyLifetime,
+          name: name,
           resourceGroup: resourceGroup,
         };
 
@@ -10564,8 +12093,8 @@ describe('VpcV1', () => {
         expect(options.body['dh_group']).toEqual(dhGroup);
         expect(options.body['encryption_algorithm']).toEqual(encryptionAlgorithm);
         expect(options.body['ike_version']).toEqual(ikeVersion);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['key_lifetime']).toEqual(keyLifetime);
+        expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -10764,20 +12293,20 @@ describe('VpcV1', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateIkePolicy
         const id = 'testString';
-        const name = 'my-ike-policy';
         const authenticationAlgorithm = 'md5';
         const dhGroup = 2;
         const encryptionAlgorithm = 'triple_des';
         const ikeVersion = 1;
         const keyLifetime = 28800;
+        const name = 'my-ike-policy';
         const params = {
           id: id,
-          name: name,
           authenticationAlgorithm: authenticationAlgorithm,
           dhGroup: dhGroup,
           encryptionAlgorithm: encryptionAlgorithm,
           ikeVersion: ikeVersion,
           keyLifetime: keyLifetime,
+          name: name,
         };
 
         const updateIkePolicyResult = vpcService.updateIkePolicy(params);
@@ -10794,12 +12323,12 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['authentication_algorithm']).toEqual(authenticationAlgorithm);
         expect(options.body['dh_group']).toEqual(dhGroup);
         expect(options.body['encryption_algorithm']).toEqual(encryptionAlgorithm);
         expect(options.body['ike_version']).toEqual(ikeVersion);
         expect(options.body['key_lifetime']).toEqual(keyLifetime);
+        expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['id']).toEqual(id);
@@ -10984,15 +12513,15 @@ describe('VpcV1', () => {
         const authenticationAlgorithm = 'md5';
         const encryptionAlgorithm = 'triple_des';
         const pfs = 'disabled';
-        const name = 'my-ipsec-policy';
         const keyLifetime = 3600;
+        const name = 'my-ipsec-policy';
         const resourceGroup = resourceGroupIdentityModel;
         const params = {
           authenticationAlgorithm: authenticationAlgorithm,
           encryptionAlgorithm: encryptionAlgorithm,
           pfs: pfs,
-          name: name,
           keyLifetime: keyLifetime,
+          name: name,
           resourceGroup: resourceGroup,
         };
 
@@ -11013,8 +12542,8 @@ describe('VpcV1', () => {
         expect(options.body['authentication_algorithm']).toEqual(authenticationAlgorithm);
         expect(options.body['encryption_algorithm']).toEqual(encryptionAlgorithm);
         expect(options.body['pfs']).toEqual(pfs);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['key_lifetime']).toEqual(keyLifetime);
+        expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -11211,17 +12740,17 @@ describe('VpcV1', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateIpsecPolicy
         const id = 'testString';
-        const name = 'my-ipsec-policy';
         const authenticationAlgorithm = 'md5';
         const encryptionAlgorithm = 'triple_des';
         const keyLifetime = 3600;
+        const name = 'my-ipsec-policy';
         const pfs = 'disabled';
         const params = {
           id: id,
-          name: name,
           authenticationAlgorithm: authenticationAlgorithm,
           encryptionAlgorithm: encryptionAlgorithm,
           keyLifetime: keyLifetime,
+          name: name,
           pfs: pfs,
         };
 
@@ -11239,10 +12768,10 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['authentication_algorithm']).toEqual(authenticationAlgorithm);
         expect(options.body['encryption_algorithm']).toEqual(encryptionAlgorithm);
         expect(options.body['key_lifetime']).toEqual(keyLifetime);
+        expect(options.body['name']).toEqual(name);
         expect(options.body['pfs']).toEqual(pfs);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -11368,10 +12897,12 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const resourceGroupId = 'testString';
+        const mode = 'route';
         const params = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
+          mode: mode,
         };
 
         const listVpnGatewaysResult = vpcService.listVpnGateways(params);
@@ -11393,6 +12924,7 @@ describe('VpcV1', () => {
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(options.qs['mode']).toEqual(mode);
       });
 
       test('should prioritize user-given headers', () => {
@@ -11421,25 +12953,29 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // SubnetIdentityById
-      const subnetIdentityModel = {
-        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
-      };
-
       // ResourceGroupIdentityById
       const resourceGroupIdentityModel = {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
+      // SubnetIdentityById
+      const subnetIdentityModel = {
+        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+      };
+
+      // VPNGatewayPrototypeVPNGatewayRouteModePrototype
+      const vpnGatewayPrototypeModel = {
+        name: 'my-vpn-gateway',
+        resource_group: resourceGroupIdentityModel,
+        subnet: subnetIdentityModel,
+        mode: 'route',
+      };
+
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createVpnGateway
-        const subnet = subnetIdentityModel;
-        const name = 'my-vpn-gateway';
-        const resourceGroup = resourceGroupIdentityModel;
+        const vpnGatewayPrototype = vpnGatewayPrototypeModel;
         const params = {
-          subnet: subnet,
-          name: name,
-          resourceGroup: resourceGroup,
+          vpnGatewayPrototype: vpnGatewayPrototype,
         };
 
         const createVpnGatewayResult = vpcService.createVpnGateway(params);
@@ -11456,20 +12992,18 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['subnet']).toEqual(subnet);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
+        expect(options.body).toEqual(vpnGatewayPrototype);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const subnet = subnetIdentityModel;
+        const vpnGatewayPrototype = vpnGatewayPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
-          subnet,
+          vpnGatewayPrototype,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -11812,29 +13346,25 @@ describe('VpcV1', () => {
         id: 'ddf51bec-3424-11e8-b467-0ed5f89f718b',
       };
 
+      // VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype
+      const vpnGatewayConnectionPrototypeModel = {
+        admin_state_up: true,
+        dead_peer_detection: vpnGatewayConnectionDpdPrototypeModel,
+        ike_policy: ikePolicyIdentityModel,
+        ipsec_policy: iPsecPolicyIdentityModel,
+        name: 'my-vpn-connection',
+        peer_address: '169.21.50.5',
+        psk: 'lkj14b1oi0alcniejkso',
+        routing_protocol: 'none',
+      };
+
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createVpnGatewayConnection
         const vpnGatewayId = 'testString';
-        const peerAddress = '169.21.50.5';
-        const psk = 'lkj14b1oi0alcniejkso';
-        const adminStateUp = true;
-        const name = 'my-vpn-connection';
-        const deadPeerDetection = vpnGatewayConnectionDpdPrototypeModel;
-        const ikePolicy = ikePolicyIdentityModel;
-        const ipsecPolicy = iPsecPolicyIdentityModel;
-        const localCidrs = ['192.168.1.0/24'];
-        const peerCidrs = ['10.45.1.0/24'];
+        const vpnGatewayConnectionPrototype = vpnGatewayConnectionPrototypeModel;
         const params = {
           vpnGatewayId: vpnGatewayId,
-          peerAddress: peerAddress,
-          psk: psk,
-          adminStateUp: adminStateUp,
-          name: name,
-          deadPeerDetection: deadPeerDetection,
-          ikePolicy: ikePolicy,
-          ipsecPolicy: ipsecPolicy,
-          localCidrs: localCidrs,
-          peerCidrs: peerCidrs,
+          vpnGatewayConnectionPrototype: vpnGatewayConnectionPrototype,
         };
 
         const createVpnGatewayConnectionResult = vpcService.createVpnGatewayConnection(params);
@@ -11851,15 +13381,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['peer_address']).toEqual(peerAddress);
-        expect(options.body['psk']).toEqual(psk);
-        expect(options.body['admin_state_up']).toEqual(adminStateUp);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['dead_peer_detection']).toEqual(deadPeerDetection);
-        expect(options.body['ike_policy']).toEqual(ikePolicy);
-        expect(options.body['ipsec_policy']).toEqual(ipsecPolicy);
-        expect(options.body['local_cidrs']).toEqual(localCidrs);
-        expect(options.body['peer_cidrs']).toEqual(peerCidrs);
+        expect(options.body).toEqual(vpnGatewayConnectionPrototype);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
@@ -11868,14 +13390,12 @@ describe('VpcV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const vpnGatewayId = 'testString';
-        const peerAddress = '169.21.50.5';
-        const psk = 'lkj14b1oi0alcniejkso';
+        const vpnGatewayConnectionPrototype = vpnGatewayConnectionPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
           vpnGatewayId,
-          peerAddress,
-          psk,
+          vpnGatewayConnectionPrototype,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -12082,27 +13602,27 @@ describe('VpcV1', () => {
         id: 'ddf51bec-3424-11e8-b467-0ed5f89f718b',
       };
 
+      // VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch
+      const vpnGatewayConnectionPatchModel = {
+        admin_state_up: true,
+        dead_peer_detection: vpnGatewayConnectionDpdPrototypeModel,
+        ike_policy: ikePolicyIdentityModel,
+        ipsec_policy: iPsecPolicyIdentityModel,
+        name: 'my-vpn-connection',
+        peer_address: '169.21.50.5',
+        psk: 'lkj14b1oi0alcniejkso',
+        routing_protocol: 'none',
+      };
+
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateVpnGatewayConnection
         const vpnGatewayId = 'testString';
         const id = 'testString';
-        const adminStateUp = true;
-        const peerAddress = '169.21.50.5';
-        const name = 'my-vpn-connection';
-        const psk = 'lkj14b1oi0alcniejkso';
-        const deadPeerDetection = vpnGatewayConnectionDpdPrototypeModel;
-        const ikePolicy = ikePolicyIdentityModel;
-        const ipsecPolicy = iPsecPolicyIdentityModel;
+        const vpnGatewayConnectionPatch = vpnGatewayConnectionPatchModel;
         const params = {
           vpnGatewayId: vpnGatewayId,
           id: id,
-          adminStateUp: adminStateUp,
-          peerAddress: peerAddress,
-          name: name,
-          psk: psk,
-          deadPeerDetection: deadPeerDetection,
-          ikePolicy: ikePolicy,
-          ipsecPolicy: ipsecPolicy,
+          vpnGatewayConnectionPatch: vpnGatewayConnectionPatch,
         };
 
         const updateVpnGatewayConnectionResult = vpcService.updateVpnGatewayConnection(params);
@@ -12119,13 +13639,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['admin_state_up']).toEqual(adminStateUp);
-        expect(options.body['peer_address']).toEqual(peerAddress);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['psk']).toEqual(psk);
-        expect(options.body['dead_peer_detection']).toEqual(deadPeerDetection);
-        expect(options.body['ike_policy']).toEqual(ikePolicy);
-        expect(options.body['ipsec_policy']).toEqual(ipsecPolicy);
+        expect(options.body).toEqual(vpnGatewayConnectionPatch);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
@@ -12136,11 +13650,13 @@ describe('VpcV1', () => {
         // parameters
         const vpnGatewayId = 'testString';
         const id = 'testString';
+        const vpnGatewayConnectionPatch = vpnGatewayConnectionPatchModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
           vpnGatewayId,
           id,
+          vpnGatewayConnectionPatch,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -13069,10 +14585,11 @@ describe('VpcV1', () => {
 
       // LoadBalancerListenerPrototypeLoadBalancerContext
       const loadBalancerListenerPrototypeLoadBalancerContextModel = {
+        accept_proxy_protocol: true,
         connection_limit: 2000,
+        default_pool: loadBalancerPoolIdentityByNameModel,
         port: 443,
         protocol: 'http',
-        default_pool: loadBalancerPoolIdentityByNameModel,
       };
 
       // LoadBalancerPoolHealthMonitorPrototype
@@ -13093,8 +14610,8 @@ describe('VpcV1', () => {
       // LoadBalancerPoolMemberPrototype
       const loadBalancerPoolMemberPrototypeModel = {
         port: 80,
-        weight: 50,
         target: loadBalancerPoolMemberTargetPrototypeModel,
+        weight: 50,
       };
 
       // LoadBalancerPoolSessionPersistencePrototype
@@ -13104,11 +14621,12 @@ describe('VpcV1', () => {
 
       // LoadBalancerPoolPrototype
       const loadBalancerPoolPrototypeModel = {
-        name: 'my-load-balancer-pool',
         algorithm: 'least_connections',
-        protocol: 'http',
         health_monitor: loadBalancerPoolHealthMonitorPrototypeModel,
         members: [loadBalancerPoolMemberPrototypeModel],
+        name: 'my-load-balancer-pool',
+        protocol: 'http',
+        proxy_protocol: 'disabled',
         session_persistence: loadBalancerPoolSessionPersistencePrototypeModel,
       };
 
@@ -13126,16 +14644,16 @@ describe('VpcV1', () => {
         // Construct the params object for operation createLoadBalancer
         const isPublic = true;
         const subnets = [subnetIdentityModel];
-        const name = 'my-load-balancer';
         const listeners = [loadBalancerListenerPrototypeLoadBalancerContextModel];
+        const name = 'my-load-balancer';
         const pools = [loadBalancerPoolPrototypeModel];
         const profile = loadBalancerProfileIdentityModel;
         const resourceGroup = resourceGroupIdentityModel;
         const params = {
           isPublic: isPublic,
           subnets: subnets,
-          name: name,
           listeners: listeners,
+          name: name,
           pools: pools,
           profile: profile,
           resourceGroup: resourceGroup,
@@ -13157,8 +14675,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['is_public']).toEqual(isPublic);
         expect(options.body['subnets']).toEqual(subnets);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['listeners']).toEqual(listeners);
+        expect(options.body['name']).toEqual(name);
         expect(options.body['pools']).toEqual(pools);
         expect(options.body['profile']).toEqual(profile);
         expect(options.body['resource_group']).toEqual(resourceGroup);
@@ -13586,18 +15104,18 @@ describe('VpcV1', () => {
         value: 'testString',
       };
 
-      // LoadBalancerListenerPolicyPrototypeTargetLoadBalancerPoolIdentityLoadBalancerPoolIdentityById
-      const loadBalancerListenerPolicyPrototypeTargetModel = {
+      // LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityById
+      const loadBalancerListenerPolicyTargetPrototypeModel = {
         id: '70294e14-4e61-11e8-bcf4-0242ac110004',
       };
 
       // LoadBalancerListenerPolicyPrototype
       const loadBalancerListenerPolicyPrototypeModel = {
+        action: 'forward',
         name: 'my-policy',
         priority: 5,
-        action: 'forward',
         rules: [loadBalancerListenerPolicyRulePrototypeModel],
-        target: loadBalancerListenerPolicyPrototypeTargetModel,
+        target: loadBalancerListenerPolicyTargetPrototypeModel,
       };
 
       test('should pass the right params to createRequest', () => {
@@ -13605,16 +15123,18 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const port = 443;
         const protocol = 'http';
-        const connectionLimit = 2000;
+        const acceptProxyProtocol = true;
         const certificateInstance = certificateInstanceIdentityModel;
+        const connectionLimit = 2000;
         const defaultPool = loadBalancerPoolIdentityModel;
         const policies = [loadBalancerListenerPolicyPrototypeModel];
         const params = {
           loadBalancerId: loadBalancerId,
           port: port,
           protocol: protocol,
-          connectionLimit: connectionLimit,
+          acceptProxyProtocol: acceptProxyProtocol,
           certificateInstance: certificateInstance,
+          connectionLimit: connectionLimit,
           defaultPool: defaultPool,
           policies: policies,
         };
@@ -13635,8 +15155,9 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['port']).toEqual(port);
         expect(options.body['protocol']).toEqual(protocol);
-        expect(options.body['connection_limit']).toEqual(connectionLimit);
+        expect(options.body['accept_proxy_protocol']).toEqual(acceptProxyProtocol);
         expect(options.body['certificate_instance']).toEqual(certificateInstance);
+        expect(options.body['connection_limit']).toEqual(connectionLimit);
         expect(options.body['default_pool']).toEqual(defaultPool);
         expect(options.body['policies']).toEqual(policies);
         expect(options.qs['version']).toEqual(service.version);
@@ -13859,19 +15380,21 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateLoadBalancerListener
         const loadBalancerId = 'testString';
         const id = 'testString';
+        const acceptProxyProtocol = true;
+        const certificateInstance = certificateInstanceIdentityModel;
         const connectionLimit = 2000;
+        const defaultPool = loadBalancerPoolIdentityModel;
         const port = 443;
         const protocol = 'http';
-        const certificateInstance = certificateInstanceIdentityModel;
-        const defaultPool = loadBalancerPoolIdentityModel;
         const params = {
           loadBalancerId: loadBalancerId,
           id: id,
+          acceptProxyProtocol: acceptProxyProtocol,
+          certificateInstance: certificateInstance,
           connectionLimit: connectionLimit,
+          defaultPool: defaultPool,
           port: port,
           protocol: protocol,
-          certificateInstance: certificateInstance,
-          defaultPool: defaultPool,
         };
 
         const updateLoadBalancerListenerResult = vpcService.updateLoadBalancerListener(params);
@@ -13888,11 +15411,12 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['accept_proxy_protocol']).toEqual(acceptProxyProtocol);
+        expect(options.body['certificate_instance']).toEqual(certificateInstance);
         expect(options.body['connection_limit']).toEqual(connectionLimit);
+        expect(options.body['default_pool']).toEqual(defaultPool);
         expect(options.body['port']).toEqual(port);
         expect(options.body['protocol']).toEqual(protocol);
-        expect(options.body['certificate_instance']).toEqual(certificateInstance);
-        expect(options.body['default_pool']).toEqual(defaultPool);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
@@ -14036,8 +15560,8 @@ describe('VpcV1', () => {
         value: 'testString',
       };
 
-      // LoadBalancerListenerPolicyPrototypeTargetLoadBalancerPoolIdentityLoadBalancerPoolIdentityById
-      const loadBalancerListenerPolicyPrototypeTargetModel = {
+      // LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityById
+      const loadBalancerListenerPolicyTargetPrototypeModel = {
         id: '70294e14-4e61-11e8-bcf4-0242ac110004',
       };
 
@@ -14045,16 +15569,16 @@ describe('VpcV1', () => {
         // Construct the params object for operation createLoadBalancerListenerPolicy
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
-        const priority = 5;
         const action = 'forward';
+        const priority = 5;
         const name = 'my-policy';
         const rules = [loadBalancerListenerPolicyRulePrototypeModel];
-        const target = loadBalancerListenerPolicyPrototypeTargetModel;
+        const target = loadBalancerListenerPolicyTargetPrototypeModel;
         const params = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
-          priority: priority,
           action: action,
+          priority: priority,
           name: name,
           rules: rules,
           target: target,
@@ -14080,8 +15604,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['priority']).toEqual(priority);
         expect(options.body['action']).toEqual(action);
+        expect(options.body['priority']).toEqual(priority);
         expect(options.body['name']).toEqual(name);
         expect(options.body['rules']).toEqual(rules);
         expect(options.body['target']).toEqual(target);
@@ -14095,15 +15619,15 @@ describe('VpcV1', () => {
         // parameters
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
-        const priority = 5;
         const action = 'forward';
+        const priority = 5;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
           loadBalancerId,
           listenerId,
-          priority,
           action,
+          priority,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -14315,8 +15839,8 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // LoadBalancerListenerPolicyPatchTargetLoadBalancerPoolIdentityLoadBalancerPoolIdentityById
-      const loadBalancerListenerPolicyPatchTargetModel = {
+      // LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityById
+      const loadBalancerListenerPolicyTargetPatchModel = {
         id: '70294e14-4e61-11e8-bcf4-0242ac110004',
       };
 
@@ -14327,7 +15851,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-policy';
         const priority = 5;
-        const target = loadBalancerListenerPolicyPatchTargetModel;
+        const target = loadBalancerListenerPolicyTargetPatchModel;
         const params = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
@@ -14980,8 +16504,8 @@ describe('VpcV1', () => {
       // LoadBalancerPoolMemberPrototype
       const loadBalancerPoolMemberPrototypeModel = {
         port: 80,
-        weight: 50,
         target: loadBalancerPoolMemberTargetPrototypeModel,
+        weight: 50,
       };
 
       // LoadBalancerPoolSessionPersistencePrototype
@@ -14993,18 +16517,20 @@ describe('VpcV1', () => {
         // Construct the params object for operation createLoadBalancerPool
         const loadBalancerId = 'testString';
         const algorithm = 'least_connections';
-        const protocol = 'http';
         const healthMonitor = loadBalancerPoolHealthMonitorPrototypeModel;
-        const name = 'my-load-balancer-pool';
+        const protocol = 'http';
         const members = [loadBalancerPoolMemberPrototypeModel];
+        const name = 'my-load-balancer-pool';
+        const proxyProtocol = 'disabled';
         const sessionPersistence = loadBalancerPoolSessionPersistencePrototypeModel;
         const params = {
           loadBalancerId: loadBalancerId,
           algorithm: algorithm,
-          protocol: protocol,
           healthMonitor: healthMonitor,
-          name: name,
+          protocol: protocol,
           members: members,
+          name: name,
+          proxyProtocol: proxyProtocol,
           sessionPersistence: sessionPersistence,
         };
 
@@ -15023,10 +16549,11 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['algorithm']).toEqual(algorithm);
-        expect(options.body['protocol']).toEqual(protocol);
         expect(options.body['health_monitor']).toEqual(healthMonitor);
-        expect(options.body['name']).toEqual(name);
+        expect(options.body['protocol']).toEqual(protocol);
         expect(options.body['members']).toEqual(members);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['proxy_protocol']).toEqual(proxyProtocol);
         expect(options.body['session_persistence']).toEqual(sessionPersistence);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -15037,15 +16564,15 @@ describe('VpcV1', () => {
         // parameters
         const loadBalancerId = 'testString';
         const algorithm = 'least_connections';
-        const protocol = 'http';
         const healthMonitor = loadBalancerPoolHealthMonitorPrototypeModel;
+        const protocol = 'http';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
           loadBalancerId,
           algorithm,
-          protocol,
           healthMonitor,
+          protocol,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -15254,18 +16781,20 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateLoadBalancerPool
         const loadBalancerId = 'testString';
         const id = 'testString';
-        const name = 'my-load-balancer-pool';
         const algorithm = 'least_connections';
-        const protocol = 'http';
         const healthMonitor = loadBalancerPoolHealthMonitorPatchModel;
+        const name = 'my-load-balancer-pool';
+        const protocol = 'http';
+        const proxyProtocol = 'disabled';
         const sessionPersistence = loadBalancerPoolSessionPersistencePatchModel;
         const params = {
           loadBalancerId: loadBalancerId,
           id: id,
-          name: name,
           algorithm: algorithm,
-          protocol: protocol,
           healthMonitor: healthMonitor,
+          name: name,
+          protocol: protocol,
+          proxyProtocol: proxyProtocol,
           sessionPersistence: sessionPersistence,
         };
 
@@ -15283,10 +16812,11 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['algorithm']).toEqual(algorithm);
-        expect(options.body['protocol']).toEqual(protocol);
         expect(options.body['health_monitor']).toEqual(healthMonitor);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['protocol']).toEqual(protocol);
+        expect(options.body['proxy_protocol']).toEqual(proxyProtocol);
         expect(options.body['session_persistence']).toEqual(sessionPersistence);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -15528,8 +17058,8 @@ describe('VpcV1', () => {
       // LoadBalancerPoolMemberPrototype
       const loadBalancerPoolMemberPrototypeModel = {
         port: 80,
-        weight: 50,
         target: loadBalancerPoolMemberTargetPrototypeModel,
+        weight: 50,
       };
 
       test('should pass the right params to createRequest', () => {
@@ -15799,15 +17329,15 @@ describe('VpcV1', () => {
         const poolId = 'testString';
         const id = 'testString';
         const port = 80;
-        const weight = 50;
         const target = loadBalancerPoolMemberTargetPrototypeModel;
+        const weight = 50;
         const params = {
           loadBalancerId: loadBalancerId,
           poolId: poolId,
           id: id,
           port: port,
-          weight: weight,
           target: target,
+          weight: weight,
         };
 
         const updateLoadBalancerPoolMemberResult = vpcService.updateLoadBalancerPoolMember(params);
@@ -15829,8 +17359,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['port']).toEqual(port);
-        expect(options.body['weight']).toEqual(weight);
         expect(options.body['target']).toEqual(target);
+        expect(options.body['weight']).toEqual(weight);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
@@ -15878,6 +17408,690 @@ describe('VpcV1', () => {
         expectToBePromise(updateLoadBalancerPoolMemberPromise);
 
         updateLoadBalancerPoolMemberPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('listEndpointGateways', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listEndpointGateways
+        const name = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const resourceGroupId = 'testString';
+        const params = {
+          name: name,
+          start: start,
+          limit: limit,
+          resourceGroupId: resourceGroupId,
+        };
+
+        const listEndpointGatewaysResult = vpcService.listEndpointGateways(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listEndpointGatewaysResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/endpoint_gateways', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['name']).toEqual(name);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listEndpointGateways(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listEndpointGateways({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('createEndpointGateway', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // EndpointGatewayTargetPrototypeProviderCloudServiceIdentityProviderCloudServiceIdentityByCRN
+      const endpointGatewayTargetPrototypeModel = {
+        resource_type: 'provider_infrastructure_service',
+        crn:
+          'crn:v1:bluemix:public:cloudant:us-south:a/123456:3527280b-9327-4411-8020-591092e60353::',
+      };
+
+      // VPCIdentityById
+      const vpcIdentityModel = {
+        id: 'f025b503-ae66-46de-a011-3bd08fd5f7bf',
+      };
+
+      // EndpointGatewayReservedIPReservedIPIdentityReservedIPIdentityById
+      const endpointGatewayReservedIpModel = {
+        id: '6d353a0f-aeb1-4ae1-832e-1110d10981bb',
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation createEndpointGateway
+        const target = endpointGatewayTargetPrototypeModel;
+        const vpc = vpcIdentityModel;
+        const ips = [endpointGatewayReservedIpModel];
+        const name = 'testString';
+        const resourceGroup = resourceGroupIdentityModel;
+        const params = {
+          target: target,
+          vpc: vpc,
+          ips: ips,
+          name: name,
+          resourceGroup: resourceGroup,
+        };
+
+        const createEndpointGatewayResult = vpcService.createEndpointGateway(params);
+
+        // all methods should return a Promise
+        expectToBePromise(createEndpointGatewayResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/endpoint_gateways', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['target']).toEqual(target);
+        expect(options.body['vpc']).toEqual(vpc);
+        expect(options.body['ips']).toEqual(ips);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['resource_group']).toEqual(resourceGroup);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const target = endpointGatewayTargetPrototypeModel;
+        const vpc = vpcIdentityModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          target,
+          vpc,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createEndpointGateway(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.createEndpointGateway({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const createEndpointGatewayPromise = vpcService.createEndpointGateway();
+        expectToBePromise(createEndpointGatewayPromise);
+
+        createEndpointGatewayPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('listEndpointGatewayIps', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listEndpointGatewayIps
+        const endpointGatewayId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const sort = 'name';
+        const params = {
+          endpointGatewayId: endpointGatewayId,
+          start: start,
+          limit: limit,
+          sort: sort,
+        };
+
+        const listEndpointGatewayIpsResult = vpcService.listEndpointGatewayIps(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listEndpointGatewayIpsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/endpoint_gateways/{endpoint_gateway_id}/ips', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.qs['sort']).toEqual(sort);
+        expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const endpointGatewayId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          endpointGatewayId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listEndpointGatewayIps(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.listEndpointGatewayIps({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const listEndpointGatewayIpsPromise = vpcService.listEndpointGatewayIps();
+        expectToBePromise(listEndpointGatewayIpsPromise);
+
+        listEndpointGatewayIpsPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('removeEndpointGatewayIp', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation removeEndpointGatewayIp
+        const endpointGatewayId = 'testString';
+        const id = 'testString';
+        const params = {
+          endpointGatewayId: endpointGatewayId,
+          id: id,
+        };
+
+        const removeEndpointGatewayIpResult = vpcService.removeEndpointGatewayIp(params);
+
+        // all methods should return a Promise
+        expectToBePromise(removeEndpointGatewayIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/endpoint_gateways/{endpoint_gateway_id}/ips/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const endpointGatewayId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          endpointGatewayId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.removeEndpointGatewayIp(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.removeEndpointGatewayIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const removeEndpointGatewayIpPromise = vpcService.removeEndpointGatewayIp();
+        expectToBePromise(removeEndpointGatewayIpPromise);
+
+        removeEndpointGatewayIpPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getEndpointGatewayIp', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getEndpointGatewayIp
+        const endpointGatewayId = 'testString';
+        const id = 'testString';
+        const params = {
+          endpointGatewayId: endpointGatewayId,
+          id: id,
+        };
+
+        const getEndpointGatewayIpResult = vpcService.getEndpointGatewayIp(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getEndpointGatewayIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/endpoint_gateways/{endpoint_gateway_id}/ips/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const endpointGatewayId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          endpointGatewayId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getEndpointGatewayIp(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getEndpointGatewayIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getEndpointGatewayIpPromise = vpcService.getEndpointGatewayIp();
+        expectToBePromise(getEndpointGatewayIpPromise);
+
+        getEndpointGatewayIpPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('addEndpointGatewayIp', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation addEndpointGatewayIp
+        const endpointGatewayId = 'testString';
+        const id = 'testString';
+        const params = {
+          endpointGatewayId: endpointGatewayId,
+          id: id,
+        };
+
+        const addEndpointGatewayIpResult = vpcService.addEndpointGatewayIp(params);
+
+        // all methods should return a Promise
+        expectToBePromise(addEndpointGatewayIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/endpoint_gateways/{endpoint_gateway_id}/ips/{id}', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const endpointGatewayId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          endpointGatewayId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.addEndpointGatewayIp(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.addEndpointGatewayIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const addEndpointGatewayIpPromise = vpcService.addEndpointGatewayIp();
+        expectToBePromise(addEndpointGatewayIpPromise);
+
+        addEndpointGatewayIpPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('deleteEndpointGateway', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation deleteEndpointGateway
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const deleteEndpointGatewayResult = vpcService.deleteEndpointGateway(params);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteEndpointGatewayResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/endpoint_gateways/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteEndpointGateway(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deleteEndpointGateway({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deleteEndpointGatewayPromise = vpcService.deleteEndpointGateway();
+        expectToBePromise(deleteEndpointGatewayPromise);
+
+        deleteEndpointGatewayPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getEndpointGateway', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getEndpointGateway
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const getEndpointGatewayResult = vpcService.getEndpointGateway(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getEndpointGatewayResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/endpoint_gateways/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getEndpointGateway(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getEndpointGateway({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getEndpointGatewayPromise = vpcService.getEndpointGateway();
+        expectToBePromise(getEndpointGatewayPromise);
+
+        getEndpointGatewayPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateEndpointGateway', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateEndpointGateway
+        const id = 'testString';
+        const name = 'my-endpoint-gateway';
+        const params = {
+          id: id,
+          name: name,
+        };
+
+        const updateEndpointGatewayResult = vpcService.updateEndpointGateway(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updateEndpointGatewayResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/endpoint_gateways/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['name']).toEqual(name);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateEndpointGateway(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updateEndpointGateway({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateEndpointGatewayPromise = vpcService.updateEndpointGateway();
+        expectToBePromise(updateEndpointGatewayPromise);
+
+        updateEndpointGatewayPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -15967,8 +18181,8 @@ describe('VpcV1', () => {
         name: 'bucket-27200-lwx4cfvcue',
       };
 
-      // FlowLogCollectorPrototypeTargetNetworkInterfaceIdentityNetworkInterfaceIdentityNetworkInterfaceIdentityById
-      const flowLogCollectorPrototypeTargetModel = {
+      // FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityNetworkInterfaceIdentityById
+      const flowLogCollectorTargetPrototypeModel = {
         id: '10c02d81-0ecb-4dc5-897d-28392913b81e',
       };
 
@@ -15980,15 +18194,15 @@ describe('VpcV1', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createFlowLogCollector
         const storageBucket = cloudObjectStorageBucketIdentityModel;
-        const target = flowLogCollectorPrototypeTargetModel;
-        const name = 'my-flow-log-collector';
+        const target = flowLogCollectorTargetPrototypeModel;
         const active = false;
+        const name = 'my-flow-log-collector';
         const resourceGroup = resourceGroupIdentityModel;
         const params = {
           storageBucket: storageBucket,
           target: target,
-          name: name,
           active: active,
+          name: name,
           resourceGroup: resourceGroup,
         };
 
@@ -16008,8 +18222,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['storage_bucket']).toEqual(storageBucket);
         expect(options.body['target']).toEqual(target);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['active']).toEqual(active);
+        expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
@@ -16018,7 +18232,7 @@ describe('VpcV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const storageBucket = cloudObjectStorageBucketIdentityModel;
-        const target = flowLogCollectorPrototypeTargetModel;
+        const target = flowLogCollectorTargetPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -16204,12 +18418,12 @@ describe('VpcV1', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateFlowLogCollector
         const id = 'testString';
-        const name = 'my-flow-log-collector';
         const active = true;
+        const name = 'my-flow-log-collector';
         const params = {
           id: id,
-          name: name,
           active: active,
+          name: name,
         };
 
         const updateFlowLogCollectorResult = vpcService.updateFlowLogCollector(params);
@@ -16226,8 +18440,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
         expect(options.body['active']).toEqual(active);
+        expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['id']).toEqual(id);
