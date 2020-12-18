@@ -4100,6 +4100,208 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('listDedicatedHostGroups()', done => {
+    vpcService
+      .listDedicatedHostGroups()
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createDedicatedHostGroup()', done => {
+    const params = {
+      _class: 'mx2',
+      family: 'balanced',
+      zone: { name: dict.zoneName },
+      name: 'my-dedicated-host-group-1',
+    };
+
+    vpcService
+      .createDedicatedHostGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdDHGroup = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getDedicatedHostGroup()', done => {
+    const params = {
+      id: dict.createdDHGroup,
+    };
+
+    vpcService
+      .getDedicatedHostGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateDedicatedHostGroup()', done => {
+    const params = {
+      id: dict.createdDHGroup,
+      name: 'my-host-group-modified',
+    };
+
+    vpcService
+      .updateDedicatedHostGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('listDedicatedHostProfiles()', done => {
+    vpcService
+      .listDedicatedHostProfiles()
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.dhProfileName = res.result[0].name;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getDedicatedHostProfile()', done => {
+    const params = {
+      name: dict.dhProfileName,
+    };
+
+    vpcService
+      .getDedicatedHostProfile(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('listDedicatedHosts()', done => {
+    vpcService
+      .listDedicatedHosts()
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createDedicatedHost()', done => {
+    const dedicatedHostProfileIdentityModel = {
+      name: dict.dhProfileName,
+    };
+
+    const dedicatedHostGroupIdentityModel = {
+      id: dict.createdDHGroup,
+    };
+
+    const dedicatedHostPrototypeModel = {
+      name: 'my-host',
+      profile: dedicatedHostProfileIdentityModel,
+      group: { id: dedicatedHostGroupIdentityModel },
+    };
+
+    const params = {
+      dedicatedHostPrototype: dedicatedHostPrototypeModel,
+    };
+
+    vpcService
+      .createDedicatedHost(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdDH = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getDedicatedHost()', done => {
+    const params = {
+      id: dict.createdDH,
+    };
+
+    vpcService
+      .getDedicatedHost(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateDedicatedHost()', done => {
+    const params = {
+      id: dict.createdDH,
+      name: 'my-host-modified',
+    };
+
+    vpcService
+      .updateDedicatedHost(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteDedicatedHostGroup()', done => {
+    const params = {
+      id: dict.createdDHGroup,
+    };
+
+    vpcService
+      .deleteDedicatedHostGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteDedicatedHost()', done => {
+    const params = {
+      id: dict.createdDH,
+    };
+
+    vpcService
+      .deleteDedicatedHost(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('deleteInstanceNetworkInterface()', done => {
     const params = {
       instanceId: dict.createdInstance,

@@ -4713,9 +4713,9 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // KeyIdentityKeyIdentityByFingerprint
+      // KeyIdentityById
       const keyIdentityModel = {
-        fingerprint: 'SHA256:yxavE4CIOL2NlsqcurRO3xGjkP6m/0mp8ugojH5yxlY',
+        id: '363f6d70-0000-0001-0000-00000013b96c',
       };
 
       // SecurityGroupIdentityById
@@ -4761,7 +4761,7 @@ describe('VpcV1', () => {
 
       // VPCIdentityById
       const vpcIdentityModel = {
-        id: '4727d842-f94f-4a2d-824a-9bc9b02c523b',
+        id: 'dc201ab2-8536-4904-86a8-084d84582133',
       };
 
       // EncryptionKeyIdentityByCRN
@@ -4793,7 +4793,7 @@ describe('VpcV1', () => {
 
       // ImageIdentityById
       const imageIdentityModel = {
-        id: '72b27b5c-f4b0-48bb-b954-5becc7c1dcb8',
+        id: '3f9a2d96-830e-4100-9b4c-663225a3f872',
       };
 
       // ZoneIdentityByName
@@ -4804,7 +4804,7 @@ describe('VpcV1', () => {
       // InstanceTemplatePrototypeInstanceByImage
       const instanceTemplatePrototypeModel = {
         keys: [keyIdentityModel],
-        name: 'my-instance',
+        name: 'my-instance-template',
         network_interfaces: [networkInterfacePrototypeModel],
         profile: instanceProfileIdentityModel,
         resource_group: resourceGroupIdentityModel,
@@ -5170,9 +5170,9 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // KeyIdentityKeyIdentityByFingerprint
+      // KeyIdentityById
       const keyIdentityModel = {
-        fingerprint: 'SHA256:RJ+YWs2kupwFGiJuLqY85twmcdLOUcjIc9cA6IR8n8E',
+        id: '363f6d70-0000-0001-0000-00000013b96c',
       };
 
       // SecurityGroupIdentityById
@@ -5204,9 +5204,23 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      // VolumeAttachmentVolumePrototypeInstanceContextVolumeIdentityVolumeIdentityById
+      // EncryptionKeyIdentityByCRN
+      const encryptionKeyIdentityModel = {
+        crn: 'crn:[...]',
+      };
+
+      // VolumeProfileIdentityByName
+      const volumeProfileIdentityModel = {
+        name: '5iops-tier',
+      };
+
+      // VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity
       const volumeAttachmentVolumePrototypeInstanceContextModel = {
-        id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
+        encryption_key: encryptionKeyIdentityModel,
+        iops: 10000,
+        name: 'my-data-volume',
+        profile: volumeProfileIdentityModel,
+        capacity: 1000,
       };
 
       // VolumeAttachmentPrototypeInstanceContext
@@ -5218,18 +5232,7 @@ describe('VpcV1', () => {
 
       // VPCIdentityById
       const vpcIdentityModel = {
-        id: '4727d842-f94f-4a2d-824a-9bc9b02c523b',
-      };
-
-      // EncryptionKeyIdentityByCRN
-      const encryptionKeyIdentityModel = {
-        crn:
-          'crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179',
-      };
-
-      // VolumeProfileIdentityByName
-      const volumeProfileIdentityModel = {
-        name: 'general-purpose',
+        id: 'f0aae929-7047-46d1-92e1-9102b07a7f6f',
       };
 
       // VolumePrototypeInstanceByImageContext
@@ -5237,7 +5240,7 @@ describe('VpcV1', () => {
         capacity: 100,
         encryption_key: encryptionKeyIdentityModel,
         iops: 10000,
-        name: 'my-volume',
+        name: 'my-boot-volume',
         profile: volumeProfileIdentityModel,
       };
 
@@ -5250,7 +5253,7 @@ describe('VpcV1', () => {
 
       // ImageIdentityById
       const imageIdentityModel = {
-        id: '72b27b5c-f4b0-48bb-b954-5becc7c1dcb8',
+        id: '9aaf3bcb-dcd7-4de7-bb60-24e39ff9d366',
       };
 
       // ZoneIdentityByName
@@ -6035,7 +6038,7 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const id = 'testString';
         const allowIpSpoofing = true;
-        const name = 'my-network-interface';
+        const name = 'my-network-interface-1';
         const params = {
           instanceId: instanceId,
           id: id,
@@ -8576,6 +8579,849 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('listDedicatedHostGroups', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listDedicatedHostGroups
+        const start = 'testString';
+        const limit = 1;
+        const resourceGroupId = 'testString';
+        const zoneName = 'testString';
+        const params = {
+          start: start,
+          limit: limit,
+          resourceGroupId: resourceGroupId,
+          zoneName: zoneName,
+        };
+
+        const listDedicatedHostGroupsResult = vpcService.listDedicatedHostGroups(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listDedicatedHostGroupsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_host/groups', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(options.qs['zone.name']).toEqual(zoneName);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listDedicatedHostGroups(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listDedicatedHostGroups({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('createDedicatedHostGroup', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // ZoneIdentityByName
+      const zoneIdentityModel = {
+        name: 'us-south-1',
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation createDedicatedHostGroup
+        const _class = 'mx2';
+        const family = 'balanced';
+        const zone = zoneIdentityModel;
+        const name = 'testString';
+        const resourceGroup = resourceGroupIdentityModel;
+        const params = {
+          _class: _class,
+          family: family,
+          zone: zone,
+          name: name,
+          resourceGroup: resourceGroup,
+        };
+
+        const createDedicatedHostGroupResult = vpcService.createDedicatedHostGroup(params);
+
+        // all methods should return a Promise
+        expectToBePromise(createDedicatedHostGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_host/groups', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['class']).toEqual(_class);
+        expect(options.body['family']).toEqual(family);
+        expect(options.body['zone']).toEqual(zone);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['resource_group']).toEqual(resourceGroup);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createDedicatedHostGroup(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.createDedicatedHostGroup({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('deleteDedicatedHostGroup', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation deleteDedicatedHostGroup
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const deleteDedicatedHostGroupResult = vpcService.deleteDedicatedHostGroup(params);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteDedicatedHostGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_host/groups/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteDedicatedHostGroup(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deleteDedicatedHostGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deleteDedicatedHostGroupPromise = vpcService.deleteDedicatedHostGroup();
+        expectToBePromise(deleteDedicatedHostGroupPromise);
+
+        deleteDedicatedHostGroupPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getDedicatedHostGroup', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getDedicatedHostGroup
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const getDedicatedHostGroupResult = vpcService.getDedicatedHostGroup(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getDedicatedHostGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_host/groups/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getDedicatedHostGroup(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getDedicatedHostGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getDedicatedHostGroupPromise = vpcService.getDedicatedHostGroup();
+        expectToBePromise(getDedicatedHostGroupPromise);
+
+        getDedicatedHostGroupPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateDedicatedHostGroup', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateDedicatedHostGroup
+        const id = 'testString';
+        const name = 'my-host-group-modified';
+        const params = {
+          id: id,
+          name: name,
+        };
+
+        const updateDedicatedHostGroupResult = vpcService.updateDedicatedHostGroup(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updateDedicatedHostGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_host/groups/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['name']).toEqual(name);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateDedicatedHostGroup(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updateDedicatedHostGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateDedicatedHostGroupPromise = vpcService.updateDedicatedHostGroup();
+        expectToBePromise(updateDedicatedHostGroupPromise);
+
+        updateDedicatedHostGroupPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('listDedicatedHostProfiles', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listDedicatedHostProfiles
+        const start = 'testString';
+        const limit = 1;
+        const params = {
+          start: start,
+          limit: limit,
+        };
+
+        const listDedicatedHostProfilesResult = vpcService.listDedicatedHostProfiles(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listDedicatedHostProfilesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_host/profiles', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listDedicatedHostProfiles(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listDedicatedHostProfiles({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('getDedicatedHostProfile', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getDedicatedHostProfile
+        const name = 'testString';
+        const params = {
+          name: name,
+        };
+
+        const getDedicatedHostProfileResult = vpcService.getDedicatedHostProfile(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getDedicatedHostProfileResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_host/profiles/{name}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['name']).toEqual(name);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const name = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          name,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getDedicatedHostProfile(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getDedicatedHostProfile({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getDedicatedHostProfilePromise = vpcService.getDedicatedHostProfile();
+        expectToBePromise(getDedicatedHostProfilePromise);
+
+        getDedicatedHostProfilePromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('listDedicatedHosts', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listDedicatedHosts
+        const dedicatedHostGroupId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const resourceGroupId = 'testString';
+        const zoneName = 'testString';
+        const params = {
+          dedicatedHostGroupId: dedicatedHostGroupId,
+          start: start,
+          limit: limit,
+          resourceGroupId: resourceGroupId,
+          zoneName: zoneName,
+        };
+
+        const listDedicatedHostsResult = vpcService.listDedicatedHosts(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listDedicatedHostsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_hosts', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['dedicated_host_group.id']).toEqual(dedicatedHostGroupId);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(options.qs['zone.name']).toEqual(zoneName);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listDedicatedHosts(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listDedicatedHosts({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('createDedicatedHost', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // DedicatedHostProfileIdentityByName
+      const dedicatedHostProfileIdentityModel = {
+        name: 'm-62x496',
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      // DedicatedHostGroupIdentityById
+      const dedicatedHostGroupIdentityModel = {
+        id: '0c8eccb4-271c-4518-956c-32bfce5cf83b',
+      };
+
+      // DedicatedHostPrototypeDedicatedHostByGroup
+      const dedicatedHostPrototypeModel = {
+        instance_placement_enabled: true,
+        name: 'my-host',
+        profile: dedicatedHostProfileIdentityModel,
+        resource_group: resourceGroupIdentityModel,
+        group: dedicatedHostGroupIdentityModel,
+      };
+
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation createDedicatedHost
+        const dedicatedHostPrototype = dedicatedHostPrototypeModel;
+        const params = {
+          dedicatedHostPrototype: dedicatedHostPrototype,
+        };
+
+        const createDedicatedHostResult = vpcService.createDedicatedHost(params);
+
+        // all methods should return a Promise
+        expectToBePromise(createDedicatedHostResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_hosts', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body).toEqual(dedicatedHostPrototype);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const dedicatedHostPrototype = dedicatedHostPrototypeModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          dedicatedHostPrototype,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createDedicatedHost(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.createDedicatedHost({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const createDedicatedHostPromise = vpcService.createDedicatedHost();
+        expectToBePromise(createDedicatedHostPromise);
+
+        createDedicatedHostPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('deleteDedicatedHost', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation deleteDedicatedHost
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const deleteDedicatedHostResult = vpcService.deleteDedicatedHost(params);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteDedicatedHostResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_hosts/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteDedicatedHost(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deleteDedicatedHost({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deleteDedicatedHostPromise = vpcService.deleteDedicatedHost();
+        expectToBePromise(deleteDedicatedHostPromise);
+
+        deleteDedicatedHostPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getDedicatedHost', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getDedicatedHost
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const getDedicatedHostResult = vpcService.getDedicatedHost(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getDedicatedHostResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_hosts/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getDedicatedHost(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getDedicatedHost({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getDedicatedHostPromise = vpcService.getDedicatedHost();
+        expectToBePromise(getDedicatedHostPromise);
+
+        getDedicatedHostPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateDedicatedHost', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateDedicatedHost
+        const id = 'testString';
+        const instancePlacementEnabled = true;
+        const name = 'my-host';
+        const params = {
+          id: id,
+          instancePlacementEnabled: instancePlacementEnabled,
+          name: name,
+        };
+
+        const updateDedicatedHostResult = vpcService.updateDedicatedHost(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updateDedicatedHostResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_hosts/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['instance_placement_enabled']).toEqual(instancePlacementEnabled);
+        expect(options.body['name']).toEqual(name);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateDedicatedHost(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updateDedicatedHost({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateDedicatedHostPromise = vpcService.updateDedicatedHost();
+        expectToBePromise(updateDedicatedHostPromise);
+
+        updateDedicatedHostPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
   describe('listVolumeProfiles', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
@@ -8770,7 +9616,7 @@ describe('VpcV1', () => {
 
       // VolumeProfileIdentityByName
       const volumeProfileIdentityModel = {
-        name: 'general-purpose',
+        name: '5iops-tier',
       };
 
       // ResourceGroupIdentityById
@@ -10146,7 +10992,7 @@ describe('VpcV1', () => {
 
       // VPCIdentityById
       const vpcIdentityModel = {
-        id: 'cf7cd5a-2f30-4336-a495-6addc820cd61',
+        id: 'f0aae929-7047-46d1-92e1-9102b07a7f6f',
       };
 
       // NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAll
@@ -14592,6 +15438,16 @@ describe('VpcV1', () => {
         protocol: 'http',
       };
 
+      // LoadBalancerLoggingDatapath
+      const loadBalancerLoggingDatapathModel = {
+        active: true,
+      };
+
+      // LoadBalancerLogging
+      const loadBalancerLoggingModel = {
+        datapath: loadBalancerLoggingDatapathModel,
+      };
+
       // LoadBalancerPoolHealthMonitorPrototype
       const loadBalancerPoolHealthMonitorPrototypeModel = {
         delay: 5,
@@ -14645,6 +15501,7 @@ describe('VpcV1', () => {
         const isPublic = true;
         const subnets = [subnetIdentityModel];
         const listeners = [loadBalancerListenerPrototypeLoadBalancerContextModel];
+        const logging = loadBalancerLoggingModel;
         const name = 'my-load-balancer';
         const pools = [loadBalancerPoolPrototypeModel];
         const profile = loadBalancerProfileIdentityModel;
@@ -14653,6 +15510,7 @@ describe('VpcV1', () => {
           isPublic: isPublic,
           subnets: subnets,
           listeners: listeners,
+          logging: logging,
           name: name,
           pools: pools,
           profile: profile,
@@ -14676,6 +15534,7 @@ describe('VpcV1', () => {
         expect(options.body['is_public']).toEqual(isPublic);
         expect(options.body['subnets']).toEqual(subnets);
         expect(options.body['listeners']).toEqual(listeners);
+        expect(options.body['logging']).toEqual(logging);
         expect(options.body['name']).toEqual(name);
         expect(options.body['pools']).toEqual(pools);
         expect(options.body['profile']).toEqual(profile);
@@ -14870,12 +15729,26 @@ describe('VpcV1', () => {
   });
   describe('updateLoadBalancer', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // LoadBalancerLoggingDatapath
+      const loadBalancerLoggingDatapathModel = {
+        active: true,
+      };
+
+      // LoadBalancerLogging
+      const loadBalancerLoggingModel = {
+        datapath: loadBalancerLoggingDatapathModel,
+      };
+
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateLoadBalancer
         const id = 'testString';
+        const logging = loadBalancerLoggingModel;
         const name = 'my-load-balancer';
         const params = {
           id: id,
+          logging: logging,
           name: name,
         };
 
@@ -14893,6 +15766,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['logging']).toEqual(logging);
         expect(options.body['name']).toEqual(name);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);

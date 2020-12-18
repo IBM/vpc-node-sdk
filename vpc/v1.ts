@@ -1140,16 +1140,16 @@ class VpcV1 extends BaseService {
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-   * Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
-   * gateway connection, the packet will be dropped.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    * @param {boolean} [params.routeTransitGatewayIngress] - If set to `true`, this routing table will be used to route
    * traffic that originates from [Transit Gateway](https://cloud.ibm.com/cloud/transit-gateway/) to this VPC. For this
    * to succeed, the VPC must not already have a routing table with this property set to `true`.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-   * Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
-   * gateway connection, the packet will be dropped.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    *
    * If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
    * enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -1160,8 +1160,8 @@ class VpcV1 extends BaseService {
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-   * Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
-   * gateway connection, the packet will be dropped.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    * @param {RoutePrototype[]} [params.routes] - Array of route prototype objects for routes to create for this routing
    * table. If unspecified, the routing table will be created with no routes.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -1331,8 +1331,8 @@ class VpcV1 extends BaseService {
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-   * Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
-   * gateway connection, the packet will be dropped.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    * @param {boolean} [params.routeTransitGatewayIngress] - Indicates whether this routing table is used to route
    * traffic that originates from
    * [Transit Gateway](https://cloud.ibm.com/cloud/transit-gateway/) to this VPC. Updating to
@@ -1341,8 +1341,8 @@ class VpcV1 extends BaseService {
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-   * Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
-   * gateway connection, the packet will be dropped.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    *
    * If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
    * enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -1354,8 +1354,8 @@ class VpcV1 extends BaseService {
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-   * Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
-   * gateway connection, the packet will be dropped.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RoutingTable>>}
    */
@@ -3178,6 +3178,9 @@ class VpcV1 extends BaseService {
   /**
    * List all instance profiles.
    *
+   * This request lists provisionable instance profiles in the region. An instance profile specifies the performance
+   * characteristics and pricing model for an instance.
+   *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceProfileCollection>>}
@@ -3257,6 +3260,8 @@ class VpcV1 extends BaseService {
 
   /**
    * Get instance templates.
+   *
+   * This request lists all instance templates in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -3381,6 +3386,8 @@ class VpcV1 extends BaseService {
 
   /**
    * Retrieve specified instance template.
+   *
+   * This request retrieves a single instance template specified by the identifier in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The instance template identifier.
@@ -3895,8 +3902,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The instance identifier.
    * @param {SubnetIdentity} params.subnet - The associated subnet.
-   * @param {boolean} [params.allowIpSpoofing] - Indicates whether IP spoofing is allowed on this interface. If false,
-   * IP spoofing is prevented on this interface. If true, IP spoofing is allowed on this interface.
+   * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this interface. If
+   * false, source IP spoofing is prevented on this interface. If true, source IP spoofing is allowed on this interface.
    * @param {string} [params.name] - The user-defined name for this network interface. If unspecified, the name will be
    * a hyphenated list of randomly-selected words.
    * @param {string} [params.primaryIpv4Address] - The primary IPv4 address. If specified, it must be an available
@@ -4062,8 +4069,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The instance identifier.
    * @param {string} params.id - The network interface identifier.
-   * @param {boolean} [params.allowIpSpoofing] - Indicates whether IP spoofing is allowed on this interface. Updating to
-   * true allows IP spoofing on this interface. Updating to false prevents IP spoofing on this interface.
+   * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this interface. If
+   * false, source IP spoofing is prevented on this interface. If true, source IP spoofing is allowed on this interface.
    * @param {string} [params.name] - The user-defined name for this network interface.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
@@ -4592,6 +4599,8 @@ class VpcV1 extends BaseService {
 
   /**
    * List all instance groups.
+   *
+   * This request lists all instance groups in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
@@ -5179,6 +5188,8 @@ class VpcV1 extends BaseService {
   /**
    * List all policies for an instance group manager.
    *
+   * This request lists all instance group policies for an instance group manager.
+   *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
    * @param {string} params.instanceGroupManagerId - The instance group manager identifier.
@@ -5491,6 +5502,8 @@ class VpcV1 extends BaseService {
   /**
    * List all memberships for the instance group.
    *
+   * This request lists all instance group memberships for an instance group.
+   *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -5672,6 +5685,590 @@ class VpcV1 extends BaseService {
     const parameters = {
       options: {
         url: '/instance_groups/{instance_group_id}/memberships/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /*************************
+   * dedicatedHosts
+   ************************/
+
+  /**
+   * List all dedicated host groups.
+   *
+   * This request lists all dedicated host groups in the region. Host groups are a collection of dedicated hosts for
+   * placement of instances. Each dedicated host must belong to one and only one group. Host groups do not span zones.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources within one of the resource groups
+   * identified in a comma-separated list of resource group identifiers.
+   * @param {string} [params.zoneName] - Filters the collection to resources in the zone with the exact specified name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostGroupCollection>>}
+   */
+  public listDedicatedHostGroups(params?: VpcV1.ListDedicatedHostGroupsParams): Promise<VpcV1.Response<VpcV1.DedicatedHostGroupCollection>> {
+    const _params = Object.assign({}, params);
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'zone.name': _params.zoneName
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHostGroups');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_host/groups',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Create a dedicated host group.
+   *
+   * This request creates a new dedicated host group.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params._class] - The dedicated host profile class for hosts in this group.
+   * @param {string} [params.family] - The dedicated host profile family for hosts in this group.
+   * @param {ZoneIdentity} [params.zone] - The zone to provision the dedicated host group in.
+   * @param {string} [params.name] - The unique user-defined name for this dedicated host group. If unspecified, the
+   * name will be a hyphenated list of randomly-selected words.
+   * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
+   * [default resource
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>>}
+   */
+  public createDedicatedHostGroup(params?: VpcV1.CreateDedicatedHostGroupParams): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
+    const _params = Object.assign({}, params);
+
+    const body = {
+      'class': _params._class,
+      'family': _params.family,
+      'zone': _params.zone,
+      'name': _params.name,
+      'resource_group': _params.resourceGroup
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createDedicatedHostGroup');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_host/groups',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Delete specified dedicated host group.
+   *
+   * This request deletes a dedicated host group.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The dedicated host group identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+   */
+  public deleteDedicatedHostGroup(params: VpcV1.DeleteDedicatedHostGroupParams): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteDedicatedHostGroup');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_host/groups/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Retrieve a dedicated host group.
+   *
+   * This request retrieves a single dedicated host group specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The dedicated host group identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>>}
+   */
+  public getDedicatedHostGroup(params: VpcV1.GetDedicatedHostGroupParams): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHostGroup');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_host/groups/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Update specified dedicated host group.
+   *
+   * This request updates a dedicated host group with the information in a provided dedicated host group patch. The
+   * dedicated host group patch object is structured in the same way as a retrieved dedicated host group and contains
+   * only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The dedicated host group identifier.
+   * @param {string} [params.name] - The unique user-defined name for this dedicated host group. If unspecified, the
+   * name will be a hyphenated list of randomly-selected words.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>>}
+   */
+  public updateDedicatedHostGroup(params: VpcV1.UpdateDedicatedHostGroupParams): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'name': _params.name
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateDedicatedHostGroup');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_host/groups/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * List all dedicated host profiles.
+   *
+   * This request lists provisionable dedicated host profiles in the region. A dedicated host profile specifies the
+   * hardware characteristics for a dedicated host.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostProfileCollection>>}
+   */
+  public listDedicatedHostProfiles(params?: VpcV1.ListDedicatedHostProfilesParams): Promise<VpcV1.Response<VpcV1.DedicatedHostProfileCollection>> {
+    const _params = Object.assign({}, params);
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHostProfiles');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_host/profiles',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Retrieve specified dedicated host profile.
+   *
+   * This request retrieves a single dedicated host profile specified by the name in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.name - The dedicated host profile name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostProfile>>}
+   */
+  public getDedicatedHostProfile(params: VpcV1.GetDedicatedHostProfileParams): Promise<VpcV1.Response<VpcV1.DedicatedHostProfile>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['name'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'name': _params.name
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHostProfile');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_host/profiles/{name}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * List all dedicated hosts.
+   *
+   * This request lists all dedicated hosts.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.dedicatedHostGroupId] - Filters the collection to dedicated host groups with specified
+   * identifier.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources within one of the resource groups
+   * identified in a comma-separated list of resource group identifiers.
+   * @param {string} [params.zoneName] - Filters the collection to resources in the zone with the exact specified name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostCollection>>}
+   */
+  public listDedicatedHosts(params?: VpcV1.ListDedicatedHostsParams): Promise<VpcV1.Response<VpcV1.DedicatedHostCollection>> {
+    const _params = Object.assign({}, params);
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'dedicated_host_group.id': _params.dedicatedHostGroupId,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'zone.name': _params.zoneName
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHosts');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_hosts',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Create a dedicated host.
+   *
+   * This request creates a new dedicated host.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {DedicatedHostPrototype} params.dedicatedHostPrototype - The dedicated host prototype object.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHost>>}
+   */
+  public createDedicatedHost(params: VpcV1.CreateDedicatedHostParams): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['dedicatedHostPrototype'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = _params.dedicatedHostPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createDedicatedHost');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_hosts',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Delete specified dedicated host.
+   *
+   * This request deletes a dedicated host.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The dedicated host identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+   */
+  public deleteDedicatedHost(params: VpcV1.DeleteDedicatedHostParams): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteDedicatedHost');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_hosts/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Retrieve a dedicated host.
+   *
+   * This request retrieves a single dedicated host specified by the identifiers in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The dedicated host identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHost>>}
+   */
+  public getDedicatedHost(params: VpcV1.GetDedicatedHostParams): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHost');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_hosts/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Update specified dedicated host.
+   *
+   * This request updates a dedicated host with the information in a provided dedicated host patch. The dedicated host
+   * patch object is structured in the same way as a retrieved dedicated host and contains only the information to be
+   * updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The dedicated host identifier.
+   * @param {boolean} [params.instancePlacementEnabled] - If set to true, instances can be placed on this dedicated
+   * host.
+   * @param {string} [params.name] - The unique user-defined name for this dedicated host. If unspecified, the name will
+   * be a hyphenated list of randomly-selected words.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHost>>}
+   */
+  public updateDedicatedHost(params: VpcV1.UpdateDedicatedHostParams): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'instance_placement_enabled': _params.instancePlacementEnabled,
+      'name': _params.name
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateDedicatedHost');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_hosts/{id}',
         method: 'PATCH',
         body,
         qs: query,
@@ -6026,7 +6623,7 @@ class VpcV1 extends BaseService {
    * List all regions.
    *
    * This request lists all regions. Each region is a separate geographic area that contains multiple isolated zones.
-   * Resources can be provisioned into a one or more zones in a region. Each zone is isolated, but connected to other
+   * Resources can be provisioned into one or more zones in a region. Each zone is isolated, but connected to other
    * zones in the same region with low-latency and high-bandwidth links. Regions represent the top-level of fault
    * isolation available. Resources deployed within a single region also benefit from the low latency afforded by
    * geographic proximity.
@@ -9635,6 +10232,13 @@ class VpcV1 extends BaseService {
    * @param {SubnetIdentity[]} params.subnets - The subnets to provision this load balancer.
    * @param {LoadBalancerListenerPrototypeLoadBalancerContext[]} [params.listeners] - The listeners of this load
    * balancer.
+   * @param {LoadBalancerLogging} [params.logging] - The logging configuration to use for this load balancer. See [VPC
+   * Datapath
+   * Logging](https://cloud.ibm.com/docs/vpc?topic=vpc-datapath-logging)
+   * on the logging format, fields and permitted values.
+   *
+   * To activate logging, the load balancer profile must support the specified logging
+   * type.
    * @param {string} [params.name] - The user-defined name for this load balancer. If unspecified, the name will be a
    * hyphenated list of randomly-selected words.
    * @param {LoadBalancerPoolPrototype[]} [params.pools] - The pools of this load balancer.
@@ -9658,6 +10262,7 @@ class VpcV1 extends BaseService {
       'is_public': _params.isPublic,
       'subnets': _params.subnets,
       'listeners': _params.listeners,
+      'logging': _params.logging,
       'name': _params.name,
       'pools': _params.pools,
       'profile': _params.profile,
@@ -9789,6 +10394,9 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The load balancer identifier.
+   * @param {LoadBalancerLogging} [params.logging] - The logging configuration to use for this load balancer.
+   *
+   * To activate logging, the load balancer profile must support the specified logging type.
    * @param {string} [params.name] - The unique user-defined name for this load balancer.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancer>>}
@@ -9803,6 +10411,7 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
+      'logging': _params.logging,
       'name': _params.name
     };
 
@@ -11924,7 +12533,7 @@ class VpcV1 extends BaseService {
    * The bucket must exist and an IAM service authorization must grant
    * `IBM Cloud Flow Logs` resources of `VPC Infrastructure Services` writer
    * access to the bucket.
-   * @param {FlowLogCollectorTargetPrototype} params.target - The target this collector will collect flow logs for. If
+   * @param {FlowLogCollectorTargetPrototype} params.target - The target this collector is collecting flow logs for. If
    * the target is an instance,
    * subnet, or VPC, flow logs will not be collected for any network interfaces within the
    * target that are themselves the target of a more specific flow log collector.
@@ -12451,7 +13060,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
     routeDirectLinkIngress?: boolean;
@@ -12461,7 +13070,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      *
      *  If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
@@ -12475,7 +13084,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
     routeVpcZoneIngress?: boolean;
@@ -12521,7 +13130,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
     routeDirectLinkIngress?: boolean;
@@ -12532,7 +13141,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      *
      *  If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
@@ -12547,7 +13156,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
     routeVpcZoneIngress?: boolean;
@@ -13107,8 +13716,8 @@ namespace VpcV1 {
     instanceId: string;
     /** The associated subnet. */
     subnet: SubnetIdentity;
-    /** Indicates whether IP spoofing is allowed on this interface. If false, IP spoofing is prevented on this
-     *  interface. If true, IP spoofing is allowed on this interface.
+    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
+     *  on this interface. If true, source IP spoofing is allowed on this interface.
      */
     allowIpSpoofing?: boolean;
     /** The user-defined name for this network interface. If unspecified, the name will be a hyphenated list of
@@ -13148,8 +13757,8 @@ namespace VpcV1 {
     instanceId: string;
     /** The network interface identifier. */
     id: string;
-    /** Indicates whether IP spoofing is allowed on this interface. Updating to true allows IP spoofing on this
-     *  interface. Updating to false prevents IP spoofing on this interface.
+    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
+     *  on this interface. If true, source IP spoofing is allowed on this interface.
      */
     allowIpSpoofing?: boolean;
     /** The user-defined name for this network interface. */
@@ -13508,6 +14117,142 @@ namespace VpcV1 {
     /** The instance group membership identifier. */
     id: string;
     /** The user-defined name for this instance group membership. Names must be unique within the instance group. */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listDedicatedHostGroups` operation. */
+  export interface ListDedicatedHostGroupsParams {
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources within one of the resource groups identified in a comma-separated list
+     *  of resource group identifiers.
+     */
+    resourceGroupId?: string;
+    /** Filters the collection to resources in the zone with the exact specified name. */
+    zoneName?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createDedicatedHostGroup` operation. */
+  export interface CreateDedicatedHostGroupParams {
+    /** The dedicated host profile class for hosts in this group. */
+    _class?: string;
+    /** The dedicated host profile family for hosts in this group. */
+    family?: CreateDedicatedHostGroupConstants.Family | string;
+    /** The zone to provision the dedicated host group in. */
+    zone?: ZoneIdentity;
+    /** The unique user-defined name for this dedicated host group. If unspecified, the name will be a hyphenated
+     *  list of randomly-selected words.
+     */
+    name?: string;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     */
+    resourceGroup?: ResourceGroupIdentity;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createDedicatedHostGroup` operation. */
+  export namespace CreateDedicatedHostGroupConstants {
+    /** The dedicated host profile family for hosts in this group. */
+    export enum Family {
+      MEMORY = 'memory',
+      BALANCED = 'balanced',
+      COMPUTE = 'compute',
+    }
+  }
+
+  /** Parameters for the `deleteDedicatedHostGroup` operation. */
+  export interface DeleteDedicatedHostGroupParams {
+    /** The dedicated host group identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getDedicatedHostGroup` operation. */
+  export interface GetDedicatedHostGroupParams {
+    /** The dedicated host group identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateDedicatedHostGroup` operation. */
+  export interface UpdateDedicatedHostGroupParams {
+    /** The dedicated host group identifier. */
+    id: string;
+    /** The unique user-defined name for this dedicated host group. If unspecified, the name will be a hyphenated
+     *  list of randomly-selected words.
+     */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listDedicatedHostProfiles` operation. */
+  export interface ListDedicatedHostProfilesParams {
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getDedicatedHostProfile` operation. */
+  export interface GetDedicatedHostProfileParams {
+    /** The dedicated host profile name. */
+    name: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listDedicatedHosts` operation. */
+  export interface ListDedicatedHostsParams {
+    /** Filters the collection to dedicated host groups with specified identifier. */
+    dedicatedHostGroupId?: string;
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources within one of the resource groups identified in a comma-separated list
+     *  of resource group identifiers.
+     */
+    resourceGroupId?: string;
+    /** Filters the collection to resources in the zone with the exact specified name. */
+    zoneName?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createDedicatedHost` operation. */
+  export interface CreateDedicatedHostParams {
+    /** The dedicated host prototype object. */
+    dedicatedHostPrototype: DedicatedHostPrototype;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteDedicatedHost` operation. */
+  export interface DeleteDedicatedHostParams {
+    /** The dedicated host identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getDedicatedHost` operation. */
+  export interface GetDedicatedHostParams {
+    /** The dedicated host identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateDedicatedHost` operation. */
+  export interface UpdateDedicatedHostParams {
+    /** The dedicated host identifier. */
+    id: string;
+    /** If set to true, instances can be placed on this dedicated host. */
+    instancePlacementEnabled?: boolean;
+    /** The unique user-defined name for this dedicated host. If unspecified, the name will be a hyphenated list of
+     *  randomly-selected words.
+     */
     name?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -14460,6 +15205,14 @@ namespace VpcV1 {
     subnets: SubnetIdentity[];
     /** The listeners of this load balancer. */
     listeners?: LoadBalancerListenerPrototypeLoadBalancerContext[];
+    /** The logging configuration to use for this load balancer. See [VPC Datapath
+     *  Logging](https://cloud.ibm.com/docs/vpc?topic=vpc-datapath-logging)
+     *  on the logging format, fields and permitted values.
+     *
+     *  To activate logging, the load balancer profile must support the specified logging
+     *  type.
+     */
+    logging?: LoadBalancerLogging;
     /** The user-defined name for this load balancer. If unspecified, the name will be a hyphenated list of
      *  randomly-selected words.
      */
@@ -14493,6 +15246,11 @@ namespace VpcV1 {
   export interface UpdateLoadBalancerParams {
     /** The load balancer identifier. */
     id: string;
+    /** The logging configuration to use for this load balancer.
+     *
+     *  To activate logging, the load balancer profile must support the specified logging type.
+     */
+    logging?: LoadBalancerLogging;
     /** The unique user-defined name for this load balancer. */
     name?: string;
     headers?: OutgoingHttpHeaders;
@@ -15184,7 +15942,7 @@ namespace VpcV1 {
      *  access to the bucket.
      */
     storageBucket: CloudObjectStorageBucketIdentity;
-    /** The target this collector will collect flow logs for. If the target is an instance,
+    /** The target this collector is collecting flow logs for. If the target is an instance,
      *  subnet, or VPC, flow logs will not be collected for any network interfaces within the
      *  target that are themselves the target of a more specific flow log collector.
      */
@@ -15304,6 +16062,304 @@ namespace VpcV1 {
     name: string;
   }
 
+  /** DedicatedHost. */
+  export interface DedicatedHost {
+    /** The amount of memory in gibibytes that is currently available for instances. */
+    available_memory: number;
+    /** The available VCPU for the dedicated host. */
+    available_vcpu: VCPU;
+    /** The date and time that the dedicated host was created. */
+    created_at: string;
+    /** The CRN for this dedicated host. */
+    crn: string;
+    /** The dedicated host group this dedicated host is in. */
+    group: DedicatedHostGroupReference;
+    /** The URL for this dedicated host. */
+    href: string;
+    /** The unique identifier for this dedicated host. */
+    id: string;
+    /** If set to true, instances can be placed on this dedicated host. */
+    instance_placement_enabled: boolean;
+    /** Array of instances that are allocated to this dedicated host. */
+    instances: InstanceReference[];
+    /** The lifecycle state of the dedicated host resource. */
+    lifecycle_state: string;
+    /** The total amount of memory in gibibytes for this host. */
+    memory: number;
+    /** The unique user-defined name for this dedicated host. If unspecified, the name will be a hyphenated list of
+     *  randomly-selected words.
+     */
+    name: string;
+    /** The profile this dedicated host uses. */
+    profile: DedicatedHostProfileReference;
+    /** Indicates whether this dedicated host is available for instance creation. */
+    provisionable: boolean;
+    /** The resource group for this dedicated host. */
+    resource_group: ResourceGroupReference;
+    /** The type of resource referenced. */
+    resource_type: string;
+    /** The total number of sockets for this host. */
+    socket_count: number;
+    /** The administrative state of the dedicated host.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the dedicated host
+     *  on which the unexpected property value was encountered.
+     */
+    state: string;
+    /** Array of instance profiles that can be used by instances placed on this dedicated host. */
+    supported_instance_profiles: InstanceProfileReference[];
+    /** The total VCPU of the dedicated host. */
+    vcpu: VCPU;
+    /** The reference of the zone to provision the dedicated host in. */
+    zone: ZoneReference;
+  }
+
+  /** DedicatedHostCollection. */
+  export interface DedicatedHostCollection {
+    /** Collection of dedicated hosts. */
+    dedicated_hosts: DedicatedHost[];
+    /** A link to the first page of resources. */
+    first: DedicatedHostCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: DedicatedHostCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface DedicatedHostCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface DedicatedHostCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** DedicatedHostGroup. */
+  export interface DedicatedHostGroup {
+    /** The dedicated host profile class for hosts in this group. */
+    class: string;
+    /** The date and time that the dedicated host group was created. */
+    created_at: string;
+    /** The CRN for this dedicated host group. */
+    crn: string;
+    /** The dedicated hosts that are in this dedicated host group. */
+    dedicated_hosts: DedicatedHostReference[];
+    /** The dedicated host profile family for hosts in this group. */
+    family: string;
+    /** The URL for this dedicated host group. */
+    href: string;
+    /** The unique identifier for this dedicated host group. */
+    id: string;
+    /** The unique user-defined name for this dedicated host group. If unspecified, the name will be a hyphenated
+     *  list of randomly-selected words.
+     */
+    name: string;
+    /** The resource group for this dedicated host group. */
+    resource_group: ResourceGroupReference;
+    /** The type of resource referenced. */
+    resource_type: string;
+    /** Array of instance profiles that can be used by instances placed on this dedicated host group. */
+    supported_instance_profiles: InstanceProfileReference[];
+    /** The zone the dedicated host group resides in. */
+    zone: ZoneReference;
+  }
+
+  /** DedicatedHostGroupCollection. */
+  export interface DedicatedHostGroupCollection {
+    /** A link to the first page of resources. */
+    first: DedicatedHostGroupCollectionFirst;
+    /** Collection of dedicated host groups. */
+    groups: DedicatedHostGroup[];
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: DedicatedHostGroupCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface DedicatedHostGroupCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface DedicatedHostGroupCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** Identifies a dedicated host group by a unique property. */
+  export interface DedicatedHostGroupIdentity {
+  }
+
+  /** DedicatedHostGroupPrototypeDedicatedHostByZoneContext. */
+  export interface DedicatedHostGroupPrototypeDedicatedHostByZoneContext {
+    /** The unique user-defined name for this dedicated host group. If unspecified, the name will be a hyphenated
+     *  list of randomly-selected words.
+     */
+    name?: string;
+    /** The resource group to use. If unspecified, the host's resource group is used. */
+    resource_group?: ResourceGroupIdentity;
+  }
+
+  /** DedicatedHostGroupReference. */
+  export interface DedicatedHostGroupReference {
+    /** The CRN for this dedicated host group. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: DedicatedHostGroupReferenceDeleted;
+    /** The URL for this dedicated host group. */
+    href: string;
+    /** The unique identifier for this dedicated host group. */
+    id: string;
+    /** The unique user-defined name for this dedicated host group. If unspecified, the name will be a hyphenated
+     *  list of randomly-selected words.
+     */
+    name: string;
+    /** The type of resource referenced. */
+    resource_type: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+  export interface DedicatedHostGroupReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** DedicatedHostProfile. */
+  export interface DedicatedHostProfile {
+    /** The product class this dedicated host profile belongs to. */
+    class: string;
+    /** The product family this dedicated host profile belongs to
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected property value was encountered.
+     */
+    family: string;
+    /** The URL for this dedicated host. */
+    href: string;
+    memory: DedicatedHostProfileMemory;
+    /** The globally unique name for this dedicated host profile. */
+    name: string;
+    socket_count: DedicatedHostProfileSocket;
+    /** Array of instance profiles that can be used by instances placed on dedicated hosts with this profile. */
+    supported_instance_profiles: InstanceProfileReference[];
+    vcpu_architecture: DedicatedHostProfileVCPUArchitecture;
+    vcpu_count: DedicatedHostProfileVCPU;
+  }
+
+  /** DedicatedHostProfileCollection. */
+  export interface DedicatedHostProfileCollection {
+    /** A link to the first page of resources. */
+    first: DedicatedHostProfileCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: DedicatedHostProfileCollectionNext;
+    /** Collection of dedicated host profiles. */
+    profiles: DedicatedHostProfile[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface DedicatedHostProfileCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface DedicatedHostProfileCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** Identifies a dedicated host profile by a unique property. */
+  export interface DedicatedHostProfileIdentity {
+  }
+
+  /** DedicatedHostProfileMemory. */
+  export interface DedicatedHostProfileMemory {
+  }
+
+  /** DedicatedHostProfileReference. */
+  export interface DedicatedHostProfileReference {
+    /** The URL for this dedicated host. */
+    href: string;
+    /** The globally unique name for this dedicated host profile. */
+    name: string;
+  }
+
+  /** DedicatedHostProfileSocket. */
+  export interface DedicatedHostProfileSocket {
+  }
+
+  /** DedicatedHostProfileVCPU. */
+  export interface DedicatedHostProfileVCPU {
+  }
+
+  /** DedicatedHostProfileVCPUArchitecture. */
+  export interface DedicatedHostProfileVCPUArchitecture {
+    /** The type for this profile field. */
+    type: string;
+    /** The VCPU architecture for a dedicated host with this profile. */
+    value: string;
+  }
+
+  /** DedicatedHostPrototype. */
+  export interface DedicatedHostPrototype {
+    /** If set to true, instances can be placed on this dedicated host. */
+    instance_placement_enabled?: boolean;
+    /** The unique user-defined name for this dedicated host. If unspecified, the name will be a hyphenated list of
+     *  randomly-selected words.
+     */
+    name?: string;
+    /** The profile to use for this dedicated host. */
+    profile: DedicatedHostProfileIdentity;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     */
+    resource_group?: ResourceGroupIdentity;
+  }
+
+  /** DedicatedHostReference. */
+  export interface DedicatedHostReference {
+    /** The CRN for this dedicated host. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: DedicatedHostReferenceDeleted;
+    /** The URL for this dedicated host. */
+    href: string;
+    /** The unique identifier for this dedicated host. */
+    id: string;
+    /** The unique user-defined name for this dedicated host. If unspecified, the name will be a hyphenated list of
+     *  randomly-selected words.
+     */
+    name: string;
+    /** The type of resource referenced. */
+    resource_type: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+  export interface DedicatedHostReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
   /** DefaultNetworkACL. */
   export interface DefaultNetworkACL {
     /** The date and time that the network ACL was created. */
@@ -15353,7 +16409,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
     route_direct_link_ingress: boolean;
@@ -15362,7 +16418,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
     route_transit_gateway_ingress: boolean;
@@ -15371,7 +16427,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
     route_vpc_zone_ingress: boolean;
@@ -15383,7 +16439,7 @@ namespace VpcV1 {
     subnets: SubnetReference[];
   }
 
-  /** Collection of rules in a default security group. */
+  /** DefaultSecurityGroup. */
   export interface DefaultSecurityGroup {
     /** The date and time that this security group was created. */
     created_at: string;
@@ -15492,7 +16548,7 @@ namespace VpcV1 {
     more_info: string;
   }
 
-  /** A reserved IP to bind to the endpoint gateway. This can be a an existing reserved IP, or a prototype used to allocate a reserved IP. The reserved IP will be bound to the endpoint gateway to function as a virtual private endpoint for the service. */
+  /** A reserved IP to bind to the endpoint gateway. This can be an existing reserved IP, or a prototype used to allocate a reserved IP. The reserved IP will be bound to the endpoint gateway to function as a virtual private endpoint for the service. */
   export interface EndpointGatewayReservedIP {
   }
 
@@ -15671,7 +16727,7 @@ namespace VpcV1 {
   export interface FlowLogCollectorTarget {
   }
 
-  /** The target this collector will collect flow logs for. If the target is an instance, subnet, or VPC, flow logs will not be collected for any network interfaces within the target that are themselves the target of a more specific flow log collector. */
+  /** The target this collector is collecting flow logs for. If the target is an instance, subnet, or VPC, flow logs will not be collected for any network interfaces within the target that are themselves the target of a more specific flow log collector. */
   export interface FlowLogCollectorTargetPrototype {
   }
 
@@ -15888,8 +16944,29 @@ namespace VpcV1 {
     operating_system?: OperatingSystem;
     /** The resource group for this image. */
     resource_group: ResourceGroupReference;
-    /** The status of this image. */
+    /** The status of this image
+     *  - available: image can be used (provisionable)
+     *  - deleting: image is being deleted, and can no longer be used to provision new
+     *    resources
+     *  - deprecated: image can be used, but is slated to become `obsolete` (provisionable)
+     *  - failed: image is corrupt or did not pass validation
+     *  - obsolete: image can no longer be used to provision new resources
+     *  - pending: image is being imported and is not yet `available`
+     *  - tentative: image import has timed out (contact support)
+     *  - unusable: image cannot be used (see `status_reasons[]` for possible remediation)
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the image on which
+     *  the unexpected property value was encountered.
+     */
     status: string;
+    /** Array of reasons for the current status (if any).
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    status_reasons: ImageStatusReason[];
     /** Whether the image is publicly visible or private to the account. */
     visibility: string;
   }
@@ -15972,6 +17049,16 @@ namespace VpcV1 {
     more_info: string;
   }
 
+  /** ImageStatusReason. */
+  export interface ImageStatusReason {
+    /** A snake case string succinctly identifying the status reason. */
+    code: string;
+    /** An explanation of the status reason. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
+  }
+
   /** Instance. */
   export interface Instance {
     /** The total bandwidth (in megabits per second) shared across the virtual server instance's network interfaces. */
@@ -15998,7 +17085,7 @@ namespace VpcV1 {
     network_interfaces: NetworkInterfaceInstanceContextReference[];
     /** Primary network interface. */
     primary_network_interface: NetworkInterfaceInstanceContextReference;
-    /** The profile this virtual server instance uses. */
+    /** The profile for this virtual server instance. */
     profile: InstanceProfileReference;
     /** The resource group for this instance. */
     resource_group: ResourceGroupReference;
@@ -16608,6 +17695,8 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this instance template. */
     id: string;
+    /** The unique user-defined name for this instance template. */
+    name: string;
   }
 
   /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
@@ -16688,6 +17777,8 @@ namespace VpcV1 {
     is_public: boolean;
     /** The listeners of this load balancer. */
     listeners: LoadBalancerListenerReference[];
+    /** The logging configuration for this load balancer. */
+    logging: LoadBalancerLogging;
     /** The unique user-defined name for this load balancer. */
     name: string;
     /** The operating status of this load balancer. */
@@ -16700,7 +17791,10 @@ namespace VpcV1 {
     profile: LoadBalancerProfileReference;
     /** The provisioning status of this load balancer. */
     provisioning_status: string;
-    /** The public IP addresses assigned to this load balancer. Applicable only for public load balancers. */
+    /** The public IP addresses assigned to this load balancer.
+     *
+     *  Applicable only for public load balancers.
+     */
     public_ips: IP[];
     /** The resource group for this load balancer. */
     resource_group: ResourceGroupReference;
@@ -16932,6 +18026,18 @@ namespace VpcV1 {
     more_info: string;
   }
 
+  /** The logging configuration for this load balancer. */
+  export interface LoadBalancerLogging {
+    /** The datapath logging configuration for this load balancer. */
+    datapath?: LoadBalancerLoggingDatapath;
+  }
+
+  /** The datapath logging configuration for this load balancer. */
+  export interface LoadBalancerLoggingDatapath {
+    /** If set to `true`, datapath logging is active for this load balancer. */
+    active: boolean;
+  }
+
   /** LoadBalancerPool. */
   export interface LoadBalancerPool {
     /** The load balancing algorithm. */
@@ -16996,7 +18102,10 @@ namespace VpcV1 {
      *  on which the unexpected property value was encountered.
      */
     type: string;
-    /** The health check URL path. Applicable only if the health monitor `type` is `http` or `https`. */
+    /** The health check URL path. Applicable only if the health monitor `type` is `http` or
+     *  `https`. This value must be in the format of an [origin-form request
+     *  target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
+     */
     url_path?: string;
   }
 
@@ -17014,7 +18123,10 @@ namespace VpcV1 {
     timeout: number;
     /** The protocol type of this load balancer pool health monitor. */
     type: string;
-    /** The health check URL path. Applicable only if the health monitor `type` is `http` or `https`. */
+    /** The health check URL path. Applicable only if the health monitor `type` is `http` or
+     *  `https`. This value must be in the format of an [origin-form request
+     *  target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
+     */
     url_path?: string;
   }
 
@@ -17032,7 +18144,10 @@ namespace VpcV1 {
     timeout: number;
     /** The protocol type of this load balancer pool health monitor. */
     type: string;
-    /** The health check URL path. Applicable only if the health monitor `type` is `http` or `https`. */
+    /** The health check URL path. Applicable only if the health monitor `type` is `http` or
+     *  `https`. This value must be in the format of an [origin-form request
+     *  target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
+     */
     url_path?: string;
   }
 
@@ -17187,6 +18302,8 @@ namespace VpcV1 {
     family: string;
     /** The URL for this load balancer profile. */
     href: string;
+    /** Indicates which logging type(s) are supported for a load balancer with this profile. */
+    logging_supported: LoadBalancerProfileLoggingSupported;
     /** The globally unique name for this load balancer profile. */
     name: string;
   }
@@ -17219,6 +18336,14 @@ namespace VpcV1 {
 
   /** Identifies a load balancer profile by a unique property. */
   export interface LoadBalancerProfileIdentity {
+  }
+
+  /** Indicates which logging type(s) are supported for a load balancer with this profile. */
+  export interface LoadBalancerProfileLoggingSupported {
+    /** The type for this profile field. */
+    type: string;
+    /** The supported logging type(s) for a load balancer with this profile. */
+    value: string[];
   }
 
   /** LoadBalancerProfileReference. */
@@ -17485,8 +18610,8 @@ namespace VpcV1 {
 
   /** NetworkInterface. */
   export interface NetworkInterface {
-    /** Indicates whether IP spoofing is allowed on this interface. If false, IP spoofing is prevented on this
-     *  interface. If true, IP spoofing is allowed on this interface.
+    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
+     *  on this interface. If true, source IP spoofing is allowed on this interface.
      */
     allow_ip_spoofing: boolean;
     /** The date and time that the network interface was created. */
@@ -17569,8 +18694,8 @@ namespace VpcV1 {
 
   /** NetworkInterfacePrototype. */
   export interface NetworkInterfacePrototype {
-    /** Indicates whether IP spoofing is allowed on this interface. If false, IP spoofing is prevented on this
-     *  interface. If true, IP spoofing is allowed on this interface.
+    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
+     *  on this interface. If true, source IP spoofing is allowed on this interface.
      */
     allow_ip_spoofing?: boolean;
     /** The user-defined name for this network interface. If unspecified, the name will be a hyphenated list of
@@ -18043,7 +19168,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
     route_direct_link_ingress: boolean;
@@ -18052,7 +19177,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
     route_transit_gateway_ingress: boolean;
@@ -18061,7 +19186,7 @@ namespace VpcV1 {
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-     *  Therefore, if an incoming packet matches a route with with a `next_hop` of an internet-bound IP address or a VPN
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
     route_vpc_zone_ingress: boolean;
@@ -18378,6 +19503,14 @@ namespace VpcV1 {
   export interface SubnetReferenceDeleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
+  }
+
+  /** The VCPU configuration. */
+  export interface VCPU {
+    /** The VCPU architecture. */
+    architecture: string;
+    /** The number of VCPUs assigned. */
+    count: number;
   }
 
   /** VPC. */
@@ -18720,6 +19853,13 @@ namespace VpcV1 {
      *  unexpected property value was encountered.
      */
     status: string;
+    /** Array of reasons for the current status (if any).
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    status_reasons: VolumeStatusReason[];
     /** The collection of volume attachments attaching instances to the volume. */
     volume_attachments: VolumeAttachmentReferenceVolumeContext[];
     /** The zone this volume resides in. */
@@ -18986,6 +20126,16 @@ namespace VpcV1 {
     more_info: string;
   }
 
+  /** VolumeStatusReason. */
+  export interface VolumeStatusReason {
+    /** A snake case string succinctly identifying the status reason. */
+    code: string;
+    /** An explanation of the status reason. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
+  }
+
   /** Zone. */
   export interface Zone {
     /** The URL for this zone. */
@@ -19026,6 +20176,163 @@ namespace VpcV1 {
   export interface CloudObjectStorageBucketIdentityByName extends CloudObjectStorageBucketIdentity {
     /** The globally unique name of this COS bucket. */
     name: string;
+  }
+
+  /** DedicatedHostGroupIdentityByCRN. */
+  export interface DedicatedHostGroupIdentityByCRN extends DedicatedHostGroupIdentity {
+    /** The CRN for this dedicated host group. */
+    crn: string;
+  }
+
+  /** DedicatedHostGroupIdentityByHref. */
+  export interface DedicatedHostGroupIdentityByHref extends DedicatedHostGroupIdentity {
+    /** The URL for this dedicated host group. */
+    href: string;
+  }
+
+  /** DedicatedHostGroupIdentityById. */
+  export interface DedicatedHostGroupIdentityById extends DedicatedHostGroupIdentity {
+    /** The unique identifier for this dedicated host group. */
+    id: string;
+  }
+
+  /** DedicatedHostProfileIdentityByHref. */
+  export interface DedicatedHostProfileIdentityByHref extends DedicatedHostProfileIdentity {
+    /** The URL for this dedicated host profile. */
+    href: string;
+  }
+
+  /** DedicatedHostProfileIdentityByName. */
+  export interface DedicatedHostProfileIdentityByName extends DedicatedHostProfileIdentity {
+    /** The globally unique name for this dedicated host profile. */
+    name: string;
+  }
+
+  /** The memory value for a dedicated host with this profile depends on its configuration. */
+  export interface DedicatedHostProfileMemoryDependent extends DedicatedHostProfileMemory {
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The permitted memory values (in gibibytes) for a dedicated host with this profile. */
+  export interface DedicatedHostProfileMemoryEnum extends DedicatedHostProfileMemory {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+
+  /** The memory (in gibibytes) for a dedicated host with this profile. */
+  export interface DedicatedHostProfileMemoryFixed extends DedicatedHostProfileMemory {
+    /** The type for this profile field. */
+    type: string;
+    /** The value for this profile field. */
+    value: number;
+  }
+
+  /** The permitted memory range (in gibibytes) for a dedicated host with this profile. */
+  export interface DedicatedHostProfileMemoryRange extends DedicatedHostProfileMemory {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The CPU socket count for a dedicated host with this profile depends on its configuration. */
+  export interface DedicatedHostProfileSocketDependent extends DedicatedHostProfileSocket {
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The permitted values for CPU socket count for a dedicated host with this profile. */
+  export interface DedicatedHostProfileSocketEnum extends DedicatedHostProfileSocket {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+
+  /** The CPU socket count for a dedicated host with this profile. */
+  export interface DedicatedHostProfileSocketFixed extends DedicatedHostProfileSocket {
+    /** The type for this profile field. */
+    type: string;
+    /** The value for this profile field. */
+    value: number;
+  }
+
+  /** The permitted range for CPU socket count for a dedicated host with this profile. */
+  export interface DedicatedHostProfileSocketRange extends DedicatedHostProfileSocket {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The VCPU count for a dedicated host with this profile depends on its configuration. */
+  export interface DedicatedHostProfileVCPUDependent extends DedicatedHostProfileVCPU {
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The permitted values for VCPU count for a dedicated host with this profile. */
+  export interface DedicatedHostProfileVCPUEnum extends DedicatedHostProfileVCPU {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+
+  /** The VCPU count for a dedicated host with this profile. */
+  export interface DedicatedHostProfileVCPUFixed extends DedicatedHostProfileVCPU {
+    /** The type for this profile field. */
+    type: string;
+    /** The value for this profile field. */
+    value: number;
+  }
+
+  /** The permitted range for VCPU count for a dedicated host with this profile. */
+  export interface DedicatedHostProfileVCPURange extends DedicatedHostProfileVCPU {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** DedicatedHostPrototypeDedicatedHostByGroup. */
+  export interface DedicatedHostPrototypeDedicatedHostByGroup extends DedicatedHostPrototype {
+    /** The dedicated host group for this dedicated host. */
+    group: DedicatedHostGroupIdentity;
+  }
+
+  /** DedicatedHostPrototypeDedicatedHostByZone. */
+  export interface DedicatedHostPrototypeDedicatedHostByZone extends DedicatedHostPrototype {
+    group?: DedicatedHostGroupPrototypeDedicatedHostByZoneContext;
+    /** The zone to provision the dedicated host in. */
+    zone: ZoneIdentity;
   }
 
   /** EncryptionKeyIdentityByCRN. */
