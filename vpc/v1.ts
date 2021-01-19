@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -96,7 +96,7 @@ class VpcV1 extends BaseService {
     } else {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
-    this.version = options.version || '2020-11-17';
+    this.version = options.version || '2021-01-12';
     this.generation = options.generation;
   }
 
@@ -107,9 +107,9 @@ class VpcV1 extends BaseService {
   /**
    * List all VPCs.
    *
-   * This request lists all VPCs. A VPC is a virtual network that belongs to an account and provides logical isolation
-   * from other networks. A VPC is made up of resources in one or more zones. VPCs are regional, and each VPC can
-   * contain resources in multiple zones in a region.
+   * This request lists all VPCs in the region. A VPC is a virtual network that belongs to an account and provides
+   * logical isolation from other networks. A VPC is made up of resources in one or more zones. VPCs are regional, and
+   * each VPC can contain resources in multiple zones in a region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
@@ -210,7 +210,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified VPC.
+   * Delete a VPC.
    *
    * This request deletes a VPC. This operation cannot be reversed. For this request to succeed, the VPC must not
    * contain any instances, subnets, or public gateways. All security groups and network ACLs associated with the VPC
@@ -259,7 +259,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified VPC.
+   * Retrieve a VPC.
    *
    * This request retrieves a single VPC specified by the identifier in the URL.
    *
@@ -306,7 +306,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified VPC.
+   * Update a VPC.
    *
    * This request updates a VPC's name.
    *
@@ -505,7 +505,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all address pool prefixes for a VPC.
+   * List all address prefixes for a VPC.
    *
    * This request lists all address pool prefixes for a VPC.
    *
@@ -556,7 +556,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create an address pool prefix.
+   * Create an address prefix for a VPC.
    *
    * This request creates a new prefix from a prefix prototype object. The prototype object is structured in the same
    * way as a retrieved prefix, and contains the information necessary to create the new prefix.
@@ -623,7 +623,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified address pool prefix.
+   * Delete an address prefix.
    *
    * This request deletes a prefix. This operation cannot be reversed. The request will fail if any subnets use
    * addresses from this prefix.
@@ -672,7 +672,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified address pool prefix.
+   * Retrieve an address prefix.
    *
    * This request retrieves a single prefix specified by the identifier in the URL.
    *
@@ -721,7 +721,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update an address pool prefix.
+   * Update an address prefix.
    *
    * This request updates a prefix with the information in a provided prefix patch. The prefix patch object is
    * structured in the same way as a retrieved prefix and contains only the information to be updated.
@@ -783,9 +783,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all routes in the VPC's default routing table.
+   * List all routes in a VPC's default routing table.
    *
-   * This request retrieves routes in the VPC's default routing table. Each route is zone-specific and directs any
+   * This request lists all routes in the VPC's default routing table. Each route is zone-specific and directs any
    * packets matching its destination CIDR block to a `next_hop` IP address. The most specific route matching a packet's
    * destination will be used. If multiple equally-specific routes exist, traffic will be distributed across them.
    *
@@ -838,7 +838,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a route in the VPC's default routing table.
+   * Create a route in a VPC's default routing table.
    *
    * This request creates a new route in the VPC's default routing table. The route prototype object is structured in
    * the same way as a retrieved route, and contains the information necessary to create the new route. The request will
@@ -911,7 +911,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete the specified route in the VPC's default routing table.
+   * Delete a VPC route.
    *
    * This request deletes a route. This operation cannot be reversed.
    *
@@ -959,7 +959,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve the specified route in the VPC's default routing table.
+   * Retrieve a VPC route.
    *
    * This request retrieves a single route specified by the identifier in the URL.
    *
@@ -1008,7 +1008,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update the specified route in the VPC's default routing table.
+   * Update a VPC route.
    *
    * This request updates a route with the information in a provided route patch. The route patch object is structured
    * in the same way as a retrieved route and contains only the information to be updated.
@@ -1124,7 +1124,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a VPC routing table.
+   * Create a routing table for a VPC.
    *
    * This request creates a user-defined routing table from a routing table prototype object. The prototype object is
    * structured in the same way as a retrieved routing table, and contains the information necessary to create the new
@@ -1215,7 +1215,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified VPC routing table.
+   * Delete a VPC routing table.
    *
    * This request deletes a routing table.  A routing table cannot be deleted if it is associated with any subnets in
    * the VPC. Additionally, a VPC's default routing table cannot be deleted. This operation cannot be reversed.
@@ -1264,7 +1264,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified VPC routing table.
+   * Retrieve a VPC routing table.
    *
    * This request retrieves a single routing table specified by the identifier in the URL.
    *
@@ -1313,7 +1313,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified VPC routing table.
+   * Update a VPC routing table.
    *
    * This request updates a routing table with the information in a provided routing table patch. The patch object is
    * structured in the same way as a retrieved table and contains only the information to be updated.
@@ -1407,13 +1407,12 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all the routes of a VPC routing table.
+   * List all routes in a VPC routing table.
    *
-   * This request lists all the routes for the specified VPC routing table.  If a subnet has been associated with this
-   * routing table, delivery of packets sent on a subnet is performed according to the action of the most specific
-   * matching route in the table (provided the subnet and route are in the same zone).  If multiple equally-specific
-   * routes exist, traffic will be distributed across them.  If no routes match, delivery will be controlled by the
-   * system's built-in routes.
+   * This request lists all routes in a VPC routing table. If a subnet has been associated with this routing table,
+   * delivery of packets sent on a subnet is performed according to the action of the most specific matching route in
+   * the table (provided the subnet and route are in the same zone). If multiple equally-specific routes exist, traffic
+   * will be distributed across them. If no routes match, delivery will be controlled by the system's built-in routes.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
@@ -1464,7 +1463,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a VPC route.
+   * Create a route in a VPC routing table.
    *
    * This request creates a new VPC route from a VPC route prototype object. The prototype object is structured in the
    * same way as a retrieved VPC route and contains the information necessary to create the route.
@@ -1538,7 +1537,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete the specified VPC route.
+   * Delete a VPC routing table route.
    *
    * This request deletes a VPC route. This operation cannot be reversed.
    *
@@ -1588,7 +1587,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve the specified VPC route.
+   * Retrieve a VPC routing table route.
    *
    * This request retrieves a single VPC route specified by the identifier in the URL path.
    *
@@ -1639,7 +1638,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update the specified VPC route.
+   * Update a VPC routing table route.
    *
    * This request updates a VPC route with the information provided in a route patch object. The patch object is
    * structured in the same way as a retrieved VPC route and needs to contain only the information to be updated.
@@ -1799,7 +1798,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified subnet.
+   * Delete a subnet.
    *
    * This request deletes a subnet. This operation cannot be reversed. For this request to succeed, the subnet must not
    * be referenced by any network interfaces, VPN gateways, or load balancers. A delete operation automatically detaches
@@ -1848,7 +1847,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified subnet.
+   * Retrieve a subnet.
    *
    * This request retrieves a single subnet specified by the identifier in the URL.
    *
@@ -1895,7 +1894,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified subnet.
+   * Update a subnet.
    *
    * This request updates a subnet with the information in a provided subnet patch. The subnet patch object is
    * structured in the same way as a retrieved subnet and contains only the information to be updated.
@@ -2309,7 +2308,7 @@ class VpcV1 extends BaseService {
   /**
    * List all reserved IPs in a subnet.
    *
-   * This request lists reserved IPs in the subnet that are unbound or bound to an endpoint gateway.
+   * This request lists reserved IPs in a subnet that are unbound or bound to an endpoint gateway.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.subnetId - The subnet identifier.
@@ -2425,7 +2424,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Release specified reserved IP.
+   * Release a reserved IP.
    *
    * This request releases a reserved IP. This operation cannot be reversed.
    *
@@ -2473,7 +2472,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified reserved IP.
+   * Retrieve a reserved IP.
    *
    * This request retrieves a single reserved IP specified by the identifier in the URL.
    *
@@ -2522,7 +2521,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified reserved IP.
+   * Update a reserved IP.
    *
    * This request updates a reserved IP with the information in a provided reserved IP patch. The reserved IP patch
    * object is structured in the same way as a retrieved reserved IP and contains only the information to be updated.
@@ -2685,7 +2684,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified image.
+   * Delete an image.
    *
    * This request deletes an image. This operation cannot be reversed. System-provided images are not allowed to be
    * deleted. An image with a `status` of `pending`, `tentative`, or `deleting` cannot be deleted.
@@ -2732,7 +2731,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve the specified image.
+   * Retrieve an image.
    *
    * This request retrieves a single image specified by the identifier in the URL.
    *
@@ -2779,7 +2778,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified image.
+   * Update an image.
    *
    * This request updates an image with the information in a provided image patch. The image patch object is structured
    * in the same way as a retrieved image and contains only the information to be updated. System-provided images are
@@ -2836,9 +2835,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieves all operating systems.
+   * List all operating systems.
    *
-   * This request retrieves all operating systems.
+   * This request lists all operating systems in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
@@ -2875,7 +2874,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieves an operating system.
+   * Retrieve an operating system.
    *
    * This request retrieves a single operating system specified by the name in the URL.
    *
@@ -2928,8 +2927,8 @@ class VpcV1 extends BaseService {
   /**
    * List all keys.
    *
-   * This request lists all keys. A key contains a public SSH key which may be installed on instances when they are
-   * created. Private keys are not stored.
+   * This request lists all keys in the region. A key contains a public SSH key which may be installed on instances when
+   * they are created. Private keys are not stored.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.resourceGroupId] - Filters the collection to resources within one of the resource groups
@@ -3025,7 +3024,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified key.
+   * Delete a key.
    *
    * This request deletes a key. This operation cannot be reversed.
    *
@@ -3071,7 +3070,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified key.
+   * Retrieve a key.
    *
    * This request retrieves a single key specified by the identifier in the URL.
    *
@@ -3118,7 +3117,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified key.
+   * Update a key.
    *
    * This request updates a key's name.
    *
@@ -3212,7 +3211,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified instance profile.
+   * Retrieve an instance profile.
    *
    * This request retrieves a single instance profile specified by the name in the URL.
    *
@@ -3259,7 +3258,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Get instance templates.
+   * List all instance templates.
    *
    * This request lists all instance templates in the region.
    *
@@ -3339,7 +3338,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified instance template.
+   * Delete an instance template.
    *
    * This request deletes the instance template. This operation cannot be reversed.
    *
@@ -3385,7 +3384,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified instance template.
+   * Retrieve an instance template.
    *
    * This request retrieves a single instance template specified by the identifier in the URL.
    *
@@ -3432,7 +3431,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified instance template.
+   * Update an instance template.
    *
    * This request updates an instance template with the information provided in the instance template patch. The
    * instance template patch object is structured in the same way as a retrieved instance template and contains only the
@@ -3585,7 +3584,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified instance.
+   * Delete an instance.
    *
    * This request deletes an instance. This operation cannot be reversed. Any floating IPs associated with the
    * instance's network interfaces are implicitly disassociated. All flow log collectors with `auto_delete` set to
@@ -3680,7 +3679,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified instance.
+   * Update an instance.
    *
    * This request updates an instance with the information in a provided instance patch. The instance patch object is
    * structured in the same way as a retrieved instance and contains only the information to be updated.
@@ -3736,7 +3735,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve configuration used to initialize the instance.
+   * Retrieve initialization configuration for an instance.
    *
    * This request retrieves configuration variables used to initialize the instance, such as SSH keys and the Windows
    * administrator password.
@@ -3892,7 +3891,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a network interface.
+   * Create a network interface on an instance.
    *
    * This request creates a new network interface from a network interface prototype object. The prototype object is
    * structured in the same way as a retrieved network interface, and contains the information necessary to create the
@@ -3961,7 +3960,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified network interface.
+   * Delete a network interface.
    *
    * This request deletes a network interface. This operation cannot be reversed. Any floating IPs associated with the
    * network interface are implicitly disassociated. All flow log collectors with `auto_delete` set to `true` targeting
@@ -4011,7 +4010,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified network interface.
+   * Retrieve a network interface.
    *
    * This request retrieves a single network interface specified by the identifier in the URL.
    *
@@ -4170,7 +4169,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Disassociate specified floating IP.
+   * Disassociate a floating IP from a network interface.
    *
    * This request disassociates the specified floating IP from the specified network interface.
    *
@@ -4325,9 +4324,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all volumes attached to an instance.
+   * List all volumes attachments on an instance.
    *
-   * This request lists all volume attachments for an instance. A volume attachment connects a volume to an instance.
+   * This request lists all volume attachments on an instance. A volume attachment connects a volume to an instance.
    * Each instance may have many volume attachments but each volume attachment connects exactly one instance to exactly
    * one volume.
    *
@@ -4374,7 +4373,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a volume attachment, connecting a volume to an instance.
+   * Create a volume attachment on an instance.
    *
    * This request creates a new volume attachment from a volume attachment prototype object. The prototype object is
    * structured in the same way as a retrieved volume attachment, and contains the information necessary to create the
@@ -4436,7 +4435,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete a volume attachment, detaching a volume from an instance.
+   * Delete a volume attachment.
    *
    * This request deletes a volume attachment. The deletion of a volume attachment detaches a volume from an instance.
    *
@@ -4484,7 +4483,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified volume attachment.
+   * Retrieve a volume attachment.
    *
    * This request retrieves a single volume attachment specified by the identifier in the URL.
    *
@@ -4708,7 +4707,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified instance group.
+   * Delete an instance group.
    *
    * This request deletes an instance group. This operation cannot be reversed. Any instances associated with the group
    * will be deleted.
@@ -4755,7 +4754,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified instance group.
+   * Retrieve an instance group.
    *
    * This request retrieves a single instance group specified by identifier in the URL.
    *
@@ -4802,7 +4801,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified instance group.
+   * Update an instance group.
    *
    * This request updates an instance group with the information provided instance group patch. The instance group patch
    * object is structured in the same way as a retrieved instance group and contains only the information to be updated.
@@ -4876,7 +4875,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified instance group load balancer.
+   * Delete an instance group load balancer.
    *
    * This request unbinds the instance group from the load balancer pool, and deletes the load balancer pool members.
    *
@@ -4924,7 +4923,7 @@ class VpcV1 extends BaseService {
   /**
    * List all managers for an instance group.
    *
-   * This request retrieves instance group managers.
+   * This request lists all managers for an instance group.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
@@ -4969,7 +4968,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create an instance group manager.
+   * Create a manager for an instance group.
    *
    * This request creates a new instance group manager.
    *
@@ -5021,7 +5020,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified instance group manager.
+   * Delete an instance group manager.
    *
    * This request deletes an instance group manager. This operation cannot be reversed.
    *
@@ -5069,7 +5068,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified instance group.
+   * Retrieve an instance group manager.
    *
    * This request retrieves a single instance group manager specified by identifier in the URL.
    *
@@ -5118,7 +5117,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified instance group manager.
+   * Update an instance group manager.
    *
    * This request updates an instance group manager with the information provided instance group manager patch.
    *
@@ -5188,7 +5187,7 @@ class VpcV1 extends BaseService {
   /**
    * List all policies for an instance group manager.
    *
-   * This request lists all instance group policies for an instance group manager.
+   * This request lists all policies for an instance group manager.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
@@ -5235,7 +5234,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create an instance group manager policy.
+   * Create a policy for an instance group manager.
    *
    * This request creates a new instance group manager policy.
    *
@@ -5289,7 +5288,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified instance group manager policy.
+   * Delete an instance group manager policy.
    *
    * This request deletes an instance group manager policy. This operation cannot be reversed.
    *
@@ -5339,7 +5338,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified instance group manager policy.
+   * Retrieve an instance group manager policy.
    *
    * This request retrieves a single instance group manager policy specified by identifier in the URL.
    *
@@ -5390,7 +5389,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified instance group manager policy.
+   * Update an instance group manager policy.
    *
    * This request updates an instance group manager policy.
    *
@@ -5453,7 +5452,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete all memberships from the instance group.
+   * Delete all memberships from an instance group.
    *
    * This request deletes all memberships of an instance group. This operation cannot be reversed. reversed. Any
    * memberships that have `delete_instance_on_membership_delete` set to `true` will also have their instances deleted.
@@ -5500,7 +5499,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all memberships for the instance group.
+   * List all memberships for an instance group.
    *
    * This request lists all instance group memberships for an instance group.
    *
@@ -5547,7 +5546,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified instance group membership.
+   * Delete an instance group membership.
    *
    * This request deletes a memberships of an instance group. This operation cannot be reversed. reversed. If the
    * membership has `delete_instance_on_membership_delete` set to `true`, the instance will also be deleted.
@@ -5596,7 +5595,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified instance group membership.
+   * Retrieve an instance group membership.
    *
    * This request retrieves a single instance group membership specified by identifier in the URL.
    *
@@ -5645,7 +5644,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified instance group membership.
+   * Update an instance group membership.
    *
    * This request updates an instance group membership with the information provided instance group membership patch.
    *
@@ -5804,7 +5803,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified dedicated host group.
+   * Delete a dedicated host group.
    *
    * This request deletes a dedicated host group.
    *
@@ -5897,7 +5896,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified dedicated host group.
+   * Update a dedicated host group.
    *
    * This request updates a dedicated host group with the information in a provided dedicated host group patch. The
    * dedicated host group patch object is structured in the same way as a retrieved dedicated host group and contains
@@ -5956,7 +5955,7 @@ class VpcV1 extends BaseService {
   /**
    * List all dedicated host profiles.
    *
-   * This request lists provisionable dedicated host profiles in the region. A dedicated host profile specifies the
+   * This request lists all provisionable dedicated host profiles in the region. A dedicated host profile specifies the
    * hardware characteristics for a dedicated host.
    *
    * @param {Object} [params] - The parameters to send to the service.
@@ -5994,7 +5993,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified dedicated host profile.
+   * Retrieve a dedicated host profile.
    *
    * This request retrieves a single dedicated host profile specified by the name in the URL.
    *
@@ -6043,7 +6042,7 @@ class VpcV1 extends BaseService {
   /**
    * List all dedicated hosts.
    *
-   * This request lists all dedicated hosts.
+   * This request lists all dedicated hosts in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.dedicatedHostGroupId] - Filters the collection to dedicated host groups with specified
@@ -6133,7 +6132,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified dedicated host.
+   * Delete a dedicated host.
    *
    * This request deletes a dedicated host.
    *
@@ -6226,7 +6225,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified dedicated host.
+   * Update a dedicated host.
    *
    * This request updates a dedicated host with the information in a provided dedicated host patch. The dedicated host
    * patch object is structured in the same way as a retrieved dedicated host and contains only the information to be
@@ -6330,7 +6329,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified volume profile.
+   * Retrieve a volume profile.
    *
    * This request retrieves a single volume profile specified by the name in the URL.
    *
@@ -6467,7 +6466,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified volume.
+   * Delete a volume.
    *
    * This request deletes a volume. This operation cannot be reversed. For this request to succeed, the volume must not
    * be attached to any instances.
@@ -6514,7 +6513,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified volume.
+   * Retrieve a volume.
    *
    * This request retrieves a single volume specified by the identifier in the URL.
    *
@@ -6561,7 +6560,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update specified volume.
+   * Update a volume.
    *
    * This request updates a volume with the information in a provided volume patch. The volume patch object is
    * structured in the same way as a retrieved volume and contains only the information to be updated.
@@ -6809,9 +6808,9 @@ class VpcV1 extends BaseService {
   /**
    * List all public gateways.
    *
-   * This request lists all public gateways. A public gateway is a virtual network device associated with a VPC, which
-   * allows access to the Internet. A public gateway resides in a zone and can be connected to subnets in the same zone
-   * only.
+   * This request lists all public gateways in the region. A public gateway is a virtual network device associated with
+   * a VPC, which allows access to the Internet. A public gateway resides in a zone and can be connected to subnets in
+   * the same zone only.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
@@ -6915,7 +6914,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified public gateway.
+   * Delete a public gateway.
    *
    * This request deletes a public gateway. This operation cannot be reversed. For this request to succeed, the public
    * gateway must not be attached to any subnets. The public gateway's floating IP will be automatically unbound. If the
@@ -6963,7 +6962,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified public gateway.
+   * Retrieve a public gateway.
    *
    * This request retrieves a single public gateway specified by the identifier in the URL.
    *
@@ -7010,7 +7009,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update a public gateway's name.
+   * Update a public gateway.
    *
    * This request updates a public gateway's name.
    *
@@ -7071,7 +7070,7 @@ class VpcV1 extends BaseService {
   /**
    * List all floating IPs.
    *
-   * This request retrieves all floating IPs in the region. Floating IPs allow inbound and outbound traffic from the
+   * This request lists all floating IPs in the region. Floating IPs allow inbound and outbound traffic from the
    * Internet to an instance.
    *
    * @param {Object} [params] - The parameters to send to the service.
@@ -7157,7 +7156,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Release the specified floating IP.
+   * Release a floating IP.
    *
    * This request disassociates (if associated) and releases a floating IP. This operation cannot be reversed. For this
    * request to succeed, the floating IP must not be required by another resource, such as a public gateway.
@@ -7204,7 +7203,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve the specified floating IP.
+   * Retrieve a floating IP.
    *
    * This request retrieves a single floating IP specified by the identifier in the URL.
    *
@@ -7251,7 +7250,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update the specified floating IP.
+   * Update a floating IP.
    *
    * This request updates a floating IP's name and/or target.
    *
@@ -7398,7 +7397,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified network ACL.
+   * Delete a network ACL.
    *
    * This request deletes a network ACL. This operation cannot be reversed. For this request to succeed, the network ACL
    * must not be the default network ACL for any VPCs, and the network ACL must not be attached to any subnets.
@@ -7445,7 +7444,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified network ACL.
+   * Retrieve a network ACL.
    *
    * This request retrieves a single network ACL specified by the identifier in the URL.
    *
@@ -7601,7 +7600,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a rule.
+   * Create a rule for a network ACL.
    *
    * This request creates a new rule from a network ACL rule prototype object. The prototype object is structured in the
    * same way as a retrieved rule, and contains the information necessary to create the new rule.
@@ -7653,7 +7652,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete specified rule.
+   * Delete a network ACL rule.
    *
    * This request deletes a rule. This operation cannot be reversed.
    *
@@ -7701,7 +7700,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified rule.
+   * Retrieve a network ACL rule.
    *
    * This request retrieves a single rule specified by the identifier in the URL.
    *
@@ -7750,7 +7749,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update a rule.
+   * Update a network ACL rule.
    *
    * This request updates a rule with the information in a provided rule patch. The rule patch object contains only the
    * information to be updated. The request will fail if the information is not applicable to the rule's protocol.
@@ -7840,9 +7839,9 @@ class VpcV1 extends BaseService {
   /**
    * List all security groups.
    *
-   * This request lists all existing security groups. Security groups provide a convenient way to apply IP filtering
-   * rules to instances in the associated VPC. With security groups, all traffic is denied by default, and rules added
-   * to security groups define which traffic the security group permits. Security group rules are stateful such that
+   * This request lists all security groups in the region. Security groups provide a way to apply IP filtering rules to
+   * instances in the associated VPC. With security groups, all traffic is denied by default, and rules added to
+   * security groups define which traffic the security group permits. Security group rules are stateful such that
    * reverse traffic in response to allowed traffic is automatically permitted.
    *
    * @param {Object} [params] - The parameters to send to the service.
@@ -8103,9 +8102,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List a security group's network interfaces.
+   * List all network interfaces associated with a security group.
    *
-   * This request lists all network interfaces associated with the security group, to which the rules in the security
+   * This request lists all network interfaces associated with a security group, to which the rules in the security
    * group are applied.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -8307,11 +8306,11 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all the rules of a security group.
+   * List all rules in a security group.
    *
-   * This request lists all the security group rules for a particular security group. These rules define what traffic
-   * the security group permits. Security group rules are stateful, such that reverse traffic in response to allowed
-   * traffic is automatically permitted.
+   * This request lists all rules in a security group. These rules define what traffic the security group permits.
+   * Security group rules are stateful, such that reverse traffic in response to allowed traffic is automatically
+   * permitted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.securityGroupId - The security group identifier.
@@ -8356,7 +8355,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a security group rule.
+   * Create a rule for a security group.
    *
    * This request creates a new security group rule from a security group rule prototype object. The prototype object is
    * structured in the same way as a retrieved security group rule and contains the information necessary to create the
@@ -8593,7 +8592,7 @@ class VpcV1 extends BaseService {
   /**
    * List all IKE policies.
    *
-   * This request retrieves a paginated list of all IKE policies that belong to this account.
+   * This request lists all IKE policies in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
@@ -8738,7 +8737,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve the specified IKE policy.
+   * Retrieve an IKE policy.
    *
    * This request retrieves a single IKE policy specified by the identifier in the URL.
    *
@@ -8849,9 +8848,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all connections that use the specified IKE policy.
+   * List all VPN gateway connections that use a specified IKE policy.
    *
-   * This request lists all the connections that use the specified policy.
+   * This request lists all VPN gateway connections that use a policy.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The IKE policy identifier.
@@ -8898,7 +8897,7 @@ class VpcV1 extends BaseService {
   /**
    * List all IPsec policies.
    *
-   * This request retrieves a paginated list of all IPsec policies that belong to this account.
+   * This request lists all IPsec policies in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
@@ -9041,7 +9040,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve the specified IPsec policy.
+   * Retrieve an IPsec policy.
    *
    * This request retrieves a single IPsec policy specified by the identifier in the URL.
    *
@@ -9150,9 +9149,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all connections that use the specified IPsec policy.
+   * List all VPN gateway connections that use a specified IPsec policy.
    *
-   * This request lists all the connections that use the specified policy.
+   * This request lists all VPN gateway connections that use a policy.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The IPsec policy identifier.
@@ -9199,7 +9198,7 @@ class VpcV1 extends BaseService {
   /**
    * List all VPN gateways.
    *
-   * This request retrieves a paginated list of all VPN gateways that belong to this account.
+   * This request lists all VPN gateways in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
@@ -9333,7 +9332,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve the specified VPN gateway.
+   * Retrieve a VPN gateway.
    *
    * This request retrieves a single VPN gateway specified by the identifier in the URL.
    *
@@ -9436,7 +9435,7 @@ class VpcV1 extends BaseService {
   /**
    * List all connections of a VPN gateway.
    *
-   * This request lists all the connections of a particular VPN gateway.
+   * This request lists all connections of a VPN gateway.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
@@ -9483,7 +9482,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a VPN gateway connection.
+   * Create a connection for a VPN gateway.
    *
    * This request creates a new VPN gateway connection.
    *
@@ -9583,7 +9582,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve the specified VPN gateway connection.
+   * Retrieve a VPN gateway connection.
    *
    * This request retrieves a single VPN gateway connection specified by the identifier in the URL.
    *
@@ -9687,7 +9686,7 @@ class VpcV1 extends BaseService {
   /**
    * List all local CIDRs for a VPN gateway connection.
    *
-   * This request lists all local CIDRs for a VPN gateway connection specified by the identifier in the URL.
+   * This request lists all local CIDRs for a VPN gateway connection.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
@@ -9893,7 +9892,7 @@ class VpcV1 extends BaseService {
   /**
    * List all peer CIDRs for a VPN gateway connection.
    *
-   * This request lists all peer CIDRs for a VPN gateway connection specified by the identifier in the URL.
+   * This request lists all peer CIDRs for a VPN gateway connection.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
@@ -10141,7 +10140,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve specified load balancer profile.
+   * Retrieve a load balancer profile.
    *
    * This request retrieves a load balancer profile specified by the name in the URL.
    *
@@ -10190,7 +10189,7 @@ class VpcV1 extends BaseService {
   /**
    * List all load balancers.
    *
-   * This request retrieves a paginated list of all load balancers that belong to this account.
+   * This request lists all load balancers in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -10223,7 +10222,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create and provision a load balancer.
+   * Create a load balancer.
    *
    * This request creates and provisions a new load balancer.
    *
@@ -10446,9 +10445,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List statistics of a load balancer.
+   * List all statistics of a load balancer.
    *
-   * This request lists statistics of a load balancer specified by the identifier in the URL path.
+   * This request lists statistics of a load balancer.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The load balancer identifier.
@@ -10493,9 +10492,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all listeners of the load balancer.
+   * List all listeners for a load balancer.
    *
-   * This request retrieves a list of all listeners that belong to the load balancer.
+   * This request lists all listeners for a load balancer.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -10540,9 +10539,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a listener.
+   * Create a listener for a load balancer.
    *
-   * This request creates a new listener to the load balancer.
+   * This request creates a new listener for a load balancer.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -10563,7 +10562,7 @@ class VpcV1 extends BaseService {
    * - Belong to this load balancer
    * - Have the same `protocol` as this listener
    * - Not already be the default pool for another listener.
-   * @param {LoadBalancerListenerPolicyPrototype[]} [params.policies] - The list of policies of this listener.
+   * @param {LoadBalancerListenerPolicyPrototype[]} [params.policies] - An array of policies for this listener.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListener>>}
    */
@@ -10617,7 +10616,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete a listener.
+   * Delete a load balancer listener.
    *
    * This request deletes a load balancer listener. This operation cannot be reversed.
    *
@@ -10665,7 +10664,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve a listener.
+   * Retrieve a load balancer listener.
    *
    * This request retrieves a single listener specified by the identifier in the URL path.
    *
@@ -10714,7 +10713,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update a listener.
+   * Update a load balancer listener.
    *
    * This request updates a load balancer listener from a listener patch.
    *
@@ -10791,9 +10790,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all policies of the load balancer listener.
+   * List all policies for a load balancer listener.
    *
-   * Retrieves a list of all policies belonging to the load balancer listener.
+   * This request lists all policies for a load balancer listener.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -10840,9 +10839,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a policy for the load balancer listener.
+   * Create a policy for a load balancer listener.
    *
-   * Creates a new policy to the load balancer listener.
+   * Creates a new policy for a load balancer listener.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -10851,7 +10850,7 @@ class VpcV1 extends BaseService {
    * @param {number} params.priority - Priority of the policy. Lower value indicates higher priority.
    * @param {string} [params.name] - The user-defined name for this policy. Names must be unique within the load
    * balancer listener the policy resides in.
-   * @param {LoadBalancerListenerPolicyRulePrototype[]} [params.rules] - The list of rules of this policy.
+   * @param {LoadBalancerListenerPolicyRulePrototype[]} [params.rules] - An array of rules for this policy.
    * @param {LoadBalancerListenerPolicyTargetPrototype} [params.target] - When `action` is `forward`,
    * `LoadBalancerPoolIdentity` is required to specify which
    * pool the load balancer forwards the traffic to. When `action` is `redirect`,
@@ -10909,7 +10908,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete a policy of the load balancer listener.
+   * Delete a load balancer listener policy.
    *
    * Deletes a policy of the load balancer listener. This operation cannot be reversed.
    *
@@ -10959,7 +10958,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve a policy of the load balancer listener.
+   * Retrieve a load balancer listener policy.
    *
    * Retrieve a single policy specified by the identifier in the URL path.
    *
@@ -11010,7 +11009,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update a policy of the load balancer listener.
+   * Update a load balancer listener policy.
    *
    * Updates a policy from a policy patch.
    *
@@ -11077,9 +11076,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all rules of the load balancer listener policy.
+   * List all rules of a load balancer listener policy.
    *
-   * Retrieves a list of all rules belonging to the load balancer listener policy.
+   * This request lists all rules of a load balancer listener policy.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -11128,7 +11127,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a rule for the load balancer listener policy.
+   * Create a rule for a load balancer listener policy.
    *
    * Creates a new rule for the load balancer listener policy.
    *
@@ -11192,7 +11191,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete a rule from the load balancer listener policy.
+   * Delete a load balancer listener policy rule.
    *
    * Deletes a rule from the load balancer listener policy. This operation cannot be reversed.
    *
@@ -11244,7 +11243,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve a rule of the load balancer listener policy.
+   * Retrieve a load balancer listener policy rule.
    *
    * Retrieves a single rule specified by the identifier in the URL path.
    *
@@ -11297,7 +11296,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update a rule of the load balancer listener policy.
+   * Update a load balancer listener policy rule.
    *
    * Updates a rule of the load balancer listener policy.
    *
@@ -11363,9 +11362,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all pools of the load balancer.
+   * List all pools of a load balancer.
    *
-   * This request lists all pools that belong to the load balancer.
+   * This request lists all pools of a load balancer.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -11487,7 +11486,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete a pool.
+   * Delete a load balancer pool.
    *
    * This request deletes a load balancer pool. This operation cannot be reversed. The pool must not currently be the
    * default pool for any listener in the load balancer.
@@ -11661,9 +11660,9 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * List all members of the load balancer pool.
+   * List all members of a load balancer pool.
    *
-   * This request retrieves a paginated list of all members that belong to the pool.
+   * This request lists all members of a load balancer pool.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -11710,7 +11709,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Create a member in the load balancer pool.
+   * Create a member in a load balancer pool.
    *
    * This request creates a new member and adds the member to the pool.
    *
@@ -11773,7 +11772,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update members of the load balancer pool.
+   * Update load balancer pool members.
    *
    * This request updates members of the load balancer pool from a collection of member prototype objects.
    *
@@ -11829,7 +11828,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete a member from the load balancer pool.
+   * Delete a load balancer pool member.
    *
    * This request deletes a member from the pool. This operation cannot be reversed.
    *
@@ -11879,7 +11878,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve a member in the load balancer pool.
+   * Retrieve a load balancer pool member.
    *
    * This request retrieves a single member specified by the identifier in the URL path.
    *
@@ -11930,7 +11929,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update a member in the load balancer pool.
+   * Update a load balancer pool member.
    *
    * This request updates an existing member from a member patch.
    *
@@ -12001,8 +12000,8 @@ class VpcV1 extends BaseService {
   /**
    * List all endpoint gateways.
    *
-   * This request lists all endpoint gateways. An endpoint gateway maps one or more reserved IPs in a VPC to a target
-   * outside the VPC.
+   * This request lists all endpoint gateways in the region. An endpoint gateway maps one or more reserved IPs in a VPC
+   * to a target outside the VPC.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.name] - Filters the collection to resources with the exact specified name.
@@ -12052,7 +12051,7 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {EndpointGatewayTargetPrototype} params.target - The target for this endpoint gateway.
    * @param {VPCIdentity} params.vpc - The VPC this endpoint gateway will serve.
-   * @param {EndpointGatewayReservedIP[]} [params.ips] - A list of reserved IPs to attach to this endpoint gateway.
+   * @param {EndpointGatewayReservedIP[]} [params.ips] - An array of reserved IPs to attach to this endpoint gateway.
    * @param {string} [params.name] - The user-defined name for this endpoint gateway. If unspecified, the name will be a
    * hyphenated list of randomly-selected words. Names must be unique within the VPC this endpoint gateway is serving.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
@@ -12106,7 +12105,7 @@ class VpcV1 extends BaseService {
   /**
    * List all reserved IPs bound to an endpoint gateway.
    *
-   * This request retrieves all reserved IPs bound to an endpoint gateway.
+   * This request lists all reserved IPs bound to an endpoint gateway.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.endpointGatewayId - The endpoint gateway identifier.
@@ -12466,7 +12465,7 @@ class VpcV1 extends BaseService {
   /**
    * List all flow log collectors.
    *
-   * This request retrieves all flow log collectors in the region. A flow log collector summarizes data sent over one or
+   * This request lists all flow log collectors in the region. A flow log collector summarizes data sent over one or
    * more network interfaces within a VPC, depending on the chosen target.
    *
    * @param {Object} [params] - The parameters to send to the service.
@@ -12533,12 +12532,11 @@ class VpcV1 extends BaseService {
    * The bucket must exist and an IAM service authorization must grant
    * `IBM Cloud Flow Logs` resources of `VPC Infrastructure Services` writer
    * access to the bucket.
-   * @param {FlowLogCollectorTargetPrototype} params.target - The target this collector is collecting flow logs for. If
+   * @param {FlowLogCollectorTargetPrototype} params.target - The target this collector will collect flow logs for. If
    * the target is an instance,
    * subnet, or VPC, flow logs will not be collected for any network interfaces within the
    * target that are themselves the target of a more specific flow log collector.
-   * @param {boolean} [params.active] - Indicates whether this collector is active. If false, this collector is created
-   * in inactive mode.
+   * @param {boolean} [params.active] - Indicates whether this collector will be active upon creation.
    * @param {string} [params.name] - The unique user-defined name for this flow log collector. If unspecified, the name
    * will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
@@ -12590,7 +12588,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Delete the specified flow log collector.
+   * Delete a flow log collector.
    *
    * This request stops and deletes a flow log collector. Collected flow logs remain available within the flow log
    * collector's bucket.
@@ -12637,7 +12635,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Retrieve the specified flow log collector.
+   * Retrieve a flow log collector.
    *
    * This request retrieves a single flow log collector specified by the identifier in the URL.
    *
@@ -12684,7 +12682,7 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update the specified flow log collector.
+   * Update a flow log collector.
    *
    * This request updates a flow log collector with the information in a provided flow log collector patch. The flow log
    * collector patch object is structured in the same way as a retrieved flow log collector and contains only the
@@ -15298,7 +15296,7 @@ namespace VpcV1 {
      *  - Not already be the default pool for another listener.
      */
     defaultPool?: LoadBalancerPoolIdentity;
-    /** The list of policies of this listener. */
+    /** An array of policies for this listener. */
     policies?: LoadBalancerListenerPolicyPrototype[];
     headers?: OutgoingHttpHeaders;
   }
@@ -15397,7 +15395,7 @@ namespace VpcV1 {
      *  resides in.
      */
     name?: string;
-    /** The list of rules of this policy. */
+    /** An array of rules for this policy. */
     rules?: LoadBalancerListenerPolicyRulePrototype[];
     /** When `action` is `forward`, `LoadBalancerPoolIdentity` is required to specify which
      *  pool the load balancer forwards the traffic to. When `action` is `redirect`,
@@ -15806,7 +15804,7 @@ namespace VpcV1 {
     target: EndpointGatewayTargetPrototype;
     /** The VPC this endpoint gateway will serve. */
     vpc: VPCIdentity;
-    /** A list of reserved IPs to attach to this endpoint gateway. */
+    /** An array of reserved IPs to attach to this endpoint gateway. */
     ips?: EndpointGatewayReservedIP[];
     /** The user-defined name for this endpoint gateway. If unspecified, the name will be a hyphenated list of
      *  randomly-selected words. Names must be unique within the VPC this endpoint gateway is serving.
@@ -15942,12 +15940,12 @@ namespace VpcV1 {
      *  access to the bucket.
      */
     storageBucket: CloudObjectStorageBucketIdentity;
-    /** The target this collector is collecting flow logs for. If the target is an instance,
+    /** The target this collector will collect flow logs for. If the target is an instance,
      *  subnet, or VPC, flow logs will not be collected for any network interfaces within the
      *  target that are themselves the target of a more specific flow log collector.
      */
     target: FlowLogCollectorTargetPrototype;
-    /** Indicates whether this collector is active. If false, this collector is created in inactive mode. */
+    /** Indicates whether this collector will be active upon creation. */
     active?: boolean;
     /** The unique user-defined name for this flow log collector. If unspecified, the name will be a hyphenated list
      *  of randomly-selected words.
@@ -16727,7 +16725,7 @@ namespace VpcV1 {
   export interface FlowLogCollectorTarget {
   }
 
-  /** The target this collector is collecting flow logs for. If the target is an instance, subnet, or VPC, flow logs will not be collected for any network interfaces within the target that are themselves the target of a more specific flow log collector. */
+  /** The target this collector will collect flow logs for. If the target is an instance, subnet, or VPC, flow logs will not be collected for any network interfaces within the target that are themselves the target of a more specific flow log collector. */
   export interface FlowLogCollectorTargetPrototype {
   }
 
@@ -17830,7 +17828,7 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this load balancer listener. */
     id: string;
-    /** The list of policies of this listener. */
+    /** An array of policies for this listener. */
     policies?: LoadBalancerListenerPolicyReference[];
     /** The listener port number. Each listener in the load balancer must have a unique
      *  `port` and `protocol` combination.
@@ -17891,7 +17889,7 @@ namespace VpcV1 {
     name?: string;
     /** Priority of the policy. Lower value indicates higher priority. */
     priority: number;
-    /** The list of rules of this policy. */
+    /** An array of rules for this policy. */
     rules?: LoadBalancerListenerPolicyRulePrototype[];
     /** When `action` is `forward`, `LoadBalancerPoolIdentity` is required to specify which
      *  pool the load balancer forwards the traffic to. When `action` is `redirect`,
