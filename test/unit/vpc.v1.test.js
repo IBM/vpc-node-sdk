@@ -1156,31 +1156,31 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // RouteNextHopPrototypeRouteNextHopIP
-      const routeNextHopPrototypeModel = {
-        address: '192.168.3.4',
-      };
-
       // ZoneIdentityByName
       const zoneIdentityModel = {
         name: 'us-south-1',
+      };
+
+      // RouteNextHopPrototypeRouteNextHopIP
+      const routeNextHopPrototypeModel = {
+        address: '192.168.3.4',
       };
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createVpcRoute
         const vpcId = 'testString';
         const destination = '192.168.3.0/24';
-        const nextHop = routeNextHopPrototypeModel;
         const zone = zoneIdentityModel;
         const action = 'delegate';
         const name = 'my-route-2';
+        const nextHop = routeNextHopPrototypeModel;
         const params = {
           vpcId: vpcId,
           destination: destination,
-          nextHop: nextHop,
           zone: zone,
           action: action,
           name: name,
+          nextHop: nextHop,
         };
 
         const createVpcRouteResult = vpcService.createVpcRoute(params);
@@ -1198,10 +1198,10 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['destination']).toEqual(destination);
-        expect(options.body['next_hop']).toEqual(nextHop);
         expect(options.body['zone']).toEqual(zone);
         expect(options.body['action']).toEqual(action);
         expect(options.body['name']).toEqual(name);
+        expect(options.body['next_hop']).toEqual(nextHop);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
@@ -1211,14 +1211,12 @@ describe('VpcV1', () => {
         // parameters
         const vpcId = 'testString';
         const destination = '192.168.3.0/24';
-        const nextHop = routeNextHopPrototypeModel;
         const zone = zoneIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
           vpcId,
           destination,
-          nextHop,
           zone,
           headers: {
             Accept: userAccept,
@@ -1994,14 +1992,14 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // RouteNextHopPrototypeRouteNextHopIP
-      const routeNextHopPrototypeModel = {
-        address: '192.168.3.4',
-      };
-
       // ZoneIdentityByName
       const zoneIdentityModel = {
         name: 'us-south-1',
+      };
+
+      // RouteNextHopPrototypeRouteNextHopIP
+      const routeNextHopPrototypeModel = {
+        address: '192.168.3.4',
       };
 
       test('should pass the right params to createRequest', () => {
@@ -2009,18 +2007,18 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const routingTableId = 'testString';
         const destination = '192.168.3.0/24';
-        const nextHop = routeNextHopPrototypeModel;
         const zone = zoneIdentityModel;
         const action = 'delegate';
         const name = 'my-route-2';
+        const nextHop = routeNextHopPrototypeModel;
         const params = {
           vpcId: vpcId,
           routingTableId: routingTableId,
           destination: destination,
-          nextHop: nextHop,
           zone: zone,
           action: action,
           name: name,
+          nextHop: nextHop,
         };
 
         const createVpcRoutingTableRouteResult = vpcService.createVpcRoutingTableRoute(params);
@@ -2042,10 +2040,10 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['destination']).toEqual(destination);
-        expect(options.body['next_hop']).toEqual(nextHop);
         expect(options.body['zone']).toEqual(zone);
         expect(options.body['action']).toEqual(action);
         expect(options.body['name']).toEqual(name);
+        expect(options.body['next_hop']).toEqual(nextHop);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
@@ -2057,7 +2055,6 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const routingTableId = 'testString';
         const destination = '192.168.3.0/24';
-        const nextHop = routeNextHopPrototypeModel;
         const zone = zoneIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
@@ -2065,7 +2062,6 @@ describe('VpcV1', () => {
           vpcId,
           routingTableId,
           destination,
-          nextHop,
           zone,
           headers: {
             Accept: userAccept,
@@ -12840,6 +12836,311 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('listSecurityGroupTargets', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listSecurityGroupTargets
+        const securityGroupId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const params = {
+          securityGroupId: securityGroupId,
+          start: start,
+          limit: limit,
+        };
+
+        const listSecurityGroupTargetsResult = vpcService.listSecurityGroupTargets(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listSecurityGroupTargetsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/security_groups/{security_group_id}/targets', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.path['security_group_id']).toEqual(securityGroupId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const securityGroupId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          securityGroupId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listSecurityGroupTargets(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.listSecurityGroupTargets({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const listSecurityGroupTargetsPromise = vpcService.listSecurityGroupTargets();
+        expectToBePromise(listSecurityGroupTargetsPromise);
+
+        listSecurityGroupTargetsPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('deleteSecurityGroupTargetBinding', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation deleteSecurityGroupTargetBinding
+        const securityGroupId = 'testString';
+        const id = 'testString';
+        const params = {
+          securityGroupId: securityGroupId,
+          id: id,
+        };
+
+        const deleteSecurityGroupTargetBindingResult = vpcService.deleteSecurityGroupTargetBinding(
+          params
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteSecurityGroupTargetBindingResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/security_groups/{security_group_id}/targets/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['security_group_id']).toEqual(securityGroupId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const securityGroupId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          securityGroupId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteSecurityGroupTargetBinding(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deleteSecurityGroupTargetBinding({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deleteSecurityGroupTargetBindingPromise = vpcService.deleteSecurityGroupTargetBinding();
+        expectToBePromise(deleteSecurityGroupTargetBindingPromise);
+
+        deleteSecurityGroupTargetBindingPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getSecurityGroupTarget', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getSecurityGroupTarget
+        const securityGroupId = 'testString';
+        const id = 'testString';
+        const params = {
+          securityGroupId: securityGroupId,
+          id: id,
+        };
+
+        const getSecurityGroupTargetResult = vpcService.getSecurityGroupTarget(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getSecurityGroupTargetResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/security_groups/{security_group_id}/targets/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['security_group_id']).toEqual(securityGroupId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const securityGroupId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          securityGroupId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getSecurityGroupTarget(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getSecurityGroupTarget({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getSecurityGroupTargetPromise = vpcService.getSecurityGroupTarget();
+        expectToBePromise(getSecurityGroupTargetPromise);
+
+        getSecurityGroupTargetPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('createSecurityGroupTargetBinding', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation createSecurityGroupTargetBinding
+        const securityGroupId = 'testString';
+        const id = 'testString';
+        const params = {
+          securityGroupId: securityGroupId,
+          id: id,
+        };
+
+        const createSecurityGroupTargetBindingResult = vpcService.createSecurityGroupTargetBinding(
+          params
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createSecurityGroupTargetBindingResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/security_groups/{security_group_id}/targets/{id}', 'PUT');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['security_group_id']).toEqual(securityGroupId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const securityGroupId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          securityGroupId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createSecurityGroupTargetBinding(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.createSecurityGroupTargetBinding({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const createSecurityGroupTargetBindingPromise = vpcService.createSecurityGroupTargetBinding();
+        expectToBePromise(createSecurityGroupTargetBindingPromise);
+
+        createSecurityGroupTargetBindingPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
   describe('listIkePolicies', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
@@ -15496,6 +15797,11 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
+      // SecurityGroupIdentityById
+      const securityGroupIdentityModel = {
+        id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
+      };
+
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createLoadBalancer
         const isPublic = true;
@@ -15506,6 +15812,7 @@ describe('VpcV1', () => {
         const pools = [loadBalancerPoolPrototypeModel];
         const profile = loadBalancerProfileIdentityModel;
         const resourceGroup = resourceGroupIdentityModel;
+        const securityGroups = [securityGroupIdentityModel];
         const params = {
           isPublic: isPublic,
           subnets: subnets,
@@ -15515,6 +15822,7 @@ describe('VpcV1', () => {
           pools: pools,
           profile: profile,
           resourceGroup: resourceGroup,
+          securityGroups: securityGroups,
         };
 
         const createLoadBalancerResult = vpcService.createLoadBalancer(params);
@@ -15539,6 +15847,7 @@ describe('VpcV1', () => {
         expect(options.body['pools']).toEqual(pools);
         expect(options.body['profile']).toEqual(profile);
         expect(options.body['resource_group']).toEqual(resourceGroup);
+        expect(options.body['security_groups']).toEqual(securityGroups);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
       });
