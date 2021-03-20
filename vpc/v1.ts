@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.12.3-81ed37e0-20200929-215851
+ * IBM OpenAPI SDK Code Generator Version: 3.28.0-55613c9e-20210220-164656
  */
 
 
@@ -80,7 +80,7 @@ class VpcV1 extends BaseService {
    * @param {Object} options - Options for the service.
    * @param {string} options.version - Requests the version of the API as of a date in the format `YYYY-MM-DD`. Any date
    * up to the current date may be provided. Specify the current date to request the latest version.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service (e.g. 'https://gateway.watsonplatform.net/v1'). The base url may differ between IBM Cloud regions.
+   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -96,7 +96,7 @@ class VpcV1 extends BaseService {
     } else {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
-    this.version = options.version || '2021-01-12';
+    this.version = options.version || '2021-03-09';
     this.generation = options.generation;
   }
 
@@ -564,10 +564,15 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
    * @param {string} params.cidr - The IPv4 range of the address prefix, expressed in CIDR format. The request must not
-   * overlap with any existing address prefixes in the VPC, and must fall within the [RFC
-   * 1918](https://tools.ietf.org/html/rfc1918) address ranges. The prefix length of the address prefix's CIDR must be
-   * between `/9` (8,388,608 addresses) and `/29` (8 addresses).
-   * @param {ZoneIdentity} params.zone - The zone this address prefix is to belong to.
+   * overlap with any existing address prefixes in the VPC or any of the following reserved address ranges:
+   *   - `127.0.0.0/8` (IPv4 loopback addresses)
+   *   - `161.26.0.0/16` (IBM services)
+   *   - `166.8.0.0/14` (Cloud Service Endpoints)
+   *   - `169.254.0.0/16` (IPv4 link-local addresses)
+   *   - `224.0.0.0/4` (IPv4 multicast addresses)
+   *
+   * The prefix length of the address prefix's CIDR must be between `/9` (8,388,608 addresses) and `/29` (8 addresses).
+   * @param {ZoneIdentity} params.zone - The zone this address prefix will reside in.
    * @param {boolean} [params.isDefault] - Indicates whether this is the default prefix for this zone in this VPC. If
    * true, this prefix will become the default prefix for this zone in this VPC. This fails if the VPC currently has a
    * default address prefix for this zone.
@@ -849,23 +854,25 @@ class VpcV1 extends BaseService {
    * @param {string} params.destination - The destination of the route. At most two routes per `zone` in a table can
    * have the same destination, and only if both routes have an `action` of `deliver` and the
    * `next_hop` is an IP address.
-   * @param {RouteNextHopPrototype} params.nextHop - If `action` is `deliver`, the next hop that packets will be
-   * delivered to.  For
-   * other `action` values, its `address` will be `0.0.0.0`.
    * @param {ZoneIdentity} params.zone - The zone to apply the route to. (Traffic from subnets in this zone will be
    * subject to this route.).
    * @param {string} [params.action] - The action to perform with a packet matching the route:
    * - `delegate`: delegate to the system's built-in routes
+   * - `delegate_vpc`: delegate to the system's built-in routes, ignoring Internet-bound
+   *   routes
    * - `deliver`: deliver the packet to the specified `next_hop`
    * - `drop`: drop the packet.
    * @param {string} [params.name] - The user-defined name for this route. If unspecified, the name will be a hyphenated
    * list of randomly-selected words. Names must be unique within the VPC routing table the route resides in.
+   * @param {RouteNextHopPrototype} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
+   * delivered to.  For
+   * other `action` values, it must be omitted or specified as `0.0.0.0`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
   public createVpcRoute(params: VpcV1.CreateVpcRouteParams): Promise<VpcV1.Response<VpcV1.Route>> {
     const _params = Object.assign({}, params);
-    const requiredParams = ['vpcId', 'destination', 'nextHop', 'zone'];
+    const requiredParams = ['vpcId', 'destination', 'zone'];
 
     const missingParams = getMissingParams(_params, requiredParams);
     if (missingParams) {
@@ -874,10 +881,10 @@ class VpcV1 extends BaseService {
 
     const body = {
       'destination': _params.destination,
-      'next_hop': _params.nextHop,
       'zone': _params.zone,
       'action': _params.action,
-      'name': _params.name
+      'name': _params.name,
+      'next_hop': _params.nextHop
     };
 
     const query = {
@@ -1474,23 +1481,25 @@ class VpcV1 extends BaseService {
    * @param {string} params.destination - The destination of the route. At most two routes per `zone` in a table can
    * have the same destination, and only if both routes have an `action` of `deliver` and the
    * `next_hop` is an IP address.
-   * @param {RouteNextHopPrototype} params.nextHop - If `action` is `deliver`, the next hop that packets will be
-   * delivered to.  For
-   * other `action` values, its `address` will be `0.0.0.0`.
    * @param {ZoneIdentity} params.zone - The zone to apply the route to. (Traffic from subnets in this zone will be
    * subject to this route.).
    * @param {string} [params.action] - The action to perform with a packet matching the route:
    * - `delegate`: delegate to the system's built-in routes
+   * - `delegate_vpc`: delegate to the system's built-in routes, ignoring Internet-bound
+   *   routes
    * - `deliver`: deliver the packet to the specified `next_hop`
    * - `drop`: drop the packet.
    * @param {string} [params.name] - The user-defined name for this route. If unspecified, the name will be a hyphenated
    * list of randomly-selected words. Names must be unique within the VPC routing table the route resides in.
+   * @param {RouteNextHopPrototype} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
+   * delivered to.  For
+   * other `action` values, it must be omitted or specified as `0.0.0.0`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
   public createVpcRoutingTableRoute(params: VpcV1.CreateVpcRoutingTableRouteParams): Promise<VpcV1.Response<VpcV1.Route>> {
     const _params = Object.assign({}, params);
-    const requiredParams = ['vpcId', 'routingTableId', 'destination', 'nextHop', 'zone'];
+    const requiredParams = ['vpcId', 'routingTableId', 'destination', 'zone'];
 
     const missingParams = getMissingParams(_params, requiredParams);
     if (missingParams) {
@@ -1499,10 +1508,10 @@ class VpcV1 extends BaseService {
 
     const body = {
       'destination': _params.destination,
-      'next_hop': _params.nextHop,
       'zone': _params.zone,
       'action': _params.action,
-      'name': _params.name
+      'name': _params.name,
+      'next_hop': _params.nextHop
     };
 
     const query = {
@@ -1712,10 +1721,10 @@ class VpcV1 extends BaseService {
    * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {string} [params.resourceGroupId] - Filters the collection to resources within one of the resource groups
    * identified in a comma-separated list of resource group identifiers.
-   * @param {string} [params.routingTableId] - Filters the collection to subnets with the routing table of the specified
-   * identifier.
-   * @param {string} [params.routingTableName] - Filters the collection to subnets with the routing table of the
-   * specified name.
+   * @param {string} [params.routingTableId] - Filters the collection to subnets attached to the routing table with the
+   * specified identifier.
+   * @param {string} [params.routingTableName] - Filters the collection to subnets attached to the routing table with
+   * the specified name.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SubnetCollection>>}
    */
@@ -5757,7 +5766,7 @@ class VpcV1 extends BaseService {
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params._class] - The dedicated host profile class for hosts in this group.
    * @param {string} [params.family] - The dedicated host profile family for hosts in this group.
-   * @param {ZoneIdentity} [params.zone] - The zone to provision the dedicated host group in.
+   * @param {ZoneIdentity} [params.zone] - The zone this dedicated host group will reside in.
    * @param {string} [params.name] - The unique user-defined name for this dedicated host group. If unspecified, the
    * name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
@@ -6045,7 +6054,7 @@ class VpcV1 extends BaseService {
    * This request lists all dedicated hosts in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.dedicatedHostGroupId] - Filters the collection to dedicated host groups with specified
+   * @param {string} [params.dedicatedHostGroupId] - Filters the collection to dedicated host groups with the specified
    * identifier.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
    * @param {number} [params.limit] - The number of resources to return on a page.
@@ -6861,7 +6870,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {VPCIdentity} params.vpc - The VPC this public gateway will serve.
-   * @param {ZoneIdentity} params.zone - The zone where this public gateway will be created.
+   * @param {ZoneIdentity} params.zone - The zone this public gateway will reside in.
    * @param {PublicGatewayFloatingIPPrototype} [params.floatingIp] -
    * @param {string} [params.name] - The user-defined name for this public gateway. Names must be unique within the VPC
    * the public gateway resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -8585,6 +8594,218 @@ class VpcV1 extends BaseService {
     return this.createRequest(parameters);
   };
 
+  /**
+   * List all targets associated with a security group.
+   *
+   * This request lists all targets associated with a security group, to which the rules in the security group are
+   * applied.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.securityGroupId - The security group identifier.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupTargetCollection>>}
+   */
+  public listSecurityGroupTargets(params: VpcV1.ListSecurityGroupTargetsParams): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetCollection>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['securityGroupId'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
+
+    const path = {
+      'security_group_id': _params.securityGroupId
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroupTargets');
+
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/targets',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Remove a target from a security group.
+   *
+   * This request removes a target from a security group. For this request to succeed, the target must be attached to at
+   * least one other security group.  The supplied target identifier can be:
+   *
+   * - A network interface identifier
+   * - An application load balancer identifier
+   *
+   * Security groups are stateful, so any changes to a target's security groups are applied to new connections. Existing
+   * connections are not affected.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.securityGroupId - The security group identifier.
+   * @param {string} params.id - The security group target identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+   */
+  public deleteSecurityGroupTargetBinding(params: VpcV1.DeleteSecurityGroupTargetBindingParams): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['securityGroupId', 'id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'security_group_id': _params.securityGroupId,
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroupTargetBinding');
+
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/targets/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Retrieve a security group target.
+   *
+   * This request retrieves a single target specified by the identifier in the URL path. The target must be an existing
+   * target of the security group.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.securityGroupId - The security group identifier.
+   * @param {string} params.id - The security group target identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>>}
+   */
+  public getSecurityGroupTarget(params: VpcV1.GetSecurityGroupTargetParams): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['securityGroupId', 'id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'security_group_id': _params.securityGroupId,
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroupTarget');
+
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/targets/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Add a target to a security group.
+   *
+   * This request adds a resource to an existing security group. The supplied target identifier can be:
+   *
+   * - A network interface identifier
+   * - An application load balancer identifier
+   *
+   * When a target is added to a security group, the security group rules are applied to the target. A request body is
+   * not required, and if supplied, is ignored.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.securityGroupId - The security group identifier.
+   * @param {string} params.id - The security group target identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>>}
+   */
+  public createSecurityGroupTargetBinding(params: VpcV1.CreateSecurityGroupTargetBindingParams): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['securityGroupId', 'id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'security_group_id': _params.securityGroupId,
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroupTargetBinding');
+
+    const parameters = {
+      options: {
+        url: '/security_groups/{security_group_id}/targets/{id}',
+        method: 'PUT',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
   /*************************
    * vPNGateways
    ************************/
@@ -10245,6 +10466,9 @@ class VpcV1 extends BaseService {
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * @param {SecurityGroupIdentity[]} [params.securityGroups] - The security groups to use for this load balancer.
+   *
+   * The load balancer profile must support security groups.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancer>>}
    */
@@ -10265,7 +10489,8 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'pools': _params.pools,
       'profile': _params.profile,
-      'resource_group': _params.resourceGroup
+      'resource_group': _params.resourceGroup,
+      'security_groups': _params.securityGroups
     };
 
     const query = {
@@ -11772,9 +11997,10 @@ class VpcV1 extends BaseService {
   };
 
   /**
-   * Update load balancer pool members.
+   * Replace load balancer pool members.
    *
-   * This request updates members of the load balancer pool from a collection of member prototype objects.
+   * This request replaces the existing members of the load balancer pool with new members created from the collection
+   * of member prototype objects.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -12051,7 +12277,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {EndpointGatewayTargetPrototype} params.target - The target for this endpoint gateway.
    * @param {VPCIdentity} params.vpc - The VPC this endpoint gateway will serve.
-   * @param {EndpointGatewayReservedIP[]} [params.ips] - An array of reserved IPs to attach to this endpoint gateway.
+   * @param {EndpointGatewayReservedIP[]} [params.ips] - An array of reserved IPs to bind to this endpoint gateway. At
+   * most one reserved IP per zone is allowed.
    * @param {string} [params.name] - The user-defined name for this endpoint gateway. If unspecified, the name will be a
    * hyphenated list of randomly-selected words. Names must be unique within the VPC this endpoint gateway is serving.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
@@ -12260,8 +12487,10 @@ class VpcV1 extends BaseService {
   /**
    * Bind a reserved IP to an endpoint gateway.
    *
-   * This request binds the specified reserved IP to the specified endpoint gateway. For this request to succeed, the
-   * reserved IP must currently be unbound and must not have a floating IP bound to it.
+   * This request binds the specified reserved IP to the specified endpoint gateway. The reserved IP:
+   *
+   * - must currently be unbound
+   * - must not be in the same zone as any other reserved IP bound to the endpoint gateway.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.endpointGatewayId - The endpoint gateway identifier.
@@ -12892,12 +13121,18 @@ namespace VpcV1 {
     /** The VPC identifier. */
     vpcId: string;
     /** The IPv4 range of the address prefix, expressed in CIDR format. The request must not overlap with any
-     *  existing address prefixes in the VPC, and must fall within the [RFC 1918](https://tools.ietf.org/html/rfc1918)
-     *  address ranges. The prefix length of the address prefix's CIDR must be between `/9` (8,388,608 addresses) and
-     *  `/29` (8 addresses).
+     *  existing address prefixes in the VPC or any of the following reserved address ranges:
+     *    - `127.0.0.0/8` (IPv4 loopback addresses)
+     *    - `161.26.0.0/16` (IBM services)
+     *    - `166.8.0.0/14` (Cloud Service Endpoints)
+     *    - `169.254.0.0/16` (IPv4 link-local addresses)
+     *    - `224.0.0.0/4` (IPv4 multicast addresses)
+     *
+     *  The prefix length of the address prefix's CIDR must be between `/9` (8,388,608 addresses) and `/29` (8
+     *  addresses).
      */
     cidr: string;
-    /** The zone this address prefix is to belong to. */
+    /** The zone this address prefix will reside in. */
     zone: ZoneIdentity;
     /** Indicates whether this is the default prefix for this zone in this VPC. If true, this prefix will become the
      *  default prefix for this zone in this VPC. This fails if the VPC currently has a default address prefix for this
@@ -12969,14 +13204,12 @@ namespace VpcV1 {
      *  `next_hop` is an IP address.
      */
     destination: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
-     *  other `action` values, its `address` will be `0.0.0.0`.
-     */
-    nextHop: RouteNextHopPrototype;
     /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
     zone: ZoneIdentity;
     /** The action to perform with a packet matching the route:
      *  - `delegate`: delegate to the system's built-in routes
+     *  - `delegate_vpc`: delegate to the system's built-in routes, ignoring Internet-bound
+     *    routes
      *  - `deliver`: deliver the packet to the specified `next_hop`
      *  - `drop`: drop the packet.
      */
@@ -12985,14 +13218,19 @@ namespace VpcV1 {
      *  randomly-selected words. Names must be unique within the VPC routing table the route resides in.
      */
     name?: string;
+    /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
+     *  other `action` values, it must be omitted or specified as `0.0.0.0`.
+     */
+    nextHop?: RouteNextHopPrototype;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createVpcRoute` operation. */
   export namespace CreateVpcRouteConstants {
-    /** The action to perform with a packet matching the route: - `delegate`: delegate to the system's built-in routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet. */
+    /** The action to perform with a packet matching the route: - `delegate`: delegate to the system's built-in routes - `delegate_vpc`: delegate to the system's built-in routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet. */
     export enum Action {
       DELEGATE = 'delegate',
+      DELEGATE_VPC = 'delegate_vpc',
       DELIVER = 'deliver',
       DROP = 'drop',
     }
@@ -13185,14 +13423,12 @@ namespace VpcV1 {
      *  `next_hop` is an IP address.
      */
     destination: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
-     *  other `action` values, its `address` will be `0.0.0.0`.
-     */
-    nextHop: RouteNextHopPrototype;
     /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
     zone: ZoneIdentity;
     /** The action to perform with a packet matching the route:
      *  - `delegate`: delegate to the system's built-in routes
+     *  - `delegate_vpc`: delegate to the system's built-in routes, ignoring Internet-bound
+     *    routes
      *  - `deliver`: deliver the packet to the specified `next_hop`
      *  - `drop`: drop the packet.
      */
@@ -13201,14 +13437,19 @@ namespace VpcV1 {
      *  randomly-selected words. Names must be unique within the VPC routing table the route resides in.
      */
     name?: string;
+    /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
+     *  other `action` values, it must be omitted or specified as `0.0.0.0`.
+     */
+    nextHop?: RouteNextHopPrototype;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createVpcRoutingTableRoute` operation. */
   export namespace CreateVpcRoutingTableRouteConstants {
-    /** The action to perform with a packet matching the route: - `delegate`: delegate to the system's built-in routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet. */
+    /** The action to perform with a packet matching the route: - `delegate`: delegate to the system's built-in routes - `delegate_vpc`: delegate to the system's built-in routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet. */
     export enum Action {
       DELEGATE = 'delegate',
+      DELEGATE_VPC = 'delegate_vpc',
       DELIVER = 'deliver',
       DROP = 'drop',
     }
@@ -13261,9 +13502,9 @@ namespace VpcV1 {
      *  of resource group identifiers.
      */
     resourceGroupId?: string;
-    /** Filters the collection to subnets with the routing table of the specified identifier. */
+    /** Filters the collection to subnets attached to the routing table with the specified identifier. */
     routingTableId?: string;
-    /** Filters the collection to subnets with the routing table of the specified name. */
+    /** Filters the collection to subnets attached to the routing table with the specified name. */
     routingTableName?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -14140,7 +14381,7 @@ namespace VpcV1 {
     _class?: string;
     /** The dedicated host profile family for hosts in this group. */
     family?: CreateDedicatedHostGroupConstants.Family | string;
-    /** The zone to provision the dedicated host group in. */
+    /** The zone this dedicated host group will reside in. */
     zone?: ZoneIdentity;
     /** The unique user-defined name for this dedicated host group. If unspecified, the name will be a hyphenated
      *  list of randomly-selected words.
@@ -14206,7 +14447,7 @@ namespace VpcV1 {
 
   /** Parameters for the `listDedicatedHosts` operation. */
   export interface ListDedicatedHostsParams {
-    /** Filters the collection to dedicated host groups with specified identifier. */
+    /** Filters the collection to dedicated host groups with the specified identifier. */
     dedicatedHostGroupId?: string;
     /** A server-supplied token determining what resource to start the page on. */
     start?: string;
@@ -14359,7 +14600,7 @@ namespace VpcV1 {
   export interface CreatePublicGatewayParams {
     /** The VPC this public gateway will serve. */
     vpc: VPCIdentity;
-    /** The zone where this public gateway will be created. */
+    /** The zone this public gateway will reside in. */
     zone: ZoneIdentity;
     floatingIp?: PublicGatewayFloatingIPPrototype;
     /** The user-defined name for this public gateway. Names must be unique within the VPC the public gateway
@@ -14763,6 +15004,44 @@ namespace VpcV1 {
     }
   }
 
+  /** Parameters for the `listSecurityGroupTargets` operation. */
+  export interface ListSecurityGroupTargetsParams {
+    /** The security group identifier. */
+    securityGroupId: string;
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteSecurityGroupTargetBinding` operation. */
+  export interface DeleteSecurityGroupTargetBindingParams {
+    /** The security group identifier. */
+    securityGroupId: string;
+    /** The security group target identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getSecurityGroupTarget` operation. */
+  export interface GetSecurityGroupTargetParams {
+    /** The security group identifier. */
+    securityGroupId: string;
+    /** The security group target identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createSecurityGroupTargetBinding` operation. */
+  export interface CreateSecurityGroupTargetBindingParams {
+    /** The security group identifier. */
+    securityGroupId: string;
+    /** The security group target identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `listIkePolicies` operation. */
   export interface ListIkePoliciesParams {
     /** A server-supplied token determining what resource to start the page on. */
@@ -14800,6 +15079,7 @@ namespace VpcV1 {
       MD5 = 'md5',
       SHA1 = 'sha1',
       SHA256 = 'sha256',
+      SHA512 = 'sha512',
     }
     /** The encryption algorithm. */
     export enum EncryptionAlgorithm {
@@ -14849,6 +15129,7 @@ namespace VpcV1 {
       MD5 = 'md5',
       SHA1 = 'sha1',
       SHA256 = 'sha256',
+      SHA512 = 'sha512',
     }
     /** The encryption algorithm. */
     export enum EncryptionAlgorithm {
@@ -14900,6 +15181,7 @@ namespace VpcV1 {
       MD5 = 'md5',
       SHA1 = 'sha1',
       SHA256 = 'sha256',
+      SHA512 = 'sha512',
     }
     /** The encryption algorithm. */
     export enum EncryptionAlgorithm {
@@ -14911,6 +15193,7 @@ namespace VpcV1 {
     export enum Pfs {
       DISABLED = 'disabled',
       GROUP_14 = 'group_14',
+      GROUP_19 = 'group_19',
       GROUP_2 = 'group_2',
       GROUP_5 = 'group_5',
     }
@@ -14954,6 +15237,7 @@ namespace VpcV1 {
       MD5 = 'md5',
       SHA1 = 'sha1',
       SHA256 = 'sha256',
+      SHA512 = 'sha512',
     }
     /** The encryption algorithm. */
     export enum EncryptionAlgorithm {
@@ -14965,6 +15249,7 @@ namespace VpcV1 {
     export enum Pfs {
       DISABLED = 'disabled',
       GROUP_14 = 'group_14',
+      GROUP_19 = 'group_19',
       GROUP_2 = 'group_2',
       GROUP_5 = 'group_5',
     }
@@ -15223,6 +15508,11 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
      */
     resourceGroup?: ResourceGroupIdentity;
+    /** The security groups to use for this load balancer.
+     *
+     *  The load balancer profile must support security groups.
+     */
+    securityGroups?: SecurityGroupIdentity[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -15804,7 +16094,7 @@ namespace VpcV1 {
     target: EndpointGatewayTargetPrototype;
     /** The VPC this endpoint gateway will serve. */
     vpc: VPCIdentity;
-    /** An array of reserved IPs to attach to this endpoint gateway. */
+    /** An array of reserved IPs to bind to this endpoint gateway. At most one reserved IP per zone is allowed. */
     ips?: EndpointGatewayReservedIP[];
     /** The user-defined name for this endpoint gateway. If unspecified, the name will be a hyphenated list of
      *  randomly-selected words. Names must be unique within the VPC this endpoint gateway is serving.
@@ -16109,7 +16399,7 @@ namespace VpcV1 {
     supported_instance_profiles: InstanceProfileReference[];
     /** The total VCPU of the dedicated host. */
     vcpu: VCPU;
-    /** The reference of the zone to provision the dedicated host in. */
+    /** The zone this dedicated host resides in. */
     zone: ZoneReference;
   }
 
@@ -16165,7 +16455,7 @@ namespace VpcV1 {
     resource_type: string;
     /** Array of instance profiles that can be used by instances placed on this dedicated host group. */
     supported_instance_profiles: InstanceProfileReference[];
-    /** The zone the dedicated host group resides in. */
+    /** The zone this dedicated host group resides in. */
     zone: ZoneReference;
   }
 
@@ -16580,7 +16870,7 @@ namespace VpcV1 {
     status: string;
     /** The target of this floating IP. */
     target?: FloatingIPTarget;
-    /** The zone the floating IP resides in. */
+    /** The zone this floating IP resides in. */
     zone: ZoneReference;
   }
 
@@ -16995,12 +17285,24 @@ namespace VpcV1 {
 
   /** ImageFile. */
   export interface ImageFile {
+    /** Checksums for this image file.
+     *
+     *  This property may be absent if the associated image has a `status` of `pending` or
+     *  `failed`.
+     */
+    checksums?: ImageFileChecksums;
     /** The size of the stored image file rounded up to the next gigabyte.
      *
      *  This property may be absent if the associated image has a `status` of `pending` or
      *  `failed`.
      */
     size?: number;
+  }
+
+  /** ImageFileChecksums. */
+  export interface ImageFileChecksums {
+    /** The SHA256 fingerprint of the image file. */
+    sha256?: string;
   }
 
   /** ImageFilePrototype. */
@@ -17075,7 +17377,7 @@ namespace VpcV1 {
     id: string;
     /** The image the virtual server instance was provisioned from. */
     image?: ImageReference;
-    /** The amount of memory in gigabytes. */
+    /** The amount of memory, truncated to whole gibibytes. */
     memory: number;
     /** The user-defined name for this virtual server instance (and default system hostname). */
     name: string;
@@ -17093,9 +17395,9 @@ namespace VpcV1 {
     vcpu: InstanceVCPU;
     /** Collection of the virtual server instance's volume attachments, including the boot volume attachment. */
     volume_attachments: VolumeAttachmentReferenceInstanceContext[];
-    /** The VPC the virtual server instance resides in. */
+    /** The VPC this virtual server instance resides in. */
     vpc: VPCReference;
-    /** The zone the virtual server instance resides in. */
+    /** The zone this virtual server instance resides in. */
     zone: ZoneReference;
   }
 
@@ -17229,26 +17531,14 @@ namespace VpcV1 {
 
   /** InstanceGroupManager. */
   export interface InstanceGroupManager {
-    /** The time window in seconds to aggregate metrics prior to evaluation. */
-    aggregation_window?: number;
-    /** The duration of time in seconds to pause further scale actions after scaling has taken place. */
-    cooldown?: number;
     /** The URL for this instance group manager. */
     href: string;
     /** The unique identifier for this instance group manager. */
     id: string;
     /** If set to `true`, this manager will control the instance group. */
     management_enabled: boolean;
-    /** The type of instance group manager. */
-    manager_type: string;
-    /** The maximum number of members in a managed instance group. */
-    max_membership_count?: number;
-    /** The minimum number of members in a managed instance group. */
-    min_membership_count?: number;
     /** The user-defined name for this instance group manager. Names must be unique within the instance group. */
     name: string;
-    /** The policies of the instance group manager. */
-    policies: InstanceGroupManagerPolicyReference[];
   }
 
   /** InstanceGroupManagerCollection. */
@@ -17796,6 +18086,13 @@ namespace VpcV1 {
     public_ips: IP[];
     /** The resource group for this load balancer. */
     resource_group: ResourceGroupReference;
+    /** The security groups targeting this load balancer.
+     *
+     *  Applicable only for load balancers that support security groups.
+     */
+    security_groups: SecurityGroupReference[];
+    /** Indicates whether this load balancer supports security groups. */
+    security_groups_supported: boolean;
     /** The subnets this load balancer is part of. */
     subnets: SubnetReference[];
   }
@@ -18304,6 +18601,7 @@ namespace VpcV1 {
     logging_supported: LoadBalancerProfileLoggingSupported;
     /** The globally unique name for this load balancer profile. */
     name: string;
+    security_groups_supported: LoadBalancerProfileSecurityGroupsSupported;
   }
 
   /** LoadBalancerProfileCollection. */
@@ -18352,6 +18650,16 @@ namespace VpcV1 {
     href: string;
     /** The globally unique name for this load balancer profile. */
     name: string;
+  }
+
+  /** LoadBalancerProfileSecurityGroupsSupported. */
+  export interface LoadBalancerProfileSecurityGroupsSupported {
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+  export interface LoadBalancerReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
   }
 
   /** LoadBalancerStatistics. */
@@ -18814,7 +19122,7 @@ namespace VpcV1 {
     status: string;
     /** The VPC this public gateway serves. */
     vpc: VPCReference;
-    /** The zone where this public gateway lives. */
+    /** The zone this public gateway resides in. */
     zone: ZoneReference;
   }
 
@@ -19104,6 +19412,8 @@ namespace VpcV1 {
   export interface RoutePrototype {
     /** The action to perform with a packet matching the route:
      *  - `delegate`: delegate to the system's built-in routes
+     *  - `delegate_vpc`: delegate to the system's built-in routes, ignoring Internet-bound
+     *    routes
      *  - `deliver`: deliver the packet to the specified `next_hop`
      *  - `drop`: drop the packet.
      */
@@ -19118,9 +19428,9 @@ namespace VpcV1 {
      */
     name?: string;
     /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
-     *  other `action` values, its `address` will be `0.0.0.0`.
+     *  other `action` values, it must be omitted or specified as `0.0.0.0`.
      */
-    next_hop: RouteNextHopPrototype;
+    next_hop?: RouteNextHopPrototype;
     /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
     zone: ZoneIdentity;
   }
@@ -19266,6 +19576,8 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** Array of rules for this security group. If no rules exist, all traffic will be denied. */
     rules: SecurityGroupRule[];
+    /** Array of references to targets. */
+    targets: SecurityGroupTargetReference[];
     /** The VPC this security group is a part of. */
     vpc: VPCReference;
   }
@@ -19382,6 +19694,36 @@ namespace VpcV1 {
 
   /** The IP addresses or security groups from which this rule will allow traffic (or to which, for outbound rules). Can be specified as an IP address, a CIDR block, or a security group. If omitted, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source (or to any source, for outbound rules). */
   export interface SecurityGroupRuleRemotePrototype {
+  }
+
+  /** SecurityGroupTargetCollection. */
+  export interface SecurityGroupTargetCollection {
+    /** A link to the first page of resources. */
+    first: SecurityGroupTargetCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: SecurityGroupTargetCollectionNext;
+    /** Collection of security group target references. */
+    targets: SecurityGroupTargetReference[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface SecurityGroupTargetCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface SecurityGroupTargetCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** SecurityGroupTargetReference. */
+  export interface SecurityGroupTargetReference {
   }
 
   /** Subnet. */
@@ -19547,9 +19889,9 @@ namespace VpcV1 {
 
   /** VPCCSESourceIP. */
   export interface VPCCSESourceIP {
-    /** The Cloud Service Endpoint source IP address for this zone. */
+    /** The cloud service endpoint source IP address for this zone. */
     ip: IP;
-    /** The zone this Cloud Service Endpoint source IP belongs to. */
+    /** The zone this cloud service endpoint source IP resides in. */
     zone: ZoneReference;
   }
 
@@ -19794,6 +20136,11 @@ namespace VpcV1 {
 
   /** VPNGatewayMember. */
   export interface VPNGatewayMember {
+    /** The private IP address assigned to the VPN gateway member. This
+     *  property will be present only when the VPN gateway status is
+     *  `available`.
+     */
+    private_ip?: IP;
     /** The public IP address assigned to the VPN gateway member. */
     public_ip: IP;
     /** The high availability role assigned to the VPN gateway member. */
@@ -20077,7 +20424,7 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
      */
     resource_group?: ResourceGroupIdentity;
-    /** The location of the volume. */
+    /** The zone this volume will reside in. */
     zone: ZoneIdentity;
   }
 
@@ -20140,7 +20487,7 @@ namespace VpcV1 {
     href: string;
     /** The globally unique name for this zone. */
     name: string;
-    /** The region this zone belongs to. */
+    /** The region this zone resides in. */
     region: RegionReference;
     /** The availability status of this zone. */
     status: string;
@@ -20329,7 +20676,7 @@ namespace VpcV1 {
   /** DedicatedHostPrototypeDedicatedHostByZone. */
   export interface DedicatedHostPrototypeDedicatedHostByZone extends DedicatedHostPrototype {
     group?: DedicatedHostGroupPrototypeDedicatedHostByZoneContext;
-    /** The zone to provision the dedicated host in. */
+    /** The zone this dedicated host will reside in. */
     zone: ZoneIdentity;
   }
 
@@ -20419,7 +20766,7 @@ namespace VpcV1 {
 
   /** FloatingIPPrototypeFloatingIPByZone. */
   export interface FloatingIPPrototypeFloatingIPByZone extends FloatingIPPrototype {
-    /** The identity of the zone to provision a floating IP in. */
+    /** The zone this floating IP will reside in. */
     zone: ZoneIdentity;
   }
 
@@ -20612,6 +20959,22 @@ namespace VpcV1 {
     operating_system: OperatingSystemIdentity;
   }
 
+  /** InstanceGroupManagerAutoScale. */
+  export interface InstanceGroupManagerAutoScale extends InstanceGroupManager {
+    /** The time window in seconds to aggregate metrics prior to evaluation. */
+    aggregation_window: number;
+    /** The duration of time in seconds to pause further scale actions after scaling has taken place. */
+    cooldown: number;
+    /** The type of instance group manager. */
+    manager_type: string;
+    /** The maximum number of members in a managed instance group. */
+    max_membership_count: number;
+    /** The minimum number of members in a managed instance group. */
+    min_membership_count: number;
+    /** The policies of the instance group manager. */
+    policies: InstanceGroupManagerPolicyReference[];
+  }
+
   /** InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype. */
   export interface InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype extends InstanceGroupManagerPolicyPrototype {
     /** The type of metric to be evaluated. */
@@ -20702,7 +21065,7 @@ namespace VpcV1 {
     type: string;
   }
 
-  /** The permitted memory values (in gigabytes) for an instance with this profile. */
+  /** The permitted memory values (in gibibytes) for an instance with this profile. */
   export interface InstanceProfileMemoryEnum extends InstanceProfileMemory {
     /** The default value for this profile field. */
     default: number;
@@ -20712,7 +21075,7 @@ namespace VpcV1 {
     values: number[];
   }
 
-  /** The memory (in gigabytes) for an instance with this profile. */
+  /** The memory (in gibibytes) for an instance with this profile. */
   export interface InstanceProfileMemoryFixed extends InstanceProfileMemory {
     /** The type for this profile field. */
     type: string;
@@ -20720,7 +21083,7 @@ namespace VpcV1 {
     value: number;
   }
 
-  /** The permitted memory range (in gigabytes) for an instance with this profile. */
+  /** The permitted memory range (in gibibytes) for an instance with this profile. */
   export interface InstanceProfileMemoryRange extends InstanceProfileMemory {
     /** The default value for this profile field. */
     default: number;
@@ -20794,7 +21157,7 @@ namespace VpcV1 {
     image: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface: NetworkInterfacePrototype;
-    /** The identity of the zone to provision the virtual server instance in. */
+    /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
@@ -20808,7 +21171,7 @@ namespace VpcV1 {
     primary_network_interface?: NetworkInterfacePrototype;
     /** Identifies an instance template by a unique property. */
     source_template: InstanceTemplateIdentity;
-    /** The identity of the zone to provision the virtual server instance in. */
+    /** The zone this virtual server instance will reside in. */
     zone?: ZoneIdentity;
   }
 
@@ -20838,7 +21201,7 @@ namespace VpcV1 {
     image: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface: NetworkInterfacePrototype;
-    /** The identity of the zone to provision the virtual server instance in. */
+    /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
@@ -20852,7 +21215,7 @@ namespace VpcV1 {
     primary_network_interface?: NetworkInterfacePrototype;
     /** Identifies an instance template by a unique property. */
     source_template: InstanceTemplateIdentity;
-    /** The identity of the zone to provision the virtual server instance in. */
+    /** The zone this virtual server instance will reside in. */
     zone?: ZoneIdentity;
   }
 
@@ -20864,7 +21227,7 @@ namespace VpcV1 {
     image: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface: NetworkInterfacePrototype;
-    /** The identity of the zone to provision the virtual server instance in. */
+    /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
@@ -20878,7 +21241,7 @@ namespace VpcV1 {
     primary_network_interface?: NetworkInterfacePrototype;
     /** Identifies an instance template by a unique property. */
     source_template: InstanceTemplateIdentity;
-    /** The identity of the zone to provision the virtual server instance in. */
+    /** The zone this virtual server instance will reside in. */
     zone?: ZoneIdentity;
   }
 
@@ -21062,6 +21425,20 @@ namespace VpcV1 {
   export interface LoadBalancerProfileIdentityByName extends LoadBalancerProfileIdentity {
     /** The globally unique name for this load balancer profile. */
     name: string;
+  }
+
+  /** The security group support for a load balancer with this profile depends on its configuration. */
+  export interface LoadBalancerProfileSecurityGroupsSupportedDependent extends LoadBalancerProfileSecurityGroupsSupported {
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The security group support for a load balancer with this profile. */
+  export interface LoadBalancerProfileSecurityGroupsSupportedFixed extends LoadBalancerProfileSecurityGroupsSupported {
+    /** The type for this profile field. */
+    type: string;
+    /** The value for this profile field. */
+    value: boolean;
   }
 
   /** NetworkACLIdentityByCRN. */
@@ -21342,6 +21719,10 @@ namespace VpcV1 {
     address: string;
   }
 
+  /** Identifies a VPN gateway connection by a unique property. */
+  export interface RouteNextHopPrototypeVPNGatewayConnectionIdentity extends RouteNextHopPrototype {
+  }
+
   /** RouteNextHopVPNGatewayConnectionReference. */
   export interface RouteNextHopVPNGatewayConnectionReference extends RouteNextHop {
     /** If present, this property indicates the referenced resource has been deleted and provides
@@ -21526,6 +21907,38 @@ namespace VpcV1 {
     protocol: string;
   }
 
+  /** SecurityGroupTargetReferenceLoadBalancerReference. */
+  export interface SecurityGroupTargetReferenceLoadBalancerReference extends SecurityGroupTargetReference {
+    /** The load balancer's CRN. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: LoadBalancerReferenceDeleted;
+    /** The load balancer's canonical URL. */
+    href: string;
+    /** The unique identifier for this load balancer. */
+    id: string;
+    /** The unique user-defined name for this load balancer. */
+    name: string;
+  }
+
+  /** SecurityGroupTargetReferenceNetworkInterfaceReferenceTargetContext. */
+  export interface SecurityGroupTargetReferenceNetworkInterfaceReferenceTargetContext extends SecurityGroupTargetReference {
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: NetworkInterfaceReferenceTargetContextDeleted;
+    /** The URL for this network interface. */
+    href: string;
+    /** The unique identifier for this network interface. */
+    id: string;
+    /** The user-defined name for this network interface. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
   /** SubnetIdentityByCRN. */
   export interface SubnetIdentityByCRN extends SubnetIdentity {
     /** The CRN for this subnet. */
@@ -21553,7 +21966,7 @@ namespace VpcV1 {
      *  subnet's IPv4 CIDR.
      */
     ipv4_cidr_block: string;
-    /** The zone the subnet is to reside in. */
+    /** The zone this subnet will reside in. */
     zone?: ZoneIdentity;
   }
 
@@ -21564,7 +21977,7 @@ namespace VpcV1 {
      *  addresses.
      */
     total_ipv4_address_count: number;
-    /** The zone the subnet is to reside in. */
+    /** The zone this subnet will reside in. */
     zone: ZoneIdentity;
   }
 
@@ -21889,6 +22302,18 @@ namespace VpcV1 {
   /** ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityById. */
   export interface ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityById extends ReservedIPTargetPrototypeEndpointGatewayIdentity {
     /** The unique identifier for this endpoint gateway. */
+    id: string;
+  }
+
+  /** RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
+  export interface RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref extends RouteNextHopPrototypeVPNGatewayConnectionIdentity {
+    /** The VPN connection's canonical URL. */
+    href: string;
+  }
+
+  /** RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById. */
+  export interface RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById extends RouteNextHopPrototypeVPNGatewayConnectionIdentity {
+    /** The unique identifier for this VPN gateway connection. */
     id: string;
   }
 
