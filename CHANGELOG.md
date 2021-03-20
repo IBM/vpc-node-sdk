@@ -1,3 +1,10 @@
+# [0.3.0](https://github.com/IBM/vpc-node-sdk/compare/v0.2.1...v0.3.0) (2021-03-20)
+
+
+### Features
+
+* **sg-targets:** Update VPC service to use API version 2020-03-09 ([#10](https://github.com/IBM/vpc-node-sdk/issues/10)) ([c05d73a](https://github.com/IBM/vpc-node-sdk/commit/c05d73acb6d715123b708edd7218123532345240))
+
 ## [0.2.1](https://github.com/IBM/vpc-node-sdk/compare/v0.2.0...v0.2.1) (2021-01-19)
 
 
