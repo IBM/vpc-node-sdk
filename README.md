@@ -9,9 +9,6 @@
 # IBM Cloud VPC Node.js SDK
 Node.js client library to interact with various [VPC APIs](https://cloud.ibm.com/apidocs?category=vpc).
 
-Disclaimer: this SDK is being released initially as a **pre-release** version.
-Changes might occur which impact applications that use this SDK.
-
 ## Table of Contents
 
 <!--
