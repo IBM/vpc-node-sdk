@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020, 2021.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -4733,6 +4733,11 @@ describe('VpcV1', () => {
         subnet: subnetIdentityModel,
       };
 
+      // InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityById
+      const instancePlacementTargetPrototypeModel = {
+        id: '1e09281b-f177-46fb-baf1-bc152b2e391a',
+      };
+
       // InstanceProfileIdentityByName
       const instanceProfileIdentityModel = {
         name: 'bx2-2x8',
@@ -4802,6 +4807,7 @@ describe('VpcV1', () => {
         keys: [keyIdentityModel],
         name: 'my-instance-template',
         network_interfaces: [networkInterfacePrototypeModel],
+        placement_target: instancePlacementTargetPrototypeModel,
         profile: instanceProfileIdentityModel,
         resource_group: resourceGroupIdentityModel,
         user_data: 'testString',
@@ -5190,6 +5196,11 @@ describe('VpcV1', () => {
         subnet: subnetIdentityModel,
       };
 
+      // InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityById
+      const instancePlacementTargetPrototypeModel = {
+        id: '0787-8c2a09be-ee18-4af2-8ef4-6a6060732221',
+      };
+
       // InstanceProfileIdentityByName
       const instanceProfileIdentityModel = {
         name: 'bx2-2x8',
@@ -5200,23 +5211,23 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      // EncryptionKeyIdentityByCRN
-      const encryptionKeyIdentityModel = {
-        crn: 'crn:[...]',
-      };
-
       // VolumeProfileIdentityByName
       const volumeProfileIdentityModel = {
         name: '5iops-tier',
       };
 
+      // EncryptionKeyIdentityByCRN
+      const encryptionKeyIdentityModel = {
+        crn: 'crn:[...]',
+      };
+
       // VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity
       const volumeAttachmentVolumePrototypeInstanceContextModel = {
-        encryption_key: encryptionKeyIdentityModel,
         iops: 10000,
         name: 'my-data-volume',
         profile: volumeProfileIdentityModel,
         capacity: 1000,
+        encryption_key: encryptionKeyIdentityModel,
       };
 
       // VolumeAttachmentPrototypeInstanceContext
@@ -5262,6 +5273,7 @@ describe('VpcV1', () => {
         keys: [keyIdentityModel],
         name: 'my-instance',
         network_interfaces: [networkInterfacePrototypeModel],
+        placement_target: instancePlacementTargetPrototypeModel,
         profile: instanceProfileIdentityModel,
         resource_group: resourceGroupIdentityModel,
         user_data: 'testString',
@@ -5483,13 +5495,22 @@ describe('VpcV1', () => {
   });
   describe('updateInstance', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // InstancePatchProfileInstanceProfileIdentityByName
+      const instancePatchProfileModel = {
+        name: 'bc1-4x16',
+      };
+
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation updateInstance
         const id = 'testString';
         const name = 'my-instance';
+        const profile = instancePatchProfileModel;
         const params = {
           id: id,
           name: name,
+          profile: profile,
         };
 
         const updateInstanceResult = vpcService.updateInstance(params);
@@ -5507,6 +5528,7 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
+        expect(options.body['profile']).toEqual(profile);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
         expect(options.path['id']).toEqual(id);
@@ -5696,6 +5718,309 @@ describe('VpcV1', () => {
         expectToBePromise(createInstanceActionPromise);
 
         createInstanceActionPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('createInstanceConsoleAccessToken', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation createInstanceConsoleAccessToken
+        const instanceId = 'testString';
+        const consoleType = 'serial';
+        const force = false;
+        const params = {
+          instanceId: instanceId,
+          consoleType: consoleType,
+          force: force,
+        };
+
+        const createInstanceConsoleAccessTokenResult = vpcService.createInstanceConsoleAccessToken(
+          params
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createInstanceConsoleAccessTokenResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/instances/{instance_id}/console_access_token', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['console_type']).toEqual(consoleType);
+        expect(options.body['force']).toEqual(force);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['instance_id']).toEqual(instanceId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const consoleType = 'serial';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          instanceId,
+          consoleType,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createInstanceConsoleAccessToken(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.createInstanceConsoleAccessToken({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const createInstanceConsoleAccessTokenPromise = vpcService.createInstanceConsoleAccessToken();
+        expectToBePromise(createInstanceConsoleAccessTokenPromise);
+
+        createInstanceConsoleAccessTokenPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('listInstanceDisks', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listInstanceDisks
+        const instanceId = 'testString';
+        const params = {
+          instanceId: instanceId,
+        };
+
+        const listInstanceDisksResult = vpcService.listInstanceDisks(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listInstanceDisksResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/instances/{instance_id}/disks', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['instance_id']).toEqual(instanceId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          instanceId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listInstanceDisks(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.listInstanceDisks({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const listInstanceDisksPromise = vpcService.listInstanceDisks();
+        expectToBePromise(listInstanceDisksPromise);
+
+        listInstanceDisksPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getInstanceDisk', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getInstanceDisk
+        const instanceId = 'testString';
+        const id = 'testString';
+        const params = {
+          instanceId: instanceId,
+          id: id,
+        };
+
+        const getInstanceDiskResult = vpcService.getInstanceDisk(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getInstanceDiskResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/instances/{instance_id}/disks/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['instance_id']).toEqual(instanceId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          instanceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getInstanceDisk(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getInstanceDisk({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getInstanceDiskPromise = vpcService.getInstanceDisk();
+        expectToBePromise(getInstanceDiskPromise);
+
+        getInstanceDiskPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateInstanceDisk', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateInstanceDisk
+        const instanceId = 'testString';
+        const id = 'testString';
+        const name = 'my-instance-disk-updated';
+        const params = {
+          instanceId: instanceId,
+          id: id,
+          name: name,
+        };
+
+        const updateInstanceDiskResult = vpcService.updateInstanceDisk(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updateInstanceDiskResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/instances/{instance_id}/disks/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['name']).toEqual(name);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['instance_id']).toEqual(instanceId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          instanceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateInstanceDisk(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updateInstanceDisk({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateInstanceDiskPromise = vpcService.updateInstanceDisk();
+        expectToBePromise(updateInstanceDiskPromise);
+
+        updateInstanceDiskPromise.catch(err => {
           expect(err.message).toMatch(/Missing required parameters/);
           done();
         });
@@ -7353,8 +7678,12 @@ describe('VpcV1', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listInstanceGroupManagers
         const instanceGroupId = 'testString';
+        const start = 'testString';
+        const limit = 1;
         const params = {
           instanceGroupId: instanceGroupId,
+          start: start,
+          limit: limit,
         };
 
         const listInstanceGroupManagersResult = vpcService.listInstanceGroupManagers(params);
@@ -7373,6 +7702,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
       });
 
@@ -7749,15 +8080,491 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('listInstanceGroupManagerActions', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listInstanceGroupManagerActions
+        const instanceGroupId = 'testString';
+        const instanceGroupManagerId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const params = {
+          instanceGroupId: instanceGroupId,
+          instanceGroupManagerId: instanceGroupManagerId,
+          start: start,
+          limit: limit,
+        };
+
+        const listInstanceGroupManagerActionsResult = vpcService.listInstanceGroupManagerActions(
+          params
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listInstanceGroupManagerActionsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          options,
+          '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
+        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceGroupId = 'testString';
+        const instanceGroupManagerId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          instanceGroupId,
+          instanceGroupManagerId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listInstanceGroupManagerActions(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.listInstanceGroupManagerActions({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const listInstanceGroupManagerActionsPromise = vpcService.listInstanceGroupManagerActions();
+        expectToBePromise(listInstanceGroupManagerActionsPromise);
+
+        listInstanceGroupManagerActionsPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('createInstanceGroupManagerAction', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // InstanceGroupManagerScheduledActionGroupPrototype
+      const instanceGroupManagerScheduledActionGroupPrototypeModel = {
+        membership_count: 10,
+      };
+
+      // InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByGroup
+      const instanceGroupManagerActionPrototypeModel = {
+        name: 'my-instance-group-manager-action',
+        run_at: '2019-01-01T12:00:00.000Z',
+        group: instanceGroupManagerScheduledActionGroupPrototypeModel,
+      };
+
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation createInstanceGroupManagerAction
+        const instanceGroupId = 'testString';
+        const instanceGroupManagerId = 'testString';
+        const instanceGroupManagerActionPrototype = instanceGroupManagerActionPrototypeModel;
+        const params = {
+          instanceGroupId: instanceGroupId,
+          instanceGroupManagerId: instanceGroupManagerId,
+          instanceGroupManagerActionPrototype: instanceGroupManagerActionPrototype,
+        };
+
+        const createInstanceGroupManagerActionResult = vpcService.createInstanceGroupManagerAction(
+          params
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createInstanceGroupManagerActionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          options,
+          '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions',
+          'POST'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body).toEqual(instanceGroupManagerActionPrototype);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
+        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceGroupId = 'testString';
+        const instanceGroupManagerId = 'testString';
+        const instanceGroupManagerActionPrototype = instanceGroupManagerActionPrototypeModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          instanceGroupId,
+          instanceGroupManagerId,
+          instanceGroupManagerActionPrototype,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createInstanceGroupManagerAction(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.createInstanceGroupManagerAction({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const createInstanceGroupManagerActionPromise = vpcService.createInstanceGroupManagerAction();
+        expectToBePromise(createInstanceGroupManagerActionPromise);
+
+        createInstanceGroupManagerActionPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('deleteInstanceGroupManagerAction', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation deleteInstanceGroupManagerAction
+        const instanceGroupId = 'testString';
+        const instanceGroupManagerId = 'testString';
+        const id = 'testString';
+        const params = {
+          instanceGroupId: instanceGroupId,
+          instanceGroupManagerId: instanceGroupManagerId,
+          id: id,
+        };
+
+        const deleteInstanceGroupManagerActionResult = vpcService.deleteInstanceGroupManagerAction(
+          params
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteInstanceGroupManagerActionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          options,
+          '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions/{id}',
+          'DELETE'
+        );
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
+        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceGroupId = 'testString';
+        const instanceGroupManagerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          instanceGroupId,
+          instanceGroupManagerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteInstanceGroupManagerAction(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deleteInstanceGroupManagerAction({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deleteInstanceGroupManagerActionPromise = vpcService.deleteInstanceGroupManagerAction();
+        expectToBePromise(deleteInstanceGroupManagerActionPromise);
+
+        deleteInstanceGroupManagerActionPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getInstanceGroupManagerAction', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getInstanceGroupManagerAction
+        const instanceGroupId = 'testString';
+        const instanceGroupManagerId = 'testString';
+        const id = 'testString';
+        const params = {
+          instanceGroupId: instanceGroupId,
+          instanceGroupManagerId: instanceGroupManagerId,
+          id: id,
+        };
+
+        const getInstanceGroupManagerActionResult = vpcService.getInstanceGroupManagerAction(
+          params
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getInstanceGroupManagerActionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          options,
+          '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
+        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceGroupId = 'testString';
+        const instanceGroupManagerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          instanceGroupId,
+          instanceGroupManagerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getInstanceGroupManagerAction(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getInstanceGroupManagerAction({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getInstanceGroupManagerActionPromise = vpcService.getInstanceGroupManagerAction();
+        expectToBePromise(getInstanceGroupManagerActionPromise);
+
+        getInstanceGroupManagerActionPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateInstanceGroupManagerAction', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // InstanceGroupManagerScheduledActionGroupPatch
+      const instanceGroupManagerScheduledActionGroupPatchModel = {
+        membership_count: 10,
+      };
+
+      // InstanceGroupManagerScheduledActionByManagerPatchManagerAutoScalePatch
+      const instanceGroupManagerScheduledActionByManagerPatchManagerModel = {
+        max_membership_count: 10,
+        min_membership_count: 10,
+      };
+
+      // InstanceGroupManagerActionPatchScheduledActionPatch
+      const instanceGroupManagerActionPatchModel = {
+        name: 'my-instance-group-manager-action',
+        cron_spec: '*/5 1,2,3 * * *',
+        group: instanceGroupManagerScheduledActionGroupPatchModel,
+        manager: instanceGroupManagerScheduledActionByManagerPatchManagerModel,
+        run_at: '2019-01-01T12:00:00.000Z',
+      };
+
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateInstanceGroupManagerAction
+        const instanceGroupId = 'testString';
+        const instanceGroupManagerId = 'testString';
+        const id = 'testString';
+        const instanceGroupManagerActionPatch = instanceGroupManagerActionPatchModel;
+        const params = {
+          instanceGroupId: instanceGroupId,
+          instanceGroupManagerId: instanceGroupManagerId,
+          id: id,
+          instanceGroupManagerActionPatch: instanceGroupManagerActionPatch,
+        };
+
+        const updateInstanceGroupManagerActionResult = vpcService.updateInstanceGroupManagerAction(
+          params
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(updateInstanceGroupManagerActionResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          options,
+          '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions/{id}',
+          'PATCH'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body).toEqual(instanceGroupManagerActionPatch);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
+        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceGroupId = 'testString';
+        const instanceGroupManagerId = 'testString';
+        const id = 'testString';
+        const instanceGroupManagerActionPatch = instanceGroupManagerActionPatchModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          instanceGroupId,
+          instanceGroupManagerId,
+          id,
+          instanceGroupManagerActionPatch,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateInstanceGroupManagerAction(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updateInstanceGroupManagerAction({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateInstanceGroupManagerActionPromise = vpcService.updateInstanceGroupManagerAction();
+        expectToBePromise(updateInstanceGroupManagerActionPromise);
+
+        updateInstanceGroupManagerActionPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
   describe('listInstanceGroupManagerPolicies', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listInstanceGroupManagerPolicies
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
+        const start = 'testString';
+        const limit = 1;
         const params = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
+          start: start,
+          limit: limit,
         };
 
         const listInstanceGroupManagerPoliciesResult = vpcService.listInstanceGroupManagerPolicies(
@@ -7782,6 +8589,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
       });
@@ -8270,8 +9079,12 @@ describe('VpcV1', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listInstanceGroupMemberships
         const instanceGroupId = 'testString';
+        const start = 'testString';
+        const limit = 1;
         const params = {
           instanceGroupId: instanceGroupId,
+          start: start,
+          limit: limit,
         };
 
         const listInstanceGroupMembershipsResult = vpcService.listInstanceGroupMemberships(params);
@@ -8290,6 +9103,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.qs['version']).toEqual(service.version);
         expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
       });
 
@@ -9202,6 +10017,229 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('listDedicatedHostDisks', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listDedicatedHostDisks
+        const dedicatedHostId = 'testString';
+        const params = {
+          dedicatedHostId: dedicatedHostId,
+        };
+
+        const listDedicatedHostDisksResult = vpcService.listDedicatedHostDisks(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listDedicatedHostDisksResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_hosts/{dedicated_host_id}/disks', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['dedicated_host_id']).toEqual(dedicatedHostId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const dedicatedHostId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          dedicatedHostId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listDedicatedHostDisks(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.listDedicatedHostDisks({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const listDedicatedHostDisksPromise = vpcService.listDedicatedHostDisks();
+        expectToBePromise(listDedicatedHostDisksPromise);
+
+        listDedicatedHostDisksPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getDedicatedHostDisk', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getDedicatedHostDisk
+        const dedicatedHostId = 'testString';
+        const id = 'testString';
+        const params = {
+          dedicatedHostId: dedicatedHostId,
+          id: id,
+        };
+
+        const getDedicatedHostDiskResult = vpcService.getDedicatedHostDisk(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getDedicatedHostDiskResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_hosts/{dedicated_host_id}/disks/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['dedicated_host_id']).toEqual(dedicatedHostId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const dedicatedHostId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          dedicatedHostId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getDedicatedHostDisk(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getDedicatedHostDisk({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getDedicatedHostDiskPromise = vpcService.getDedicatedHostDisk();
+        expectToBePromise(getDedicatedHostDiskPromise);
+
+        getDedicatedHostDiskPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateDedicatedHostDisk', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateDedicatedHostDisk
+        const dedicatedHostId = 'testString';
+        const id = 'testString';
+        const name = 'my-disk-updated';
+        const params = {
+          dedicatedHostId: dedicatedHostId,
+          id: id,
+          name: name,
+        };
+
+        const updateDedicatedHostDiskResult = vpcService.updateDedicatedHostDisk(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updateDedicatedHostDiskResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/dedicated_hosts/{dedicated_host_id}/disks/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['name']).toEqual(name);
+        expect(options.qs['version']).toEqual(service.version);
+        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.path['dedicated_host_id']).toEqual(dedicatedHostId);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const dedicatedHostId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          dedicatedHostId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateDedicatedHostDisk(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updateDedicatedHostDisk({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateDedicatedHostDiskPromise = vpcService.updateDedicatedHostDisk();
+        expectToBePromise(updateDedicatedHostDiskPromise);
+
+        updateDedicatedHostDiskPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
   describe('deleteDedicatedHost', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
@@ -9604,12 +10642,6 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // EncryptionKeyIdentityByCRN
-      const encryptionKeyIdentityModel = {
-        crn:
-          'crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179',
-      };
-
       // VolumeProfileIdentityByName
       const volumeProfileIdentityModel = {
         name: '5iops-tier',
@@ -9625,15 +10657,21 @@ describe('VpcV1', () => {
         name: 'us-south-1',
       };
 
+      // EncryptionKeyIdentityByCRN
+      const encryptionKeyIdentityModel = {
+        crn:
+          'crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179',
+      };
+
       // VolumePrototypeVolumeByCapacity
       const volumePrototypeModel = {
-        encryption_key: encryptionKeyIdentityModel,
         iops: 10000,
         name: 'my-volume',
         profile: volumeProfileIdentityModel,
         resource_group: resourceGroupIdentityModel,
         zone: zoneIdentityModel,
         capacity: 100,
+        encryption_key: encryptionKeyIdentityModel,
       };
 
       test('should pass the right params to createRequest', () => {

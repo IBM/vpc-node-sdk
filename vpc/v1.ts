@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020, 2021.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.28.0-55613c9e-20210220-164656
+ * IBM OpenAPI SDK Code Generator Version: 3.31.0-902c9336-20210504-161156
  */
 
 
@@ -96,7 +96,7 @@ class VpcV1 extends BaseService {
     } else {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
-    this.version = options.version || '2021-03-09';
+    this.version = options.version || '2021-05-06';
     this.generation = options.generation;
   }
 
@@ -2695,8 +2695,9 @@ class VpcV1 extends BaseService {
   /**
    * Delete an image.
    *
-   * This request deletes an image. This operation cannot be reversed. System-provided images are not allowed to be
-   * deleted. An image with a `status` of `pending`, `tentative`, or `deleting` cannot be deleted.
+   * This request deletes an image. This operation cannot be reversed. A system-provided image is not allowed to be
+   * deleted. Additionally, an image cannot be deleted if it has a
+   * `status` of `pending`, `tentative`, or `deleting`.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The image identifier.
@@ -2790,7 +2791,7 @@ class VpcV1 extends BaseService {
    * Update an image.
    *
    * This request updates an image with the information in a provided image patch. The image patch object is structured
-   * in the same way as a retrieved image and contains only the information to be updated. System-provided images are
+   * in the same way as a retrieved image and contains only the information to be updated. A system-provided image is
    * not allowed to be updated. An image with a `status` of `deleting` cannot be updated.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -3697,6 +3698,16 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The instance identifier.
    * @param {string} [params.name] - The user-defined name for this virtual server instance (and default system
    * hostname).
+   * @param {InstancePatchProfile} [params.profile] - The profile to use for this virtual server instance. For the
+   * profile to be changed,
+   * the instance `status` must be `stopping` or `stopped`. In addition, the requested
+   * profile must:
+   * - Match the current profile's instance disk support. (Note: If the current profile
+   *   supports instance storage disks, the requested profile can have a different
+   *   instance storage disk configuration.)
+   * - Be compatible with any `placement_target` constraints. For example, if the
+   *   instance is placed on a dedicated host, the requested profile `family` must be
+   *   the same as the dedicated host `family`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Instance>>}
    */
@@ -3710,7 +3721,8 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
+      'profile': _params.profile
     };
 
     const query = {
@@ -3842,6 +3854,220 @@ class VpcV1 extends BaseService {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Create a console access token for an instance.
+   *
+   * This request creates a new single-use console access token for an instance. All console configuration is provided
+   * at token create time, and the token is subsequently used in the `access_token` query parameter for the WebSocket
+   * request.  The access token is only valid for a short period of time, and a maximum of one token is valid for a
+   * given instance at a time.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.consoleType - The instance console type for which this token may be used.
+   * @param {boolean} [params.force] - Indicates whether to disconnect an existing serial console session as the serial
+   * console cannot be shared.  This has no effect on VNC consoles.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceConsoleAccessToken>>}
+   */
+  public createInstanceConsoleAccessToken(params: VpcV1.CreateInstanceConsoleAccessTokenParams): Promise<VpcV1.Response<VpcV1.InstanceConsoleAccessToken>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['instanceId', 'consoleType'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'console_type': _params.consoleType,
+      'force': _params.force
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'instance_id': _params.instanceId
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceConsoleAccessToken');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/console_access_token',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * List all disks on an instance.
+   *
+   * This request lists all disks on an instance.  A disk is a block device that is locally attached to the instance's
+   * physical host and is also referred to as instance storage. By default, the listed disks are sorted by their
+   * `created_at` property values, with the newest disk first.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The instance identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceDiskCollection>>}
+   */
+  public listInstanceDisks(params: VpcV1.ListInstanceDisksParams): Promise<VpcV1.Response<VpcV1.InstanceDiskCollection>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['instanceId'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'instance_id': _params.instanceId
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceDisks');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/disks',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Retrieve an instance disk.
+   *
+   * This request retrieves a single instance disk specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.id - The instance disk identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceDisk>>}
+   */
+  public getInstanceDisk(params: VpcV1.GetInstanceDiskParams): Promise<VpcV1.Response<VpcV1.InstanceDisk>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['instanceId', 'id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceDisk');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/disks/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Update an instance disk.
+   *
+   * This request updates the instance disk with the information in a provided patch.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.id - The instance disk identifier.
+   * @param {string} [params.name] - The user-defined name for this disk.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceDisk>>}
+   */
+  public updateInstanceDisk(params: VpcV1.UpdateInstanceDiskParams): Promise<VpcV1.Response<VpcV1.InstanceDisk>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['instanceId', 'id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'name': _params.name
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceDisk');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/disks/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
         }, _params.headers),
       }),
     };
@@ -4070,9 +4296,9 @@ class VpcV1 extends BaseService {
   /**
    * Update a network interface.
    *
-   * This request updates a network interface with the information in a provided network interface patch. The network
-   * interface patch object is structured in the same way as a retrieved network interface and can contain an updated
-   * name and/or port speed.
+   * This request updates a network interface with the information provided in a network interface patch object. The
+   * network interface patch object is structured in the same way as a retrieved network interface and needs to contain
+   * only the information to be updated.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The instance identifier.
@@ -4543,9 +4769,9 @@ class VpcV1 extends BaseService {
   /**
    * Update a volume attachment.
    *
-   * This request updates a volume attachment with the information in a provided volume attachment patch. The volume
-   * attachment patch object is structured in the same way as a retrieved volume attachment and can contain an updated
-   * name.
+   * This request updates a volume attachment with the information provided in a volume attachment patch object. The
+   * volume attachment patch object is structured in the same way as a retrieved volume attachment and needs to contain
+   * only the information to be updated.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The instance identifier.
@@ -4936,6 +5162,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerCollection>>}
    */
@@ -4950,7 +5178,9 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
     };
 
     const path = {
@@ -5194,6 +5424,270 @@ class VpcV1 extends BaseService {
   };
 
   /**
+   * List all actions for an instance group manager.
+   *
+   * This request lists all instance group actions for an instance group manager.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceGroupId - The instance group identifier.
+   * @param {string} params.instanceGroupManagerId - The instance group manager identifier.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerActionsCollection>>}
+   */
+  public listInstanceGroupManagerActions(params: VpcV1.ListInstanceGroupManagerActionsParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerActionsCollection>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['instanceGroupId', 'instanceGroupManagerId'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
+    };
+
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'instance_group_manager_id': _params.instanceGroupManagerId
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagerActions');
+
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Create an instance group manager action.
+   *
+   * This request creates a new instance group manager action.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceGroupId - The instance group identifier.
+   * @param {string} params.instanceGroupManagerId - The instance group manager identifier.
+   * @param {InstanceGroupManagerActionPrototype} params.instanceGroupManagerActionPrototype - The instance group
+   * manager action prototype object.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>>}
+   */
+  public createInstanceGroupManagerAction(params: VpcV1.CreateInstanceGroupManagerActionParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'instanceGroupManagerActionPrototype'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = _params.instanceGroupManagerActionPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'instance_group_manager_id': _params.instanceGroupManagerId
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManagerAction');
+
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Delete specified instance group manager action.
+   *
+   * This request deletes an instance group manager action. This operation cannot be reversed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceGroupId - The instance group identifier.
+   * @param {string} params.instanceGroupManagerId - The instance group manager identifier.
+   * @param {string} params.id - The instance group manager action identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+   */
+  public deleteInstanceGroupManagerAction(params: VpcV1.DeleteInstanceGroupManagerActionParams): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'instance_group_manager_id': _params.instanceGroupManagerId,
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManagerAction');
+
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Retrieve specified instance group manager action.
+   *
+   * This request retrieves a single instance group manager action specified by identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceGroupId - The instance group identifier.
+   * @param {string} params.instanceGroupManagerId - The instance group manager identifier.
+   * @param {string} params.id - The instance group manager action identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>>}
+   */
+  public getInstanceGroupManagerAction(params: VpcV1.GetInstanceGroupManagerActionParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'instance_group_manager_id': _params.instanceGroupManagerId,
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManagerAction');
+
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Update specified instance group manager action.
+   *
+   * This request updates an instance group manager action.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceGroupId - The instance group identifier.
+   * @param {string} params.instanceGroupManagerId - The instance group manager identifier.
+   * @param {string} params.id - The instance group manager action identifier.
+   * @param {InstanceGroupManagerActionPatch} params.instanceGroupManagerActionPatch - The instance group manager action
+   * patch.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>>}
+   */
+  public updateInstanceGroupManagerAction(params: VpcV1.UpdateInstanceGroupManagerActionParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'instanceGroupManagerActionPatch'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = _params.instanceGroupManagerActionPatch;
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'instance_group_id': _params.instanceGroupId,
+      'instance_group_manager_id': _params.instanceGroupManagerId,
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManagerAction');
+
+    const parameters = {
+      options: {
+        url: '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
    * List all policies for an instance group manager.
    *
    * This request lists all policies for an instance group manager.
@@ -5201,6 +5695,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
    * @param {string} params.instanceGroupManagerId - The instance group manager identifier.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicyCollection>>}
    */
@@ -5215,7 +5711,9 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
     };
 
     const path = {
@@ -5514,6 +6012,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupMembershipCollection>>}
    */
@@ -5528,7 +6028,9 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
     };
 
     const path = {
@@ -6133,6 +6635,160 @@ class VpcV1 extends BaseService {
         headers: extend(true, sdkHeaders, {
           'Accept': 'application/json',
           'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * List all disks on a dedicated host.
+   *
+   * This request lists all disks on a dedicated host.  A disk is a physical device that is locally attached to the
+   * compute node. By default, the listed disks are sorted by their
+   * `created_at` property values, with the newest disk first.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.dedicatedHostId - The dedicated host identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostDiskCollection>>}
+   */
+  public listDedicatedHostDisks(params: VpcV1.ListDedicatedHostDisksParams): Promise<VpcV1.Response<VpcV1.DedicatedHostDiskCollection>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['dedicatedHostId'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'dedicated_host_id': _params.dedicatedHostId
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHostDisks');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_hosts/{dedicated_host_id}/disks',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Retrieve a dedicated host disk.
+   *
+   * This request retrieves a single dedicated host disk specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.dedicatedHostId - The dedicated host identifier.
+   * @param {string} params.id - The dedicated host disk identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>>}
+   */
+  public getDedicatedHostDisk(params: VpcV1.GetDedicatedHostDiskParams): Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['dedicatedHostId', 'id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'dedicated_host_id': _params.dedicatedHostId,
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHostDisk');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_hosts/{dedicated_host_id}/disks/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Update a dedicated host disk.
+   *
+   * This request updates the dedicated host disk with the information in a provided patch.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.dedicatedHostId - The dedicated host identifier.
+   * @param {string} params.id - The dedicated host disk identifier.
+   * @param {string} [params.name] - The user-defined name for this disk.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>>}
+   */
+  public updateDedicatedHostDisk(params: VpcV1.UpdateDedicatedHostDiskParams): Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['dedicatedHostId', 'id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'name': _params.name
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'dedicated_host_id': _params.dedicatedHostId,
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateDedicatedHostDisk');
+
+    const parameters = {
+      options: {
+        url: '/dedicated_hosts/{dedicated_host_id}/disks/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
         }, _params.headers),
       }),
     };
@@ -8528,19 +9184,23 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.securityGroupId - The security group identifier.
    * @param {string} params.id - The rule identifier.
-   * @param {number} [params.code] - The ICMP traffic code to allow.
+   * @param {number} [params.code] - The ICMP traffic code to allow. Specify `null` to remove an existing ICMP traffic
+   * code value.
    * @param {string} [params.direction] - The direction of traffic to enforce, either `inbound` or `outbound`.
    * @param {string} [params.ipVersion] - The IP version to enforce. The format of `remote.address` or
    * `remote.cidr_block` must match this field, if they are used. Alternatively, if `remote` references a security
    * group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version.
-   * @param {number} [params.portMax] - The inclusive upper bound of TCP/UDP port range.
-   * @param {number} [params.portMin] - The inclusive lower bound of TCP/UDP port range.
+   * @param {number} [params.portMax] - The inclusive upper bound of the protocol port range. Specify `null` to clear an
+   * existing upper bound. If a lower bound has been set, the upper bound must also be set, and must not be smaller.
+   * @param {number} [params.portMin] - The inclusive lower bound of the protocol port range. Specify `null` to clear an
+   * existing lower bound. If an upper bound has been set, the lower bound must also be set, and must not be larger.
    * @param {SecurityGroupRuleRemotePatch} [params.remote] - The IP addresses or security groups from which this rule
    * will allow traffic (or to
    * which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
    * security group. A CIDR block of `0.0.0.0/0` will allow traffic from any source (or to
    * any source, for outbound rules).
-   * @param {number} [params.type] - The ICMP traffic type to allow.
+   * @param {number} [params.type] - The ICMP traffic type to allow. Specify `null` to remove an existing ICMP traffic
+   * type value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupRule>>}
    */
@@ -10770,8 +11430,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
-   * @param {number} params.port - The listener port number. Each listener in the load balancer must have a unique
-   * `port` and `protocol` combination.
+   * @param {number} params.port - The listener port number, or the inclusive lower bound of the port range. Each
+   * listener in the load balancer must have a unique `port` and `protocol` combination.
    * @param {string} params.protocol - The listener protocol. Load balancers in the `network` family support `tcp`. Load
    * balancers in the `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer must
    * have a unique `port` and `protocol` combination.
@@ -10957,8 +11617,8 @@ class VpcV1 extends BaseService {
    * - Belong to this load balancer
    * - Have the same `protocol` as this listener
    * - Not already be the default pool for another listener.
-   * @param {number} [params.port] - The listener port number. Each listener in the load balancer must have a unique
-   * `port` and `protocol` combination.
+   * @param {number} [params.port] - The listener port number, or the inclusive lower bound of the port range. Each
+   * listener in the load balancer must have a unique `port` and `protocol` combination.
    * @param {string} [params.protocol] - The listener protocol. Load balancers in the `network` family support `tcp`.
    * Load balancers in the `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer
    * must have a unique `port` and `protocol` combination.
@@ -11362,8 +12022,19 @@ class VpcV1 extends BaseService {
    * @param {string} params.policyId - The policy identifier.
    * @param {string} params.condition - The condition of the rule.
    * @param {string} params.type - The type of the rule.
+   *
+   * Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
    * @param {string} params.value - Value to be matched for rule condition.
-   * @param {string} [params.field] - HTTP header field. This is only applicable to "header" rule type.
+   *
+   * If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
+   * @param {string} [params.field] - The field. This is applicable to `header`, `query`, and `body` rule types.
+   *
+   * If the rule type is `header`, this field is required.
+   *
+   * If the rule type is `query`, this is optional. If specified and the rule condition is not
+   * `matches_regex`, the value must be percent-encoded.
+   *
+   * If the rule type is `body`, this is optional.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>>}
    */
@@ -11531,9 +12202,20 @@ class VpcV1 extends BaseService {
    * @param {string} params.policyId - The policy identifier.
    * @param {string} params.id - The rule identifier.
    * @param {string} [params.condition] - The condition of the rule.
-   * @param {string} [params.field] - HTTP header field. This is only applicable to "header" rule type.
+   * @param {string} [params.field] - The field. This is applicable to `header`, `query`, and `body` rule types.
+   *
+   * If the rule type is `header`, this field is required.
+   *
+   * If the rule type is `query`, this is optional. If specified and the rule condition is not
+   * `matches_regex`, the value must be percent-encoded.
+   *
+   * If the rule type is `body`, this is optional.
    * @param {string} [params.type] - The type of the rule.
+   *
+   * Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
    * @param {string} [params.value] - Value to be matched for rule condition.
+   *
+   * If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>>}
    */
@@ -13909,6 +14591,17 @@ namespace VpcV1 {
     id: string;
     /** The user-defined name for this virtual server instance (and default system hostname). */
     name?: string;
+    /** The profile to use for this virtual server instance. For the profile to be changed,
+     *  the instance `status` must be `stopping` or `stopped`. In addition, the requested
+     *  profile must:
+     *  - Match the current profile's instance disk support. (Note: If the current profile
+     *    supports instance storage disks, the requested profile can have a different
+     *    instance storage disk configuration.)
+     *  - Be compatible with any `placement_target` constraints. For example, if the
+     *    instance is placed on a dedicated host, the requested profile `family` must be
+     *    the same as the dedicated host `family`.
+     */
+    profile?: InstancePatchProfile;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -13940,6 +14633,55 @@ namespace VpcV1 {
       START = 'start',
       STOP = 'stop',
     }
+  }
+
+  /** Parameters for the `createInstanceConsoleAccessToken` operation. */
+  export interface CreateInstanceConsoleAccessTokenParams {
+    /** The instance identifier. */
+    instanceId: string;
+    /** The instance console type for which this token may be used. */
+    consoleType: CreateInstanceConsoleAccessTokenConstants.ConsoleType | string;
+    /** Indicates whether to disconnect an existing serial console session as the serial console cannot be shared.
+     *  This has no effect on VNC consoles.
+     */
+    force?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createInstanceConsoleAccessToken` operation. */
+  export namespace CreateInstanceConsoleAccessTokenConstants {
+    /** The instance console type for which this token may be used. */
+    export enum ConsoleType {
+      VNC = 'vnc',
+      SERIAL = 'serial',
+    }
+  }
+
+  /** Parameters for the `listInstanceDisks` operation. */
+  export interface ListInstanceDisksParams {
+    /** The instance identifier. */
+    instanceId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getInstanceDisk` operation. */
+  export interface GetInstanceDiskParams {
+    /** The instance identifier. */
+    instanceId: string;
+    /** The instance disk identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateInstanceDisk` operation. */
+  export interface UpdateInstanceDiskParams {
+    /** The instance identifier. */
+    instanceId: string;
+    /** The instance disk identifier. */
+    id: string;
+    /** The user-defined name for this disk. */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceNetworkInterfaces` operation. */
@@ -14194,6 +14936,10 @@ namespace VpcV1 {
   export interface ListInstanceGroupManagersParams {
     /** The instance group identifier. */
     instanceGroupId: string;
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -14245,12 +14991,75 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listInstanceGroupManagerActions` operation. */
+  export interface ListInstanceGroupManagerActionsParams {
+    /** The instance group identifier. */
+    instanceGroupId: string;
+    /** The instance group manager identifier. */
+    instanceGroupManagerId: string;
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createInstanceGroupManagerAction` operation. */
+  export interface CreateInstanceGroupManagerActionParams {
+    /** The instance group identifier. */
+    instanceGroupId: string;
+    /** The instance group manager identifier. */
+    instanceGroupManagerId: string;
+    /** The instance group manager action prototype object. */
+    instanceGroupManagerActionPrototype: InstanceGroupManagerActionPrototype;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteInstanceGroupManagerAction` operation. */
+  export interface DeleteInstanceGroupManagerActionParams {
+    /** The instance group identifier. */
+    instanceGroupId: string;
+    /** The instance group manager identifier. */
+    instanceGroupManagerId: string;
+    /** The instance group manager action identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getInstanceGroupManagerAction` operation. */
+  export interface GetInstanceGroupManagerActionParams {
+    /** The instance group identifier. */
+    instanceGroupId: string;
+    /** The instance group manager identifier. */
+    instanceGroupManagerId: string;
+    /** The instance group manager action identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateInstanceGroupManagerAction` operation. */
+  export interface UpdateInstanceGroupManagerActionParams {
+    /** The instance group identifier. */
+    instanceGroupId: string;
+    /** The instance group manager identifier. */
+    instanceGroupManagerId: string;
+    /** The instance group manager action identifier. */
+    id: string;
+    /** The instance group manager action patch. */
+    instanceGroupManagerActionPatch: InstanceGroupManagerActionPatch;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `listInstanceGroupManagerPolicies` operation. */
   export interface ListInstanceGroupManagerPoliciesParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
     instanceGroupManagerId: string;
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -14328,6 +15137,10 @@ namespace VpcV1 {
   export interface ListInstanceGroupMembershipsParams {
     /** The instance group identifier. */
     instanceGroupId: string;
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -14466,6 +15279,33 @@ namespace VpcV1 {
   export interface CreateDedicatedHostParams {
     /** The dedicated host prototype object. */
     dedicatedHostPrototype: DedicatedHostPrototype;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listDedicatedHostDisks` operation. */
+  export interface ListDedicatedHostDisksParams {
+    /** The dedicated host identifier. */
+    dedicatedHostId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getDedicatedHostDisk` operation. */
+  export interface GetDedicatedHostDiskParams {
+    /** The dedicated host identifier. */
+    dedicatedHostId: string;
+    /** The dedicated host disk identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateDedicatedHostDisk` operation. */
+  export interface UpdateDedicatedHostDiskParams {
+    /** The dedicated host identifier. */
+    dedicatedHostId: string;
+    /** The dedicated host disk identifier. */
+    id: string;
+    /** The user-defined name for this disk. */
+    name?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -14967,7 +15807,7 @@ namespace VpcV1 {
     securityGroupId: string;
     /** The rule identifier. */
     id: string;
-    /** The ICMP traffic code to allow. */
+    /** The ICMP traffic code to allow. Specify `null` to remove an existing ICMP traffic code value. */
     code?: number;
     /** The direction of traffic to enforce, either `inbound` or `outbound`. */
     direction?: UpdateSecurityGroupRuleConstants.Direction | string;
@@ -14976,9 +15816,13 @@ namespace VpcV1 {
      *  addresses (network interfaces) in that group matching this IP version.
      */
     ipVersion?: UpdateSecurityGroupRuleConstants.IpVersion | string;
-    /** The inclusive upper bound of TCP/UDP port range. */
+    /** The inclusive upper bound of the protocol port range. Specify `null` to clear an existing upper bound. If a
+     *  lower bound has been set, the upper bound must also be set, and must not be smaller.
+     */
     portMax?: number;
-    /** The inclusive lower bound of TCP/UDP port range. */
+    /** The inclusive lower bound of the protocol port range. Specify `null` to clear an existing lower bound. If an
+     *  upper bound has been set, the lower bound must also be set, and must not be larger.
+     */
     portMin?: number;
     /** The IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
@@ -14986,7 +15830,7 @@ namespace VpcV1 {
      *  any source, for outbound rules).
      */
     remote?: SecurityGroupRuleRemotePatch;
-    /** The ICMP traffic type to allow. */
+    /** The ICMP traffic type to allow. Specify `null` to remove an existing ICMP traffic type value. */
     type?: number;
     headers?: OutgoingHttpHeaders;
   }
@@ -15562,8 +16406,8 @@ namespace VpcV1 {
   export interface CreateLoadBalancerListenerParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
-    /** The listener port number. Each listener in the load balancer must have a unique
-     *  `port` and `protocol` combination.
+    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
+     *  must have a unique `port` and `protocol` combination.
      */
     port: number;
     /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
@@ -15640,8 +16484,8 @@ namespace VpcV1 {
      *  - Not already be the default pool for another listener.
      */
     defaultPool?: LoadBalancerPoolIdentity;
-    /** The listener port number. Each listener in the load balancer must have a unique
-     *  `port` and `protocol` combination.
+    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
+     *  must have a unique `port` and `protocol` combination.
      */
     port?: number;
     /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
@@ -15772,11 +16616,25 @@ namespace VpcV1 {
     policyId: string;
     /** The condition of the rule. */
     condition: CreateLoadBalancerListenerPolicyRuleConstants.Condition | string;
-    /** The type of the rule. */
+    /** The type of the rule.
+     *
+     *  Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
+     */
     type: CreateLoadBalancerListenerPolicyRuleConstants.Type | string;
-    /** Value to be matched for rule condition. */
+    /** Value to be matched for rule condition.
+     *
+     *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
+     */
     value: string;
-    /** HTTP header field. This is only applicable to "header" rule type. */
+    /** The field. This is applicable to `header`, `query`, and `body` rule types.
+     *
+     *  If the rule type is `header`, this field is required.
+     *
+     *  If the rule type is `query`, this is optional. If specified and the rule condition is not
+     *  `matches_regex`, the value must be percent-encoded.
+     *
+     *  If the rule type is `body`, this is optional.
+     */
     field?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -15789,11 +16647,13 @@ namespace VpcV1 {
       EQUALS = 'equals',
       MATCHES_REGEX = 'matches_regex',
     }
-    /** The type of the rule. */
+    /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
     export enum Type {
       HEADER = 'header',
       HOSTNAME = 'hostname',
       PATH = 'path',
+      QUERY = 'query',
+      BODY = 'body',
     }
   }
 
@@ -15835,11 +16695,25 @@ namespace VpcV1 {
     id: string;
     /** The condition of the rule. */
     condition?: UpdateLoadBalancerListenerPolicyRuleConstants.Condition | string;
-    /** HTTP header field. This is only applicable to "header" rule type. */
+    /** The field. This is applicable to `header`, `query`, and `body` rule types.
+     *
+     *  If the rule type is `header`, this field is required.
+     *
+     *  If the rule type is `query`, this is optional. If specified and the rule condition is not
+     *  `matches_regex`, the value must be percent-encoded.
+     *
+     *  If the rule type is `body`, this is optional.
+     */
     field?: string;
-    /** The type of the rule. */
+    /** The type of the rule.
+     *
+     *  Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
+     */
     type?: UpdateLoadBalancerListenerPolicyRuleConstants.Type | string;
-    /** Value to be matched for rule condition. */
+    /** Value to be matched for rule condition.
+     *
+     *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
+     */
     value?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -15852,11 +16726,13 @@ namespace VpcV1 {
       EQUALS = 'equals',
       MATCHES_REGEX = 'matches_regex',
     }
-    /** The type of the rule. */
+    /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
     export enum Type {
       HEADER = 'header',
       HOSTNAME = 'hostname',
       PATH = 'path',
+      QUERY = 'query',
+      BODY = 'body',
     }
   }
 
@@ -16360,6 +17236,8 @@ namespace VpcV1 {
     created_at: string;
     /** The CRN for this dedicated host. */
     crn: string;
+    /** Collection of the dedicated host's disks. */
+    disks: DedicatedHostDisk[];
     /** The dedicated host group this dedicated host is in. */
     group: DedicatedHostGroupReference;
     /** The URL for this dedicated host. */
@@ -16427,6 +17305,45 @@ namespace VpcV1 {
   export interface DedicatedHostCollectionNext {
     /** The URL for a page of resources. */
     href: string;
+  }
+
+  /** DedicatedHostDisk. */
+  export interface DedicatedHostDisk {
+    /** The remaining space left for instance placement in GB (gigabytes). */
+    available: number;
+    /** The date and time that the disk was created. */
+    created_at: string;
+    /** The URL for this disk. */
+    href: string;
+    /** The unique identifier for this disk. */
+    id: string;
+    /** Instance disks that are on this dedicated host disk. */
+    instance_disks: InstanceDiskReference[];
+    /** The disk interface used for attaching the disk
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected property value was encountered.
+     */
+    interface_type: string;
+    /** The lifecycle state of this dedicated host disk. */
+    lifecycle_state?: string;
+    /** The user-defined or system-provided name for this disk. */
+    name: string;
+    /** Indicates whether this dedicated host disk is available for instance disk creation. */
+    provisionable: boolean;
+    /** The type of resource referenced. */
+    resource_type: string;
+    /** The size of the disk in GB (gigabytes). */
+    size: number;
+    /** The instance disk interfaces supported for this dedicated host disk. */
+    supported_instance_interface_types: string[];
+  }
+
+  /** DedicatedHostDiskCollection. */
+  export interface DedicatedHostDiskCollection {
+    /** Collection of the dedicated host's disks. */
+    disks: DedicatedHostDisk[];
   }
 
   /** DedicatedHostGroup. */
@@ -16529,6 +17446,8 @@ namespace VpcV1 {
   export interface DedicatedHostProfile {
     /** The product class this dedicated host profile belongs to. */
     class: string;
+    /** Collection of the dedicated host profile's disks. */
+    disks: DedicatedHostProfileDisk[];
     /** The product family this dedicated host profile belongs to
      *
      *  The enumerated values for this property are expected to expand in the future. When processing this property,
@@ -16572,6 +17491,53 @@ namespace VpcV1 {
   export interface DedicatedHostProfileCollectionNext {
     /** The URL for a page of resources. */
     href: string;
+  }
+
+  /** Disks provided by this profile. */
+  export interface DedicatedHostProfileDisk {
+    interface_type: DedicatedHostProfileDiskInterface;
+    /** The number of disks of this type for a dedicated host with this profile. */
+    quantity: DedicatedHostProfileDiskQuantity;
+    /** The size of the disk in GB (gigabytes). */
+    size: DedicatedHostProfileDiskSize;
+    supported_instance_interface_types: DedicatedHostProfileDiskSupportedInterfaces;
+  }
+
+  /** DedicatedHostProfileDiskInterface. */
+  export interface DedicatedHostProfileDiskInterface {
+    /** The type for this profile field. */
+    type: string;
+    /** The interface of the disk for a dedicated host with this profile
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected property value was encountered.
+     */
+    value: string;
+  }
+
+  /** The number of disks of this type for a dedicated host with this profile. */
+  export interface DedicatedHostProfileDiskQuantity {
+    /** The type for this profile field. */
+    type: string;
+    /** The value for this profile field. */
+    value: number;
+  }
+
+  /** The size of the disk in GB (gigabytes). */
+  export interface DedicatedHostProfileDiskSize {
+    /** The type for this profile field. */
+    type: string;
+    /** The size of the disk in GB (gigabytes). */
+    value: number;
+  }
+
+  /** DedicatedHostProfileDiskSupportedInterfaces. */
+  export interface DedicatedHostProfileDiskSupportedInterfaces {
+    /** The type for this profile field. */
+    type: string;
+    /** The instance disk interfaces supported for a dedicated host with this profile. */
+    value: string[];
   }
 
   /** Identifies a dedicated host profile by a unique property. */
@@ -17369,6 +18335,8 @@ namespace VpcV1 {
     created_at: string;
     /** The CRN for this virtual server instance. */
     crn: string;
+    /** Collection of the instance's disks. */
+    disks: InstanceDisk[];
     /** The virtual server instance GPU configuration. */
     gpu?: InstanceGPU;
     /** The URL for this virtual server instance. */
@@ -17391,6 +18359,13 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** The status of the virtual server instance. */
     status: string;
+    /** Array of reasons for the current status (if any).
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    status_reasons: InstanceStatusReason[];
     /** The virtual server instance VCPU configuration. */
     vcpu: InstanceVCPU;
     /** Collection of the virtual server instance's volume attachments, including the boot volume attachment. */
@@ -17449,6 +18424,75 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** The instance console access token information. */
+  export interface InstanceConsoleAccessToken {
+    /** A URL safe single-use token used to access the console WebSocket. */
+    access_token: string;
+    /** The instance console type for which this token may be used. */
+    console_type: string;
+    /** The date and time that the access token was created. */
+    created_at: string;
+    /** The date and time that the access token will expire. */
+    expires_at: string;
+    /** Indicates whether to disconnect an existing serial console session as the serial console cannot be shared.
+     *  This has no effect on VNC consoles.
+     */
+    force: boolean;
+    /** The URL to access this instance console. */
+    href: string;
+  }
+
+  /** InstanceDisk. */
+  export interface InstanceDisk {
+    /** The date and time that the disk was created. */
+    created_at: string;
+    /** The URL for this instance disk. */
+    href: string;
+    /** The unique identifier for this instance disk. */
+    id: string;
+    /** The disk interface used for attaching the disk.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected property value was encountered.
+     */
+    interface_type: string;
+    /** The user-defined name for this disk. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+    /** The size of the disk in GB (gigabytes). */
+    size: number;
+  }
+
+  /** InstanceDiskCollection. */
+  export interface InstanceDiskCollection {
+    /** Collection of the instance's disks. */
+    disks: InstanceDisk[];
+  }
+
+  /** InstanceDiskReference. */
+  export interface InstanceDiskReference {
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: InstanceDiskReferenceDeleted;
+    /** The URL for this instance disk. */
+    href: string;
+    /** The unique identifier for this instance disk. */
+    id: string;
+    /** The user-defined name for this disk. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+  export interface InstanceDiskReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
   /** The virtual server instance GPU configuration. */
   export interface InstanceGPU {
     /** The number of GPUs assigned to the instance. */
@@ -17499,6 +18543,8 @@ namespace VpcV1 {
     status: string;
     /** Array of references to subnets to use when creating new instances. */
     subnets: SubnetReference[];
+    /** The date and time that the instance group was updated. */
+    updated_at: string;
     /** The VPC the instance group resides in. */
     vpc: VPCReference;
   }
@@ -17531,6 +18577,8 @@ namespace VpcV1 {
 
   /** InstanceGroupManager. */
   export interface InstanceGroupManager {
+    /** The date and time that the instance group manager was created. */
+    created_at: string;
     /** The URL for this instance group manager. */
     href: string;
     /** The unique identifier for this instance group manager. */
@@ -17539,6 +18587,108 @@ namespace VpcV1 {
     management_enabled: boolean;
     /** The user-defined name for this instance group manager. Names must be unique within the instance group. */
     name: string;
+    /** The date and time that the instance group manager was updated. */
+    updated_at: string;
+  }
+
+  /** InstanceGroupManagerAction. */
+  export interface InstanceGroupManagerAction {
+    /** If set to `true`, this scheduled action will be automatically deleted after it has finished and the
+     *  `auto_delete_timeout` time has passed.
+     */
+    auto_delete: boolean;
+    /** Amount of time in hours that are required to pass before the scheduled action will be automatically deleted
+     *  once it has finished. If this value is 0, the action will be deleted on completion.
+     */
+    auto_delete_timeout: number;
+    /** The date and time that the instance group manager action was created. */
+    created_at: string;
+    /** The URL for this instance group manager action. */
+    href: string;
+    /** The unique identifier for this instance group manager action. */
+    id: string;
+    /** The user-defined name for this instance group manager action. Names must be unique within the instance group
+     *  manager.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+    /** The status of the instance group action
+     *  - `active`: Action is ready to be run
+     *  - `completed`: Action was completed successfully
+     *  - `failed`: Action could not be completed successfully
+     *  - `incompatible`: Action parameters are not compatible with the group or manager
+     *  - `omitted`: Action was not applied because this action's manager was disabled.
+     */
+    status: string;
+    /** The date and time that the instance group manager action was modified. */
+    updated_at: string;
+  }
+
+  /** InstanceGroupManagerActionPatch. */
+  export interface InstanceGroupManagerActionPatch {
+    /** The user-defined name for this instance group manager action. Names must be unique within the instance group
+     *  manager.
+     */
+    name?: string;
+  }
+
+  /** InstanceGroupManagerActionPrototype. */
+  export interface InstanceGroupManagerActionPrototype {
+    /** The user-defined name for this instance group manager action. Names must be unique within the instance group
+     *  manager.
+     */
+    name?: string;
+  }
+
+  /** InstanceGroupManagerActionReference. */
+  export interface InstanceGroupManagerActionReference {
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: InstanceGroupManagerActionReferenceDeleted;
+    /** The URL for this instance group manager action. */
+    href: string;
+    /** The unique identifier for this instance group manager action. */
+    id: string;
+    /** The user-defined name for this instance group manager action. Names must be unique within the instance group
+     *  manager.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+  export interface InstanceGroupManagerActionReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** InstanceGroupManagerActionsCollection. */
+  export interface InstanceGroupManagerActionsCollection {
+    /** Collection of instance group manager actions. */
+    actions: InstanceGroupManagerAction[];
+    /** A link to the first page of resources. */
+    first: InstanceGroupManagerActionsCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: InstanceGroupManagerActionsCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface InstanceGroupManagerActionsCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface InstanceGroupManagerActionsCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
   }
 
   /** InstanceGroupManagerCollection. */
@@ -17569,6 +18719,8 @@ namespace VpcV1 {
 
   /** InstanceGroupManagerPolicy. */
   export interface InstanceGroupManagerPolicy {
+    /** The date and time that the instance group manager policy was created. */
+    created_at: string;
     /** The URL for this instance group manager policy. */
     href: string;
     /** The unique identifier for this instance group manager policy. */
@@ -17577,6 +18729,8 @@ namespace VpcV1 {
      *  manager.
      */
     name: string;
+    /** The date and time that the instance group manager policy was updated. */
+    updated_at: string;
   }
 
   /** InstanceGroupManagerPolicyCollection. */
@@ -17663,8 +18817,40 @@ namespace VpcV1 {
     more_info: string;
   }
 
+  /** InstanceGroupManagerScheduledActionByManagerManager. */
+  export interface InstanceGroupManagerScheduledActionByManagerManager {
+  }
+
+  /** InstanceGroupManagerScheduledActionByManagerPatchManager. */
+  export interface InstanceGroupManagerScheduledActionByManagerPatchManager {
+  }
+
+  /** InstanceGroupManagerScheduledActionGroupGroup. */
+  export interface InstanceGroupManagerScheduledActionGroupGroup {
+    /** The number of members the instance group should have at the scheduled time. */
+    membership_count: number;
+  }
+
+  /** InstanceGroupManagerScheduledActionGroupPatch. */
+  export interface InstanceGroupManagerScheduledActionGroupPatch {
+    /** The number of members the instance group should have at the scheduled time. */
+    membership_count?: number;
+  }
+
+  /** InstanceGroupManagerScheduledActionGroupPrototype. */
+  export interface InstanceGroupManagerScheduledActionGroupPrototype {
+    /** The number of members the instance group should have at the scheduled time. */
+    membership_count: number;
+  }
+
+  /** InstanceGroupManagerScheduledActionManagerManager. */
+  export interface InstanceGroupManagerScheduledActionManagerManager {
+  }
+
   /** InstanceGroupMembership. */
   export interface InstanceGroupMembership {
+    /** The date and time that the instance group manager policy was created. */
+    created_at: string;
     /** If set to true, when deleting the membership the instance will also be deleted. */
     delete_instance_on_membership_delete: boolean;
     /** The URL for this instance group membership. */
@@ -17684,6 +18870,8 @@ namespace VpcV1 {
      *  - `unhealthy`: Membership has unhealthy dependent resources.
      */
     status: string;
+    /** The date and time that the instance group membership was updated. */
+    updated_at: string;
   }
 
   /** InstanceGroupMembershipCollection. */
@@ -17749,9 +18937,19 @@ namespace VpcV1 {
     encryption_key: KeyReferenceInstanceInitializationContext;
   }
 
+  /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Match the current profile's instance disk support. (Note: If the current profile supports instance storage disks, the requested profile can have a different instance storage disk configuration.) - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. */
+  export interface InstancePatchProfile {
+  }
+
+  /** InstancePlacementTargetPrototype. */
+  export interface InstancePlacementTargetPrototype {
+  }
+
   /** InstanceProfile. */
   export interface InstanceProfile {
     bandwidth: InstanceProfileBandwidth;
+    /** Collection of the instance profile's disks. */
+    disks: InstanceProfileDisk[];
     /** The product family this virtual server instance profile belongs to. */
     family?: string;
     /** The URL for this virtual server instance profile. */
@@ -17773,6 +18971,36 @@ namespace VpcV1 {
   export interface InstanceProfileCollection {
     /** Collection of virtual server instance profiles. */
     profiles: InstanceProfile[];
+  }
+
+  /** Disks provided by this profile. */
+  export interface InstanceProfileDisk {
+    quantity: InstanceProfileDiskQuantity;
+    size: InstanceProfileDiskSize;
+    supported_interface_types: InstanceProfileDiskSupportedInterfaces;
+  }
+
+  /** InstanceProfileDiskQuantity. */
+  export interface InstanceProfileDiskQuantity {
+  }
+
+  /** InstanceProfileDiskSize. */
+  export interface InstanceProfileDiskSize {
+  }
+
+  /** InstanceProfileDiskSupportedInterfaces. */
+  export interface InstanceProfileDiskSupportedInterfaces {
+    /** The disk interface used for attaching the disk.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected property value was encountered.
+     */
+    default: string;
+    /** The type for this profile field. */
+    type: string;
+    /** The supported disk interfaces used for attaching the disk. */
+    values: string[];
   }
 
   /** Identifies an instance profile by a unique property. */
@@ -17835,6 +19063,8 @@ namespace VpcV1 {
     name?: string;
     /** Collection of additional network interfaces to create for the virtual server instance. */
     network_interfaces?: NetworkInterfacePrototype[];
+    /** The placement restrictions to use for the virtual server instance. */
+    placement_target?: InstancePlacementTargetPrototype;
     /** The profile to use for this virtual server instance. */
     profile?: InstanceProfileIdentity;
     /** The resource group to use. If unspecified, the account's [default resource
@@ -17873,6 +19103,16 @@ namespace VpcV1 {
     more_info: string;
   }
 
+  /** InstanceStatusReason. */
+  export interface InstanceStatusReason {
+    /** A snake case string succinctly identifying the status reason. */
+    code: string;
+    /** An explanation of the status reason. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
+  }
+
   /** InstanceTemplate. */
   export interface InstanceTemplate {
     /** The date and time that the instance template was created. */
@@ -17895,6 +19135,8 @@ namespace VpcV1 {
     name: string;
     /** Collection of additional network interfaces to create for the virtual server instance. */
     network_interfaces?: NetworkInterfacePrototype[];
+    /** The placement restrictions to use for the virtual server instance. */
+    placement_target?: InstancePlacementTargetPrototype;
     /** The profile to use for this virtual server instance. */
     profile?: InstanceProfileIdentity;
     /** The resource group for this instance template. */
@@ -17955,6 +19197,8 @@ namespace VpcV1 {
     name?: string;
     /** Collection of additional network interfaces to create for the virtual server instance. */
     network_interfaces?: NetworkInterfacePrototype[];
+    /** The placement restrictions to use for the virtual server instance. */
+    placement_target?: InstancePlacementTargetPrototype;
     /** The profile to use for this virtual server instance. */
     profile?: InstanceProfileIdentity;
     /** The resource group to use. If unspecified, the account's [default resource
@@ -18127,8 +19371,8 @@ namespace VpcV1 {
     id: string;
     /** An array of policies for this listener. */
     policies?: LoadBalancerListenerPolicyReference[];
-    /** The listener port number. Each listener in the load balancer must have a unique
-     *  `port` and `protocol` combination.
+    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
+     *  must have a unique `port` and `protocol` combination.
      */
     port: number;
     /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
@@ -18220,7 +19464,15 @@ namespace VpcV1 {
     condition: string;
     /** The date and time that this rule was created. */
     created_at: string;
-    /** HTTP header field. This is only applicable to "header" rule type. */
+    /** The field. This is applicable to `header`, `query`, and `body` rule types.
+     *
+     *  If the rule type is `header`, this field is required.
+     *
+     *  If the rule type is `query`, this is optional. If specified and the rule condition is not
+     *  `matches_regex`, the value must be percent-encoded.
+     *
+     *  If the rule type is `body`, this is optional.
+     */
     field?: string;
     /** The rule's canonical URL. */
     href: string;
@@ -18228,9 +19480,15 @@ namespace VpcV1 {
     id: string;
     /** The provisioning status of this rule. */
     provisioning_status: string;
-    /** The type of the rule. */
+    /** The type of the rule.
+     *
+     *  Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
+     */
     type: string;
-    /** Value to be matched for rule condition. */
+    /** Value to be matched for rule condition.
+     *
+     *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
+     */
     value: string;
   }
 
@@ -18244,11 +19502,25 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyRulePrototype {
     /** The condition of the rule. */
     condition: string;
-    /** HTTP header field. This is only applicable to "header" rule type. */
+    /** The field. This is applicable to `header`, `query`, and `body` rule types.
+     *
+     *  If the rule type is `header`, this field is required.
+     *
+     *  If the rule type is `query`, this is optional. If specified and the rule condition is not
+     *  `matches_regex`, the value must be percent-encoded.
+     *
+     *  If the rule type is `body`, this is optional.
+     */
     field?: string;
-    /** The type of the rule. */
+    /** The type of the rule.
+     *
+     *  Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
+     */
     type: string;
-    /** Value to be matched for rule condition. */
+    /** Value to be matched for rule condition.
+     *
+     *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
+     */
     value: string;
   }
 
@@ -18292,8 +19564,8 @@ namespace VpcV1 {
     connection_limit?: number;
     /** The default pool associated with the listener. */
     default_pool?: LoadBalancerPoolIdentityByName;
-    /** The listener port number. Each listener in the load balancer must have a unique
-     *  `port` and `protocol` combination.
+    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
+     *  must have a unique `port` and `protocol` combination.
      */
     port: number;
     /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
@@ -18368,7 +19640,13 @@ namespace VpcV1 {
      *  Supported by load balancers in the `application` family (otherwise always `disabled`).
      */
     proxy_protocol: string;
-    /** The session persistence of this pool. */
+    /** The session persistence of this pool.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When
+     *  processing this property, check for and log unknown values. Optionally halt
+     *  processing and surface the error, or bypass the pool on which the unexpected
+     *  property value was encountered.
+     */
     session_persistence?: LoadBalancerPoolSessionPersistence;
   }
 
@@ -19058,6 +20336,8 @@ namespace VpcV1 {
   export interface OperatingSystem {
     /** The operating system architecture. */
     architecture: string;
+    /** Images with this operating system can only be used on dedicated hosts or dedicated host groups. */
+    dedicated_host_only: boolean;
     /** A unique, display-friendly name for the operating system. */
     display_name: string;
     /** The name of the software family this operating system belongs to. */
@@ -19310,6 +20590,12 @@ namespace VpcV1 {
 
   /** ReservedIPReference. */
   export interface ReservedIPReference {
+    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
+     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
+     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
+     *  encountered.
+     */
+    address: string;
     /** If present, this property indicates the referenced resource has been deleted and provides
      *  some supplementary information.
      */
@@ -19722,7 +21008,7 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** SecurityGroupTargetReference. */
+  /** The resource types that can be security group targets are expected to expand in the future. When iterating over security group targets, do not assume that every target resource will be from a known set of resource types. Optionally halt processing and surface an error, or bypass resources of unrecognized types. */
   export interface SecurityGroupTargetReference {
   }
 
@@ -20408,12 +21694,6 @@ namespace VpcV1 {
 
   /** VolumePrototype. */
   export interface VolumePrototype {
-    /** The identity of the root key to use to wrap the data encryption key for the volume.
-     *
-     *  If this property is not provided, the `encryption` type for the volume will be
-     *  `provider_managed`.
-     */
-    encryption_key?: EncryptionKeyIdentity;
     /** The bandwidth for the volume. */
     iops?: number;
     /** The unique user-defined name for this volume. */
@@ -20959,6 +22239,38 @@ namespace VpcV1 {
     operating_system: OperatingSystemIdentity;
   }
 
+  /** InstanceGroupManagerActionPatchScheduledActionPatch. */
+  export interface InstanceGroupManagerActionPatchScheduledActionPatch extends InstanceGroupManagerActionPatch {
+    /** The cron specification for a recurring scheduled action. Actions can be applied a maximum of one time within
+     *  a 5 min period.
+     */
+    cron_spec?: string;
+    group?: InstanceGroupManagerScheduledActionGroupPatch;
+    manager?: InstanceGroupManagerScheduledActionByManagerPatchManager;
+    /** The date and time the scheduled action will run. */
+    run_at?: string;
+  }
+
+  /** InstanceGroupManagerActionPrototypeScheduledActionPrototype. */
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototype extends InstanceGroupManagerActionPrototype {
+  }
+
+  /** InstanceGroupManagerActionScheduledAction. */
+  export interface InstanceGroupManagerActionScheduledAction extends InstanceGroupManagerAction {
+    /** The type of action for the instance group. */
+    action_type: string;
+    /** The cron specification for a recurring scheduled action. Actions can be applied a maximum of one time within
+     *  a 5 min period.
+     */
+    cron_spec?: string;
+    /** The date and time the scheduled action was last applied. If empty the action has never been applied. */
+    last_applied_at?: string;
+    /** The date and time the scheduled action will next run. If empty the system is currently calculating the next
+     *  run time.
+     */
+    next_run_at?: string;
+  }
+
   /** InstanceGroupManagerAutoScale. */
   export interface InstanceGroupManagerAutoScale extends InstanceGroupManager {
     /** The time window in seconds to aggregate metrics prior to evaluation. */
@@ -21009,7 +22321,75 @@ namespace VpcV1 {
     min_membership_count?: number;
   }
 
-  /** The total bandwidth shared across the network interfaces of an instance with this profile depends on its configuration. */
+  /** InstanceGroupManagerPrototypeInstanceGroupManagerScheduledPrototype. */
+  export interface InstanceGroupManagerPrototypeInstanceGroupManagerScheduledPrototype extends InstanceGroupManagerPrototype {
+    /** The type of instance group manager. */
+    manager_type: string;
+  }
+
+  /** InstanceGroupManagerScheduled. */
+  export interface InstanceGroupManagerScheduled extends InstanceGroupManager {
+    /** The actions of the instance group manager. */
+    actions: InstanceGroupManagerActionReference[];
+    /** The type of instance group manager. */
+    manager_type: string;
+  }
+
+  /** The identity of the auto scale manager to update and the property or properties to be updated. Exactly one of `id` or `href` must be provided in addition to at least one of `min_membership_count` and `max_membership_count`. */
+  export interface InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototype extends InstanceGroupManagerScheduledActionByManagerManager {
+    /** The maximum number of members the instance group should have at the scheduled time. */
+    max_membership_count?: number;
+    /** The minimum number of members the instance group should have at the scheduled time. */
+    min_membership_count?: number;
+  }
+
+  /** InstanceGroupManagerScheduledActionByManagerPatchManagerAutoScalePatch. */
+  export interface InstanceGroupManagerScheduledActionByManagerPatchManagerAutoScalePatch extends InstanceGroupManagerScheduledActionByManagerPatchManager {
+    /** The maximum number of members the instance group should have at the scheduled time. */
+    max_membership_count?: number;
+    /** The minimum number of members the instance group should have at the scheduled time. */
+    min_membership_count?: number;
+  }
+
+  /** InstanceGroupManagerScheduledActionManagerManagerAutoScale. */
+  export interface InstanceGroupManagerScheduledActionManagerManagerAutoScale extends InstanceGroupManagerScheduledActionManagerManager {
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: InstanceGroupManagerReferenceDeleted;
+    /** The URL for this instance group manager. */
+    href: string;
+    /** The unique identifier for this instance group manager. */
+    id: string;
+    /** The user-defined name for this instance group manager. Names must be unique within the instance group. */
+    name: string;
+    /** The maximum number of members the instance group should have at the scheduled time. */
+    max_membership_count?: number;
+    /** The minimum number of members the instance group should have at the scheduled time. */
+    min_membership_count?: number;
+  }
+
+  /** InstancePatchProfileInstanceProfileIdentityByHref. */
+  export interface InstancePatchProfileInstanceProfileIdentityByHref extends InstancePatchProfile {
+    /** The URL for this virtual server instance profile. */
+    href: string;
+  }
+
+  /** InstancePatchProfileInstanceProfileIdentityByName. */
+  export interface InstancePatchProfileInstanceProfileIdentityByName extends InstancePatchProfile {
+    /** The globally unique name for this virtual server instance profile. */
+    name: string;
+  }
+
+  /** Identifies a dedicated host group by a unique property. */
+  export interface InstancePlacementTargetPrototypeDedicatedHostGroupIdentity extends InstancePlacementTargetPrototype {
+  }
+
+  /** Identifies a dedicated host by a unique property. */
+  export interface InstancePlacementTargetPrototypeDedicatedHostIdentity extends InstancePlacementTargetPrototype {
+  }
+
+  /** The total bandwidth shared across the network interfaces and storage volumes of an instance with this profile depends on its configuration. */
   export interface InstanceProfileBandwidthDependent extends InstanceProfileBandwidth {
     /** The type for this profile field. */
     type: string;
@@ -21025,7 +22405,7 @@ namespace VpcV1 {
     values: number[];
   }
 
-  /** The total bandwidth (in megabits per second) shared across the network interfaces of an instance with this profile. */
+  /** The total bandwidth (in megabits per second) shared across the network interfaces and storage volumes of an instance with this profile. */
   export interface InstanceProfileBandwidthFixed extends InstanceProfileBandwidth {
     /** The type for this profile field. */
     type: string;
@@ -21033,8 +22413,84 @@ namespace VpcV1 {
     value: number;
   }
 
-  /** The permitted total bandwidth range (in megabits per second) shared across the network interfaces of an instance with this profile. */
+  /** The permitted total bandwidth range (in megabits per second) shared across the network interfaces and storage volumes of an instance with this profile. */
   export interface InstanceProfileBandwidthRange extends InstanceProfileBandwidth {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The number of disks of this configuration for an instance with this profile depends on its instance configuration. */
+  export interface InstanceProfileDiskQuantityDependent extends InstanceProfileDiskQuantity {
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The permitted the number of disks of this configuration for an instance with this profile. */
+  export interface InstanceProfileDiskQuantityEnum extends InstanceProfileDiskQuantity {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+
+  /** The number of disks of this configuration for an instance with this profile. */
+  export interface InstanceProfileDiskQuantityFixed extends InstanceProfileDiskQuantity {
+    /** The type for this profile field. */
+    type: string;
+    /** The value for this profile field. */
+    value: number;
+  }
+
+  /** The permitted range for the number of disks of this configuration for an instance with this profile. */
+  export interface InstanceProfileDiskQuantityRange extends InstanceProfileDiskQuantity {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The disk size in GB (gigabytes) of this configuration for an instance with this profile depends on its instance configuration. */
+  export interface InstanceProfileDiskSizeDependent extends InstanceProfileDiskSize {
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The permitted disk size in GB (gigabytes) of this configuration for an instance with this profile. */
+  export interface InstanceProfileDiskSizeEnum extends InstanceProfileDiskSize {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+
+  /** The size of the disk in GB (gigabytes). */
+  export interface InstanceProfileDiskSizeFixed extends InstanceProfileDiskSize {
+    /** The type for this profile field. */
+    type: string;
+    /** The value for this profile field. */
+    value: number;
+  }
+
+  /** The permitted range for the disk size of this configuration in GB (gigabytes) for an instance with this profile. */
+  export interface InstanceProfileDiskSizeRange extends InstanceProfileDiskSize {
     /** The default value for this profile field. */
     default: number;
     /** The maximum value for this profile field. */
@@ -21785,7 +23241,7 @@ namespace VpcV1 {
     type?: number;
   }
 
-  /** If `protocol` is either `tcp` or `udp`, then the rule may also contain `port_min` and `port_max`. Either both should be set, or neither. When neither is set then traffic is allowed on all ports. For a single port, set both to the same value. */
+  /** If `protocol` is either `tcp` or `udp`, then the rule may also contain `port_min` and `port_max`. Either both must be set, or neither. When neither is set then traffic is allowed on all ports. For a single port, set both to the same value. */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP extends SecurityGroupRulePrototype {
     /** The inclusive upper bound of TCP/UDP port range. */
     port_max?: number;
@@ -21897,7 +23353,7 @@ namespace VpcV1 {
     type?: number;
   }
 
-  /** If `protocol` is either `tcp` or `udp`, then the rule may also contain `port_min` and `port_max`. Either both should be set, or neither. When neither is set then traffic is allowed on all ports. For a single port, set both to the same value. */
+  /** If `protocol` is either `tcp` or `udp`, then the rule may also contain `port_min` and `port_max`. Either both must be set, or neither. When neither is set then traffic is allowed on all ports. For a single port, set both to the same value. */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolTCPUDP extends SecurityGroupRule {
     /** The inclusive upper bound of TCP/UDP port range. */
     port_max?: number;
@@ -22065,12 +23521,6 @@ namespace VpcV1 {
 
   /** VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContext. */
   export interface VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContext extends VolumeAttachmentVolumePrototypeInstanceContext {
-    /** The identity of the root key to use to wrap the data encryption key for the volume.
-     *
-     *  If this property is not provided, the `encryption` type for the volume will be
-     *  `provider_managed`.
-     */
-    encryption_key?: EncryptionKeyIdentity;
     /** The bandwidth for the volume. */
     iops?: number;
     /** The unique user-defined name for this volume. */
@@ -22115,6 +23565,12 @@ namespace VpcV1 {
      *  updating volumes may expand in the future.
      */
     capacity: number;
+    /** The identity of the root key to use to wrap the data encryption key for the volume.
+     *
+     *  If this property is not provided, the `encryption` type for the volume will be
+     *  `provider_managed`.
+     */
+    encryption_key?: EncryptionKeyIdentity;
   }
 
   /** ZoneIdentityByHref. */
@@ -22218,6 +23674,78 @@ namespace VpcV1 {
   /** FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityById. */
   export interface FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityById extends FlowLogCollectorTargetPrototypeVPCIdentity {
     /** The unique identifier for this VPC. */
+    id: string;
+  }
+
+  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec. */
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec extends InstanceGroupManagerActionPrototypeScheduledActionPrototype {
+    /** The cron specification for a recurring scheduled action. Actions can be applied a maximum of one time within
+     *  a 5 min period.
+     */
+    cron_spec?: string;
+  }
+
+  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt. */
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt extends InstanceGroupManagerActionPrototypeScheduledActionPrototype {
+    /** The date and time the scheduled action will run. */
+    run_at?: string;
+  }
+
+  /** InstanceGroupManagerActionScheduledActionGroup. */
+  export interface InstanceGroupManagerActionScheduledActionGroup extends InstanceGroupManagerActionScheduledAction {
+    group: InstanceGroupManagerScheduledActionGroupGroup;
+  }
+
+  /** InstanceGroupManagerActionScheduledActionManager. */
+  export interface InstanceGroupManagerActionScheduledActionManager extends InstanceGroupManagerActionScheduledAction {
+    manager: InstanceGroupManagerScheduledActionManagerManager;
+  }
+
+  /** InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototypeInstanceGroupManagerScheduledActionManagerAutoScalePrototypeInstanceGroupManagerIdentityByHref. */
+  export interface InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototypeInstanceGroupManagerScheduledActionManagerAutoScalePrototypeInstanceGroupManagerIdentityByHref extends InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototype {
+    /** The URL for this instance group manager. */
+    href: string;
+  }
+
+  /** InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototypeInstanceGroupManagerScheduledActionManagerAutoScalePrototypeInstanceGroupManagerIdentityById. */
+  export interface InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototypeInstanceGroupManagerScheduledActionManagerAutoScalePrototypeInstanceGroupManagerIdentityById extends InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototype {
+    /** The unique identifier for this instance group manager. */
+    id: string;
+  }
+
+  /** InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityByCRN. */
+  export interface InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityByCRN extends InstancePlacementTargetPrototypeDedicatedHostGroupIdentity {
+    /** The CRN for this dedicated host group. */
+    crn: string;
+  }
+
+  /** InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityByHref. */
+  export interface InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityByHref extends InstancePlacementTargetPrototypeDedicatedHostGroupIdentity {
+    /** The URL for this dedicated host group. */
+    href: string;
+  }
+
+  /** InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityById. */
+  export interface InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityById extends InstancePlacementTargetPrototypeDedicatedHostGroupIdentity {
+    /** The unique identifier for this dedicated host group. */
+    id: string;
+  }
+
+  /** InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityByCRN. */
+  export interface InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityByCRN extends InstancePlacementTargetPrototypeDedicatedHostIdentity {
+    /** The CRN for this dedicated host. */
+    crn: string;
+  }
+
+  /** InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityByHref. */
+  export interface InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityByHref extends InstancePlacementTargetPrototypeDedicatedHostIdentity {
+    /** The URL for this dedicated host. */
+    href: string;
+  }
+
+  /** InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityById. */
+  export interface InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityById extends InstancePlacementTargetPrototypeDedicatedHostIdentity {
+    /** The unique identifier for this dedicated host. */
     id: string;
   }
 
@@ -22377,6 +23905,32 @@ namespace VpcV1 {
      *  updating volumes may expand in the future.
      */
     capacity: number;
+    /** The identity of the root key to use to wrap the data encryption key for the volume.
+     *
+     *  If this property is not provided, the `encryption` type for the volume will be
+     *  `provider_managed`.
+     */
+    encryption_key?: EncryptionKeyIdentity;
+  }
+
+  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByGroup. */
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByGroup extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec {
+    group: InstanceGroupManagerScheduledActionGroupPrototype;
+  }
+
+  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByManager. */
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec {
+    manager: InstanceGroupManagerScheduledActionByManagerManager;
+  }
+
+  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByGroup. */
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByGroup extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt {
+    group: InstanceGroupManagerScheduledActionGroupPrototype;
+  }
+
+  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByManager. */
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt {
+    manager: InstanceGroupManagerScheduledActionByManagerManager;
   }
 
 }
