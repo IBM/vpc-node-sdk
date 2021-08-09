@@ -812,6 +812,73 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  // Snapshots
+  test('listSnapshots()', async () => {
+    const res = await vpcService.listSnapshots();
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('createSnapshot()', async () => {
+    // Request models needed by this operation.
+
+    // VolumeIdentityById
+    const volumeIdentityModel = {
+      id: dict.createdVolume,
+    };
+    const params = {
+      sourceVolume: volumeIdentityModel,
+      name: generateName('snap1'),
+    };
+
+    const res = await vpcService.createSnapshot(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+    const params2 = {
+      sourceVolume: volumeIdentityModel,
+      name: generateName('snap2'),
+    };
+    const res2 = await vpcService.createSnapshot(params2);
+    expect(res2).toBeDefined();
+    expect(res2.result).toBeDefined();
+    dict.snapshotId = res2.result.id;
+  });
+  test('getSnapshot()', async () => {
+    const params = {
+      id: dict.snapshotId,
+    };
+
+    const res = await vpcService.getSnapshot(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('updateSnapshot()', async () => {
+    const params = {
+      id: dict.snapshotId,
+      name: generateName('snap3'),
+    };
+
+    const res = await vpcService.updateSnapshot(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('deleteSnapshot()', async () => {
+    const params = {
+      id: dict.snapshotId,
+    };
+
+    const res = await vpcService.deleteSnapshot(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('deleteSnapshots()', async () => {
+    const params = {
+      sourceVolumeId: dict.createdVolume,
+    };
+
+    const res = await vpcService.deleteSnapshots(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
   // Instance Profiles
   test('listInstanceProfiles()', done => {
     vpcService
@@ -4382,22 +4449,6 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('deleteVolume()', done => {
-    const params = {
-      id: dict.createdVolume,
-    };
-
-    vpcService
-      .deleteVolume(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
   test('deleteFloatingIp()', done => {
     const params = {
       id: dict.createdFloatingIp,
@@ -4510,7 +4561,22 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('deleteVolume()', done => {
+    const params = {
+      id: dict.createdVolume,
+    };
 
+    vpcService
+      .deleteVolume(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('deleteVpc()', done => {
     const params = {
       id: dict.createdVpc,
