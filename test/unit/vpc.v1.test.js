@@ -29,13 +29,13 @@ const {
   checkForSuccessfulExecution,
 } = unitTestUtils;
 
-const service = {
+const vpcServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
   url: 'https://us-south.iaas.cloud.ibm.com/v1',
   version: 'testString',
 };
 
-const vpcService = new VpcV1(service);
+const vpcService = new VpcV1(vpcServiceOptions);
 
 // dont actually create a request
 const createRequestMock = jest.spyOn(vpcService, 'createRequest');
@@ -118,10 +118,10 @@ describe('VpcV1', () => {
   describe('service-level tests', () => {
     describe('positive tests', () => {
       test('construct service with global params', () => {
-        const serviceObj = new VpcV1(service);
+        const serviceObj = new VpcV1(vpcServiceOptions);
         expect(serviceObj).not.toBeNull();
-        expect(serviceObj.version).toEqual(service.version);
-        expect(serviceObj.generation).toEqual(service.generation);
+        expect(serviceObj.version).toEqual(vpcServiceOptions.version);
+        expect(serviceObj.generation).toEqual(vpcServiceOptions.generation);
       });
     });
   });
@@ -154,8 +154,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -224,8 +224,8 @@ describe('VpcV1', () => {
         expect(options.body['classic_access']).toEqual(classicAccess);
         expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -273,8 +273,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -343,8 +343,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -416,8 +416,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -486,8 +486,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -556,8 +556,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -626,8 +626,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -700,8 +700,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.path['vpc_id']).toEqual(vpcId);
@@ -791,8 +791,8 @@ describe('VpcV1', () => {
         expect(options.body['zone']).toEqual(zone);
         expect(options.body['is_default']).toEqual(isDefault);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
       });
 
@@ -867,8 +867,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['id']).toEqual(id);
       });
@@ -942,8 +942,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['id']).toEqual(id);
       });
@@ -1023,8 +1023,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['is_default']).toEqual(isDefault);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['id']).toEqual(id);
       });
@@ -1102,8 +1102,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['zone.name']).toEqual(zoneName);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
@@ -1202,8 +1202,8 @@ describe('VpcV1', () => {
         expect(options.body['action']).toEqual(action);
         expect(options.body['name']).toEqual(name);
         expect(options.body['next_hop']).toEqual(nextHop);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
       });
 
@@ -1278,8 +1278,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['id']).toEqual(id);
       });
@@ -1353,8 +1353,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['id']).toEqual(id);
       });
@@ -1431,8 +1431,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['id']).toEqual(id);
       });
@@ -1510,8 +1510,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['is_default']).toEqual(isDefault);
@@ -1619,8 +1619,8 @@ describe('VpcV1', () => {
         expect(options.body['route_transit_gateway_ingress']).toEqual(routeTransitGatewayIngress);
         expect(options.body['route_vpc_zone_ingress']).toEqual(routeVpcZoneIngress);
         expect(options.body['routes']).toEqual(routes);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
       });
 
@@ -1691,8 +1691,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['id']).toEqual(id);
       });
@@ -1766,8 +1766,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['id']).toEqual(id);
       });
@@ -1853,8 +1853,8 @@ describe('VpcV1', () => {
         expect(options.body['route_direct_link_ingress']).toEqual(routeDirectLinkIngress);
         expect(options.body['route_transit_gateway_ingress']).toEqual(routeTransitGatewayIngress);
         expect(options.body['route_vpc_zone_ingress']).toEqual(routeVpcZoneIngress);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['id']).toEqual(id);
       });
@@ -1936,8 +1936,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.path['vpc_id']).toEqual(vpcId);
@@ -2044,8 +2044,8 @@ describe('VpcV1', () => {
         expect(options.body['action']).toEqual(action);
         expect(options.body['name']).toEqual(name);
         expect(options.body['next_hop']).toEqual(nextHop);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['routing_table_id']).toEqual(routingTableId);
       });
@@ -2129,8 +2129,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['routing_table_id']).toEqual(routingTableId);
         expect(options.path['id']).toEqual(id);
@@ -2213,8 +2213,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['routing_table_id']).toEqual(routingTableId);
         expect(options.path['id']).toEqual(id);
@@ -2300,8 +2300,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpc_id']).toEqual(vpcId);
         expect(options.path['routing_table_id']).toEqual(routingTableId);
         expect(options.path['id']).toEqual(id);
@@ -2384,8 +2384,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -2484,8 +2484,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(subnetPrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -2553,8 +2553,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -2623,8 +2623,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -2722,8 +2722,8 @@ describe('VpcV1', () => {
         expect(options.body['network_acl']).toEqual(networkAcl);
         expect(options.body['public_gateway']).toEqual(publicGateway);
         expect(options.body['routing_table']).toEqual(routingTable);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -2792,8 +2792,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -2872,8 +2872,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(networkAclIdentity);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -2944,8 +2944,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -3014,8 +3014,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -3094,8 +3094,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(publicGatewayIdentity);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -3166,8 +3166,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -3246,8 +3246,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(routingTableIdentity);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -3324,8 +3324,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['sort']).toEqual(sort);
@@ -3413,8 +3413,8 @@ describe('VpcV1', () => {
         expect(options.body['auto_delete']).toEqual(autoDelete);
         expect(options.body['name']).toEqual(name);
         expect(options.body['target']).toEqual(target);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['subnet_id']).toEqual(subnetId);
       });
 
@@ -3485,8 +3485,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['subnet_id']).toEqual(subnetId);
         expect(options.path['id']).toEqual(id);
       });
@@ -3560,8 +3560,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['subnet_id']).toEqual(subnetId);
         expect(options.path['id']).toEqual(id);
       });
@@ -3641,8 +3641,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['auto_delete']).toEqual(autoDelete);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['subnet_id']).toEqual(subnetId);
         expect(options.path['id']).toEqual(id);
       });
@@ -3722,8 +3722,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -3810,8 +3810,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(imagePrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -3879,8 +3879,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -3949,8 +3949,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -4022,8 +4022,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -4094,8 +4094,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
       });
@@ -4145,8 +4145,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['name']).toEqual(name);
       });
 
@@ -4196,8 +4196,12 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listKeys
+        const start = 'testString';
+        const limit = 1;
         const resourceGroupId = 'testString';
         const params = {
+          start: start,
+          limit: limit,
           resourceGroupId: resourceGroupId,
         };
 
@@ -4215,8 +4219,10 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
       });
 
@@ -4283,8 +4289,8 @@ describe('VpcV1', () => {
         expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
         expect(options.body['type']).toEqual(type);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -4353,8 +4359,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -4423,8 +4429,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -4496,8 +4502,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -4563,8 +4569,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -4612,8 +4618,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['name']).toEqual(name);
       });
 
@@ -4679,8 +4685,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -4841,8 +4847,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(instanceTemplatePrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -4910,8 +4916,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -4980,8 +4986,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -5053,8 +5059,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -5111,6 +5117,9 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const vpcCrn = 'testString';
         const vpcName = 'testString';
+        const dedicatedHostId = 'testString';
+        const dedicatedHostCrn = 'testString';
+        const dedicatedHostName = 'testString';
         const params = {
           start: start,
           limit: limit,
@@ -5119,6 +5128,9 @@ describe('VpcV1', () => {
           vpcId: vpcId,
           vpcCrn: vpcCrn,
           vpcName: vpcName,
+          dedicatedHostId: dedicatedHostId,
+          dedicatedHostCrn: dedicatedHostCrn,
+          dedicatedHostName: dedicatedHostName,
         };
 
         const listInstancesResult = vpcService.listInstances(params);
@@ -5135,8 +5147,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -5144,6 +5156,9 @@ describe('VpcV1', () => {
         expect(options.qs['vpc.id']).toEqual(vpcId);
         expect(options.qs['vpc.crn']).toEqual(vpcCrn);
         expect(options.qs['vpc.name']).toEqual(vpcName);
+        expect(options.qs['dedicated_host.id']).toEqual(dedicatedHostId);
+        expect(options.qs['dedicated_host.crn']).toEqual(dedicatedHostCrn);
+        expect(options.qs['dedicated_host.name']).toEqual(dedicatedHostName);
       });
 
       test('should prioritize user-given headers', () => {
@@ -5307,8 +5322,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(instancePrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -5376,8 +5391,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -5446,8 +5461,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -5529,8 +5544,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['profile']).toEqual(profile);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -5599,8 +5614,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -5675,8 +5690,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['type']).toEqual(type);
         expect(options.body['force']).toEqual(force);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
       });
 
@@ -5755,8 +5770,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['console_type']).toEqual(consoleType);
         expect(options.body['force']).toEqual(force);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
       });
 
@@ -5827,8 +5842,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
       });
 
@@ -5899,8 +5914,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['id']).toEqual(id);
       });
@@ -5977,8 +5992,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['id']).toEqual(id);
       });
@@ -6052,8 +6067,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
       });
 
@@ -6151,8 +6166,8 @@ describe('VpcV1', () => {
         expect(options.body['name']).toEqual(name);
         expect(options.body['primary_ipv4_address']).toEqual(primaryIpv4Address);
         expect(options.body['security_groups']).toEqual(securityGroups);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
       });
 
@@ -6227,8 +6242,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['id']).toEqual(id);
       });
@@ -6302,8 +6317,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['id']).toEqual(id);
       });
@@ -6385,8 +6400,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['allow_ip_spoofing']).toEqual(allowIpSpoofing);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['id']).toEqual(id);
       });
@@ -6466,8 +6481,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['network_interface_id']).toEqual(networkInterfaceId);
       });
@@ -6549,8 +6564,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['network_interface_id']).toEqual(networkInterfaceId);
         expect(options.path['id']).toEqual(id);
@@ -6635,8 +6650,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['network_interface_id']).toEqual(networkInterfaceId);
         expect(options.path['id']).toEqual(id);
@@ -6721,8 +6736,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['network_interface_id']).toEqual(networkInterfaceId);
         expect(options.path['id']).toEqual(id);
@@ -6799,8 +6814,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
       });
 
@@ -6850,15 +6865,15 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // VolumeIdentityById
-      const volumeIdentityModel = {
+      // VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityById
+      const volumeAttachmentPrototypeVolumeModel = {
         id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
       };
 
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation createInstanceVolumeAttachment
         const instanceId = 'testString';
-        const volume = volumeIdentityModel;
+        const volume = volumeAttachmentPrototypeVolumeModel;
         const deleteVolumeOnInstanceDelete = true;
         const name = 'my-volume-attachment';
         const params = {
@@ -6889,15 +6904,15 @@ describe('VpcV1', () => {
           deleteVolumeOnInstanceDelete
         );
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
       });
 
       test('should prioritize user-given headers', () => {
         // parameters
         const instanceId = 'testString';
-        const volume = volumeIdentityModel;
+        const volume = volumeAttachmentPrototypeVolumeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -6965,8 +6980,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['id']).toEqual(id);
       });
@@ -7040,8 +7055,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['id']).toEqual(id);
       });
@@ -7125,8 +7140,8 @@ describe('VpcV1', () => {
           deleteVolumeOnInstanceDelete
         );
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_id']).toEqual(instanceId);
         expect(options.path['id']).toEqual(id);
       });
@@ -7200,8 +7215,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
       });
@@ -7300,8 +7315,8 @@ describe('VpcV1', () => {
         expect(options.body['membership_count']).toEqual(membershipCount);
         expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -7371,8 +7386,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -7441,8 +7456,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -7554,8 +7569,8 @@ describe('VpcV1', () => {
         expect(options.body['membership_count']).toEqual(membershipCount);
         expect(options.body['name']).toEqual(name);
         expect(options.body['subnets']).toEqual(subnets);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -7626,8 +7641,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
       });
 
@@ -7700,8 +7715,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
@@ -7788,8 +7803,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(instanceGroupManagerPrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
       });
 
@@ -7862,8 +7877,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -7937,8 +7952,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -8030,8 +8045,8 @@ describe('VpcV1', () => {
         expect(options.body['max_membership_count']).toEqual(maxMembershipCount);
         expect(options.body['min_membership_count']).toEqual(minMembershipCount);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -8115,8 +8130,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
@@ -8215,8 +8230,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(instanceGroupManagerActionPrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
       });
@@ -8300,8 +8315,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
         expect(options.path['id']).toEqual(id);
@@ -8386,8 +8401,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
         expect(options.path['id']).toEqual(id);
@@ -8443,24 +8458,15 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // InstanceGroupManagerScheduledActionGroupPatch
-      const instanceGroupManagerScheduledActionGroupPatchModel = {
+      // InstanceGroupManagerActionGroupPatch
+      const instanceGroupManagerActionGroupPatchModel = {
         membership_count: 10,
       };
 
-      // InstanceGroupManagerScheduledActionByManagerPatchManagerAutoScalePatch
-      const instanceGroupManagerScheduledActionByManagerPatchManagerModel = {
+      // InstanceGroupManagerActionManagerPatch
+      const instanceGroupManagerActionManagerPatchModel = {
         max_membership_count: 10,
         min_membership_count: 10,
-      };
-
-      // InstanceGroupManagerActionPatchScheduledActionPatch
-      const instanceGroupManagerActionPatchModel = {
-        name: 'my-instance-group-manager-action',
-        cron_spec: '*/5 1,2,3 * * *',
-        group: instanceGroupManagerScheduledActionGroupPatchModel,
-        manager: instanceGroupManagerScheduledActionByManagerPatchManagerModel,
-        run_at: '2019-01-01T12:00:00.000Z',
       };
 
       test('should pass the right params to createRequest', () => {
@@ -8468,12 +8474,20 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
-        const instanceGroupManagerActionPatch = instanceGroupManagerActionPatchModel;
+        const cronSpec = '*/5 1,2,3 * * *';
+        const group = instanceGroupManagerActionGroupPatchModel;
+        const manager = instanceGroupManagerActionManagerPatchModel;
+        const name = 'my-instance-group-manager-action';
+        const runAt = '2019-01-01T12:00:00.000Z';
         const params = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           id: id,
-          instanceGroupManagerActionPatch: instanceGroupManagerActionPatch,
+          cronSpec: cronSpec,
+          group: group,
+          manager: manager,
+          name: name,
+          runAt: runAt,
         };
 
         const updateInstanceGroupManagerActionResult = vpcService.updateInstanceGroupManagerAction(
@@ -8496,9 +8510,13 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(instanceGroupManagerActionPatch);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.body['cron_spec']).toEqual(cronSpec);
+        expect(options.body['group']).toEqual(group);
+        expect(options.body['manager']).toEqual(manager);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['run_at']).toEqual(runAt);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
         expect(options.path['id']).toEqual(id);
@@ -8509,14 +8527,12 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
-        const instanceGroupManagerActionPatch = instanceGroupManagerActionPatchModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
           instanceGroupId,
           instanceGroupManagerId,
           id,
-          instanceGroupManagerActionPatch,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -8587,8 +8603,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
@@ -8683,8 +8699,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(instanceGroupManagerPolicyPrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
       });
@@ -8768,8 +8784,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
         expect(options.path['id']).toEqual(id);
@@ -8854,8 +8870,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
         expect(options.path['id']).toEqual(id);
@@ -8949,8 +8965,8 @@ describe('VpcV1', () => {
         expect(options.body['metric_type']).toEqual(metricType);
         expect(options.body['metric_value']).toEqual(metricValue);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
         expect(options.path['id']).toEqual(id);
@@ -9027,8 +9043,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
       });
 
@@ -9101,8 +9117,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
@@ -9181,8 +9197,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -9256,8 +9272,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -9340,8 +9356,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['instance_group_id']).toEqual(instanceGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -9419,8 +9435,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -9497,8 +9513,8 @@ describe('VpcV1', () => {
         expect(options.body['zone']).toEqual(zone);
         expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -9546,8 +9562,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -9616,8 +9632,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -9689,8 +9705,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -9761,8 +9777,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
       });
@@ -9812,8 +9828,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['name']).toEqual(name);
       });
 
@@ -9890,8 +9906,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['dedicated_host_group.id']).toEqual(dedicatedHostGroupId);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
@@ -9971,8 +9987,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(dedicatedHostPrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -10040,8 +10056,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['dedicated_host_id']).toEqual(dedicatedHostId);
       });
 
@@ -10112,8 +10128,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['dedicated_host_id']).toEqual(dedicatedHostId);
         expect(options.path['id']).toEqual(id);
       });
@@ -10190,8 +10206,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['dedicated_host_id']).toEqual(dedicatedHostId);
         expect(options.path['id']).toEqual(id);
       });
@@ -10263,8 +10279,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -10333,8 +10349,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -10409,8 +10425,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['instance_placement_enabled']).toEqual(instancePlacementEnabled);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -10481,8 +10497,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
       });
@@ -10532,8 +10548,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['name']).toEqual(name);
       });
 
@@ -10608,8 +10624,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['name']).toEqual(name);
@@ -10696,8 +10712,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(volumePrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -10765,8 +10781,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -10835,8 +10851,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -10908,8 +10924,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -10955,6 +10971,451 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('deleteSnapshots', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation deleteSnapshots
+        const sourceVolumeId = 'testString';
+        const params = {
+          sourceVolumeId: sourceVolumeId,
+        };
+
+        const deleteSnapshotsResult = vpcService.deleteSnapshots(params);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteSnapshotsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/snapshots', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(options.qs['source_volume.id']).toEqual(sourceVolumeId);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const sourceVolumeId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          sourceVolumeId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteSnapshots(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deleteSnapshots({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deleteSnapshotsPromise = vpcService.deleteSnapshots();
+        expectToBePromise(deleteSnapshotsPromise);
+
+        deleteSnapshotsPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('listSnapshots', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation listSnapshots
+        const start = 'testString';
+        const limit = 1;
+        const resourceGroupId = 'testString';
+        const name = 'testString';
+        const sourceVolumeId = 'testString';
+        const sourceVolumeCrn = 'testString';
+        const sourceImageId = 'testString';
+        const sourceImageCrn = 'testString';
+        const sort = 'name';
+        const params = {
+          start: start,
+          limit: limit,
+          resourceGroupId: resourceGroupId,
+          name: name,
+          sourceVolumeId: sourceVolumeId,
+          sourceVolumeCrn: sourceVolumeCrn,
+          sourceImageId: sourceImageId,
+          sourceImageCrn: sourceImageCrn,
+          sort: sort,
+        };
+
+        const listSnapshotsResult = vpcService.listSnapshots(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listSnapshotsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/snapshots', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
+        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(options.qs['name']).toEqual(name);
+        expect(options.qs['source_volume.id']).toEqual(sourceVolumeId);
+        expect(options.qs['source_volume.crn']).toEqual(sourceVolumeCrn);
+        expect(options.qs['source_image.id']).toEqual(sourceImageId);
+        expect(options.qs['source_image.crn']).toEqual(sourceImageCrn);
+        expect(options.qs['sort']).toEqual(sort);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listSnapshots(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listSnapshots({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('createSnapshot', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // VolumeIdentityById
+      const volumeIdentityModel = {
+        id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation createSnapshot
+        const sourceVolume = volumeIdentityModel;
+        const name = 'my-snapshot';
+        const resourceGroup = resourceGroupIdentityModel;
+        const params = {
+          sourceVolume: sourceVolume,
+          name: name,
+          resourceGroup: resourceGroup,
+        };
+
+        const createSnapshotResult = vpcService.createSnapshot(params);
+
+        // all methods should return a Promise
+        expectToBePromise(createSnapshotResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/snapshots', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['source_volume']).toEqual(sourceVolume);
+        expect(options.body['name']).toEqual(name);
+        expect(options.body['resource_group']).toEqual(resourceGroup);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const sourceVolume = volumeIdentityModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          sourceVolume,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createSnapshot(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.createSnapshot({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const createSnapshotPromise = vpcService.createSnapshot();
+        expectToBePromise(createSnapshotPromise);
+
+        createSnapshotPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('deleteSnapshot', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation deleteSnapshot
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const deleteSnapshotResult = vpcService.deleteSnapshot(params);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteSnapshotResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/snapshots/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteSnapshot(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deleteSnapshot({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deleteSnapshotPromise = vpcService.deleteSnapshot();
+        expectToBePromise(deleteSnapshotPromise);
+
+        deleteSnapshotPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getSnapshot', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation getSnapshot
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const getSnapshotResult = vpcService.getSnapshot(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getSnapshotResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/snapshots/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getSnapshot(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getSnapshot({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getSnapshotPromise = vpcService.getSnapshot();
+        expectToBePromise(getSnapshotPromise);
+
+        getSnapshotPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updateSnapshot', () => {
+    describe('positive tests', () => {
+      test('should pass the right params to createRequest', () => {
+        // Construct the params object for operation updateSnapshot
+        const id = 'testString';
+        const name = 'my-snapshot';
+        const params = {
+          id: id,
+          name: name,
+        };
+
+        const updateSnapshotResult = vpcService.updateSnapshot(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updateSnapshotResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const options = getOptions(createRequestMock);
+
+        checkUrlAndMethod(options, '/snapshots/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(options.body['name']).toEqual(name);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(options.path['id']).toEqual(id);
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateSnapshot(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updateSnapshot({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updateSnapshotPromise = vpcService.updateSnapshot();
+        expectToBePromise(updateSnapshotPromise);
+
+        updateSnapshotPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
   describe('listRegions', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
@@ -10975,8 +11436,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -11024,8 +11485,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['name']).toEqual(name);
       });
 
@@ -11094,8 +11555,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['region_name']).toEqual(regionName);
       });
 
@@ -11166,8 +11627,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['region_name']).toEqual(regionName);
         expect(options.path['name']).toEqual(name);
       });
@@ -11243,8 +11704,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -11330,8 +11791,8 @@ describe('VpcV1', () => {
         expect(options.body['floating_ip']).toEqual(floatingIp);
         expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -11401,8 +11862,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -11471,8 +11932,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -11544,8 +12005,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -11618,8 +12079,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -11690,8 +12151,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(floatingIpPrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -11759,8 +12220,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -11829,8 +12290,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -11912,8 +12373,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
         expect(options.body['target']).toEqual(target);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -11986,8 +12447,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -12069,8 +12530,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(networkAclPrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -12118,8 +12579,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -12188,8 +12649,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -12261,8 +12722,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -12337,8 +12798,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['direction']).toEqual(direction);
@@ -12433,8 +12894,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(networkAclRulePrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['network_acl_id']).toEqual(networkAclId);
       });
 
@@ -12507,8 +12968,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['network_acl_id']).toEqual(networkAclId);
         expect(options.path['id']).toEqual(id);
       });
@@ -12582,8 +13043,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['network_acl_id']).toEqual(networkAclId);
         expect(options.path['id']).toEqual(id);
       });
@@ -12700,8 +13161,8 @@ describe('VpcV1', () => {
         expect(options.body['source_port_max']).toEqual(sourcePortMax);
         expect(options.body['source_port_min']).toEqual(sourcePortMin);
         expect(options.body['type']).toEqual(type);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['network_acl_id']).toEqual(networkAclId);
         expect(options.path['id']).toEqual(id);
       });
@@ -12783,8 +13244,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -12836,11 +13297,11 @@ describe('VpcV1', () => {
 
       // SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP
       const securityGroupRulePrototypeModel = {
+        code: 0,
         direction: 'inbound',
         ip_version: 'ipv4',
-        remote: securityGroupRuleRemotePrototypeModel,
-        code: 0,
         protocol: 'icmp',
+        remote: securityGroupRuleRemotePrototypeModel,
         type: 8,
       };
 
@@ -12875,8 +13336,8 @@ describe('VpcV1', () => {
         expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
         expect(options.body['rules']).toEqual(rules);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -12944,8 +13405,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -13014,8 +13475,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -13087,8 +13548,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -13167,8 +13628,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
@@ -13247,8 +13708,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -13328,8 +13789,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -13409,8 +13870,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -13482,8 +13943,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
       });
 
@@ -13540,11 +14001,11 @@ describe('VpcV1', () => {
 
       // SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP
       const securityGroupRulePrototypeModel = {
+        code: 0,
         direction: 'inbound',
         ip_version: 'ipv4',
-        remote: securityGroupRuleRemotePrototypeModel,
-        code: 0,
         protocol: 'icmp',
+        remote: securityGroupRuleRemotePrototypeModel,
         type: 8,
       };
 
@@ -13572,8 +14033,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(securityGroupRulePrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
       });
 
@@ -13646,8 +14107,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -13721,8 +14182,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -13824,8 +14285,8 @@ describe('VpcV1', () => {
         expect(options.body['port_min']).toEqual(portMin);
         expect(options.body['remote']).toEqual(remote);
         expect(options.body['type']).toEqual(type);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -13901,8 +14362,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
@@ -13977,8 +14438,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -14052,8 +14513,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -14129,8 +14590,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['security_group_id']).toEqual(securityGroupId);
         expect(options.path['id']).toEqual(id);
       });
@@ -14204,8 +14665,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
       });
@@ -14281,8 +14742,8 @@ describe('VpcV1', () => {
         expect(options.body['key_lifetime']).toEqual(keyLifetime);
         expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -14356,8 +14817,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -14426,8 +14887,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -14514,8 +14975,8 @@ describe('VpcV1', () => {
         expect(options.body['ike_version']).toEqual(ikeVersion);
         expect(options.body['key_lifetime']).toEqual(keyLifetime);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -14584,8 +15045,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -14656,8 +15117,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
       });
@@ -14730,8 +15191,8 @@ describe('VpcV1', () => {
         expect(options.body['key_lifetime']).toEqual(keyLifetime);
         expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -14803,8 +15264,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -14873,8 +15334,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -14958,8 +15419,8 @@ describe('VpcV1', () => {
         expect(options.body['key_lifetime']).toEqual(keyLifetime);
         expect(options.body['name']).toEqual(name);
         expect(options.body['pfs']).toEqual(pfs);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -15028,8 +15489,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -15104,8 +15565,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -15178,8 +15639,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(vpnGatewayPrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -15247,8 +15708,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -15317,8 +15778,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -15390,8 +15851,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -15462,8 +15923,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['status']).toEqual(status);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
       });
@@ -15567,8 +16028,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(vpnGatewayConnectionPrototype);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
       });
 
@@ -15641,8 +16102,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
       });
@@ -15716,8 +16177,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
       });
@@ -15825,8 +16286,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body).toEqual(vpnGatewayConnectionPatch);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
       });
@@ -15908,8 +16369,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
       });
@@ -15993,8 +16454,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
         expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
@@ -16084,8 +16545,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
         expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
@@ -16175,8 +16636,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
         expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
@@ -16262,8 +16723,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
       });
@@ -16347,8 +16808,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
         expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
@@ -16438,8 +16899,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
         expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
@@ -16529,8 +16990,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
         expect(options.path['id']).toEqual(id);
         expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
@@ -16610,8 +17071,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
       });
@@ -16661,8 +17122,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['name']).toEqual(name);
       });
 
@@ -16712,7 +17173,12 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       test('should pass the right params to createRequest', () => {
         // Construct the params object for operation listLoadBalancers
-        const params = {};
+        const start = 'testString';
+        const limit = 1;
+        const params = {
+          start: start,
+          limit: limit,
+        };
 
         const listLoadBalancersResult = vpcService.listLoadBalancers(params);
 
@@ -16728,8 +17194,10 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(options.qs['start']).toEqual(start);
+        expect(options.qs['limit']).toEqual(limit);
       });
 
       test('should prioritize user-given headers', () => {
@@ -16811,6 +17279,7 @@ describe('VpcV1', () => {
 
       // LoadBalancerPoolSessionPersistencePrototype
       const loadBalancerPoolSessionPersistencePrototypeModel = {
+        cookie_name: 'my-cookie-name',
         type: 'source_ip',
       };
 
@@ -16886,8 +17355,8 @@ describe('VpcV1', () => {
         expect(options.body['profile']).toEqual(profile);
         expect(options.body['resource_group']).toEqual(resourceGroup);
         expect(options.body['security_groups']).toEqual(securityGroups);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -16957,8 +17426,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -17027,8 +17496,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -17115,8 +17584,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['logging']).toEqual(logging);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -17185,8 +17654,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -17255,8 +17724,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
       });
 
@@ -17381,8 +17850,8 @@ describe('VpcV1', () => {
         expect(options.body['connection_limit']).toEqual(connectionLimit);
         expect(options.body['default_pool']).toEqual(defaultPool);
         expect(options.body['policies']).toEqual(policies);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
       });
 
@@ -17457,8 +17926,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['id']).toEqual(id);
       });
@@ -17532,8 +18001,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['id']).toEqual(id);
       });
@@ -17638,8 +18107,8 @@ describe('VpcV1', () => {
         expect(options.body['default_pool']).toEqual(defaultPool);
         expect(options.body['port']).toEqual(port);
         expect(options.body['protocol']).toEqual(protocol);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['id']).toEqual(id);
       });
@@ -17719,8 +18188,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['listener_id']).toEqual(listenerId);
       });
@@ -17830,8 +18299,8 @@ describe('VpcV1', () => {
         expect(options.body['name']).toEqual(name);
         expect(options.body['rules']).toEqual(rules);
         expect(options.body['target']).toEqual(target);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['listener_id']).toEqual(listenerId);
       });
@@ -17917,8 +18386,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['listener_id']).toEqual(listenerId);
         expect(options.path['id']).toEqual(id);
@@ -18003,8 +18472,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['listener_id']).toEqual(listenerId);
         expect(options.path['id']).toEqual(id);
@@ -18105,8 +18574,8 @@ describe('VpcV1', () => {
         expect(options.body['name']).toEqual(name);
         expect(options.body['priority']).toEqual(priority);
         expect(options.body['target']).toEqual(target);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['listener_id']).toEqual(listenerId);
         expect(options.path['id']).toEqual(id);
@@ -18191,8 +18660,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['listener_id']).toEqual(listenerId);
         expect(options.path['policy_id']).toEqual(policyId);
@@ -18289,8 +18758,8 @@ describe('VpcV1', () => {
         expect(options.body['type']).toEqual(type);
         expect(options.body['value']).toEqual(value);
         expect(options.body['field']).toEqual(field);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['listener_id']).toEqual(listenerId);
         expect(options.path['policy_id']).toEqual(policyId);
@@ -18383,8 +18852,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['listener_id']).toEqual(listenerId);
         expect(options.path['policy_id']).toEqual(policyId);
@@ -18474,8 +18943,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['listener_id']).toEqual(listenerId);
         expect(options.path['policy_id']).toEqual(policyId);
@@ -18577,8 +19046,8 @@ describe('VpcV1', () => {
         expect(options.body['field']).toEqual(field);
         expect(options.body['type']).toEqual(type);
         expect(options.body['value']).toEqual(value);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['listener_id']).toEqual(listenerId);
         expect(options.path['policy_id']).toEqual(policyId);
@@ -18656,8 +19125,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
       });
 
@@ -18731,6 +19200,7 @@ describe('VpcV1', () => {
 
       // LoadBalancerPoolSessionPersistencePrototype
       const loadBalancerPoolSessionPersistencePrototypeModel = {
+        cookie_name: 'my-cookie-name',
         type: 'source_ip',
       };
 
@@ -18776,8 +19246,8 @@ describe('VpcV1', () => {
         expect(options.body['name']).toEqual(name);
         expect(options.body['proxy_protocol']).toEqual(proxyProtocol);
         expect(options.body['session_persistence']).toEqual(sessionPersistence);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
       });
 
@@ -18854,8 +19324,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['id']).toEqual(id);
       });
@@ -18929,8 +19399,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['id']).toEqual(id);
       });
@@ -18995,6 +19465,7 @@ describe('VpcV1', () => {
 
       // LoadBalancerPoolSessionPersistencePatch
       const loadBalancerPoolSessionPersistencePatchModel = {
+        cookie_name: 'my-cookie-name',
         type: 'source_ip',
       };
 
@@ -19039,8 +19510,8 @@ describe('VpcV1', () => {
         expect(options.body['protocol']).toEqual(protocol);
         expect(options.body['proxy_protocol']).toEqual(proxyProtocol);
         expect(options.body['session_persistence']).toEqual(sessionPersistence);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['id']).toEqual(id);
       });
@@ -19118,8 +19589,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['pool_id']).toEqual(poolId);
       });
@@ -19213,8 +19684,8 @@ describe('VpcV1', () => {
         expect(options.body['port']).toEqual(port);
         expect(options.body['target']).toEqual(target);
         expect(options.body['weight']).toEqual(weight);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['pool_id']).toEqual(poolId);
       });
@@ -19315,8 +19786,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['members']).toEqual(members);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['pool_id']).toEqual(poolId);
       });
@@ -19398,8 +19869,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['pool_id']).toEqual(poolId);
         expect(options.path['id']).toEqual(id);
@@ -19482,8 +19953,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['pool_id']).toEqual(poolId);
         expect(options.path['id']).toEqual(id);
@@ -19582,8 +20053,8 @@ describe('VpcV1', () => {
         expect(options.body['port']).toEqual(port);
         expect(options.body['target']).toEqual(target);
         expect(options.body['weight']).toEqual(weight);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
         expect(options.path['pool_id']).toEqual(poolId);
         expect(options.path['id']).toEqual(id);
@@ -19664,8 +20135,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['name']).toEqual(name);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
@@ -19754,8 +20225,8 @@ describe('VpcV1', () => {
         expect(options.body['ips']).toEqual(ips);
         expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -19831,8 +20302,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['sort']).toEqual(sort);
@@ -19906,8 +20377,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
         expect(options.path['id']).toEqual(id);
       });
@@ -19981,8 +20452,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
         expect(options.path['id']).toEqual(id);
       });
@@ -20056,8 +20527,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
         expect(options.path['id']).toEqual(id);
       });
@@ -20129,8 +20600,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -20199,8 +20670,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -20272,8 +20743,8 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -20358,8 +20829,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.qs['start']).toEqual(start);
         expect(options.qs['limit']).toEqual(limit);
         expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
@@ -20446,8 +20917,8 @@ describe('VpcV1', () => {
         expect(options.body['active']).toEqual(active);
         expect(options.body['name']).toEqual(name);
         expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
       });
 
       test('should prioritize user-given headers', () => {
@@ -20517,8 +20988,8 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -20587,8 +21058,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 
@@ -20663,8 +21134,8 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(options.body['active']).toEqual(active);
         expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(service.version);
-        expect(options.qs['generation']).toEqual(service.generation);
+        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
+        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
         expect(options.path['id']).toEqual(id);
       });
 

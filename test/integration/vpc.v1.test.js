@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -957,7 +957,7 @@ describe('VpcV1_integration', () => {
   });
   test('createInstance()', done => {
     const subnetIdentityModel = {
-      id: dict.subnetId,
+      id: dict.createdSubnet,
     };
 
     const networkInterfacePrototypeModel = {
@@ -970,7 +970,7 @@ describe('VpcV1_integration', () => {
     };
 
     const vpcIdentityModel = {
-      id: dict.vpcId,
+      id: dict.createVpc,
     };
 
     const zoneIdentityModel = {
@@ -1092,7 +1092,7 @@ describe('VpcV1_integration', () => {
   });
   test('createInstanceNetworkInterface()', done => {
     const subnetIdentityModel = {
-      id: dict.subnetId,
+      id: dict.createdSubnet,
     };
 
     const params = {
@@ -3589,23 +3589,6 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('deleteSubnetReservedIp()', done => {
-    const params = {
-      subnetId: dict.createdSubnet,
-      id: dict.createdReservedIp,
-    };
-
-    vpcService
-      .deleteSubnetReservedIp(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
   test('listEndpointGateways()', done => {
     vpcService
       .listEndpointGateways()
@@ -3656,14 +3639,14 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('getEndpointGatewayIp()', done => {
+  test('addEndpointGatewayIp()', done => {
     const params = {
       endpointGatewayId: dict.createdEndpointGateway,
       id: dict.createdReservedIp,
     };
 
     vpcService
-      .getEndpointGatewayIp(params)
+      .addEndpointGatewayIp(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -3673,14 +3656,14 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('addEndpointGatewayIp()', done => {
+  test('getEndpointGatewayIp()', done => {
     const params = {
       endpointGatewayId: dict.createdEndpointGateway,
       id: dict.createdReservedIp,
     };
 
     vpcService
-      .addEndpointGatewayIp(params)
+      .getEndpointGatewayIp(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -3747,6 +3730,23 @@ describe('VpcV1_integration', () => {
 
     vpcService
       .deleteEndpointGateway(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteSubnetReservedIp()', done => {
+    const params = {
+      subnetId: dict.createdSubnet,
+      id: dict.createdReservedIp,
+    };
+
+    vpcService
+      .deleteSubnetReservedIp(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -3823,6 +3823,41 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('createVpcRoutingTable2()', done => {
+    const routeNextHopPrototypeModel = {
+      address: '192.168.3.5',
+    };
+
+    const zoneIdentityModel = {
+      name: dict.zone,
+    };
+
+    const routePrototypeModel = {
+      action: 'delegate',
+      destination: '192.168.3.0/24',
+      name: 'my-route-2',
+      next_hop: routeNextHopPrototypeModel,
+      zone: zoneIdentityModel,
+    };
+
+    const params = {
+      vpcId: dict.createdVpc,
+      name: 'my-routing-table-3',
+      routes: [routePrototypeModel],
+    };
+
+    vpcService
+      .createVpcRoutingTable(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdVpcRoutingTable2 = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('getVpcRoutingTable()', done => {
     const params = {
       vpcId: dict.createdVpc,
@@ -3876,14 +3911,10 @@ describe('VpcV1_integration', () => {
       });
   });
   test('createVpcRoutingTableRoute()', done => {
-    // Request models needed by this operation.
-
-    // RouteNextHopPrototypeRouteNextHopIP
     const routeNextHopPrototypeModel = {
       address: '192.168.3.4',
     };
 
-    // ZoneIdentityByName
     const zoneIdentityModel = {
       name: dict.zoneName,
     };
@@ -3938,159 +3969,6 @@ describe('VpcV1_integration', () => {
 
     vpcService
       .updateVpcRoutingTableRoute(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('deleteVpcRoutingTableRoute()', done => {
-    const params = {
-      vpcId: dict.createdVpc,
-      routingTableId: dict.createdVpcRoutingTable,
-      id: dict.createdVpcRoutingTableRoute,
-    };
-
-    vpcService
-      .deleteVpcRoutingTableRoute(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('deleteVpcRoutingTable()', done => {
-    const params = {
-      vpcId: dict.createdVpc,
-      id: dict.createdVpcRoutingTable,
-    };
-
-    vpcService
-      .deleteVpcRoutingTable(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('getSubnetRoutingTable()', done => {
-    const params = {
-      id: dict.createdSubnet,
-    };
-
-    vpcService
-      .getSubnetRoutingTable(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('replaceSubnetRoutingTable()', done => {
-    // Request models needed by this operation.
-
-    // RoutingTableIdentityById
-    const routingTableIdentityModel = {
-      id: dict.createdVpcRoutingTable,
-    };
-
-    const params = {
-      id: dict.createdSubnet,
-      routingTableIdentity: routingTableIdentityModel,
-    };
-
-    vpcService
-      .replaceSubnetRoutingTable(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('createVpcAddressPrefix()', done => {
-    const zoneIdentityModel = {
-      name: dict.zoneName,
-    };
-
-    const params = {
-      vpcId: dict.createdVpc,
-      cidr: '10.0.0.0/24',
-      zone: zoneIdentityModel,
-      name: generateName('address-prefix'),
-      isDefault: true,
-    };
-
-    vpcService
-      .createVpcAddressPrefix(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        dict.createdAddrPrefix = res.result.id;
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('getVpcAddressPrefix()', done => {
-    const params = {
-      vpcId: dict.createdVpc,
-      id: dict.createdAddrPrefix,
-    };
-
-    vpcService
-      .getVpcAddressPrefix(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('updateVpcAddressPrefix()', done => {
-    const params = {
-      vpcId: dict.createdVpc,
-      id: dict.createdAddrPrefix,
-      name: generateName('my-address-prefix-2'),
-      isDefault: false,
-    };
-
-    vpcService
-      .updateVpcAddressPrefix(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('deleteVpcAddressPrefix()', done => {
-    const params = {
-      vpcId: dict.createdVpc,
-      id: dict.createdAddrPrefix,
-    };
-
-    vpcService
-      .deleteVpcAddressPrefix(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -4170,7 +4048,7 @@ describe('VpcV1_integration', () => {
       .listDedicatedHostProfiles()
       .then(res => {
         expect(res.result).not.toBeNull();
-        dict.dhProfileName = res.result[0].name;
+        dict.dhProfileName = res.result.profiles[0].name;
         done();
       })
       .catch(err => {
@@ -4218,7 +4096,7 @@ describe('VpcV1_integration', () => {
     const dedicatedHostPrototypeModel = {
       name: 'my-host',
       profile: dedicatedHostProfileIdentityModel,
-      group: { id: dedicatedHostGroupIdentityModel },
+      group: dedicatedHostGroupIdentityModel,
     };
 
     const params = {
@@ -4293,6 +4171,158 @@ describe('VpcV1_integration', () => {
 
     vpcService
       .deleteDedicatedHost(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteVpcRoutingTableRoute()', done => {
+    const params = {
+      vpcId: dict.createdVpc,
+      routingTableId: dict.createdVpcRoutingTable,
+      id: dict.createdVpcRoutingTableRoute,
+    };
+
+    vpcService
+      .deleteVpcRoutingTableRoute(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getSubnetRoutingTable()', done => {
+    const params = {
+      id: dict.createdSubnet,
+    };
+
+    vpcService
+      .getSubnetRoutingTable(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('replaceSubnetRoutingTable()', done => {
+    // Request models needed by this operation.
+
+    // RoutingTableIdentityById
+    const routingTableIdentityModel = {
+      id: dict.createdVpcRoutingTable,
+    };
+
+    const params = {
+      id: dict.createdSubnet,
+      routingTableIdentity: routingTableIdentityModel,
+    };
+
+    vpcService
+      .replaceSubnetRoutingTable(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteVpcRoutingTable()', done => {
+    const params = {
+      vpcId: dict.createdVpc,
+      id: dict.createdVpcRoutingTable2,
+    };
+    vpcService
+      .deleteVpcRoutingTable(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createVpcAddressPrefix()', done => {
+    const zoneIdentityModel = {
+      name: dict.zoneName,
+    };
+
+    const params = {
+      vpcId: dict.createdVpc,
+      cidr: '10.0.0.0/24',
+      zone: zoneIdentityModel,
+      name: generateName('address-prefix'),
+      isDefault: true,
+    };
+
+    vpcService
+      .createVpcAddressPrefix(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdAddrPrefix = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getVpcAddressPrefix()', done => {
+    const params = {
+      vpcId: dict.createdVpc,
+      id: dict.createdAddrPrefix,
+    };
+
+    vpcService
+      .getVpcAddressPrefix(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateVpcAddressPrefix()', done => {
+    const params = {
+      vpcId: dict.createdVpc,
+      id: dict.createdAddrPrefix,
+      name: generateName('my-address-prefix-2'),
+      isDefault: false,
+    };
+
+    vpcService
+      .updateVpcAddressPrefix(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteVpcAddressPrefix()', done => {
+    const params = {
+      vpcId: dict.createdVpc,
+      id: dict.createdAddrPrefix,
+    };
+
+    vpcService
+      .deleteVpcAddressPrefix(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();

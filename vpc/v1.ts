@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.31.0-902c9336-20210504-161156
+ * IBM OpenAPI SDK Code Generator Version: 3.35.1-e449803c-20210628-211617
  */
 
 
@@ -96,7 +96,7 @@ class VpcV1 extends BaseService {
     } else {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
-    this.version = options.version || '2021-05-06';
+    this.version = options.version || '2021-08-03';
     this.generation = options.generation;
   }
 
@@ -116,9 +116,7 @@ class VpcV1 extends BaseService {
    * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {string} [params.resourceGroupId] - Filters the collection to resources within one of the resource groups
    * identified in a comma-separated list of resource group identifiers.
-   * @param {boolean} [params.classicAccess] - The `classic_access` parameter filters the returned collection by the
-   * supplied field. If the supplied field is `true`, only Classic Access VPCs will be returned. If the supplied field
-   * is `false`, only VPCs without Classic Access will be returned.
+   * @param {boolean} [params.classicAccess] - Filters the collection to VPCs with the specified `classic_access` value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPCCollection>>}
    */
@@ -1169,8 +1167,8 @@ class VpcV1 extends BaseService {
    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
    * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
    * connection, the packet will be dropped.
-   * @param {RoutePrototype[]} [params.routes] - Array of route prototype objects for routes to create for this routing
-   * table. If unspecified, the routing table will be created with no routes.
+   * @param {RoutePrototype[]} [params.routes] - The prototype objects for routes to create for this routing table. If
+   * unspecified, the routing table will be created with no routes.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RoutingTable>>}
    */
@@ -2323,10 +2321,10 @@ class VpcV1 extends BaseService {
    * @param {string} params.subnetId - The subnet identifier.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
    * @param {number} [params.limit] - The number of resources to return on a page.
-   * @param {string} [params.sort] - Sorts the returned collection by the specified field name in ascending order. A `-`
-   * may be prepended to the field name to sort in descending order. For example, the value
-   * `-created_at` sorts the collection by the `created_at` field in descending order, and the value `name` sorts it by
-   * the `name` field in ascending order.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollection>>}
    */
@@ -2649,8 +2647,9 @@ class VpcV1 extends BaseService {
    * Create an image.
    *
    * This request creates a new image from an image prototype object. The prototype object is structured in the same way
-   * as a retrieved image, and contains the information necessary to create the new image. A URL to the image file on
-   * object storage must be provided.
+   * as a retrieved image, and contains the information necessary to create the new image. If an image is being
+   * imported, a URL to the image file on object storage must be specified. If an image is being created from an
+   * existing volume, that volume must be specified.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {ImagePrototype} params.imagePrototype - The image prototype object.
@@ -2796,7 +2795,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The image identifier.
-   * @param {string} [params.name] - The unique user-defined name for this image. Names starting with "ibm-" are not
+   * @param {string} [params.name] - The unique user-defined name for this image. Names starting with `ibm-` are not
    * allowed.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Image>>}
@@ -2941,6 +2940,8 @@ class VpcV1 extends BaseService {
    * they are created. Private keys are not stored.
    *
    * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {string} [params.resourceGroupId] - Filters the collection to resources within one of the resource groups
    * identified in a comma-separated list of resource group identifiers.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -2952,6 +2953,8 @@ class VpcV1 extends BaseService {
     const query = {
       'version': this.version,
       'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId
     };
 
@@ -3510,6 +3513,12 @@ class VpcV1 extends BaseService {
    * @param {string} [params.vpcId] - Filters the collection to resources in the VPC with the specified identifier.
    * @param {string} [params.vpcCrn] - Filters the collection to resources in the VPC with the specified CRN.
    * @param {string} [params.vpcName] - Filters the collection to resources in the VPC with the exact specified name.
+   * @param {string} [params.dedicatedHostId] - Filters the collection to instances on the dedicated host with the
+   * specified identifier.
+   * @param {string} [params.dedicatedHostCrn] - Filters the collection to instances on the dedicated host with the
+   * specified CRN.
+   * @param {string} [params.dedicatedHostName] - Filters the collection to instances on the dedicated host with the
+   * specified name.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceCollection>>}
    */
@@ -3525,7 +3534,10 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'vpc.id': _params.vpcId,
       'vpc.crn': _params.vpcCrn,
-      'vpc.name': _params.vpcName
+      'vpc.name': _params.vpcName,
+      'dedicated_host.id': _params.dedicatedHostId,
+      'dedicated_host.crn': _params.dedicatedHostCrn,
+      'dedicated_host.name': _params.dedicatedHostName
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstances');
@@ -4616,7 +4628,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The instance identifier.
-   * @param {VolumeIdentity} params.volume - The identity of the volume to attach to the instance.
+   * @param {VolumeAttachmentPrototypeVolume} params.volume - An existing volume to attach to the instance, or a
+   * prototype object for a new volume.
    * @param {boolean} [params.deleteVolumeOnInstanceDelete] - If set to true, when deleting the instance the volume will
    * also be deleted.
    * @param {string} [params.name] - The user-defined name for this volume attachment. If unspecified, the name will be
@@ -4877,7 +4890,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {InstanceTemplateIdentity} params.instanceTemplate - Instance template to use when creating new instances.
-   * @param {SubnetIdentity[]} params.subnets - Array of identities to subnets to use when creating new instances.
+   * @param {SubnetIdentity[]} params.subnets - The subnets to use when creating new instances.
    * @param {number} [params.applicationPort] - Required if specifying a load balancer pool only. Used by the instance
    * group when scaling up instances to supply the port for the load balancer pool member.
    * @param {LoadBalancerIdentity} [params.loadBalancer] - The load balancer that the load balancer pool used by this
@@ -5056,7 +5069,7 @@ class VpcV1 extends BaseService {
    * `application_port`.
    * @param {number} [params.membershipCount] - The number of instances in the instance group.
    * @param {string} [params.name] - The user-defined name for this instance group.
-   * @param {SubnetIdentity[]} [params.subnets] - Array of identities to subnets to use when creating new instances.
+   * @param {SubnetIdentity[]} [params.subnets] - The subnets to use when creating new instances.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroup>>}
    */
@@ -5640,21 +5653,33 @@ class VpcV1 extends BaseService {
    * @param {string} params.instanceGroupId - The instance group identifier.
    * @param {string} params.instanceGroupManagerId - The instance group manager identifier.
    * @param {string} params.id - The instance group manager action identifier.
-   * @param {InstanceGroupManagerActionPatch} params.instanceGroupManagerActionPatch - The instance group manager action
-   * patch.
+   * @param {string} [params.cronSpec] - The cron specification for a recurring scheduled action. Actions can be applied
+   * a maximum of one time within a 5 min period.
+   * @param {InstanceGroupManagerActionGroupPatch} [params.group] -
+   * @param {InstanceGroupManagerActionManagerPatch} [params.manager] -
+   * @param {string} [params.name] - The user-defined name for this instance group manager action. Names must be unique
+   * within the instance group manager.
+   * @param {string} [params.runAt] - The date and time the scheduled action will run.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>>}
    */
   public updateInstanceGroupManagerAction(params: VpcV1.UpdateInstanceGroupManagerActionParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
     const _params = Object.assign({}, params);
-    const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'instanceGroupManagerActionPatch'];
+    const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
     if (missingParams) {
       return Promise.reject(missingParams);
     }
 
-    const body = _params.instanceGroupManagerActionPatch;
+    const body = {
+      'cron_spec': _params.cronSpec,
+      'group': _params.group,
+      'manager': _params.manager,
+      'name': _params.name,
+      'run_at': _params.runAt
+    };
+
     const query = {
       'version': this.version,
       'generation': this.generation
@@ -7280,6 +7305,324 @@ class VpcV1 extends BaseService {
   };
 
   /*************************
+   * snapshots
+   ************************/
+
+  /**
+   * Delete a filtered collection of snapshots.
+   *
+   * This request deletes all snapshots created from a specific source volume.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.sourceVolumeId - Filters the collection to resources with the source volume with the
+   * specified identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+   */
+  public deleteSnapshots(params: VpcV1.DeleteSnapshotsParams): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['sourceVolumeId'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'source_volume.id': _params.sourceVolumeId
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSnapshots');
+
+    const parameters = {
+      options: {
+        url: '/snapshots',
+        method: 'DELETE',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * List all snapshots.
+   *
+   * This request lists all snapshots in the region. A snapshot preserves the data of a volume at the time the snapshot
+   * is created.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources within one of the resource groups
+   * identified in a comma-separated list of resource group identifiers.
+   * @param {string} [params.name] - Filters the collection to resources with the exact specified name.
+   * @param {string} [params.sourceVolumeId] - Filters the collection to resources with the source volume with the
+   * specified identifier.
+   * @param {string} [params.sourceVolumeCrn] - Filters the collection to resources with the source volume with the
+   * specified CRN.
+   * @param {string} [params.sourceImageId] - Filters the collection to resources with the source image with the
+   * specified identifier.
+   *
+   * This parameter also supports the values `null` and `not:null` which filter the collection to resources which have
+   * no source image or any existent source image, respectively.
+   * @param {string} [params.sourceImageCrn] - Filters the collection to resources with the source volume with the
+   * specified CRN.
+   *
+   * This parameter also supports the values `null` and `not:null` which filter the collection to resources which have
+   * no source image or any existent source image, respectively.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotCollection>>}
+   */
+  public listSnapshots(params?: VpcV1.ListSnapshotsParams): Promise<VpcV1.Response<VpcV1.SnapshotCollection>> {
+    const _params = Object.assign({}, params);
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'name': _params.name,
+      'source_volume.id': _params.sourceVolumeId,
+      'source_volume.crn': _params.sourceVolumeCrn,
+      'source_image.id': _params.sourceImageId,
+      'source_image.crn': _params.sourceImageCrn,
+      'sort': _params.sort
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSnapshots');
+
+    const parameters = {
+      options: {
+        url: '/snapshots',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Create a snapshot.
+   *
+   * This request creates a new snapshot from a snapshot prototype object.  The prototype object is structured in the
+   * same way as a retrieved snapshot, and contains the information necessary to provision the new snapshot.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {VolumeIdentity} params.sourceVolume - The volume to snapshot.
+   * @param {string} [params.name] - The unique user-defined name for this snapshot. If unspecified, the name will be a
+   * hyphenated list of randomly-selected words.
+   * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
+   * [default resource
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Snapshot>>}
+   */
+  public createSnapshot(params: VpcV1.CreateSnapshotParams): Promise<VpcV1.Response<VpcV1.Snapshot>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['sourceVolume'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'source_volume': _params.sourceVolume,
+      'name': _params.name,
+      'resource_group': _params.resourceGroup
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSnapshot');
+
+    const parameters = {
+      options: {
+        url: '/snapshots',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Delete a snapshot.
+   *
+   * This request deletes a snapshot. This operation cannot be reversed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The snapshot identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+   */
+  public deleteSnapshot(params: VpcV1.DeleteSnapshotParams): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSnapshot');
+
+    const parameters = {
+      options: {
+        url: '/snapshots/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Retrieve a snapshot.
+   *
+   * This request retrieves a single snapshot specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The snapshot identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Snapshot>>}
+   */
+  public getSnapshot(params: VpcV1.GetSnapshotParams): Promise<VpcV1.Response<VpcV1.Snapshot>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSnapshot');
+
+    const parameters = {
+      options: {
+        url: '/snapshots/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /**
+   * Update a snapshot.
+   *
+   * This request updates a snapshot's name.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The snapshot identifier.
+   * @param {string} [params.name] - The user-defined name for this snapshot.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Snapshot>>}
+   */
+  public updateSnapshot(params: VpcV1.UpdateSnapshotParams): Promise<VpcV1.Response<VpcV1.Snapshot>> {
+    const _params = Object.assign({}, params);
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'name': _params.name
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation
+    };
+
+    const path = {
+      'id': _params.id
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSnapshot');
+
+    const parameters = {
+      options: {
+        url: '/snapshots/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(true, sdkHeaders, {
+          'Accept': 'application/json',
+          'Content-Type': 'application/merge-patch+json',
+        }, _params.headers),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  };
+
+  /*************************
    * geography
    ************************/
 
@@ -8568,8 +8911,8 @@ class VpcV1 extends BaseService {
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
-   * @param {SecurityGroupRulePrototype[]} [params.rules] - Array of rule prototype objects for rules to be created for
-   * this security group. If unspecified, no rules will be created, resulting in all traffic being denied.
+   * @param {SecurityGroupRulePrototype[]} [params.rules] - The prototype objects for rules to be created for this
+   * security group. If unspecified, no rules will be created, resulting in all traffic being denied.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroup>>}
    */
@@ -9188,7 +9531,7 @@ class VpcV1 extends BaseService {
    * code value.
    * @param {string} [params.direction] - The direction of traffic to enforce, either `inbound` or `outbound`.
    * @param {string} [params.ipVersion] - The IP version to enforce. The format of `remote.address` or
-   * `remote.cidr_block` must match this field, if they are used. Alternatively, if `remote` references a security
+   * `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security
    * group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version.
    * @param {number} [params.portMax] - The inclusive upper bound of the protocol port range. Specify `null` to clear an
    * existing upper bound. If a lower bound has been set, the upper bound must also be set, and must not be smaller.
@@ -11073,6 +11416,8 @@ class VpcV1 extends BaseService {
    * This request lists all load balancers in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerCollection>>}
    */
@@ -11081,7 +11426,9 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancers');
@@ -11430,8 +11777,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
-   * @param {number} params.port - The listener port number, or the inclusive lower bound of the port range. Each
-   * listener in the load balancer must have a unique `port` and `protocol` combination.
+   * @param {number} params.port - The listener port number. Each listener in the load balancer must have a unique
+   * `port` and `protocol` combination.
    * @param {string} params.protocol - The listener protocol. Load balancers in the `network` family support `tcp`. Load
    * balancers in the `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer must
    * have a unique `port` and `protocol` combination.
@@ -11447,7 +11794,7 @@ class VpcV1 extends BaseService {
    * - Belong to this load balancer
    * - Have the same `protocol` as this listener
    * - Not already be the default pool for another listener.
-   * @param {LoadBalancerListenerPolicyPrototype[]} [params.policies] - An array of policies for this listener.
+   * @param {LoadBalancerListenerPolicyPrototype[]} [params.policies] - The policy prototype objects for this listener.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListener>>}
    */
@@ -11617,8 +11964,8 @@ class VpcV1 extends BaseService {
    * - Belong to this load balancer
    * - Have the same `protocol` as this listener
    * - Not already be the default pool for another listener.
-   * @param {number} [params.port] - The listener port number, or the inclusive lower bound of the port range. Each
-   * listener in the load balancer must have a unique `port` and `protocol` combination.
+   * @param {number} [params.port] - The listener port number. Each listener in the load balancer must have a unique
+   * `port` and `protocol` combination.
    * @param {string} [params.protocol] - The listener protocol. Load balancers in the `network` family support `tcp`.
    * Load balancers in the `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer
    * must have a unique `port` and `protocol` combination.
@@ -11732,15 +12079,17 @@ class VpcV1 extends BaseService {
    * @param {string} params.loadBalancerId - The load balancer identifier.
    * @param {string} params.listenerId - The listener identifier.
    * @param {string} params.action - The policy action.
+   *
+   * The enumerated values for this property are expected to expand in the future. When processing this property, check
+   * for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on which the
+   * unexpected property value was encountered.
    * @param {number} params.priority - Priority of the policy. Lower value indicates higher priority.
    * @param {string} [params.name] - The user-defined name for this policy. Names must be unique within the load
    * balancer listener the policy resides in.
-   * @param {LoadBalancerListenerPolicyRulePrototype[]} [params.rules] - An array of rules for this policy.
-   * @param {LoadBalancerListenerPolicyTargetPrototype} [params.target] - When `action` is `forward`,
-   * `LoadBalancerPoolIdentity` is required to specify which
-   * pool the load balancer forwards the traffic to. When `action` is `redirect`,
-   * `LoadBalancerListenerPolicyRedirectURLPrototype` is required to specify the url and
-   * http status code used in the redirect response.
+   * @param {LoadBalancerListenerPolicyRulePrototype[]} [params.rules] - The rule prototype objects for this policy.
+   * @param {LoadBalancerListenerPolicyTargetPrototype} [params.target] - - If `action` is `forward`, specify a
+   * `LoadBalancerPoolIdentity`.
+   * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>>}
    */
@@ -11905,11 +12254,9 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The user-defined name for this policy. Names must be unique within the load
    * balancer listener the policy resides in.
    * @param {number} [params.priority] - Priority of the policy. Lower value indicates higher priority.
-   * @param {LoadBalancerListenerPolicyTargetPatch} [params.target] - When `action` is `forward`,
-   * `LoadBalancerPoolIdentity` specifies which pool the load
-   * balancer forwards the traffic to. When `action` is `redirect`,
-   * `LoadBalancerListenerPolicyRedirectURLPatch` specifies the url and http
-   * status code used in the redirect response.
+   * @param {LoadBalancerListenerPolicyTargetPatch} [params.target] - - If `action` is `forward`, specify a
+   * `LoadBalancerPoolIdentity`.
+   * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>>}
    */
@@ -12029,7 +12376,7 @@ class VpcV1 extends BaseService {
    * If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
    * @param {string} [params.field] - The field. This is applicable to `header`, `query`, and `body` rule types.
    *
-   * If the rule type is `header`, this field is required.
+   * If the rule type is `header`, this property is required.
    *
    * If the rule type is `query`, this is optional. If specified and the rule condition is not
    * `matches_regex`, the value must be percent-encoded.
@@ -12204,7 +12551,7 @@ class VpcV1 extends BaseService {
    * @param {string} [params.condition] - The condition of the rule.
    * @param {string} [params.field] - The field. This is applicable to `header`, `query`, and `body` rule types.
    *
-   * If the rule type is `header`, this field is required.
+   * If the rule type is `header`, this property is required.
    *
    * If the rule type is `query`, this is optional. If specified and the rule condition is not
    * `matches_regex`, the value must be percent-encoded.
@@ -12687,7 +13034,7 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
    * @param {string} params.poolId - The pool identifier.
-   * @param {LoadBalancerPoolMemberPrototype[]} params.members - Array of pool member prototype objects.
+   * @param {LoadBalancerPoolMemberPrototype[]} params.members - The member prototype objects for this pool.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMemberCollection>>}
    */
@@ -12959,8 +13306,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {EndpointGatewayTargetPrototype} params.target - The target for this endpoint gateway.
    * @param {VPCIdentity} params.vpc - The VPC this endpoint gateway will serve.
-   * @param {EndpointGatewayReservedIP[]} [params.ips] - An array of reserved IPs to bind to this endpoint gateway. At
-   * most one reserved IP per zone is allowed.
+   * @param {EndpointGatewayReservedIP[]} [params.ips] - The reserved IPs to bind to this endpoint gateway. At most one
+   * reserved IP per zone is allowed.
    * @param {string} [params.name] - The user-defined name for this endpoint gateway. If unspecified, the name will be a
    * hyphenated list of randomly-selected words. Names must be unique within the VPC this endpoint gateway is serving.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
@@ -13020,10 +13367,10 @@ class VpcV1 extends BaseService {
    * @param {string} params.endpointGatewayId - The endpoint gateway identifier.
    * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
    * @param {number} [params.limit] - The number of resources to return on a page.
-   * @param {string} [params.sort] - Sorts the returned collection by the specified field name in ascending order. A `-`
-   * may be prepended to the field name to sort in descending order. For example, the value
-   * `-created_at` sorts the collection by the `created_at` field in descending order, and the value `name` sorts it by
-   * the `name` field in ascending order.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionEndpointGatewayContext>>}
    */
@@ -13704,10 +14051,7 @@ namespace VpcV1 {
      *  of resource group identifiers.
      */
     resourceGroupId?: string;
-    /** The `classic_access` parameter filters the returned collection by the supplied field. If the supplied field
-     *  is `true`, only Classic Access VPCs will be returned. If the supplied field is `false`, only VPCs without
-     *  Classic Access will be returned.
-     */
+    /** Filters the collection to VPCs with the specified `classic_access` value. */
     classicAccess?: boolean;
     headers?: OutgoingHttpHeaders;
   }
@@ -14006,8 +14350,8 @@ namespace VpcV1 {
      *  gateway connection, the packet will be dropped.
      */
     routeVpcZoneIngress?: boolean;
-    /** Array of route prototype objects for routes to create for this routing table. If unspecified, the routing
-     *  table will be created with no routes.
+    /** The prototype objects for routes to create for this routing table. If unspecified, the routing table will be
+     *  created with no routes.
      */
     routes?: RoutePrototype[];
     headers?: OutgoingHttpHeaders;
@@ -14293,10 +14637,10 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    /** Sorts the returned collection by the specified field name in ascending order. A `-` may be prepended to the
-     *  field name to sort in descending order. For example, the value
-     *  `-created_at` sorts the collection by the `created_at` field in descending order, and the value `name` sorts it
-     *  by the `name` field in ascending order.
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
      */
     sort?: ListSubnetReservedIpsConstants.Sort | string;
     headers?: OutgoingHttpHeaders;
@@ -14304,7 +14648,7 @@ namespace VpcV1 {
 
   /** Constants for the `listSubnetReservedIps` operation. */
   export namespace ListSubnetReservedIpsConstants {
-    /** Sorts the returned collection by the specified field name in ascending order. A `-` may be prepended to the field name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` field in descending order, and the value `name` sorts it by the `name` field in ascending order. */
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
     export enum Sort {
       CREATED_AT = 'created_at',
       NAME = 'name',
@@ -14416,7 +14760,7 @@ namespace VpcV1 {
   export interface UpdateImageParams {
     /** The image identifier. */
     id: string;
-    /** The unique user-defined name for this image. Names starting with "ibm-" are not allowed. */
+    /** The unique user-defined name for this image. Names starting with `ibm-` are not allowed. */
     name?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -14439,6 +14783,10 @@ namespace VpcV1 {
 
   /** Parameters for the `listKeys` operation. */
   export interface ListKeysParams {
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
     /** Filters the collection to resources within one of the resource groups identified in a comma-separated list
      *  of resource group identifiers.
      */
@@ -14561,6 +14909,12 @@ namespace VpcV1 {
     vpcCrn?: string;
     /** Filters the collection to resources in the VPC with the exact specified name. */
     vpcName?: string;
+    /** Filters the collection to instances on the dedicated host with the specified identifier. */
+    dedicatedHostId?: string;
+    /** Filters the collection to instances on the dedicated host with the specified CRN. */
+    dedicatedHostCrn?: string;
+    /** Filters the collection to instances on the dedicated host with the specified name. */
+    dedicatedHostName?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -14800,8 +15154,8 @@ namespace VpcV1 {
   export interface CreateInstanceVolumeAttachmentParams {
     /** The instance identifier. */
     instanceId: string;
-    /** The identity of the volume to attach to the instance. */
-    volume: VolumeIdentity;
+    /** An existing volume to attach to the instance, or a prototype object for a new volume. */
+    volume: VolumeAttachmentPrototypeVolume;
     /** If set to true, when deleting the instance the volume will also be deleted. */
     deleteVolumeOnInstanceDelete?: boolean;
     /** The user-defined name for this volume attachment. If unspecified, the name will be a hyphenated list of
@@ -14855,7 +15209,7 @@ namespace VpcV1 {
   export interface CreateInstanceGroupParams {
     /** Instance template to use when creating new instances. */
     instanceTemplate: InstanceTemplateIdentity;
-    /** Array of identities to subnets to use when creating new instances. */
+    /** The subnets to use when creating new instances. */
     subnets: SubnetIdentity[];
     /** Required if specifying a load balancer pool only. Used by the instance group when scaling up instances to
      *  supply the port for the load balancer pool member.
@@ -14920,7 +15274,7 @@ namespace VpcV1 {
     membershipCount?: number;
     /** The user-defined name for this instance group. */
     name?: string;
-    /** Array of identities to subnets to use when creating new instances. */
+    /** The subnets to use when creating new instances. */
     subnets?: SubnetIdentity[];
     headers?: OutgoingHttpHeaders;
   }
@@ -15045,8 +15399,18 @@ namespace VpcV1 {
     instanceGroupManagerId: string;
     /** The instance group manager action identifier. */
     id: string;
-    /** The instance group manager action patch. */
-    instanceGroupManagerActionPatch: InstanceGroupManagerActionPatch;
+    /** The cron specification for a recurring scheduled action. Actions can be applied a maximum of one time within
+     *  a 5 min period.
+     */
+    cronSpec?: string;
+    group?: InstanceGroupManagerActionGroupPatch;
+    manager?: InstanceGroupManagerActionManagerPatch;
+    /** The user-defined name for this instance group manager action. Names must be unique within the instance group
+     *  manager.
+     */
+    name?: string;
+    /** The date and time the scheduled action will run. */
+    runAt?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -15395,6 +15759,97 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `deleteSnapshots` operation. */
+  export interface DeleteSnapshotsParams {
+    /** Filters the collection to resources with the source volume with the specified identifier. */
+    sourceVolumeId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listSnapshots` operation. */
+  export interface ListSnapshotsParams {
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources within one of the resource groups identified in a comma-separated list
+     *  of resource group identifiers.
+     */
+    resourceGroupId?: string;
+    /** Filters the collection to resources with the exact specified name. */
+    name?: string;
+    /** Filters the collection to resources with the source volume with the specified identifier. */
+    sourceVolumeId?: string;
+    /** Filters the collection to resources with the source volume with the specified CRN. */
+    sourceVolumeCrn?: string;
+    /** Filters the collection to resources with the source image with the specified identifier.
+     *
+     *  This parameter also supports the values `null` and `not:null` which filter the collection to resources which
+     *  have no source image or any existent source image, respectively.
+     */
+    sourceImageId?: string;
+    /** Filters the collection to resources with the source volume with the specified CRN.
+     *
+     *  This parameter also supports the values `null` and `not:null` which filter the collection to resources which
+     *  have no source image or any existent source image, respectively.
+     */
+    sourceImageCrn?: string;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListSnapshotsConstants.Sort | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listSnapshots` operation. */
+  export namespace ListSnapshotsConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `createSnapshot` operation. */
+  export interface CreateSnapshotParams {
+    /** The volume to snapshot. */
+    sourceVolume: VolumeIdentity;
+    /** The unique user-defined name for this snapshot. If unspecified, the name will be a hyphenated list of
+     *  randomly-selected words.
+     */
+    name?: string;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     */
+    resourceGroup?: ResourceGroupIdentity;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteSnapshot` operation. */
+  export interface DeleteSnapshotParams {
+    /** The snapshot identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getSnapshot` operation. */
+  export interface GetSnapshotParams {
+    /** The snapshot identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateSnapshot` operation. */
+  export interface UpdateSnapshotParams {
+    /** The snapshot identifier. */
+    id: string;
+    /** The user-defined name for this snapshot. */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `listRegions` operation. */
   export interface ListRegionsParams {
     headers?: OutgoingHttpHeaders;
@@ -15697,8 +16152,8 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    /** Array of rule prototype objects for rules to be created for this security group. If unspecified, no rules
-     *  will be created, resulting in all traffic being denied.
+    /** The prototype objects for rules to be created for this security group. If unspecified, no rules will be
+     *  created, resulting in all traffic being denied.
      */
     rules?: SecurityGroupRulePrototype[];
     headers?: OutgoingHttpHeaders;
@@ -15811,8 +16266,8 @@ namespace VpcV1 {
     code?: number;
     /** The direction of traffic to enforce, either `inbound` or `outbound`. */
     direction?: UpdateSecurityGroupRuleConstants.Direction | string;
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this field, if
-     *  they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
+    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
+     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
      *  addresses (network interfaces) in that group matching this IP version.
      */
     ipVersion?: UpdateSecurityGroupRuleConstants.IpVersion | string;
@@ -15842,7 +16297,7 @@ namespace VpcV1 {
       INBOUND = 'inbound',
       OUTBOUND = 'outbound',
     }
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this field, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
     export enum IpVersion {
       IPV4 = 'ipv4',
     }
@@ -16321,6 +16776,10 @@ namespace VpcV1 {
 
   /** Parameters for the `listLoadBalancers` operation. */
   export interface ListLoadBalancersParams {
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -16406,8 +16865,8 @@ namespace VpcV1 {
   export interface CreateLoadBalancerListenerParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
-    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
-     *  must have a unique `port` and `protocol` combination.
+    /** The listener port number. Each listener in the load balancer must have a unique
+     *  `port` and `protocol` combination.
      */
     port: number;
     /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
@@ -16430,7 +16889,7 @@ namespace VpcV1 {
      *  - Not already be the default pool for another listener.
      */
     defaultPool?: LoadBalancerPoolIdentity;
-    /** An array of policies for this listener. */
+    /** The policy prototype objects for this listener. */
     policies?: LoadBalancerListenerPolicyPrototype[];
     headers?: OutgoingHttpHeaders;
   }
@@ -16484,8 +16943,8 @@ namespace VpcV1 {
      *  - Not already be the default pool for another listener.
      */
     defaultPool?: LoadBalancerPoolIdentity;
-    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
-     *  must have a unique `port` and `protocol` combination.
+    /** The listener port number. Each listener in the load balancer must have a unique
+     *  `port` and `protocol` combination.
      */
     port?: number;
     /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
@@ -16521,7 +16980,12 @@ namespace VpcV1 {
     loadBalancerId: string;
     /** The listener identifier. */
     listenerId: string;
-    /** The policy action. */
+    /** The policy action.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on
+     *  which the unexpected property value was encountered.
+     */
     action: CreateLoadBalancerListenerPolicyConstants.Action | string;
     /** Priority of the policy. Lower value indicates higher priority. */
     priority: number;
@@ -16529,12 +16993,10 @@ namespace VpcV1 {
      *  resides in.
      */
     name?: string;
-    /** An array of rules for this policy. */
+    /** The rule prototype objects for this policy. */
     rules?: LoadBalancerListenerPolicyRulePrototype[];
-    /** When `action` is `forward`, `LoadBalancerPoolIdentity` is required to specify which
-     *  pool the load balancer forwards the traffic to. When `action` is `redirect`,
-     *  `LoadBalancerListenerPolicyRedirectURLPrototype` is required to specify the url and
-     *  http status code used in the redirect response.
+    /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
+     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
      */
     target?: LoadBalancerListenerPolicyTargetPrototype;
     headers?: OutgoingHttpHeaders;
@@ -16542,7 +17004,7 @@ namespace VpcV1 {
 
   /** Constants for the `createLoadBalancerListenerPolicy` operation. */
   export namespace CreateLoadBalancerListenerPolicyConstants {
-    /** The policy action. */
+    /** The policy action. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on which the unexpected property value was encountered. */
     export enum Action {
       FORWARD = 'forward',
       REDIRECT = 'redirect',
@@ -16586,10 +17048,8 @@ namespace VpcV1 {
     name?: string;
     /** Priority of the policy. Lower value indicates higher priority. */
     priority?: number;
-    /** When `action` is `forward`, `LoadBalancerPoolIdentity` specifies which pool the load
-     *  balancer forwards the traffic to. When `action` is `redirect`,
-     *  `LoadBalancerListenerPolicyRedirectURLPatch` specifies the url and http
-     *  status code used in the redirect response.
+    /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
+     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
      */
     target?: LoadBalancerListenerPolicyTargetPatch;
     headers?: OutgoingHttpHeaders;
@@ -16628,7 +17088,7 @@ namespace VpcV1 {
     value: string;
     /** The field. This is applicable to `header`, `query`, and `body` rule types.
      *
-     *  If the rule type is `header`, this field is required.
+     *  If the rule type is `header`, this property is required.
      *
      *  If the rule type is `query`, this is optional. If specified and the rule condition is not
      *  `matches_regex`, the value must be percent-encoded.
@@ -16697,7 +17157,7 @@ namespace VpcV1 {
     condition?: UpdateLoadBalancerListenerPolicyRuleConstants.Condition | string;
     /** The field. This is applicable to `header`, `query`, and `body` rule types.
      *
-     *  If the rule type is `header`, this field is required.
+     *  If the rule type is `header`, this property is required.
      *
      *  If the rule type is `query`, this is optional. If specified and the rule condition is not
      *  `matches_regex`, the value must be percent-encoded.
@@ -16903,7 +17363,7 @@ namespace VpcV1 {
     loadBalancerId: string;
     /** The pool identifier. */
     poolId: string;
-    /** Array of pool member prototype objects. */
+    /** The member prototype objects for this pool. */
     members: LoadBalancerPoolMemberPrototype[];
     headers?: OutgoingHttpHeaders;
   }
@@ -16970,7 +17430,7 @@ namespace VpcV1 {
     target: EndpointGatewayTargetPrototype;
     /** The VPC this endpoint gateway will serve. */
     vpc: VPCIdentity;
-    /** An array of reserved IPs to bind to this endpoint gateway. At most one reserved IP per zone is allowed. */
+    /** The reserved IPs to bind to this endpoint gateway. At most one reserved IP per zone is allowed. */
     ips?: EndpointGatewayReservedIP[];
     /** The user-defined name for this endpoint gateway. If unspecified, the name will be a hyphenated list of
      *  randomly-selected words. Names must be unique within the VPC this endpoint gateway is serving.
@@ -16991,10 +17451,10 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    /** Sorts the returned collection by the specified field name in ascending order. A `-` may be prepended to the
-     *  field name to sort in descending order. For example, the value
-     *  `-created_at` sorts the collection by the `created_at` field in descending order, and the value `name` sorts it
-     *  by the `name` field in ascending order.
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
      */
     sort?: ListEndpointGatewayIpsConstants.Sort | string;
     headers?: OutgoingHttpHeaders;
@@ -17002,7 +17462,7 @@ namespace VpcV1 {
 
   /** Constants for the `listEndpointGatewayIps` operation. */
   export namespace ListEndpointGatewayIpsConstants {
-    /** Sorts the returned collection by the specified field name in ascending order. A `-` may be prepended to the field name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` field in descending order, and the value `name` sorts it by the `name` field in ascending order. */
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
     export enum Sort {
       CREATED_AT = 'created_at',
       NAME = 'name',
@@ -17246,7 +17706,7 @@ namespace VpcV1 {
     id: string;
     /** If set to true, instances can be placed on this dedicated host. */
     instance_placement_enabled: boolean;
-    /** Array of instances that are allocated to this dedicated host. */
+    /** The instances that are allocated to this dedicated host. */
     instances: InstanceReference[];
     /** The lifecycle state of the dedicated host resource. */
     lifecycle_state: string;
@@ -17273,7 +17733,7 @@ namespace VpcV1 {
      *  on which the unexpected property value was encountered.
      */
     state: string;
-    /** Array of instance profiles that can be used by instances placed on this dedicated host. */
+    /** The instance profiles usable by instances placed on this dedicated host. */
     supported_instance_profiles: InstanceProfileReference[];
     /** The total VCPU of the dedicated host. */
     vcpu: VCPU;
@@ -17370,7 +17830,7 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** The type of resource referenced. */
     resource_type: string;
-    /** Array of instance profiles that can be used by instances placed on this dedicated host group. */
+    /** The instance profiles usable by instances placed on this dedicated host group. */
     supported_instance_profiles: InstanceProfileReference[];
     /** The zone this dedicated host group resides in. */
     zone: ZoneReference;
@@ -17461,7 +17921,7 @@ namespace VpcV1 {
     /** The globally unique name for this dedicated host profile. */
     name: string;
     socket_count: DedicatedHostProfileSocket;
-    /** Array of instance profiles that can be used by instances placed on dedicated hosts with this profile. */
+    /** The instance profiles usable by instances placed on dedicated hosts with this profile. */
     supported_instance_profiles: InstanceProfileReference[];
     vcpu_architecture: DedicatedHostProfileVCPUArchitecture;
     vcpu_count: DedicatedHostProfileVCPU;
@@ -17709,9 +18169,9 @@ namespace VpcV1 {
     name: string;
     /** The resource group for this security group. */
     resource_group: ResourceGroupReference;
-    /** Array of rules for the default security group for a VPC. Defaults to allowing all outbound traffic, and
-     *  allowing all inbound traffic from other interfaces in the VPC's default security group. Rules in the default
-     *  security group may be changed, added or removed.
+    /** The rules for the default security group for a VPC. Defaults to allowing all outbound traffic, and allowing
+     *  all inbound traffic from other interfaces in the VPC's default security group. Rules in the default security
+     *  group may be changed, added or removed.
      */
     rules: SecurityGroupRule[];
     /** The VPC this security group is a part of. */
@@ -17750,7 +18210,7 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this endpoint gateway. */
     id: string;
-    /** Collection of reserved IPs bound to an endpoint gateway. */
+    /** The reserved IPs bound to this endpoint gateway. */
     ips: ReservedIPReference[];
     /** The lifecycle state of the endpoint gateway. */
     lifecycle_state: string;
@@ -17762,7 +18222,7 @@ namespace VpcV1 {
     resource_type: string;
     /** The fully qualified domain name for the target service. */
     service_endpoint?: string;
-    /** Collection of fully qualified domain names for the target service. */
+    /** The fully qualified domain names for the target service. */
     service_endpoints: string[];
     /** The target for this endpoint gateway. */
     target: EndpointGatewayTarget;
@@ -17802,7 +18262,7 @@ namespace VpcV1 {
     more_info: string;
   }
 
-  /** A reserved IP to bind to the endpoint gateway. This can be an existing reserved IP, or a prototype used to allocate a reserved IP. The reserved IP will be bound to the endpoint gateway to function as a virtual private endpoint for the service. */
+  /** A reserved IP to bind to the endpoint gateway. This can be specified using an existing reserved IP, or a prototype object for a new reserved IP. The reserved IP will be bound to the endpoint gateway to function as a virtual private endpoint for the service. */
   export interface EndpointGatewayReservedIP {
   }
 
@@ -17989,7 +18449,7 @@ namespace VpcV1 {
   export interface IKEPolicy {
     /** The authentication algorithm. */
     authentication_algorithm: string;
-    /** Collection of references to VPN gateway connections that use this IKE policy. */
+    /** The VPN gateway connections that use this IKE policy. */
     connections: VPNGatewayConnectionReference[];
     /** The date and time that this IKE policy was created. */
     created_at: string;
@@ -18082,7 +18542,7 @@ namespace VpcV1 {
   export interface IPsecPolicy {
     /** The authentication algorithm. */
     authentication_algorithm: string;
-    /** Collection of references to VPN gateway connections that use this IPsec policy. */
+    /** The VPN gateway connections that use this IPsec policy. */
     connections: VPNGatewayConnectionReference[];
     /** The date and time that this IPsec policy was created. */
     created_at: string;
@@ -18198,6 +18658,11 @@ namespace VpcV1 {
     operating_system?: OperatingSystem;
     /** The resource group for this image. */
     resource_group: ResourceGroupReference;
+    /** The volume used to create this image (this may be
+     *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
+     *  If absent, this image was not created from a volume.
+     */
+    source_volume?: VolumeReference;
     /** The status of this image
      *  - available: image can be used (provisionable)
      *  - deleting: image is being deleted, and can no longer be used to provision new
@@ -18214,7 +18679,7 @@ namespace VpcV1 {
      *  the unexpected property value was encountered.
      */
     status: string;
-    /** Array of reasons for the current status (if any).
+    /** The reasons for the current status (if any).
      *
      *  The enumerated reason code values for this property will expand in the future. When processing this property,
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
@@ -18283,7 +18748,7 @@ namespace VpcV1 {
 
   /** ImagePrototype. */
   export interface ImagePrototype {
-    /** The unique user-defined name for this image. Names starting with "ibm-" are not allowed. If unspecified, the
+    /** The unique user-defined name for this image. Names starting with `ibm-` are not allowed. If unspecified, the
      *  name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
@@ -18335,7 +18800,7 @@ namespace VpcV1 {
     created_at: string;
     /** The CRN for this virtual server instance. */
     crn: string;
-    /** Collection of the instance's disks. */
+    /** The instance disks for this virtual server instance. */
     disks: InstanceDisk[];
     /** The virtual server instance GPU configuration. */
     gpu?: InstanceGPU;
@@ -18349,17 +18814,21 @@ namespace VpcV1 {
     memory: number;
     /** The user-defined name for this virtual server instance (and default system hostname). */
     name: string;
-    /** Collection of the virtual server instance's network interfaces, including the primary network interface. */
+    /** The network interfaces for this virtual server instance, including the primary network interface. */
     network_interfaces: NetworkInterfaceInstanceContextReference[];
+    /** The placement restrictions for the virtual server instance. */
+    placement_target?: InstancePlacementTarget;
     /** Primary network interface. */
     primary_network_interface: NetworkInterfaceInstanceContextReference;
     /** The profile for this virtual server instance. */
     profile: InstanceProfileReference;
     /** The resource group for this instance. */
     resource_group: ResourceGroupReference;
+    /** Indicates whether the state of the virtual server instance permits a start request. */
+    startable: boolean;
     /** The status of the virtual server instance. */
     status: string;
-    /** Array of reasons for the current status (if any).
+    /** The reasons for the current status (if any).
      *
      *  The enumerated reason code values for this property will expand in the future. When processing this property,
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
@@ -18368,7 +18837,7 @@ namespace VpcV1 {
     status_reasons: InstanceStatusReason[];
     /** The virtual server instance VCPU configuration. */
     vcpu: InstanceVCPU;
-    /** Collection of the virtual server instance's volume attachments, including the boot volume attachment. */
+    /** The volume attachments for this virtual server instance, including the boot volume attachment. */
     volume_attachments: VolumeAttachmentReferenceInstanceContext[];
     /** The VPC this virtual server instance resides in. */
     vpc: VPCReference;
@@ -18526,7 +18995,7 @@ namespace VpcV1 {
      *  pool created.
      */
     load_balancer_pool?: LoadBalancerPoolReference;
-    /** Array of references to managers for the instance group. */
+    /** The managers for the instance group. */
     managers: InstanceGroupManagerReference[];
     /** The number of instances in the instance group. */
     membership_count: number;
@@ -18541,7 +19010,7 @@ namespace VpcV1 {
      *  - `unhealthy`: Group is unable to reach `membership_count` instances.
      */
     status: string;
-    /** Array of references to subnets to use when creating new instances. */
+    /** The subnets to use when creating new instances. */
     subnets: SubnetReference[];
     /** The date and time that the instance group was updated. */
     updated_at: string;
@@ -18625,12 +19094,18 @@ namespace VpcV1 {
     updated_at: string;
   }
 
-  /** InstanceGroupManagerActionPatch. */
-  export interface InstanceGroupManagerActionPatch {
-    /** The user-defined name for this instance group manager action. Names must be unique within the instance group
-     *  manager.
-     */
-    name?: string;
+  /** InstanceGroupManagerActionGroupPatch. */
+  export interface InstanceGroupManagerActionGroupPatch {
+    /** The number of members the instance group should have at the scheduled time. */
+    membership_count?: number;
+  }
+
+  /** InstanceGroupManagerActionManagerPatch. */
+  export interface InstanceGroupManagerActionManagerPatch {
+    /** The maximum number of members the instance group should have at the scheduled time. */
+    max_membership_count?: number;
+    /** The minimum number of members the instance group should have at the scheduled time. */
+    min_membership_count?: number;
   }
 
   /** InstanceGroupManagerActionPrototype. */
@@ -18817,24 +19292,10 @@ namespace VpcV1 {
     more_info: string;
   }
 
-  /** InstanceGroupManagerScheduledActionByManagerManager. */
-  export interface InstanceGroupManagerScheduledActionByManagerManager {
-  }
-
-  /** InstanceGroupManagerScheduledActionByManagerPatchManager. */
-  export interface InstanceGroupManagerScheduledActionByManagerPatchManager {
-  }
-
-  /** InstanceGroupManagerScheduledActionGroupGroup. */
-  export interface InstanceGroupManagerScheduledActionGroupGroup {
+  /** InstanceGroupManagerScheduledActionGroup. */
+  export interface InstanceGroupManagerScheduledActionGroup {
     /** The number of members the instance group should have at the scheduled time. */
     membership_count: number;
-  }
-
-  /** InstanceGroupManagerScheduledActionGroupPatch. */
-  export interface InstanceGroupManagerScheduledActionGroupPatch {
-    /** The number of members the instance group should have at the scheduled time. */
-    membership_count?: number;
   }
 
   /** InstanceGroupManagerScheduledActionGroupPrototype. */
@@ -18843,8 +19304,12 @@ namespace VpcV1 {
     membership_count: number;
   }
 
-  /** InstanceGroupManagerScheduledActionManagerManager. */
-  export interface InstanceGroupManagerScheduledActionManagerManager {
+  /** InstanceGroupManagerScheduledActionManager. */
+  export interface InstanceGroupManagerScheduledActionManager {
+  }
+
+  /** InstanceGroupManagerScheduledActionManagerPrototype. */
+  export interface InstanceGroupManagerScheduledActionManagerPrototype {
   }
 
   /** InstanceGroupMembership. */
@@ -18924,7 +19389,7 @@ namespace VpcV1 {
 
   /** InstanceInitialization. */
   export interface InstanceInitialization {
-    /** Collection of references to public SSH keys used at instance initialization. */
+    /** The public SSH keys used at instance initialization. */
     keys: KeyReferenceInstanceInitializationContext[];
     password?: InstanceInitializationPassword;
   }
@@ -18933,12 +19398,16 @@ namespace VpcV1 {
   export interface InstanceInitializationPassword {
     /** The administrator password at initialization, encrypted using `encryption_key`, and returned base64-encoded. */
     encrypted_password: string;
-    /** The reference to the public SSH key used to encrypt the administrator password. */
+    /** The public SSH key used to encrypt the administrator password. */
     encryption_key: KeyReferenceInstanceInitializationContext;
   }
 
   /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Match the current profile's instance disk support. (Note: If the current profile supports instance storage disks, the requested profile can have a different instance storage disk configuration.) - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. */
   export interface InstancePatchProfile {
+  }
+
+  /** InstancePlacementTarget. */
+  export interface InstancePlacementTarget {
   }
 
   /** InstancePlacementTargetPrototype. */
@@ -19061,7 +19530,7 @@ namespace VpcV1 {
      *  the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** Collection of additional network interfaces to create for the virtual server instance. */
+    /** The additional network interfaces to create for the virtual server instance. */
     network_interfaces?: NetworkInterfacePrototype[];
     /** The placement restrictions to use for the virtual server instance. */
     placement_target?: InstancePlacementTargetPrototype;
@@ -19073,7 +19542,7 @@ namespace VpcV1 {
     resource_group?: ResourceGroupIdentity;
     /** User data to be made available when setting up the virtual server instance. */
     user_data?: string;
-    /** Collection of volume attachments. */
+    /** The volume attachments for this virtual server instance. */
     volume_attachments?: VolumeAttachmentPrototypeInstanceContext[];
     /** The VPC the virtual server instance is to be a part of. If provided, must match the
      *  VPC tied to the subnets of the instance's network interfaces.
@@ -19133,7 +19602,7 @@ namespace VpcV1 {
     keys?: KeyIdentity[];
     /** The unique user-defined name for this instance template. */
     name: string;
-    /** Collection of additional network interfaces to create for the virtual server instance. */
+    /** The additional network interfaces to create for the virtual server instance. */
     network_interfaces?: NetworkInterfacePrototype[];
     /** The placement restrictions to use for the virtual server instance. */
     placement_target?: InstancePlacementTargetPrototype;
@@ -19143,7 +19612,7 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** User data to be made available when setting up the virtual server instance. */
     user_data?: string;
-    /** Collection of volume attachments. */
+    /** The volume attachments for this virtual server instance. */
     volume_attachments?: VolumeAttachmentPrototypeInstanceContext[];
     /** The VPC the virtual server instance is to be a part of. If provided, must match the
      *  VPC tied to the subnets of the instance's network interfaces.
@@ -19195,7 +19664,7 @@ namespace VpcV1 {
      *  the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** Collection of additional network interfaces to create for the virtual server instance. */
+    /** The additional network interfaces to create for the virtual server instance. */
     network_interfaces?: NetworkInterfacePrototype[];
     /** The placement restrictions to use for the virtual server instance. */
     placement_target?: InstancePlacementTargetPrototype;
@@ -19207,7 +19676,7 @@ namespace VpcV1 {
     resource_group?: ResourceGroupIdentity;
     /** User data to be made available when setting up the virtual server instance. */
     user_data?: string;
-    /** Collection of volume attachments. */
+    /** The volume attachments for this virtual server instance. */
     volume_attachments?: VolumeAttachmentPrototypeInstanceContext[];
     /** The VPC the virtual server instance is to be a part of. If provided, must match the
      *  VPC tied to the subnets of the instance's network interfaces.
@@ -19275,8 +19744,22 @@ namespace VpcV1 {
 
   /** KeyCollection. */
   export interface KeyCollection {
+    /** A link to the first page of resources. */
+    first: PageLink;
     /** Collection of keys. */
     keys: Key[];
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: KeyCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface KeyCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
   }
 
   /** Identifies a key by a unique property. */
@@ -19343,8 +19826,28 @@ namespace VpcV1 {
 
   /** LoadBalancerCollection. */
   export interface LoadBalancerCollection {
+    /** A link to the first page of resources. */
+    first: LoadBalancerCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
     /** Collection of load balancers. */
     load_balancers: LoadBalancer[];
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: LoadBalancerCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface LoadBalancerCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface LoadBalancerCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
   }
 
   /** Identifies a load balancer by a unique property. */
@@ -19369,10 +19872,10 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this load balancer listener. */
     id: string;
-    /** An array of policies for this listener. */
+    /** The policies for this listener. */
     policies?: LoadBalancerListenerPolicyReference[];
-    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
-     *  must have a unique `port` and `protocol` combination.
+    /** The listener port number. Each listener in the load balancer must have a unique
+     *  `port` and `protocol` combination.
      */
     port: number;
     /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
@@ -19392,7 +19895,12 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerPolicy. */
   export interface LoadBalancerListenerPolicy {
-    /** The policy action. */
+    /** The policy action.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on
+     *  which the unexpected property value was encountered.
+     */
     action: string;
     /** The date and time that this policy was created. */
     created_at: string;
@@ -19406,10 +19914,10 @@ namespace VpcV1 {
     priority: number;
     /** The provisioning status of this policy. */
     provisioning_status: string;
-    /** The rules of this policy. */
+    /** The rules for this policy. */
     rules: LoadBalancerListenerPolicyRuleReference[];
-    /** `LoadBalancerPoolReference` is in the response if `action` is `forward`.
-     *  `LoadBalancerListenerPolicyRedirectURL` is in the response if `action` is `redirect`.
+    /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference`
+     *  - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`.
      */
     target?: LoadBalancerListenerPolicyTarget;
   }
@@ -19422,7 +19930,12 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerPolicyPrototype. */
   export interface LoadBalancerListenerPolicyPrototype {
-    /** The policy action. */
+    /** The policy action.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on
+     *  which the unexpected property value was encountered.
+     */
     action: string;
     /** The user-defined name for this policy. Names must be unique within the load balancer listener the policy
      *  resides in.
@@ -19430,12 +19943,10 @@ namespace VpcV1 {
     name?: string;
     /** Priority of the policy. Lower value indicates higher priority. */
     priority: number;
-    /** An array of rules for this policy. */
+    /** The rule prototype objects for this policy. */
     rules?: LoadBalancerListenerPolicyRulePrototype[];
-    /** When `action` is `forward`, `LoadBalancerPoolIdentity` is required to specify which
-     *  pool the load balancer forwards the traffic to. When `action` is `redirect`,
-     *  `LoadBalancerListenerPolicyRedirectURLPrototype` is required to specify the url and
-     *  http status code used in the redirect response.
+    /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
+     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
      */
     target?: LoadBalancerListenerPolicyTargetPrototype;
   }
@@ -19466,7 +19977,7 @@ namespace VpcV1 {
     created_at: string;
     /** The field. This is applicable to `header`, `query`, and `body` rule types.
      *
-     *  If the rule type is `header`, this field is required.
+     *  If the rule type is `header`, this property is required.
      *
      *  If the rule type is `query`, this is optional. If specified and the rule condition is not
      *  `matches_regex`, the value must be percent-encoded.
@@ -19504,7 +20015,7 @@ namespace VpcV1 {
     condition: string;
     /** The field. This is applicable to `header`, `query`, and `body` rule types.
      *
-     *  If the rule type is `header`, this field is required.
+     *  If the rule type is `header`, this property is required.
      *
      *  If the rule type is `query`, this is optional. If specified and the rule condition is not
      *  `matches_regex`, the value must be percent-encoded.
@@ -19542,15 +20053,15 @@ namespace VpcV1 {
     more_info: string;
   }
 
-  /** `LoadBalancerPoolReference` is in the response if `action` is `forward`. `LoadBalancerListenerPolicyRedirectURL` is in the response if `action` is `redirect`. */
+  /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference` - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`. */
   export interface LoadBalancerListenerPolicyTarget {
   }
 
-  /** When `action` is `forward`, `LoadBalancerPoolIdentity` specifies which pool the load balancer forwards the traffic to. When `action` is `redirect`, `LoadBalancerListenerPolicyRedirectURLPatch` specifies the url and http status code used in the redirect response. */
+  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`. */
   export interface LoadBalancerListenerPolicyTargetPatch {
   }
 
-  /** When `action` is `forward`, `LoadBalancerPoolIdentity` is required to specify which pool the load balancer forwards the traffic to. When `action` is `redirect`, `LoadBalancerListenerPolicyRedirectURLPrototype` is required to specify the url and http status code used in the redirect response. */
+  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`. */
   export interface LoadBalancerListenerPolicyTargetPrototype {
   }
 
@@ -19564,8 +20075,8 @@ namespace VpcV1 {
     connection_limit?: number;
     /** The default pool associated with the listener. */
     default_pool?: LoadBalancerPoolIdentityByName;
-    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
-     *  must have a unique `port` and `protocol` combination.
+    /** The listener port number. Each listener in the load balancer must have a unique
+     *  `port` and `protocol` combination.
      */
     port: number;
     /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
@@ -19853,19 +20364,37 @@ namespace VpcV1 {
 
   /** LoadBalancerPoolSessionPersistence. */
   export interface LoadBalancerPoolSessionPersistence {
-    /** The session persistence type. */
+    /** The session persistence cookie name. Applicable only for type `app_cookie`. Names starting with `IBM` are
+     *  not allowed.
+     */
+    cookie_name?: string;
+    /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and
+     *  `https` protocols.
+     */
     type: string;
   }
 
-  /** LoadBalancerPoolSessionPersistencePatch. */
+  /** The session persistence configuration. Specify `null` to remove any existing session persistence configuration. */
   export interface LoadBalancerPoolSessionPersistencePatch {
-    /** The session persistence type. */
-    type: string;
+    /** The session persistence cookie name. Applicable only for type `app_cookie`. Names starting with `IBM` are
+     *  not allowed.
+     */
+    cookie_name?: string;
+    /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and
+     *  `https` protocols.
+     */
+    type?: string;
   }
 
   /** LoadBalancerPoolSessionPersistencePrototype. */
   export interface LoadBalancerPoolSessionPersistencePrototype {
-    /** The session persistence type. */
+    /** The session persistence cookie name. Applicable only for type `app_cookie`. Names starting with `IBM` are
+     *  not allowed.
+     */
+    cookie_name?: string;
+    /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and
+     *  `https` protocols.
+     */
     type: string;
   }
 
@@ -20200,7 +20729,7 @@ namespace VpcV1 {
     allow_ip_spoofing: boolean;
     /** The date and time that the network interface was created. */
     created_at: string;
-    /** Array of references to floating IPs associated with this network interface. */
+    /** The floating IPs associated with this network interface. */
     floating_ips?: FloatingIPReference[];
     /** The URL for this network interface. */
     href: string;
@@ -20380,13 +20909,27 @@ namespace VpcV1 {
   export interface OperatingSystemIdentity {
   }
 
+  /** OperatingSystemReference. */
+  export interface OperatingSystemReference {
+    /** The URL for this operating system. */
+    href: string;
+    /** The globally unique name for this operating system. */
+    name: string;
+  }
+
+  /** PageLink. */
+  export interface PageLink {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
   /** PublicGateway. */
   export interface PublicGateway {
     /** The date and time that the public gateway was created. */
     created_at: string;
     /** The CRN for this public gateway. */
     crn: string;
-    /** Reference to the floating IP which is bound to this public gateway. */
+    /** The floating IP bound to this public gateway. */
     floating_ip: PublicGatewayFloatingIp;
     /** The URL for this public gateway. */
     href: string;
@@ -20436,7 +20979,7 @@ namespace VpcV1 {
   export interface PublicGatewayFloatingIPPrototype {
   }
 
-  /** Reference to the floating IP which is bound to this public gateway. */
+  /** The floating IP bound to this public gateway. */
   export interface PublicGatewayFloatingIp {
     /** The globally unique IP address. */
     address: string;
@@ -20856,13 +21399,13 @@ namespace VpcV1 {
      *  resides in.
      */
     name: string;
-    /** Array of references to network interfaces. */
+    /** The network interfaces for this security group. */
     network_interfaces: NetworkInterfaceReference[];
     /** The resource group for this security group. */
     resource_group: ResourceGroupReference;
-    /** Array of rules for this security group. If no rules exist, all traffic will be denied. */
+    /** The rules for this security group. If no rules exist, all traffic will be denied. */
     rules: SecurityGroupRule[];
-    /** Array of references to targets. */
+    /** The targets for this security group. */
     targets: SecurityGroupTargetReference[];
     /** The VPC this security group is a part of. */
     vpc: VPCReference;
@@ -20930,8 +21473,8 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this security group rule. */
     id: string;
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this field, if
-     *  they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
+    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
+     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
      *  addresses (network interfaces) in that group matching this IP version.
      */
     ip_version?: string;
@@ -20955,8 +21498,8 @@ namespace VpcV1 {
   export interface SecurityGroupRulePrototype {
     /** The direction of traffic to enforce, either `inbound` or `outbound`. */
     direction: string;
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this field, if
-     *  they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
+    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
+     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
      *  addresses (network interfaces) in that group matching this IP version.
      */
     ip_version?: string;
@@ -20990,7 +21533,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: SecurityGroupTargetCollectionNext;
-    /** Collection of security group target references. */
+    /** Collection of targets for this security group. */
     targets: SecurityGroupTargetReference[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -21010,6 +21553,108 @@ namespace VpcV1 {
 
   /** The resource types that can be security group targets are expected to expand in the future. When iterating over security group targets, do not assume that every target resource will be from a known set of resource types. Optionally halt processing and surface an error, or bypass resources of unrecognized types. */
   export interface SecurityGroupTargetReference {
+  }
+
+  /** Snapshot. */
+  export interface Snapshot {
+    /** Indicates if a boot volume attachment can be created with a volume created from this snapshot. */
+    bootable: boolean;
+    /** The date and time that this snapshot was created. */
+    created_at: string;
+    /** The CRN for this snapshot. */
+    crn: string;
+    /** Indicates whether this snapshot can be deleted. This value will not be `true` if any other snapshots depend
+     *  on it.
+     */
+    deletable: boolean;
+    /** The type of encryption used on the source volume. */
+    encryption: string;
+    /** The root key used to wrap the data encryption key for the source volume.
+     *
+     *  This property will be present for volumes with an `encryption` type of
+     *  `user_managed`.
+     */
+    encryption_key?: EncryptionKeyReference;
+    /** The URL for this snapshot. */
+    href: string;
+    /** The unique identifier for this snapshot. */
+    id: string;
+    /** The lifecycle state of this snapshot. */
+    lifecycle_state: string;
+    /** The minimum capacity of a volume created from this snapshot. When a snapshot is created, this will be set to
+     *  the capacity of the `source_volume`.
+     */
+    minimum_capacity: number;
+    /** The user-defined name for this snapshot. */
+    name: string;
+    /** The operating system included in this image. */
+    operating_system?: OperatingSystem;
+    /** The resource group for this snapshot. */
+    resource_group: ResourceGroupReference;
+    /** The resource type. */
+    resource_type: string;
+    /** The size of this snapshot rounded up to the next gigabyte. */
+    size: number;
+    /** If present, the image from which the data on this volume was most directly provisioned. */
+    source_image?: ImageReference;
+    /** The source volume this snapshot was created from (may be
+     *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
+     */
+    source_volume: VolumeReference;
+  }
+
+  /** SnapshotCollection. */
+  export interface SnapshotCollection {
+    /** A link to the first page of resources. */
+    first: SnapshotCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: SnapshotCollectionNext;
+    /** Collection of snapshots. */
+    snapshots: Snapshot[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface SnapshotCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface SnapshotCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** Identifies a snapshot by a unique property. */
+  export interface SnapshotIdentity {
+  }
+
+  /** SnapshotReference. */
+  export interface SnapshotReference {
+    /** The CRN for this snapshot. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: SnapshotReferenceDeleted;
+    /** The URL for this snapshot. */
+    href: string;
+    /** The unique identifier for this snapshot. */
+    id: string;
+    /** The user-defined name for this snapshot. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+  export interface SnapshotReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
   }
 
   /** Subnet. */
@@ -21150,9 +21795,8 @@ namespace VpcV1 {
     created_at: string;
     /** The CRN for this VPC. */
     crn: string;
-    /** Array of CSE ([Cloud Service
-     *  Endpoint](https://cloud.ibm.com/docs/resources?topic=resources-service-endpoints)) source IP addresses for the
-     *  VPC. The VPC will have one CSE source IP address per zone.
+    /** The CSE ([Cloud Service Endpoint](https://cloud.ibm.com/docs/resources?topic=resources-service-endpoints))
+     *  source IP addresses for the VPC. The VPC will have one CSE source IP address per zone.
      */
     cse_source_ips?: VPCCSESourceIP[];
     /** The default network ACL to use for subnets created in this VPC. */
@@ -21235,7 +21879,7 @@ namespace VpcV1 {
 
   /** VPNGateway. */
   export interface VPNGateway {
-    /** Collection of references to VPN gateway connections. */
+    /** Connections for this VPN gateway. */
     connections: VPNGatewayConnectionReference[];
     /** The date and time that this VPN gateway was created. */
     created_at: string;
@@ -21344,7 +21988,7 @@ namespace VpcV1 {
 
   /** VPNGatewayConnectionLocalCIDRs. */
   export interface VPNGatewayConnectionLocalCIDRs {
-    /** A collection of local CIDRs for this resource. */
+    /** The local CIDRs for this resource. */
     local_cidrs?: string[];
   }
 
@@ -21368,7 +22012,7 @@ namespace VpcV1 {
 
   /** VPNGatewayConnectionPeerCIDRs. */
   export interface VPNGatewayConnectionPeerCIDRs {
-    /** A collection of peer CIDRs for this resource. */
+    /** The peer CIDRs for this resource. */
     peer_cidrs?: string[];
   }
 
@@ -21449,8 +22093,14 @@ namespace VpcV1 {
 
   /** Volume. */
   export interface Volume {
-    /** The capacity of the volume in gigabytes. The specified minimum and maximum capacity values for creating or
-     *  updating volumes may expand in the future.
+    /** Indicates whether a running virtual server instance has an attachment to this volume. */
+    active: boolean;
+    /** Indicates whether this volume is performing an operation that must be serialized. If an operation specifies
+     *  that it requires serialization, the operation will fail unless this property is `false`.
+     */
+    busy: boolean;
+    /** The capacity to use for the volume (in gigabytes). The specified minimum and maximum capacity values for
+     *  creating or updating volumes may expand in the future.
      */
     capacity: number;
     /** The date and time that the volume was created. */
@@ -21459,7 +22109,7 @@ namespace VpcV1 {
     crn: string;
     /** The type of encryption used on the volume. */
     encryption: string;
-    /** A reference to the root key used to wrap the data encryption key for the volume.
+    /** The root key used to wrap the data encryption key for the volume.
      *
      *  This property will be present for volumes with an `encryption` type of
      *  `user_managed`.
@@ -21473,10 +22123,21 @@ namespace VpcV1 {
     iops: number;
     /** The unique user-defined name for this volume. */
     name: string;
+    /** The operating system associated with this volume. If absent, this volume was not
+     *  created from an image, or the image did not include an operating system.
+     */
+    operating_system?: OperatingSystemReference;
     /** The profile this volume uses. */
     profile: VolumeProfileReference;
     /** The resource group for this volume. */
     resource_group: ResourceGroupReference;
+    /** The image from which this volume was created (this may be
+     *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
+     *  If absent, this volume was not created from an image.
+     */
+    source_image?: ImageReference;
+    /** The snapshot from which this volume was cloned. */
+    source_snapshot?: SnapshotReference;
     /** The status of the volume.
      *
      *  The enumerated values for this property will expand in the future. When processing this property, check for and
@@ -21484,14 +22145,14 @@ namespace VpcV1 {
      *  unexpected property value was encountered.
      */
     status: string;
-    /** Array of reasons for the current status (if any).
+    /** The reasons for the current status (if any).
      *
      *  The enumerated reason code values for this property will expand in the future. When processing this property,
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected reason code was encountered.
      */
     status_reasons: VolumeStatusReason[];
-    /** The collection of volume attachments attaching instances to the volume. */
+    /** The volume attachments for this volume. */
     volume_attachments: VolumeAttachmentReferenceVolumeContext[];
     /** The zone this volume resides in. */
     zone: ZoneReference;
@@ -21544,14 +22205,28 @@ namespace VpcV1 {
     volume: VolumePrototypeInstanceByImageContext;
   }
 
+  /** VolumeAttachmentPrototypeInstanceByVolumeContext. */
+  export interface VolumeAttachmentPrototypeInstanceByVolumeContext {
+    /** If set to true, when deleting the instance the volume will also be deleted. */
+    delete_volume_on_instance_delete?: boolean;
+    /** The user-defined name for this volume attachment. */
+    name?: string;
+    /** An existing volume to attach to the instance, or a prototype object for a new volume. */
+    volume: VolumeAttachmentVolumePrototypeInstanceByVolumeContext;
+  }
+
   /** VolumeAttachmentPrototypeInstanceContext. */
   export interface VolumeAttachmentPrototypeInstanceContext {
     /** If set to true, when deleting the instance the volume will also be deleted. */
     delete_volume_on_instance_delete?: boolean;
     /** The user-defined name for this volume attachment. */
     name?: string;
-    /** The identity of the volume to attach to the instance, or a prototype object for a new volume. */
+    /** An existing volume to attach to the instance, or a prototype object for a new volume. */
     volume: VolumeAttachmentVolumePrototypeInstanceContext;
+  }
+
+  /** An existing volume to attach to the instance, or a prototype object for a new volume. */
+  export interface VolumeAttachmentPrototypeVolume {
   }
 
   /** VolumeAttachmentReferenceInstanceContext. */
@@ -21612,7 +22287,11 @@ namespace VpcV1 {
     more_info: string;
   }
 
-  /** The identity of the volume to attach to the instance, or a prototype object for a new volume. */
+  /** An existing volume to attach to the instance, or a prototype object for a new volume. */
+  export interface VolumeAttachmentVolumePrototypeInstanceByVolumeContext {
+  }
+
+  /** An existing volume to attach to the instance, or a prototype object for a new volume. */
   export interface VolumeAttachmentVolumePrototypeInstanceContext {
   }
 
@@ -21710,11 +22389,11 @@ namespace VpcV1 {
 
   /** VolumePrototypeInstanceByImageContext. */
   export interface VolumePrototypeInstanceByImageContext {
-    /** The capacity of the volume in gigabytes. The specified minimum and maximum capacity values for creating or
-     *  updating volumes may expand in the future.
+    /** The capacity to use for the volume (in gigabytes). The specified minimum and maximum capacity values for
+     *  creating or updating volumes may expand in the future.
      */
     capacity?: number;
-    /** The identity of the root key to use to wrap the data encryption key for the volume.
+    /** The root key to use to wrap the data encryption key for the volume.
      *
      *  If this property is not provided but the image is encrypted, the image's
      *  `encryption_key` will be used. Otherwise, the `encryption` type for the
@@ -22222,33 +22901,38 @@ namespace VpcV1 {
      *  If this property is not provided, the imported image is treated as unencrypted.
      */
     encrypted_data_key?: string;
-    /** The identity of the root key that was used to wrap the data key (which is ultimately
-     *  represented as `encrypted_data_key`). Additionally, the root key will be used to encrypt
-     *  volumes created from this image (unless an alternate `encryption_key` is provided at
-     *  volume creation).
+    /** The root key that was used to wrap the data key (which is ultimately represented as
+     *  `encrypted_data_key`). Additionally, the root key will be used to encrypt volumes
+     *  created from this image (unless an alternate `encryption_key` is provided at volume
+     *  creation).
      *
      *  If this property is not provided, the imported image is treated as unencrypted.
      */
     encryption_key?: EncryptionKeyIdentity;
     /** The file from which to create the image. */
     file: ImageFilePrototype;
-    /** The identity of the [supported operating
-     *  system](https://cloud.ibm.com/apidocs/vpc#list-operating-systems) included in
-     *  this image.
+    /** The [supported operating
+     *  system](https://cloud.ibm.com/apidocs/vpc#list-operating-systems) included in this
+     *  image.
      */
     operating_system: OperatingSystemIdentity;
   }
 
-  /** InstanceGroupManagerActionPatchScheduledActionPatch. */
-  export interface InstanceGroupManagerActionPatchScheduledActionPatch extends InstanceGroupManagerActionPatch {
-    /** The cron specification for a recurring scheduled action. Actions can be applied a maximum of one time within
-     *  a 5 min period.
+  /** ImagePrototypeImageBySourceVolume. */
+  export interface ImagePrototypeImageBySourceVolume extends ImagePrototype {
+    /** The root key used to wrap the system-generated data encryption key for the image.
+     *
+     *  If this property is not provided, the root key from `source_volume` will be used.
      */
-    cron_spec?: string;
-    group?: InstanceGroupManagerScheduledActionGroupPatch;
-    manager?: InstanceGroupManagerScheduledActionByManagerPatchManager;
-    /** The date and time the scheduled action will run. */
-    run_at?: string;
+    encryption_key?: EncryptionKeyIdentity;
+    /** The volume from which to create the image. The specified volume must:
+     *  - Originate from an image, which will be used to populate this image's
+     *    operating system information.
+     *  - Not be `active` or `busy`.
+     *
+     *  During image creation, the specified volume may briefly become `busy`.
+     */
+    source_volume: VolumeIdentity;
   }
 
   /** InstanceGroupManagerActionPrototypeScheduledActionPrototype. */
@@ -22335,24 +23019,8 @@ namespace VpcV1 {
     manager_type: string;
   }
 
-  /** The identity of the auto scale manager to update and the property or properties to be updated. Exactly one of `id` or `href` must be provided in addition to at least one of `min_membership_count` and `max_membership_count`. */
-  export interface InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototype extends InstanceGroupManagerScheduledActionByManagerManager {
-    /** The maximum number of members the instance group should have at the scheduled time. */
-    max_membership_count?: number;
-    /** The minimum number of members the instance group should have at the scheduled time. */
-    min_membership_count?: number;
-  }
-
-  /** InstanceGroupManagerScheduledActionByManagerPatchManagerAutoScalePatch. */
-  export interface InstanceGroupManagerScheduledActionByManagerPatchManagerAutoScalePatch extends InstanceGroupManagerScheduledActionByManagerPatchManager {
-    /** The maximum number of members the instance group should have at the scheduled time. */
-    max_membership_count?: number;
-    /** The minimum number of members the instance group should have at the scheduled time. */
-    min_membership_count?: number;
-  }
-
-  /** InstanceGroupManagerScheduledActionManagerManagerAutoScale. */
-  export interface InstanceGroupManagerScheduledActionManagerManagerAutoScale extends InstanceGroupManagerScheduledActionManagerManager {
+  /** InstanceGroupManagerScheduledActionManagerAutoScale. */
+  export interface InstanceGroupManagerScheduledActionManagerAutoScale extends InstanceGroupManagerScheduledActionManager {
     /** If present, this property indicates the referenced resource has been deleted and provides
      *  some supplementary information.
      */
@@ -22363,6 +23031,14 @@ namespace VpcV1 {
     id: string;
     /** The user-defined name for this instance group manager. Names must be unique within the instance group. */
     name: string;
+    /** The maximum number of members the instance group should have at the scheduled time. */
+    max_membership_count?: number;
+    /** The minimum number of members the instance group should have at the scheduled time. */
+    min_membership_count?: number;
+  }
+
+  /** The auto scale manager to update and the property or properties to be updated. Exactly one of `id` or `href` must be provided in addition to at least one of `min_membership_count` and `max_membership_count`. */
+  export interface InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototype extends InstanceGroupManagerScheduledActionManagerPrototype {
     /** The maximum number of members the instance group should have at the scheduled time. */
     max_membership_count?: number;
     /** The minimum number of members the instance group should have at the scheduled time. */
@@ -22387,6 +23063,46 @@ namespace VpcV1 {
 
   /** Identifies a dedicated host by a unique property. */
   export interface InstancePlacementTargetPrototypeDedicatedHostIdentity extends InstancePlacementTargetPrototype {
+  }
+
+  /** InstancePlacementTargetDedicatedHostGroupReference. */
+  export interface InstancePlacementTargetDedicatedHostGroupReference extends InstancePlacementTarget {
+    /** The CRN for this dedicated host group. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: DedicatedHostGroupReferenceDeleted;
+    /** The URL for this dedicated host group. */
+    href: string;
+    /** The unique identifier for this dedicated host group. */
+    id: string;
+    /** The unique user-defined name for this dedicated host group. If unspecified, the name will be a hyphenated
+     *  list of randomly-selected words.
+     */
+    name: string;
+    /** The type of resource referenced. */
+    resource_type: string;
+  }
+
+  /** InstancePlacementTargetDedicatedHostReference. */
+  export interface InstancePlacementTargetDedicatedHostReference extends InstancePlacementTarget {
+    /** The CRN for this dedicated host. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: DedicatedHostReferenceDeleted;
+    /** The URL for this dedicated host. */
+    href: string;
+    /** The unique identifier for this dedicated host. */
+    id: string;
+    /** The unique user-defined name for this dedicated host. If unspecified, the name will be a hyphenated list of
+     *  randomly-selected words.
+     */
+    name: string;
+    /** The type of resource referenced. */
+    resource_type: string;
   }
 
   /** The total bandwidth shared across the network interfaces and storage volumes of an instance with this profile depends on its configuration. */
@@ -22609,7 +23325,7 @@ namespace VpcV1 {
   export interface InstancePrototypeInstanceByImage extends InstancePrototype {
     /** The boot volume attachment for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
-    /** The identity of the image to use when provisioning the virtual server instance. */
+    /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface: NetworkInterfacePrototype;
@@ -22621,7 +23337,7 @@ namespace VpcV1 {
   export interface InstancePrototypeInstanceBySourceTemplate extends InstancePrototype {
     /** The boot volume attachment for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
-    /** The identity of the image to use when provisioning the virtual server instance. */
+    /** The image to use when provisioning the virtual server instance. */
     image?: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface?: NetworkInterfacePrototype;
@@ -22629,6 +23345,16 @@ namespace VpcV1 {
     source_template: InstanceTemplateIdentity;
     /** The zone this virtual server instance will reside in. */
     zone?: ZoneIdentity;
+  }
+
+  /** InstancePrototypeInstanceByVolume. */
+  export interface InstancePrototypeInstanceByVolume extends InstancePrototype {
+    /** The boot volume attachment for the virtual server instance. */
+    boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
+    /** Primary network interface. */
+    primary_network_interface: NetworkInterfacePrototype;
+    /** The zone this virtual server instance will reside in. */
+    zone: ZoneIdentity;
   }
 
   /** InstanceTemplateIdentityByCRN. */
@@ -22653,7 +23379,7 @@ namespace VpcV1 {
   export interface InstanceTemplatePrototypeInstanceByImage extends InstanceTemplatePrototype {
     /** The boot volume attachment for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
-    /** The identity of the image to use when provisioning the virtual server instance. */
+    /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface: NetworkInterfacePrototype;
@@ -22665,7 +23391,7 @@ namespace VpcV1 {
   export interface InstanceTemplatePrototypeInstanceBySourceTemplate extends InstanceTemplatePrototype {
     /** The boot volume attachment for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
-    /** The identity of the image to use when provisioning the virtual server instance. */
+    /** The image to use when provisioning the virtual server instance. */
     image?: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface?: NetworkInterfacePrototype;
@@ -22675,11 +23401,21 @@ namespace VpcV1 {
     zone?: ZoneIdentity;
   }
 
+  /** InstanceTemplatePrototypeInstanceByVolume. */
+  export interface InstanceTemplatePrototypeInstanceByVolume extends InstanceTemplatePrototype {
+    /** The boot volume attachment for the virtual server instance. */
+    boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
+    /** Primary network interface. */
+    primary_network_interface: NetworkInterfacePrototype;
+    /** The zone this virtual server instance will reside in. */
+    zone: ZoneIdentity;
+  }
+
   /** InstanceTemplateInstanceByImage. */
   export interface InstanceTemplateInstanceByImage extends InstanceTemplate {
     /** The boot volume attachment for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
-    /** The identity of the image to use when provisioning the virtual server instance. */
+    /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface: NetworkInterfacePrototype;
@@ -22691,7 +23427,7 @@ namespace VpcV1 {
   export interface InstanceTemplateInstanceBySourceTemplate extends InstanceTemplate {
     /** The boot volume attachment for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
-    /** The identity of the image to use when provisioning the virtual server instance. */
+    /** The image to use when provisioning the virtual server instance. */
     image?: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface?: NetworkInterfacePrototype;
@@ -22699,6 +23435,16 @@ namespace VpcV1 {
     source_template: InstanceTemplateIdentity;
     /** The zone this virtual server instance will reside in. */
     zone?: ZoneIdentity;
+  }
+
+  /** InstanceTemplateInstanceByVolume. */
+  export interface InstanceTemplateInstanceByVolume extends InstanceTemplate {
+    /** The boot volume attachment for the virtual server instance. */
+    boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
+    /** Primary network interface. */
+    primary_network_interface: NetworkInterfacePrototype;
+    /** The zone this virtual server instance will reside in. */
+    zone: ZoneIdentity;
   }
 
   /** KeyIdentityByCRN. */
@@ -22775,7 +23521,7 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyRedirectURLPatch. */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyRedirectURLPatch extends LoadBalancerListenerPolicyTargetPatch {
-    /** The http status code in the redirect response. */
+    /** The HTTP status code for this redirect. */
     http_status_code?: number;
     /** The redirect target URL. */
     url?: string;
@@ -22787,7 +23533,7 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyRedirectURLPrototype. */
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyRedirectURLPrototype extends LoadBalancerListenerPolicyTargetPrototype {
-    /** The http status code in the redirect response. */
+    /** The HTTP status code for this redirect. */
     http_status_code: number;
     /** The redirect target URL. */
     url: string;
@@ -22799,7 +23545,7 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyRedirectURL. */
   export interface LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyRedirectURL extends LoadBalancerListenerPolicyTarget {
-    /** The http status code in the redirect response. */
+    /** The HTTP status code for this redirect. */
     http_status_code: number;
     /** The redirect target URL. */
     url: string;
@@ -22917,7 +23663,7 @@ namespace VpcV1 {
 
   /** NetworkACLPrototypeNetworkACLByRules. */
   export interface NetworkACLPrototypeNetworkACLByRules extends NetworkACLPrototype {
-    /** Array of prototype objects for rules to create along with this network ACL. If unspecified, no rules will be
+    /** The prototype objects for rules to create along with this network ACL. If unspecified, no rules will be
      *  created, resulting in all traffic being denied.
      */
     rules?: NetworkACLRulePrototypeNetworkACLContext[];
@@ -23227,28 +23973,67 @@ namespace VpcV1 {
 
   /** When `protocol` is `all`, then it's invalid to specify `port_min`, `port_max`, `type` or `code`. */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll extends SecurityGroupRulePrototype {
+    /** The direction of traffic to enforce, either `inbound` or `outbound`. */
+    direction: string;
+    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
+     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
+     *  addresses (network interfaces) in that group matching this IP version.
+     */
+    ip_version?: string;
     /** The protocol to enforce. */
     protocol: string;
+    /** The IP addresses or security groups from which this rule will allow traffic (or to
+     *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
+     *  security group. If omitted, a CIDR block of `0.0.0.0/0` will be used to allow traffic
+     *  from any source (or to any source, for outbound rules).
+     */
+    remote?: SecurityGroupRuleRemotePrototype;
   }
 
-  /** When `protocol` is `icmp`, then the rule may also contain fields to specify an ICMP `type` and `code`. Field `code` may only be specified if `type` is also specified. If type is not specified, then traffic is allowed for all types and codes. If type is specified and code is not specified, then traffic is allowed with the specified type for all codes. */
+  /** When `protocol` is `icmp`, the `type` property may optionally be specified. If specified, then ICMP traffic is allowed only for the specified ICMP type. Further, if `type` is specified, the `code` property may optionally be specified to allow traffic only for the specified ICMP code. */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP extends SecurityGroupRulePrototype {
     /** The ICMP traffic code to allow. */
     code?: number;
+    /** The direction of traffic to enforce, either `inbound` or `outbound`. */
+    direction: string;
+    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
+     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
+     *  addresses (network interfaces) in that group matching this IP version.
+     */
+    ip_version?: string;
     /** The protocol to enforce. */
     protocol: string;
+    /** The IP addresses or security groups from which this rule will allow traffic (or to
+     *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
+     *  security group. If omitted, a CIDR block of `0.0.0.0/0` will be used to allow traffic
+     *  from any source (or to any source, for outbound rules).
+     */
+    remote?: SecurityGroupRuleRemotePrototype;
     /** The ICMP traffic type to allow. */
     type?: number;
   }
 
   /** If `protocol` is either `tcp` or `udp`, then the rule may also contain `port_min` and `port_max`. Either both must be set, or neither. When neither is set then traffic is allowed on all ports. For a single port, set both to the same value. */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP extends SecurityGroupRulePrototype {
+    /** The direction of traffic to enforce, either `inbound` or `outbound`. */
+    direction: string;
+    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
+     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
+     *  addresses (network interfaces) in that group matching this IP version.
+     */
+    ip_version?: string;
     /** The inclusive upper bound of TCP/UDP port range. */
     port_max?: number;
     /** The inclusive lower bound of TCP/UDP port range. */
     port_min?: number;
     /** The protocol to enforce. */
     protocol: string;
+    /** The IP addresses or security groups from which this rule will allow traffic (or to
+     *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
+     *  security group. If omitted, a CIDR block of `0.0.0.0/0` will be used to allow traffic
+     *  from any source (or to any source, for outbound rules).
+     */
+    remote?: SecurityGroupRuleRemotePrototype;
   }
 
   /** SecurityGroupRuleRemotePatchCIDR. */
@@ -23343,7 +24128,7 @@ namespace VpcV1 {
     protocol: string;
   }
 
-  /** When `protocol` is `icmp`, then the rule may also contain fields to specify an ICMP `type` and `code`. Field `code` may only be specified if `type` is also specified. If type is not specified, then traffic is allowed for all types and codes. If type is specified and code is not specified, then traffic is allowed with the specified type for all codes. */
+  /** When `protocol` is `icmp`, the `type` property may optionally be specified. If specified, then ICMP traffic is allowed only for the specified ICMP type. Further, if `type` is specified, the `code` property may optionally be specified to allow traffic only for the specified ICMP code. */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolICMP extends SecurityGroupRule {
     /** The ICMP traffic code to allow. */
     code?: number;
@@ -23393,6 +24178,24 @@ namespace VpcV1 {
     name: string;
     /** The resource type. */
     resource_type: string;
+  }
+
+  /** SnapshotIdentityByCRN. */
+  export interface SnapshotIdentityByCRN extends SnapshotIdentity {
+    /** The CRN for this snapshot. */
+    crn: string;
+  }
+
+  /** SnapshotIdentityByHref. */
+  export interface SnapshotIdentityByHref extends SnapshotIdentity {
+    /** The URL for this snapshot. */
+    href: string;
+  }
+
+  /** SnapshotIdentityById. */
+  export interface SnapshotIdentityById extends SnapshotIdentity {
+    /** The unique identifier for this snapshot. */
+    id: string;
   }
 
   /** SubnetIdentityByCRN. */
@@ -23463,17 +24266,17 @@ namespace VpcV1 {
 
   /** VPNGatewayConnectionPolicyMode. */
   export interface VPNGatewayConnectionPolicyMode extends VPNGatewayConnection {
-    /** A collection of local CIDRs for this resource. */
+    /** The local CIDRs for this resource. */
     local_cidrs: string[];
-    /** A collection of peer CIDRs for this resource. */
+    /** The peer CIDRs for this resource. */
     peer_cidrs: string[];
   }
 
   /** VPNGatewayConnectionPrototypeVPNGatewayConnectionPolicyModePrototype. */
   export interface VPNGatewayConnectionPrototypeVPNGatewayConnectionPolicyModePrototype extends VPNGatewayConnectionPrototype {
-    /** A collection of local CIDRs for this resource. */
+    /** The local CIDRs for this resource. */
     local_cidrs: string[];
-    /** A collection of peer CIDRs for this resource. */
+    /** The peer CIDRs for this resource. */
     peer_cidrs: string[];
   }
 
@@ -23513,6 +24316,43 @@ namespace VpcV1 {
   export interface VPNGatewayRouteMode extends VPNGateway {
     /** Route mode VPN gateway. */
     mode: string;
+  }
+
+  /** Identifies a volume by a unique property. */
+  export interface VolumeAttachmentPrototypeVolumeVolumeIdentity extends VolumeAttachmentPrototypeVolume {
+  }
+
+  /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext. */
+  export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext extends VolumeAttachmentPrototypeVolume {
+    /** The bandwidth for the volume. */
+    iops?: number;
+    /** The unique user-defined name for this volume. */
+    name?: string;
+    /** The profile to use for this volume. */
+    profile: VolumeProfileIdentity;
+  }
+
+  /** VolumeAttachmentVolumePrototypeInstanceByVolumeContextVolumePrototypeInstanceByVolumeContext. */
+  export interface VolumeAttachmentVolumePrototypeInstanceByVolumeContextVolumePrototypeInstanceByVolumeContext extends VolumeAttachmentVolumePrototypeInstanceByVolumeContext {
+    /** The capacity to use for the volume (in gigabytes). The only allowed value is the source snapshot's
+     *  `minimum_capacity`, but the allowed values are expected to expand in the future.
+     *
+     *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
+     */
+    capacity?: number;
+    /** The root key to use to wrap the data encryption key for the volume.
+     *
+     *  If this property is not provided, the snapshot's `encryption_key` will be used.
+     */
+    encryption_key?: EncryptionKeyIdentity;
+    /** The bandwidth for the volume. */
+    iops?: number;
+    /** The unique user-defined name for this volume. */
+    name?: string;
+    /** The profile to use for this volume. */
+    profile: VolumeProfileIdentity;
+    /** The snapshot from which to clone the volume. */
+    source_snapshot: SnapshotIdentity;
   }
 
   /** Identifies a volume by a unique property. */
@@ -23561,11 +24401,11 @@ namespace VpcV1 {
 
   /** VolumePrototypeVolumeByCapacity. */
   export interface VolumePrototypeVolumeByCapacity extends VolumePrototype {
-    /** The capacity of the volume in gigabytes. The specified minimum and maximum capacity values for creating or
-     *  updating volumes may expand in the future.
+    /** The capacity to use for the volume (in gigabytes). The specified minimum and maximum capacity values for
+     *  creating or updating volumes may expand in the future.
      */
     capacity: number;
-    /** The identity of the root key to use to wrap the data encryption key for the volume.
+    /** The root key to use to wrap the data encryption key for the volume.
      *
      *  If this property is not provided, the `encryption` type for the volume will be
      *  `provider_managed`.
@@ -23691,24 +24531,24 @@ namespace VpcV1 {
     run_at?: string;
   }
 
-  /** InstanceGroupManagerActionScheduledActionGroup. */
-  export interface InstanceGroupManagerActionScheduledActionGroup extends InstanceGroupManagerActionScheduledAction {
-    group: InstanceGroupManagerScheduledActionGroupGroup;
+  /** InstanceGroupManagerActionScheduledActionGroupTarget. */
+  export interface InstanceGroupManagerActionScheduledActionGroupTarget extends InstanceGroupManagerActionScheduledAction {
+    group: InstanceGroupManagerScheduledActionGroup;
   }
 
-  /** InstanceGroupManagerActionScheduledActionManager. */
-  export interface InstanceGroupManagerActionScheduledActionManager extends InstanceGroupManagerActionScheduledAction {
-    manager: InstanceGroupManagerScheduledActionManagerManager;
+  /** InstanceGroupManagerActionScheduledActionManagerTarget. */
+  export interface InstanceGroupManagerActionScheduledActionManagerTarget extends InstanceGroupManagerActionScheduledAction {
+    manager: InstanceGroupManagerScheduledActionManager;
   }
 
-  /** InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototypeInstanceGroupManagerScheduledActionManagerAutoScalePrototypeInstanceGroupManagerIdentityByHref. */
-  export interface InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototypeInstanceGroupManagerScheduledActionManagerAutoScalePrototypeInstanceGroupManagerIdentityByHref extends InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototype {
+  /** InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeByHref. */
+  export interface InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeByHref extends InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototype {
     /** The URL for this instance group manager. */
     href: string;
   }
 
-  /** InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototypeInstanceGroupManagerScheduledActionManagerAutoScalePrototypeInstanceGroupManagerIdentityById. */
-  export interface InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototypeInstanceGroupManagerScheduledActionManagerAutoScalePrototypeInstanceGroupManagerIdentityById extends InstanceGroupManagerScheduledActionByManagerManagerAutoScalePrototype {
+  /** InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeById. */
+  export interface InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeById extends InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototype {
     /** The unique identifier for this instance group manager. */
     id: string;
   }
@@ -23881,6 +24721,54 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityByCRN. */
+  export interface VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityByCRN extends VolumeAttachmentPrototypeVolumeVolumeIdentity {
+    /** The CRN for this volume. */
+    crn: string;
+  }
+
+  /** VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityByHref. */
+  export interface VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityByHref extends VolumeAttachmentPrototypeVolumeVolumeIdentity {
+    /** The URL for this volume. */
+    href: string;
+  }
+
+  /** VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityById. */
+  export interface VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityById extends VolumeAttachmentPrototypeVolumeVolumeIdentity {
+    /** The unique identifier for this volume. */
+    id: string;
+  }
+
+  /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity. */
+  export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity extends VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext {
+    /** The capacity to use for the volume (in gigabytes). The specified minimum and maximum capacity values for
+     *  creating or updating volumes may expand in the future.
+     */
+    capacity: number;
+    /** The root key to use to wrap the data encryption key for the volume.
+     *
+     *  If this property is not provided, the `encryption` type for the volume will be
+     *  `provider_managed`.
+     */
+    encryption_key?: EncryptionKeyIdentity;
+  }
+
+  /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot. */
+  export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot extends VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext {
+    /** The capacity to use for the volume (in gigabytes). The allowed values are expected to expand in the future.
+     *
+     *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
+     */
+    capacity?: number;
+    /** The root key to use to wrap the data encryption key for the volume.
+     *
+     *  If this property is not provided, the snapshot's `encryption_key` will be used.
+     */
+    encryption_key?: EncryptionKeyIdentity;
+    /** The snapshot from which to clone the volume. */
+    source_snapshot: SnapshotIdentity;
+  }
+
   /** VolumeAttachmentVolumePrototypeInstanceContextVolumeIdentityVolumeIdentityByCRN. */
   export interface VolumeAttachmentVolumePrototypeInstanceContextVolumeIdentityVolumeIdentityByCRN extends VolumeAttachmentVolumePrototypeInstanceContextVolumeIdentity {
     /** The CRN for this volume. */
@@ -23901,16 +24789,32 @@ namespace VpcV1 {
 
   /** VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity. */
   export interface VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity extends VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContext {
-    /** The capacity of the volume in gigabytes. The specified minimum and maximum capacity values for creating or
-     *  updating volumes may expand in the future.
+    /** The capacity to use for the volume (in gigabytes). The specified minimum and maximum capacity values for
+     *  creating or updating volumes may expand in the future.
      */
     capacity: number;
-    /** The identity of the root key to use to wrap the data encryption key for the volume.
+    /** The root key to use to wrap the data encryption key for the volume.
      *
      *  If this property is not provided, the `encryption` type for the volume will be
      *  `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
+  }
+
+  /** VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot. */
+  export interface VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot extends VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContext {
+    /** The capacity to use for the volume (in gigabytes). The allowed values are expected to expand in the future.
+     *
+     *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
+     */
+    capacity?: number;
+    /** The root key to use to wrap the data encryption key for the volume.
+     *
+     *  If this property is not provided, the snapshot's `encryption_key` will be used.
+     */
+    encryption_key?: EncryptionKeyIdentity;
+    /** The snapshot from which to clone the volume. */
+    source_snapshot: SnapshotIdentity;
   }
 
   /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByGroup. */
@@ -23920,7 +24824,7 @@ namespace VpcV1 {
 
   /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByManager. */
   export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec {
-    manager: InstanceGroupManagerScheduledActionByManagerManager;
+    manager: InstanceGroupManagerScheduledActionManagerPrototype;
   }
 
   /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByGroup. */
@@ -23930,7 +24834,7 @@ namespace VpcV1 {
 
   /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByManager. */
   export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt {
-    manager: InstanceGroupManagerScheduledActionByManagerManager;
+    manager: InstanceGroupManagerScheduledActionManagerPrototype;
   }
 
 }
