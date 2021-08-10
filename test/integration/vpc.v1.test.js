@@ -1,6 +1,6 @@
 /* eslint-disable no-console */
 /**
- * (C) Copyright IBM Corp. 2020.
+ * (C) Copyright IBM Corp. 2020, 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -812,6 +812,73 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  // Snapshots
+  test('listSnapshots()', async () => {
+    const res = await vpcService.listSnapshots();
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('createSnapshot()', async () => {
+    // Request models needed by this operation.
+
+    // VolumeIdentityById
+    const volumeIdentityModel = {
+      id: dict.createdVolume,
+    };
+    const params = {
+      sourceVolume: volumeIdentityModel,
+      name: generateName('snap1'),
+    };
+
+    const res = await vpcService.createSnapshot(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+    const params2 = {
+      sourceVolume: volumeIdentityModel,
+      name: generateName('snap2'),
+    };
+    const res2 = await vpcService.createSnapshot(params2);
+    expect(res2).toBeDefined();
+    expect(res2.result).toBeDefined();
+    dict.snapshotId = res2.result.id;
+  });
+  test('getSnapshot()', async () => {
+    const params = {
+      id: dict.snapshotId,
+    };
+
+    const res = await vpcService.getSnapshot(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('updateSnapshot()', async () => {
+    const params = {
+      id: dict.snapshotId,
+      name: generateName('snap3'),
+    };
+
+    const res = await vpcService.updateSnapshot(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('deleteSnapshot()', async () => {
+    const params = {
+      id: dict.snapshotId,
+    };
+
+    const res = await vpcService.deleteSnapshot(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('deleteSnapshots()', async () => {
+    const params = {
+      sourceVolumeId: dict.createdVolume,
+    };
+
+    const res = await vpcService.deleteSnapshots(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
   // Instance Profiles
   test('listInstanceProfiles()', done => {
     vpcService
@@ -957,7 +1024,7 @@ describe('VpcV1_integration', () => {
   });
   test('createInstance()', done => {
     const subnetIdentityModel = {
-      id: dict.subnetId,
+      id: dict.createdSubnet,
     };
 
     const networkInterfacePrototypeModel = {
@@ -970,7 +1037,7 @@ describe('VpcV1_integration', () => {
     };
 
     const vpcIdentityModel = {
-      id: dict.vpcId,
+      id: dict.createVpc,
     };
 
     const zoneIdentityModel = {
@@ -1092,7 +1159,7 @@ describe('VpcV1_integration', () => {
   });
   test('createInstanceNetworkInterface()', done => {
     const subnetIdentityModel = {
-      id: dict.subnetId,
+      id: dict.createdSubnet,
     };
 
     const params = {
@@ -3589,23 +3656,6 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('deleteSubnetReservedIp()', done => {
-    const params = {
-      subnetId: dict.createdSubnet,
-      id: dict.createdReservedIp,
-    };
-
-    vpcService
-      .deleteSubnetReservedIp(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
   test('listEndpointGateways()', done => {
     vpcService
       .listEndpointGateways()
@@ -3656,14 +3706,14 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('getEndpointGatewayIp()', done => {
+  test('addEndpointGatewayIp()', done => {
     const params = {
       endpointGatewayId: dict.createdEndpointGateway,
       id: dict.createdReservedIp,
     };
 
     vpcService
-      .getEndpointGatewayIp(params)
+      .addEndpointGatewayIp(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -3673,14 +3723,14 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('addEndpointGatewayIp()', done => {
+  test('getEndpointGatewayIp()', done => {
     const params = {
       endpointGatewayId: dict.createdEndpointGateway,
       id: dict.createdReservedIp,
     };
 
     vpcService
-      .addEndpointGatewayIp(params)
+      .getEndpointGatewayIp(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -3747,6 +3797,23 @@ describe('VpcV1_integration', () => {
 
     vpcService
       .deleteEndpointGateway(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteSubnetReservedIp()', done => {
+    const params = {
+      subnetId: dict.createdSubnet,
+      id: dict.createdReservedIp,
+    };
+
+    vpcService
+      .deleteSubnetReservedIp(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -3823,6 +3890,41 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('createVpcRoutingTable2()', done => {
+    const routeNextHopPrototypeModel = {
+      address: '192.168.3.5',
+    };
+
+    const zoneIdentityModel = {
+      name: dict.zone,
+    };
+
+    const routePrototypeModel = {
+      action: 'delegate',
+      destination: '192.168.3.0/24',
+      name: 'my-route-2',
+      next_hop: routeNextHopPrototypeModel,
+      zone: zoneIdentityModel,
+    };
+
+    const params = {
+      vpcId: dict.createdVpc,
+      name: 'my-routing-table-3',
+      routes: [routePrototypeModel],
+    };
+
+    vpcService
+      .createVpcRoutingTable(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdVpcRoutingTable2 = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('getVpcRoutingTable()', done => {
     const params = {
       vpcId: dict.createdVpc,
@@ -3876,14 +3978,10 @@ describe('VpcV1_integration', () => {
       });
   });
   test('createVpcRoutingTableRoute()', done => {
-    // Request models needed by this operation.
-
-    // RouteNextHopPrototypeRouteNextHopIP
     const routeNextHopPrototypeModel = {
       address: '192.168.3.4',
     };
 
-    // ZoneIdentityByName
     const zoneIdentityModel = {
       name: dict.zoneName,
     };
@@ -3947,15 +4045,9 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('deleteVpcRoutingTableRoute()', done => {
-    const params = {
-      vpcId: dict.createdVpc,
-      routingTableId: dict.createdVpcRoutingTable,
-      id: dict.createdVpcRoutingTableRoute,
-    };
-
+  test('listDedicatedHostGroups()', done => {
     vpcService
-      .deleteVpcRoutingTableRoute(params)
+      .listDedicatedHostGroups()
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -3965,14 +4057,205 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('deleteVpcRoutingTable()', done => {
+  test('createDedicatedHostGroup()', done => {
     const params = {
-      vpcId: dict.createdVpc,
-      id: dict.createdVpcRoutingTable,
+      _class: 'mx2',
+      family: 'balanced',
+      zone: { name: dict.zoneName },
+      name: 'my-dedicated-host-group-1',
     };
 
     vpcService
-      .deleteVpcRoutingTable(params)
+      .createDedicatedHostGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdDHGroup = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getDedicatedHostGroup()', done => {
+    const params = {
+      id: dict.createdDHGroup,
+    };
+
+    vpcService
+      .getDedicatedHostGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateDedicatedHostGroup()', done => {
+    const params = {
+      id: dict.createdDHGroup,
+      name: 'my-host-group-modified',
+    };
+
+    vpcService
+      .updateDedicatedHostGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('listDedicatedHostProfiles()', done => {
+    vpcService
+      .listDedicatedHostProfiles()
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.dhProfileName = res.result.profiles[0].name;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getDedicatedHostProfile()', done => {
+    const params = {
+      name: dict.dhProfileName,
+    };
+
+    vpcService
+      .getDedicatedHostProfile(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('listDedicatedHosts()', done => {
+    vpcService
+      .listDedicatedHosts()
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createDedicatedHost()', done => {
+    const dedicatedHostProfileIdentityModel = {
+      name: dict.dhProfileName,
+    };
+
+    const dedicatedHostGroupIdentityModel = {
+      id: dict.createdDHGroup,
+    };
+
+    const dedicatedHostPrototypeModel = {
+      name: 'my-host',
+      profile: dedicatedHostProfileIdentityModel,
+      group: dedicatedHostGroupIdentityModel,
+    };
+
+    const params = {
+      dedicatedHostPrototype: dedicatedHostPrototypeModel,
+    };
+
+    vpcService
+      .createDedicatedHost(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdDH = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getDedicatedHost()', done => {
+    const params = {
+      id: dict.createdDH,
+    };
+
+    vpcService
+      .getDedicatedHost(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateDedicatedHost()', done => {
+    const params = {
+      id: dict.createdDH,
+      name: 'my-host-modified',
+    };
+
+    vpcService
+      .updateDedicatedHost(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteDedicatedHostGroup()', done => {
+    const params = {
+      id: dict.createdDHGroup,
+    };
+
+    vpcService
+      .deleteDedicatedHostGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteDedicatedHost()', done => {
+    const params = {
+      id: dict.createdDH,
+    };
+
+    vpcService
+      .deleteDedicatedHost(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteVpcRoutingTableRoute()', done => {
+    const params = {
+      vpcId: dict.createdVpc,
+      routingTableId: dict.createdVpcRoutingTable,
+      id: dict.createdVpcRoutingTableRoute,
+    };
+
+    vpcService
+      .deleteVpcRoutingTableRoute(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -4013,6 +4296,22 @@ describe('VpcV1_integration', () => {
 
     vpcService
       .replaceSubnetRoutingTable(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteVpcRoutingTable()', done => {
+    const params = {
+      vpcId: dict.createdVpc,
+      id: dict.createdVpcRoutingTable2,
+    };
+    vpcService
+      .deleteVpcRoutingTable(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -4100,208 +4399,6 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('listDedicatedHostGroups()', done => {
-    vpcService
-      .listDedicatedHostGroups()
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('createDedicatedHostGroup()', done => {
-    const params = {
-      _class: 'mx2',
-      family: 'balanced',
-      zone: { name: dict.zoneName },
-      name: 'my-dedicated-host-group-1',
-    };
-
-    vpcService
-      .createDedicatedHostGroup(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        dict.createdDHGroup = res.result.id;
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('getDedicatedHostGroup()', done => {
-    const params = {
-      id: dict.createdDHGroup,
-    };
-
-    vpcService
-      .getDedicatedHostGroup(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('updateDedicatedHostGroup()', done => {
-    const params = {
-      id: dict.createdDHGroup,
-      name: 'my-host-group-modified',
-    };
-
-    vpcService
-      .updateDedicatedHostGroup(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('listDedicatedHostProfiles()', done => {
-    vpcService
-      .listDedicatedHostProfiles()
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        dict.dhProfileName = res.result[0].name;
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('getDedicatedHostProfile()', done => {
-    const params = {
-      name: dict.dhProfileName,
-    };
-
-    vpcService
-      .getDedicatedHostProfile(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('listDedicatedHosts()', done => {
-    vpcService
-      .listDedicatedHosts()
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('createDedicatedHost()', done => {
-    const dedicatedHostProfileIdentityModel = {
-      name: dict.dhProfileName,
-    };
-
-    const dedicatedHostGroupIdentityModel = {
-      id: dict.createdDHGroup,
-    };
-
-    const dedicatedHostPrototypeModel = {
-      name: 'my-host',
-      profile: dedicatedHostProfileIdentityModel,
-      group: { id: dedicatedHostGroupIdentityModel },
-    };
-
-    const params = {
-      dedicatedHostPrototype: dedicatedHostPrototypeModel,
-    };
-
-    vpcService
-      .createDedicatedHost(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        dict.createdDH = res.result.id;
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('getDedicatedHost()', done => {
-    const params = {
-      id: dict.createdDH,
-    };
-
-    vpcService
-      .getDedicatedHost(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('updateDedicatedHost()', done => {
-    const params = {
-      id: dict.createdDH,
-      name: 'my-host-modified',
-    };
-
-    vpcService
-      .updateDedicatedHost(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('deleteDedicatedHostGroup()', done => {
-    const params = {
-      id: dict.createdDHGroup,
-    };
-
-    vpcService
-      .deleteDedicatedHostGroup(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('deleteDedicatedHost()', done => {
-    const params = {
-      id: dict.createdDH,
-    };
-
-    vpcService
-      .deleteDedicatedHost(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
   test('deleteInstanceNetworkInterface()', done => {
     const params = {
       instanceId: dict.createdInstance,
@@ -4343,22 +4440,6 @@ describe('VpcV1_integration', () => {
 
     vpcService
       .deleteInstance(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('deleteVolume()', done => {
-    const params = {
-      id: dict.createdVolume,
-    };
-
-    vpcService
-      .deleteVolume(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -4480,7 +4561,22 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('deleteVolume()', done => {
+    const params = {
+      id: dict.createdVolume,
+    };
 
+    vpcService
+      .deleteVolume(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('deleteVpc()', done => {
     const params = {
       id: dict.createdVpc,
