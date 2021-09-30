@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2020, 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,23 +15,30 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.35.1-e449803c-20210628-211617
+ * IBM OpenAPI SDK Code Generator Version: 3.39.0-748eb4ca-20210917-165907
  */
-
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { Authenticator, BaseService, getAuthenticatorFromEnvironment, getMissingParams, UserOptions } from 'ibm-cloud-sdk-core';
+import {
+  Authenticator,
+  BaseService,
+  getAuthenticatorFromEnvironment,
+  getMissingParams,
+  UserOptions,
+} from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
 
 /**
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage infrastructure
  * resources, including virtual server instances, subnets, volumes, and load balancers.
+ *
+ * API Version: 2021-09-21
  */
 
 class VpcV1 extends BaseService {
-
   static DEFAULT_SERVICE_URL: string = 'https://us-south.iaas.cloud.ibm.com/v1';
+
   static DEFAULT_SERVICE_NAME: string = 'vpc';
 
   /*************************
@@ -65,7 +72,6 @@ class VpcV1 extends BaseService {
     return service;
   }
 
-
   /** Requests the version of the API as of a date in the format `YYYY-MM-DD`. Any date up to the current date may
    *  be provided. Specify the current date to request the latest version.
    */
@@ -96,7 +102,7 @@ class VpcV1 extends BaseService {
     } else {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
-    this.version = options.version || '2021-08-03';
+    this.version = options.version || '2021-09-21';
     this.generation = options.generation;
   }
 
@@ -120,8 +126,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPCCollection>>}
    */
-  public listVpcs(params?: VpcV1.ListVpcsParams): Promise<VpcV1.Response<VpcV1.VPCCollection>> {
-    const _params = Object.assign({}, params);
+  public listVpcs(
+    params?: VpcV1.ListVpcsParams
+  ): Promise<VpcV1.Response<VpcV1.VPCCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -129,10 +137,14 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
-      'classic_access': _params.classicAccess
+      'classic_access': _params.classicAccess,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcs');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVpcs'
+    );
 
     const parameters = {
       options: {
@@ -141,14 +153,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a VPC.
@@ -172,22 +189,28 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPC>>}
    */
-  public createVpc(params?: VpcV1.CreateVpcParams): Promise<VpcV1.Response<VpcV1.VPC>> {
-    const _params = Object.assign({}, params);
+  public createVpc(
+    params?: VpcV1.CreateVpcParams
+  ): Promise<VpcV1.Response<VpcV1.VPC>> {
+    const _params = { ...params };
 
     const body = {
       'address_prefix_management': _params.addressPrefixManagement,
       'classic_access': _params.classicAccess,
       'name': _params.name,
-      'resource_group': _params.resourceGroup
+      'resource_group': _params.resourceGroup,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpc');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createVpc'
+    );
 
     const parameters = {
       options: {
@@ -197,15 +220,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a VPC.
@@ -220,8 +248,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteVpc(params: VpcV1.DeleteVpcParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteVpc(
+    params: VpcV1.DeleteVpcParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -231,14 +261,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpc');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteVpc'
+    );
 
     const parameters = {
       options: {
@@ -248,13 +282,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a VPC.
@@ -266,8 +305,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPC>>}
    */
-  public getVpc(params: VpcV1.GetVpcParams): Promise<VpcV1.Response<VpcV1.VPC>> {
-    const _params = Object.assign({}, params);
+  public getVpc(
+    params: VpcV1.GetVpcParams
+  ): Promise<VpcV1.Response<VpcV1.VPC>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -277,14 +318,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpc');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVpc'
+    );
 
     const parameters = {
       options: {
@@ -294,14 +339,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a VPC.
@@ -314,8 +364,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPC>>}
    */
-  public updateVpc(params: VpcV1.UpdateVpcParams): Promise<VpcV1.Response<VpcV1.VPC>> {
-    const _params = Object.assign({}, params);
+  public updateVpc(
+    params: VpcV1.UpdateVpcParams
+  ): Promise<VpcV1.Response<VpcV1.VPC>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -324,19 +376,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpc');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVpc'
+    );
 
     const parameters = {
       options: {
@@ -347,15 +403,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a VPC's default network ACL.
@@ -368,8 +429,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DefaultNetworkACL>>}
    */
-  public getVpcDefaultNetworkAcl(params: VpcV1.GetVpcDefaultNetworkAclParams): Promise<VpcV1.Response<VpcV1.DefaultNetworkACL>> {
-    const _params = Object.assign({}, params);
+  public getVpcDefaultNetworkAcl(
+    params: VpcV1.GetVpcDefaultNetworkAclParams
+  ): Promise<VpcV1.Response<VpcV1.DefaultNetworkACL>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -379,14 +442,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDefaultNetworkAcl');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVpcDefaultNetworkAcl'
+    );
 
     const parameters = {
       options: {
@@ -396,14 +463,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a VPC's default routing table.
@@ -417,8 +489,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DefaultRoutingTable>>}
    */
-  public getVpcDefaultRoutingTable(params: VpcV1.GetVpcDefaultRoutingTableParams): Promise<VpcV1.Response<VpcV1.DefaultRoutingTable>> {
-    const _params = Object.assign({}, params);
+  public getVpcDefaultRoutingTable(
+    params: VpcV1.GetVpcDefaultRoutingTableParams
+  ): Promise<VpcV1.Response<VpcV1.DefaultRoutingTable>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -428,14 +502,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDefaultRoutingTable');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVpcDefaultRoutingTable'
+    );
 
     const parameters = {
       options: {
@@ -445,14 +523,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a VPC's default security group.
@@ -465,8 +548,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DefaultSecurityGroup>>}
    */
-  public getVpcDefaultSecurityGroup(params: VpcV1.GetVpcDefaultSecurityGroupParams): Promise<VpcV1.Response<VpcV1.DefaultSecurityGroup>> {
-    const _params = Object.assign({}, params);
+  public getVpcDefaultSecurityGroup(
+    params: VpcV1.GetVpcDefaultSecurityGroupParams
+  ): Promise<VpcV1.Response<VpcV1.DefaultSecurityGroup>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -476,14 +561,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDefaultSecurityGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVpcDefaultSecurityGroup'
+    );
 
     const parameters = {
       options: {
@@ -493,14 +582,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all address prefixes for a VPC.
@@ -514,8 +608,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.AddressPrefixCollection>>}
    */
-  public listVpcAddressPrefixes(params: VpcV1.ListVpcAddressPrefixesParams): Promise<VpcV1.Response<VpcV1.AddressPrefixCollection>> {
-    const _params = Object.assign({}, params);
+  public listVpcAddressPrefixes(
+    params: VpcV1.ListVpcAddressPrefixesParams
+  ): Promise<VpcV1.Response<VpcV1.AddressPrefixCollection>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -527,14 +623,18 @@ class VpcV1 extends BaseService {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
     const path = {
-      'vpc_id': _params.vpcId
+      'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcAddressPrefixes');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVpcAddressPrefixes'
+    );
 
     const parameters = {
       options: {
@@ -544,14 +644,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create an address prefix for a VPC.
@@ -579,8 +684,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.AddressPrefix>>}
    */
-  public createVpcAddressPrefix(params: VpcV1.CreateVpcAddressPrefixParams): Promise<VpcV1.Response<VpcV1.AddressPrefix>> {
-    const _params = Object.assign({}, params);
+  public createVpcAddressPrefix(
+    params: VpcV1.CreateVpcAddressPrefixParams
+  ): Promise<VpcV1.Response<VpcV1.AddressPrefix>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'cidr', 'zone'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -592,19 +699,23 @@ class VpcV1 extends BaseService {
       'cidr': _params.cidr,
       'zone': _params.zone,
       'is_default': _params.isDefault,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'vpc_id': _params.vpcId
+      'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcAddressPrefix');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createVpcAddressPrefix'
+    );
 
     const parameters = {
       options: {
@@ -615,15 +726,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an address prefix.
@@ -637,8 +753,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteVpcAddressPrefix(params: VpcV1.DeleteVpcAddressPrefixParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteVpcAddressPrefix(
+    params: VpcV1.DeleteVpcAddressPrefixParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -648,15 +766,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcAddressPrefix');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteVpcAddressPrefix'
+    );
 
     const parameters = {
       options: {
@@ -666,13 +788,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an address prefix.
@@ -685,8 +812,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.AddressPrefix>>}
    */
-  public getVpcAddressPrefix(params: VpcV1.GetVpcAddressPrefixParams): Promise<VpcV1.Response<VpcV1.AddressPrefix>> {
-    const _params = Object.assign({}, params);
+  public getVpcAddressPrefix(
+    params: VpcV1.GetVpcAddressPrefixParams
+  ): Promise<VpcV1.Response<VpcV1.AddressPrefix>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -696,15 +825,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcAddressPrefix');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVpcAddressPrefix'
+    );
 
     const parameters = {
       options: {
@@ -714,14 +847,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an address prefix.
@@ -740,8 +878,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.AddressPrefix>>}
    */
-  public updateVpcAddressPrefix(params: VpcV1.UpdateVpcAddressPrefixParams): Promise<VpcV1.Response<VpcV1.AddressPrefix>> {
-    const _params = Object.assign({}, params);
+  public updateVpcAddressPrefix(
+    params: VpcV1.UpdateVpcAddressPrefixParams
+  ): Promise<VpcV1.Response<VpcV1.AddressPrefix>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -751,20 +891,24 @@ class VpcV1 extends BaseService {
 
     const body = {
       'is_default': _params.isDefault,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcAddressPrefix');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVpcAddressPrefix'
+    );
 
     const parameters = {
       options: {
@@ -775,15 +919,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all routes in a VPC's default routing table.
@@ -800,8 +949,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RouteCollection>>}
    */
-  public listVpcRoutes(params: VpcV1.ListVpcRoutesParams): Promise<VpcV1.Response<VpcV1.RouteCollection>> {
-    const _params = Object.assign({}, params);
+  public listVpcRoutes(
+    params: VpcV1.ListVpcRoutesParams
+  ): Promise<VpcV1.Response<VpcV1.RouteCollection>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -814,14 +965,18 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
       'zone.name': _params.zoneName,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
     const path = {
-      'vpc_id': _params.vpcId
+      'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcRoutes');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVpcRoutes'
+    );
 
     const parameters = {
       options: {
@@ -831,14 +986,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a route in a VPC's default routing table.
@@ -868,8 +1028,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
-  public createVpcRoute(params: VpcV1.CreateVpcRouteParams): Promise<VpcV1.Response<VpcV1.Route>> {
-    const _params = Object.assign({}, params);
+  public createVpcRoute(
+    params: VpcV1.CreateVpcRouteParams
+  ): Promise<VpcV1.Response<VpcV1.Route>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'destination', 'zone'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -882,19 +1044,23 @@ class VpcV1 extends BaseService {
       'zone': _params.zone,
       'action': _params.action,
       'name': _params.name,
-      'next_hop': _params.nextHop
+      'next_hop': _params.nextHop,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'vpc_id': _params.vpcId
+      'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcRoute');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createVpcRoute'
+    );
 
     const parameters = {
       options: {
@@ -905,15 +1071,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a VPC route.
@@ -926,8 +1097,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteVpcRoute(params: VpcV1.DeleteVpcRouteParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteVpcRoute(
+    params: VpcV1.DeleteVpcRouteParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -937,15 +1110,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcRoute');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteVpcRoute'
+    );
 
     const parameters = {
       options: {
@@ -955,13 +1132,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a VPC route.
@@ -974,8 +1156,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
-  public getVpcRoute(params: VpcV1.GetVpcRouteParams): Promise<VpcV1.Response<VpcV1.Route>> {
-    const _params = Object.assign({}, params);
+  public getVpcRoute(
+    params: VpcV1.GetVpcRouteParams
+  ): Promise<VpcV1.Response<VpcV1.Route>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -985,15 +1169,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcRoute');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVpcRoute'
+    );
 
     const parameters = {
       options: {
@@ -1003,14 +1191,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a VPC route.
@@ -1026,8 +1219,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
-  public updateVpcRoute(params: VpcV1.UpdateVpcRouteParams): Promise<VpcV1.Response<VpcV1.Route>> {
-    const _params = Object.assign({}, params);
+  public updateVpcRoute(
+    params: VpcV1.UpdateVpcRouteParams
+  ): Promise<VpcV1.Response<VpcV1.Route>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1036,20 +1231,24 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcRoute');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVpcRoute'
+    );
 
     const parameters = {
       options: {
@@ -1060,15 +1259,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all routing tables for a VPC.
@@ -1088,8 +1292,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RoutingTableCollection>>}
    */
-  public listVpcRoutingTables(params: VpcV1.ListVpcRoutingTablesParams): Promise<VpcV1.Response<VpcV1.RoutingTableCollection>> {
-    const _params = Object.assign({}, params);
+  public listVpcRoutingTables(
+    params: VpcV1.ListVpcRoutingTablesParams
+  ): Promise<VpcV1.Response<VpcV1.RoutingTableCollection>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1102,14 +1308,18 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
       'start': _params.start,
       'limit': _params.limit,
-      'is_default': _params.isDefault
+      'is_default': _params.isDefault,
     };
 
     const path = {
-      'vpc_id': _params.vpcId
+      'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcRoutingTables');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVpcRoutingTables'
+    );
 
     const parameters = {
       options: {
@@ -1119,14 +1329,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a routing table for a VPC.
@@ -1172,8 +1387,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RoutingTable>>}
    */
-  public createVpcRoutingTable(params: VpcV1.CreateVpcRoutingTableParams): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
-    const _params = Object.assign({}, params);
+  public createVpcRoutingTable(
+    params: VpcV1.CreateVpcRoutingTableParams
+  ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1186,19 +1403,23 @@ class VpcV1 extends BaseService {
       'route_direct_link_ingress': _params.routeDirectLinkIngress,
       'route_transit_gateway_ingress': _params.routeTransitGatewayIngress,
       'route_vpc_zone_ingress': _params.routeVpcZoneIngress,
-      'routes': _params.routes
+      'routes': _params.routes,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'vpc_id': _params.vpcId
+      'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcRoutingTable');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createVpcRoutingTable'
+    );
 
     const parameters = {
       options: {
@@ -1209,15 +1430,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a VPC routing table.
@@ -1231,8 +1457,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteVpcRoutingTable(params: VpcV1.DeleteVpcRoutingTableParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteVpcRoutingTable(
+    params: VpcV1.DeleteVpcRoutingTableParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1242,15 +1470,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcRoutingTable');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteVpcRoutingTable'
+    );
 
     const parameters = {
       options: {
@@ -1260,13 +1492,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a VPC routing table.
@@ -1279,8 +1516,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RoutingTable>>}
    */
-  public getVpcRoutingTable(params: VpcV1.GetVpcRoutingTableParams): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
-    const _params = Object.assign({}, params);
+  public getVpcRoutingTable(
+    params: VpcV1.GetVpcRoutingTableParams
+  ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1290,15 +1529,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcRoutingTable');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVpcRoutingTable'
+    );
 
     const parameters = {
       options: {
@@ -1308,14 +1551,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a VPC routing table.
@@ -1364,8 +1612,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RoutingTable>>}
    */
-  public updateVpcRoutingTable(params: VpcV1.UpdateVpcRoutingTableParams): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
-    const _params = Object.assign({}, params);
+  public updateVpcRoutingTable(
+    params: VpcV1.UpdateVpcRoutingTableParams
+  ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1377,20 +1627,24 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'route_direct_link_ingress': _params.routeDirectLinkIngress,
       'route_transit_gateway_ingress': _params.routeTransitGatewayIngress,
-      'route_vpc_zone_ingress': _params.routeVpcZoneIngress
+      'route_vpc_zone_ingress': _params.routeVpcZoneIngress,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcRoutingTable');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVpcRoutingTable'
+    );
 
     const parameters = {
       options: {
@@ -1401,15 +1655,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all routes in a VPC routing table.
@@ -1427,8 +1686,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RouteCollection>>}
    */
-  public listVpcRoutingTableRoutes(params: VpcV1.ListVpcRoutingTableRoutesParams): Promise<VpcV1.Response<VpcV1.RouteCollection>> {
-    const _params = Object.assign({}, params);
+  public listVpcRoutingTableRoutes(
+    params: VpcV1.ListVpcRoutingTableRoutesParams
+  ): Promise<VpcV1.Response<VpcV1.RouteCollection>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'routingTableId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1440,15 +1701,19 @@ class VpcV1 extends BaseService {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'routing_table_id': _params.routingTableId
+      'routing_table_id': _params.routingTableId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcRoutingTableRoutes');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVpcRoutingTableRoutes'
+    );
 
     const parameters = {
       options: {
@@ -1458,14 +1723,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a route in a VPC routing table.
@@ -1495,8 +1765,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
-  public createVpcRoutingTableRoute(params: VpcV1.CreateVpcRoutingTableRouteParams): Promise<VpcV1.Response<VpcV1.Route>> {
-    const _params = Object.assign({}, params);
+  public createVpcRoutingTableRoute(
+    params: VpcV1.CreateVpcRoutingTableRouteParams
+  ): Promise<VpcV1.Response<VpcV1.Route>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'routingTableId', 'destination', 'zone'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1509,20 +1781,24 @@ class VpcV1 extends BaseService {
       'zone': _params.zone,
       'action': _params.action,
       'name': _params.name,
-      'next_hop': _params.nextHop
+      'next_hop': _params.nextHop,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
-      'routing_table_id': _params.routingTableId
+      'routing_table_id': _params.routingTableId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcRoutingTableRoute');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createVpcRoutingTableRoute'
+    );
 
     const parameters = {
       options: {
@@ -1533,15 +1809,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a VPC routing table route.
@@ -1555,8 +1836,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteVpcRoutingTableRoute(params: VpcV1.DeleteVpcRoutingTableRouteParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteVpcRoutingTableRoute(
+    params: VpcV1.DeleteVpcRoutingTableRouteParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'routingTableId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1566,16 +1849,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
       'routing_table_id': _params.routingTableId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcRoutingTableRoute');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteVpcRoutingTableRoute'
+    );
 
     const parameters = {
       options: {
@@ -1585,13 +1872,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a VPC routing table route.
@@ -1605,8 +1897,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
-  public getVpcRoutingTableRoute(params: VpcV1.GetVpcRoutingTableRouteParams): Promise<VpcV1.Response<VpcV1.Route>> {
-    const _params = Object.assign({}, params);
+  public getVpcRoutingTableRoute(
+    params: VpcV1.GetVpcRoutingTableRouteParams
+  ): Promise<VpcV1.Response<VpcV1.Route>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'routingTableId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1616,16 +1910,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
       'routing_table_id': _params.routingTableId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcRoutingTableRoute');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVpcRoutingTableRoute'
+    );
 
     const parameters = {
       options: {
@@ -1635,14 +1933,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a VPC routing table route.
@@ -1659,8 +1962,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
-  public updateVpcRoutingTableRoute(params: VpcV1.UpdateVpcRoutingTableRouteParams): Promise<VpcV1.Response<VpcV1.Route>> {
-    const _params = Object.assign({}, params);
+  public updateVpcRoutingTableRoute(
+    params: VpcV1.UpdateVpcRoutingTableRouteParams
+  ): Promise<VpcV1.Response<VpcV1.Route>> {
+    const _params = { ...params };
     const requiredParams = ['vpcId', 'routingTableId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1669,21 +1974,25 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpc_id': _params.vpcId,
       'routing_table_id': _params.routingTableId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcRoutingTableRoute');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVpcRoutingTableRoute'
+    );
 
     const parameters = {
       options: {
@@ -1694,16 +2003,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * subnets
    ************************/
@@ -1726,8 +2039,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SubnetCollection>>}
    */
-  public listSubnets(params?: VpcV1.ListSubnetsParams): Promise<VpcV1.Response<VpcV1.SubnetCollection>> {
-    const _params = Object.assign({}, params);
+  public listSubnets(
+    params?: VpcV1.ListSubnetsParams
+  ): Promise<VpcV1.Response<VpcV1.SubnetCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -1736,10 +2051,14 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
       'routing_table.id': _params.routingTableId,
-      'routing_table.name': _params.routingTableName
+      'routing_table.name': _params.routingTableName,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSubnets');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listSubnets'
+    );
 
     const parameters = {
       options: {
@@ -1748,14 +2067,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a subnet.
@@ -1769,8 +2093,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Subnet>>}
    */
-  public createSubnet(params: VpcV1.CreateSubnetParams): Promise<VpcV1.Response<VpcV1.Subnet>> {
-    const _params = Object.assign({}, params);
+  public createSubnet(
+    params: VpcV1.CreateSubnetParams
+  ): Promise<VpcV1.Response<VpcV1.Subnet>> {
+    const _params = { ...params };
     const requiredParams = ['subnetPrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1781,10 +2107,14 @@ class VpcV1 extends BaseService {
     const body = _params.subnetPrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSubnet');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createSubnet'
+    );
 
     const parameters = {
       options: {
@@ -1794,15 +2124,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a subnet.
@@ -1817,8 +2152,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteSubnet(params: VpcV1.DeleteSubnetParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteSubnet(
+    params: VpcV1.DeleteSubnetParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1828,14 +2165,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSubnet');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteSubnet'
+    );
 
     const parameters = {
       options: {
@@ -1845,13 +2186,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a subnet.
@@ -1863,8 +2209,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Subnet>>}
    */
-  public getSubnet(params: VpcV1.GetSubnetParams): Promise<VpcV1.Response<VpcV1.Subnet>> {
-    const _params = Object.assign({}, params);
+  public getSubnet(
+    params: VpcV1.GetSubnetParams
+  ): Promise<VpcV1.Response<VpcV1.Subnet>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1874,14 +2222,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnet');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSubnet'
+    );
 
     const parameters = {
       options: {
@@ -1891,14 +2243,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a subnet.
@@ -1920,8 +2277,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Subnet>>}
    */
-  public updateSubnet(params: VpcV1.UpdateSubnetParams): Promise<VpcV1.Response<VpcV1.Subnet>> {
-    const _params = Object.assign({}, params);
+  public updateSubnet(
+    params: VpcV1.UpdateSubnetParams
+  ): Promise<VpcV1.Response<VpcV1.Subnet>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1933,19 +2292,23 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'network_acl': _params.networkAcl,
       'public_gateway': _params.publicGateway,
-      'routing_table': _params.routingTable
+      'routing_table': _params.routingTable,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSubnet');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateSubnet'
+    );
 
     const parameters = {
       options: {
@@ -1956,15 +2319,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a subnet's attached network ACL.
@@ -1976,8 +2344,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACL>>}
    */
-  public getSubnetNetworkAcl(params: VpcV1.GetSubnetNetworkAclParams): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
-    const _params = Object.assign({}, params);
+  public getSubnetNetworkAcl(
+    params: VpcV1.GetSubnetNetworkAclParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -1987,14 +2357,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetNetworkAcl');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSubnetNetworkAcl'
+    );
 
     const parameters = {
       options: {
@@ -2004,14 +2378,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Attach a network ACL to a subnet.
@@ -2025,8 +2404,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACL>>}
    */
-  public replaceSubnetNetworkAcl(params: VpcV1.ReplaceSubnetNetworkAclParams): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
-    const _params = Object.assign({}, params);
+  public replaceSubnetNetworkAcl(
+    params: VpcV1.ReplaceSubnetNetworkAclParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
+    const _params = { ...params };
     const requiredParams = ['id', 'networkAclIdentity'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2037,14 +2418,18 @@ class VpcV1 extends BaseService {
     const body = _params.networkAclIdentity;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceSubnetNetworkAcl');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceSubnetNetworkAcl'
+    );
 
     const parameters = {
       options: {
@@ -2055,15 +2440,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Detach a public gateway from a subnet.
@@ -2075,8 +2465,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public unsetSubnetPublicGateway(params: VpcV1.UnsetSubnetPublicGatewayParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public unsetSubnetPublicGateway(
+    params: VpcV1.UnsetSubnetPublicGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2086,14 +2478,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'unsetSubnetPublicGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'unsetSubnetPublicGateway'
+    );
 
     const parameters = {
       options: {
@@ -2103,13 +2499,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a subnet's attached public gateway.
@@ -2121,8 +2522,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.PublicGateway>>}
    */
-  public getSubnetPublicGateway(params: VpcV1.GetSubnetPublicGatewayParams): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
-    const _params = Object.assign({}, params);
+  public getSubnetPublicGateway(
+    params: VpcV1.GetSubnetPublicGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2132,14 +2535,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetPublicGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSubnetPublicGateway'
+    );
 
     const parameters = {
       options: {
@@ -2149,14 +2556,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Attach a public gateway to a subnet.
@@ -2170,8 +2582,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.PublicGateway>>}
    */
-  public setSubnetPublicGateway(params: VpcV1.SetSubnetPublicGatewayParams): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
-    const _params = Object.assign({}, params);
+  public setSubnetPublicGateway(
+    params: VpcV1.SetSubnetPublicGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
+    const _params = { ...params };
     const requiredParams = ['id', 'publicGatewayIdentity'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2182,14 +2596,18 @@ class VpcV1 extends BaseService {
     const body = _params.publicGatewayIdentity;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'setSubnetPublicGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'setSubnetPublicGateway'
+    );
 
     const parameters = {
       options: {
@@ -2200,15 +2618,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a subnet's attached routing table.
@@ -2220,8 +2643,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RoutingTable>>}
    */
-  public getSubnetRoutingTable(params: VpcV1.GetSubnetRoutingTableParams): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
-    const _params = Object.assign({}, params);
+  public getSubnetRoutingTable(
+    params: VpcV1.GetSubnetRoutingTableParams
+  ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2231,14 +2656,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetRoutingTable');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSubnetRoutingTable'
+    );
 
     const parameters = {
       options: {
@@ -2248,14 +2677,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Attach a routing table to a subnet.
@@ -2272,8 +2706,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RoutingTable>>}
    */
-  public replaceSubnetRoutingTable(params: VpcV1.ReplaceSubnetRoutingTableParams): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
-    const _params = Object.assign({}, params);
+  public replaceSubnetRoutingTable(
+    params: VpcV1.ReplaceSubnetRoutingTableParams
+  ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
+    const _params = { ...params };
     const requiredParams = ['id', 'routingTableIdentity'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2284,14 +2720,18 @@ class VpcV1 extends BaseService {
     const body = _params.routingTableIdentity;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceSubnetRoutingTable');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceSubnetRoutingTable'
+    );
 
     const parameters = {
       options: {
@@ -2302,15 +2742,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all reserved IPs in a subnet.
@@ -2328,8 +2773,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollection>>}
    */
-  public listSubnetReservedIps(params: VpcV1.ListSubnetReservedIpsParams): Promise<VpcV1.Response<VpcV1.ReservedIPCollection>> {
-    const _params = Object.assign({}, params);
+  public listSubnetReservedIps(
+    params: VpcV1.ListSubnetReservedIpsParams
+  ): Promise<VpcV1.Response<VpcV1.ReservedIPCollection>> {
+    const _params = { ...params };
     const requiredParams = ['subnetId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2342,14 +2789,18 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
       'start': _params.start,
       'limit': _params.limit,
-      'sort': _params.sort
+      'sort': _params.sort,
     };
 
     const path = {
-      'subnet_id': _params.subnetId
+      'subnet_id': _params.subnetId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSubnetReservedIps');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listSubnetReservedIps'
+    );
 
     const parameters = {
       options: {
@@ -2359,14 +2810,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Reserve an IP in a subnet.
@@ -2385,8 +2841,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
    */
-  public createSubnetReservedIp(params: VpcV1.CreateSubnetReservedIpParams): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
-    const _params = Object.assign({}, params);
+  public createSubnetReservedIp(
+    params: VpcV1.CreateSubnetReservedIpParams
+  ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
+    const _params = { ...params };
     const requiredParams = ['subnetId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2397,19 +2855,23 @@ class VpcV1 extends BaseService {
     const body = {
       'auto_delete': _params.autoDelete,
       'name': _params.name,
-      'target': _params.target
+      'target': _params.target,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'subnet_id': _params.subnetId
+      'subnet_id': _params.subnetId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSubnetReservedIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createSubnetReservedIp'
+    );
 
     const parameters = {
       options: {
@@ -2420,15 +2882,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Release a reserved IP.
@@ -2441,8 +2908,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteSubnetReservedIp(params: VpcV1.DeleteSubnetReservedIpParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteSubnetReservedIp(
+    params: VpcV1.DeleteSubnetReservedIpParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['subnetId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2452,15 +2921,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'subnet_id': _params.subnetId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSubnetReservedIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteSubnetReservedIp'
+    );
 
     const parameters = {
       options: {
@@ -2470,13 +2943,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a reserved IP.
@@ -2489,8 +2967,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
    */
-  public getSubnetReservedIp(params: VpcV1.GetSubnetReservedIpParams): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
-    const _params = Object.assign({}, params);
+  public getSubnetReservedIp(
+    params: VpcV1.GetSubnetReservedIpParams
+  ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
+    const _params = { ...params };
     const requiredParams = ['subnetId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2500,15 +2980,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'subnet_id': _params.subnetId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetReservedIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSubnetReservedIp'
+    );
 
     const parameters = {
       options: {
@@ -2518,14 +3002,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a reserved IP.
@@ -2544,8 +3033,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
    */
-  public updateSubnetReservedIp(params: VpcV1.UpdateSubnetReservedIpParams): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
-    const _params = Object.assign({}, params);
+  public updateSubnetReservedIp(
+    params: VpcV1.UpdateSubnetReservedIpParams
+  ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
+    const _params = { ...params };
     const requiredParams = ['subnetId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2555,20 +3046,24 @@ class VpcV1 extends BaseService {
 
     const body = {
       'auto_delete': _params.autoDelete,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'subnet_id': _params.subnetId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSubnetReservedIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateSubnetReservedIp'
+    );
 
     const parameters = {
       options: {
@@ -2579,16 +3074,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * images
    ************************/
@@ -2612,8 +3111,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ImageCollection>>}
    */
-  public listImages(params?: VpcV1.ListImagesParams): Promise<VpcV1.Response<VpcV1.ImageCollection>> {
-    const _params = Object.assign({}, params);
+  public listImages(
+    params?: VpcV1.ListImagesParams
+  ): Promise<VpcV1.Response<VpcV1.ImageCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -2622,10 +3123,14 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
       'name': _params.name,
-      'visibility': _params.visibility
+      'visibility': _params.visibility,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listImages');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listImages'
+    );
 
     const parameters = {
       options: {
@@ -2634,14 +3139,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create an image.
@@ -2656,8 +3166,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Image>>}
    */
-  public createImage(params: VpcV1.CreateImageParams): Promise<VpcV1.Response<VpcV1.Image>> {
-    const _params = Object.assign({}, params);
+  public createImage(
+    params: VpcV1.CreateImageParams
+  ): Promise<VpcV1.Response<VpcV1.Image>> {
+    const _params = { ...params };
     const requiredParams = ['imagePrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2668,10 +3180,14 @@ class VpcV1 extends BaseService {
     const body = _params.imagePrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createImage');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createImage'
+    );
 
     const parameters = {
       options: {
@@ -2681,15 +3197,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an image.
@@ -2703,8 +3224,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteImage(params: VpcV1.DeleteImageParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteImage(
+    params: VpcV1.DeleteImageParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2714,14 +3237,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteImage');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteImage'
+    );
 
     const parameters = {
       options: {
@@ -2731,13 +3258,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an image.
@@ -2749,8 +3281,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Image>>}
    */
-  public getImage(params: VpcV1.GetImageParams): Promise<VpcV1.Response<VpcV1.Image>> {
-    const _params = Object.assign({}, params);
+  public getImage(
+    params: VpcV1.GetImageParams
+  ): Promise<VpcV1.Response<VpcV1.Image>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2760,14 +3294,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getImage');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getImage'
+    );
 
     const parameters = {
       options: {
@@ -2777,14 +3315,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an image.
@@ -2800,8 +3343,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Image>>}
    */
-  public updateImage(params: VpcV1.UpdateImageParams): Promise<VpcV1.Response<VpcV1.Image>> {
-    const _params = Object.assign({}, params);
+  public updateImage(
+    params: VpcV1.UpdateImageParams
+  ): Promise<VpcV1.Response<VpcV1.Image>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2810,19 +3355,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateImage');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateImage'
+    );
 
     const parameters = {
       options: {
@@ -2833,15 +3382,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all operating systems.
@@ -2854,17 +3408,23 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.OperatingSystemCollection>>}
    */
-  public listOperatingSystems(params?: VpcV1.ListOperatingSystemsParams): Promise<VpcV1.Response<VpcV1.OperatingSystemCollection>> {
-    const _params = Object.assign({}, params);
+  public listOperatingSystems(
+    params?: VpcV1.ListOperatingSystemsParams
+  ): Promise<VpcV1.Response<VpcV1.OperatingSystemCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listOperatingSystems');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listOperatingSystems'
+    );
 
     const parameters = {
       options: {
@@ -2873,14 +3433,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an operating system.
@@ -2892,8 +3457,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.OperatingSystem>>}
    */
-  public getOperatingSystem(params: VpcV1.GetOperatingSystemParams): Promise<VpcV1.Response<VpcV1.OperatingSystem>> {
-    const _params = Object.assign({}, params);
+  public getOperatingSystem(
+    params: VpcV1.GetOperatingSystemParams
+  ): Promise<VpcV1.Response<VpcV1.OperatingSystem>> {
+    const _params = { ...params };
     const requiredParams = ['name'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -2903,14 +3470,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'name': _params.name
+      'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getOperatingSystem');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getOperatingSystem'
+    );
 
     const parameters = {
       options: {
@@ -2920,15 +3491,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * keys
    ************************/
@@ -2947,18 +3522,24 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.KeyCollection>>}
    */
-  public listKeys(params?: VpcV1.ListKeysParams): Promise<VpcV1.Response<VpcV1.KeyCollection>> {
-    const _params = Object.assign({}, params);
+  public listKeys(
+    params?: VpcV1.ListKeysParams
+  ): Promise<VpcV1.Response<VpcV1.KeyCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
       'limit': _params.limit,
-      'resource_group.id': _params.resourceGroupId
+      'resource_group.id': _params.resourceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listKeys');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listKeys'
+    );
 
     const parameters = {
       options: {
@@ -2967,14 +3548,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a key.
@@ -2984,8 +3570,9 @@ class VpcV1 extends BaseService {
    * provided.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.publicKey - A unique public SSH key to import, encoded in PEM format. The key (prior to
-   * encoding) must be either 2048 or 4096 bits long.
+   * @param {string} params.publicKey - A unique public SSH key to import, in OpenSSH format (consisting of three
+   * space-separated fields: the algorithm name, base64-encoded key, and a comment). The algorithm and comment fields
+   * may be omitted, as only the key field is imported.
    * @param {string} [params.name] - The unique user-defined name for this key. If unspecified, the name will be a
    * hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
@@ -2995,8 +3582,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Key>>}
    */
-  public createKey(params: VpcV1.CreateKeyParams): Promise<VpcV1.Response<VpcV1.Key>> {
-    const _params = Object.assign({}, params);
+  public createKey(
+    params: VpcV1.CreateKeyParams
+  ): Promise<VpcV1.Response<VpcV1.Key>> {
+    const _params = { ...params };
     const requiredParams = ['publicKey'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3008,15 +3597,19 @@ class VpcV1 extends BaseService {
       'public_key': _params.publicKey,
       'name': _params.name,
       'resource_group': _params.resourceGroup,
-      'type': _params.type
+      'type': _params.type,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createKey');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createKey'
+    );
 
     const parameters = {
       options: {
@@ -3026,15 +3619,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a key.
@@ -3046,8 +3644,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteKey(params: VpcV1.DeleteKeyParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteKey(
+    params: VpcV1.DeleteKeyParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3057,14 +3657,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteKey');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteKey'
+    );
 
     const parameters = {
       options: {
@@ -3074,13 +3678,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a key.
@@ -3092,8 +3701,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Key>>}
    */
-  public getKey(params: VpcV1.GetKeyParams): Promise<VpcV1.Response<VpcV1.Key>> {
-    const _params = Object.assign({}, params);
+  public getKey(
+    params: VpcV1.GetKeyParams
+  ): Promise<VpcV1.Response<VpcV1.Key>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3103,14 +3714,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getKey');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getKey'
+    );
 
     const parameters = {
       options: {
@@ -3120,14 +3735,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a key.
@@ -3140,8 +3760,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Key>>}
    */
-  public updateKey(params: VpcV1.UpdateKeyParams): Promise<VpcV1.Response<VpcV1.Key>> {
-    const _params = Object.assign({}, params);
+  public updateKey(
+    params: VpcV1.UpdateKeyParams
+  ): Promise<VpcV1.Response<VpcV1.Key>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3150,19 +3772,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateKey');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateKey'
+    );
 
     const parameters = {
       options: {
@@ -3173,16 +3799,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * instances
    ************************/
@@ -3197,15 +3827,21 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceProfileCollection>>}
    */
-  public listInstanceProfiles(params?: VpcV1.ListInstanceProfilesParams): Promise<VpcV1.Response<VpcV1.InstanceProfileCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceProfiles(
+    params?: VpcV1.ListInstanceProfilesParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceProfileCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceProfiles');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceProfiles'
+    );
 
     const parameters = {
       options: {
@@ -3214,14 +3850,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an instance profile.
@@ -3233,8 +3874,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceProfile>>}
    */
-  public getInstanceProfile(params: VpcV1.GetInstanceProfileParams): Promise<VpcV1.Response<VpcV1.InstanceProfile>> {
-    const _params = Object.assign({}, params);
+  public getInstanceProfile(
+    params: VpcV1.GetInstanceProfileParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceProfile>> {
+    const _params = { ...params };
     const requiredParams = ['name'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3244,14 +3887,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'name': _params.name
+      'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceProfile');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceProfile'
+    );
 
     const parameters = {
       options: {
@@ -3261,14 +3908,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all instance templates.
@@ -3279,15 +3931,21 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceTemplateCollection>>}
    */
-  public listInstanceTemplates(params?: VpcV1.ListInstanceTemplatesParams): Promise<VpcV1.Response<VpcV1.InstanceTemplateCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceTemplates(
+    params?: VpcV1.ListInstanceTemplatesParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceTemplateCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceTemplates');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceTemplates'
+    );
 
     const parameters = {
       options: {
@@ -3296,27 +3954,38 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create an instance template.
    *
-   * This request creates a new instance template.
+   * This request creates a new instance template. The prototype object is structured in the same way as a retrieved
+   * instance template, and contains the information necessary to provision a new instance from the template.
+   *
+   * If a `source_template` is specified in the prototype object, its contents are copied into the new template prior to
+   * copying any other properties provided in the prototype object.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {InstanceTemplatePrototype} params.instanceTemplatePrototype - The instance template prototype object.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceTemplate>>}
    */
-  public createInstanceTemplate(params: VpcV1.CreateInstanceTemplateParams): Promise<VpcV1.Response<VpcV1.InstanceTemplate>> {
-    const _params = Object.assign({}, params);
+  public createInstanceTemplate(
+    params: VpcV1.CreateInstanceTemplateParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceTemplate>> {
+    const _params = { ...params };
     const requiredParams = ['instanceTemplatePrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3327,10 +3996,14 @@ class VpcV1 extends BaseService {
     const body = _params.instanceTemplatePrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceTemplate');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createInstanceTemplate'
+    );
 
     const parameters = {
       options: {
@@ -3340,15 +4013,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an instance template.
@@ -3360,8 +4038,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstanceTemplate(params: VpcV1.DeleteInstanceTemplateParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstanceTemplate(
+    params: VpcV1.DeleteInstanceTemplateParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3371,14 +4051,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceTemplate');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstanceTemplate'
+    );
 
     const parameters = {
       options: {
@@ -3388,13 +4072,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an instance template.
@@ -3406,8 +4095,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceTemplate>>}
    */
-  public getInstanceTemplate(params: VpcV1.GetInstanceTemplateParams): Promise<VpcV1.Response<VpcV1.InstanceTemplate>> {
-    const _params = Object.assign({}, params);
+  public getInstanceTemplate(
+    params: VpcV1.GetInstanceTemplateParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceTemplate>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3417,14 +4108,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceTemplate');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceTemplate'
+    );
 
     const parameters = {
       options: {
@@ -3434,14 +4129,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an instance template.
@@ -3456,8 +4156,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceTemplate>>}
    */
-  public updateInstanceTemplate(params: VpcV1.UpdateInstanceTemplateParams): Promise<VpcV1.Response<VpcV1.InstanceTemplate>> {
-    const _params = Object.assign({}, params);
+  public updateInstanceTemplate(
+    params: VpcV1.UpdateInstanceTemplateParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceTemplate>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3466,19 +4168,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceTemplate');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateInstanceTemplate'
+    );
 
     const parameters = {
       options: {
@@ -3489,15 +4195,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all instances.
@@ -3519,11 +4230,19 @@ class VpcV1 extends BaseService {
    * specified CRN.
    * @param {string} [params.dedicatedHostName] - Filters the collection to instances on the dedicated host with the
    * specified name.
+   * @param {string} [params.placementGroupId] - Filters the collection to instances in the placement group with the
+   * specified identifier.
+   * @param {string} [params.placementGroupCrn] - Filters the collection to instances in the placement group with the
+   * specified CRN.
+   * @param {string} [params.placementGroupName] - Filters the collection to instances in the placement group with the
+   * specified name.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceCollection>>}
    */
-  public listInstances(params?: VpcV1.ListInstancesParams): Promise<VpcV1.Response<VpcV1.InstanceCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstances(
+    params?: VpcV1.ListInstancesParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -3537,10 +4256,17 @@ class VpcV1 extends BaseService {
       'vpc.name': _params.vpcName,
       'dedicated_host.id': _params.dedicatedHostId,
       'dedicated_host.crn': _params.dedicatedHostCrn,
-      'dedicated_host.name': _params.dedicatedHostName
+      'dedicated_host.name': _params.dedicatedHostName,
+      'placement_group.id': _params.placementGroupId,
+      'placement_group.crn': _params.placementGroupCrn,
+      'placement_group.name': _params.placementGroupName,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstances');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstances'
+    );
 
     const parameters = {
       options: {
@@ -3549,14 +4275,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create an instance.
@@ -3570,8 +4301,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Instance>>}
    */
-  public createInstance(params: VpcV1.CreateInstanceParams): Promise<VpcV1.Response<VpcV1.Instance>> {
-    const _params = Object.assign({}, params);
+  public createInstance(
+    params: VpcV1.CreateInstanceParams
+  ): Promise<VpcV1.Response<VpcV1.Instance>> {
+    const _params = { ...params };
     const requiredParams = ['instancePrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3582,10 +4315,14 @@ class VpcV1 extends BaseService {
     const body = _params.instancePrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstance');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createInstance'
+    );
 
     const parameters = {
       options: {
@@ -3595,15 +4332,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an instance.
@@ -3617,8 +4359,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstance(params: VpcV1.DeleteInstanceParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstance(
+    params: VpcV1.DeleteInstanceParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3628,14 +4372,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstance');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstance'
+    );
 
     const parameters = {
       options: {
@@ -3645,13 +4393,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an instance.
@@ -3663,8 +4416,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Instance>>}
    */
-  public getInstance(params: VpcV1.GetInstanceParams): Promise<VpcV1.Response<VpcV1.Instance>> {
-    const _params = Object.assign({}, params);
+  public getInstance(
+    params: VpcV1.GetInstanceParams
+  ): Promise<VpcV1.Response<VpcV1.Instance>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3674,14 +4429,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstance');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstance'
+    );
 
     const parameters = {
       options: {
@@ -3691,14 +4450,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an instance.
@@ -3714,17 +4478,22 @@ class VpcV1 extends BaseService {
    * profile to be changed,
    * the instance `status` must be `stopping` or `stopped`. In addition, the requested
    * profile must:
-   * - Match the current profile's instance disk support. (Note: If the current profile
-   *   supports instance storage disks, the requested profile can have a different
-   *   instance storage disk configuration.)
+   * - Have matching instance disk support. Any disks associated with the current profile
+   *   will be deleted, and any disks associated with the requested profile will be
+   *   created.
    * - Be compatible with any `placement_target` constraints. For example, if the
    *   instance is placed on a dedicated host, the requested profile `family` must be
    *   the same as the dedicated host `family`.
+   * @param {number} [params.totalVolumeBandwidth] - The amount of bandwidth (in megabits per second) allocated
+   * exclusively to instance storage volumes. An increase in this value will result in a corresponding decrease to
+   * `total_network_bandwidth`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Instance>>}
    */
-  public updateInstance(params: VpcV1.UpdateInstanceParams): Promise<VpcV1.Response<VpcV1.Instance>> {
-    const _params = Object.assign({}, params);
+  public updateInstance(
+    params: VpcV1.UpdateInstanceParams
+  ): Promise<VpcV1.Response<VpcV1.Instance>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3734,19 +4503,24 @@ class VpcV1 extends BaseService {
 
     const body = {
       'name': _params.name,
-      'profile': _params.profile
+      'profile': _params.profile,
+      'total_volume_bandwidth': _params.totalVolumeBandwidth,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstance');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateInstance'
+    );
 
     const parameters = {
       options: {
@@ -3757,15 +4531,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve initialization configuration for an instance.
@@ -3778,8 +4557,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceInitialization>>}
    */
-  public getInstanceInitialization(params: VpcV1.GetInstanceInitializationParams): Promise<VpcV1.Response<VpcV1.InstanceInitialization>> {
-    const _params = Object.assign({}, params);
+  public getInstanceInitialization(
+    params: VpcV1.GetInstanceInitializationParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceInitialization>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3789,14 +4570,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceInitialization');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceInitialization'
+    );
 
     const parameters = {
       options: {
@@ -3806,14 +4591,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create an instance action.
@@ -3829,8 +4619,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceAction>>}
    */
-  public createInstanceAction(params: VpcV1.CreateInstanceActionParams): Promise<VpcV1.Response<VpcV1.InstanceAction>> {
-    const _params = Object.assign({}, params);
+  public createInstanceAction(
+    params: VpcV1.CreateInstanceActionParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceAction>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'type'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3840,19 +4632,23 @@ class VpcV1 extends BaseService {
 
     const body = {
       'type': _params.type,
-      'force': _params.force
+      'force': _params.force,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'instance_id': _params.instanceId
+      'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceAction');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createInstanceAction'
+    );
 
     const parameters = {
       options: {
@@ -3863,15 +4659,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a console access token for an instance.
@@ -3889,8 +4690,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceConsoleAccessToken>>}
    */
-  public createInstanceConsoleAccessToken(params: VpcV1.CreateInstanceConsoleAccessTokenParams): Promise<VpcV1.Response<VpcV1.InstanceConsoleAccessToken>> {
-    const _params = Object.assign({}, params);
+  public createInstanceConsoleAccessToken(
+    params: VpcV1.CreateInstanceConsoleAccessTokenParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceConsoleAccessToken>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'consoleType'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3900,19 +4703,23 @@ class VpcV1 extends BaseService {
 
     const body = {
       'console_type': _params.consoleType,
-      'force': _params.force
+      'force': _params.force,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'instance_id': _params.instanceId
+      'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceConsoleAccessToken');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createInstanceConsoleAccessToken'
+    );
 
     const parameters = {
       options: {
@@ -3923,15 +4730,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all disks on an instance.
@@ -3945,8 +4757,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceDiskCollection>>}
    */
-  public listInstanceDisks(params: VpcV1.ListInstanceDisksParams): Promise<VpcV1.Response<VpcV1.InstanceDiskCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceDisks(
+    params: VpcV1.ListInstanceDisksParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceDiskCollection>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -3956,14 +4770,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'instance_id': _params.instanceId
+      'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceDisks');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceDisks'
+    );
 
     const parameters = {
       options: {
@@ -3973,14 +4791,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an instance disk.
@@ -3993,8 +4816,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceDisk>>}
    */
-  public getInstanceDisk(params: VpcV1.GetInstanceDiskParams): Promise<VpcV1.Response<VpcV1.InstanceDisk>> {
-    const _params = Object.assign({}, params);
+  public getInstanceDisk(
+    params: VpcV1.GetInstanceDiskParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceDisk>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4004,15 +4829,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceDisk');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceDisk'
+    );
 
     const parameters = {
       options: {
@@ -4022,14 +4851,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an instance disk.
@@ -4043,8 +4877,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceDisk>>}
    */
-  public updateInstanceDisk(params: VpcV1.UpdateInstanceDiskParams): Promise<VpcV1.Response<VpcV1.InstanceDisk>> {
-    const _params = Object.assign({}, params);
+  public updateInstanceDisk(
+    params: VpcV1.UpdateInstanceDiskParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceDisk>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4053,20 +4889,24 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceDisk');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateInstanceDisk'
+    );
 
     const parameters = {
       options: {
@@ -4077,15 +4917,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all network interfaces on an instance.
@@ -4100,8 +4945,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterfaceUnpaginatedCollection>>}
    */
-  public listInstanceNetworkInterfaces(params: VpcV1.ListInstanceNetworkInterfacesParams): Promise<VpcV1.Response<VpcV1.NetworkInterfaceUnpaginatedCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceNetworkInterfaces(
+    params: VpcV1.ListInstanceNetworkInterfacesParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkInterfaceUnpaginatedCollection>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4111,14 +4958,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'instance_id': _params.instanceId
+      'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceNetworkInterfaces');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceNetworkInterfaces'
+    );
 
     const parameters = {
       options: {
@@ -4128,14 +4979,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a network interface on an instance.
@@ -4159,8 +5015,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
    */
-  public createInstanceNetworkInterface(params: VpcV1.CreateInstanceNetworkInterfaceParams): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
-    const _params = Object.assign({}, params);
+  public createInstanceNetworkInterface(
+    params: VpcV1.CreateInstanceNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'subnet'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4173,19 +5031,23 @@ class VpcV1 extends BaseService {
       'allow_ip_spoofing': _params.allowIpSpoofing,
       'name': _params.name,
       'primary_ipv4_address': _params.primaryIpv4Address,
-      'security_groups': _params.securityGroups
+      'security_groups': _params.securityGroups,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'instance_id': _params.instanceId
+      'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceNetworkInterface');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createInstanceNetworkInterface'
+    );
 
     const parameters = {
       options: {
@@ -4196,15 +5058,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a network interface.
@@ -4219,8 +5086,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstanceNetworkInterface(params: VpcV1.DeleteInstanceNetworkInterfaceParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstanceNetworkInterface(
+    params: VpcV1.DeleteInstanceNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4230,15 +5099,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceNetworkInterface');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstanceNetworkInterface'
+    );
 
     const parameters = {
       options: {
@@ -4248,13 +5121,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a network interface.
@@ -4267,8 +5145,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
    */
-  public getInstanceNetworkInterface(params: VpcV1.GetInstanceNetworkInterfaceParams): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
-    const _params = Object.assign({}, params);
+  public getInstanceNetworkInterface(
+    params: VpcV1.GetInstanceNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4278,15 +5158,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceNetworkInterface');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceNetworkInterface'
+    );
 
     const parameters = {
       options: {
@@ -4296,14 +5180,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a network interface.
@@ -4321,8 +5210,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
    */
-  public updateInstanceNetworkInterface(params: VpcV1.UpdateInstanceNetworkInterfaceParams): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
-    const _params = Object.assign({}, params);
+  public updateInstanceNetworkInterface(
+    params: VpcV1.UpdateInstanceNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4332,20 +5223,24 @@ class VpcV1 extends BaseService {
 
     const body = {
       'allow_ip_spoofing': _params.allowIpSpoofing,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceNetworkInterface');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateInstanceNetworkInterface'
+    );
 
     const parameters = {
       options: {
@@ -4356,15 +5251,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all floating IPs associated with a network interface.
@@ -4377,8 +5277,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIPUnpaginatedCollection>>}
    */
-  public listInstanceNetworkInterfaceFloatingIps(params: VpcV1.ListInstanceNetworkInterfaceFloatingIpsParams): Promise<VpcV1.Response<VpcV1.FloatingIPUnpaginatedCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceNetworkInterfaceFloatingIps(
+    params: VpcV1.ListInstanceNetworkInterfaceFloatingIpsParams
+  ): Promise<VpcV1.Response<VpcV1.FloatingIPUnpaginatedCollection>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'networkInterfaceId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4388,15 +5290,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
-      'network_interface_id': _params.networkInterfaceId
+      'network_interface_id': _params.networkInterfaceId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceNetworkInterfaceFloatingIps');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceNetworkInterfaceFloatingIps'
+    );
 
     const parameters = {
       options: {
@@ -4406,14 +5312,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Disassociate a floating IP from a network interface.
@@ -4427,8 +5338,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public removeInstanceNetworkInterfaceFloatingIp(params: VpcV1.RemoveInstanceNetworkInterfaceFloatingIpParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public removeInstanceNetworkInterfaceFloatingIp(
+    params: VpcV1.RemoveInstanceNetworkInterfaceFloatingIpParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4438,16 +5351,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
       'network_interface_id': _params.networkInterfaceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeInstanceNetworkInterfaceFloatingIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'removeInstanceNetworkInterfaceFloatingIp'
+    );
 
     const parameters = {
       options: {
@@ -4457,13 +5374,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve associated floating IP.
@@ -4478,8 +5400,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
    */
-  public getInstanceNetworkInterfaceFloatingIp(params: VpcV1.GetInstanceNetworkInterfaceFloatingIpParams): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
-    const _params = Object.assign({}, params);
+  public getInstanceNetworkInterfaceFloatingIp(
+    params: VpcV1.GetInstanceNetworkInterfaceFloatingIpParams
+  ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4489,16 +5413,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
       'network_interface_id': _params.networkInterfaceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceNetworkInterfaceFloatingIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceNetworkInterfaceFloatingIp'
+    );
 
     const parameters = {
       options: {
@@ -4508,14 +5436,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Associate a floating IP with a network interface.
@@ -4531,8 +5464,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
    */
-  public addInstanceNetworkInterfaceFloatingIp(params: VpcV1.AddInstanceNetworkInterfaceFloatingIpParams): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
-    const _params = Object.assign({}, params);
+  public addInstanceNetworkInterfaceFloatingIp(
+    params: VpcV1.AddInstanceNetworkInterfaceFloatingIpParams
+  ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4542,16 +5477,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
       'network_interface_id': _params.networkInterfaceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addInstanceNetworkInterfaceFloatingIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'addInstanceNetworkInterfaceFloatingIp'
+    );
 
     const parameters = {
       options: {
@@ -4561,14 +5500,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all volumes attachments on an instance.
@@ -4582,8 +5526,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeAttachmentCollection>>}
    */
-  public listInstanceVolumeAttachments(params: VpcV1.ListInstanceVolumeAttachmentsParams): Promise<VpcV1.Response<VpcV1.VolumeAttachmentCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceVolumeAttachments(
+    params: VpcV1.ListInstanceVolumeAttachmentsParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeAttachmentCollection>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4593,14 +5539,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'instance_id': _params.instanceId
+      'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceVolumeAttachments');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceVolumeAttachments'
+    );
 
     const parameters = {
       options: {
@@ -4610,14 +5560,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a volume attachment on an instance.
@@ -4637,8 +5592,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeAttachment>>}
    */
-  public createInstanceVolumeAttachment(params: VpcV1.CreateInstanceVolumeAttachmentParams): Promise<VpcV1.Response<VpcV1.VolumeAttachment>> {
-    const _params = Object.assign({}, params);
+  public createInstanceVolumeAttachment(
+    params: VpcV1.CreateInstanceVolumeAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeAttachment>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'volume'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4649,19 +5606,23 @@ class VpcV1 extends BaseService {
     const body = {
       'volume': _params.volume,
       'delete_volume_on_instance_delete': _params.deleteVolumeOnInstanceDelete,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'instance_id': _params.instanceId
+      'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceVolumeAttachment');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createInstanceVolumeAttachment'
+    );
 
     const parameters = {
       options: {
@@ -4672,15 +5633,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a volume attachment.
@@ -4693,8 +5659,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstanceVolumeAttachment(params: VpcV1.DeleteInstanceVolumeAttachmentParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstanceVolumeAttachment(
+    params: VpcV1.DeleteInstanceVolumeAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4704,15 +5672,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceVolumeAttachment');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstanceVolumeAttachment'
+    );
 
     const parameters = {
       options: {
@@ -4722,13 +5694,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a volume attachment.
@@ -4741,8 +5718,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeAttachment>>}
    */
-  public getInstanceVolumeAttachment(params: VpcV1.GetInstanceVolumeAttachmentParams): Promise<VpcV1.Response<VpcV1.VolumeAttachment>> {
-    const _params = Object.assign({}, params);
+  public getInstanceVolumeAttachment(
+    params: VpcV1.GetInstanceVolumeAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeAttachment>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4752,15 +5731,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceVolumeAttachment');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceVolumeAttachment'
+    );
 
     const parameters = {
       options: {
@@ -4770,14 +5753,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a volume attachment.
@@ -4795,8 +5783,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeAttachment>>}
    */
-  public updateInstanceVolumeAttachment(params: VpcV1.UpdateInstanceVolumeAttachmentParams): Promise<VpcV1.Response<VpcV1.VolumeAttachment>> {
-    const _params = Object.assign({}, params);
+  public updateInstanceVolumeAttachment(
+    params: VpcV1.UpdateInstanceVolumeAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeAttachment>> {
+    const _params = { ...params };
     const requiredParams = ['instanceId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4806,20 +5796,24 @@ class VpcV1 extends BaseService {
 
     const body = {
       'delete_volume_on_instance_delete': _params.deleteVolumeOnInstanceDelete,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_id': _params.instanceId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceVolumeAttachment');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateInstanceVolumeAttachment'
+    );
 
     const parameters = {
       options: {
@@ -4830,16 +5824,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * instanceGroups
    ************************/
@@ -4855,17 +5853,23 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupCollection>>}
    */
-  public listInstanceGroups(params?: VpcV1.ListInstanceGroupsParams): Promise<VpcV1.Response<VpcV1.InstanceGroupCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceGroups(
+    params?: VpcV1.ListInstanceGroupsParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroups');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceGroups'
+    );
 
     const parameters = {
       options: {
@@ -4874,14 +5878,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create an instance group.
@@ -4889,7 +5898,7 @@ class VpcV1 extends BaseService {
    * This request creates a new instance group.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {InstanceTemplateIdentity} params.instanceTemplate - Instance template to use when creating new instances.
+   * @param {InstanceTemplateIdentity} params.instanceTemplate - Identifies an instance template by a unique property.
    * @param {SubnetIdentity[]} params.subnets - The subnets to use when creating new instances.
    * @param {number} [params.applicationPort] - Required if specifying a load balancer pool only. Used by the instance
    * group when scaling up instances to supply the port for the load balancer pool member.
@@ -4909,8 +5918,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroup>>}
    */
-  public createInstanceGroup(params: VpcV1.CreateInstanceGroupParams): Promise<VpcV1.Response<VpcV1.InstanceGroup>> {
-    const _params = Object.assign({}, params);
+  public createInstanceGroup(
+    params: VpcV1.CreateInstanceGroupParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroup>> {
+    const _params = { ...params };
     const requiredParams = ['instanceTemplate', 'subnets'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4926,15 +5937,19 @@ class VpcV1 extends BaseService {
       'load_balancer_pool': _params.loadBalancerPool,
       'membership_count': _params.membershipCount,
       'name': _params.name,
-      'resource_group': _params.resourceGroup
+      'resource_group': _params.resourceGroup,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createInstanceGroup'
+    );
 
     const parameters = {
       options: {
@@ -4944,15 +5959,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an instance group.
@@ -4965,8 +5985,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstanceGroup(params: VpcV1.DeleteInstanceGroupParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstanceGroup(
+    params: VpcV1.DeleteInstanceGroupParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -4976,14 +5998,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstanceGroup'
+    );
 
     const parameters = {
       options: {
@@ -4993,13 +6019,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an instance group.
@@ -5011,8 +6042,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroup>>}
    */
-  public getInstanceGroup(params: VpcV1.GetInstanceGroupParams): Promise<VpcV1.Response<VpcV1.InstanceGroup>> {
-    const _params = Object.assign({}, params);
+  public getInstanceGroup(
+    params: VpcV1.GetInstanceGroupParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroup>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5022,14 +6055,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceGroup'
+    );
 
     const parameters = {
       options: {
@@ -5039,14 +6076,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an instance group.
@@ -5058,7 +6100,7 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The instance group identifier.
    * @param {number} [params.applicationPort] - Required if specifying a load balancer pool only. Used by the instance
    * group when scaling up instances to supply the port for the load balancer pool member.
-   * @param {InstanceTemplateIdentity} [params.instanceTemplate] - Instance template to use when creating new instances.
+   * @param {InstanceTemplateIdentity} [params.instanceTemplate] - Identifies an instance template by a unique property.
    * @param {LoadBalancerIdentity} [params.loadBalancer] - The load balancer that the load balancer pool used by this
    * group
    * is in. Must be supplied when using a load balancer pool.
@@ -5073,8 +6115,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroup>>}
    */
-  public updateInstanceGroup(params: VpcV1.UpdateInstanceGroupParams): Promise<VpcV1.Response<VpcV1.InstanceGroup>> {
-    const _params = Object.assign({}, params);
+  public updateInstanceGroup(
+    params: VpcV1.UpdateInstanceGroupParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroup>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5089,19 +6133,23 @@ class VpcV1 extends BaseService {
       'load_balancer_pool': _params.loadBalancerPool,
       'membership_count': _params.membershipCount,
       'name': _params.name,
-      'subnets': _params.subnets
+      'subnets': _params.subnets,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateInstanceGroup'
+    );
 
     const parameters = {
       options: {
@@ -5112,15 +6160,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an instance group load balancer.
@@ -5132,8 +6185,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstanceGroupLoadBalancer(params: VpcV1.DeleteInstanceGroupLoadBalancerParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstanceGroupLoadBalancer(
+    params: VpcV1.DeleteInstanceGroupLoadBalancerParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5143,14 +6198,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'instance_group_id': _params.instanceGroupId
+      'instance_group_id': _params.instanceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupLoadBalancer');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstanceGroupLoadBalancer'
+    );
 
     const parameters = {
       options: {
@@ -5160,13 +6219,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all managers for an instance group.
@@ -5180,8 +6244,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerCollection>>}
    */
-  public listInstanceGroupManagers(params: VpcV1.ListInstanceGroupManagersParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceGroupManagers(
+    params: VpcV1.ListInstanceGroupManagersParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerCollection>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5193,14 +6259,18 @@ class VpcV1 extends BaseService {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
     const path = {
-      'instance_group_id': _params.instanceGroupId
+      'instance_group_id': _params.instanceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagers');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceGroupManagers'
+    );
 
     const parameters = {
       options: {
@@ -5210,14 +6280,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a manager for an instance group.
@@ -5231,8 +6306,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManager>>}
    */
-  public createInstanceGroupManager(params: VpcV1.CreateInstanceGroupManagerParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManager>> {
-    const _params = Object.assign({}, params);
+  public createInstanceGroupManager(
+    params: VpcV1.CreateInstanceGroupManagerParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManager>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerPrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5243,14 +6320,18 @@ class VpcV1 extends BaseService {
     const body = _params.instanceGroupManagerPrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'instance_group_id': _params.instanceGroupId
+      'instance_group_id': _params.instanceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManager');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createInstanceGroupManager'
+    );
 
     const parameters = {
       options: {
@@ -5261,15 +6342,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an instance group manager.
@@ -5282,8 +6368,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstanceGroupManager(params: VpcV1.DeleteInstanceGroupManagerParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstanceGroupManager(
+    params: VpcV1.DeleteInstanceGroupManagerParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5293,15 +6381,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManager');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstanceGroupManager'
+    );
 
     const parameters = {
       options: {
@@ -5311,13 +6403,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an instance group manager.
@@ -5330,8 +6427,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManager>>}
    */
-  public getInstanceGroupManager(params: VpcV1.GetInstanceGroupManagerParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManager>> {
-    const _params = Object.assign({}, params);
+  public getInstanceGroupManager(
+    params: VpcV1.GetInstanceGroupManagerParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManager>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5341,15 +6440,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManager');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceGroupManager'
+    );
 
     const parameters = {
       options: {
@@ -5359,14 +6462,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an instance group manager.
@@ -5387,8 +6495,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManager>>}
    */
-  public updateInstanceGroupManager(params: VpcV1.UpdateInstanceGroupManagerParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManager>> {
-    const _params = Object.assign({}, params);
+  public updateInstanceGroupManager(
+    params: VpcV1.UpdateInstanceGroupManagerParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManager>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5402,20 +6512,24 @@ class VpcV1 extends BaseService {
       'management_enabled': _params.managementEnabled,
       'max_membership_count': _params.maxMembershipCount,
       'min_membership_count': _params.minMembershipCount,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManager');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateInstanceGroupManager'
+    );
 
     const parameters = {
       options: {
@@ -5426,15 +6540,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all actions for an instance group manager.
@@ -5449,8 +6568,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerActionsCollection>>}
    */
-  public listInstanceGroupManagerActions(params: VpcV1.ListInstanceGroupManagerActionsParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerActionsCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceGroupManagerActions(
+    params: VpcV1.ListInstanceGroupManagerActionsParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerActionsCollection>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5462,15 +6583,19 @@ class VpcV1 extends BaseService {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
-      'instance_group_manager_id': _params.instanceGroupManagerId
+      'instance_group_manager_id': _params.instanceGroupManagerId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagerActions');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceGroupManagerActions'
+    );
 
     const parameters = {
       options: {
@@ -5480,14 +6605,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create an instance group manager action.
@@ -5502,8 +6632,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>>}
    */
-  public createInstanceGroupManagerAction(params: VpcV1.CreateInstanceGroupManagerActionParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
-    const _params = Object.assign({}, params);
+  public createInstanceGroupManagerAction(
+    params: VpcV1.CreateInstanceGroupManagerActionParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'instanceGroupManagerActionPrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5514,15 +6646,19 @@ class VpcV1 extends BaseService {
     const body = _params.instanceGroupManagerActionPrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
-      'instance_group_manager_id': _params.instanceGroupManagerId
+      'instance_group_manager_id': _params.instanceGroupManagerId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManagerAction');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createInstanceGroupManagerAction'
+    );
 
     const parameters = {
       options: {
@@ -5533,15 +6669,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete specified instance group manager action.
@@ -5555,8 +6696,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstanceGroupManagerAction(params: VpcV1.DeleteInstanceGroupManagerActionParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstanceGroupManagerAction(
+    params: VpcV1.DeleteInstanceGroupManagerActionParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5566,16 +6709,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
       'instance_group_manager_id': _params.instanceGroupManagerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManagerAction');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstanceGroupManagerAction'
+    );
 
     const parameters = {
       options: {
@@ -5585,13 +6732,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve specified instance group manager action.
@@ -5605,8 +6757,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>>}
    */
-  public getInstanceGroupManagerAction(params: VpcV1.GetInstanceGroupManagerActionParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
-    const _params = Object.assign({}, params);
+  public getInstanceGroupManagerAction(
+    params: VpcV1.GetInstanceGroupManagerActionParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5616,16 +6770,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
       'instance_group_manager_id': _params.instanceGroupManagerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManagerAction');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceGroupManagerAction'
+    );
 
     const parameters = {
       options: {
@@ -5635,14 +6793,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update specified instance group manager action.
@@ -5663,8 +6826,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>>}
    */
-  public updateInstanceGroupManagerAction(params: VpcV1.UpdateInstanceGroupManagerActionParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
-    const _params = Object.assign({}, params);
+  public updateInstanceGroupManagerAction(
+    params: VpcV1.UpdateInstanceGroupManagerActionParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5677,21 +6842,25 @@ class VpcV1 extends BaseService {
       'group': _params.group,
       'manager': _params.manager,
       'name': _params.name,
-      'run_at': _params.runAt
+      'run_at': _params.runAt,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
       'instance_group_manager_id': _params.instanceGroupManagerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManagerAction');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateInstanceGroupManagerAction'
+    );
 
     const parameters = {
       options: {
@@ -5702,15 +6871,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all policies for an instance group manager.
@@ -5725,8 +6899,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicyCollection>>}
    */
-  public listInstanceGroupManagerPolicies(params: VpcV1.ListInstanceGroupManagerPoliciesParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicyCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceGroupManagerPolicies(
+    params: VpcV1.ListInstanceGroupManagerPoliciesParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicyCollection>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5738,15 +6914,19 @@ class VpcV1 extends BaseService {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
-      'instance_group_manager_id': _params.instanceGroupManagerId
+      'instance_group_manager_id': _params.instanceGroupManagerId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagerPolicies');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceGroupManagerPolicies'
+    );
 
     const parameters = {
       options: {
@@ -5756,14 +6936,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a policy for an instance group manager.
@@ -5778,8 +6963,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>>}
    */
-  public createInstanceGroupManagerPolicy(params: VpcV1.CreateInstanceGroupManagerPolicyParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>> {
-    const _params = Object.assign({}, params);
+  public createInstanceGroupManagerPolicy(
+    params: VpcV1.CreateInstanceGroupManagerPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'instanceGroupManagerPolicyPrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5790,15 +6977,19 @@ class VpcV1 extends BaseService {
     const body = _params.instanceGroupManagerPolicyPrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
-      'instance_group_manager_id': _params.instanceGroupManagerId
+      'instance_group_manager_id': _params.instanceGroupManagerId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManagerPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createInstanceGroupManagerPolicy'
+    );
 
     const parameters = {
       options: {
@@ -5809,15 +7000,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an instance group manager policy.
@@ -5831,8 +7027,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstanceGroupManagerPolicy(params: VpcV1.DeleteInstanceGroupManagerPolicyParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstanceGroupManagerPolicy(
+    params: VpcV1.DeleteInstanceGroupManagerPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5842,16 +7040,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
       'instance_group_manager_id': _params.instanceGroupManagerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManagerPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstanceGroupManagerPolicy'
+    );
 
     const parameters = {
       options: {
@@ -5861,13 +7063,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an instance group manager policy.
@@ -5881,8 +7088,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>>}
    */
-  public getInstanceGroupManagerPolicy(params: VpcV1.GetInstanceGroupManagerPolicyParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>> {
-    const _params = Object.assign({}, params);
+  public getInstanceGroupManagerPolicy(
+    params: VpcV1.GetInstanceGroupManagerPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5892,16 +7101,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
       'instance_group_manager_id': _params.instanceGroupManagerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManagerPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceGroupManagerPolicy'
+    );
 
     const parameters = {
       options: {
@@ -5911,14 +7124,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an instance group manager policy.
@@ -5936,8 +7154,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>>}
    */
-  public updateInstanceGroupManagerPolicy(params: VpcV1.UpdateInstanceGroupManagerPolicyParams): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>> {
-    const _params = Object.assign({}, params);
+  public updateInstanceGroupManagerPolicy(
+    params: VpcV1.UpdateInstanceGroupManagerPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -5948,21 +7168,25 @@ class VpcV1 extends BaseService {
     const body = {
       'metric_type': _params.metricType,
       'metric_value': _params.metricValue,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
       'instance_group_manager_id': _params.instanceGroupManagerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManagerPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateInstanceGroupManagerPolicy'
+    );
 
     const parameters = {
       options: {
@@ -5973,15 +7197,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete all memberships from an instance group.
@@ -5994,8 +7223,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstanceGroupMemberships(params: VpcV1.DeleteInstanceGroupMembershipsParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstanceGroupMemberships(
+    params: VpcV1.DeleteInstanceGroupMembershipsParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6005,14 +7236,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'instance_group_id': _params.instanceGroupId
+      'instance_group_id': _params.instanceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupMemberships');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstanceGroupMemberships'
+    );
 
     const parameters = {
       options: {
@@ -6022,13 +7257,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all memberships for an instance group.
@@ -6042,8 +7282,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupMembershipCollection>>}
    */
-  public listInstanceGroupMemberships(params: VpcV1.ListInstanceGroupMembershipsParams): Promise<VpcV1.Response<VpcV1.InstanceGroupMembershipCollection>> {
-    const _params = Object.assign({}, params);
+  public listInstanceGroupMemberships(
+    params: VpcV1.ListInstanceGroupMembershipsParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupMembershipCollection>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6055,14 +7297,18 @@ class VpcV1 extends BaseService {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
     const path = {
-      'instance_group_id': _params.instanceGroupId
+      'instance_group_id': _params.instanceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupMemberships');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listInstanceGroupMemberships'
+    );
 
     const parameters = {
       options: {
@@ -6072,14 +7318,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an instance group membership.
@@ -6093,8 +7344,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteInstanceGroupMembership(params: VpcV1.DeleteInstanceGroupMembershipParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteInstanceGroupMembership(
+    params: VpcV1.DeleteInstanceGroupMembershipParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6104,15 +7357,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupMembership');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteInstanceGroupMembership'
+    );
 
     const parameters = {
       options: {
@@ -6122,13 +7379,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an instance group membership.
@@ -6141,8 +7403,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupMembership>>}
    */
-  public getInstanceGroupMembership(params: VpcV1.GetInstanceGroupMembershipParams): Promise<VpcV1.Response<VpcV1.InstanceGroupMembership>> {
-    const _params = Object.assign({}, params);
+  public getInstanceGroupMembership(
+    params: VpcV1.GetInstanceGroupMembershipParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupMembership>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6152,15 +7416,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupMembership');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getInstanceGroupMembership'
+    );
 
     const parameters = {
       options: {
@@ -6170,14 +7438,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an instance group membership.
@@ -6192,8 +7465,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroupMembership>>}
    */
-  public updateInstanceGroupMembership(params: VpcV1.UpdateInstanceGroupMembershipParams): Promise<VpcV1.Response<VpcV1.InstanceGroupMembership>> {
-    const _params = Object.assign({}, params);
+  public updateInstanceGroupMembership(
+    params: VpcV1.UpdateInstanceGroupMembershipParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceGroupMembership>> {
+    const _params = { ...params };
     const requiredParams = ['instanceGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6202,20 +7477,24 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'instance_group_id': _params.instanceGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupMembership');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateInstanceGroupMembership'
+    );
 
     const parameters = {
       options: {
@@ -6226,16 +7505,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * dedicatedHosts
    ************************/
@@ -6255,8 +7538,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostGroupCollection>>}
    */
-  public listDedicatedHostGroups(params?: VpcV1.ListDedicatedHostGroupsParams): Promise<VpcV1.Response<VpcV1.DedicatedHostGroupCollection>> {
-    const _params = Object.assign({}, params);
+  public listDedicatedHostGroups(
+    params?: VpcV1.ListDedicatedHostGroupsParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHostGroupCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -6264,10 +7549,14 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
-      'zone.name': _params.zoneName
+      'zone.name': _params.zoneName,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHostGroups');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listDedicatedHostGroups'
+    );
 
     const parameters = {
       options: {
@@ -6276,14 +7565,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a dedicated host group.
@@ -6302,23 +7596,29 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>>}
    */
-  public createDedicatedHostGroup(params?: VpcV1.CreateDedicatedHostGroupParams): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
-    const _params = Object.assign({}, params);
+  public createDedicatedHostGroup(
+    params?: VpcV1.CreateDedicatedHostGroupParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
+    const _params = { ...params };
 
     const body = {
       'class': _params._class,
       'family': _params.family,
       'zone': _params.zone,
       'name': _params.name,
-      'resource_group': _params.resourceGroup
+      'resource_group': _params.resourceGroup,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createDedicatedHostGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createDedicatedHostGroup'
+    );
 
     const parameters = {
       options: {
@@ -6328,15 +7628,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a dedicated host group.
@@ -6348,8 +7653,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteDedicatedHostGroup(params: VpcV1.DeleteDedicatedHostGroupParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteDedicatedHostGroup(
+    params: VpcV1.DeleteDedicatedHostGroupParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6359,14 +7666,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteDedicatedHostGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteDedicatedHostGroup'
+    );
 
     const parameters = {
       options: {
@@ -6376,13 +7687,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a dedicated host group.
@@ -6394,8 +7710,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>>}
    */
-  public getDedicatedHostGroup(params: VpcV1.GetDedicatedHostGroupParams): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
-    const _params = Object.assign({}, params);
+  public getDedicatedHostGroup(
+    params: VpcV1.GetDedicatedHostGroupParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6405,14 +7723,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHostGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getDedicatedHostGroup'
+    );
 
     const parameters = {
       options: {
@@ -6422,14 +7744,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a dedicated host group.
@@ -6445,8 +7772,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>>}
    */
-  public updateDedicatedHostGroup(params: VpcV1.UpdateDedicatedHostGroupParams): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
-    const _params = Object.assign({}, params);
+  public updateDedicatedHostGroup(
+    params: VpcV1.UpdateDedicatedHostGroupParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6455,19 +7784,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateDedicatedHostGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateDedicatedHostGroup'
+    );
 
     const parameters = {
       options: {
@@ -6478,15 +7811,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all dedicated host profiles.
@@ -6500,17 +7838,23 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostProfileCollection>>}
    */
-  public listDedicatedHostProfiles(params?: VpcV1.ListDedicatedHostProfilesParams): Promise<VpcV1.Response<VpcV1.DedicatedHostProfileCollection>> {
-    const _params = Object.assign({}, params);
+  public listDedicatedHostProfiles(
+    params?: VpcV1.ListDedicatedHostProfilesParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHostProfileCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHostProfiles');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listDedicatedHostProfiles'
+    );
 
     const parameters = {
       options: {
@@ -6519,14 +7863,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a dedicated host profile.
@@ -6538,8 +7887,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostProfile>>}
    */
-  public getDedicatedHostProfile(params: VpcV1.GetDedicatedHostProfileParams): Promise<VpcV1.Response<VpcV1.DedicatedHostProfile>> {
-    const _params = Object.assign({}, params);
+  public getDedicatedHostProfile(
+    params: VpcV1.GetDedicatedHostProfileParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHostProfile>> {
+    const _params = { ...params };
     const requiredParams = ['name'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6549,14 +7900,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'name': _params.name
+      'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHostProfile');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getDedicatedHostProfile'
+    );
 
     const parameters = {
       options: {
@@ -6566,14 +7921,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all dedicated hosts.
@@ -6591,8 +7951,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostCollection>>}
    */
-  public listDedicatedHosts(params?: VpcV1.ListDedicatedHostsParams): Promise<VpcV1.Response<VpcV1.DedicatedHostCollection>> {
-    const _params = Object.assign({}, params);
+  public listDedicatedHosts(
+    params?: VpcV1.ListDedicatedHostsParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHostCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -6601,10 +7963,14 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
-      'zone.name': _params.zoneName
+      'zone.name': _params.zoneName,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHosts');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listDedicatedHosts'
+    );
 
     const parameters = {
       options: {
@@ -6613,14 +7979,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a dedicated host.
@@ -6632,8 +8003,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHost>>}
    */
-  public createDedicatedHost(params: VpcV1.CreateDedicatedHostParams): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
-    const _params = Object.assign({}, params);
+  public createDedicatedHost(
+    params: VpcV1.CreateDedicatedHostParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
+    const _params = { ...params };
     const requiredParams = ['dedicatedHostPrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6644,10 +8017,14 @@ class VpcV1 extends BaseService {
     const body = _params.dedicatedHostPrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createDedicatedHost');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createDedicatedHost'
+    );
 
     const parameters = {
       options: {
@@ -6657,15 +8034,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all disks on a dedicated host.
@@ -6679,8 +8061,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostDiskCollection>>}
    */
-  public listDedicatedHostDisks(params: VpcV1.ListDedicatedHostDisksParams): Promise<VpcV1.Response<VpcV1.DedicatedHostDiskCollection>> {
-    const _params = Object.assign({}, params);
+  public listDedicatedHostDisks(
+    params: VpcV1.ListDedicatedHostDisksParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHostDiskCollection>> {
+    const _params = { ...params };
     const requiredParams = ['dedicatedHostId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6690,14 +8074,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'dedicated_host_id': _params.dedicatedHostId
+      'dedicated_host_id': _params.dedicatedHostId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHostDisks');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listDedicatedHostDisks'
+    );
 
     const parameters = {
       options: {
@@ -6707,14 +8095,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a dedicated host disk.
@@ -6727,8 +8120,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>>}
    */
-  public getDedicatedHostDisk(params: VpcV1.GetDedicatedHostDiskParams): Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>> {
-    const _params = Object.assign({}, params);
+  public getDedicatedHostDisk(
+    params: VpcV1.GetDedicatedHostDiskParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>> {
+    const _params = { ...params };
     const requiredParams = ['dedicatedHostId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6738,15 +8133,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'dedicated_host_id': _params.dedicatedHostId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHostDisk');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getDedicatedHostDisk'
+    );
 
     const parameters = {
       options: {
@@ -6756,14 +8155,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a dedicated host disk.
@@ -6777,8 +8181,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>>}
    */
-  public updateDedicatedHostDisk(params: VpcV1.UpdateDedicatedHostDiskParams): Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>> {
-    const _params = Object.assign({}, params);
+  public updateDedicatedHostDisk(
+    params: VpcV1.UpdateDedicatedHostDiskParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>> {
+    const _params = { ...params };
     const requiredParams = ['dedicatedHostId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6787,20 +8193,24 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'dedicated_host_id': _params.dedicatedHostId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateDedicatedHostDisk');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateDedicatedHostDisk'
+    );
 
     const parameters = {
       options: {
@@ -6811,15 +8221,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a dedicated host.
@@ -6831,8 +8246,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteDedicatedHost(params: VpcV1.DeleteDedicatedHostParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteDedicatedHost(
+    params: VpcV1.DeleteDedicatedHostParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6842,14 +8259,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteDedicatedHost');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteDedicatedHost'
+    );
 
     const parameters = {
       options: {
@@ -6859,13 +8280,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a dedicated host.
@@ -6877,8 +8303,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHost>>}
    */
-  public getDedicatedHost(params: VpcV1.GetDedicatedHostParams): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
-    const _params = Object.assign({}, params);
+  public getDedicatedHost(
+    params: VpcV1.GetDedicatedHostParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6888,14 +8316,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHost');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getDedicatedHost'
+    );
 
     const parameters = {
       options: {
@@ -6905,14 +8337,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a dedicated host.
@@ -6930,8 +8367,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHost>>}
    */
-  public updateDedicatedHost(params: VpcV1.UpdateDedicatedHostParams): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
-    const _params = Object.assign({}, params);
+  public updateDedicatedHost(
+    params: VpcV1.UpdateDedicatedHostParams
+  ): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -6941,19 +8380,23 @@ class VpcV1 extends BaseService {
 
     const body = {
       'instance_placement_enabled': _params.instancePlacementEnabled,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateDedicatedHost');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateDedicatedHost'
+    );
 
     const parameters = {
       options: {
@@ -6964,16 +8407,328 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
+  /*************************
+   * placementGroups
+   ************************/
 
+  /**
+   * List all placement groups.
+   *
+   * This request lists all placement groups in the region.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-supplied token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PlacementGroupCollection>>}
+   */
+  public listPlacementGroups(
+    params?: VpcV1.ListPlacementGroupsParams
+  ): Promise<VpcV1.Response<VpcV1.PlacementGroupCollection>> {
+    const _params = { ...params };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listPlacementGroups'
+    );
+
+    const parameters = {
+      options: {
+        url: '/placement_groups',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a placement group.
+   *
+   * This request creates a new placement group.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.strategy - The strategy for this placement group
+   * - `host_spread`: place on different compute hosts
+   * - `power_spread`: place on compute hosts that use different power sources
+   *
+   * The enumerated values for this property may expand in the future. When processing this property, check for and log
+   * unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the
+   * unexpected strategy was encountered.
+   * @param {string} [params.name] - The unique user-defined name for this placement group. If unspecified, the name
+   * will be a hyphenated list of randomly-selected words.
+   * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
+   * [default resource
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PlacementGroup>>}
+   */
+  public createPlacementGroup(
+    params: VpcV1.CreatePlacementGroupParams
+  ): Promise<VpcV1.Response<VpcV1.PlacementGroup>> {
+    const _params = { ...params };
+    const requiredParams = ['strategy'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'strategy': _params.strategy,
+      'name': _params.name,
+      'resource_group': _params.resourceGroup,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createPlacementGroup'
+    );
+
+    const parameters = {
+      options: {
+        url: '/placement_groups',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a placement group.
+   *
+   * This request deletes a placement group. This operation cannot be reversed. For this request to succeed, the
+   * placement group must not be associated with an instance.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The placement group identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+   */
+  public deletePlacementGroup(
+    params: VpcV1.DeletePlacementGroupParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deletePlacementGroup'
+    );
+
+    const parameters = {
+      options: {
+        url: '/placement_groups/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a placement group.
+   *
+   * This request retrieves a single placement group specified by identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The placement group identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PlacementGroup>>}
+   */
+  public getPlacementGroup(
+    params: VpcV1.GetPlacementGroupParams
+  ): Promise<VpcV1.Response<VpcV1.PlacementGroup>> {
+    const _params = { ...params };
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPlacementGroup'
+    );
+
+    const parameters = {
+      options: {
+        url: '/placement_groups/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a placement group.
+   *
+   * This request updates a placement group with the information provided placement group patch. The placement group
+   * patch object is structured in the same way as a retrieved placement group and contains only the information to be
+   * updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The placement group identifier.
+   * @param {string} [params.name] - The user-defined name for this placement group.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PlacementGroup>>}
+   */
+  public updatePlacementGroup(
+    params: VpcV1.UpdatePlacementGroupParams
+  ): Promise<VpcV1.Response<VpcV1.PlacementGroup>> {
+    const _params = { ...params };
+    const requiredParams = ['id'];
+
+    const missingParams = getMissingParams(_params, requiredParams);
+    if (missingParams) {
+      return Promise.reject(missingParams);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updatePlacementGroup'
+    );
+
+    const parameters = {
+      options: {
+        url: '/placement_groups/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
   /*************************
    * volumes
    ************************/
@@ -6990,17 +8745,23 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeProfileCollection>>}
    */
-  public listVolumeProfiles(params?: VpcV1.ListVolumeProfilesParams): Promise<VpcV1.Response<VpcV1.VolumeProfileCollection>> {
-    const _params = Object.assign({}, params);
+  public listVolumeProfiles(
+    params?: VpcV1.ListVolumeProfilesParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeProfileCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumeProfiles');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVolumeProfiles'
+    );
 
     const parameters = {
       options: {
@@ -7009,14 +8770,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a volume profile.
@@ -7028,8 +8794,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeProfile>>}
    */
-  public getVolumeProfile(params: VpcV1.GetVolumeProfileParams): Promise<VpcV1.Response<VpcV1.VolumeProfile>> {
-    const _params = Object.assign({}, params);
+  public getVolumeProfile(
+    params: VpcV1.GetVolumeProfileParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeProfile>> {
+    const _params = { ...params };
     const requiredParams = ['name'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7039,14 +8807,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'name': _params.name
+      'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVolumeProfile');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVolumeProfile'
+    );
 
     const parameters = {
       options: {
@@ -7056,14 +8828,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all volumes.
@@ -7079,8 +8856,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeCollection>>}
    */
-  public listVolumes(params?: VpcV1.ListVolumesParams): Promise<VpcV1.Response<VpcV1.VolumeCollection>> {
-    const _params = Object.assign({}, params);
+  public listVolumes(
+    params?: VpcV1.ListVolumesParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -7088,10 +8867,14 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'name': _params.name,
-      'zone.name': _params.zoneName
+      'zone.name': _params.zoneName,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumes');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVolumes'
+    );
 
     const parameters = {
       options: {
@@ -7100,14 +8883,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a volume.
@@ -7120,8 +8908,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Volume>>}
    */
-  public createVolume(params: VpcV1.CreateVolumeParams): Promise<VpcV1.Response<VpcV1.Volume>> {
-    const _params = Object.assign({}, params);
+  public createVolume(
+    params: VpcV1.CreateVolumeParams
+  ): Promise<VpcV1.Response<VpcV1.Volume>> {
+    const _params = { ...params };
     const requiredParams = ['volumePrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7132,10 +8922,14 @@ class VpcV1 extends BaseService {
     const body = _params.volumePrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVolume');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createVolume'
+    );
 
     const parameters = {
       options: {
@@ -7145,15 +8939,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a volume.
@@ -7166,8 +8965,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteVolume(params: VpcV1.DeleteVolumeParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteVolume(
+    params: VpcV1.DeleteVolumeParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7177,14 +8978,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVolume');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteVolume'
+    );
 
     const parameters = {
       options: {
@@ -7194,13 +8999,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a volume.
@@ -7212,8 +9022,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Volume>>}
    */
-  public getVolume(params: VpcV1.GetVolumeParams): Promise<VpcV1.Response<VpcV1.Volume>> {
-    const _params = Object.assign({}, params);
+  public getVolume(
+    params: VpcV1.GetVolumeParams
+  ): Promise<VpcV1.Response<VpcV1.Volume>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7223,14 +9035,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVolume');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVolume'
+    );
 
     const parameters = {
       options: {
@@ -7240,14 +9056,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a volume.
@@ -7257,12 +9078,25 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The volume identifier.
+   * @param {number} [params.capacity] - The capacity to use for the volume (in gigabytes). The volume must be attached
+   * as a data volume to a virtual server instance, and the specified value must not be less than the current capacity.
+   *
+   * The minimum and maximum capacity limits for creating or updating volumes may expand in the future.
+   * @param {number} [params.iops] - The maximum I/O operations per second (IOPS) to use for the volume. Applicable only
+   * to volumes using a profile `family` of `custom`. The volume must be attached as a data volume to a running virtual
+   * server instance.
    * @param {string} [params.name] - The unique user-defined name for this volume.
+   * @param {VolumeProfileIdentity} [params.profile] - The profile to use for this volume.  The requested profile must
+   * be in the same
+   * `family` as the current profile.  The volume must be attached as a data volume to a
+   *  running virtual server instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Volume>>}
    */
-  public updateVolume(params: VpcV1.UpdateVolumeParams): Promise<VpcV1.Response<VpcV1.Volume>> {
-    const _params = Object.assign({}, params);
+  public updateVolume(
+    params: VpcV1.UpdateVolumeParams
+  ): Promise<VpcV1.Response<VpcV1.Volume>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7271,19 +9105,26 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'capacity': _params.capacity,
+      'iops': _params.iops,
+      'name': _params.name,
+      'profile': _params.profile,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVolume');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVolume'
+    );
 
     const parameters = {
       options: {
@@ -7294,16 +9135,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * snapshots
    ************************/
@@ -7319,8 +9164,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteSnapshots(params: VpcV1.DeleteSnapshotsParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteSnapshots(
+    params: VpcV1.DeleteSnapshotsParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['sourceVolumeId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7331,10 +9178,14 @@ class VpcV1 extends BaseService {
     const query = {
       'version': this.version,
       'generation': this.generation,
-      'source_volume.id': _params.sourceVolumeId
+      'source_volume.id': _params.sourceVolumeId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSnapshots');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteSnapshots'
+    );
 
     const parameters = {
       options: {
@@ -7343,13 +9194,18 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all snapshots.
@@ -7384,8 +9240,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SnapshotCollection>>}
    */
-  public listSnapshots(params?: VpcV1.ListSnapshotsParams): Promise<VpcV1.Response<VpcV1.SnapshotCollection>> {
-    const _params = Object.assign({}, params);
+  public listSnapshots(
+    params?: VpcV1.ListSnapshotsParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -7398,10 +9256,14 @@ class VpcV1 extends BaseService {
       'source_volume.crn': _params.sourceVolumeCrn,
       'source_image.id': _params.sourceImageId,
       'source_image.crn': _params.sourceImageCrn,
-      'sort': _params.sort
+      'sort': _params.sort,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSnapshots');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listSnapshots'
+    );
 
     const parameters = {
       options: {
@@ -7410,14 +9272,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a snapshot.
@@ -7435,8 +9302,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Snapshot>>}
    */
-  public createSnapshot(params: VpcV1.CreateSnapshotParams): Promise<VpcV1.Response<VpcV1.Snapshot>> {
-    const _params = Object.assign({}, params);
+  public createSnapshot(
+    params: VpcV1.CreateSnapshotParams
+  ): Promise<VpcV1.Response<VpcV1.Snapshot>> {
+    const _params = { ...params };
     const requiredParams = ['sourceVolume'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7447,15 +9316,19 @@ class VpcV1 extends BaseService {
     const body = {
       'source_volume': _params.sourceVolume,
       'name': _params.name,
-      'resource_group': _params.resourceGroup
+      'resource_group': _params.resourceGroup,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSnapshot');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createSnapshot'
+    );
 
     const parameters = {
       options: {
@@ -7465,15 +9338,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a snapshot.
@@ -7485,8 +9363,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteSnapshot(params: VpcV1.DeleteSnapshotParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteSnapshot(
+    params: VpcV1.DeleteSnapshotParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7496,14 +9376,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSnapshot');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteSnapshot'
+    );
 
     const parameters = {
       options: {
@@ -7513,13 +9397,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a snapshot.
@@ -7531,8 +9420,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Snapshot>>}
    */
-  public getSnapshot(params: VpcV1.GetSnapshotParams): Promise<VpcV1.Response<VpcV1.Snapshot>> {
-    const _params = Object.assign({}, params);
+  public getSnapshot(
+    params: VpcV1.GetSnapshotParams
+  ): Promise<VpcV1.Response<VpcV1.Snapshot>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7542,14 +9433,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSnapshot');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSnapshot'
+    );
 
     const parameters = {
       options: {
@@ -7559,14 +9454,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a snapshot.
@@ -7579,8 +9479,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Snapshot>>}
    */
-  public updateSnapshot(params: VpcV1.UpdateSnapshotParams): Promise<VpcV1.Response<VpcV1.Snapshot>> {
-    const _params = Object.assign({}, params);
+  public updateSnapshot(
+    params: VpcV1.UpdateSnapshotParams
+  ): Promise<VpcV1.Response<VpcV1.Snapshot>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7589,19 +9491,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSnapshot');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateSnapshot'
+    );
 
     const parameters = {
       options: {
@@ -7612,16 +9518,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * geography
    ************************/
@@ -7639,15 +9549,21 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.RegionCollection>>}
    */
-  public listRegions(params?: VpcV1.ListRegionsParams): Promise<VpcV1.Response<VpcV1.RegionCollection>> {
-    const _params = Object.assign({}, params);
+  public listRegions(
+    params?: VpcV1.ListRegionsParams
+  ): Promise<VpcV1.Response<VpcV1.RegionCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listRegions');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listRegions'
+    );
 
     const parameters = {
       options: {
@@ -7656,14 +9572,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a region.
@@ -7675,8 +9596,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Region>>}
    */
-  public getRegion(params: VpcV1.GetRegionParams): Promise<VpcV1.Response<VpcV1.Region>> {
-    const _params = Object.assign({}, params);
+  public getRegion(
+    params: VpcV1.GetRegionParams
+  ): Promise<VpcV1.Response<VpcV1.Region>> {
+    const _params = { ...params };
     const requiredParams = ['name'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7686,14 +9609,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'name': _params.name
+      'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getRegion');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getRegion'
+    );
 
     const parameters = {
       options: {
@@ -7703,14 +9630,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all zones in a region.
@@ -7723,8 +9655,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ZoneCollection>>}
    */
-  public listRegionZones(params: VpcV1.ListRegionZonesParams): Promise<VpcV1.Response<VpcV1.ZoneCollection>> {
-    const _params = Object.assign({}, params);
+  public listRegionZones(
+    params: VpcV1.ListRegionZonesParams
+  ): Promise<VpcV1.Response<VpcV1.ZoneCollection>> {
+    const _params = { ...params };
     const requiredParams = ['regionName'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7734,14 +9668,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'region_name': _params.regionName
+      'region_name': _params.regionName,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listRegionZones');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listRegionZones'
+    );
 
     const parameters = {
       options: {
@@ -7751,14 +9689,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a zone.
@@ -7771,8 +9714,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Zone>>}
    */
-  public getRegionZone(params: VpcV1.GetRegionZoneParams): Promise<VpcV1.Response<VpcV1.Zone>> {
-    const _params = Object.assign({}, params);
+  public getRegionZone(
+    params: VpcV1.GetRegionZoneParams
+  ): Promise<VpcV1.Response<VpcV1.Zone>> {
+    const _params = { ...params };
     const requiredParams = ['regionName', 'name'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7782,15 +9727,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'region_name': _params.regionName,
-      'name': _params.name
+      'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getRegionZone');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getRegionZone'
+    );
 
     const parameters = {
       options: {
@@ -7800,15 +9749,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * publicGateways
    ************************/
@@ -7828,18 +9781,24 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.PublicGatewayCollection>>}
    */
-  public listPublicGateways(params?: VpcV1.ListPublicGatewaysParams): Promise<VpcV1.Response<VpcV1.PublicGatewayCollection>> {
-    const _params = Object.assign({}, params);
+  public listPublicGateways(
+    params?: VpcV1.ListPublicGatewaysParams
+  ): Promise<VpcV1.Response<VpcV1.PublicGatewayCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
       'limit': _params.limit,
-      'resource_group.id': _params.resourceGroupId
+      'resource_group.id': _params.resourceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listPublicGateways');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listPublicGateways'
+    );
 
     const parameters = {
       options: {
@@ -7848,14 +9807,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a public gateway.
@@ -7879,8 +9843,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.PublicGateway>>}
    */
-  public createPublicGateway(params: VpcV1.CreatePublicGatewayParams): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
-    const _params = Object.assign({}, params);
+  public createPublicGateway(
+    params: VpcV1.CreatePublicGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
+    const _params = { ...params };
     const requiredParams = ['vpc', 'zone'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7893,15 +9859,19 @@ class VpcV1 extends BaseService {
       'zone': _params.zone,
       'floating_ip': _params.floatingIp,
       'name': _params.name,
-      'resource_group': _params.resourceGroup
+      'resource_group': _params.resourceGroup,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createPublicGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createPublicGateway'
+    );
 
     const parameters = {
       options: {
@@ -7911,15 +9881,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a public gateway.
@@ -7933,8 +9908,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deletePublicGateway(params: VpcV1.DeletePublicGatewayParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deletePublicGateway(
+    params: VpcV1.DeletePublicGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7944,14 +9921,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePublicGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deletePublicGateway'
+    );
 
     const parameters = {
       options: {
@@ -7961,13 +9942,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a public gateway.
@@ -7979,8 +9965,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.PublicGateway>>}
    */
-  public getPublicGateway(params: VpcV1.GetPublicGatewayParams): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
-    const _params = Object.assign({}, params);
+  public getPublicGateway(
+    params: VpcV1.GetPublicGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -7990,14 +9978,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getPublicGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getPublicGateway'
+    );
 
     const parameters = {
       options: {
@@ -8007,14 +9999,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a public gateway.
@@ -8028,8 +10025,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.PublicGateway>>}
    */
-  public updatePublicGateway(params: VpcV1.UpdatePublicGatewayParams): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
-    const _params = Object.assign({}, params);
+  public updatePublicGateway(
+    params: VpcV1.UpdatePublicGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8038,19 +10037,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updatePublicGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updatePublicGateway'
+    );
 
     const parameters = {
       options: {
@@ -8061,16 +10064,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * floatingIPs
    ************************/
@@ -8089,18 +10096,24 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIPCollection>>}
    */
-  public listFloatingIps(params?: VpcV1.ListFloatingIpsParams): Promise<VpcV1.Response<VpcV1.FloatingIPCollection>> {
-    const _params = Object.assign({}, params);
+  public listFloatingIps(
+    params?: VpcV1.ListFloatingIpsParams
+  ): Promise<VpcV1.Response<VpcV1.FloatingIPCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
       'limit': _params.limit,
-      'resource_group.id': _params.resourceGroupId
+      'resource_group.id': _params.resourceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listFloatingIps');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listFloatingIps'
+    );
 
     const parameters = {
       options: {
@@ -8109,14 +10122,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Reserve a floating IP.
@@ -8128,8 +10146,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
    */
-  public createFloatingIp(params: VpcV1.CreateFloatingIpParams): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
-    const _params = Object.assign({}, params);
+  public createFloatingIp(
+    params: VpcV1.CreateFloatingIpParams
+  ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
+    const _params = { ...params };
     const requiredParams = ['floatingIpPrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8140,10 +10160,14 @@ class VpcV1 extends BaseService {
     const body = _params.floatingIpPrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createFloatingIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createFloatingIp'
+    );
 
     const parameters = {
       options: {
@@ -8153,15 +10177,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Release a floating IP.
@@ -8174,8 +10203,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteFloatingIp(params: VpcV1.DeleteFloatingIpParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteFloatingIp(
+    params: VpcV1.DeleteFloatingIpParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8185,14 +10216,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteFloatingIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteFloatingIp'
+    );
 
     const parameters = {
       options: {
@@ -8202,13 +10237,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a floating IP.
@@ -8220,8 +10260,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
    */
-  public getFloatingIp(params: VpcV1.GetFloatingIpParams): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
-    const _params = Object.assign({}, params);
+  public getFloatingIp(
+    params: VpcV1.GetFloatingIpParams
+  ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8231,14 +10273,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getFloatingIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getFloatingIp'
+    );
 
     const parameters = {
       options: {
@@ -8248,14 +10294,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a floating IP.
@@ -8272,8 +10323,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
    */
-  public updateFloatingIp(params: VpcV1.UpdateFloatingIpParams): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
-    const _params = Object.assign({}, params);
+  public updateFloatingIp(
+    params: VpcV1.UpdateFloatingIpParams
+  ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8283,19 +10336,23 @@ class VpcV1 extends BaseService {
 
     const body = {
       'name': _params.name,
-      'target': _params.target
+      'target': _params.target,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateFloatingIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateFloatingIp'
+    );
 
     const parameters = {
       options: {
@@ -8306,16 +10363,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * networkACLs
    ************************/
@@ -8335,18 +10396,24 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACLCollection>>}
    */
-  public listNetworkAcls(params?: VpcV1.ListNetworkAclsParams): Promise<VpcV1.Response<VpcV1.NetworkACLCollection>> {
-    const _params = Object.assign({}, params);
+  public listNetworkAcls(
+    params?: VpcV1.ListNetworkAclsParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkACLCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
       'limit': _params.limit,
-      'resource_group.id': _params.resourceGroupId
+      'resource_group.id': _params.resourceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listNetworkAcls');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listNetworkAcls'
+    );
 
     const parameters = {
       options: {
@@ -8355,14 +10422,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a network ACL.
@@ -8375,16 +10447,22 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACL>>}
    */
-  public createNetworkAcl(params?: VpcV1.CreateNetworkAclParams): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
-    const _params = Object.assign({}, params);
+  public createNetworkAcl(
+    params?: VpcV1.CreateNetworkAclParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
+    const _params = { ...params };
 
     const body = _params.networkAclPrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createNetworkAcl');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createNetworkAcl'
+    );
 
     const parameters = {
       options: {
@@ -8394,15 +10472,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a network ACL.
@@ -8415,8 +10498,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteNetworkAcl(params: VpcV1.DeleteNetworkAclParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteNetworkAcl(
+    params: VpcV1.DeleteNetworkAclParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8426,14 +10511,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNetworkAcl');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteNetworkAcl'
+    );
 
     const parameters = {
       options: {
@@ -8443,13 +10532,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a network ACL.
@@ -8461,8 +10555,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACL>>}
    */
-  public getNetworkAcl(params: VpcV1.GetNetworkAclParams): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
-    const _params = Object.assign({}, params);
+  public getNetworkAcl(
+    params: VpcV1.GetNetworkAclParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8472,14 +10568,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getNetworkAcl');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getNetworkAcl'
+    );
 
     const parameters = {
       options: {
@@ -8489,14 +10589,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a network ACL.
@@ -8510,8 +10615,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACL>>}
    */
-  public updateNetworkAcl(params: VpcV1.UpdateNetworkAclParams): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
-    const _params = Object.assign({}, params);
+  public updateNetworkAcl(
+    params: VpcV1.UpdateNetworkAclParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8520,19 +10627,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateNetworkAcl');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateNetworkAcl'
+    );
 
     const parameters = {
       options: {
@@ -8543,15 +10654,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all rules for a network ACL.
@@ -8567,8 +10683,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACLRuleCollection>>}
    */
-  public listNetworkAclRules(params: VpcV1.ListNetworkAclRulesParams): Promise<VpcV1.Response<VpcV1.NetworkACLRuleCollection>> {
-    const _params = Object.assign({}, params);
+  public listNetworkAclRules(
+    params: VpcV1.ListNetworkAclRulesParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkACLRuleCollection>> {
+    const _params = { ...params };
     const requiredParams = ['networkAclId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8581,14 +10699,18 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
       'start': _params.start,
       'limit': _params.limit,
-      'direction': _params.direction
+      'direction': _params.direction,
     };
 
     const path = {
-      'network_acl_id': _params.networkAclId
+      'network_acl_id': _params.networkAclId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listNetworkAclRules');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listNetworkAclRules'
+    );
 
     const parameters = {
       options: {
@@ -8598,14 +10720,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a rule for a network ACL.
@@ -8619,8 +10746,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACLRule>>}
    */
-  public createNetworkAclRule(params: VpcV1.CreateNetworkAclRuleParams): Promise<VpcV1.Response<VpcV1.NetworkACLRule>> {
-    const _params = Object.assign({}, params);
+  public createNetworkAclRule(
+    params: VpcV1.CreateNetworkAclRuleParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkACLRule>> {
+    const _params = { ...params };
     const requiredParams = ['networkAclId', 'networkAclRulePrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8631,14 +10760,18 @@ class VpcV1 extends BaseService {
     const body = _params.networkAclRulePrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'network_acl_id': _params.networkAclId
+      'network_acl_id': _params.networkAclId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createNetworkAclRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createNetworkAclRule'
+    );
 
     const parameters = {
       options: {
@@ -8649,15 +10782,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a network ACL rule.
@@ -8670,8 +10808,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteNetworkAclRule(params: VpcV1.DeleteNetworkAclRuleParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteNetworkAclRule(
+    params: VpcV1.DeleteNetworkAclRuleParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['networkAclId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8681,15 +10821,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'network_acl_id': _params.networkAclId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNetworkAclRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteNetworkAclRule'
+    );
 
     const parameters = {
       options: {
@@ -8699,13 +10843,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a network ACL rule.
@@ -8718,8 +10867,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACLRule>>}
    */
-  public getNetworkAclRule(params: VpcV1.GetNetworkAclRuleParams): Promise<VpcV1.Response<VpcV1.NetworkACLRule>> {
-    const _params = Object.assign({}, params);
+  public getNetworkAclRule(
+    params: VpcV1.GetNetworkAclRuleParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkACLRule>> {
+    const _params = { ...params };
     const requiredParams = ['networkAclId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8729,15 +10880,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'network_acl_id': _params.networkAclId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getNetworkAclRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getNetworkAclRule'
+    );
 
     const parameters = {
       options: {
@@ -8747,14 +10902,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a network ACL rule.
@@ -8785,8 +10945,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACLRule>>}
    */
-  public updateNetworkAclRule(params: VpcV1.UpdateNetworkAclRuleParams): Promise<VpcV1.Response<VpcV1.NetworkACLRule>> {
-    const _params = Object.assign({}, params);
+  public updateNetworkAclRule(
+    params: VpcV1.UpdateNetworkAclRuleParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkACLRule>> {
+    const _params = { ...params };
     const requiredParams = ['networkAclId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8806,20 +10968,24 @@ class VpcV1 extends BaseService {
       'source': _params.source,
       'source_port_max': _params.sourcePortMax,
       'source_port_min': _params.sourcePortMin,
-      'type': _params.type
+      'type': _params.type,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'network_acl_id': _params.networkAclId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateNetworkAclRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateNetworkAclRule'
+    );
 
     const parameters = {
       options: {
@@ -8830,16 +10996,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * securityGroups
    ************************/
@@ -8863,8 +11033,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupCollection>>}
    */
-  public listSecurityGroups(params?: VpcV1.ListSecurityGroupsParams): Promise<VpcV1.Response<VpcV1.SecurityGroupCollection>> {
-    const _params = Object.assign({}, params);
+  public listSecurityGroups(
+    params?: VpcV1.ListSecurityGroupsParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroupCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -8874,10 +11046,14 @@ class VpcV1 extends BaseService {
       'resource_group.id': _params.resourceGroupId,
       'vpc.id': _params.vpcId,
       'vpc.crn': _params.vpcCrn,
-      'vpc.name': _params.vpcName
+      'vpc.name': _params.vpcName,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroups');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listSecurityGroups'
+    );
 
     const parameters = {
       options: {
@@ -8886,14 +11062,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a security group.
@@ -8916,8 +11097,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroup>>}
    */
-  public createSecurityGroup(params: VpcV1.CreateSecurityGroupParams): Promise<VpcV1.Response<VpcV1.SecurityGroup>> {
-    const _params = Object.assign({}, params);
+  public createSecurityGroup(
+    params: VpcV1.CreateSecurityGroupParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroup>> {
+    const _params = { ...params };
     const requiredParams = ['vpc'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8929,15 +11112,19 @@ class VpcV1 extends BaseService {
       'vpc': _params.vpc,
       'name': _params.name,
       'resource_group': _params.resourceGroup,
-      'rules': _params.rules
+      'rules': _params.rules,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createSecurityGroup'
+    );
 
     const parameters = {
       options: {
@@ -8947,15 +11134,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a security group.
@@ -8969,8 +11161,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteSecurityGroup(params: VpcV1.DeleteSecurityGroupParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteSecurityGroup(
+    params: VpcV1.DeleteSecurityGroupParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -8980,14 +11174,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteSecurityGroup'
+    );
 
     const parameters = {
       options: {
@@ -8997,13 +11195,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a security group.
@@ -9015,8 +11218,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroup>>}
    */
-  public getSecurityGroup(params: VpcV1.GetSecurityGroupParams): Promise<VpcV1.Response<VpcV1.SecurityGroup>> {
-    const _params = Object.assign({}, params);
+  public getSecurityGroup(
+    params: VpcV1.GetSecurityGroupParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroup>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9026,14 +11231,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSecurityGroup'
+    );
 
     const parameters = {
       options: {
@@ -9043,14 +11252,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a security group.
@@ -9066,8 +11280,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroup>>}
    */
-  public updateSecurityGroup(params: VpcV1.UpdateSecurityGroupParams): Promise<VpcV1.Response<VpcV1.SecurityGroup>> {
-    const _params = Object.assign({}, params);
+  public updateSecurityGroup(
+    params: VpcV1.UpdateSecurityGroupParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroup>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9076,19 +11292,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSecurityGroup');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateSecurityGroup'
+    );
 
     const parameters = {
       options: {
@@ -9099,15 +11319,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all network interfaces associated with a security group.
@@ -9122,8 +11347,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterfaceCollection>>}
    */
-  public listSecurityGroupNetworkInterfaces(params: VpcV1.ListSecurityGroupNetworkInterfacesParams): Promise<VpcV1.Response<VpcV1.NetworkInterfaceCollection>> {
-    const _params = Object.assign({}, params);
+  public listSecurityGroupNetworkInterfaces(
+    params: VpcV1.ListSecurityGroupNetworkInterfacesParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkInterfaceCollection>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9135,14 +11362,18 @@ class VpcV1 extends BaseService {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
     const path = {
-      'security_group_id': _params.securityGroupId
+      'security_group_id': _params.securityGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroupNetworkInterfaces');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listSecurityGroupNetworkInterfaces'
+    );
 
     const parameters = {
       options: {
@@ -9152,14 +11383,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Remove a network interface from a security group.
@@ -9175,8 +11411,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public removeSecurityGroupNetworkInterface(params: VpcV1.RemoveSecurityGroupNetworkInterfaceParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public removeSecurityGroupNetworkInterface(
+    params: VpcV1.RemoveSecurityGroupNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9186,15 +11424,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'security_group_id': _params.securityGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeSecurityGroupNetworkInterface');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'removeSecurityGroupNetworkInterface'
+    );
 
     const parameters = {
       options: {
@@ -9204,13 +11446,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a network interface in a security group.
@@ -9224,8 +11471,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
    */
-  public getSecurityGroupNetworkInterface(params: VpcV1.GetSecurityGroupNetworkInterfaceParams): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
-    const _params = Object.assign({}, params);
+  public getSecurityGroupNetworkInterface(
+    params: VpcV1.GetSecurityGroupNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9235,15 +11484,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'security_group_id': _params.securityGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroupNetworkInterface');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSecurityGroupNetworkInterface'
+    );
 
     const parameters = {
       options: {
@@ -9253,14 +11506,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Add a network interface to a security group.
@@ -9275,8 +11533,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
    */
-  public addSecurityGroupNetworkInterface(params: VpcV1.AddSecurityGroupNetworkInterfaceParams): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
-    const _params = Object.assign({}, params);
+  public addSecurityGroupNetworkInterface(
+    params: VpcV1.AddSecurityGroupNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9286,15 +11546,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'security_group_id': _params.securityGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addSecurityGroupNetworkInterface');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'addSecurityGroupNetworkInterface'
+    );
 
     const parameters = {
       options: {
@@ -9304,14 +11568,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all rules in a security group.
@@ -9325,8 +11594,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupRuleCollection>>}
    */
-  public listSecurityGroupRules(params: VpcV1.ListSecurityGroupRulesParams): Promise<VpcV1.Response<VpcV1.SecurityGroupRuleCollection>> {
-    const _params = Object.assign({}, params);
+  public listSecurityGroupRules(
+    params: VpcV1.ListSecurityGroupRulesParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroupRuleCollection>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9336,14 +11607,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'security_group_id': _params.securityGroupId
+      'security_group_id': _params.securityGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroupRules');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listSecurityGroupRules'
+    );
 
     const parameters = {
       options: {
@@ -9353,14 +11628,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a rule for a security group.
@@ -9379,8 +11659,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupRule>>}
    */
-  public createSecurityGroupRule(params: VpcV1.CreateSecurityGroupRuleParams): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
-    const _params = Object.assign({}, params);
+  public createSecurityGroupRule(
+    params: VpcV1.CreateSecurityGroupRuleParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId', 'securityGroupRulePrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9391,14 +11673,18 @@ class VpcV1 extends BaseService {
     const body = _params.securityGroupRulePrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'security_group_id': _params.securityGroupId
+      'security_group_id': _params.securityGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroupRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createSecurityGroupRule'
+    );
 
     const parameters = {
       options: {
@@ -9409,15 +11695,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a security group rule.
@@ -9431,8 +11722,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteSecurityGroupRule(params: VpcV1.DeleteSecurityGroupRuleParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteSecurityGroupRule(
+    params: VpcV1.DeleteSecurityGroupRuleParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9442,15 +11735,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'security_group_id': _params.securityGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroupRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteSecurityGroupRule'
+    );
 
     const parameters = {
       options: {
@@ -9460,13 +11757,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a security group rule.
@@ -9479,8 +11781,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupRule>>}
    */
-  public getSecurityGroupRule(params: VpcV1.GetSecurityGroupRuleParams): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
-    const _params = Object.assign({}, params);
+  public getSecurityGroupRule(
+    params: VpcV1.GetSecurityGroupRuleParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9490,15 +11794,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'security_group_id': _params.securityGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroupRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSecurityGroupRule'
+    );
 
     const parameters = {
       options: {
@@ -9508,14 +11816,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a security group rule.
@@ -9547,8 +11860,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupRule>>}
    */
-  public updateSecurityGroupRule(params: VpcV1.UpdateSecurityGroupRuleParams): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
-    const _params = Object.assign({}, params);
+  public updateSecurityGroupRule(
+    params: VpcV1.UpdateSecurityGroupRuleParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9563,20 +11878,24 @@ class VpcV1 extends BaseService {
       'port_max': _params.portMax,
       'port_min': _params.portMin,
       'remote': _params.remote,
-      'type': _params.type
+      'type': _params.type,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'security_group_id': _params.securityGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSecurityGroupRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateSecurityGroupRule'
+    );
 
     const parameters = {
       options: {
@@ -9587,15 +11906,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all targets associated with a security group.
@@ -9610,8 +11934,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupTargetCollection>>}
    */
-  public listSecurityGroupTargets(params: VpcV1.ListSecurityGroupTargetsParams): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetCollection>> {
-    const _params = Object.assign({}, params);
+  public listSecurityGroupTargets(
+    params: VpcV1.ListSecurityGroupTargetsParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetCollection>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9623,14 +11949,18 @@ class VpcV1 extends BaseService {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
     const path = {
-      'security_group_id': _params.securityGroupId
+      'security_group_id': _params.securityGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroupTargets');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listSecurityGroupTargets'
+    );
 
     const parameters = {
       options: {
@@ -9640,14 +11970,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Remove a target from a security group.
@@ -9667,8 +12002,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteSecurityGroupTargetBinding(params: VpcV1.DeleteSecurityGroupTargetBindingParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteSecurityGroupTargetBinding(
+    params: VpcV1.DeleteSecurityGroupTargetBindingParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9678,15 +12015,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'security_group_id': _params.securityGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroupTargetBinding');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteSecurityGroupTargetBinding'
+    );
 
     const parameters = {
       options: {
@@ -9696,13 +12037,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a security group target.
@@ -9716,8 +12062,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>>}
    */
-  public getSecurityGroupTarget(params: VpcV1.GetSecurityGroupTargetParams): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>> {
-    const _params = Object.assign({}, params);
+  public getSecurityGroupTarget(
+    params: VpcV1.GetSecurityGroupTargetParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9727,15 +12075,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'security_group_id': _params.securityGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroupTarget');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSecurityGroupTarget'
+    );
 
     const parameters = {
       options: {
@@ -9745,14 +12097,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Add a target to a security group.
@@ -9771,8 +12128,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>>}
    */
-  public createSecurityGroupTargetBinding(params: VpcV1.CreateSecurityGroupTargetBindingParams): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>> {
-    const _params = Object.assign({}, params);
+  public createSecurityGroupTargetBinding(
+    params: VpcV1.CreateSecurityGroupTargetBindingParams
+  ): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>> {
+    const _params = { ...params };
     const requiredParams = ['securityGroupId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9782,15 +12141,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'security_group_id': _params.securityGroupId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroupTargetBinding');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createSecurityGroupTargetBinding'
+    );
 
     const parameters = {
       options: {
@@ -9800,15 +12163,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * vPNGateways
    ************************/
@@ -9824,17 +12191,23 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IKEPolicyCollection>>}
    */
-  public listIkePolicies(params?: VpcV1.ListIkePoliciesParams): Promise<VpcV1.Response<VpcV1.IKEPolicyCollection>> {
-    const _params = Object.assign({}, params);
+  public listIkePolicies(
+    params?: VpcV1.ListIkePoliciesParams
+  ): Promise<VpcV1.Response<VpcV1.IKEPolicyCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIkePolicies');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listIkePolicies'
+    );
 
     const parameters = {
       options: {
@@ -9843,14 +12216,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create an IKE policy.
@@ -9870,8 +12248,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IKEPolicy>>}
    */
-  public createIkePolicy(params: VpcV1.CreateIkePolicyParams): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
-    const _params = Object.assign({}, params);
+  public createIkePolicy(
+    params: VpcV1.CreateIkePolicyParams
+  ): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['authenticationAlgorithm', 'dhGroup', 'encryptionAlgorithm', 'ikeVersion'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9886,15 +12266,19 @@ class VpcV1 extends BaseService {
       'ike_version': _params.ikeVersion,
       'key_lifetime': _params.keyLifetime,
       'name': _params.name,
-      'resource_group': _params.resourceGroup
+      'resource_group': _params.resourceGroup,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createIkePolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createIkePolicy'
+    );
 
     const parameters = {
       options: {
@@ -9904,15 +12288,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an IKE policy.
@@ -9924,8 +12313,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteIkePolicy(params: VpcV1.DeleteIkePolicyParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteIkePolicy(
+    params: VpcV1.DeleteIkePolicyParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9935,14 +12326,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteIkePolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteIkePolicy'
+    );
 
     const parameters = {
       options: {
@@ -9952,13 +12347,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an IKE policy.
@@ -9970,8 +12370,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IKEPolicy>>}
    */
-  public getIkePolicy(params: VpcV1.GetIkePolicyParams): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
-    const _params = Object.assign({}, params);
+  public getIkePolicy(
+    params: VpcV1.GetIkePolicyParams
+  ): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -9981,14 +12383,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getIkePolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getIkePolicy'
+    );
 
     const parameters = {
       options: {
@@ -9998,14 +12404,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an IKE policy.
@@ -10023,8 +12434,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IKEPolicy>>}
    */
-  public updateIkePolicy(params: VpcV1.UpdateIkePolicyParams): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
-    const _params = Object.assign({}, params);
+  public updateIkePolicy(
+    params: VpcV1.UpdateIkePolicyParams
+  ): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10038,19 +12451,23 @@ class VpcV1 extends BaseService {
       'encryption_algorithm': _params.encryptionAlgorithm,
       'ike_version': _params.ikeVersion,
       'key_lifetime': _params.keyLifetime,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateIkePolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateIkePolicy'
+    );
 
     const parameters = {
       options: {
@@ -10061,15 +12478,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all VPN gateway connections that use a specified IKE policy.
@@ -10081,8 +12503,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>>}
    */
-  public listIkePolicyConnections(params: VpcV1.ListIkePolicyConnectionsParams): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>> {
-    const _params = Object.assign({}, params);
+  public listIkePolicyConnections(
+    params: VpcV1.ListIkePolicyConnectionsParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10092,14 +12516,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIkePolicyConnections');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listIkePolicyConnections'
+    );
 
     const parameters = {
       options: {
@@ -10109,14 +12537,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all IPsec policies.
@@ -10129,17 +12562,23 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IPsecPolicyCollection>>}
    */
-  public listIpsecPolicies(params?: VpcV1.ListIpsecPoliciesParams): Promise<VpcV1.Response<VpcV1.IPsecPolicyCollection>> {
-    const _params = Object.assign({}, params);
+  public listIpsecPolicies(
+    params?: VpcV1.ListIpsecPoliciesParams
+  ): Promise<VpcV1.Response<VpcV1.IPsecPolicyCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIpsecPolicies');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listIpsecPolicies'
+    );
 
     const parameters = {
       options: {
@@ -10148,14 +12587,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create an IPsec policy.
@@ -10174,8 +12618,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IPsecPolicy>>}
    */
-  public createIpsecPolicy(params: VpcV1.CreateIpsecPolicyParams): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
-    const _params = Object.assign({}, params);
+  public createIpsecPolicy(
+    params: VpcV1.CreateIpsecPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['authenticationAlgorithm', 'encryptionAlgorithm', 'pfs'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10189,15 +12635,19 @@ class VpcV1 extends BaseService {
       'pfs': _params.pfs,
       'key_lifetime': _params.keyLifetime,
       'name': _params.name,
-      'resource_group': _params.resourceGroup
+      'resource_group': _params.resourceGroup,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createIpsecPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createIpsecPolicy'
+    );
 
     const parameters = {
       options: {
@@ -10207,15 +12657,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an IPsec policy.
@@ -10227,8 +12682,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteIpsecPolicy(params: VpcV1.DeleteIpsecPolicyParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteIpsecPolicy(
+    params: VpcV1.DeleteIpsecPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10238,14 +12695,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteIpsecPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteIpsecPolicy'
+    );
 
     const parameters = {
       options: {
@@ -10255,13 +12716,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an IPsec policy.
@@ -10273,8 +12739,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IPsecPolicy>>}
    */
-  public getIpsecPolicy(params: VpcV1.GetIpsecPolicyParams): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
-    const _params = Object.assign({}, params);
+  public getIpsecPolicy(
+    params: VpcV1.GetIpsecPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10284,14 +12752,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getIpsecPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getIpsecPolicy'
+    );
 
     const parameters = {
       options: {
@@ -10301,14 +12773,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an IPsec policy.
@@ -10325,8 +12802,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IPsecPolicy>>}
    */
-  public updateIpsecPolicy(params: VpcV1.UpdateIpsecPolicyParams): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
-    const _params = Object.assign({}, params);
+  public updateIpsecPolicy(
+    params: VpcV1.UpdateIpsecPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10339,19 +12818,23 @@ class VpcV1 extends BaseService {
       'encryption_algorithm': _params.encryptionAlgorithm,
       'key_lifetime': _params.keyLifetime,
       'name': _params.name,
-      'pfs': _params.pfs
+      'pfs': _params.pfs,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateIpsecPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateIpsecPolicy'
+    );
 
     const parameters = {
       options: {
@@ -10362,15 +12845,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all VPN gateway connections that use a specified IPsec policy.
@@ -10382,8 +12870,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>>}
    */
-  public listIpsecPolicyConnections(params: VpcV1.ListIpsecPolicyConnectionsParams): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>> {
-    const _params = Object.assign({}, params);
+  public listIpsecPolicyConnections(
+    params: VpcV1.ListIpsecPolicyConnectionsParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10393,14 +12883,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIpsecPolicyConnections');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listIpsecPolicyConnections'
+    );
 
     const parameters = {
       options: {
@@ -10410,14 +12904,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all VPN gateways.
@@ -10433,8 +12932,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayCollection>>}
    */
-  public listVpnGateways(params?: VpcV1.ListVpnGatewaysParams): Promise<VpcV1.Response<VpcV1.VPNGatewayCollection>> {
-    const _params = Object.assign({}, params);
+  public listVpnGateways(
+    params?: VpcV1.ListVpnGatewaysParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -10442,10 +12943,14 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
-      'mode': _params.mode
+      'mode': _params.mode,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGateways');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVpnGateways'
+    );
 
     const parameters = {
       options: {
@@ -10454,14 +12959,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a VPN gateway.
@@ -10473,8 +12983,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGateway>>}
    */
-  public createVpnGateway(params: VpcV1.CreateVpnGatewayParams): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
-    const _params = Object.assign({}, params);
+  public createVpnGateway(
+    params: VpcV1.CreateVpnGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayPrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10485,10 +12997,14 @@ class VpcV1 extends BaseService {
     const body = _params.vpnGatewayPrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpnGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createVpnGateway'
+    );
 
     const parameters = {
       options: {
@@ -10498,15 +13014,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a VPN gateway.
@@ -10519,8 +13040,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteVpnGateway(params: VpcV1.DeleteVpnGatewayParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteVpnGateway(
+    params: VpcV1.DeleteVpnGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10530,14 +13053,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteVpnGateway'
+    );
 
     const parameters = {
       options: {
@@ -10547,13 +13074,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a VPN gateway.
@@ -10565,8 +13097,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGateway>>}
    */
-  public getVpnGateway(params: VpcV1.GetVpnGatewayParams): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
-    const _params = Object.assign({}, params);
+  public getVpnGateway(
+    params: VpcV1.GetVpnGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10576,14 +13110,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVpnGateway'
+    );
 
     const parameters = {
       options: {
@@ -10593,14 +13131,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a VPN gateway.
@@ -10613,8 +13156,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGateway>>}
    */
-  public updateVpnGateway(params: VpcV1.UpdateVpnGatewayParams): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
-    const _params = Object.assign({}, params);
+  public updateVpnGateway(
+    params: VpcV1.UpdateVpnGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10623,19 +13168,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpnGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVpnGateway'
+    );
 
     const parameters = {
       options: {
@@ -10646,15 +13195,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all connections of a VPN gateway.
@@ -10667,8 +13221,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>>}
    */
-  public listVpnGatewayConnections(params: VpcV1.ListVpnGatewayConnectionsParams): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>> {
-    const _params = Object.assign({}, params);
+  public listVpnGatewayConnections(
+    params: VpcV1.ListVpnGatewayConnectionsParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10679,14 +13235,18 @@ class VpcV1 extends BaseService {
     const query = {
       'version': this.version,
       'generation': this.generation,
-      'status': _params.status
+      'status': _params.status,
     };
 
     const path = {
-      'vpn_gateway_id': _params.vpnGatewayId
+      'vpn_gateway_id': _params.vpnGatewayId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnections');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVpnGatewayConnections'
+    );
 
     const parameters = {
       options: {
@@ -10696,14 +13256,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a connection for a VPN gateway.
@@ -10717,8 +13282,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>>}
    */
-  public createVpnGatewayConnection(params: VpcV1.CreateVpnGatewayConnectionParams): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
-    const _params = Object.assign({}, params);
+  public createVpnGatewayConnection(
+    params: VpcV1.CreateVpnGatewayConnectionParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'vpnGatewayConnectionPrototype'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10729,14 +13296,18 @@ class VpcV1 extends BaseService {
     const body = _params.vpnGatewayConnectionPrototype;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'vpn_gateway_id': _params.vpnGatewayId
+      'vpn_gateway_id': _params.vpnGatewayId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpnGatewayConnection');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createVpnGatewayConnection'
+    );
 
     const parameters = {
       options: {
@@ -10747,15 +13318,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a VPN gateway connection.
@@ -10768,8 +13344,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteVpnGatewayConnection(params: VpcV1.DeleteVpnGatewayConnectionParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteVpnGatewayConnection(
+    params: VpcV1.DeleteVpnGatewayConnectionParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10779,15 +13357,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnGatewayConnection');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteVpnGatewayConnection'
+    );
 
     const parameters = {
       options: {
@@ -10797,13 +13379,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a VPN gateway connection.
@@ -10816,8 +13403,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>>}
    */
-  public getVpnGatewayConnection(params: VpcV1.GetVpnGatewayConnectionParams): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
-    const _params = Object.assign({}, params);
+  public getVpnGatewayConnection(
+    params: VpcV1.GetVpnGatewayConnectionParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10827,15 +13416,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnGatewayConnection');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVpnGatewayConnection'
+    );
 
     const parameters = {
       options: {
@@ -10845,14 +13438,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a VPN gateway connection.
@@ -10866,8 +13464,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>>}
    */
-  public updateVpnGatewayConnection(params: VpcV1.UpdateVpnGatewayConnectionParams): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
-    const _params = Object.assign({}, params);
+  public updateVpnGatewayConnection(
+    params: VpcV1.UpdateVpnGatewayConnectionParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id', 'vpnGatewayConnectionPatch'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10878,15 +13478,19 @@ class VpcV1 extends BaseService {
     const body = _params.vpnGatewayConnectionPatch;
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpnGatewayConnection');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVpnGatewayConnection'
+    );
 
     const parameters = {
       options: {
@@ -10897,15 +13501,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all local CIDRs for a VPN gateway connection.
@@ -10918,8 +13527,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionLocalCIDRs>>}
    */
-  public listVpnGatewayConnectionLocalCidrs(params: VpcV1.ListVpnGatewayConnectionLocalCidrsParams): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionLocalCIDRs>> {
-    const _params = Object.assign({}, params);
+  public listVpnGatewayConnectionLocalCidrs(
+    params: VpcV1.ListVpnGatewayConnectionLocalCidrsParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionLocalCIDRs>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10929,15 +13540,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionLocalCidrs');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVpnGatewayConnectionLocalCidrs'
+    );
 
     const parameters = {
       options: {
@@ -10947,14 +13562,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Remove a local CIDR from a VPN gateway connection.
@@ -10969,8 +13589,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public removeVpnGatewayConnectionLocalCidr(params: VpcV1.RemoveVpnGatewayConnectionLocalCidrParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public removeVpnGatewayConnectionLocalCidr(
+    params: VpcV1.RemoveVpnGatewayConnectionLocalCidrParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -10980,17 +13602,21 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
       'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength
+      'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionLocalCidr');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'removeVpnGatewayConnectionLocalCidr'
+    );
 
     const parameters = {
       options: {
@@ -11000,13 +13626,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Check if the specified local CIDR exists on a VPN gateway connection.
@@ -11021,8 +13652,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public checkVpnGatewayConnectionLocalCidr(params: VpcV1.CheckVpnGatewayConnectionLocalCidrParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public checkVpnGatewayConnectionLocalCidr(
+    params: VpcV1.CheckVpnGatewayConnectionLocalCidrParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11032,17 +13665,21 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
       'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength
+      'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionLocalCidr');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'checkVpnGatewayConnectionLocalCidr'
+    );
 
     const parameters = {
       options: {
@@ -11052,13 +13689,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Set a local CIDR on a VPN gateway connection.
@@ -11074,8 +13716,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public addVpnGatewayConnectionLocalCidr(params: VpcV1.AddVpnGatewayConnectionLocalCidrParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public addVpnGatewayConnectionLocalCidr(
+    params: VpcV1.AddVpnGatewayConnectionLocalCidrParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11085,17 +13729,21 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
       'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength
+      'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionLocalCidr');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'addVpnGatewayConnectionLocalCidr'
+    );
 
     const parameters = {
       options: {
@@ -11105,13 +13753,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all peer CIDRs for a VPN gateway connection.
@@ -11124,8 +13777,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionPeerCIDRs>>}
    */
-  public listVpnGatewayConnectionPeerCidrs(params: VpcV1.ListVpnGatewayConnectionPeerCidrsParams): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionPeerCIDRs>> {
-    const _params = Object.assign({}, params);
+  public listVpnGatewayConnectionPeerCidrs(
+    params: VpcV1.ListVpnGatewayConnectionPeerCidrsParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionPeerCIDRs>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11135,15 +13790,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionPeerCidrs');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVpnGatewayConnectionPeerCidrs'
+    );
 
     const parameters = {
       options: {
@@ -11153,14 +13812,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Remove a peer CIDR from a VPN gateway connection.
@@ -11175,8 +13839,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public removeVpnGatewayConnectionPeerCidr(params: VpcV1.RemoveVpnGatewayConnectionPeerCidrParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public removeVpnGatewayConnectionPeerCidr(
+    params: VpcV1.RemoveVpnGatewayConnectionPeerCidrParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11186,17 +13852,21 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
       'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength
+      'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionPeerCidr');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'removeVpnGatewayConnectionPeerCidr'
+    );
 
     const parameters = {
       options: {
@@ -11206,13 +13876,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Check if the specified peer CIDR exists on a VPN gateway connection.
@@ -11227,8 +13902,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public checkVpnGatewayConnectionPeerCidr(params: VpcV1.CheckVpnGatewayConnectionPeerCidrParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public checkVpnGatewayConnectionPeerCidr(
+    params: VpcV1.CheckVpnGatewayConnectionPeerCidrParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11238,17 +13915,21 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
       'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength
+      'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionPeerCidr');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'checkVpnGatewayConnectionPeerCidr'
+    );
 
     const parameters = {
       options: {
@@ -11258,13 +13939,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Set a peer CIDR on a VPN gateway connection.
@@ -11280,8 +13966,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public addVpnGatewayConnectionPeerCidr(params: VpcV1.AddVpnGatewayConnectionPeerCidrParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public addVpnGatewayConnectionPeerCidr(
+    params: VpcV1.AddVpnGatewayConnectionPeerCidrParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11291,17 +13979,21 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
       'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength
+      'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionPeerCidr');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'addVpnGatewayConnectionPeerCidr'
+    );
 
     const parameters = {
       options: {
@@ -11311,14 +14003,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * loadBalancers
    ************************/
@@ -11335,17 +14031,23 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerProfileCollection>>}
    */
-  public listLoadBalancerProfiles(params?: VpcV1.ListLoadBalancerProfilesParams): Promise<VpcV1.Response<VpcV1.LoadBalancerProfileCollection>> {
-    const _params = Object.assign({}, params);
+  public listLoadBalancerProfiles(
+    params?: VpcV1.ListLoadBalancerProfilesParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerProfileCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerProfiles');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listLoadBalancerProfiles'
+    );
 
     const parameters = {
       options: {
@@ -11354,14 +14056,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a load balancer profile.
@@ -11373,8 +14080,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerProfile>>}
    */
-  public getLoadBalancerProfile(params: VpcV1.GetLoadBalancerProfileParams): Promise<VpcV1.Response<VpcV1.LoadBalancerProfile>> {
-    const _params = Object.assign({}, params);
+  public getLoadBalancerProfile(
+    params: VpcV1.GetLoadBalancerProfileParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerProfile>> {
+    const _params = { ...params };
     const requiredParams = ['name'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11384,14 +14093,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'name': _params.name
+      'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerProfile');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLoadBalancerProfile'
+    );
 
     const parameters = {
       options: {
@@ -11401,14 +14114,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all load balancers.
@@ -11421,17 +14139,23 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerCollection>>}
    */
-  public listLoadBalancers(params?: VpcV1.ListLoadBalancersParams): Promise<VpcV1.Response<VpcV1.LoadBalancerCollection>> {
-    const _params = Object.assign({}, params);
+  public listLoadBalancers(
+    params?: VpcV1.ListLoadBalancersParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
       'generation': this.generation,
       'start': _params.start,
-      'limit': _params.limit
+      'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancers');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listLoadBalancers'
+    );
 
     const parameters = {
       options: {
@@ -11440,14 +14164,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a load balancer.
@@ -11479,8 +14208,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancer>>}
    */
-  public createLoadBalancer(params: VpcV1.CreateLoadBalancerParams): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
-    const _params = Object.assign({}, params);
+  public createLoadBalancer(
+    params: VpcV1.CreateLoadBalancerParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
+    const _params = { ...params };
     const requiredParams = ['isPublic', 'subnets'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11497,15 +14228,19 @@ class VpcV1 extends BaseService {
       'pools': _params.pools,
       'profile': _params.profile,
       'resource_group': _params.resourceGroup,
-      'security_groups': _params.securityGroups
+      'security_groups': _params.securityGroups,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancer');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createLoadBalancer'
+    );
 
     const parameters = {
       options: {
@@ -11515,15 +14250,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a load balancer.
@@ -11535,8 +14275,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteLoadBalancer(params: VpcV1.DeleteLoadBalancerParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteLoadBalancer(
+    params: VpcV1.DeleteLoadBalancerParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11546,14 +14288,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancer');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteLoadBalancer'
+    );
 
     const parameters = {
       options: {
@@ -11563,13 +14309,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a load balancer.
@@ -11581,8 +14332,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancer>>}
    */
-  public getLoadBalancer(params: VpcV1.GetLoadBalancerParams): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
-    const _params = Object.assign({}, params);
+  public getLoadBalancer(
+    params: VpcV1.GetLoadBalancerParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11592,14 +14345,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancer');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLoadBalancer'
+    );
 
     const parameters = {
       options: {
@@ -11609,14 +14366,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a load balancer.
@@ -11632,8 +14394,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancer>>}
    */
-  public updateLoadBalancer(params: VpcV1.UpdateLoadBalancerParams): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
-    const _params = Object.assign({}, params);
+  public updateLoadBalancer(
+    params: VpcV1.UpdateLoadBalancerParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11643,19 +14407,23 @@ class VpcV1 extends BaseService {
 
     const body = {
       'logging': _params.logging,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancer');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateLoadBalancer'
+    );
 
     const parameters = {
       options: {
@@ -11666,15 +14434,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all statistics of a load balancer.
@@ -11686,8 +14459,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerStatistics>>}
    */
-  public getLoadBalancerStatistics(params: VpcV1.GetLoadBalancerStatisticsParams): Promise<VpcV1.Response<VpcV1.LoadBalancerStatistics>> {
-    const _params = Object.assign({}, params);
+  public getLoadBalancerStatistics(
+    params: VpcV1.GetLoadBalancerStatisticsParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerStatistics>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11697,14 +14472,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerStatistics');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLoadBalancerStatistics'
+    );
 
     const parameters = {
       options: {
@@ -11714,14 +14493,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all listeners for a load balancer.
@@ -11733,8 +14517,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerCollection>>}
    */
-  public listLoadBalancerListeners(params: VpcV1.ListLoadBalancerListenersParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerCollection>> {
-    const _params = Object.assign({}, params);
+  public listLoadBalancerListeners(
+    params: VpcV1.ListLoadBalancerListenersParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerCollection>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11744,14 +14530,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'load_balancer_id': _params.loadBalancerId
+      'load_balancer_id': _params.loadBalancerId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListeners');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listLoadBalancerListeners'
+    );
 
     const parameters = {
       options: {
@@ -11761,14 +14551,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a listener for a load balancer.
@@ -11779,11 +14574,18 @@ class VpcV1 extends BaseService {
    * @param {string} params.loadBalancerId - The load balancer identifier.
    * @param {number} params.port - The listener port number. Each listener in the load balancer must have a unique
    * `port` and `protocol` combination.
-   * @param {string} params.protocol - The listener protocol. Load balancers in the `network` family support `tcp`. Load
-   * balancers in the `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer must
-   * have a unique `port` and `protocol` combination.
+   * @param {string} params.protocol - The listener protocol. Each listener in the load balancer must have a unique
+   * `port` and `protocol` combination.  Additional restrictions:
+   * - If this load balancer is in the `network` family, the protocol must be `tcp`.
+   * - If this listener has `https_redirect` specified, the protocol must be `http`.
+   * - If this listener is a listener's `https_redirect` target, the protocol must be `https`.
    * @param {boolean} [params.acceptProxyProtocol] - If set to `true`, this listener will accept and forward PROXY
    * protocol information. Supported by load balancers in the `application` family (otherwise always `false`).
+   * Additional restrictions:
+   * - If this listener has `https_redirect` specified, its `accept_proxy_protocol` value must
+   *   match the `accept_proxy_protocol` value of the `https_redirect` listener.
+   * - If this listener is the target of another listener's `https_redirect`, its
+   *   `accept_proxy_protocol` value must match that listener's `accept_proxy_protocol` value.
    * @param {CertificateInstanceIdentity} [params.certificateInstance] - The certificate instance used for SSL
    * termination. It is applicable only to `https`
    * protocol.
@@ -11794,12 +14596,17 @@ class VpcV1 extends BaseService {
    * - Belong to this load balancer
    * - Have the same `protocol` as this listener
    * - Not already be the default pool for another listener.
+   * @param {LoadBalancerListenerHTTPSRedirectPrototype} [params.httpsRedirect] - The target listener that requests will
+   * be redirected to. This listener must have a
+   * `protocol` of `http`, and the target listener must have a `protocol` of `https`.
    * @param {LoadBalancerListenerPolicyPrototype[]} [params.policies] - The policy prototype objects for this listener.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListener>>}
    */
-  public createLoadBalancerListener(params: VpcV1.CreateLoadBalancerListenerParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
-    const _params = Object.assign({}, params);
+  public createLoadBalancerListener(
+    params: VpcV1.CreateLoadBalancerListenerParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'port', 'protocol'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11814,19 +14621,24 @@ class VpcV1 extends BaseService {
       'certificate_instance': _params.certificateInstance,
       'connection_limit': _params.connectionLimit,
       'default_pool': _params.defaultPool,
-      'policies': _params.policies
+      'https_redirect': _params.httpsRedirect,
+      'policies': _params.policies,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'load_balancer_id': _params.loadBalancerId
+      'load_balancer_id': _params.loadBalancerId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListener');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createLoadBalancerListener'
+    );
 
     const parameters = {
       options: {
@@ -11837,20 +14649,26 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a load balancer listener.
    *
-   * This request deletes a load balancer listener. This operation cannot be reversed.
+   * This request deletes a load balancer listener. This operation cannot be reversed. For this operation to succeed,
+   * the listener must not be the target of another load balancer listener.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -11858,8 +14676,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteLoadBalancerListener(params: VpcV1.DeleteLoadBalancerListenerParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteLoadBalancerListener(
+    params: VpcV1.DeleteLoadBalancerListenerParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11869,15 +14689,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListener');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteLoadBalancerListener'
+    );
 
     const parameters = {
       options: {
@@ -11887,13 +14711,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a load balancer listener.
@@ -11906,8 +14735,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListener>>}
    */
-  public getLoadBalancerListener(params: VpcV1.GetLoadBalancerListenerParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
-    const _params = Object.assign({}, params);
+  public getLoadBalancerListener(
+    params: VpcV1.GetLoadBalancerListenerParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11917,15 +14748,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListener');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLoadBalancerListener'
+    );
 
     const parameters = {
       options: {
@@ -11935,14 +14770,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a load balancer listener.
@@ -11954,6 +14794,11 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The listener identifier.
    * @param {boolean} [params.acceptProxyProtocol] - If set to `true`, this listener will accept and forward PROXY
    * protocol information. Supported by load balancers in the `application` family (otherwise always `false`).
+   * Additional restrictions:
+   * - If this listener has `https_redirect` specified, its `accept_proxy_protocol` value must
+   *   match the `accept_proxy_protocol` value of the `https_redirect` listener.
+   * - If this listener is the target of another listener's `https_redirect`, its
+   *   `accept_proxy_protocol` value must match that listener's `accept_proxy_protocol` value.
    * @param {CertificateInstanceIdentity} [params.certificateInstance] - The certificate instance used for SSL
    * termination. It is applicable only to `https`
    * protocol.
@@ -11964,16 +14809,24 @@ class VpcV1 extends BaseService {
    * - Belong to this load balancer
    * - Have the same `protocol` as this listener
    * - Not already be the default pool for another listener.
+   * @param {LoadBalancerListenerHTTPSRedirectPatch} [params.httpsRedirect] - The target listener that requests will be
+   * redirected to. This listener must have a
+   * `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+   * Specify `null` to remove any existing https redirect.
    * @param {number} [params.port] - The listener port number. Each listener in the load balancer must have a unique
    * `port` and `protocol` combination.
-   * @param {string} [params.protocol] - The listener protocol. Load balancers in the `network` family support `tcp`.
-   * Load balancers in the `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer
-   * must have a unique `port` and `protocol` combination.
+   * @param {string} [params.protocol] - The listener protocol. Each listener in the load balancer must have a unique
+   * `port` and `protocol` combination.  Additional restrictions:
+   * - If this load balancer is in the `network` family, the protocol must be `tcp`.
+   * - If this listener has `https_redirect` specified, the protocol must be `http`.
+   * - If this listener is a listener's `https_redirect` target, the protocol must be `https`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListener>>}
    */
-  public updateLoadBalancerListener(params: VpcV1.UpdateLoadBalancerListenerParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
-    const _params = Object.assign({}, params);
+  public updateLoadBalancerListener(
+    params: VpcV1.UpdateLoadBalancerListenerParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -11986,21 +14839,26 @@ class VpcV1 extends BaseService {
       'certificate_instance': _params.certificateInstance,
       'connection_limit': _params.connectionLimit,
       'default_pool': _params.defaultPool,
+      'https_redirect': _params.httpsRedirect,
       'port': _params.port,
-      'protocol': _params.protocol
+      'protocol': _params.protocol,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListener');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateLoadBalancerListener'
+    );
 
     const parameters = {
       options: {
@@ -12011,15 +14869,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all policies for a load balancer listener.
@@ -12032,8 +14895,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyCollection>>}
    */
-  public listLoadBalancerListenerPolicies(params: VpcV1.ListLoadBalancerListenerPoliciesParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyCollection>> {
-    const _params = Object.assign({}, params);
+  public listLoadBalancerListenerPolicies(
+    params: VpcV1.ListLoadBalancerListenerPoliciesParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyCollection>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'listenerId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12043,15 +14908,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'listener_id': _params.listenerId
+      'listener_id': _params.listenerId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListenerPolicies');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listLoadBalancerListenerPolicies'
+    );
 
     const parameters = {
       options: {
@@ -12061,14 +14930,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a policy for a load balancer listener.
@@ -12090,11 +14964,15 @@ class VpcV1 extends BaseService {
    * @param {LoadBalancerListenerPolicyTargetPrototype} [params.target] - - If `action` is `forward`, specify a
    * `LoadBalancerPoolIdentity`.
    * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
+   * - If `action` is `https_redirect`, specify a
+   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>>}
    */
-  public createLoadBalancerListenerPolicy(params: VpcV1.CreateLoadBalancerListenerPolicyParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>> {
-    const _params = Object.assign({}, params);
+  public createLoadBalancerListenerPolicy(
+    params: VpcV1.CreateLoadBalancerListenerPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'listenerId', 'action', 'priority'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12107,20 +14985,24 @@ class VpcV1 extends BaseService {
       'priority': _params.priority,
       'name': _params.name,
       'rules': _params.rules,
-      'target': _params.target
+      'target': _params.target,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'listener_id': _params.listenerId
+      'listener_id': _params.listenerId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListenerPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createLoadBalancerListenerPolicy'
+    );
 
     const parameters = {
       options: {
@@ -12131,15 +15013,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a load balancer listener policy.
@@ -12153,8 +15040,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteLoadBalancerListenerPolicy(params: VpcV1.DeleteLoadBalancerListenerPolicyParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteLoadBalancerListenerPolicy(
+    params: VpcV1.DeleteLoadBalancerListenerPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'listenerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12164,16 +15053,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'listener_id': _params.listenerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListenerPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteLoadBalancerListenerPolicy'
+    );
 
     const parameters = {
       options: {
@@ -12183,13 +15076,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a load balancer listener policy.
@@ -12203,8 +15101,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>>}
    */
-  public getLoadBalancerListenerPolicy(params: VpcV1.GetLoadBalancerListenerPolicyParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>> {
-    const _params = Object.assign({}, params);
+  public getLoadBalancerListenerPolicy(
+    params: VpcV1.GetLoadBalancerListenerPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'listenerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12214,16 +15114,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'listener_id': _params.listenerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListenerPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLoadBalancerListenerPolicy'
+    );
 
     const parameters = {
       options: {
@@ -12233,14 +15137,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a load balancer listener policy.
@@ -12257,11 +15166,15 @@ class VpcV1 extends BaseService {
    * @param {LoadBalancerListenerPolicyTargetPatch} [params.target] - - If `action` is `forward`, specify a
    * `LoadBalancerPoolIdentity`.
    * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
+   * - If `action` is `https_redirect`, specify a
+   *   `LoadBalancerListenerPolicyHTTPSRedirectPatch`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>>}
    */
-  public updateLoadBalancerListenerPolicy(params: VpcV1.UpdateLoadBalancerListenerPolicyParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>> {
-    const _params = Object.assign({}, params);
+  public updateLoadBalancerListenerPolicy(
+    params: VpcV1.UpdateLoadBalancerListenerPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'listenerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12272,21 +15185,25 @@ class VpcV1 extends BaseService {
     const body = {
       'name': _params.name,
       'priority': _params.priority,
-      'target': _params.target
+      'target': _params.target,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'listener_id': _params.listenerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListenerPolicy');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateLoadBalancerListenerPolicy'
+    );
 
     const parameters = {
       options: {
@@ -12297,15 +15214,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all rules of a load balancer listener policy.
@@ -12319,8 +15241,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRuleCollection>>}
    */
-  public listLoadBalancerListenerPolicyRules(params: VpcV1.ListLoadBalancerListenerPolicyRulesParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRuleCollection>> {
-    const _params = Object.assign({}, params);
+  public listLoadBalancerListenerPolicyRules(
+    params: VpcV1.ListLoadBalancerListenerPolicyRulesParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRuleCollection>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'listenerId', 'policyId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12330,16 +15254,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'listener_id': _params.listenerId,
-      'policy_id': _params.policyId
+      'policy_id': _params.policyId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListenerPolicyRules');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listLoadBalancerListenerPolicyRules'
+    );
 
     const parameters = {
       options: {
@@ -12349,14 +15277,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a rule for a load balancer listener policy.
@@ -12385,8 +15318,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>>}
    */
-  public createLoadBalancerListenerPolicyRule(params: VpcV1.CreateLoadBalancerListenerPolicyRuleParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>> {
-    const _params = Object.assign({}, params);
+  public createLoadBalancerListenerPolicyRule(
+    params: VpcV1.CreateLoadBalancerListenerPolicyRuleParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'condition', 'type', 'value'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12398,21 +15333,25 @@ class VpcV1 extends BaseService {
       'condition': _params.condition,
       'type': _params.type,
       'value': _params.value,
-      'field': _params.field
+      'field': _params.field,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'listener_id': _params.listenerId,
-      'policy_id': _params.policyId
+      'policy_id': _params.policyId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListenerPolicyRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createLoadBalancerListenerPolicyRule'
+    );
 
     const parameters = {
       options: {
@@ -12423,15 +15362,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a load balancer listener policy rule.
@@ -12446,8 +15390,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteLoadBalancerListenerPolicyRule(params: VpcV1.DeleteLoadBalancerListenerPolicyRuleParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteLoadBalancerListenerPolicyRule(
+    params: VpcV1.DeleteLoadBalancerListenerPolicyRuleParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12457,17 +15403,21 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'listener_id': _params.listenerId,
       'policy_id': _params.policyId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListenerPolicyRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteLoadBalancerListenerPolicyRule'
+    );
 
     const parameters = {
       options: {
@@ -12477,13 +15427,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a load balancer listener policy rule.
@@ -12498,8 +15453,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>>}
    */
-  public getLoadBalancerListenerPolicyRule(params: VpcV1.GetLoadBalancerListenerPolicyRuleParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>> {
-    const _params = Object.assign({}, params);
+  public getLoadBalancerListenerPolicyRule(
+    params: VpcV1.GetLoadBalancerListenerPolicyRuleParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12509,17 +15466,21 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'listener_id': _params.listenerId,
       'policy_id': _params.policyId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListenerPolicyRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLoadBalancerListenerPolicyRule'
+    );
 
     const parameters = {
       options: {
@@ -12529,14 +15490,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a load balancer listener policy rule.
@@ -12566,8 +15532,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>>}
    */
-  public updateLoadBalancerListenerPolicyRule(params: VpcV1.UpdateLoadBalancerListenerPolicyRuleParams): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>> {
-    const _params = Object.assign({}, params);
+  public updateLoadBalancerListenerPolicyRule(
+    params: VpcV1.UpdateLoadBalancerListenerPolicyRuleParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12579,22 +15547,26 @@ class VpcV1 extends BaseService {
       'condition': _params.condition,
       'field': _params.field,
       'type': _params.type,
-      'value': _params.value
+      'value': _params.value,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'listener_id': _params.listenerId,
       'policy_id': _params.policyId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListenerPolicyRule');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateLoadBalancerListenerPolicyRule'
+    );
 
     const parameters = {
       options: {
@@ -12605,15 +15577,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all pools of a load balancer.
@@ -12625,8 +15602,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPoolCollection>>}
    */
-  public listLoadBalancerPools(params: VpcV1.ListLoadBalancerPoolsParams): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolCollection>> {
-    const _params = Object.assign({}, params);
+  public listLoadBalancerPools(
+    params: VpcV1.ListLoadBalancerPoolsParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolCollection>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12636,14 +15615,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'load_balancer_id': _params.loadBalancerId
+      'load_balancer_id': _params.loadBalancerId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerPools');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listLoadBalancerPools'
+    );
 
     const parameters = {
       options: {
@@ -12653,14 +15636,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a load balancer pool.
@@ -12690,8 +15678,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPool>>}
    */
-  public createLoadBalancerPool(params: VpcV1.CreateLoadBalancerPoolParams): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
-    const _params = Object.assign({}, params);
+  public createLoadBalancerPool(
+    params: VpcV1.CreateLoadBalancerPoolParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'algorithm', 'healthMonitor', 'protocol'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12706,19 +15696,23 @@ class VpcV1 extends BaseService {
       'members': _params.members,
       'name': _params.name,
       'proxy_protocol': _params.proxyProtocol,
-      'session_persistence': _params.sessionPersistence
+      'session_persistence': _params.sessionPersistence,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'load_balancer_id': _params.loadBalancerId
+      'load_balancer_id': _params.loadBalancerId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerPool');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createLoadBalancerPool'
+    );
 
     const parameters = {
       options: {
@@ -12729,15 +15723,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a load balancer pool.
@@ -12751,8 +15750,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteLoadBalancerPool(params: VpcV1.DeleteLoadBalancerPoolParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteLoadBalancerPool(
+    params: VpcV1.DeleteLoadBalancerPoolParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12762,15 +15763,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerPool');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteLoadBalancerPool'
+    );
 
     const parameters = {
       options: {
@@ -12780,13 +15785,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a load balancer pool.
@@ -12799,8 +15809,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPool>>}
    */
-  public getLoadBalancerPool(params: VpcV1.GetLoadBalancerPoolParams): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
-    const _params = Object.assign({}, params);
+  public getLoadBalancerPool(
+    params: VpcV1.GetLoadBalancerPoolParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12810,15 +15822,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerPool');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLoadBalancerPool'
+    );
 
     const parameters = {
       options: {
@@ -12828,14 +15844,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a load balancer pool.
@@ -12864,8 +15885,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPool>>}
    */
-  public updateLoadBalancerPool(params: VpcV1.UpdateLoadBalancerPoolParams): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
-    const _params = Object.assign({}, params);
+  public updateLoadBalancerPool(
+    params: VpcV1.UpdateLoadBalancerPoolParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12879,20 +15902,24 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'protocol': _params.protocol,
       'proxy_protocol': _params.proxyProtocol,
-      'session_persistence': _params.sessionPersistence
+      'session_persistence': _params.sessionPersistence,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerPool');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateLoadBalancerPool'
+    );
 
     const parameters = {
       options: {
@@ -12903,15 +15930,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all members of a load balancer pool.
@@ -12924,8 +15956,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMemberCollection>>}
    */
-  public listLoadBalancerPoolMembers(params: VpcV1.ListLoadBalancerPoolMembersParams): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMemberCollection>> {
-    const _params = Object.assign({}, params);
+  public listLoadBalancerPoolMembers(
+    params: VpcV1.ListLoadBalancerPoolMembersParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMemberCollection>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'poolId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12935,15 +15969,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'pool_id': _params.poolId
+      'pool_id': _params.poolId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerPoolMembers');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listLoadBalancerPoolMembers'
+    );
 
     const parameters = {
       options: {
@@ -12953,14 +15991,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a member in a load balancer pool.
@@ -12979,8 +16022,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>>}
    */
-  public createLoadBalancerPoolMember(params: VpcV1.CreateLoadBalancerPoolMemberParams): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>> {
-    const _params = Object.assign({}, params);
+  public createLoadBalancerPoolMember(
+    params: VpcV1.CreateLoadBalancerPoolMemberParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'poolId', 'port', 'target'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -12991,20 +16036,24 @@ class VpcV1 extends BaseService {
     const body = {
       'port': _params.port,
       'target': _params.target,
-      'weight': _params.weight
+      'weight': _params.weight,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'pool_id': _params.poolId
+      'pool_id': _params.poolId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerPoolMember');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createLoadBalancerPoolMember'
+    );
 
     const parameters = {
       options: {
@@ -13015,15 +16064,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Replace load balancer pool members.
@@ -13038,8 +16092,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMemberCollection>>}
    */
-  public replaceLoadBalancerPoolMembers(params: VpcV1.ReplaceLoadBalancerPoolMembersParams): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMemberCollection>> {
-    const _params = Object.assign({}, params);
+  public replaceLoadBalancerPoolMembers(
+    params: VpcV1.ReplaceLoadBalancerPoolMembersParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMemberCollection>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'poolId', 'members'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13048,20 +16104,24 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'members': _params.members
+      'members': _params.members,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
-      'pool_id': _params.poolId
+      'pool_id': _params.poolId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceLoadBalancerPoolMembers');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'replaceLoadBalancerPoolMembers'
+    );
 
     const parameters = {
       options: {
@@ -13072,15 +16132,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a load balancer pool member.
@@ -13094,8 +16159,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteLoadBalancerPoolMember(params: VpcV1.DeleteLoadBalancerPoolMemberParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteLoadBalancerPoolMember(
+    params: VpcV1.DeleteLoadBalancerPoolMemberParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'poolId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13105,16 +16172,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'pool_id': _params.poolId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerPoolMember');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteLoadBalancerPoolMember'
+    );
 
     const parameters = {
       options: {
@@ -13124,13 +16195,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a load balancer pool member.
@@ -13144,8 +16220,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>>}
    */
-  public getLoadBalancerPoolMember(params: VpcV1.GetLoadBalancerPoolMemberParams): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>> {
-    const _params = Object.assign({}, params);
+  public getLoadBalancerPoolMember(
+    params: VpcV1.GetLoadBalancerPoolMemberParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'poolId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13155,16 +16233,20 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'pool_id': _params.poolId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerPoolMember');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getLoadBalancerPoolMember'
+    );
 
     const parameters = {
       options: {
@@ -13174,14 +16256,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a load balancer pool member.
@@ -13201,8 +16288,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>>}
    */
-  public updateLoadBalancerPoolMember(params: VpcV1.UpdateLoadBalancerPoolMemberParams): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>> {
-    const _params = Object.assign({}, params);
+  public updateLoadBalancerPoolMember(
+    params: VpcV1.UpdateLoadBalancerPoolMemberParams
+  ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>> {
+    const _params = { ...params };
     const requiredParams = ['loadBalancerId', 'poolId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13213,21 +16302,25 @@ class VpcV1 extends BaseService {
     const body = {
       'port': _params.port,
       'target': _params.target,
-      'weight': _params.weight
+      'weight': _params.weight,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'load_balancer_id': _params.loadBalancerId,
       'pool_id': _params.poolId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerPoolMember');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateLoadBalancerPoolMember'
+    );
 
     const parameters = {
       options: {
@@ -13238,16 +16331,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * endpointGateways
    ************************/
@@ -13267,8 +16364,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EndpointGatewayCollection>>}
    */
-  public listEndpointGateways(params?: VpcV1.ListEndpointGatewaysParams): Promise<VpcV1.Response<VpcV1.EndpointGatewayCollection>> {
-    const _params = Object.assign({}, params);
+  public listEndpointGateways(
+    params?: VpcV1.ListEndpointGatewaysParams
+  ): Promise<VpcV1.Response<VpcV1.EndpointGatewayCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -13276,10 +16375,14 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'start': _params.start,
       'limit': _params.limit,
-      'resource_group.id': _params.resourceGroupId
+      'resource_group.id': _params.resourceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listEndpointGateways');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listEndpointGateways'
+    );
 
     const parameters = {
       options: {
@@ -13288,14 +16391,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create an endpoint gateway.
@@ -13316,8 +16424,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EndpointGateway>>}
    */
-  public createEndpointGateway(params: VpcV1.CreateEndpointGatewayParams): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
-    const _params = Object.assign({}, params);
+  public createEndpointGateway(
+    params: VpcV1.CreateEndpointGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
+    const _params = { ...params };
     const requiredParams = ['target', 'vpc'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13330,15 +16440,19 @@ class VpcV1 extends BaseService {
       'vpc': _params.vpc,
       'ips': _params.ips,
       'name': _params.name,
-      'resource_group': _params.resourceGroup
+      'resource_group': _params.resourceGroup,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createEndpointGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createEndpointGateway'
+    );
 
     const parameters = {
       options: {
@@ -13348,15 +16462,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * List all reserved IPs bound to an endpoint gateway.
@@ -13374,8 +16493,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionEndpointGatewayContext>>}
    */
-  public listEndpointGatewayIps(params: VpcV1.ListEndpointGatewayIpsParams): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionEndpointGatewayContext>> {
-    const _params = Object.assign({}, params);
+  public listEndpointGatewayIps(
+    params: VpcV1.ListEndpointGatewayIpsParams
+  ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionEndpointGatewayContext>> {
+    const _params = { ...params };
     const requiredParams = ['endpointGatewayId'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13388,14 +16509,18 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
       'start': _params.start,
       'limit': _params.limit,
-      'sort': _params.sort
+      'sort': _params.sort,
     };
 
     const path = {
-      'endpoint_gateway_id': _params.endpointGatewayId
+      'endpoint_gateway_id': _params.endpointGatewayId,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listEndpointGatewayIps');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listEndpointGatewayIps'
+    );
 
     const parameters = {
       options: {
@@ -13405,14 +16530,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Unbind a reserved IP from an endpoint gateway.
@@ -13426,8 +16556,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public removeEndpointGatewayIp(params: VpcV1.RemoveEndpointGatewayIpParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public removeEndpointGatewayIp(
+    params: VpcV1.RemoveEndpointGatewayIpParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['endpointGatewayId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13437,15 +16569,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'endpoint_gateway_id': _params.endpointGatewayId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeEndpointGatewayIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'removeEndpointGatewayIp'
+    );
 
     const parameters = {
       options: {
@@ -13455,13 +16591,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a reserved IP bound to an endpoint gateway.
@@ -13475,8 +16616,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
    */
-  public getEndpointGatewayIp(params: VpcV1.GetEndpointGatewayIpParams): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
-    const _params = Object.assign({}, params);
+  public getEndpointGatewayIp(
+    params: VpcV1.GetEndpointGatewayIpParams
+  ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
+    const _params = { ...params };
     const requiredParams = ['endpointGatewayId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13486,15 +16629,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'endpoint_gateway_id': _params.endpointGatewayId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getEndpointGatewayIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getEndpointGatewayIp'
+    );
 
     const parameters = {
       options: {
@@ -13504,14 +16651,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Bind a reserved IP to an endpoint gateway.
@@ -13527,8 +16679,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
    */
-  public addEndpointGatewayIp(params: VpcV1.AddEndpointGatewayIpParams): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
-    const _params = Object.assign({}, params);
+  public addEndpointGatewayIp(
+    params: VpcV1.AddEndpointGatewayIpParams
+  ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
+    const _params = { ...params };
     const requiredParams = ['endpointGatewayId', 'id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13538,15 +16692,19 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
       'endpoint_gateway_id': _params.endpointGatewayId,
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addEndpointGatewayIp');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'addEndpointGatewayIp'
+    );
 
     const parameters = {
       options: {
@@ -13556,14 +16714,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete an endpoint gateway.
@@ -13578,8 +16741,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteEndpointGateway(params: VpcV1.DeleteEndpointGatewayParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteEndpointGateway(
+    params: VpcV1.DeleteEndpointGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13589,14 +16754,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteEndpointGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteEndpointGateway'
+    );
 
     const parameters = {
       options: {
@@ -13606,13 +16775,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve an endpoint gateway.
@@ -13624,8 +16798,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EndpointGateway>>}
    */
-  public getEndpointGateway(params: VpcV1.GetEndpointGatewayParams): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
-    const _params = Object.assign({}, params);
+  public getEndpointGateway(
+    params: VpcV1.GetEndpointGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13635,14 +16811,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getEndpointGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getEndpointGateway'
+    );
 
     const parameters = {
       options: {
@@ -13652,14 +16832,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update an endpoint gateway.
@@ -13673,8 +16858,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EndpointGateway>>}
    */
-  public updateEndpointGateway(params: VpcV1.UpdateEndpointGatewayParams): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
-    const _params = Object.assign({}, params);
+  public updateEndpointGateway(
+    params: VpcV1.UpdateEndpointGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13683,19 +16870,23 @@ class VpcV1 extends BaseService {
     }
 
     const body = {
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateEndpointGateway');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateEndpointGateway'
+    );
 
     const parameters = {
       options: {
@@ -13706,16 +16897,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
   /*************************
    * flowLogCollectors
    ************************/
@@ -13742,8 +16937,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FlowLogCollectorCollection>>}
    */
-  public listFlowLogCollectors(params?: VpcV1.ListFlowLogCollectorsParams): Promise<VpcV1.Response<VpcV1.FlowLogCollectorCollection>> {
-    const _params = Object.assign({}, params);
+  public listFlowLogCollectors(
+    params?: VpcV1.ListFlowLogCollectorsParams
+  ): Promise<VpcV1.Response<VpcV1.FlowLogCollectorCollection>> {
+    const _params = { ...params };
 
     const query = {
       'version': this.version,
@@ -13756,10 +16953,14 @@ class VpcV1 extends BaseService {
       'vpc.crn': _params.vpcCrn,
       'vpc.name': _params.vpcName,
       'target.id': _params.targetId,
-      'target.resource_type': _params.targetResourceType
+      'target.resource_type': _params.targetResourceType,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listFlowLogCollectors');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listFlowLogCollectors'
+    );
 
     const parameters = {
       options: {
@@ -13768,14 +16969,19 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Create a flow log collector.
@@ -13803,8 +17009,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FlowLogCollector>>}
    */
-  public createFlowLogCollector(params: VpcV1.CreateFlowLogCollectorParams): Promise<VpcV1.Response<VpcV1.FlowLogCollector>> {
-    const _params = Object.assign({}, params);
+  public createFlowLogCollector(
+    params: VpcV1.CreateFlowLogCollectorParams
+  ): Promise<VpcV1.Response<VpcV1.FlowLogCollector>> {
+    const _params = { ...params };
     const requiredParams = ['storageBucket', 'target'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13817,15 +17025,19 @@ class VpcV1 extends BaseService {
       'target': _params.target,
       'active': _params.active,
       'name': _params.name,
-      'resource_group': _params.resourceGroup
+      'resource_group': _params.resourceGroup,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createFlowLogCollector');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createFlowLogCollector'
+    );
 
     const parameters = {
       options: {
@@ -13835,15 +17047,20 @@ class VpcV1 extends BaseService {
         qs: query,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Delete a flow log collector.
@@ -13856,8 +17073,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
    */
-  public deleteFlowLogCollector(params: VpcV1.DeleteFlowLogCollectorParams): Promise<VpcV1.Response<VpcV1.Empty>> {
-    const _params = Object.assign({}, params);
+  public deleteFlowLogCollector(
+    params: VpcV1.DeleteFlowLogCollectorParams
+  ): Promise<VpcV1.Response<VpcV1.Empty>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13867,14 +17086,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteFlowLogCollector');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteFlowLogCollector'
+    );
 
     const parameters = {
       options: {
@@ -13884,13 +17107,18 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Retrieve a flow log collector.
@@ -13902,8 +17130,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FlowLogCollector>>}
    */
-  public getFlowLogCollector(params: VpcV1.GetFlowLogCollectorParams): Promise<VpcV1.Response<VpcV1.FlowLogCollector>> {
-    const _params = Object.assign({}, params);
+  public getFlowLogCollector(
+    params: VpcV1.GetFlowLogCollectorParams
+  ): Promise<VpcV1.Response<VpcV1.FlowLogCollector>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13913,14 +17143,18 @@ class VpcV1 extends BaseService {
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getFlowLogCollector');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getFlowLogCollector'
+    );
 
     const parameters = {
       options: {
@@ -13930,14 +17164,19 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
+  }
 
   /**
    * Update a flow log collector.
@@ -13954,8 +17193,10 @@ class VpcV1 extends BaseService {
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FlowLogCollector>>}
    */
-  public updateFlowLogCollector(params: VpcV1.UpdateFlowLogCollectorParams): Promise<VpcV1.Response<VpcV1.FlowLogCollector>> {
-    const _params = Object.assign({}, params);
+  public updateFlowLogCollector(
+    params: VpcV1.UpdateFlowLogCollectorParams
+  ): Promise<VpcV1.Response<VpcV1.FlowLogCollector>> {
+    const _params = { ...params };
     const requiredParams = ['id'];
 
     const missingParams = getMissingParams(_params, requiredParams);
@@ -13965,19 +17206,23 @@ class VpcV1 extends BaseService {
 
     const body = {
       'active': _params.active,
-      'name': _params.name
+      'name': _params.name,
     };
 
     const query = {
       'version': this.version,
-      'generation': this.generation
+      'generation': this.generation,
     };
 
     const path = {
-      'id': _params.id
+      'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateFlowLogCollector');
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateFlowLogCollector'
+    );
 
     const parameters = {
       options: {
@@ -13988,16 +17233,20 @@ class VpcV1 extends BaseService {
         path,
       },
       defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(true, sdkHeaders, {
-          'Accept': 'application/json',
-          'Content-Type': 'application/merge-patch+json',
-        }, _params.headers),
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
       }),
     };
 
     return this.createRequest(parameters);
-  };
-
+  }
 }
 
 /*************************
@@ -14005,21 +17254,18 @@ class VpcV1 extends BaseService {
  ************************/
 
 namespace VpcV1 {
-
   /** Options for the `VpcV1` constructor. */
   export interface Options extends UserOptions {
-
     /** Requests the version of the API as of a date in the format `YYYY-MM-DD`. Any date up to the current date may
      *  be provided. Specify the current date to request the latest version.
      */
     version: string;
-
     /** The infrastructure generation for the request. For the API behavior documented here, use `2`. */
     generation?: number;
   }
 
   /** An operation response. */
-  export interface Response<T = any>  {
+  export interface Response<T = any> {
     result: T;
     status: number;
     statusText: string;
@@ -14030,7 +17276,7 @@ namespace VpcV1 {
   export type Callback<T> = (error: any, response?: Response<T>) => void;
 
   /** The body of a service request that returns no response data. */
-  export interface Empty { }
+  export interface Empty {}
 
   /** A standard JS object, defined to avoid the limitations of `Object` and `object` */
   export interface JsonObject {
@@ -14796,8 +18042,9 @@ namespace VpcV1 {
 
   /** Parameters for the `createKey` operation. */
   export interface CreateKeyParams {
-    /** A unique public SSH key to import, encoded in PEM format. The key (prior to encoding) must be either 2048 or
-     *  4096 bits long.
+    /** A unique public SSH key to import, in OpenSSH format (consisting of three space-separated fields: the
+     *  algorithm name, base64-encoded key, and a comment). The algorithm and comment fields may be omitted, as only the
+     *  key field is imported.
      */
     publicKey: string;
     /** The unique user-defined name for this key. If unspecified, the name will be a hyphenated list of
@@ -14915,6 +18162,12 @@ namespace VpcV1 {
     dedicatedHostCrn?: string;
     /** Filters the collection to instances on the dedicated host with the specified name. */
     dedicatedHostName?: string;
+    /** Filters the collection to instances in the placement group with the specified identifier. */
+    placementGroupId?: string;
+    /** Filters the collection to instances in the placement group with the specified CRN. */
+    placementGroupCrn?: string;
+    /** Filters the collection to instances in the placement group with the specified name. */
+    placementGroupName?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -14948,14 +18201,19 @@ namespace VpcV1 {
     /** The profile to use for this virtual server instance. For the profile to be changed,
      *  the instance `status` must be `stopping` or `stopped`. In addition, the requested
      *  profile must:
-     *  - Match the current profile's instance disk support. (Note: If the current profile
-     *    supports instance storage disks, the requested profile can have a different
-     *    instance storage disk configuration.)
+     *  - Have matching instance disk support. Any disks associated with the current profile
+     *    will be deleted, and any disks associated with the requested profile will be
+     *    created.
      *  - Be compatible with any `placement_target` constraints. For example, if the
      *    instance is placed on a dedicated host, the requested profile `family` must be
      *    the same as the dedicated host `family`.
      */
     profile?: InstancePatchProfile;
+    /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
+     *  increase in this value will result in a corresponding decrease to
+     *  `total_network_bandwidth`.
+     */
+    totalVolumeBandwidth?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -15207,7 +18465,7 @@ namespace VpcV1 {
 
   /** Parameters for the `createInstanceGroup` operation. */
   export interface CreateInstanceGroupParams {
-    /** Instance template to use when creating new instances. */
+    /** Identifies an instance template by a unique property. */
     instanceTemplate: InstanceTemplateIdentity;
     /** The subnets to use when creating new instances. */
     subnets: SubnetIdentity[];
@@ -15258,7 +18516,7 @@ namespace VpcV1 {
      *  supply the port for the load balancer pool member.
      */
     applicationPort?: number;
-    /** Instance template to use when creating new instances. */
+    /** Identifies an instance template by a unique property. */
     instanceTemplate?: InstanceTemplateIdentity;
     /** The load balancer that the load balancer pool used by this group
      *  is in. Must be supplied when using a load balancer pool.
@@ -15700,6 +18958,69 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listPlacementGroups` operation. */
+  export interface ListPlacementGroupsParams {
+    /** A server-supplied token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createPlacementGroup` operation. */
+  export interface CreatePlacementGroupParams {
+    /** The strategy for this placement group
+     *  - `host_spread`: place on different compute hosts
+     *  - `power_spread`: place on compute hosts that use different power sources
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the
+     *  unexpected strategy was encountered.
+     */
+    strategy: CreatePlacementGroupConstants.Strategy | string;
+    /** The unique user-defined name for this placement group. If unspecified, the name will be a hyphenated list of
+     *  randomly-selected words.
+     */
+    name?: string;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     */
+    resourceGroup?: ResourceGroupIdentity;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createPlacementGroup` operation. */
+  export namespace CreatePlacementGroupConstants {
+    /** The strategy for this placement group - `host_spread`: place on different compute hosts - `power_spread`: place on compute hosts that use different power sources The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the unexpected strategy was encountered. */
+    export enum Strategy {
+      HOST_SPREAD = 'host_spread',
+      POWER_SPREAD = 'power_spread',
+    }
+  }
+
+  /** Parameters for the `deletePlacementGroup` operation. */
+  export interface DeletePlacementGroupParams {
+    /** The placement group identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getPlacementGroup` operation. */
+  export interface GetPlacementGroupParams {
+    /** The placement group identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updatePlacementGroup` operation. */
+  export interface UpdatePlacementGroupParams {
+    /** The placement group identifier. */
+    id: string;
+    /** The user-defined name for this placement group. */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `listVolumeProfiles` operation. */
   export interface ListVolumeProfilesParams {
     /** A server-supplied token determining what resource to start the page on. */
@@ -15754,8 +19075,23 @@ namespace VpcV1 {
   export interface UpdateVolumeParams {
     /** The volume identifier. */
     id: string;
+    /** The capacity to use for the volume (in gigabytes). The volume must be attached as a data volume to a virtual
+     *  server instance, and the specified value must not be less than the current capacity.
+     *
+     *  The minimum and maximum capacity limits for creating or updating volumes may expand in the future.
+     */
+    capacity?: number;
+    /** The maximum I/O operations per second (IOPS) to use for the volume. Applicable only to volumes using a
+     *  profile `family` of `custom`. The volume must be attached as a data volume to a running virtual server instance.
+     */
+    iops?: number;
     /** The unique user-defined name for this volume. */
     name?: string;
+    /** The profile to use for this volume.  The requested profile must be in the same
+     *  `family` as the current profile.  The volume must be attached as a data volume to a
+     *   running virtual server instance.
+     */
+    profile?: VolumeProfileIdentity;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -16869,13 +20205,19 @@ namespace VpcV1 {
      *  `port` and `protocol` combination.
      */
     port: number;
-    /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
-     *  `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer must have a unique
-     *  `port` and `protocol` combination.
+    /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol`
+     *  combination.  Additional restrictions:
+     *  - If this load balancer is in the `network` family, the protocol must be `tcp`.
+     *  - If this listener has `https_redirect` specified, the protocol must be `http`.
+     *  - If this listener is a listener's `https_redirect` target, the protocol must be `https`.
      */
     protocol: CreateLoadBalancerListenerConstants.Protocol | string;
     /** If set to `true`, this listener will accept and forward PROXY protocol information. Supported by load
-     *  balancers in the `application` family (otherwise always `false`).
+     *  balancers in the `application` family (otherwise always `false`). Additional restrictions:
+     *  - If this listener has `https_redirect` specified, its `accept_proxy_protocol` value must
+     *    match the `accept_proxy_protocol` value of the `https_redirect` listener.
+     *  - If this listener is the target of another listener's `https_redirect`, its
+     *    `accept_proxy_protocol` value must match that listener's `accept_proxy_protocol` value.
      */
     acceptProxyProtocol?: boolean;
     /** The certificate instance used for SSL termination. It is applicable only to `https` protocol. */
@@ -16889,6 +20231,10 @@ namespace VpcV1 {
      *  - Not already be the default pool for another listener.
      */
     defaultPool?: LoadBalancerPoolIdentity;
+    /** The target listener that requests will be redirected to. This listener must have a
+     *  `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+     */
+    httpsRedirect?: LoadBalancerListenerHTTPSRedirectPrototype;
     /** The policy prototype objects for this listener. */
     policies?: LoadBalancerListenerPolicyPrototype[];
     headers?: OutgoingHttpHeaders;
@@ -16896,7 +20242,7 @@ namespace VpcV1 {
 
   /** Constants for the `createLoadBalancerListener` operation. */
   export namespace CreateLoadBalancerListenerConstants {
-    /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer must have a unique `port` and `protocol` combination. */
+    /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol` combination.  Additional restrictions: - If this load balancer is in the `network` family, the protocol must be `tcp`. - If this listener has `https_redirect` specified, the protocol must be `http`. - If this listener is a listener's `https_redirect` target, the protocol must be `https`. */
     export enum Protocol {
       HTTP = 'http',
       HTTPS = 'https',
@@ -16929,7 +20275,11 @@ namespace VpcV1 {
     /** The listener identifier. */
     id: string;
     /** If set to `true`, this listener will accept and forward PROXY protocol information. Supported by load
-     *  balancers in the `application` family (otherwise always `false`).
+     *  balancers in the `application` family (otherwise always `false`). Additional restrictions:
+     *  - If this listener has `https_redirect` specified, its `accept_proxy_protocol` value must
+     *    match the `accept_proxy_protocol` value of the `https_redirect` listener.
+     *  - If this listener is the target of another listener's `https_redirect`, its
+     *    `accept_proxy_protocol` value must match that listener's `accept_proxy_protocol` value.
      */
     acceptProxyProtocol?: boolean;
     /** The certificate instance used for SSL termination. It is applicable only to `https` protocol. */
@@ -16943,13 +20293,20 @@ namespace VpcV1 {
      *  - Not already be the default pool for another listener.
      */
     defaultPool?: LoadBalancerPoolIdentity;
+    /** The target listener that requests will be redirected to. This listener must have a
+     *  `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+     *  Specify `null` to remove any existing https redirect.
+     */
+    httpsRedirect?: LoadBalancerListenerHTTPSRedirectPatch;
     /** The listener port number. Each listener in the load balancer must have a unique
      *  `port` and `protocol` combination.
      */
     port?: number;
-    /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
-     *  `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer must have a unique
-     *  `port` and `protocol` combination.
+    /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol`
+     *  combination.  Additional restrictions:
+     *  - If this load balancer is in the `network` family, the protocol must be `tcp`.
+     *  - If this listener has `https_redirect` specified, the protocol must be `http`.
+     *  - If this listener is a listener's `https_redirect` target, the protocol must be `https`.
      */
     protocol?: UpdateLoadBalancerListenerConstants.Protocol | string;
     headers?: OutgoingHttpHeaders;
@@ -16957,7 +20314,7 @@ namespace VpcV1 {
 
   /** Constants for the `updateLoadBalancerListener` operation. */
   export namespace UpdateLoadBalancerListenerConstants {
-    /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer must have a unique `port` and `protocol` combination. */
+    /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol` combination.  Additional restrictions: - If this load balancer is in the `network` family, the protocol must be `tcp`. - If this listener has `https_redirect` specified, the protocol must be `http`. - If this listener is a listener's `https_redirect` target, the protocol must be `https`. */
     export enum Protocol {
       HTTP = 'http',
       HTTPS = 'https',
@@ -16997,6 +20354,8 @@ namespace VpcV1 {
     rules?: LoadBalancerListenerPolicyRulePrototype[];
     /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
      *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
+     *  - If `action` is `https_redirect`, specify a
+     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
      */
     target?: LoadBalancerListenerPolicyTargetPrototype;
     headers?: OutgoingHttpHeaders;
@@ -17009,6 +20368,7 @@ namespace VpcV1 {
       FORWARD = 'forward',
       REDIRECT = 'redirect',
       REJECT = 'reject',
+      HTTPS_REDIRECT = 'https_redirect',
     }
   }
 
@@ -17050,6 +20410,8 @@ namespace VpcV1 {
     priority?: number;
     /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
      *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
+     *  - If `action` is `https_redirect`, specify a
+     *    `LoadBalancerListenerPolicyHTTPSRedirectPatch`.
      */
     target?: LoadBalancerListenerPolicyTargetPatch;
     headers?: OutgoingHttpHeaders;
@@ -17708,7 +21070,7 @@ namespace VpcV1 {
     instance_placement_enabled: boolean;
     /** The instances that are allocated to this dedicated host. */
     instances: InstanceReference[];
-    /** The lifecycle state of the dedicated host resource. */
+    /** The lifecycle state of the dedicated host. */
     lifecycle_state: string;
     /** The total amount of memory in gibibytes for this host. */
     memory: number;
@@ -18529,10 +21891,11 @@ namespace VpcV1 {
 
   /** IP. */
   export interface IP {
-    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
-     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
-     *  encountered.
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
   }
@@ -18792,7 +22155,9 @@ namespace VpcV1 {
 
   /** Instance. */
   export interface Instance {
-    /** The total bandwidth (in megabits per second) shared across the virtual server instance's network interfaces. */
+    /** The total bandwidth (in megabits per second) shared across the virtual server instance's network interfaces
+     *  and storage volumes.
+     */
     bandwidth: number;
     /** Boot volume attachment. */
     boot_volume_attachment: VolumeAttachmentReferenceInstanceContext;
@@ -18835,6 +22200,13 @@ namespace VpcV1 {
      *  which the unexpected reason code was encountered.
      */
     status_reasons: InstanceStatusReason[];
+    /** The amount of bandwidth (in megabits per second) allocated exclusively to instance network interfaces. */
+    total_network_bandwidth: number;
+    /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
+     *  increase in this value will result in a corresponding decrease to
+     *  `total_network_bandwidth`.
+     */
+    total_volume_bandwidth: number;
     /** The virtual server instance VCPU configuration. */
     vcpu: InstanceVCPU;
     /** The volume attachments for this virtual server instance, including the boot volume attachment. */
@@ -19390,7 +22762,7 @@ namespace VpcV1 {
   /** InstanceInitialization. */
   export interface InstanceInitialization {
     /** The public SSH keys used at instance initialization. */
-    keys: KeyReferenceInstanceInitializationContext[];
+    keys: KeyReference[];
     password?: InstanceInitializationPassword;
   }
 
@@ -19399,10 +22771,10 @@ namespace VpcV1 {
     /** The administrator password at initialization, encrypted using `encryption_key`, and returned base64-encoded. */
     encrypted_password: string;
     /** The public SSH key used to encrypt the administrator password. */
-    encryption_key: KeyReferenceInstanceInitializationContext;
+    encryption_key: KeyIdentityByFingerprint;
   }
 
-  /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Match the current profile's instance disk support. (Note: If the current profile supports instance storage disks, the requested profile can have a different instance storage disk configuration.) - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. */
+  /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. */
   export interface InstancePatchProfile {
   }
 
@@ -19428,6 +22800,7 @@ namespace VpcV1 {
     name: string;
     os_architecture: InstanceProfileOSArchitecture;
     port_speed: InstanceProfilePortSpeed;
+    total_volume_bandwidth: InstanceProfileVolumeBandwidth;
     vcpu_architecture: InstanceProfileVCPUArchitecture;
     vcpu_count: InstanceProfileVCPU;
   }
@@ -19516,14 +22889,20 @@ namespace VpcV1 {
     value: string;
   }
 
+  /** InstanceProfileVolumeBandwidth. */
+  export interface InstanceProfileVolumeBandwidth {
+  }
+
   /** InstancePrototype. */
   export interface InstancePrototype {
-    /** The public SSH keys for the administrative user of the virtual server instance. Up to 10 keys may be
-     *  provided; if no keys are provided the instance will be inaccessible unless the image used provides another means
-     *  of access. For Windows instances, one of the keys will be used to encrypt the administrator password.
+    /** The public SSH keys for the administrative user of the virtual server instance. Keys will be made available
+     *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
+     *  added as SSH authorized keys for the administrative user.
      *
-     *  Keys will be made available to the virtual server instance as cloud-init vendor data. For cloud-init enabled
-     *  images, these keys will also be added as SSH authorized keys for the administrative user.
+     *  For Windows images, at least one key must be specified, and one will be chosen to encrypt [the administrator
+     *  password](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization). Keys are optional for other images,
+     *  but if no keys are specified, the instance will be inaccessible unless the specified image provides another
+     *  means of access.
      */
     keys?: KeyIdentity[];
     /** The unique user-defined name for this virtual server instance (and default system hostname). If unspecified,
@@ -19540,6 +22919,11 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
      */
     resource_group?: ResourceGroupIdentity;
+    /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
+     *  increase in this value will result in a corresponding decrease to
+     *  `total_network_bandwidth`.
+     */
+    total_volume_bandwidth?: number;
     /** User data to be made available when setting up the virtual server instance. */
     user_data?: string;
     /** The volume attachments for this virtual server instance. */
@@ -19592,12 +22976,14 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this instance template. */
     id: string;
-    /** The public SSH keys for the administrative user of the virtual server instance. Up to 10 keys may be
-     *  provided; if no keys are provided the instance will be inaccessible unless the image used provides another means
-     *  of access. For Windows instances, one of the keys will be used to encrypt the administrator password.
+    /** The public SSH keys for the administrative user of the virtual server instance. Keys will be made available
+     *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
+     *  added as SSH authorized keys for the administrative user.
      *
-     *  Keys will be made available to the virtual server instance as cloud-init vendor data. For cloud-init enabled
-     *  images, these keys will also be added as SSH authorized keys for the administrative user.
+     *  For Windows images, at least one key must be specified, and one will be chosen to encrypt [the administrator
+     *  password](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization). Keys are optional for other images,
+     *  but if no keys are specified, the instance will be inaccessible unless the specified image provides another
+     *  means of access.
      */
     keys?: KeyIdentity[];
     /** The unique user-defined name for this instance template. */
@@ -19610,6 +22996,11 @@ namespace VpcV1 {
     profile?: InstanceProfileIdentity;
     /** The resource group for this instance template. */
     resource_group: ResourceGroupReference;
+    /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
+     *  increase in this value will result in a corresponding decrease to
+     *  `total_network_bandwidth`.
+     */
+    total_volume_bandwidth?: number;
     /** User data to be made available when setting up the virtual server instance. */
     user_data?: string;
     /** The volume attachments for this virtual server instance. */
@@ -19652,12 +23043,14 @@ namespace VpcV1 {
 
   /** InstanceTemplatePrototype. */
   export interface InstanceTemplatePrototype {
-    /** The public SSH keys for the administrative user of the virtual server instance. Up to 10 keys may be
-     *  provided; if no keys are provided the instance will be inaccessible unless the image used provides another means
-     *  of access. For Windows instances, one of the keys will be used to encrypt the administrator password.
+    /** The public SSH keys for the administrative user of the virtual server instance. Keys will be made available
+     *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
+     *  added as SSH authorized keys for the administrative user.
      *
-     *  Keys will be made available to the virtual server instance as cloud-init vendor data. For cloud-init enabled
-     *  images, these keys will also be added as SSH authorized keys for the administrative user.
+     *  For Windows images, at least one key must be specified, and one will be chosen to encrypt [the administrator
+     *  password](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization). Keys are optional for other images,
+     *  but if no keys are specified, the instance will be inaccessible unless the specified image provides another
+     *  means of access.
      */
     keys?: KeyIdentity[];
     /** The unique user-defined name for this virtual server instance (and default system hostname). If unspecified,
@@ -19674,6 +23067,11 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
      */
     resource_group?: ResourceGroupIdentity;
+    /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
+     *  increase in this value will result in a corresponding decrease to
+     *  `total_network_bandwidth`.
+     */
+    total_volume_bandwidth?: number;
     /** User data to be made available when setting up the virtual server instance. */
     user_data?: string;
     /** The volume attachments for this virtual server instance. */
@@ -19745,7 +23143,7 @@ namespace VpcV1 {
   /** KeyCollection. */
   export interface KeyCollection {
     /** A link to the first page of resources. */
-    first: PageLink;
+    first: KeyCollectionFirst;
     /** Collection of keys. */
     keys: Key[];
     /** The maximum number of resources that can be returned by the request. */
@@ -19754,6 +23152,12 @@ namespace VpcV1 {
     next?: KeyCollectionNext;
     /** The total number of resources across all pages. */
     total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface KeyCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
   }
 
   /** A link to the next page of resources. This property is present for all pages except the last page. */
@@ -19766,14 +23170,30 @@ namespace VpcV1 {
   export interface KeyIdentity {
   }
 
+  /** KeyReference. */
+  export interface KeyReference {
+    /** The CRN for this key. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: KeyReferenceDeleted;
+    /** The fingerprint for this key.  The value is returned base64-encoded and prefixed with the hash algorithm
+     *  (always `SHA256`).
+     */
+    fingerprint: string;
+    /** The URL for this key. */
+    href: string;
+    /** The unique identifier for this key. */
+    id: string;
+    /** The user-defined name for this key. */
+    name: string;
+  }
+
   /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
   export interface KeyReferenceDeleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
-  }
-
-  /** KeyReferenceInstanceInitializationContext. */
-  export interface KeyReferenceInstanceInitializationContext {
   }
 
   /** LoadBalancer. */
@@ -19857,7 +23277,11 @@ namespace VpcV1 {
   /** LoadBalancerListener. */
   export interface LoadBalancerListener {
     /** If set to `true`, this listener will accept and forward PROXY protocol information. Supported by load
-     *  balancers in the `application` family (otherwise always `false`).
+     *  balancers in the `application` family (otherwise always `false`). Additional restrictions:
+     *  - If this listener has `https_redirect` specified, its `accept_proxy_protocol` value must
+     *    match the `accept_proxy_protocol` value of the `https_redirect` listener.
+     *  - If this listener is the target of another listener's `https_redirect`, its
+     *    `accept_proxy_protocol` value must match that listener's `accept_proxy_protocol` value.
      */
     accept_proxy_protocol: boolean;
     /** The certificate instance used for SSL termination. It is applicable only to `https` protocol. */
@@ -19870,6 +23294,8 @@ namespace VpcV1 {
     default_pool?: LoadBalancerPoolReference;
     /** The listener's canonical URL. */
     href: string;
+    /** If provided, the target listener that requests are redirected to. */
+    https_redirect?: LoadBalancerListenerHTTPSRedirect;
     /** The unique identifier for this load balancer listener. */
     id: string;
     /** The policies for this listener. */
@@ -19891,6 +23317,39 @@ namespace VpcV1 {
   export interface LoadBalancerListenerCollection {
     /** Collection of listeners. */
     listeners: LoadBalancerListener[];
+  }
+
+  /** LoadBalancerListenerHTTPSRedirect. */
+  export interface LoadBalancerListenerHTTPSRedirect {
+    /** The HTTP status code for this redirect. */
+    http_status_code: number;
+    listener: LoadBalancerListenerReference;
+    /** The redirect relative target URI. */
+    uri?: string;
+  }
+
+  /** LoadBalancerListenerHTTPSRedirectPatch. */
+  export interface LoadBalancerListenerHTTPSRedirectPatch {
+    /** The HTTP status code for this redirect. */
+    http_status_code?: number;
+    /** Identifies a load balancer listener by a unique property. */
+    listener?: LoadBalancerListenerIdentity;
+    /** The redirect relative target URI. */
+    uri?: string;
+  }
+
+  /** LoadBalancerListenerHTTPSRedirectPrototype. */
+  export interface LoadBalancerListenerHTTPSRedirectPrototype {
+    /** The HTTP status code for this redirect. */
+    http_status_code: number;
+    /** Identifies a load balancer listener by a unique property. */
+    listener: LoadBalancerListenerIdentity;
+    /** The redirect relative target URI. */
+    uri?: string;
+  }
+
+  /** Identifies a load balancer listener by a unique property. */
+  export interface LoadBalancerListenerIdentity {
   }
 
   /** LoadBalancerListenerPolicy. */
@@ -19917,7 +23376,8 @@ namespace VpcV1 {
     /** The rules for this policy. */
     rules: LoadBalancerListenerPolicyRuleReference[];
     /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference`
-     *  - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`.
+     *  - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`
+     *  - If `action` is `https_redirect`, the response is a `LoadBalancerListenerHTTPSRedirect`.
      */
     target?: LoadBalancerListenerPolicyTarget;
   }
@@ -19947,6 +23407,8 @@ namespace VpcV1 {
     rules?: LoadBalancerListenerPolicyRulePrototype[];
     /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
      *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
+     *  - If `action` is `https_redirect`, specify a
+     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
      */
     target?: LoadBalancerListenerPolicyTargetPrototype;
   }
@@ -20053,22 +23515,26 @@ namespace VpcV1 {
     more_info: string;
   }
 
-  /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference` - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`. */
+  /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference` - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL` - If `action` is `https_redirect`, the response is a `LoadBalancerListenerHTTPSRedirect`. */
   export interface LoadBalancerListenerPolicyTarget {
   }
 
-  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`. */
+  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`. - If `action` is `https_redirect`, specify a `LoadBalancerListenerPolicyHTTPSRedirectPatch`. */
   export interface LoadBalancerListenerPolicyTargetPatch {
   }
 
-  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`. */
+  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`. - If `action` is `https_redirect`, specify a `LoadBalancerListenerPolicyHTTPSRedirectPrototype`. */
   export interface LoadBalancerListenerPolicyTargetPrototype {
   }
 
   /** LoadBalancerListenerPrototypeLoadBalancerContext. */
   export interface LoadBalancerListenerPrototypeLoadBalancerContext {
     /** If set to `true`, this listener will accept and forward PROXY protocol information. Supported by load
-     *  balancers in the `application` family (otherwise always `false`).
+     *  balancers in the `application` family (otherwise always `false`). Additional restrictions:
+     *  - If this listener has `https_redirect` specified, its `accept_proxy_protocol` value must
+     *    match the `accept_proxy_protocol` value of the `https_redirect` listener.
+     *  - If this listener is the target of another listener's `https_redirect`, its
+     *    `accept_proxy_protocol` value must match that listener's `accept_proxy_protocol` value.
      */
     accept_proxy_protocol?: boolean;
     /** The connection limit of the listener. */
@@ -20739,7 +24205,10 @@ namespace VpcV1 {
     name: string;
     /** The network interface port speed in Mbps. */
     port_speed: number;
-    /** The primary IPv4 address. */
+    /** The primary IPv4 address.
+     *
+     *  If the address has not yet been selected, the value will be `0.0.0.0`.
+     */
     primary_ipv4_address: string;
     /** The resource type. */
     resource_type: string;
@@ -20791,7 +24260,10 @@ namespace VpcV1 {
     id: string;
     /** The user-defined name for this network interface. */
     name: string;
-    /** The primary IPv4 address. */
+    /** The primary IPv4 address.
+     *
+     *  If the address has not yet been selected, the value will be `0.0.0.0`.
+     */
     primary_ipv4_address: string;
     /** The resource type. */
     resource_type: string;
@@ -20837,7 +24309,10 @@ namespace VpcV1 {
     id: string;
     /** The user-defined name for this network interface. */
     name: string;
-    /** The primary IPv4 address. */
+    /** The primary IPv4 address.
+     *
+     *  If the address has not yet been selected, the value will be `0.0.0.0`.
+     */
     primary_ipv4_address: string;
     /** The resource type. */
     resource_type: string;
@@ -20917,10 +24392,65 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** PageLink. */
-  export interface PageLink {
+  /** PlacementGroup. */
+  export interface PlacementGroup {
+    /** The date and time that the placement group was created. */
+    created_at: string;
+    /** The CRN for this placement group. */
+    crn: string;
+    /** The URL for this placement group. */
+    href: string;
+    /** The unique identifier for this placement group. */
+    id: string;
+    /** The lifecycle state of the placement group. */
+    lifecycle_state: string;
+    /** The user-defined name for this placement group. */
+    name: string;
+    /** The resource group for this placement group. */
+    resource_group: ResourceGroupReference;
+    /** The resource type. */
+    resource_type: string;
+    /** The strategy for this placement group
+     *  - `host_spread`: place on different compute hosts
+     *  - `power_spread`: place on compute hosts that use different power sources
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the
+     *  unexpected strategy was encountered.
+     */
+    strategy: string;
+  }
+
+  /** PlacementGroupCollection. */
+  export interface PlacementGroupCollection {
+    /** A link to the first page of resources. */
+    first: PlacementGroupCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PlacementGroupCollectionNext;
+    /** Collection of placement groups. */
+    placement_groups: PlacementGroup[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface PlacementGroupCollectionFirst {
     /** The URL for a page of resources. */
     href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface PlacementGroupCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+  export interface PlacementGroupReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
   }
 
   /** PublicGateway. */
@@ -21053,10 +24583,13 @@ namespace VpcV1 {
 
   /** ReservedIP. */
   export interface ReservedIP {
-    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
-     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
-     *  encountered.
+    /** The IP address.
+     *
+     *  If the address has not yet been selected, the value will be `0.0.0.0`.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
     /** If set to `true`, this reserved IP will be automatically deleted when the target is deleted or when the
@@ -21133,10 +24666,13 @@ namespace VpcV1 {
 
   /** ReservedIPReference. */
   export interface ReservedIPReference {
-    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
-     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
-     *  encountered.
+    /** The IP address.
+     *
+     *  If the address has not yet been selected, the value will be `0.0.0.0`.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
     /** If present, this property indicates the referenced resource has been deleted and provides
@@ -21183,6 +24719,14 @@ namespace VpcV1 {
 
   /** Route. */
   export interface Route {
+    /** The action to perform with a packet matching the route:
+     *  - `delegate`: delegate to the system's built-in routes
+     *  - `delegate_vpc`: delegate to the system's built-in routes, ignoring Internet-bound
+     *    routes
+     *  - `deliver`: deliver the packet to the specified `next_hop`
+     *  - `drop`: drop the packet.
+     */
+    action: string;
     /** The date and time that the route was created. */
     created_at: string;
     /** The destination of the route. */
@@ -21504,7 +25048,7 @@ namespace VpcV1 {
      */
     ip_version?: string;
     /** The protocol to enforce. */
-    protocol?: string;
+    protocol: string;
     /** The IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
      *  security group. If omitted, a CIDR block of `0.0.0.0/0` will be used to allow traffic
@@ -22095,6 +25639,8 @@ namespace VpcV1 {
   export interface Volume {
     /** Indicates whether a running virtual server instance has an attachment to this volume. */
     active: boolean;
+    /** The maximum bandwidth (in megabits per second) for the volume. */
+    bandwidth: number;
     /** Indicates whether this volume is performing an operation that must be serialized. If an operation specifies
      *  that it requires serialization, the operation will fail unless this property is `false`.
      */
@@ -22119,7 +25665,7 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this volume. */
     id: string;
-    /** The bandwidth for the volume. */
+    /** The maximum I/O operations per second (IOPS) for the volume. */
     iops: number;
     /** The unique user-defined name for this volume. */
     name: string;
@@ -22160,6 +25706,10 @@ namespace VpcV1 {
 
   /** VolumeAttachment. */
   export interface VolumeAttachment {
+    /** The maximum bandwidth (in megabits per second) for the volume when attached to this instance. This may be
+     *  lower than the volume bandwidth depending on the configuration of the instance.
+     */
+    bandwidth: number;
     /** The date and time that the volume was attached. */
     created_at: string;
     /** If set to true, when deleting the instance the volume will also be deleted. */
@@ -22325,8 +25875,13 @@ namespace VpcV1 {
 
   /** VolumeProfile. */
   export interface VolumeProfile {
-    /** The product family this volume profile belongs to. */
-    family?: string;
+    /** The product family this volume profile belongs to.
+     *
+     *  The enumerated values for this property will expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the volume profile on which the
+     *  unexpected property value was encountered.
+     */
+    family: string;
     /** The URL for this volume profile. */
     href: string;
     /** The globally unique name for this volume profile. */
@@ -22373,7 +25928,9 @@ namespace VpcV1 {
 
   /** VolumePrototype. */
   export interface VolumePrototype {
-    /** The bandwidth for the volume. */
+    /** The maximum I/O operations per second (IOPS) to use for the volume. Applicable only to volumes using a
+     *  profile `family` of `custom`. The volume must be attached as a data volume to a running virtual server instance.
+     */
     iops?: number;
     /** The unique user-defined name for this volume. */
     name?: string;
@@ -22389,8 +25946,10 @@ namespace VpcV1 {
 
   /** VolumePrototypeInstanceByImageContext. */
   export interface VolumePrototypeInstanceByImageContext {
-    /** The capacity to use for the volume (in gigabytes). The specified minimum and maximum capacity values for
-     *  creating or updating volumes may expand in the future.
+    /** The capacity to use for the volume (in gigabytes). The only allowed value is the image's
+     *  `minimum_provisioned_size`, but the allowed values are expected to expand in the future.
+     *
+     *  If unspecified, the capacity will be the image's `minimum_provisioned_size`.
      */
     capacity?: number;
     /** The root key to use to wrap the data encryption key for the volume.
@@ -22400,7 +25959,7 @@ namespace VpcV1 {
      *  volume will be `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The bandwidth for the volume. */
+    /** The maximum I/O operations per second (IOPS) for the volume. */
     iops?: number;
     /** The unique user-defined name for this volume. */
     name?: string;
@@ -22741,7 +26300,10 @@ namespace VpcV1 {
     id: string;
     /** The user-defined name for this network interface. */
     name: string;
-    /** The primary IPv4 address. */
+    /** The primary IPv4 address.
+     *
+     *  If the address has not yet been selected, the value will be `0.0.0.0`.
+     */
     primary_ipv4_address: string;
     /** The resource type. */
     resource_type: string;
@@ -23065,6 +26627,10 @@ namespace VpcV1 {
   export interface InstancePlacementTargetPrototypeDedicatedHostIdentity extends InstancePlacementTargetPrototype {
   }
 
+  /** Identifies a placement group by a unique property. */
+  export interface InstancePlacementTargetPrototypePlacementGroupIdentity extends InstancePlacementTargetPrototype {
+  }
+
   /** InstancePlacementTargetDedicatedHostGroupReference. */
   export interface InstancePlacementTargetDedicatedHostGroupReference extends InstancePlacementTarget {
     /** The CRN for this dedicated host group. */
@@ -23105,13 +26671,31 @@ namespace VpcV1 {
     resource_type: string;
   }
 
+  /** InstancePlacementTargetPlacementGroupReference. */
+  export interface InstancePlacementTargetPlacementGroupReference extends InstancePlacementTarget {
+    /** The CRN for this placement group. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted and provides
+     *  some supplementary information.
+     */
+    deleted?: PlacementGroupReferenceDeleted;
+    /** The URL for this placement group. */
+    href: string;
+    /** The unique identifier for this placement group. */
+    id: string;
+    /** The user-defined name for this placement group. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
   /** The total bandwidth shared across the network interfaces and storage volumes of an instance with this profile depends on its configuration. */
   export interface InstanceProfileBandwidthDependent extends InstanceProfileBandwidth {
     /** The type for this profile field. */
     type: string;
   }
 
-  /** The permitted total bandwidth values (in megabits per second) shared across the network interfaces of an instance with this profile. */
+  /** The permitted total bandwidth values (in megabits per second) shared across the network interfaces and storage volumes of an instance with this profile. */
   export interface InstanceProfileBandwidthEnum extends InstanceProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -23321,6 +26905,44 @@ namespace VpcV1 {
     type: string;
   }
 
+  /** The storage bandwidth shared across the storage volumes of an instance with this profile depends on its configuration. */
+  export interface InstanceProfileVolumeBandwidthDependent extends InstanceProfileVolumeBandwidth {
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The permitted storage bandwidth values (in megabits per second) shared across the storage volumes of an instance with this profile. */
+  export interface InstanceProfileVolumeBandwidthEnum extends InstanceProfileVolumeBandwidth {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+
+  /** The storage bandwidth (in megabits per second) shared across the storage volumes of an instance with this profile. */
+  export interface InstanceProfileVolumeBandwidthFixed extends InstanceProfileVolumeBandwidth {
+    /** The type for this profile field. */
+    type: string;
+    /** The value for this profile field. */
+    value: number;
+  }
+
+  /** The permitted storage bandwidth range (in megabits per second) shared across the storage volumes of an instance with this profile. */
+  export interface InstanceProfileVolumeBandwidthRange extends InstanceProfileVolumeBandwidth {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
   /** InstancePrototypeInstanceByImage. */
   export interface InstancePrototypeInstanceByImage extends InstancePrototype {
     /** The boot volume attachment for the virtual server instance. */
@@ -23341,7 +26963,7 @@ namespace VpcV1 {
     image?: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface?: NetworkInterfacePrototype;
-    /** Identifies an instance template by a unique property. */
+    /** The template to create this virtual server instance from. */
     source_template: InstanceTemplateIdentity;
     /** The zone this virtual server instance will reside in. */
     zone?: ZoneIdentity;
@@ -23395,7 +27017,7 @@ namespace VpcV1 {
     image?: ImageIdentity;
     /** Primary network interface. */
     primary_network_interface?: NetworkInterfacePrototype;
-    /** Identifies an instance template by a unique property. */
+    /** The template to create this virtual server instance from. */
     source_template: InstanceTemplateIdentity;
     /** The zone this virtual server instance will reside in. */
     zone?: ZoneIdentity;
@@ -23423,20 +27045,6 @@ namespace VpcV1 {
     zone: ZoneIdentity;
   }
 
-  /** InstanceTemplateInstanceBySourceTemplate. */
-  export interface InstanceTemplateInstanceBySourceTemplate extends InstanceTemplate {
-    /** The boot volume attachment for the virtual server instance. */
-    boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
-    /** The image to use when provisioning the virtual server instance. */
-    image?: ImageIdentity;
-    /** Primary network interface. */
-    primary_network_interface?: NetworkInterfacePrototype;
-    /** Identifies an instance template by a unique property. */
-    source_template: InstanceTemplateIdentity;
-    /** The zone this virtual server instance will reside in. */
-    zone?: ZoneIdentity;
-  }
-
   /** InstanceTemplateInstanceByVolume. */
   export interface InstanceTemplateInstanceByVolume extends InstanceTemplate {
     /** The boot volume attachment for the virtual server instance. */
@@ -23453,6 +27061,14 @@ namespace VpcV1 {
     crn: string;
   }
 
+  /** KeyIdentityByFingerprint. */
+  export interface KeyIdentityByFingerprint extends KeyIdentity {
+    /** The fingerprint for this key.  The value is returned base64-encoded and prefixed with the hash algorithm
+     *  (always `SHA256`).
+     */
+    fingerprint: string;
+  }
+
   /** KeyIdentityByHref. */
   export interface KeyIdentityByHref extends KeyIdentity {
     /** The URL for this key. */
@@ -23463,42 +27079,6 @@ namespace VpcV1 {
   export interface KeyIdentityById extends KeyIdentity {
     /** The unique identifier for this key. */
     id: string;
-  }
-
-  /** KeyIdentityKeyIdentityByFingerprint. */
-  export interface KeyIdentityKeyIdentityByFingerprint extends KeyIdentity {
-    /** The fingerprint for this key.  The value is returned base64-encoded and prefixed with the hash algorithm
-     *  (always `SHA256`).
-     */
-    fingerprint: string;
-  }
-
-  /** KeyReferenceInstanceInitializationContextKeyIdentityByFingerprint. */
-  export interface KeyReferenceInstanceInitializationContextKeyIdentityByFingerprint extends KeyReferenceInstanceInitializationContext {
-    /** The fingerprint for this key.  The value is returned base64-encoded and prefixed with the hash algorithm
-     *  (always `SHA256`).
-     */
-    fingerprint: string;
-  }
-
-  /** KeyReferenceInstanceInitializationContextKeyReference. */
-  export interface KeyReferenceInstanceInitializationContextKeyReference extends KeyReferenceInstanceInitializationContext {
-    /** The CRN for this key. */
-    crn: string;
-    /** If present, this property indicates the referenced resource has been deleted and provides
-     *  some supplementary information.
-     */
-    deleted?: KeyReferenceDeleted;
-    /** The fingerprint for this key.  The value is returned base64-encoded and prefixed with the hash algorithm
-     *  (always `SHA256`).
-     */
-    fingerprint: string;
-    /** The URL for this key. */
-    href: string;
-    /** The unique identifier for this key. */
-    id: string;
-    /** The user-defined name for this key. */
-    name: string;
   }
 
   /** LoadBalancerIdentityByCRN. */
@@ -23519,6 +27099,28 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** LoadBalancerListenerIdentityByHref. */
+  export interface LoadBalancerListenerIdentityByHref extends LoadBalancerListenerIdentity {
+    /** The listener's canonical URL. */
+    href: string;
+  }
+
+  /** LoadBalancerListenerIdentityById. */
+  export interface LoadBalancerListenerIdentityById extends LoadBalancerListenerIdentity {
+    /** The unique identifier for this load balancer listener. */
+    id: string;
+  }
+
+  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerHTTPSRedirectPatch. */
+  export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerHTTPSRedirectPatch extends LoadBalancerListenerPolicyTargetPatch {
+    /** The HTTP status code for this redirect. */
+    http_status_code?: number;
+    /** Identifies a load balancer listener by a unique property. */
+    listener?: LoadBalancerListenerIdentity;
+    /** The redirect relative target URI. */
+    uri?: string;
+  }
+
   /** LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyRedirectURLPatch. */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyRedirectURLPatch extends LoadBalancerListenerPolicyTargetPatch {
     /** The HTTP status code for this redirect. */
@@ -23531,6 +27133,16 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity extends LoadBalancerListenerPolicyTargetPatch {
   }
 
+  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerHTTPSRedirectPrototype. */
+  export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerHTTPSRedirectPrototype extends LoadBalancerListenerPolicyTargetPrototype {
+    /** The HTTP status code for this redirect. */
+    http_status_code: number;
+    /** Identifies a load balancer listener by a unique property. */
+    listener: LoadBalancerListenerIdentity;
+    /** The redirect relative target URI. */
+    uri?: string;
+  }
+
   /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyRedirectURLPrototype. */
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyRedirectURLPrototype extends LoadBalancerListenerPolicyTargetPrototype {
     /** The HTTP status code for this redirect. */
@@ -23541,6 +27153,15 @@ namespace VpcV1 {
 
   /** Identifies a load balancer pool by a unique property. */
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentity extends LoadBalancerListenerPolicyTargetPrototype {
+  }
+
+  /** LoadBalancerListenerPolicyTargetLoadBalancerListenerHTTPSRedirect. */
+  export interface LoadBalancerListenerPolicyTargetLoadBalancerListenerHTTPSRedirect extends LoadBalancerListenerPolicyTarget {
+    /** The HTTP status code for this redirect. */
+    http_status_code: number;
+    listener: LoadBalancerListenerReference;
+    /** The redirect relative target URI. */
+    uri?: string;
   }
 
   /** LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyRedirectURL. */
@@ -23579,10 +27200,11 @@ namespace VpcV1 {
 
   /** LoadBalancerPoolMemberTargetPrototypeIP. */
   export interface LoadBalancerPoolMemberTargetPrototypeIP extends LoadBalancerPoolMemberTargetPrototype {
-    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
-     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
-     *  encountered.
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
   }
@@ -23593,10 +27215,11 @@ namespace VpcV1 {
 
   /** LoadBalancerPoolMemberTargetIP. */
   export interface LoadBalancerPoolMemberTargetIP extends LoadBalancerPoolMemberTarget {
-    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
-     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
-     *  encountered.
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
   }
@@ -23903,20 +27526,22 @@ namespace VpcV1 {
 
   /** RouteNextHopIP. */
   export interface RouteNextHopIP extends RouteNextHop {
-    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
-     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
-     *  encountered.
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
   }
 
   /** The IP address of the next hop to which to route packets. */
   export interface RouteNextHopPrototypeRouteNextHopIP extends RouteNextHopPrototype {
-    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
-     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
-     *  encountered.
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
   }
@@ -24048,10 +27673,11 @@ namespace VpcV1 {
 
   /** SecurityGroupRuleRemotePatchIP. */
   export interface SecurityGroupRuleRemotePatchIP extends SecurityGroupRuleRemotePatch {
-    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
-     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
-     *  encountered.
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
   }
@@ -24072,10 +27698,11 @@ namespace VpcV1 {
 
   /** SecurityGroupRuleRemotePrototypeIP. */
   export interface SecurityGroupRuleRemotePrototypeIP extends SecurityGroupRuleRemotePrototype {
-    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
-     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
-     *  encountered.
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
   }
@@ -24096,10 +27723,11 @@ namespace VpcV1 {
 
   /** SecurityGroupRuleRemoteIP. */
   export interface SecurityGroupRuleRemoteIP extends SecurityGroupRuleRemote {
-    /** The IP address. This property may add support for IPv6 addresses in the future. When processing a value in
-     *  this property, verify that the address is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected IP address format was
-     *  encountered.
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
   }
@@ -24324,7 +27952,7 @@ namespace VpcV1 {
 
   /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext. */
   export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext extends VolumeAttachmentPrototypeVolume {
-    /** The bandwidth for the volume. */
+    /** The maximum I/O operations per second (IOPS) for the volume. */
     iops?: number;
     /** The unique user-defined name for this volume. */
     name?: string;
@@ -24345,7 +27973,7 @@ namespace VpcV1 {
      *  If this property is not provided, the snapshot's `encryption_key` will be used.
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The bandwidth for the volume. */
+    /** The maximum I/O operations per second (IOPS) for the volume. */
     iops?: number;
     /** The unique user-defined name for this volume. */
     name?: string;
@@ -24361,7 +27989,7 @@ namespace VpcV1 {
 
   /** VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContext. */
   export interface VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContext extends VolumeAttachmentVolumePrototypeInstanceContext {
-    /** The bandwidth for the volume. */
+    /** The maximum I/O operations per second (IOPS) for the volume. */
     iops?: number;
     /** The unique user-defined name for this volume. */
     name?: string;
@@ -24586,6 +28214,24 @@ namespace VpcV1 {
   /** InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityById. */
   export interface InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityById extends InstancePlacementTargetPrototypeDedicatedHostIdentity {
     /** The unique identifier for this dedicated host. */
+    id: string;
+  }
+
+  /** InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityByCRN. */
+  export interface InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityByCRN extends InstancePlacementTargetPrototypePlacementGroupIdentity {
+    /** The CRN for this placement group. */
+    crn: string;
+  }
+
+  /** InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityByHref. */
+  export interface InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityByHref extends InstancePlacementTargetPrototypePlacementGroupIdentity {
+    /** The URL for this placement group. */
+    href: string;
+  }
+
+  /** InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityById. */
+  export interface InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityById extends InstancePlacementTargetPrototypePlacementGroupIdentity {
+    /** The unique identifier for this placement group. */
     id: string;
   }
 
@@ -24836,7 +28482,6 @@ namespace VpcV1 {
   export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt {
     manager: InstanceGroupManagerScheduledActionManagerPrototype;
   }
-
 }
 
 export = VpcV1;

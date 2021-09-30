@@ -4247,6 +4247,82 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('CreatePlacementGroup()', done => {
+    const params = {
+      strategy: 'host_spread',
+      name: 'my-placement-group',
+    };
+
+    vpcService
+      .createPlacementGroup(params)
+      .then(res => {
+        dict.placementGroupId = res.result.id;
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('listPlacementGroups()', done => {
+    vpcService
+      .listPlacementGroups()
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getPlacementGroup()', done => {
+    const params = {
+      id: dict.placementGroupId,
+    };
+    vpcService
+      .getPlacementGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updatePlacementGroup()', done => {
+    const params = {
+      id: dict.placementGroupId,
+      name: 'my-placement-group1',
+    };
+    vpcService
+      .updatePlacementGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deletePlacementGroup()', done => {
+    const params = {
+      id: dict.placementGroupId,
+    };
+    vpcService
+      .deletePlacementGroup(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('deleteVpcRoutingTableRoute()', done => {
     const params = {
       vpcId: dict.createdVpc,

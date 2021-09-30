@@ -3,8 +3,8 @@ language: node_js
 sudo: false
 
 node_js:
-- 10
 - 12
+- 14
 
 script:
 - npm run build
@@ -20,5 +20,5 @@ deploy:
   skip_cleanup: true
   script: npx semantic-release
   on:
-    node: 12
+    node: 14
     branch: master
