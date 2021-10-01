@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2020, 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 'use strict';
-
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
+
 const { NoAuthAuthenticator, unitTestUtils } = core;
 
 const VpcV1 = require('../../dist/vpc/v1');
@@ -127,7 +127,7 @@ describe('VpcV1', () => {
   });
   describe('listVpcs', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVpcsTest() {
         // Construct the params object for operation listVpcs
         const start = 'testString';
         const limit = 1;
@@ -148,18 +148,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
-        expect(options.qs['classic_access']).toEqual(classicAccess);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.classic_access).toEqual(classicAccess);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpcsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpcsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpcsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -193,7 +208,7 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createVpcTest() {
         // Construct the params object for operation createVpc
         const addressPrefixManagement = 'manual';
         const classicAccess = false;
@@ -214,18 +229,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['address_prefix_management']).toEqual(addressPrefixManagement);
-        expect(options.body['classic_access']).toEqual(classicAccess);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.address_prefix_management).toEqual(addressPrefixManagement);
+        expect(mockRequestOptions.body.classic_access).toEqual(classicAccess);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVpcTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVpcTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVpcTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -252,7 +282,7 @@ describe('VpcV1', () => {
   });
   describe('deleteVpc', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteVpcTest() {
         // Construct the params object for operation deleteVpc
         const id = 'testString';
         const params = {
@@ -267,15 +297,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVpcTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVpcTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVpcTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -322,7 +367,7 @@ describe('VpcV1', () => {
   });
   describe('getVpc', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVpcTest() {
         // Construct the params object for operation getVpc
         const id = 'testString';
         const params = {
@@ -337,15 +382,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpcTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpcTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpcTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -392,7 +452,7 @@ describe('VpcV1', () => {
   });
   describe('updateVpc', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateVpcTest() {
         // Construct the params object for operation updateVpc
         const id = 'testString';
         const name = 'my-vpc';
@@ -409,16 +469,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVpcTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateVpcTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateVpcTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -465,7 +540,7 @@ describe('VpcV1', () => {
   });
   describe('getVpcDefaultNetworkAcl', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVpcDefaultNetworkAclTest() {
         // Construct the params object for operation getVpcDefaultNetworkAcl
         const id = 'testString';
         const params = {
@@ -480,15 +555,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{id}/default_network_acl', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{id}/default_network_acl', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpcDefaultNetworkAclTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpcDefaultNetworkAclTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpcDefaultNetworkAclTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -535,7 +625,7 @@ describe('VpcV1', () => {
   });
   describe('getVpcDefaultRoutingTable', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVpcDefaultRoutingTableTest() {
         // Construct the params object for operation getVpcDefaultRoutingTable
         const id = 'testString';
         const params = {
@@ -550,15 +640,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{id}/default_routing_table', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{id}/default_routing_table', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpcDefaultRoutingTableTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpcDefaultRoutingTableTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpcDefaultRoutingTableTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -605,7 +710,7 @@ describe('VpcV1', () => {
   });
   describe('getVpcDefaultSecurityGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVpcDefaultSecurityGroupTest() {
         // Construct the params object for operation getVpcDefaultSecurityGroup
         const id = 'testString';
         const params = {
@@ -620,15 +725,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{id}/default_security_group', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{id}/default_security_group', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpcDefaultSecurityGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpcDefaultSecurityGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpcDefaultSecurityGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -675,7 +795,7 @@ describe('VpcV1', () => {
   });
   describe('listVpcAddressPrefixes', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVpcAddressPrefixesTest() {
         // Construct the params object for operation listVpcAddressPrefixes
         const vpcId = 'testString';
         const start = 'testString';
@@ -694,17 +814,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/address_prefixes', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/address_prefixes', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpcAddressPrefixesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpcAddressPrefixesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpcAddressPrefixesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -758,7 +893,7 @@ describe('VpcV1', () => {
         name: 'us-south-1',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createVpcAddressPrefixTest() {
         // Construct the params object for operation createVpcAddressPrefix
         const vpcId = 'testString';
         const cidr = '10.0.0.0/24';
@@ -781,19 +916,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/address_prefixes', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/address_prefixes', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['cidr']).toEqual(cidr);
-        expect(options.body['zone']).toEqual(zone);
-        expect(options.body['is_default']).toEqual(isDefault);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(mockRequestOptions.body.cidr).toEqual(cidr);
+        expect(mockRequestOptions.body.zone).toEqual(zone);
+        expect(mockRequestOptions.body.is_default).toEqual(isDefault);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVpcAddressPrefixTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVpcAddressPrefixTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVpcAddressPrefixTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -844,7 +994,7 @@ describe('VpcV1', () => {
   });
   describe('deleteVpcAddressPrefix', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteVpcAddressPrefixTest() {
         // Construct the params object for operation deleteVpcAddressPrefix
         const vpcId = 'testString';
         const id = 'testString';
@@ -861,16 +1011,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/address_prefixes/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/address_prefixes/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVpcAddressPrefixTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVpcAddressPrefixTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVpcAddressPrefixTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -919,7 +1084,7 @@ describe('VpcV1', () => {
   });
   describe('getVpcAddressPrefix', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVpcAddressPrefixTest() {
         // Construct the params object for operation getVpcAddressPrefix
         const vpcId = 'testString';
         const id = 'testString';
@@ -936,16 +1101,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/address_prefixes/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/address_prefixes/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpcAddressPrefixTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpcAddressPrefixTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpcAddressPrefixTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -994,7 +1174,7 @@ describe('VpcV1', () => {
   });
   describe('updateVpcAddressPrefix', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateVpcAddressPrefixTest() {
         // Construct the params object for operation updateVpcAddressPrefix
         const vpcId = 'testString';
         const id = 'testString';
@@ -1015,18 +1195,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/address_prefixes/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/address_prefixes/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['is_default']).toEqual(isDefault);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.is_default).toEqual(isDefault);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVpcAddressPrefixTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateVpcAddressPrefixTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateVpcAddressPrefixTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1075,7 +1270,7 @@ describe('VpcV1', () => {
   });
   describe('listVpcRoutes', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVpcRoutesTest() {
         // Construct the params object for operation listVpcRoutes
         const vpcId = 'testString';
         const zoneName = 'testString';
@@ -1096,18 +1291,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routes', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/routes', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['zone.name']).toEqual(zoneName);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs['zone.name']).toEqual(zoneName);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpcRoutesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpcRoutesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpcRoutesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1166,12 +1376,12 @@ describe('VpcV1', () => {
         address: '192.168.3.4',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createVpcRouteTest() {
         // Construct the params object for operation createVpcRoute
         const vpcId = 'testString';
         const destination = '192.168.3.0/24';
         const zone = zoneIdentityModel;
-        const action = 'delegate';
+        const action = 'deliver';
         const name = 'my-route-2';
         const nextHop = routeNextHopPrototypeModel;
         const params = {
@@ -1191,20 +1401,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routes', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/routes', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['destination']).toEqual(destination);
-        expect(options.body['zone']).toEqual(zone);
-        expect(options.body['action']).toEqual(action);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['next_hop']).toEqual(nextHop);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(mockRequestOptions.body.destination).toEqual(destination);
+        expect(mockRequestOptions.body.zone).toEqual(zone);
+        expect(mockRequestOptions.body.action).toEqual(action);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.next_hop).toEqual(nextHop);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVpcRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVpcRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVpcRouteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1255,7 +1480,7 @@ describe('VpcV1', () => {
   });
   describe('deleteVpcRoute', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteVpcRouteTest() {
         // Construct the params object for operation deleteVpcRoute
         const vpcId = 'testString';
         const id = 'testString';
@@ -1272,16 +1497,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routes/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/routes/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVpcRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVpcRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVpcRouteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1330,7 +1570,7 @@ describe('VpcV1', () => {
   });
   describe('getVpcRoute', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVpcRouteTest() {
         // Construct the params object for operation getVpcRoute
         const vpcId = 'testString';
         const id = 'testString';
@@ -1347,16 +1587,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routes/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/routes/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpcRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpcRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpcRouteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1405,7 +1660,7 @@ describe('VpcV1', () => {
   });
   describe('updateVpcRoute', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateVpcRouteTest() {
         // Construct the params object for operation updateVpcRoute
         const vpcId = 'testString';
         const id = 'testString';
@@ -1424,17 +1679,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routes/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/routes/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVpcRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateVpcRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateVpcRouteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1483,7 +1753,7 @@ describe('VpcV1', () => {
   });
   describe('listVpcRoutingTables', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVpcRoutingTablesTest() {
         // Construct the params object for operation listVpcRoutingTables
         const vpcId = 'testString';
         const start = 'testString';
@@ -1504,18 +1774,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routing_tables', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/routing_tables', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['is_default']).toEqual(isDefault);
-        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.is_default).toEqual(isDefault);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpcRoutingTablesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpcRoutingTablesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpcRoutingTablesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1576,20 +1861,20 @@ describe('VpcV1', () => {
 
       // RoutePrototype
       const routePrototypeModel = {
-        action: 'delegate',
+        action: 'deliver',
         destination: '192.168.3.0/24',
         name: 'my-route-2',
         next_hop: routeNextHopPrototypeModel,
         zone: zoneIdentityModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createVpcRoutingTableTest() {
         // Construct the params object for operation createVpcRoutingTable
         const vpcId = 'testString';
         const name = 'my-routing-table-2';
-        const routeDirectLinkIngress = true;
-        const routeTransitGatewayIngress = true;
-        const routeVpcZoneIngress = true;
+        const routeDirectLinkIngress = false;
+        const routeTransitGatewayIngress = false;
+        const routeVpcZoneIngress = false;
         const routes = [routePrototypeModel];
         const params = {
           vpcId: vpcId,
@@ -1608,20 +1893,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routing_tables', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/routing_tables', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['route_direct_link_ingress']).toEqual(routeDirectLinkIngress);
-        expect(options.body['route_transit_gateway_ingress']).toEqual(routeTransitGatewayIngress);
-        expect(options.body['route_vpc_zone_ingress']).toEqual(routeVpcZoneIngress);
-        expect(options.body['routes']).toEqual(routes);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.route_direct_link_ingress).toEqual(routeDirectLinkIngress);
+        expect(mockRequestOptions.body.route_transit_gateway_ingress).toEqual(
+          routeTransitGatewayIngress
+        );
+        expect(mockRequestOptions.body.route_vpc_zone_ingress).toEqual(routeVpcZoneIngress);
+        expect(mockRequestOptions.body.routes).toEqual(routes);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVpcRoutingTableTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVpcRoutingTableTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVpcRoutingTableTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1668,7 +1970,7 @@ describe('VpcV1', () => {
   });
   describe('deleteVpcRoutingTable', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteVpcRoutingTableTest() {
         // Construct the params object for operation deleteVpcRoutingTable
         const vpcId = 'testString';
         const id = 'testString';
@@ -1685,16 +1987,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routing_tables/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/routing_tables/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVpcRoutingTableTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVpcRoutingTableTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVpcRoutingTableTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1743,7 +2060,7 @@ describe('VpcV1', () => {
   });
   describe('getVpcRoutingTable', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVpcRoutingTableTest() {
         // Construct the params object for operation getVpcRoutingTable
         const vpcId = 'testString';
         const id = 'testString';
@@ -1760,16 +2077,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routing_tables/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/routing_tables/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpcRoutingTableTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpcRoutingTableTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpcRoutingTableTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1818,7 +2150,7 @@ describe('VpcV1', () => {
   });
   describe('updateVpcRoutingTable', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateVpcRoutingTableTest() {
         // Construct the params object for operation updateVpcRoutingTable
         const vpcId = 'testString';
         const id = 'testString';
@@ -1843,20 +2175,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpcs/{vpc_id}/routing_tables/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/vpcs/{vpc_id}/routing_tables/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['route_direct_link_ingress']).toEqual(routeDirectLinkIngress);
-        expect(options.body['route_transit_gateway_ingress']).toEqual(routeTransitGatewayIngress);
-        expect(options.body['route_vpc_zone_ingress']).toEqual(routeVpcZoneIngress);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.route_direct_link_ingress).toEqual(routeDirectLinkIngress);
+        expect(mockRequestOptions.body.route_transit_gateway_ingress).toEqual(
+          routeTransitGatewayIngress
+        );
+        expect(mockRequestOptions.body.route_vpc_zone_ingress).toEqual(routeVpcZoneIngress);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVpcRoutingTableTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateVpcRoutingTableTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateVpcRoutingTableTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -1905,7 +2254,7 @@ describe('VpcV1', () => {
   });
   describe('listVpcRoutingTableRoutes', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVpcRoutingTableRoutesTest() {
         // Construct the params object for operation listVpcRoutingTableRoutes
         const vpcId = 'testString';
         const routingTableId = 'testString';
@@ -1926,22 +2275,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpcs/{vpc_id}/routing_tables/{routing_table_id}/routes',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['routing_table_id']).toEqual(routingTableId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.routing_table_id).toEqual(routingTableId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpcRoutingTableRoutesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpcRoutingTableRoutesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpcRoutingTableRoutesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2002,13 +2366,13 @@ describe('VpcV1', () => {
         address: '192.168.3.4',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createVpcRoutingTableRouteTest() {
         // Construct the params object for operation createVpcRoutingTableRoute
         const vpcId = 'testString';
         const routingTableId = 'testString';
         const destination = '192.168.3.0/24';
         const zone = zoneIdentityModel;
-        const action = 'delegate';
+        const action = 'deliver';
         const name = 'my-route-2';
         const nextHop = routeNextHopPrototypeModel;
         const params = {
@@ -2029,25 +2393,40 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpcs/{vpc_id}/routing_tables/{routing_table_id}/routes',
           'POST'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['destination']).toEqual(destination);
-        expect(options.body['zone']).toEqual(zone);
-        expect(options.body['action']).toEqual(action);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['next_hop']).toEqual(nextHop);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['routing_table_id']).toEqual(routingTableId);
+        expect(mockRequestOptions.body.destination).toEqual(destination);
+        expect(mockRequestOptions.body.zone).toEqual(zone);
+        expect(mockRequestOptions.body.action).toEqual(action);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.next_hop).toEqual(nextHop);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.routing_table_id).toEqual(routingTableId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVpcRoutingTableRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVpcRoutingTableRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVpcRoutingTableRouteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2100,7 +2479,7 @@ describe('VpcV1', () => {
   });
   describe('deleteVpcRoutingTableRoute', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteVpcRoutingTableRouteTest() {
         // Construct the params object for operation deleteVpcRoutingTableRoute
         const vpcId = 'testString';
         const routingTableId = 'testString';
@@ -2119,21 +2498,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpcs/{vpc_id}/routing_tables/{routing_table_id}/routes/{id}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['routing_table_id']).toEqual(routingTableId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.routing_table_id).toEqual(routingTableId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVpcRoutingTableRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVpcRoutingTableRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVpcRoutingTableRouteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2184,7 +2578,7 @@ describe('VpcV1', () => {
   });
   describe('getVpcRoutingTableRoute', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVpcRoutingTableRouteTest() {
         // Construct the params object for operation getVpcRoutingTableRoute
         const vpcId = 'testString';
         const routingTableId = 'testString';
@@ -2203,21 +2597,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpcs/{vpc_id}/routing_tables/{routing_table_id}/routes/{id}',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['routing_table_id']).toEqual(routingTableId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.routing_table_id).toEqual(routingTableId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpcRoutingTableRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpcRoutingTableRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpcRoutingTableRouteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2268,7 +2677,7 @@ describe('VpcV1', () => {
   });
   describe('updateVpcRoutingTableRoute', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateVpcRoutingTableRouteTest() {
         // Construct the params object for operation updateVpcRoutingTableRoute
         const vpcId = 'testString';
         const routingTableId = 'testString';
@@ -2289,22 +2698,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpcs/{vpc_id}/routing_tables/{routing_table_id}/routes/{id}',
           'PATCH'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpc_id']).toEqual(vpcId);
-        expect(options.path['routing_table_id']).toEqual(routingTableId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
+        expect(mockRequestOptions.path.routing_table_id).toEqual(routingTableId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVpcRoutingTableRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateVpcRoutingTableRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateVpcRoutingTableRouteTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2355,7 +2779,7 @@ describe('VpcV1', () => {
   });
   describe('listSubnets', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listSubnetsTest() {
         // Construct the params object for operation listSubnets
         const start = 'testString';
         const limit = 1;
@@ -2378,19 +2802,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/subnets', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
-        expect(options.qs['routing_table.id']).toEqual(routingTableId);
-        expect(options.qs['routing_table.name']).toEqual(routingTableName);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs['routing_table.id']).toEqual(routingTableId);
+        expect(mockRequestOptions.qs['routing_table.name']).toEqual(routingTableName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listSubnetsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listSubnetsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listSubnetsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2462,7 +2901,7 @@ describe('VpcV1', () => {
         zone: zoneIdentityModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createSubnetTest() {
         // Construct the params object for operation createSubnet
         const subnetPrototype = subnetPrototypeModel;
         const params = {
@@ -2477,15 +2916,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/subnets', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(subnetPrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body).toEqual(subnetPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createSubnetTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createSubnetTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createSubnetTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2532,7 +2986,7 @@ describe('VpcV1', () => {
   });
   describe('deleteSubnet', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteSubnetTest() {
         // Construct the params object for operation deleteSubnet
         const id = 'testString';
         const params = {
@@ -2547,15 +3001,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteSubnetTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteSubnetTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteSubnetTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2602,7 +3071,7 @@ describe('VpcV1', () => {
   });
   describe('getSubnet', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSubnetTest() {
         // Construct the params object for operation getSubnet
         const id = 'testString';
         const params = {
@@ -2617,15 +3086,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSubnetTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSubnetTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSubnetTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2689,7 +3173,7 @@ describe('VpcV1', () => {
         id: '6885e83f-03b2-4603-8a86-db2a0f55c840',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateSubnetTest() {
         // Construct the params object for operation updateSubnet
         const id = 'testString';
         const name = 'my-subnet';
@@ -2712,19 +3196,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['network_acl']).toEqual(networkAcl);
-        expect(options.body['public_gateway']).toEqual(publicGateway);
-        expect(options.body['routing_table']).toEqual(routingTable);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.network_acl).toEqual(networkAcl);
+        expect(mockRequestOptions.body.public_gateway).toEqual(publicGateway);
+        expect(mockRequestOptions.body.routing_table).toEqual(routingTable);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateSubnetTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateSubnetTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateSubnetTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2771,7 +3270,7 @@ describe('VpcV1', () => {
   });
   describe('getSubnetNetworkAcl', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSubnetNetworkAclTest() {
         // Construct the params object for operation getSubnetNetworkAcl
         const id = 'testString';
         const params = {
@@ -2786,15 +3285,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{id}/network_acl', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{id}/network_acl', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSubnetNetworkAclTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSubnetNetworkAclTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSubnetNetworkAclTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2848,7 +3362,7 @@ describe('VpcV1', () => {
         id: 'a4e28308-8ee7-46ab-8108-9f881f22bdbf',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __replaceSubnetNetworkAclTest() {
         // Construct the params object for operation replaceSubnetNetworkAcl
         const id = 'testString';
         const networkAclIdentity = networkAclIdentityModel;
@@ -2865,16 +3379,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{id}/network_acl', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{id}/network_acl', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(networkAclIdentity);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body).toEqual(networkAclIdentity);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __replaceSubnetNetworkAclTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __replaceSubnetNetworkAclTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __replaceSubnetNetworkAclTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2923,7 +3452,7 @@ describe('VpcV1', () => {
   });
   describe('unsetSubnetPublicGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __unsetSubnetPublicGatewayTest() {
         // Construct the params object for operation unsetSubnetPublicGateway
         const id = 'testString';
         const params = {
@@ -2938,15 +3467,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{id}/public_gateway', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{id}/public_gateway', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __unsetSubnetPublicGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __unsetSubnetPublicGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __unsetSubnetPublicGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -2993,7 +3537,7 @@ describe('VpcV1', () => {
   });
   describe('getSubnetPublicGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSubnetPublicGatewayTest() {
         // Construct the params object for operation getSubnetPublicGateway
         const id = 'testString';
         const params = {
@@ -3008,15 +3552,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{id}/public_gateway', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{id}/public_gateway', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSubnetPublicGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSubnetPublicGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSubnetPublicGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3070,7 +3629,7 @@ describe('VpcV1', () => {
         id: 'dc5431ef-1fc6-4861-adc9-a59d077d1241',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __setSubnetPublicGatewayTest() {
         // Construct the params object for operation setSubnetPublicGateway
         const id = 'testString';
         const publicGatewayIdentity = publicGatewayIdentityModel;
@@ -3087,16 +3646,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{id}/public_gateway', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{id}/public_gateway', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(publicGatewayIdentity);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body).toEqual(publicGatewayIdentity);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __setSubnetPublicGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __setSubnetPublicGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __setSubnetPublicGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3145,7 +3719,7 @@ describe('VpcV1', () => {
   });
   describe('getSubnetRoutingTable', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSubnetRoutingTableTest() {
         // Construct the params object for operation getSubnetRoutingTable
         const id = 'testString';
         const params = {
@@ -3160,15 +3734,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{id}/routing_table', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{id}/routing_table', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSubnetRoutingTableTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSubnetRoutingTableTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSubnetRoutingTableTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3222,7 +3811,7 @@ describe('VpcV1', () => {
         id: '1a15dca5-7e33-45e1-b7c5-bc690e569531',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __replaceSubnetRoutingTableTest() {
         // Construct the params object for operation replaceSubnetRoutingTable
         const id = 'testString';
         const routingTableIdentity = routingTableIdentityModel;
@@ -3239,16 +3828,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{id}/routing_table', 'PUT');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{id}/routing_table', 'PUT');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(routingTableIdentity);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body).toEqual(routingTableIdentity);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __replaceSubnetRoutingTableTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __replaceSubnetRoutingTableTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __replaceSubnetRoutingTableTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3297,7 +3901,7 @@ describe('VpcV1', () => {
   });
   describe('listSubnetReservedIps', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listSubnetReservedIpsTest() {
         // Construct the params object for operation listSubnetReservedIps
         const subnetId = 'testString';
         const start = 'testString';
@@ -3318,18 +3922,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{subnet_id}/reserved_ips', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{subnet_id}/reserved_ips', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['sort']).toEqual(sort);
-        expect(options.path['subnet_id']).toEqual(subnetId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.path.subnet_id).toEqual(subnetId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listSubnetReservedIpsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listSubnetReservedIpsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listSubnetReservedIpsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3383,7 +4002,7 @@ describe('VpcV1', () => {
         id: 'd7cc5196-9864-48c4-82d8-3f30da41fcc5',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createSubnetReservedIpTest() {
         // Construct the params object for operation createSubnetReservedIp
         const subnetId = 'testString';
         const autoDelete = false;
@@ -3404,18 +4023,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{subnet_id}/reserved_ips', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{subnet_id}/reserved_ips', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['auto_delete']).toEqual(autoDelete);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['target']).toEqual(target);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['subnet_id']).toEqual(subnetId);
+        expect(mockRequestOptions.body.auto_delete).toEqual(autoDelete);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.subnet_id).toEqual(subnetId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createSubnetReservedIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createSubnetReservedIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createSubnetReservedIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3462,7 +4096,7 @@ describe('VpcV1', () => {
   });
   describe('deleteSubnetReservedIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteSubnetReservedIpTest() {
         // Construct the params object for operation deleteSubnetReservedIp
         const subnetId = 'testString';
         const id = 'testString';
@@ -3479,16 +4113,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{subnet_id}/reserved_ips/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{subnet_id}/reserved_ips/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['subnet_id']).toEqual(subnetId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.subnet_id).toEqual(subnetId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteSubnetReservedIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteSubnetReservedIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteSubnetReservedIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3537,7 +4186,7 @@ describe('VpcV1', () => {
   });
   describe('getSubnetReservedIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSubnetReservedIpTest() {
         // Construct the params object for operation getSubnetReservedIp
         const subnetId = 'testString';
         const id = 'testString';
@@ -3554,16 +4203,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{subnet_id}/reserved_ips/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{subnet_id}/reserved_ips/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['subnet_id']).toEqual(subnetId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.subnet_id).toEqual(subnetId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSubnetReservedIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSubnetReservedIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSubnetReservedIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3612,7 +4276,7 @@ describe('VpcV1', () => {
   });
   describe('updateSubnetReservedIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateSubnetReservedIpTest() {
         // Construct the params object for operation updateSubnetReservedIp
         const subnetId = 'testString';
         const id = 'testString';
@@ -3633,18 +4297,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/subnets/{subnet_id}/reserved_ips/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/subnets/{subnet_id}/reserved_ips/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['auto_delete']).toEqual(autoDelete);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['subnet_id']).toEqual(subnetId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.auto_delete).toEqual(autoDelete);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.subnet_id).toEqual(subnetId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateSubnetReservedIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateSubnetReservedIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateSubnetReservedIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3693,7 +4372,7 @@ describe('VpcV1', () => {
   });
   describe('listImages', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listImagesTest() {
         // Construct the params object for operation listImages
         const start = 'testString';
         const limit = 1;
@@ -3716,19 +4395,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/images', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/images', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['visibility']).toEqual(visibility);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.visibility).toEqual(visibility);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listImagesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listImagesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listImagesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3788,7 +4482,7 @@ describe('VpcV1', () => {
         operating_system: operatingSystemIdentityModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createImageTest() {
         // Construct the params object for operation createImage
         const imagePrototype = imagePrototypeModel;
         const params = {
@@ -3803,15 +4497,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/images', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/images', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(imagePrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body).toEqual(imagePrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createImageTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createImageTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createImageTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3858,7 +4567,7 @@ describe('VpcV1', () => {
   });
   describe('deleteImage', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteImageTest() {
         // Construct the params object for operation deleteImage
         const id = 'testString';
         const params = {
@@ -3873,15 +4582,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/images/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/images/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteImageTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteImageTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteImageTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3928,7 +4652,7 @@ describe('VpcV1', () => {
   });
   describe('getImage', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getImageTest() {
         // Construct the params object for operation getImage
         const id = 'testString';
         const params = {
@@ -3943,15 +4667,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/images/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/images/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getImageTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getImageTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getImageTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -3998,7 +4737,7 @@ describe('VpcV1', () => {
   });
   describe('updateImage', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateImageTest() {
         // Construct the params object for operation updateImage
         const id = 'testString';
         const name = 'my-image';
@@ -4015,16 +4754,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/images/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/images/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateImageTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateImageTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateImageTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4071,7 +4825,7 @@ describe('VpcV1', () => {
   });
   describe('listOperatingSystems', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listOperatingSystemsTest() {
         // Construct the params object for operation listOperatingSystems
         const start = 'testString';
         const limit = 1;
@@ -4088,16 +4842,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/operating_systems', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/operating_systems', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listOperatingSystemsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listOperatingSystemsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listOperatingSystemsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4124,7 +4893,7 @@ describe('VpcV1', () => {
   });
   describe('getOperatingSystem', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getOperatingSystemTest() {
         // Construct the params object for operation getOperatingSystem
         const name = 'testString';
         const params = {
@@ -4139,15 +4908,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/operating_systems/{name}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/operating_systems/{name}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['name']).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.name).toEqual(name);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getOperatingSystemTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getOperatingSystemTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getOperatingSystemTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4194,7 +4978,7 @@ describe('VpcV1', () => {
   });
   describe('listKeys', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listKeysTest() {
         // Construct the params object for operation listKeys
         const start = 'testString';
         const limit = 1;
@@ -4213,17 +4997,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/keys', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/keys', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listKeysTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listKeysTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listKeysTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4257,7 +5056,7 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createKeyTest() {
         // Construct the params object for operation createKey
         const publicKey =
           'AAAAB3NzaC1yc2EAAAADAQABAAABAQDDGe50Bxa5T5NDddrrtbx2Y4/VGbiCgXqnBsYToIUKoFSHTQl5IX3PasGnneKanhcLwWz5M5MoCRvhxTp66NKzIfAz7r+FX9rxgR+ZgcM253YAqOVeIpOU408simDZKriTlN8kYsXL7P34tsWuAJf4MgZtJAQxous/2byetpdCv8ddnT4X3ltOg9w+LqSCPYfNivqH00Eh7S1Ldz7I8aw5WOp5a+sQFP/RbwfpwHp+ny7DfeIOokcuI42tJkoBn7UsLTVpCSmXr2EDRlSWe/1M/iHNRBzaT3CK0+SwZWd2AEjePxSnWKNGIEUJDlUYp7hKhiQcgT5ZAnWU121oc5En';
@@ -4279,18 +5078,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/keys', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/keys', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['public_key']).toEqual(publicKey);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.body['type']).toEqual(type);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.public_key).toEqual(publicKey);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createKeyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createKeyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createKeyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4338,7 +5152,7 @@ describe('VpcV1', () => {
   });
   describe('deleteKey', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteKeyTest() {
         // Construct the params object for operation deleteKey
         const id = 'testString';
         const params = {
@@ -4353,15 +5167,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/keys/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/keys/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteKeyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteKeyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteKeyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4408,7 +5237,7 @@ describe('VpcV1', () => {
   });
   describe('getKey', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getKeyTest() {
         // Construct the params object for operation getKey
         const id = 'testString';
         const params = {
@@ -4423,15 +5252,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/keys/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/keys/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getKeyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getKeyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getKeyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4478,7 +5322,7 @@ describe('VpcV1', () => {
   });
   describe('updateKey', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateKeyTest() {
         // Construct the params object for operation updateKey
         const id = 'testString';
         const name = 'my-key';
@@ -4495,16 +5339,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/keys/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/keys/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateKeyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateKeyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateKeyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4551,7 +5410,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceProfiles', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceProfilesTest() {
         // Construct the params object for operation listInstanceProfiles
         const params = {};
 
@@ -4563,14 +5422,29 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance/profiles', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instance/profiles', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceProfilesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceProfilesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceProfilesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4597,7 +5471,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceProfile', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceProfileTest() {
         // Construct the params object for operation getInstanceProfile
         const name = 'testString';
         const params = {
@@ -4612,15 +5486,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance/profiles/{name}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instance/profiles/{name}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['name']).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.name).toEqual(name);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceProfileTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceProfileTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceProfileTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4667,7 +5556,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceTemplates', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceTemplatesTest() {
         // Construct the params object for operation listInstanceTemplates
         const params = {};
 
@@ -4679,14 +5568,29 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance/templates', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instance/templates', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceTemplatesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceTemplatesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceTemplatesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4784,7 +5688,7 @@ describe('VpcV1', () => {
 
       // VolumePrototypeInstanceByImageContext
       const volumePrototypeInstanceByImageContextModel = {
-        capacity: 100,
+        capacity: 38,
         encryption_key: encryptionKeyIdentityModel,
         iops: 10000,
         name: 'my-volume',
@@ -4816,6 +5720,7 @@ describe('VpcV1', () => {
         placement_target: instancePlacementTargetPrototypeModel,
         profile: instanceProfileIdentityModel,
         resource_group: resourceGroupIdentityModel,
+        total_volume_bandwidth: 500,
         user_data: 'testString',
         volume_attachments: [volumeAttachmentPrototypeInstanceContextModel],
         vpc: vpcIdentityModel,
@@ -4825,7 +5730,7 @@ describe('VpcV1', () => {
         zone: zoneIdentityModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createInstanceTemplateTest() {
         // Construct the params object for operation createInstanceTemplate
         const instanceTemplatePrototype = instanceTemplatePrototypeModel;
         const params = {
@@ -4840,15 +5745,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance/templates', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/instance/templates', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(instanceTemplatePrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body).toEqual(instanceTemplatePrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceTemplateTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4895,7 +5815,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstanceTemplate', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceTemplateTest() {
         // Construct the params object for operation deleteInstanceTemplate
         const id = 'testString';
         const params = {
@@ -4910,15 +5830,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance/templates/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/instance/templates/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceTemplateTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -4965,7 +5900,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceTemplate', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceTemplateTest() {
         // Construct the params object for operation getInstanceTemplate
         const id = 'testString';
         const params = {
@@ -4980,15 +5915,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance/templates/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instance/templates/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceTemplateTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5035,7 +5985,7 @@ describe('VpcV1', () => {
   });
   describe('updateInstanceTemplate', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateInstanceTemplateTest() {
         // Construct the params object for operation updateInstanceTemplate
         const id = 'testString';
         const name = 'my-instance-template';
@@ -5052,16 +6002,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance/templates/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/instance/templates/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceTemplateTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceTemplateTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceTemplateTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5108,7 +6073,7 @@ describe('VpcV1', () => {
   });
   describe('listInstances', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstancesTest() {
         // Construct the params object for operation listInstances
         const start = 'testString';
         const limit = 1;
@@ -5120,6 +6085,9 @@ describe('VpcV1', () => {
         const dedicatedHostId = 'testString';
         const dedicatedHostCrn = 'testString';
         const dedicatedHostName = 'testString';
+        const placementGroupId = 'testString';
+        const placementGroupCrn = 'testString';
+        const placementGroupName = 'testString';
         const params = {
           start: start,
           limit: limit,
@@ -5131,6 +6099,9 @@ describe('VpcV1', () => {
           dedicatedHostId: dedicatedHostId,
           dedicatedHostCrn: dedicatedHostCrn,
           dedicatedHostName: dedicatedHostName,
+          placementGroupId: placementGroupId,
+          placementGroupCrn: placementGroupCrn,
+          placementGroupName: placementGroupName,
         };
 
         const listInstancesResult = vpcService.listInstances(params);
@@ -5141,24 +6112,42 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instances', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['vpc.id']).toEqual(vpcId);
-        expect(options.qs['vpc.crn']).toEqual(vpcCrn);
-        expect(options.qs['vpc.name']).toEqual(vpcName);
-        expect(options.qs['dedicated_host.id']).toEqual(dedicatedHostId);
-        expect(options.qs['dedicated_host.crn']).toEqual(dedicatedHostCrn);
-        expect(options.qs['dedicated_host.name']).toEqual(dedicatedHostName);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs['vpc.id']).toEqual(vpcId);
+        expect(mockRequestOptions.qs['vpc.crn']).toEqual(vpcCrn);
+        expect(mockRequestOptions.qs['vpc.name']).toEqual(vpcName);
+        expect(mockRequestOptions.qs['dedicated_host.id']).toEqual(dedicatedHostId);
+        expect(mockRequestOptions.qs['dedicated_host.crn']).toEqual(dedicatedHostCrn);
+        expect(mockRequestOptions.qs['dedicated_host.name']).toEqual(dedicatedHostName);
+        expect(mockRequestOptions.qs['placement_group.id']).toEqual(placementGroupId);
+        expect(mockRequestOptions.qs['placement_group.crn']).toEqual(placementGroupCrn);
+        expect(mockRequestOptions.qs['placement_group.name']).toEqual(placementGroupName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstancesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstancesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstancesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5259,7 +6248,7 @@ describe('VpcV1', () => {
 
       // VolumePrototypeInstanceByImageContext
       const volumePrototypeInstanceByImageContextModel = {
-        capacity: 100,
+        capacity: 38,
         encryption_key: encryptionKeyIdentityModel,
         iops: 10000,
         name: 'my-boot-volume',
@@ -5291,6 +6280,7 @@ describe('VpcV1', () => {
         placement_target: instancePlacementTargetPrototypeModel,
         profile: instanceProfileIdentityModel,
         resource_group: resourceGroupIdentityModel,
+        total_volume_bandwidth: 500,
         user_data: 'testString',
         volume_attachments: [volumeAttachmentPrototypeInstanceContextModel],
         vpc: vpcIdentityModel,
@@ -5300,7 +6290,7 @@ describe('VpcV1', () => {
         zone: zoneIdentityModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createInstanceTest() {
         // Construct the params object for operation createInstance
         const instancePrototype = instancePrototypeModel;
         const params = {
@@ -5315,15 +6305,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/instances', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(instancePrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body).toEqual(instancePrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5370,7 +6375,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstance', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceTest() {
         // Construct the params object for operation deleteInstance
         const id = 'testString';
         const params = {
@@ -5385,15 +6390,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/instances/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5440,7 +6460,7 @@ describe('VpcV1', () => {
   });
   describe('getInstance', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceTest() {
         // Construct the params object for operation getInstance
         const id = 'testString';
         const params = {
@@ -5455,15 +6475,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instances/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5517,15 +6552,17 @@ describe('VpcV1', () => {
         name: 'bc1-4x16',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateInstanceTest() {
         // Construct the params object for operation updateInstance
         const id = 'testString';
         const name = 'my-instance';
         const profile = instancePatchProfileModel;
+        const totalVolumeBandwidth = 500;
         const params = {
           id: id,
           name: name,
           profile: profile,
+          totalVolumeBandwidth: totalVolumeBandwidth,
         };
 
         const updateInstanceResult = vpcService.updateInstance(params);
@@ -5536,17 +6573,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/instances/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['profile']).toEqual(profile);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.profile).toEqual(profile);
+        expect(mockRequestOptions.body.total_volume_bandwidth).toEqual(totalVolumeBandwidth);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5593,7 +6646,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceInitialization', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceInitializationTest() {
         // Construct the params object for operation getInstanceInitialization
         const id = 'testString';
         const params = {
@@ -5608,15 +6661,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{id}/initialization', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instances/{id}/initialization', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceInitializationTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceInitializationTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceInitializationTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5663,7 +6731,7 @@ describe('VpcV1', () => {
   });
   describe('createInstanceAction', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createInstanceActionTest() {
         // Construct the params object for operation createInstanceAction
         const instanceId = 'testString';
         const type = 'reboot';
@@ -5682,17 +6750,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/actions', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/instances/{instance_id}/actions', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['type']).toEqual(type);
-        expect(options.body['force']).toEqual(force);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.body.force).toEqual(force);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceActionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceActionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceActionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5741,7 +6824,7 @@ describe('VpcV1', () => {
   });
   describe('createInstanceConsoleAccessToken', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createInstanceConsoleAccessTokenTest() {
         // Construct the params object for operation createInstanceConsoleAccessToken
         const instanceId = 'testString';
         const consoleType = 'serial';
@@ -5762,17 +6845,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/console_access_token', 'POST');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/console_access_token',
+          'POST'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['console_type']).toEqual(consoleType);
-        expect(options.body['force']).toEqual(force);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
+        expect(mockRequestOptions.body.console_type).toEqual(consoleType);
+        expect(mockRequestOptions.body.force).toEqual(force);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceConsoleAccessTokenTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceConsoleAccessTokenTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceConsoleAccessTokenTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5821,7 +6923,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceDisks', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceDisksTest() {
         // Construct the params object for operation listInstanceDisks
         const instanceId = 'testString';
         const params = {
@@ -5836,15 +6938,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/disks', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instances/{instance_id}/disks', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceDisksTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceDisksTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceDisksTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5891,7 +7008,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceDisk', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceDiskTest() {
         // Construct the params object for operation getInstanceDisk
         const instanceId = 'testString';
         const id = 'testString';
@@ -5908,16 +7025,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/disks/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instances/{instance_id}/disks/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceDiskTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceDiskTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceDiskTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -5966,7 +7098,7 @@ describe('VpcV1', () => {
   });
   describe('updateInstanceDisk', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateInstanceDiskTest() {
         // Construct the params object for operation updateInstanceDisk
         const instanceId = 'testString';
         const id = 'testString';
@@ -5985,17 +7117,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/disks/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/instances/{instance_id}/disks/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceDiskTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceDiskTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceDiskTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6044,7 +7191,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceNetworkInterfaces', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceNetworkInterfacesTest() {
         // Construct the params object for operation listInstanceNetworkInterfaces
         const instanceId = 'testString';
         const params = {
@@ -6061,15 +7208,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/network_interfaces', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instances/{instance_id}/network_interfaces', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceNetworkInterfacesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceNetworkInterfacesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceNetworkInterfacesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6128,7 +7290,7 @@ describe('VpcV1', () => {
         id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createInstanceNetworkInterfaceTest() {
         // Construct the params object for operation createInstanceNetworkInterface
         const instanceId = 'testString';
         const subnet = subnetIdentityModel;
@@ -6155,20 +7317,39 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/network_interfaces', 'POST');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_interfaces',
+          'POST'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['subnet']).toEqual(subnet);
-        expect(options.body['allow_ip_spoofing']).toEqual(allowIpSpoofing);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['primary_ipv4_address']).toEqual(primaryIpv4Address);
-        expect(options.body['security_groups']).toEqual(securityGroups);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
+        expect(mockRequestOptions.body.subnet).toEqual(subnet);
+        expect(mockRequestOptions.body.allow_ip_spoofing).toEqual(allowIpSpoofing);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.primary_ipv4_address).toEqual(primaryIpv4Address);
+        expect(mockRequestOptions.body.security_groups).toEqual(securityGroups);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceNetworkInterfaceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6217,7 +7398,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstanceNetworkInterface', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceNetworkInterfaceTest() {
         // Construct the params object for operation deleteInstanceNetworkInterface
         const instanceId = 'testString';
         const id = 'testString';
@@ -6236,16 +7417,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/network_interfaces/{id}', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_interfaces/{id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceNetworkInterfaceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6294,7 +7494,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceNetworkInterface', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceNetworkInterfaceTest() {
         // Construct the params object for operation getInstanceNetworkInterface
         const instanceId = 'testString';
         const id = 'testString';
@@ -6311,16 +7511,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/network_interfaces/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_interfaces/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceNetworkInterfaceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6369,7 +7588,7 @@ describe('VpcV1', () => {
   });
   describe('updateInstanceNetworkInterface', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateInstanceNetworkInterfaceTest() {
         // Construct the params object for operation updateInstanceNetworkInterface
         const instanceId = 'testString';
         const id = 'testString';
@@ -6392,18 +7611,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/network_interfaces/{id}', 'PATCH');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_interfaces/{id}',
+          'PATCH'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['allow_ip_spoofing']).toEqual(allowIpSpoofing);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.allow_ip_spoofing).toEqual(allowIpSpoofing);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceNetworkInterfaceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6452,7 +7690,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceNetworkInterfaceFloatingIps', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceNetworkInterfaceFloatingIpsTest() {
         // Construct the params object for operation listInstanceNetworkInterfaceFloatingIps
         const instanceId = 'testString';
         const networkInterfaceId = 'testString';
@@ -6471,20 +7709,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['network_interface_id']).toEqual(networkInterfaceId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceNetworkInterfaceFloatingIpsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceNetworkInterfaceFloatingIpsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceNetworkInterfaceFloatingIpsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6533,7 +7786,7 @@ describe('VpcV1', () => {
   });
   describe('removeInstanceNetworkInterfaceFloatingIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __removeInstanceNetworkInterfaceFloatingIpTest() {
         // Construct the params object for operation removeInstanceNetworkInterfaceFloatingIp
         const instanceId = 'testString';
         const networkInterfaceId = 'testString';
@@ -6554,21 +7807,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['network_interface_id']).toEqual(networkInterfaceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeInstanceNetworkInterfaceFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __removeInstanceNetworkInterfaceFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __removeInstanceNetworkInterfaceFloatingIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6619,7 +7887,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceNetworkInterfaceFloatingIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceNetworkInterfaceFloatingIpTest() {
         // Construct the params object for operation getInstanceNetworkInterfaceFloatingIp
         const instanceId = 'testString';
         const networkInterfaceId = 'testString';
@@ -6640,21 +7908,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['network_interface_id']).toEqual(networkInterfaceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceNetworkInterfaceFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceNetworkInterfaceFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceNetworkInterfaceFloatingIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6705,7 +7988,7 @@ describe('VpcV1', () => {
   });
   describe('addInstanceNetworkInterfaceFloatingIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __addInstanceNetworkInterfaceFloatingIpTest() {
         // Construct the params object for operation addInstanceNetworkInterfaceFloatingIp
         const instanceId = 'testString';
         const networkInterfaceId = 'testString';
@@ -6726,21 +8009,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instances/{instance_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
           'PUT'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['network_interface_id']).toEqual(networkInterfaceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addInstanceNetworkInterfaceFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __addInstanceNetworkInterfaceFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __addInstanceNetworkInterfaceFloatingIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6791,7 +8089,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceVolumeAttachments', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceVolumeAttachmentsTest() {
         // Construct the params object for operation listInstanceVolumeAttachments
         const instanceId = 'testString';
         const params = {
@@ -6808,15 +8106,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/volume_attachments', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instances/{instance_id}/volume_attachments', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceVolumeAttachmentsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceVolumeAttachmentsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceVolumeAttachmentsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6870,11 +8183,11 @@ describe('VpcV1', () => {
         id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createInstanceVolumeAttachmentTest() {
         // Construct the params object for operation createInstanceVolumeAttachment
         const instanceId = 'testString';
         const volume = volumeAttachmentPrototypeVolumeModel;
-        const deleteVolumeOnInstanceDelete = true;
+        const deleteVolumeOnInstanceDelete = false;
         const name = 'my-volume-attachment';
         const params = {
           instanceId: instanceId,
@@ -6893,20 +8206,39 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/volume_attachments', 'POST');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/volume_attachments',
+          'POST'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['volume']).toEqual(volume);
-        expect(options.body['delete_volume_on_instance_delete']).toEqual(
+        expect(mockRequestOptions.body.volume).toEqual(volume);
+        expect(mockRequestOptions.body.delete_volume_on_instance_delete).toEqual(
           deleteVolumeOnInstanceDelete
         );
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceVolumeAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceVolumeAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceVolumeAttachmentTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -6955,7 +8287,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstanceVolumeAttachment', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceVolumeAttachmentTest() {
         // Construct the params object for operation deleteInstanceVolumeAttachment
         const instanceId = 'testString';
         const id = 'testString';
@@ -6974,16 +8306,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/volume_attachments/{id}', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/volume_attachments/{id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceVolumeAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceVolumeAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceVolumeAttachmentTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7032,7 +8383,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceVolumeAttachment', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceVolumeAttachmentTest() {
         // Construct the params object for operation getInstanceVolumeAttachment
         const instanceId = 'testString';
         const id = 'testString';
@@ -7049,16 +8400,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/volume_attachments/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/volume_attachments/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceVolumeAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceVolumeAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceVolumeAttachmentTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7107,7 +8477,7 @@ describe('VpcV1', () => {
   });
   describe('updateInstanceVolumeAttachment', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateInstanceVolumeAttachmentTest() {
         // Construct the params object for operation updateInstanceVolumeAttachment
         const instanceId = 'testString';
         const id = 'testString';
@@ -7130,20 +8500,39 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instances/{instance_id}/volume_attachments/{id}', 'PATCH');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/volume_attachments/{id}',
+          'PATCH'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['delete_volume_on_instance_delete']).toEqual(
+        expect(mockRequestOptions.body.delete_volume_on_instance_delete).toEqual(
           deleteVolumeOnInstanceDelete
         );
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_id']).toEqual(instanceId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceVolumeAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceVolumeAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceVolumeAttachmentTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7192,7 +8581,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceGroups', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceGroupsTest() {
         // Construct the params object for operation listInstanceGroups
         const start = 'testString';
         const limit = 1;
@@ -7209,16 +8598,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instance_groups', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceGroupsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceGroupsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceGroupsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7272,7 +8676,7 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createInstanceGroupTest() {
         // Construct the params object for operation createInstanceGroup
         const instanceTemplate = instanceTemplateIdentityModel;
         const subnets = [subnetIdentityModel];
@@ -7301,22 +8705,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/instance_groups', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['instance_template']).toEqual(instanceTemplate);
-        expect(options.body['subnets']).toEqual(subnets);
-        expect(options.body['application_port']).toEqual(applicationPort);
-        expect(options.body['load_balancer']).toEqual(loadBalancer);
-        expect(options.body['load_balancer_pool']).toEqual(loadBalancerPool);
-        expect(options.body['membership_count']).toEqual(membershipCount);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.instance_template).toEqual(instanceTemplate);
+        expect(mockRequestOptions.body.subnets).toEqual(subnets);
+        expect(mockRequestOptions.body.application_port).toEqual(applicationPort);
+        expect(mockRequestOptions.body.load_balancer).toEqual(loadBalancer);
+        expect(mockRequestOptions.body.load_balancer_pool).toEqual(loadBalancerPool);
+        expect(mockRequestOptions.body.membership_count).toEqual(membershipCount);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7365,7 +8784,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstanceGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceGroupTest() {
         // Construct the params object for operation deleteInstanceGroup
         const id = 'testString';
         const params = {
@@ -7380,15 +8799,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/instance_groups/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7435,7 +8869,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceGroupTest() {
         // Construct the params object for operation getInstanceGroup
         const id = 'testString';
         const params = {
@@ -7450,15 +8884,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/instance_groups/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7527,7 +8976,7 @@ describe('VpcV1', () => {
         id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateInstanceGroupTest() {
         // Construct the params object for operation updateInstanceGroup
         const id = 'testString';
         const applicationPort = 22;
@@ -7556,22 +9005,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/instance_groups/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['application_port']).toEqual(applicationPort);
-        expect(options.body['instance_template']).toEqual(instanceTemplate);
-        expect(options.body['load_balancer']).toEqual(loadBalancer);
-        expect(options.body['load_balancer_pool']).toEqual(loadBalancerPool);
-        expect(options.body['membership_count']).toEqual(membershipCount);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['subnets']).toEqual(subnets);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.application_port).toEqual(applicationPort);
+        expect(mockRequestOptions.body.instance_template).toEqual(instanceTemplate);
+        expect(mockRequestOptions.body.load_balancer).toEqual(loadBalancer);
+        expect(mockRequestOptions.body.load_balancer_pool).toEqual(loadBalancerPool);
+        expect(mockRequestOptions.body.membership_count).toEqual(membershipCount);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.subnets).toEqual(subnets);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7618,7 +9082,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstanceGroupLoadBalancer', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceGroupLoadBalancerTest() {
         // Construct the params object for operation deleteInstanceGroupLoadBalancer
         const instanceGroupId = 'testString';
         const params = {
@@ -7635,15 +9099,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{instance_group_id}/load_balancer', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instance_groups/{instance_group_id}/load_balancer',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceGroupLoadBalancerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceGroupLoadBalancerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceGroupLoadBalancerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7690,7 +9173,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceGroupManagers', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceGroupManagersTest() {
         // Construct the params object for operation listInstanceGroupManagers
         const instanceGroupId = 'testString';
         const start = 'testString';
@@ -7709,17 +9192,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{instance_group_id}/managers', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instance_groups/{instance_group_id}/managers',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceGroupManagersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceGroupManagersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceGroupManagersTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7779,7 +9281,7 @@ describe('VpcV1', () => {
         min_membership_count: 10,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createInstanceGroupManagerTest() {
         // Construct the params object for operation createInstanceGroupManager
         const instanceGroupId = 'testString';
         const instanceGroupManagerPrototype = instanceGroupManagerPrototypeModel;
@@ -7796,16 +9298,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{instance_group_id}/managers', 'POST');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instance_groups/{instance_group_id}/managers',
+          'POST'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(instanceGroupManagerPrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
+        expect(mockRequestOptions.body).toEqual(instanceGroupManagerPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceGroupManagerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceGroupManagerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceGroupManagerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7854,7 +9375,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstanceGroupManager', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceGroupManagerTest() {
         // Construct the params object for operation deleteInstanceGroupManager
         const instanceGroupId = 'testString';
         const id = 'testString';
@@ -7871,16 +9392,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{instance_group_id}/managers/{id}', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instance_groups/{instance_group_id}/managers/{id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceGroupManagerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceGroupManagerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceGroupManagerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -7929,7 +9469,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceGroupManager', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceGroupManagerTest() {
         // Construct the params object for operation getInstanceGroupManager
         const instanceGroupId = 'testString';
         const id = 'testString';
@@ -7946,16 +9486,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{instance_group_id}/managers/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instance_groups/{instance_group_id}/managers/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceGroupManagerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceGroupManagerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceGroupManagerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8004,7 +9563,7 @@ describe('VpcV1', () => {
   });
   describe('updateInstanceGroupManager', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateInstanceGroupManagerTest() {
         // Construct the params object for operation updateInstanceGroupManager
         const instanceGroupId = 'testString';
         const id = 'testString';
@@ -8033,22 +9592,41 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{instance_group_id}/managers/{id}', 'PATCH');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instance_groups/{instance_group_id}/managers/{id}',
+          'PATCH'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['aggregation_window']).toEqual(aggregationWindow);
-        expect(options.body['cooldown']).toEqual(cooldown);
-        expect(options.body['management_enabled']).toEqual(managementEnabled);
-        expect(options.body['max_membership_count']).toEqual(maxMembershipCount);
-        expect(options.body['min_membership_count']).toEqual(minMembershipCount);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.aggregation_window).toEqual(aggregationWindow);
+        expect(mockRequestOptions.body.cooldown).toEqual(cooldown);
+        expect(mockRequestOptions.body.management_enabled).toEqual(managementEnabled);
+        expect(mockRequestOptions.body.max_membership_count).toEqual(maxMembershipCount);
+        expect(mockRequestOptions.body.min_membership_count).toEqual(minMembershipCount);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceGroupManagerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceGroupManagerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceGroupManagerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8097,7 +9675,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceGroupManagerActions', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceGroupManagerActionsTest() {
         // Construct the params object for operation listInstanceGroupManagerActions
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
@@ -8120,22 +9698,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.instance_group_manager_id).toEqual(instanceGroupManagerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceGroupManagerActionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceGroupManagerActionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceGroupManagerActionsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8198,7 +9791,7 @@ describe('VpcV1', () => {
         group: instanceGroupManagerScheduledActionGroupPrototypeModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createInstanceGroupManagerActionTest() {
         // Construct the params object for operation createInstanceGroupManagerAction
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
@@ -8219,21 +9812,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions',
           'POST'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(instanceGroupManagerActionPrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
+        expect(mockRequestOptions.body).toEqual(instanceGroupManagerActionPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.instance_group_manager_id).toEqual(instanceGroupManagerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceGroupManagerActionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceGroupManagerActionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceGroupManagerActionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8284,7 +9892,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstanceGroupManagerAction', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceGroupManagerActionTest() {
         // Construct the params object for operation deleteInstanceGroupManagerAction
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
@@ -8305,21 +9913,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions/{id}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.instance_group_manager_id).toEqual(instanceGroupManagerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceGroupManagerActionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceGroupManagerActionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceGroupManagerActionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8370,7 +9993,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceGroupManagerAction', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceGroupManagerActionTest() {
         // Construct the params object for operation getInstanceGroupManagerAction
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
@@ -8391,21 +10014,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions/{id}',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.instance_group_manager_id).toEqual(instanceGroupManagerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceGroupManagerActionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceGroupManagerActionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceGroupManagerActionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8469,7 +10107,7 @@ describe('VpcV1', () => {
         min_membership_count: 10,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateInstanceGroupManagerActionTest() {
         // Construct the params object for operation updateInstanceGroupManagerAction
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
@@ -8500,26 +10138,41 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/actions/{id}',
           'PATCH'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['cron_spec']).toEqual(cronSpec);
-        expect(options.body['group']).toEqual(group);
-        expect(options.body['manager']).toEqual(manager);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['run_at']).toEqual(runAt);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.cron_spec).toEqual(cronSpec);
+        expect(mockRequestOptions.body.group).toEqual(group);
+        expect(mockRequestOptions.body.manager).toEqual(manager);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.run_at).toEqual(runAt);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.instance_group_manager_id).toEqual(instanceGroupManagerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceGroupManagerActionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceGroupManagerActionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceGroupManagerActionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8570,7 +10223,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceGroupManagerPolicies', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceGroupManagerPoliciesTest() {
         // Construct the params object for operation listInstanceGroupManagerPolicies
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
@@ -8593,22 +10246,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.instance_group_manager_id).toEqual(instanceGroupManagerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceGroupManagerPoliciesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceGroupManagerPoliciesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceGroupManagerPoliciesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8667,7 +10335,7 @@ describe('VpcV1', () => {
         policy_type: 'target',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createInstanceGroupManagerPolicyTest() {
         // Construct the params object for operation createInstanceGroupManagerPolicy
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
@@ -8688,21 +10356,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies',
           'POST'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(instanceGroupManagerPolicyPrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
+        expect(mockRequestOptions.body).toEqual(instanceGroupManagerPolicyPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.instance_group_manager_id).toEqual(instanceGroupManagerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceGroupManagerPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceGroupManagerPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceGroupManagerPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8753,7 +10436,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstanceGroupManagerPolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceGroupManagerPolicyTest() {
         // Construct the params object for operation deleteInstanceGroupManagerPolicy
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
@@ -8774,21 +10457,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies/{id}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.instance_group_manager_id).toEqual(instanceGroupManagerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceGroupManagerPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceGroupManagerPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceGroupManagerPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8839,7 +10537,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceGroupManagerPolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceGroupManagerPolicyTest() {
         // Construct the params object for operation getInstanceGroupManagerPolicy
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
@@ -8860,21 +10558,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies/{id}',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.instance_group_manager_id).toEqual(instanceGroupManagerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceGroupManagerPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceGroupManagerPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceGroupManagerPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -8925,7 +10638,7 @@ describe('VpcV1', () => {
   });
   describe('updateInstanceGroupManagerPolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateInstanceGroupManagerPolicyTest() {
         // Construct the params object for operation updateInstanceGroupManagerPolicy
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
@@ -8952,24 +10665,39 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/managers/{instance_group_manager_id}/policies/{id}',
           'PATCH'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['metric_type']).toEqual(metricType);
-        expect(options.body['metric_value']).toEqual(metricValue);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['instance_group_manager_id']).toEqual(instanceGroupManagerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.metric_type).toEqual(metricType);
+        expect(mockRequestOptions.body.metric_value).toEqual(metricValue);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.instance_group_manager_id).toEqual(instanceGroupManagerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceGroupManagerPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceGroupManagerPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceGroupManagerPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9020,7 +10748,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstanceGroupMemberships', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceGroupMembershipsTest() {
         // Construct the params object for operation deleteInstanceGroupMemberships
         const instanceGroupId = 'testString';
         const params = {
@@ -9037,15 +10765,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{instance_group_id}/memberships', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instance_groups/{instance_group_id}/memberships',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceGroupMembershipsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceGroupMembershipsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceGroupMembershipsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9092,7 +10839,7 @@ describe('VpcV1', () => {
   });
   describe('listInstanceGroupMemberships', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listInstanceGroupMembershipsTest() {
         // Construct the params object for operation listInstanceGroupMemberships
         const instanceGroupId = 'testString';
         const start = 'testString';
@@ -9111,17 +10858,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{instance_group_id}/memberships', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instance_groups/{instance_group_id}/memberships',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceGroupMembershipsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceGroupMembershipsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceGroupMembershipsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9168,7 +10934,7 @@ describe('VpcV1', () => {
   });
   describe('deleteInstanceGroupMembership', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteInstanceGroupMembershipTest() {
         // Construct the params object for operation deleteInstanceGroupMembership
         const instanceGroupId = 'testString';
         const id = 'testString';
@@ -9187,20 +10953,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/memberships/{id}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceGroupMembershipTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceGroupMembershipTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceGroupMembershipTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9249,7 +11030,7 @@ describe('VpcV1', () => {
   });
   describe('getInstanceGroupMembership', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getInstanceGroupMembershipTest() {
         // Construct the params object for operation getInstanceGroupMembership
         const instanceGroupId = 'testString';
         const id = 'testString';
@@ -9266,16 +11047,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/instance_groups/{instance_group_id}/memberships/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instance_groups/{instance_group_id}/memberships/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceGroupMembershipTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceGroupMembershipTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceGroupMembershipTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9324,7 +11124,7 @@ describe('VpcV1', () => {
   });
   describe('updateInstanceGroupMembership', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateInstanceGroupMembershipTest() {
         // Construct the params object for operation updateInstanceGroupMembership
         const instanceGroupId = 'testString';
         const id = 'testString';
@@ -9345,21 +11145,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/instance_groups/{instance_group_id}/memberships/{id}',
           'PATCH'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['instance_group_id']).toEqual(instanceGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_group_id).toEqual(instanceGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceGroupMembershipTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceGroupMembershipTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceGroupMembershipTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9408,7 +11223,7 @@ describe('VpcV1', () => {
   });
   describe('listDedicatedHostGroups', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listDedicatedHostGroupsTest() {
         // Construct the params object for operation listDedicatedHostGroups
         const start = 'testString';
         const limit = 1;
@@ -9429,18 +11244,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_host/groups', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_host/groups', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
-        expect(options.qs['zone.name']).toEqual(zoneName);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs['zone.name']).toEqual(zoneName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listDedicatedHostGroupsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listDedicatedHostGroupsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listDedicatedHostGroupsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9479,7 +11309,7 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createDedicatedHostGroupTest() {
         // Construct the params object for operation createDedicatedHostGroup
         const _class = 'mx2';
         const family = 'balanced';
@@ -9502,19 +11332,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_host/groups', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_host/groups', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['class']).toEqual(_class);
-        expect(options.body['family']).toEqual(family);
-        expect(options.body['zone']).toEqual(zone);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.class).toEqual(_class);
+        expect(mockRequestOptions.body.family).toEqual(family);
+        expect(mockRequestOptions.body.zone).toEqual(zone);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createDedicatedHostGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createDedicatedHostGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createDedicatedHostGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9541,7 +11386,7 @@ describe('VpcV1', () => {
   });
   describe('deleteDedicatedHostGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteDedicatedHostGroupTest() {
         // Construct the params object for operation deleteDedicatedHostGroup
         const id = 'testString';
         const params = {
@@ -9556,15 +11401,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_host/groups/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_host/groups/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteDedicatedHostGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteDedicatedHostGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteDedicatedHostGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9611,7 +11471,7 @@ describe('VpcV1', () => {
   });
   describe('getDedicatedHostGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getDedicatedHostGroupTest() {
         // Construct the params object for operation getDedicatedHostGroup
         const id = 'testString';
         const params = {
@@ -9626,15 +11486,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_host/groups/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_host/groups/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getDedicatedHostGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getDedicatedHostGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getDedicatedHostGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9681,7 +11556,7 @@ describe('VpcV1', () => {
   });
   describe('updateDedicatedHostGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateDedicatedHostGroupTest() {
         // Construct the params object for operation updateDedicatedHostGroup
         const id = 'testString';
         const name = 'my-host-group-modified';
@@ -9698,16 +11573,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_host/groups/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_host/groups/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateDedicatedHostGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateDedicatedHostGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateDedicatedHostGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9754,7 +11644,7 @@ describe('VpcV1', () => {
   });
   describe('listDedicatedHostProfiles', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listDedicatedHostProfilesTest() {
         // Construct the params object for operation listDedicatedHostProfiles
         const start = 'testString';
         const limit = 1;
@@ -9771,16 +11661,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_host/profiles', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_host/profiles', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listDedicatedHostProfilesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listDedicatedHostProfilesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listDedicatedHostProfilesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9807,7 +11712,7 @@ describe('VpcV1', () => {
   });
   describe('getDedicatedHostProfile', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getDedicatedHostProfileTest() {
         // Construct the params object for operation getDedicatedHostProfile
         const name = 'testString';
         const params = {
@@ -9822,15 +11727,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_host/profiles/{name}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_host/profiles/{name}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['name']).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.name).toEqual(name);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getDedicatedHostProfileTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getDedicatedHostProfileTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getDedicatedHostProfileTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9877,7 +11797,7 @@ describe('VpcV1', () => {
   });
   describe('listDedicatedHosts', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listDedicatedHostsTest() {
         // Construct the params object for operation listDedicatedHosts
         const dedicatedHostGroupId = 'testString';
         const start = 'testString';
@@ -9900,19 +11820,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_hosts', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_hosts', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['dedicated_host_group.id']).toEqual(dedicatedHostGroupId);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
-        expect(options.qs['zone.name']).toEqual(zoneName);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs['dedicated_host_group.id']).toEqual(dedicatedHostGroupId);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs['zone.name']).toEqual(zoneName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listDedicatedHostsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listDedicatedHostsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listDedicatedHostsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -9965,7 +11900,7 @@ describe('VpcV1', () => {
         group: dedicatedHostGroupIdentityModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createDedicatedHostTest() {
         // Construct the params object for operation createDedicatedHost
         const dedicatedHostPrototype = dedicatedHostPrototypeModel;
         const params = {
@@ -9980,15 +11915,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_hosts', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_hosts', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(dedicatedHostPrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body).toEqual(dedicatedHostPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createDedicatedHostTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createDedicatedHostTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createDedicatedHostTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10035,7 +11985,7 @@ describe('VpcV1', () => {
   });
   describe('listDedicatedHostDisks', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listDedicatedHostDisksTest() {
         // Construct the params object for operation listDedicatedHostDisks
         const dedicatedHostId = 'testString';
         const params = {
@@ -10050,15 +12000,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_hosts/{dedicated_host_id}/disks', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_hosts/{dedicated_host_id}/disks', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['dedicated_host_id']).toEqual(dedicatedHostId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.dedicated_host_id).toEqual(dedicatedHostId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listDedicatedHostDisksTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listDedicatedHostDisksTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listDedicatedHostDisksTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10105,7 +12070,7 @@ describe('VpcV1', () => {
   });
   describe('getDedicatedHostDisk', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getDedicatedHostDiskTest() {
         // Construct the params object for operation getDedicatedHostDisk
         const dedicatedHostId = 'testString';
         const id = 'testString';
@@ -10122,16 +12087,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_hosts/{dedicated_host_id}/disks/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/dedicated_hosts/{dedicated_host_id}/disks/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['dedicated_host_id']).toEqual(dedicatedHostId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.dedicated_host_id).toEqual(dedicatedHostId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getDedicatedHostDiskTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getDedicatedHostDiskTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getDedicatedHostDiskTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10180,7 +12164,7 @@ describe('VpcV1', () => {
   });
   describe('updateDedicatedHostDisk', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateDedicatedHostDiskTest() {
         // Construct the params object for operation updateDedicatedHostDisk
         const dedicatedHostId = 'testString';
         const id = 'testString';
@@ -10199,17 +12183,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_hosts/{dedicated_host_id}/disks/{id}', 'PATCH');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/dedicated_hosts/{dedicated_host_id}/disks/{id}',
+          'PATCH'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['dedicated_host_id']).toEqual(dedicatedHostId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.dedicated_host_id).toEqual(dedicatedHostId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateDedicatedHostDiskTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateDedicatedHostDiskTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateDedicatedHostDiskTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10258,7 +12261,7 @@ describe('VpcV1', () => {
   });
   describe('deleteDedicatedHost', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteDedicatedHostTest() {
         // Construct the params object for operation deleteDedicatedHost
         const id = 'testString';
         const params = {
@@ -10273,15 +12276,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_hosts/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_hosts/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteDedicatedHostTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteDedicatedHostTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteDedicatedHostTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10328,7 +12346,7 @@ describe('VpcV1', () => {
   });
   describe('getDedicatedHost', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getDedicatedHostTest() {
         // Construct the params object for operation getDedicatedHost
         const id = 'testString';
         const params = {
@@ -10343,15 +12361,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_hosts/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_hosts/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getDedicatedHostTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getDedicatedHostTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getDedicatedHostTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10398,7 +12431,7 @@ describe('VpcV1', () => {
   });
   describe('updateDedicatedHost', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateDedicatedHostTest() {
         // Construct the params object for operation updateDedicatedHost
         const id = 'testString';
         const instancePlacementEnabled = true;
@@ -10417,17 +12450,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/dedicated_hosts/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/dedicated_hosts/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['instance_placement_enabled']).toEqual(instancePlacementEnabled);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.instance_placement_enabled).toEqual(
+          instancePlacementEnabled
+        );
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateDedicatedHostTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateDedicatedHostTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateDedicatedHostTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10472,9 +12522,433 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('listPlacementGroups', () => {
+    describe('positive tests', () => {
+      function __listPlacementGroupsTest() {
+        // Construct the params object for operation listPlacementGroups
+        const start = 'testString';
+        const limit = 1;
+        const params = {
+          start: start,
+          limit: limit,
+        };
+
+        const listPlacementGroupsResult = vpcService.listPlacementGroups(params);
+
+        // all methods should return a Promise
+        expectToBePromise(listPlacementGroupsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/placement_groups', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listPlacementGroupsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listPlacementGroupsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listPlacementGroupsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listPlacementGroups(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listPlacementGroups({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('createPlacementGroup', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      function __createPlacementGroupTest() {
+        // Construct the params object for operation createPlacementGroup
+        const strategy = 'host_spread';
+        const name = 'my-placement-group';
+        const resourceGroup = resourceGroupIdentityModel;
+        const params = {
+          strategy: strategy,
+          name: name,
+          resourceGroup: resourceGroup,
+        };
+
+        const createPlacementGroupResult = vpcService.createPlacementGroup(params);
+
+        // all methods should return a Promise
+        expectToBePromise(createPlacementGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/placement_groups', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.strategy).toEqual(strategy);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createPlacementGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createPlacementGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createPlacementGroupTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const strategy = 'host_spread';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          strategy,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createPlacementGroup(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.createPlacementGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const createPlacementGroupPromise = vpcService.createPlacementGroup();
+        expectToBePromise(createPlacementGroupPromise);
+
+        createPlacementGroupPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('deletePlacementGroup', () => {
+    describe('positive tests', () => {
+      function __deletePlacementGroupTest() {
+        // Construct the params object for operation deletePlacementGroup
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const deletePlacementGroupResult = vpcService.deletePlacementGroup(params);
+
+        // all methods should return a Promise
+        expectToBePromise(deletePlacementGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/placement_groups/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deletePlacementGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deletePlacementGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deletePlacementGroupTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deletePlacementGroup(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.deletePlacementGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const deletePlacementGroupPromise = vpcService.deletePlacementGroup();
+        expectToBePromise(deletePlacementGroupPromise);
+
+        deletePlacementGroupPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('getPlacementGroup', () => {
+    describe('positive tests', () => {
+      function __getPlacementGroupTest() {
+        // Construct the params object for operation getPlacementGroup
+        const id = 'testString';
+        const params = {
+          id: id,
+        };
+
+        const getPlacementGroupResult = vpcService.getPlacementGroup(params);
+
+        // all methods should return a Promise
+        expectToBePromise(getPlacementGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/placement_groups/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getPlacementGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getPlacementGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getPlacementGroupTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getPlacementGroup(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.getPlacementGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const getPlacementGroupPromise = vpcService.getPlacementGroup();
+        expectToBePromise(getPlacementGroupPromise);
+
+        getPlacementGroupPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
+  describe('updatePlacementGroup', () => {
+    describe('positive tests', () => {
+      function __updatePlacementGroupTest() {
+        // Construct the params object for operation updatePlacementGroup
+        const id = 'testString';
+        const name = 'my-placement-group';
+        const params = {
+          id: id,
+          name: name,
+        };
+
+        const updatePlacementGroupResult = vpcService.updatePlacementGroup(params);
+
+        // all methods should return a Promise
+        expectToBePromise(updatePlacementGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/placement_groups/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updatePlacementGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updatePlacementGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updatePlacementGroupTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const params = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updatePlacementGroup(params);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async done => {
+        let err;
+        try {
+          await vpcService.updatePlacementGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+        done();
+      });
+
+      test('should reject promise when required params are not given', done => {
+        const updatePlacementGroupPromise = vpcService.updatePlacementGroup();
+        expectToBePromise(updatePlacementGroupPromise);
+
+        updatePlacementGroupPromise.catch(err => {
+          expect(err.message).toMatch(/Missing required parameters/);
+          done();
+        });
+      });
+    });
+  });
   describe('listVolumeProfiles', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVolumeProfilesTest() {
         // Construct the params object for operation listVolumeProfiles
         const start = 'testString';
         const limit = 1;
@@ -10491,16 +12965,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/volume/profiles', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/volume/profiles', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVolumeProfilesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVolumeProfilesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVolumeProfilesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10527,7 +13016,7 @@ describe('VpcV1', () => {
   });
   describe('getVolumeProfile', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVolumeProfileTest() {
         // Construct the params object for operation getVolumeProfile
         const name = 'testString';
         const params = {
@@ -10542,15 +13031,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/volume/profiles/{name}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/volume/profiles/{name}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['name']).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.name).toEqual(name);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVolumeProfileTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVolumeProfileTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVolumeProfileTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10597,7 +13101,7 @@ describe('VpcV1', () => {
   });
   describe('listVolumes', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVolumesTest() {
         // Construct the params object for operation listVolumes
         const start = 'testString';
         const limit = 1;
@@ -10618,18 +13122,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/volumes', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/volumes', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['zone.name']).toEqual(zoneName);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs['zone.name']).toEqual(zoneName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVolumesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVolumesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVolumesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10690,7 +13209,7 @@ describe('VpcV1', () => {
         encryption_key: encryptionKeyIdentityModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createVolumeTest() {
         // Construct the params object for operation createVolume
         const volumePrototype = volumePrototypeModel;
         const params = {
@@ -10705,15 +13224,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/volumes', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/volumes', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(volumePrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body).toEqual(volumePrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVolumeTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVolumeTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVolumeTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10760,7 +13294,7 @@ describe('VpcV1', () => {
   });
   describe('deleteVolume', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteVolumeTest() {
         // Construct the params object for operation deleteVolume
         const id = 'testString';
         const params = {
@@ -10775,15 +13309,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/volumes/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/volumes/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVolumeTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVolumeTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVolumeTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10830,7 +13379,7 @@ describe('VpcV1', () => {
   });
   describe('getVolume', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVolumeTest() {
         // Construct the params object for operation getVolume
         const id = 'testString';
         const params = {
@@ -10845,15 +13394,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/volumes/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/volumes/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVolumeTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVolumeTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVolumeTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10900,13 +13464,26 @@ describe('VpcV1', () => {
   });
   describe('updateVolume', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      // Request models needed by this operation.
+
+      // VolumeProfileIdentityByName
+      const volumeProfileIdentityModel = {
+        name: 'general-purpose',
+      };
+
+      function __updateVolumeTest() {
         // Construct the params object for operation updateVolume
         const id = 'testString';
+        const capacity = 100;
+        const iops = 10000;
         const name = 'my-volume';
+        const profile = volumeProfileIdentityModel;
         const params = {
           id: id,
+          capacity: capacity,
+          iops: iops,
           name: name,
+          profile: profile,
         };
 
         const updateVolumeResult = vpcService.updateVolume(params);
@@ -10917,16 +13494,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/volumes/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/volumes/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.capacity).toEqual(capacity);
+        expect(mockRequestOptions.body.iops).toEqual(iops);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.profile).toEqual(profile);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVolumeTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateVolumeTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateVolumeTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -10973,7 +13568,7 @@ describe('VpcV1', () => {
   });
   describe('deleteSnapshots', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteSnapshotsTest() {
         // Construct the params object for operation deleteSnapshots
         const sourceVolumeId = 'testString';
         const params = {
@@ -10988,15 +13583,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/snapshots', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/snapshots', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['source_volume.id']).toEqual(sourceVolumeId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs['source_volume.id']).toEqual(sourceVolumeId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteSnapshotsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteSnapshotsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteSnapshotsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11043,7 +13653,7 @@ describe('VpcV1', () => {
   });
   describe('listSnapshots', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listSnapshotsTest() {
         // Construct the params object for operation listSnapshots
         const start = 'testString';
         const limit = 1;
@@ -11074,23 +13684,38 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/snapshots', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/snapshots', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['source_volume.id']).toEqual(sourceVolumeId);
-        expect(options.qs['source_volume.crn']).toEqual(sourceVolumeCrn);
-        expect(options.qs['source_image.id']).toEqual(sourceImageId);
-        expect(options.qs['source_image.crn']).toEqual(sourceImageCrn);
-        expect(options.qs['sort']).toEqual(sort);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs['source_volume.id']).toEqual(sourceVolumeId);
+        expect(mockRequestOptions.qs['source_volume.crn']).toEqual(sourceVolumeCrn);
+        expect(mockRequestOptions.qs['source_image.id']).toEqual(sourceImageId);
+        expect(mockRequestOptions.qs['source_image.crn']).toEqual(sourceImageCrn);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listSnapshotsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listSnapshotsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listSnapshotsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11129,7 +13754,7 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createSnapshotTest() {
         // Construct the params object for operation createSnapshot
         const sourceVolume = volumeIdentityModel;
         const name = 'my-snapshot';
@@ -11148,17 +13773,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/snapshots', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/snapshots', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['source_volume']).toEqual(sourceVolume);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.source_volume).toEqual(sourceVolume);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createSnapshotTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createSnapshotTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createSnapshotTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11205,7 +13845,7 @@ describe('VpcV1', () => {
   });
   describe('deleteSnapshot', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteSnapshotTest() {
         // Construct the params object for operation deleteSnapshot
         const id = 'testString';
         const params = {
@@ -11220,15 +13860,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/snapshots/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/snapshots/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteSnapshotTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteSnapshotTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteSnapshotTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11275,7 +13930,7 @@ describe('VpcV1', () => {
   });
   describe('getSnapshot', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSnapshotTest() {
         // Construct the params object for operation getSnapshot
         const id = 'testString';
         const params = {
@@ -11290,15 +13945,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/snapshots/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/snapshots/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSnapshotTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSnapshotTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSnapshotTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11345,7 +14015,7 @@ describe('VpcV1', () => {
   });
   describe('updateSnapshot', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateSnapshotTest() {
         // Construct the params object for operation updateSnapshot
         const id = 'testString';
         const name = 'my-snapshot';
@@ -11362,16 +14032,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/snapshots/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/snapshots/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateSnapshotTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateSnapshotTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateSnapshotTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11418,7 +14103,7 @@ describe('VpcV1', () => {
   });
   describe('listRegions', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listRegionsTest() {
         // Construct the params object for operation listRegions
         const params = {};
 
@@ -11430,14 +14115,29 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/regions', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/regions', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listRegionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listRegionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listRegionsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11464,7 +14164,7 @@ describe('VpcV1', () => {
   });
   describe('getRegion', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getRegionTest() {
         // Construct the params object for operation getRegion
         const name = 'testString';
         const params = {
@@ -11479,15 +14179,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/regions/{name}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/regions/{name}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['name']).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.name).toEqual(name);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getRegionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getRegionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getRegionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11534,7 +14249,7 @@ describe('VpcV1', () => {
   });
   describe('listRegionZones', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listRegionZonesTest() {
         // Construct the params object for operation listRegionZones
         const regionName = 'testString';
         const params = {
@@ -11549,15 +14264,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/regions/{region_name}/zones', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/regions/{region_name}/zones', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['region_name']).toEqual(regionName);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.region_name).toEqual(regionName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listRegionZonesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listRegionZonesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listRegionZonesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11604,7 +14334,7 @@ describe('VpcV1', () => {
   });
   describe('getRegionZone', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getRegionZoneTest() {
         // Construct the params object for operation getRegionZone
         const regionName = 'testString';
         const name = 'testString';
@@ -11621,16 +14351,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/regions/{region_name}/zones/{name}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/regions/{region_name}/zones/{name}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['region_name']).toEqual(regionName);
-        expect(options.path['name']).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.region_name).toEqual(regionName);
+        expect(mockRequestOptions.path.name).toEqual(name);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getRegionZoneTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getRegionZoneTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getRegionZoneTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11679,7 +14424,7 @@ describe('VpcV1', () => {
   });
   describe('listPublicGateways', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listPublicGatewaysTest() {
         // Construct the params object for operation listPublicGateways
         const start = 'testString';
         const limit = 1;
@@ -11698,17 +14443,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/public_gateways', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/public_gateways', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listPublicGatewaysTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listPublicGatewaysTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listPublicGatewaysTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11757,7 +14517,7 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createPublicGatewayTest() {
         // Construct the params object for operation createPublicGateway
         const vpc = vpcIdentityModel;
         const zone = zoneIdentityModel;
@@ -11780,19 +14540,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/public_gateways', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/public_gateways', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['vpc']).toEqual(vpc);
-        expect(options.body['zone']).toEqual(zone);
-        expect(options.body['floating_ip']).toEqual(floatingIp);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.vpc).toEqual(vpc);
+        expect(mockRequestOptions.body.zone).toEqual(zone);
+        expect(mockRequestOptions.body.floating_ip).toEqual(floatingIp);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createPublicGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createPublicGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createPublicGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11841,7 +14616,7 @@ describe('VpcV1', () => {
   });
   describe('deletePublicGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deletePublicGatewayTest() {
         // Construct the params object for operation deletePublicGateway
         const id = 'testString';
         const params = {
@@ -11856,15 +14631,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/public_gateways/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/public_gateways/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deletePublicGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deletePublicGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deletePublicGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11911,7 +14701,7 @@ describe('VpcV1', () => {
   });
   describe('getPublicGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getPublicGatewayTest() {
         // Construct the params object for operation getPublicGateway
         const id = 'testString';
         const params = {
@@ -11926,15 +14716,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/public_gateways/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/public_gateways/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getPublicGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getPublicGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getPublicGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -11981,7 +14786,7 @@ describe('VpcV1', () => {
   });
   describe('updatePublicGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updatePublicGatewayTest() {
         // Construct the params object for operation updatePublicGateway
         const id = 'testString';
         const name = 'my-public-gateway';
@@ -11998,16 +14803,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/public_gateways/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/public_gateways/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updatePublicGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updatePublicGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updatePublicGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12054,7 +14874,7 @@ describe('VpcV1', () => {
   });
   describe('listFloatingIps', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listFloatingIpsTest() {
         // Construct the params object for operation listFloatingIps
         const start = 'testString';
         const limit = 1;
@@ -12073,17 +14893,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/floating_ips', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/floating_ips', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listFloatingIpsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listFloatingIpsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listFloatingIpsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12129,7 +14964,7 @@ describe('VpcV1', () => {
         zone: zoneIdentityModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createFloatingIpTest() {
         // Construct the params object for operation createFloatingIp
         const floatingIpPrototype = floatingIpPrototypeModel;
         const params = {
@@ -12144,15 +14979,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/floating_ips', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/floating_ips', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(floatingIpPrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body).toEqual(floatingIpPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createFloatingIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12199,7 +15049,7 @@ describe('VpcV1', () => {
   });
   describe('deleteFloatingIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteFloatingIpTest() {
         // Construct the params object for operation deleteFloatingIp
         const id = 'testString';
         const params = {
@@ -12214,15 +15064,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/floating_ips/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/floating_ips/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteFloatingIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12269,7 +15134,7 @@ describe('VpcV1', () => {
   });
   describe('getFloatingIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getFloatingIpTest() {
         // Construct the params object for operation getFloatingIp
         const id = 'testString';
         const params = {
@@ -12284,15 +15149,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/floating_ips/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/floating_ips/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getFloatingIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12346,7 +15226,7 @@ describe('VpcV1', () => {
         id: '69e55145-cc7d-4d8e-9e1f-cc3fb60b1793',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateFloatingIpTest() {
         // Construct the params object for operation updateFloatingIp
         const id = 'testString';
         const name = 'my-floating-ip';
@@ -12365,17 +15245,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/floating_ips/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/floating_ips/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['target']).toEqual(target);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateFloatingIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12422,7 +15317,7 @@ describe('VpcV1', () => {
   });
   describe('listNetworkAcls', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listNetworkAclsTest() {
         // Construct the params object for operation listNetworkAcls
         const start = 'testString';
         const limit = 1;
@@ -12441,17 +15336,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/network_acls', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/network_acls', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listNetworkAclsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listNetworkAclsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listNetworkAclsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12508,7 +15418,7 @@ describe('VpcV1', () => {
         rules: [networkAclRulePrototypeNetworkAclContextModel],
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createNetworkAclTest() {
         // Construct the params object for operation createNetworkAcl
         const networkAclPrototype = networkAclPrototypeModel;
         const params = {
@@ -12523,15 +15433,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/network_acls', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/network_acls', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(networkAclPrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body).toEqual(networkAclPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createNetworkAclTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createNetworkAclTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createNetworkAclTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12558,7 +15483,7 @@ describe('VpcV1', () => {
   });
   describe('deleteNetworkAcl', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteNetworkAclTest() {
         // Construct the params object for operation deleteNetworkAcl
         const id = 'testString';
         const params = {
@@ -12573,15 +15498,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/network_acls/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/network_acls/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteNetworkAclTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteNetworkAclTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteNetworkAclTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12628,7 +15568,7 @@ describe('VpcV1', () => {
   });
   describe('getNetworkAcl', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getNetworkAclTest() {
         // Construct the params object for operation getNetworkAcl
         const id = 'testString';
         const params = {
@@ -12643,15 +15583,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/network_acls/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/network_acls/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getNetworkAclTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getNetworkAclTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getNetworkAclTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12698,7 +15653,7 @@ describe('VpcV1', () => {
   });
   describe('updateNetworkAcl', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateNetworkAclTest() {
         // Construct the params object for operation updateNetworkAcl
         const id = 'testString';
         const name = 'my-network-acl';
@@ -12715,16 +15670,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/network_acls/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/network_acls/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateNetworkAclTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateNetworkAclTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateNetworkAclTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12771,7 +15741,7 @@ describe('VpcV1', () => {
   });
   describe('listNetworkAclRules', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listNetworkAclRulesTest() {
         // Construct the params object for operation listNetworkAclRules
         const networkAclId = 'testString';
         const start = 'testString';
@@ -12792,18 +15762,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/network_acls/{network_acl_id}/rules', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/network_acls/{network_acl_id}/rules', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['direction']).toEqual(direction);
-        expect(options.path['network_acl_id']).toEqual(networkAclId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.direction).toEqual(direction);
+        expect(mockRequestOptions.path.network_acl_id).toEqual(networkAclId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listNetworkAclRulesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listNetworkAclRulesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listNetworkAclRulesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12870,7 +15855,7 @@ describe('VpcV1', () => {
         type: 8,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createNetworkAclRuleTest() {
         // Construct the params object for operation createNetworkAclRule
         const networkAclId = 'testString';
         const networkAclRulePrototype = networkAclRulePrototypeModel;
@@ -12887,16 +15872,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/network_acls/{network_acl_id}/rules', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/network_acls/{network_acl_id}/rules', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(networkAclRulePrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['network_acl_id']).toEqual(networkAclId);
+        expect(mockRequestOptions.body).toEqual(networkAclRulePrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.network_acl_id).toEqual(networkAclId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createNetworkAclRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createNetworkAclRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createNetworkAclRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -12945,7 +15945,7 @@ describe('VpcV1', () => {
   });
   describe('deleteNetworkAclRule', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteNetworkAclRuleTest() {
         // Construct the params object for operation deleteNetworkAclRule
         const networkAclId = 'testString';
         const id = 'testString';
@@ -12962,16 +15962,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/network_acls/{network_acl_id}/rules/{id}', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/network_acls/{network_acl_id}/rules/{id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['network_acl_id']).toEqual(networkAclId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.network_acl_id).toEqual(networkAclId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteNetworkAclRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteNetworkAclRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteNetworkAclRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13020,7 +16039,7 @@ describe('VpcV1', () => {
   });
   describe('getNetworkAclRule', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getNetworkAclRuleTest() {
         // Construct the params object for operation getNetworkAclRule
         const networkAclId = 'testString';
         const id = 'testString';
@@ -13037,16 +16056,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/network_acls/{network_acl_id}/rules/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/network_acls/{network_acl_id}/rules/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['network_acl_id']).toEqual(networkAclId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.network_acl_id).toEqual(networkAclId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getNetworkAclRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getNetworkAclRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getNetworkAclRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13102,7 +16136,7 @@ describe('VpcV1', () => {
         id: '8daca77a-4980-4d33-8f3e-7038797be8f9',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateNetworkAclRuleTest() {
         // Construct the params object for operation updateNetworkAclRule
         const networkAclId = 'testString';
         const id = 'testString';
@@ -13143,28 +16177,43 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/network_acls/{network_acl_id}/rules/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/network_acls/{network_acl_id}/rules/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['action']).toEqual(action);
-        expect(options.body['before']).toEqual(before);
-        expect(options.body['code']).toEqual(code);
-        expect(options.body['destination']).toEqual(destination);
-        expect(options.body['destination_port_max']).toEqual(destinationPortMax);
-        expect(options.body['destination_port_min']).toEqual(destinationPortMin);
-        expect(options.body['direction']).toEqual(direction);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['source']).toEqual(source);
-        expect(options.body['source_port_max']).toEqual(sourcePortMax);
-        expect(options.body['source_port_min']).toEqual(sourcePortMin);
-        expect(options.body['type']).toEqual(type);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['network_acl_id']).toEqual(networkAclId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.action).toEqual(action);
+        expect(mockRequestOptions.body.before).toEqual(before);
+        expect(mockRequestOptions.body.code).toEqual(code);
+        expect(mockRequestOptions.body.destination).toEqual(destination);
+        expect(mockRequestOptions.body.destination_port_max).toEqual(destinationPortMax);
+        expect(mockRequestOptions.body.destination_port_min).toEqual(destinationPortMin);
+        expect(mockRequestOptions.body.direction).toEqual(direction);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.source).toEqual(source);
+        expect(mockRequestOptions.body.source_port_max).toEqual(sourcePortMax);
+        expect(mockRequestOptions.body.source_port_min).toEqual(sourcePortMin);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.network_acl_id).toEqual(networkAclId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateNetworkAclRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateNetworkAclRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateNetworkAclRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13213,7 +16262,7 @@ describe('VpcV1', () => {
   });
   describe('listSecurityGroups', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listSecurityGroupsTest() {
         // Construct the params object for operation listSecurityGroups
         const start = 'testString';
         const limit = 1;
@@ -13238,20 +16287,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/security_groups', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
-        expect(options.qs['vpc.id']).toEqual(vpcId);
-        expect(options.qs['vpc.crn']).toEqual(vpcCrn);
-        expect(options.qs['vpc.name']).toEqual(vpcName);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs['vpc.id']).toEqual(vpcId);
+        expect(mockRequestOptions.qs['vpc.crn']).toEqual(vpcCrn);
+        expect(mockRequestOptions.qs['vpc.name']).toEqual(vpcName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listSecurityGroupsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listSecurityGroupsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listSecurityGroupsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13305,7 +16369,7 @@ describe('VpcV1', () => {
         type: 8,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createSecurityGroupTest() {
         // Construct the params object for operation createSecurityGroup
         const vpc = vpcIdentityModel;
         const name = 'my-security-group';
@@ -13326,18 +16390,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/security_groups', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['vpc']).toEqual(vpc);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.body['rules']).toEqual(rules);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.vpc).toEqual(vpc);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.body.rules).toEqual(rules);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createSecurityGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createSecurityGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createSecurityGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13384,7 +16463,7 @@ describe('VpcV1', () => {
   });
   describe('deleteSecurityGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteSecurityGroupTest() {
         // Construct the params object for operation deleteSecurityGroup
         const id = 'testString';
         const params = {
@@ -13399,15 +16478,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/security_groups/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteSecurityGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteSecurityGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteSecurityGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13454,7 +16548,7 @@ describe('VpcV1', () => {
   });
   describe('getSecurityGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSecurityGroupTest() {
         // Construct the params object for operation getSecurityGroup
         const id = 'testString';
         const params = {
@@ -13469,15 +16563,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/security_groups/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSecurityGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSecurityGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSecurityGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13524,7 +16633,7 @@ describe('VpcV1', () => {
   });
   describe('updateSecurityGroup', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateSecurityGroupTest() {
         // Construct the params object for operation updateSecurityGroup
         const id = 'testString';
         const name = 'my-security-group';
@@ -13541,16 +16650,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/security_groups/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateSecurityGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateSecurityGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateSecurityGroupTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13597,7 +16721,7 @@ describe('VpcV1', () => {
   });
   describe('listSecurityGroupNetworkInterfaces', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listSecurityGroupNetworkInterfacesTest() {
         // Construct the params object for operation listSecurityGroupNetworkInterfaces
         const securityGroupId = 'testString';
         const start = 'testString';
@@ -13618,21 +16742,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/security_groups/{security_group_id}/network_interfaces',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listSecurityGroupNetworkInterfacesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listSecurityGroupNetworkInterfacesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listSecurityGroupNetworkInterfacesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13679,7 +16818,7 @@ describe('VpcV1', () => {
   });
   describe('removeSecurityGroupNetworkInterface', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __removeSecurityGroupNetworkInterfaceTest() {
         // Construct the params object for operation removeSecurityGroupNetworkInterface
         const securityGroupId = 'testString';
         const id = 'testString';
@@ -13698,20 +16837,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/security_groups/{security_group_id}/network_interfaces/{id}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeSecurityGroupNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __removeSecurityGroupNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __removeSecurityGroupNetworkInterfaceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13760,7 +16914,7 @@ describe('VpcV1', () => {
   });
   describe('getSecurityGroupNetworkInterface', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSecurityGroupNetworkInterfaceTest() {
         // Construct the params object for operation getSecurityGroupNetworkInterface
         const securityGroupId = 'testString';
         const id = 'testString';
@@ -13779,20 +16933,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/security_groups/{security_group_id}/network_interfaces/{id}',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSecurityGroupNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSecurityGroupNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSecurityGroupNetworkInterfaceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13841,7 +17010,7 @@ describe('VpcV1', () => {
   });
   describe('addSecurityGroupNetworkInterface', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __addSecurityGroupNetworkInterfaceTest() {
         // Construct the params object for operation addSecurityGroupNetworkInterface
         const securityGroupId = 'testString';
         const id = 'testString';
@@ -13860,20 +17029,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/security_groups/{security_group_id}/network_interfaces/{id}',
           'PUT'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addSecurityGroupNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __addSecurityGroupNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __addSecurityGroupNetworkInterfaceTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -13922,7 +17106,7 @@ describe('VpcV1', () => {
   });
   describe('listSecurityGroupRules', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listSecurityGroupRulesTest() {
         // Construct the params object for operation listSecurityGroupRules
         const securityGroupId = 'testString';
         const params = {
@@ -13937,15 +17121,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{security_group_id}/rules', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/security_groups/{security_group_id}/rules', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listSecurityGroupRulesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listSecurityGroupRulesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listSecurityGroupRulesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14009,7 +17208,7 @@ describe('VpcV1', () => {
         type: 8,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createSecurityGroupRuleTest() {
         // Construct the params object for operation createSecurityGroupRule
         const securityGroupId = 'testString';
         const securityGroupRulePrototype = securityGroupRulePrototypeModel;
@@ -14026,16 +17225,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{security_group_id}/rules', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/security_groups/{security_group_id}/rules', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(securityGroupRulePrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
+        expect(mockRequestOptions.body).toEqual(securityGroupRulePrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createSecurityGroupRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createSecurityGroupRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createSecurityGroupRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14084,7 +17298,7 @@ describe('VpcV1', () => {
   });
   describe('deleteSecurityGroupRule', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteSecurityGroupRuleTest() {
         // Construct the params object for operation deleteSecurityGroupRule
         const securityGroupId = 'testString';
         const id = 'testString';
@@ -14101,16 +17315,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{security_group_id}/rules/{id}', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/security_groups/{security_group_id}/rules/{id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteSecurityGroupRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteSecurityGroupRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteSecurityGroupRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14159,7 +17392,7 @@ describe('VpcV1', () => {
   });
   describe('getSecurityGroupRule', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSecurityGroupRuleTest() {
         // Construct the params object for operation getSecurityGroupRule
         const securityGroupId = 'testString';
         const id = 'testString';
@@ -14176,16 +17409,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{security_group_id}/rules/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/security_groups/{security_group_id}/rules/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSecurityGroupRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSecurityGroupRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSecurityGroupRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14241,7 +17493,7 @@ describe('VpcV1', () => {
         address: '192.168.3.4',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateSecurityGroupRuleTest() {
         // Construct the params object for operation updateSecurityGroupRule
         const securityGroupId = 'testString';
         const id = 'testString';
@@ -14272,23 +17524,42 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{security_group_id}/rules/{id}', 'PATCH');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/security_groups/{security_group_id}/rules/{id}',
+          'PATCH'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['code']).toEqual(code);
-        expect(options.body['direction']).toEqual(direction);
-        expect(options.body['ip_version']).toEqual(ipVersion);
-        expect(options.body['port_max']).toEqual(portMax);
-        expect(options.body['port_min']).toEqual(portMin);
-        expect(options.body['remote']).toEqual(remote);
-        expect(options.body['type']).toEqual(type);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.code).toEqual(code);
+        expect(mockRequestOptions.body.direction).toEqual(direction);
+        expect(mockRequestOptions.body.ip_version).toEqual(ipVersion);
+        expect(mockRequestOptions.body.port_max).toEqual(portMax);
+        expect(mockRequestOptions.body.port_min).toEqual(portMin);
+        expect(mockRequestOptions.body.remote).toEqual(remote);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateSecurityGroupRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateSecurityGroupRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateSecurityGroupRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14337,7 +17608,7 @@ describe('VpcV1', () => {
   });
   describe('listSecurityGroupTargets', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listSecurityGroupTargetsTest() {
         // Construct the params object for operation listSecurityGroupTargets
         const securityGroupId = 'testString';
         const start = 'testString';
@@ -14356,17 +17627,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{security_group_id}/targets', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/security_groups/{security_group_id}/targets',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listSecurityGroupTargetsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listSecurityGroupTargetsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listSecurityGroupTargetsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14413,7 +17703,7 @@ describe('VpcV1', () => {
   });
   describe('deleteSecurityGroupTargetBinding', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteSecurityGroupTargetBindingTest() {
         // Construct the params object for operation deleteSecurityGroupTargetBinding
         const securityGroupId = 'testString';
         const id = 'testString';
@@ -14432,16 +17722,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{security_group_id}/targets/{id}', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/security_groups/{security_group_id}/targets/{id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteSecurityGroupTargetBindingTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteSecurityGroupTargetBindingTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteSecurityGroupTargetBindingTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14490,7 +17799,7 @@ describe('VpcV1', () => {
   });
   describe('getSecurityGroupTarget', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getSecurityGroupTargetTest() {
         // Construct the params object for operation getSecurityGroupTarget
         const securityGroupId = 'testString';
         const id = 'testString';
@@ -14507,16 +17816,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{security_group_id}/targets/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/security_groups/{security_group_id}/targets/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSecurityGroupTargetTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSecurityGroupTargetTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSecurityGroupTargetTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14565,7 +17893,7 @@ describe('VpcV1', () => {
   });
   describe('createSecurityGroupTargetBinding', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createSecurityGroupTargetBindingTest() {
         // Construct the params object for operation createSecurityGroupTargetBinding
         const securityGroupId = 'testString';
         const id = 'testString';
@@ -14584,16 +17912,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/security_groups/{security_group_id}/targets/{id}', 'PUT');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/security_groups/{security_group_id}/targets/{id}',
+          'PUT'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['security_group_id']).toEqual(securityGroupId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createSecurityGroupTargetBindingTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createSecurityGroupTargetBindingTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createSecurityGroupTargetBindingTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14642,7 +17989,7 @@ describe('VpcV1', () => {
   });
   describe('listIkePolicies', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listIkePoliciesTest() {
         // Construct the params object for operation listIkePolicies
         const start = 'testString';
         const limit = 1;
@@ -14659,16 +18006,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ike_policies', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/ike_policies', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listIkePoliciesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listIkePoliciesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listIkePoliciesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14702,7 +18064,7 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createIkePolicyTest() {
         // Construct the params object for operation createIkePolicy
         const authenticationAlgorithm = 'md5';
         const dhGroup = 2;
@@ -14729,21 +18091,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ike_policies', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/ike_policies', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['authentication_algorithm']).toEqual(authenticationAlgorithm);
-        expect(options.body['dh_group']).toEqual(dhGroup);
-        expect(options.body['encryption_algorithm']).toEqual(encryptionAlgorithm);
-        expect(options.body['ike_version']).toEqual(ikeVersion);
-        expect(options.body['key_lifetime']).toEqual(keyLifetime);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.authentication_algorithm).toEqual(authenticationAlgorithm);
+        expect(mockRequestOptions.body.dh_group).toEqual(dhGroup);
+        expect(mockRequestOptions.body.encryption_algorithm).toEqual(encryptionAlgorithm);
+        expect(mockRequestOptions.body.ike_version).toEqual(ikeVersion);
+        expect(mockRequestOptions.body.key_lifetime).toEqual(keyLifetime);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createIkePolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createIkePolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createIkePolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14796,7 +18173,7 @@ describe('VpcV1', () => {
   });
   describe('deleteIkePolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteIkePolicyTest() {
         // Construct the params object for operation deleteIkePolicy
         const id = 'testString';
         const params = {
@@ -14811,15 +18188,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ike_policies/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/ike_policies/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteIkePolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteIkePolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteIkePolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14866,7 +18258,7 @@ describe('VpcV1', () => {
   });
   describe('getIkePolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getIkePolicyTest() {
         // Construct the params object for operation getIkePolicy
         const id = 'testString';
         const params = {
@@ -14881,15 +18273,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ike_policies/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/ike_policies/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getIkePolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getIkePolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getIkePolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -14936,7 +18343,7 @@ describe('VpcV1', () => {
   });
   describe('updateIkePolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateIkePolicyTest() {
         // Construct the params object for operation updateIkePolicy
         const id = 'testString';
         const authenticationAlgorithm = 'md5';
@@ -14963,21 +18370,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ike_policies/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/ike_policies/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['authentication_algorithm']).toEqual(authenticationAlgorithm);
-        expect(options.body['dh_group']).toEqual(dhGroup);
-        expect(options.body['encryption_algorithm']).toEqual(encryptionAlgorithm);
-        expect(options.body['ike_version']).toEqual(ikeVersion);
-        expect(options.body['key_lifetime']).toEqual(keyLifetime);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.authentication_algorithm).toEqual(authenticationAlgorithm);
+        expect(mockRequestOptions.body.dh_group).toEqual(dhGroup);
+        expect(mockRequestOptions.body.encryption_algorithm).toEqual(encryptionAlgorithm);
+        expect(mockRequestOptions.body.ike_version).toEqual(ikeVersion);
+        expect(mockRequestOptions.body.key_lifetime).toEqual(keyLifetime);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateIkePolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateIkePolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateIkePolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15024,7 +18446,7 @@ describe('VpcV1', () => {
   });
   describe('listIkePolicyConnections', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listIkePolicyConnectionsTest() {
         // Construct the params object for operation listIkePolicyConnections
         const id = 'testString';
         const params = {
@@ -15039,15 +18461,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ike_policies/{id}/connections', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/ike_policies/{id}/connections', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listIkePolicyConnectionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listIkePolicyConnectionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listIkePolicyConnectionsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15094,7 +18531,7 @@ describe('VpcV1', () => {
   });
   describe('listIpsecPolicies', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listIpsecPoliciesTest() {
         // Construct the params object for operation listIpsecPolicies
         const start = 'testString';
         const limit = 1;
@@ -15111,16 +18548,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ipsec_policies', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/ipsec_policies', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listIpsecPoliciesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listIpsecPoliciesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listIpsecPoliciesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15154,7 +18606,7 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createIpsecPolicyTest() {
         // Construct the params object for operation createIpsecPolicy
         const authenticationAlgorithm = 'md5';
         const encryptionAlgorithm = 'triple_des';
@@ -15179,20 +18631,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ipsec_policies', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/ipsec_policies', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['authentication_algorithm']).toEqual(authenticationAlgorithm);
-        expect(options.body['encryption_algorithm']).toEqual(encryptionAlgorithm);
-        expect(options.body['pfs']).toEqual(pfs);
-        expect(options.body['key_lifetime']).toEqual(keyLifetime);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.authentication_algorithm).toEqual(authenticationAlgorithm);
+        expect(mockRequestOptions.body.encryption_algorithm).toEqual(encryptionAlgorithm);
+        expect(mockRequestOptions.body.pfs).toEqual(pfs);
+        expect(mockRequestOptions.body.key_lifetime).toEqual(keyLifetime);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createIpsecPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createIpsecPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createIpsecPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15243,7 +18710,7 @@ describe('VpcV1', () => {
   });
   describe('deleteIpsecPolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteIpsecPolicyTest() {
         // Construct the params object for operation deleteIpsecPolicy
         const id = 'testString';
         const params = {
@@ -15258,15 +18725,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ipsec_policies/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/ipsec_policies/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteIpsecPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteIpsecPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteIpsecPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15313,7 +18795,7 @@ describe('VpcV1', () => {
   });
   describe('getIpsecPolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getIpsecPolicyTest() {
         // Construct the params object for operation getIpsecPolicy
         const id = 'testString';
         const params = {
@@ -15328,15 +18810,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ipsec_policies/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/ipsec_policies/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getIpsecPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getIpsecPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getIpsecPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15383,7 +18880,7 @@ describe('VpcV1', () => {
   });
   describe('updateIpsecPolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateIpsecPolicyTest() {
         // Construct the params object for operation updateIpsecPolicy
         const id = 'testString';
         const authenticationAlgorithm = 'md5';
@@ -15408,20 +18905,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ipsec_policies/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/ipsec_policies/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['authentication_algorithm']).toEqual(authenticationAlgorithm);
-        expect(options.body['encryption_algorithm']).toEqual(encryptionAlgorithm);
-        expect(options.body['key_lifetime']).toEqual(keyLifetime);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['pfs']).toEqual(pfs);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.authentication_algorithm).toEqual(authenticationAlgorithm);
+        expect(mockRequestOptions.body.encryption_algorithm).toEqual(encryptionAlgorithm);
+        expect(mockRequestOptions.body.key_lifetime).toEqual(keyLifetime);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.pfs).toEqual(pfs);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateIpsecPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateIpsecPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateIpsecPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15468,7 +18980,7 @@ describe('VpcV1', () => {
   });
   describe('listIpsecPolicyConnections', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listIpsecPolicyConnectionsTest() {
         // Construct the params object for operation listIpsecPolicyConnections
         const id = 'testString';
         const params = {
@@ -15483,15 +18995,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/ipsec_policies/{id}/connections', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/ipsec_policies/{id}/connections', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listIpsecPolicyConnectionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listIpsecPolicyConnectionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listIpsecPolicyConnectionsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15538,7 +19065,7 @@ describe('VpcV1', () => {
   });
   describe('listVpnGateways', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVpnGatewaysTest() {
         // Construct the params object for operation listVpnGateways
         const start = 'testString';
         const limit = 1;
@@ -15559,18 +19086,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpn_gateways', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpn_gateways', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
-        expect(options.qs['mode']).toEqual(mode);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.mode).toEqual(mode);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpnGatewaysTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpnGatewaysTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpnGatewaysTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15617,7 +19159,7 @@ describe('VpcV1', () => {
         mode: 'route',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createVpnGatewayTest() {
         // Construct the params object for operation createVpnGateway
         const vpnGatewayPrototype = vpnGatewayPrototypeModel;
         const params = {
@@ -15632,15 +19174,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpn_gateways', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/vpn_gateways', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(vpnGatewayPrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body).toEqual(vpnGatewayPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVpnGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVpnGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVpnGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15687,7 +19244,7 @@ describe('VpcV1', () => {
   });
   describe('deleteVpnGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteVpnGatewayTest() {
         // Construct the params object for operation deleteVpnGateway
         const id = 'testString';
         const params = {
@@ -15702,15 +19259,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpn_gateways/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/vpn_gateways/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVpnGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVpnGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVpnGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15757,7 +19329,7 @@ describe('VpcV1', () => {
   });
   describe('getVpnGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVpnGatewayTest() {
         // Construct the params object for operation getVpnGateway
         const id = 'testString';
         const params = {
@@ -15772,15 +19344,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpn_gateways/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpn_gateways/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpnGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpnGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpnGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15827,7 +19414,7 @@ describe('VpcV1', () => {
   });
   describe('updateVpnGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateVpnGatewayTest() {
         // Construct the params object for operation updateVpnGateway
         const id = 'testString';
         const name = 'my-vpn-gateway';
@@ -15844,16 +19431,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpn_gateways/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/vpn_gateways/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVpnGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateVpnGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateVpnGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -15900,7 +19502,7 @@ describe('VpcV1', () => {
   });
   describe('listVpnGatewayConnections', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVpnGatewayConnectionsTest() {
         // Construct the params object for operation listVpnGatewayConnections
         const vpnGatewayId = 'testString';
         const status = 'testString';
@@ -15917,16 +19519,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpn_gateways/{vpn_gateway_id}/connections', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/vpn_gateways/{vpn_gateway_id}/connections', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['status']).toEqual(status);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.status).toEqual(status);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpnGatewayConnectionsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpnGatewayConnectionsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpnGatewayConnectionsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16004,7 +19621,7 @@ describe('VpcV1', () => {
         routing_protocol: 'none',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createVpnGatewayConnectionTest() {
         // Construct the params object for operation createVpnGatewayConnection
         const vpnGatewayId = 'testString';
         const vpnGatewayConnectionPrototype = vpnGatewayConnectionPrototypeModel;
@@ -16021,16 +19638,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpn_gateways/{vpn_gateway_id}/connections', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/vpn_gateways/{vpn_gateway_id}/connections', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(vpnGatewayConnectionPrototype);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.body).toEqual(vpnGatewayConnectionPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVpnGatewayConnectionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVpnGatewayConnectionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVpnGatewayConnectionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16079,7 +19711,7 @@ describe('VpcV1', () => {
   });
   describe('deleteVpnGatewayConnection', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteVpnGatewayConnectionTest() {
         // Construct the params object for operation deleteVpnGatewayConnection
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16096,16 +19728,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpn_gateways/{vpn_gateway_id}/connections/{id}', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/vpn_gateways/{vpn_gateway_id}/connections/{id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVpnGatewayConnectionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVpnGatewayConnectionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVpnGatewayConnectionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16154,7 +19805,7 @@ describe('VpcV1', () => {
   });
   describe('getVpnGatewayConnection', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getVpnGatewayConnectionTest() {
         // Construct the params object for operation getVpnGatewayConnection
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16171,16 +19822,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpn_gateways/{vpn_gateway_id}/connections/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/vpn_gateways/{vpn_gateway_id}/connections/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpnGatewayConnectionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpnGatewayConnectionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpnGatewayConnectionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16260,7 +19930,7 @@ describe('VpcV1', () => {
         routing_protocol: 'none',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateVpnGatewayConnectionTest() {
         // Construct the params object for operation updateVpnGatewayConnection
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16279,17 +19949,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/vpn_gateways/{vpn_gateway_id}/connections/{id}', 'PATCH');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/vpn_gateways/{vpn_gateway_id}/connections/{id}',
+          'PATCH'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body).toEqual(vpnGatewayConnectionPatch);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body).toEqual(vpnGatewayConnectionPatch);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVpnGatewayConnectionTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateVpnGatewayConnectionTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateVpnGatewayConnectionTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16340,7 +20029,7 @@ describe('VpcV1', () => {
   });
   describe('listVpnGatewayConnectionLocalCidrs', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVpnGatewayConnectionLocalCidrsTest() {
         // Construct the params object for operation listVpnGatewayConnectionLocalCidrs
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16359,20 +20048,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpnGatewayConnectionLocalCidrsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpnGatewayConnectionLocalCidrsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpnGatewayConnectionLocalCidrsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16421,7 +20125,7 @@ describe('VpcV1', () => {
   });
   describe('removeVpnGatewayConnectionLocalCidr', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __removeVpnGatewayConnectionLocalCidrTest() {
         // Construct the params object for operation removeVpnGatewayConnectionLocalCidr
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16444,22 +20148,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
-        expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
-        expect(options.path['prefix_length']).toEqual(prefixLength);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+        expect(mockRequestOptions.path.cidr_prefix).toEqual(cidrPrefix);
+        expect(mockRequestOptions.path.prefix_length).toEqual(prefixLength);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeVpnGatewayConnectionLocalCidrTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __removeVpnGatewayConnectionLocalCidrTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __removeVpnGatewayConnectionLocalCidrTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16512,7 +20231,7 @@ describe('VpcV1', () => {
   });
   describe('checkVpnGatewayConnectionLocalCidr', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __checkVpnGatewayConnectionLocalCidrTest() {
         // Construct the params object for operation checkVpnGatewayConnectionLocalCidr
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16535,22 +20254,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
           'GET'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
-        expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
-        expect(options.path['prefix_length']).toEqual(prefixLength);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+        expect(mockRequestOptions.path.cidr_prefix).toEqual(cidrPrefix);
+        expect(mockRequestOptions.path.prefix_length).toEqual(prefixLength);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __checkVpnGatewayConnectionLocalCidrTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __checkVpnGatewayConnectionLocalCidrTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __checkVpnGatewayConnectionLocalCidrTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16603,7 +20337,7 @@ describe('VpcV1', () => {
   });
   describe('addVpnGatewayConnectionLocalCidr', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __addVpnGatewayConnectionLocalCidrTest() {
         // Construct the params object for operation addVpnGatewayConnectionLocalCidr
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16626,22 +20360,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
           'PUT'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
-        expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
-        expect(options.path['prefix_length']).toEqual(prefixLength);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+        expect(mockRequestOptions.path.cidr_prefix).toEqual(cidrPrefix);
+        expect(mockRequestOptions.path.prefix_length).toEqual(prefixLength);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addVpnGatewayConnectionLocalCidrTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __addVpnGatewayConnectionLocalCidrTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __addVpnGatewayConnectionLocalCidrTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16694,7 +20443,7 @@ describe('VpcV1', () => {
   });
   describe('listVpnGatewayConnectionPeerCidrs', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listVpnGatewayConnectionPeerCidrsTest() {
         // Construct the params object for operation listVpnGatewayConnectionPeerCidrs
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16713,20 +20462,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpnGatewayConnectionPeerCidrsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpnGatewayConnectionPeerCidrsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpnGatewayConnectionPeerCidrsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16775,7 +20539,7 @@ describe('VpcV1', () => {
   });
   describe('removeVpnGatewayConnectionPeerCidr', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __removeVpnGatewayConnectionPeerCidrTest() {
         // Construct the params object for operation removeVpnGatewayConnectionPeerCidr
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16798,22 +20562,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
-        expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
-        expect(options.path['prefix_length']).toEqual(prefixLength);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+        expect(mockRequestOptions.path.cidr_prefix).toEqual(cidrPrefix);
+        expect(mockRequestOptions.path.prefix_length).toEqual(prefixLength);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeVpnGatewayConnectionPeerCidrTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __removeVpnGatewayConnectionPeerCidrTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __removeVpnGatewayConnectionPeerCidrTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16866,7 +20645,7 @@ describe('VpcV1', () => {
   });
   describe('checkVpnGatewayConnectionPeerCidr', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __checkVpnGatewayConnectionPeerCidrTest() {
         // Construct the params object for operation checkVpnGatewayConnectionPeerCidr
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16889,22 +20668,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
           'GET'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
-        expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
-        expect(options.path['prefix_length']).toEqual(prefixLength);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+        expect(mockRequestOptions.path.cidr_prefix).toEqual(cidrPrefix);
+        expect(mockRequestOptions.path.prefix_length).toEqual(prefixLength);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __checkVpnGatewayConnectionPeerCidrTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __checkVpnGatewayConnectionPeerCidrTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __checkVpnGatewayConnectionPeerCidrTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -16957,7 +20751,7 @@ describe('VpcV1', () => {
   });
   describe('addVpnGatewayConnectionPeerCidr', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __addVpnGatewayConnectionPeerCidrTest() {
         // Construct the params object for operation addVpnGatewayConnectionPeerCidr
         const vpnGatewayId = 'testString';
         const id = 'testString';
@@ -16980,22 +20774,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
           'PUT'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['vpn_gateway_id']).toEqual(vpnGatewayId);
-        expect(options.path['id']).toEqual(id);
-        expect(options.path['cidr_prefix']).toEqual(cidrPrefix);
-        expect(options.path['prefix_length']).toEqual(prefixLength);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+        expect(mockRequestOptions.path.cidr_prefix).toEqual(cidrPrefix);
+        expect(mockRequestOptions.path.prefix_length).toEqual(prefixLength);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addVpnGatewayConnectionPeerCidrTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __addVpnGatewayConnectionPeerCidrTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __addVpnGatewayConnectionPeerCidrTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17048,7 +20857,7 @@ describe('VpcV1', () => {
   });
   describe('listLoadBalancerProfiles', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listLoadBalancerProfilesTest() {
         // Construct the params object for operation listLoadBalancerProfiles
         const start = 'testString';
         const limit = 1;
@@ -17065,16 +20874,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancer/profiles', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/load_balancer/profiles', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listLoadBalancerProfilesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listLoadBalancerProfilesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listLoadBalancerProfilesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17101,7 +20925,7 @@ describe('VpcV1', () => {
   });
   describe('getLoadBalancerProfile', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getLoadBalancerProfileTest() {
         // Construct the params object for operation getLoadBalancerProfile
         const name = 'testString';
         const params = {
@@ -17116,15 +20940,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancer/profiles/{name}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/load_balancer/profiles/{name}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['name']).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.name).toEqual(name);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getLoadBalancerProfileTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getLoadBalancerProfileTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getLoadBalancerProfileTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17171,7 +21010,7 @@ describe('VpcV1', () => {
   });
   describe('listLoadBalancers', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listLoadBalancersTest() {
         // Construct the params object for operation listLoadBalancers
         const start = 'testString';
         const limit = 1;
@@ -17188,16 +21027,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/load_balancers', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listLoadBalancersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listLoadBalancersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listLoadBalancersTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17309,7 +21163,7 @@ describe('VpcV1', () => {
         id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createLoadBalancerTest() {
         // Construct the params object for operation createLoadBalancer
         const isPublic = true;
         const subnets = [subnetIdentityModel];
@@ -17340,23 +21194,38 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/load_balancers', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['is_public']).toEqual(isPublic);
-        expect(options.body['subnets']).toEqual(subnets);
-        expect(options.body['listeners']).toEqual(listeners);
-        expect(options.body['logging']).toEqual(logging);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['pools']).toEqual(pools);
-        expect(options.body['profile']).toEqual(profile);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.body['security_groups']).toEqual(securityGroups);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.is_public).toEqual(isPublic);
+        expect(mockRequestOptions.body.subnets).toEqual(subnets);
+        expect(mockRequestOptions.body.listeners).toEqual(listeners);
+        expect(mockRequestOptions.body.logging).toEqual(logging);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.pools).toEqual(pools);
+        expect(mockRequestOptions.body.profile).toEqual(profile);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.body.security_groups).toEqual(securityGroups);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createLoadBalancerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createLoadBalancerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createLoadBalancerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17405,7 +21274,7 @@ describe('VpcV1', () => {
   });
   describe('deleteLoadBalancer', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteLoadBalancerTest() {
         // Construct the params object for operation deleteLoadBalancer
         const id = 'testString';
         const params = {
@@ -17420,15 +21289,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/load_balancers/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteLoadBalancerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteLoadBalancerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteLoadBalancerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17475,7 +21359,7 @@ describe('VpcV1', () => {
   });
   describe('getLoadBalancer', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getLoadBalancerTest() {
         // Construct the params object for operation getLoadBalancer
         const id = 'testString';
         const params = {
@@ -17490,15 +21374,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/load_balancers/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getLoadBalancerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getLoadBalancerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getLoadBalancerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17557,7 +21456,7 @@ describe('VpcV1', () => {
         datapath: loadBalancerLoggingDatapathModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateLoadBalancerTest() {
         // Construct the params object for operation updateLoadBalancer
         const id = 'testString';
         const logging = loadBalancerLoggingModel;
@@ -17576,17 +21475,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/load_balancers/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['logging']).toEqual(logging);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.logging).toEqual(logging);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateLoadBalancerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateLoadBalancerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateLoadBalancerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17633,7 +21547,7 @@ describe('VpcV1', () => {
   });
   describe('getLoadBalancerStatistics', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getLoadBalancerStatisticsTest() {
         // Construct the params object for operation getLoadBalancerStatistics
         const id = 'testString';
         const params = {
@@ -17648,15 +21562,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{id}/statistics', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/load_balancers/{id}/statistics', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getLoadBalancerStatisticsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getLoadBalancerStatisticsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getLoadBalancerStatisticsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17703,7 +21632,7 @@ describe('VpcV1', () => {
   });
   describe('listLoadBalancerListeners', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listLoadBalancerListenersTest() {
         // Construct the params object for operation listLoadBalancerListeners
         const loadBalancerId = 'testString';
         const params = {
@@ -17718,15 +21647,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/listeners', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/load_balancers/{load_balancer_id}/listeners',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listLoadBalancerListenersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listLoadBalancerListenersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listLoadBalancerListenersTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17786,6 +21734,18 @@ describe('VpcV1', () => {
         id: '70294e14-4e61-11e8-bcf4-0242ac110004',
       };
 
+      // LoadBalancerListenerIdentityById
+      const loadBalancerListenerIdentityModel = {
+        id: '70294e14-4e61-11e8-bcf4-0242ac110004',
+      };
+
+      // LoadBalancerListenerHTTPSRedirectPrototype
+      const loadBalancerListenerHttpsRedirectPrototypeModel = {
+        http_status_code: 301,
+        listener: loadBalancerListenerIdentityModel,
+        uri: '/example?doc=get',
+      };
+
       // LoadBalancerListenerPolicyRulePrototype
       const loadBalancerListenerPolicyRulePrototypeModel = {
         condition: 'contains',
@@ -17808,7 +21768,7 @@ describe('VpcV1', () => {
         target: loadBalancerListenerPolicyTargetPrototypeModel,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createLoadBalancerListenerTest() {
         // Construct the params object for operation createLoadBalancerListener
         const loadBalancerId = 'testString';
         const port = 443;
@@ -17817,6 +21777,7 @@ describe('VpcV1', () => {
         const certificateInstance = certificateInstanceIdentityModel;
         const connectionLimit = 2000;
         const defaultPool = loadBalancerPoolIdentityModel;
+        const httpsRedirect = loadBalancerListenerHttpsRedirectPrototypeModel;
         const policies = [loadBalancerListenerPolicyPrototypeModel];
         const params = {
           loadBalancerId: loadBalancerId,
@@ -17826,6 +21787,7 @@ describe('VpcV1', () => {
           certificateInstance: certificateInstance,
           connectionLimit: connectionLimit,
           defaultPool: defaultPool,
+          httpsRedirect: httpsRedirect,
           policies: policies,
         };
 
@@ -17837,22 +21799,42 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/listeners', 'POST');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/load_balancers/{load_balancer_id}/listeners',
+          'POST'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['port']).toEqual(port);
-        expect(options.body['protocol']).toEqual(protocol);
-        expect(options.body['accept_proxy_protocol']).toEqual(acceptProxyProtocol);
-        expect(options.body['certificate_instance']).toEqual(certificateInstance);
-        expect(options.body['connection_limit']).toEqual(connectionLimit);
-        expect(options.body['default_pool']).toEqual(defaultPool);
-        expect(options.body['policies']).toEqual(policies);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
+        expect(mockRequestOptions.body.port).toEqual(port);
+        expect(mockRequestOptions.body.protocol).toEqual(protocol);
+        expect(mockRequestOptions.body.accept_proxy_protocol).toEqual(acceptProxyProtocol);
+        expect(mockRequestOptions.body.certificate_instance).toEqual(certificateInstance);
+        expect(mockRequestOptions.body.connection_limit).toEqual(connectionLimit);
+        expect(mockRequestOptions.body.default_pool).toEqual(defaultPool);
+        expect(mockRequestOptions.body.https_redirect).toEqual(httpsRedirect);
+        expect(mockRequestOptions.body.policies).toEqual(policies);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createLoadBalancerListenerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createLoadBalancerListenerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createLoadBalancerListenerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17903,7 +21885,7 @@ describe('VpcV1', () => {
   });
   describe('deleteLoadBalancerListener', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteLoadBalancerListenerTest() {
         // Construct the params object for operation deleteLoadBalancerListener
         const loadBalancerId = 'testString';
         const id = 'testString';
@@ -17920,16 +21902,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/listeners/{id}', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/load_balancers/{load_balancer_id}/listeners/{id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteLoadBalancerListenerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteLoadBalancerListenerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteLoadBalancerListenerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -17978,7 +21979,7 @@ describe('VpcV1', () => {
   });
   describe('getLoadBalancerListener', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getLoadBalancerListenerTest() {
         // Construct the params object for operation getLoadBalancerListener
         const loadBalancerId = 'testString';
         const id = 'testString';
@@ -17995,16 +21996,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/listeners/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/load_balancers/{load_balancer_id}/listeners/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getLoadBalancerListenerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getLoadBalancerListenerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getLoadBalancerListenerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -18066,7 +22086,19 @@ describe('VpcV1', () => {
         id: '70294e14-4e61-11e8-bcf4-0242ac110004',
       };
 
-      test('should pass the right params to createRequest', () => {
+      // LoadBalancerListenerIdentityById
+      const loadBalancerListenerIdentityModel = {
+        id: '70294e14-4e61-11e8-bcf4-0242ac110004',
+      };
+
+      // LoadBalancerListenerHTTPSRedirectPatch
+      const loadBalancerListenerHttpsRedirectPatchModel = {
+        http_status_code: 301,
+        listener: loadBalancerListenerIdentityModel,
+        uri: '/example?doc=get',
+      };
+
+      function __updateLoadBalancerListenerTest() {
         // Construct the params object for operation updateLoadBalancerListener
         const loadBalancerId = 'testString';
         const id = 'testString';
@@ -18074,6 +22106,7 @@ describe('VpcV1', () => {
         const certificateInstance = certificateInstanceIdentityModel;
         const connectionLimit = 2000;
         const defaultPool = loadBalancerPoolIdentityModel;
+        const httpsRedirect = loadBalancerListenerHttpsRedirectPatchModel;
         const port = 443;
         const protocol = 'http';
         const params = {
@@ -18083,6 +22116,7 @@ describe('VpcV1', () => {
           certificateInstance: certificateInstance,
           connectionLimit: connectionLimit,
           defaultPool: defaultPool,
+          httpsRedirect: httpsRedirect,
           port: port,
           protocol: protocol,
         };
@@ -18095,22 +22129,42 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/listeners/{id}', 'PATCH');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/load_balancers/{load_balancer_id}/listeners/{id}',
+          'PATCH'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['accept_proxy_protocol']).toEqual(acceptProxyProtocol);
-        expect(options.body['certificate_instance']).toEqual(certificateInstance);
-        expect(options.body['connection_limit']).toEqual(connectionLimit);
-        expect(options.body['default_pool']).toEqual(defaultPool);
-        expect(options.body['port']).toEqual(port);
-        expect(options.body['protocol']).toEqual(protocol);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.accept_proxy_protocol).toEqual(acceptProxyProtocol);
+        expect(mockRequestOptions.body.certificate_instance).toEqual(certificateInstance);
+        expect(mockRequestOptions.body.connection_limit).toEqual(connectionLimit);
+        expect(mockRequestOptions.body.default_pool).toEqual(defaultPool);
+        expect(mockRequestOptions.body.https_redirect).toEqual(httpsRedirect);
+        expect(mockRequestOptions.body.port).toEqual(port);
+        expect(mockRequestOptions.body.protocol).toEqual(protocol);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateLoadBalancerListenerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateLoadBalancerListenerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateLoadBalancerListenerTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -18159,7 +22213,7 @@ describe('VpcV1', () => {
   });
   describe('listLoadBalancerListenerPolicies', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listLoadBalancerListenerPoliciesTest() {
         // Construct the params object for operation listLoadBalancerListenerPolicies
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
@@ -18178,20 +22232,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['listener_id']).toEqual(listenerId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.listener_id).toEqual(listenerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listLoadBalancerListenerPoliciesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listLoadBalancerListenerPoliciesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listLoadBalancerListenerPoliciesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -18255,7 +22324,7 @@ describe('VpcV1', () => {
         id: '70294e14-4e61-11e8-bcf4-0242ac110004',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createLoadBalancerListenerPolicyTest() {
         // Construct the params object for operation createLoadBalancerListenerPolicy
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
@@ -18284,25 +22353,40 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies',
           'POST'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['action']).toEqual(action);
-        expect(options.body['priority']).toEqual(priority);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['rules']).toEqual(rules);
-        expect(options.body['target']).toEqual(target);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['listener_id']).toEqual(listenerId);
+        expect(mockRequestOptions.body.action).toEqual(action);
+        expect(mockRequestOptions.body.priority).toEqual(priority);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.rules).toEqual(rules);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.listener_id).toEqual(listenerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createLoadBalancerListenerPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createLoadBalancerListenerPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createLoadBalancerListenerPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -18355,7 +22439,7 @@ describe('VpcV1', () => {
   });
   describe('deleteLoadBalancerListenerPolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteLoadBalancerListenerPolicyTest() {
         // Construct the params object for operation deleteLoadBalancerListenerPolicy
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
@@ -18376,21 +22460,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{id}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['listener_id']).toEqual(listenerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.listener_id).toEqual(listenerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteLoadBalancerListenerPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteLoadBalancerListenerPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteLoadBalancerListenerPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -18441,7 +22540,7 @@ describe('VpcV1', () => {
   });
   describe('getLoadBalancerListenerPolicy', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getLoadBalancerListenerPolicyTest() {
         // Construct the params object for operation getLoadBalancerListenerPolicy
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
@@ -18462,21 +22561,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{id}',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['listener_id']).toEqual(listenerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.listener_id).toEqual(listenerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getLoadBalancerListenerPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getLoadBalancerListenerPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getLoadBalancerListenerPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -18534,7 +22648,7 @@ describe('VpcV1', () => {
         id: '70294e14-4e61-11e8-bcf4-0242ac110004',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateLoadBalancerListenerPolicyTest() {
         // Construct the params object for operation updateLoadBalancerListenerPolicy
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
@@ -18561,24 +22675,39 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{id}',
           'PATCH'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['priority']).toEqual(priority);
-        expect(options.body['target']).toEqual(target);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['listener_id']).toEqual(listenerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.priority).toEqual(priority);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.listener_id).toEqual(listenerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateLoadBalancerListenerPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateLoadBalancerListenerPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateLoadBalancerListenerPolicyTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -18629,7 +22758,7 @@ describe('VpcV1', () => {
   });
   describe('listLoadBalancerListenerPolicyRules', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listLoadBalancerListenerPolicyRulesTest() {
         // Construct the params object for operation listLoadBalancerListenerPolicyRules
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
@@ -18650,21 +22779,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['listener_id']).toEqual(listenerId);
-        expect(options.path['policy_id']).toEqual(policyId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.listener_id).toEqual(listenerId);
+        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listLoadBalancerListenerPolicyRulesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listLoadBalancerListenerPolicyRulesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listLoadBalancerListenerPolicyRulesTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -18715,7 +22859,7 @@ describe('VpcV1', () => {
   });
   describe('createLoadBalancerListenerPolicyRule', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __createLoadBalancerListenerPolicyRuleTest() {
         // Construct the params object for operation createLoadBalancerListenerPolicyRule
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
@@ -18744,25 +22888,40 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules',
           'POST'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['condition']).toEqual(condition);
-        expect(options.body['type']).toEqual(type);
-        expect(options.body['value']).toEqual(value);
-        expect(options.body['field']).toEqual(field);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['listener_id']).toEqual(listenerId);
-        expect(options.path['policy_id']).toEqual(policyId);
+        expect(mockRequestOptions.body.condition).toEqual(condition);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.body.value).toEqual(value);
+        expect(mockRequestOptions.body.field).toEqual(field);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.listener_id).toEqual(listenerId);
+        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createLoadBalancerListenerPolicyRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createLoadBalancerListenerPolicyRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createLoadBalancerListenerPolicyRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -18819,7 +22978,7 @@ describe('VpcV1', () => {
   });
   describe('deleteLoadBalancerListenerPolicyRule', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteLoadBalancerListenerPolicyRuleTest() {
         // Construct the params object for operation deleteLoadBalancerListenerPolicyRule
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
@@ -18842,22 +23001,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules/{id}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['listener_id']).toEqual(listenerId);
-        expect(options.path['policy_id']).toEqual(policyId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.listener_id).toEqual(listenerId);
+        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteLoadBalancerListenerPolicyRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteLoadBalancerListenerPolicyRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteLoadBalancerListenerPolicyRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -18910,7 +23084,7 @@ describe('VpcV1', () => {
   });
   describe('getLoadBalancerListenerPolicyRule', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getLoadBalancerListenerPolicyRuleTest() {
         // Construct the params object for operation getLoadBalancerListenerPolicyRule
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
@@ -18933,22 +23107,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules/{id}',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['listener_id']).toEqual(listenerId);
-        expect(options.path['policy_id']).toEqual(policyId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.listener_id).toEqual(listenerId);
+        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getLoadBalancerListenerPolicyRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getLoadBalancerListenerPolicyRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getLoadBalancerListenerPolicyRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19001,7 +23190,7 @@ describe('VpcV1', () => {
   });
   describe('updateLoadBalancerListenerPolicyRule', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateLoadBalancerListenerPolicyRuleTest() {
         // Construct the params object for operation updateLoadBalancerListenerPolicyRule
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
@@ -19032,26 +23221,41 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/listeners/{listener_id}/policies/{policy_id}/rules/{id}',
           'PATCH'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['condition']).toEqual(condition);
-        expect(options.body['field']).toEqual(field);
-        expect(options.body['type']).toEqual(type);
-        expect(options.body['value']).toEqual(value);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['listener_id']).toEqual(listenerId);
-        expect(options.path['policy_id']).toEqual(policyId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.condition).toEqual(condition);
+        expect(mockRequestOptions.body.field).toEqual(field);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.body.value).toEqual(value);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.listener_id).toEqual(listenerId);
+        expect(mockRequestOptions.path.policy_id).toEqual(policyId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateLoadBalancerListenerPolicyRuleTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateLoadBalancerListenerPolicyRuleTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateLoadBalancerListenerPolicyRuleTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19104,7 +23308,7 @@ describe('VpcV1', () => {
   });
   describe('listLoadBalancerPools', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listLoadBalancerPoolsTest() {
         // Construct the params object for operation listLoadBalancerPools
         const loadBalancerId = 'testString';
         const params = {
@@ -19119,15 +23323,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/pools', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/load_balancers/{load_balancer_id}/pools', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listLoadBalancerPoolsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listLoadBalancerPoolsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listLoadBalancerPoolsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19204,7 +23423,7 @@ describe('VpcV1', () => {
         type: 'source_ip',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createLoadBalancerPoolTest() {
         // Construct the params object for operation createLoadBalancerPool
         const loadBalancerId = 'testString';
         const algorithm = 'least_connections';
@@ -19233,22 +23452,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/pools', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/load_balancers/{load_balancer_id}/pools', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['algorithm']).toEqual(algorithm);
-        expect(options.body['health_monitor']).toEqual(healthMonitor);
-        expect(options.body['protocol']).toEqual(protocol);
-        expect(options.body['members']).toEqual(members);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['proxy_protocol']).toEqual(proxyProtocol);
-        expect(options.body['session_persistence']).toEqual(sessionPersistence);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
+        expect(mockRequestOptions.body.algorithm).toEqual(algorithm);
+        expect(mockRequestOptions.body.health_monitor).toEqual(healthMonitor);
+        expect(mockRequestOptions.body.protocol).toEqual(protocol);
+        expect(mockRequestOptions.body.members).toEqual(members);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.proxy_protocol).toEqual(proxyProtocol);
+        expect(mockRequestOptions.body.session_persistence).toEqual(sessionPersistence);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createLoadBalancerPoolTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createLoadBalancerPoolTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createLoadBalancerPoolTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19301,7 +23535,7 @@ describe('VpcV1', () => {
   });
   describe('deleteLoadBalancerPool', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteLoadBalancerPoolTest() {
         // Construct the params object for operation deleteLoadBalancerPool
         const loadBalancerId = 'testString';
         const id = 'testString';
@@ -19318,16 +23552,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/pools/{id}', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/load_balancers/{load_balancer_id}/pools/{id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteLoadBalancerPoolTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteLoadBalancerPoolTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteLoadBalancerPoolTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19376,7 +23629,7 @@ describe('VpcV1', () => {
   });
   describe('getLoadBalancerPool', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getLoadBalancerPoolTest() {
         // Construct the params object for operation getLoadBalancerPool
         const loadBalancerId = 'testString';
         const id = 'testString';
@@ -19393,16 +23646,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/pools/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/load_balancers/{load_balancer_id}/pools/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getLoadBalancerPoolTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getLoadBalancerPoolTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getLoadBalancerPoolTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19469,7 +23741,7 @@ describe('VpcV1', () => {
         type: 'source_ip',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateLoadBalancerPoolTest() {
         // Construct the params object for operation updateLoadBalancerPool
         const loadBalancerId = 'testString';
         const id = 'testString';
@@ -19498,22 +23770,41 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/load_balancers/{load_balancer_id}/pools/{id}', 'PATCH');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/load_balancers/{load_balancer_id}/pools/{id}',
+          'PATCH'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['algorithm']).toEqual(algorithm);
-        expect(options.body['health_monitor']).toEqual(healthMonitor);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['protocol']).toEqual(protocol);
-        expect(options.body['proxy_protocol']).toEqual(proxyProtocol);
-        expect(options.body['session_persistence']).toEqual(sessionPersistence);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.algorithm).toEqual(algorithm);
+        expect(mockRequestOptions.body.health_monitor).toEqual(healthMonitor);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.protocol).toEqual(protocol);
+        expect(mockRequestOptions.body.proxy_protocol).toEqual(proxyProtocol);
+        expect(mockRequestOptions.body.session_persistence).toEqual(sessionPersistence);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateLoadBalancerPoolTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateLoadBalancerPoolTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateLoadBalancerPoolTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19562,7 +23853,7 @@ describe('VpcV1', () => {
   });
   describe('listLoadBalancerPoolMembers', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listLoadBalancerPoolMembersTest() {
         // Construct the params object for operation listLoadBalancerPoolMembers
         const loadBalancerId = 'testString';
         const poolId = 'testString';
@@ -19579,20 +23870,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/pools/{pool_id}/members',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['pool_id']).toEqual(poolId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.pool_id).toEqual(poolId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listLoadBalancerPoolMembersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listLoadBalancerPoolMembersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listLoadBalancerPoolMembersTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19648,7 +23954,7 @@ describe('VpcV1', () => {
         id: '1e09281b-f177-46fb-baf1-bc152b2e391a',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createLoadBalancerPoolMemberTest() {
         // Construct the params object for operation createLoadBalancerPoolMember
         const loadBalancerId = 'testString';
         const poolId = 'testString';
@@ -19671,23 +23977,38 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/pools/{pool_id}/members',
           'POST'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['port']).toEqual(port);
-        expect(options.body['target']).toEqual(target);
-        expect(options.body['weight']).toEqual(weight);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['pool_id']).toEqual(poolId);
+        expect(mockRequestOptions.body.port).toEqual(port);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.body.weight).toEqual(weight);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.pool_id).toEqual(poolId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createLoadBalancerPoolMemberTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createLoadBalancerPoolMemberTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createLoadBalancerPoolMemberTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19754,7 +24075,7 @@ describe('VpcV1', () => {
         weight: 50,
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __replaceLoadBalancerPoolMembersTest() {
         // Construct the params object for operation replaceLoadBalancerPoolMembers
         const loadBalancerId = 'testString';
         const poolId = 'testString';
@@ -19775,21 +24096,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/pools/{pool_id}/members',
           'PUT'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['members']).toEqual(members);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['pool_id']).toEqual(poolId);
+        expect(mockRequestOptions.body.members).toEqual(members);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.pool_id).toEqual(poolId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __replaceLoadBalancerPoolMembersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __replaceLoadBalancerPoolMembersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __replaceLoadBalancerPoolMembersTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19840,7 +24176,7 @@ describe('VpcV1', () => {
   });
   describe('deleteLoadBalancerPoolMember', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteLoadBalancerPoolMemberTest() {
         // Construct the params object for operation deleteLoadBalancerPoolMember
         const loadBalancerId = 'testString';
         const poolId = 'testString';
@@ -19859,21 +24195,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/pools/{pool_id}/members/{id}',
           'DELETE'
         );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['pool_id']).toEqual(poolId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.pool_id).toEqual(poolId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteLoadBalancerPoolMemberTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteLoadBalancerPoolMemberTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteLoadBalancerPoolMemberTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -19924,7 +24275,7 @@ describe('VpcV1', () => {
   });
   describe('getLoadBalancerPoolMember', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getLoadBalancerPoolMemberTest() {
         // Construct the params object for operation getLoadBalancerPoolMember
         const loadBalancerId = 'testString';
         const poolId = 'testString';
@@ -19943,21 +24294,36 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/pools/{pool_id}/members/{id}',
           'GET'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['pool_id']).toEqual(poolId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.pool_id).toEqual(poolId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getLoadBalancerPoolMemberTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getLoadBalancerPoolMemberTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getLoadBalancerPoolMemberTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20015,7 +24381,7 @@ describe('VpcV1', () => {
         id: '1e09281b-f177-46fb-baf1-bc152b2e391a',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __updateLoadBalancerPoolMemberTest() {
         // Construct the params object for operation updateLoadBalancerPoolMember
         const loadBalancerId = 'testString';
         const poolId = 'testString';
@@ -20040,24 +24406,39 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
         checkUrlAndMethod(
-          options,
+          mockRequestOptions,
           '/load_balancers/{load_balancer_id}/pools/{pool_id}/members/{id}',
           'PATCH'
         );
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['port']).toEqual(port);
-        expect(options.body['target']).toEqual(target);
-        expect(options.body['weight']).toEqual(weight);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['load_balancer_id']).toEqual(loadBalancerId);
-        expect(options.path['pool_id']).toEqual(poolId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.port).toEqual(port);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.body.weight).toEqual(weight);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
+        expect(mockRequestOptions.path.pool_id).toEqual(poolId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateLoadBalancerPoolMemberTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateLoadBalancerPoolMemberTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateLoadBalancerPoolMemberTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20108,7 +24489,7 @@ describe('VpcV1', () => {
   });
   describe('listEndpointGateways', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listEndpointGatewaysTest() {
         // Construct the params object for operation listEndpointGateways
         const name = 'testString';
         const start = 'testString';
@@ -20129,18 +24510,33 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/endpoint_gateways', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/endpoint_gateways', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listEndpointGatewaysTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listEndpointGatewaysTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listEndpointGatewaysTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20191,7 +24587,7 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createEndpointGatewayTest() {
         // Construct the params object for operation createEndpointGateway
         const target = endpointGatewayTargetPrototypeModel;
         const vpc = vpcIdentityModel;
@@ -20214,19 +24610,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/endpoint_gateways', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/endpoint_gateways', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['target']).toEqual(target);
-        expect(options.body['vpc']).toEqual(vpc);
-        expect(options.body['ips']).toEqual(ips);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.body.vpc).toEqual(vpc);
+        expect(mockRequestOptions.body.ips).toEqual(ips);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createEndpointGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createEndpointGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createEndpointGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20275,7 +24686,7 @@ describe('VpcV1', () => {
   });
   describe('listEndpointGatewayIps', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listEndpointGatewayIpsTest() {
         // Construct the params object for operation listEndpointGatewayIps
         const endpointGatewayId = 'testString';
         const start = 'testString';
@@ -20296,18 +24707,37 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/endpoint_gateways/{endpoint_gateway_id}/ips', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/endpoint_gateways/{endpoint_gateway_id}/ips',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['sort']).toEqual(sort);
-        expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.path.endpoint_gateway_id).toEqual(endpointGatewayId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listEndpointGatewayIpsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listEndpointGatewayIpsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listEndpointGatewayIpsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20354,7 +24784,7 @@ describe('VpcV1', () => {
   });
   describe('removeEndpointGatewayIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __removeEndpointGatewayIpTest() {
         // Construct the params object for operation removeEndpointGatewayIp
         const endpointGatewayId = 'testString';
         const id = 'testString';
@@ -20371,16 +24801,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/endpoint_gateways/{endpoint_gateway_id}/ips/{id}', 'DELETE');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/endpoint_gateways/{endpoint_gateway_id}/ips/{id}',
+          'DELETE'
+        );
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.endpoint_gateway_id).toEqual(endpointGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeEndpointGatewayIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __removeEndpointGatewayIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __removeEndpointGatewayIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20429,7 +24878,7 @@ describe('VpcV1', () => {
   });
   describe('getEndpointGatewayIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getEndpointGatewayIpTest() {
         // Construct the params object for operation getEndpointGatewayIp
         const endpointGatewayId = 'testString';
         const id = 'testString';
@@ -20446,16 +24895,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/endpoint_gateways/{endpoint_gateway_id}/ips/{id}', 'GET');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/endpoint_gateways/{endpoint_gateway_id}/ips/{id}',
+          'GET'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.endpoint_gateway_id).toEqual(endpointGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getEndpointGatewayIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getEndpointGatewayIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getEndpointGatewayIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20504,7 +24972,7 @@ describe('VpcV1', () => {
   });
   describe('addEndpointGatewayIp', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __addEndpointGatewayIpTest() {
         // Construct the params object for operation addEndpointGatewayIp
         const endpointGatewayId = 'testString';
         const id = 'testString';
@@ -20521,16 +24989,35 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/endpoint_gateways/{endpoint_gateway_id}/ips/{id}', 'PUT');
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/endpoint_gateways/{endpoint_gateway_id}/ips/{id}',
+          'PUT'
+        );
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['endpoint_gateway_id']).toEqual(endpointGatewayId);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.endpoint_gateway_id).toEqual(endpointGatewayId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addEndpointGatewayIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __addEndpointGatewayIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __addEndpointGatewayIpTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20579,7 +25066,7 @@ describe('VpcV1', () => {
   });
   describe('deleteEndpointGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteEndpointGatewayTest() {
         // Construct the params object for operation deleteEndpointGateway
         const id = 'testString';
         const params = {
@@ -20594,15 +25081,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/endpoint_gateways/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/endpoint_gateways/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteEndpointGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteEndpointGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteEndpointGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20649,7 +25151,7 @@ describe('VpcV1', () => {
   });
   describe('getEndpointGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getEndpointGatewayTest() {
         // Construct the params object for operation getEndpointGateway
         const id = 'testString';
         const params = {
@@ -20664,15 +25166,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/endpoint_gateways/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/endpoint_gateways/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getEndpointGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getEndpointGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getEndpointGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20719,7 +25236,7 @@ describe('VpcV1', () => {
   });
   describe('updateEndpointGateway', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateEndpointGatewayTest() {
         // Construct the params object for operation updateEndpointGateway
         const id = 'testString';
         const name = 'my-endpoint-gateway';
@@ -20736,16 +25253,31 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/endpoint_gateways/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/endpoint_gateways/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateEndpointGatewayTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateEndpointGatewayTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateEndpointGatewayTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20792,7 +25324,7 @@ describe('VpcV1', () => {
   });
   describe('listFlowLogCollectors', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __listFlowLogCollectorsTest() {
         // Construct the params object for operation listFlowLogCollectors
         const start = 'testString';
         const limit = 1;
@@ -20823,23 +25355,38 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/flow_log_collectors', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/flow_log_collectors', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.qs['start']).toEqual(start);
-        expect(options.qs['limit']).toEqual(limit);
-        expect(options.qs['resource_group.id']).toEqual(resourceGroupId);
-        expect(options.qs['name']).toEqual(name);
-        expect(options.qs['vpc.id']).toEqual(vpcId);
-        expect(options.qs['vpc.crn']).toEqual(vpcCrn);
-        expect(options.qs['vpc.name']).toEqual(vpcName);
-        expect(options.qs['target.id']).toEqual(targetId);
-        expect(options.qs['target.resource_type']).toEqual(targetResourceType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs['vpc.id']).toEqual(vpcId);
+        expect(mockRequestOptions.qs['vpc.crn']).toEqual(vpcCrn);
+        expect(mockRequestOptions.qs['vpc.name']).toEqual(vpcName);
+        expect(mockRequestOptions.qs['target.id']).toEqual(targetId);
+        expect(mockRequestOptions.qs['target.resource_type']).toEqual(targetResourceType);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listFlowLogCollectorsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listFlowLogCollectorsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listFlowLogCollectorsTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20883,7 +25430,7 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      test('should pass the right params to createRequest', () => {
+      function __createFlowLogCollectorTest() {
         // Construct the params object for operation createFlowLogCollector
         const storageBucket = cloudObjectStorageBucketIdentityModel;
         const target = flowLogCollectorTargetPrototypeModel;
@@ -20906,19 +25453,34 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/flow_log_collectors', 'POST');
+        checkUrlAndMethod(mockRequestOptions, '/flow_log_collectors', 'POST');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['storage_bucket']).toEqual(storageBucket);
-        expect(options.body['target']).toEqual(target);
-        expect(options.body['active']).toEqual(active);
-        expect(options.body['name']).toEqual(name);
-        expect(options.body['resource_group']).toEqual(resourceGroup);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.body.storage_bucket).toEqual(storageBucket);
+        expect(mockRequestOptions.body.target).toEqual(target);
+        expect(mockRequestOptions.body.active).toEqual(active);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createFlowLogCollectorTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createFlowLogCollectorTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createFlowLogCollectorTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -20967,7 +25529,7 @@ describe('VpcV1', () => {
   });
   describe('deleteFlowLogCollector', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __deleteFlowLogCollectorTest() {
         // Construct the params object for operation deleteFlowLogCollector
         const id = 'testString';
         const params = {
@@ -20982,15 +25544,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/flow_log_collectors/{id}', 'DELETE');
+        checkUrlAndMethod(mockRequestOptions, '/flow_log_collectors/{id}', 'DELETE');
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteFlowLogCollectorTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteFlowLogCollectorTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteFlowLogCollectorTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -21037,7 +25614,7 @@ describe('VpcV1', () => {
   });
   describe('getFlowLogCollector', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __getFlowLogCollectorTest() {
         // Construct the params object for operation getFlowLogCollector
         const id = 'testString';
         const params = {
@@ -21052,15 +25629,30 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/flow_log_collectors/{id}', 'GET');
+        checkUrlAndMethod(mockRequestOptions, '/flow_log_collectors/{id}', 'GET');
         const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getFlowLogCollectorTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getFlowLogCollectorTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getFlowLogCollectorTest();
       });
 
       test('should prioritize user-given headers', () => {
@@ -21107,7 +25699,7 @@ describe('VpcV1', () => {
   });
   describe('updateFlowLogCollector', () => {
     describe('positive tests', () => {
-      test('should pass the right params to createRequest', () => {
+      function __updateFlowLogCollectorTest() {
         // Construct the params object for operation updateFlowLogCollector
         const id = 'testString';
         const active = true;
@@ -21126,17 +25718,32 @@ describe('VpcV1', () => {
         // assert that create request was called
         expect(createRequestMock).toHaveBeenCalledTimes(1);
 
-        const options = getOptions(createRequestMock);
+        const mockRequestOptions = getOptions(createRequestMock);
 
-        checkUrlAndMethod(options, '/flow_log_collectors/{id}', 'PATCH');
+        checkUrlAndMethod(mockRequestOptions, '/flow_log_collectors/{id}', 'PATCH');
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(options.body['active']).toEqual(active);
-        expect(options.body['name']).toEqual(name);
-        expect(options.qs['version']).toEqual(vpcServiceOptions.version);
-        expect(options.qs['generation']).toEqual(vpcServiceOptions.generation);
-        expect(options.path['id']).toEqual(id);
+        expect(mockRequestOptions.body.active).toEqual(active);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateFlowLogCollectorTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateFlowLogCollectorTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateFlowLogCollectorTest();
       });
 
       test('should prioritize user-given headers', () => {
