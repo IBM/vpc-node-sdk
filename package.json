@@ -27,7 +27,6 @@
     "test-travis": "jest --runInBand --testNamePattern='^((?!@slow).)*$' test/",
     "test-unit-travis": "jest --runInBand test/unit/",
     "test-integration-travis": "jest --runInBand --no-colors --testNamePattern='^((?!@slow).)*$' --json test/integration > test-output.log",
-    "report-coverage": "codecov",
     "check-packages": "installed-check -e -d -v"
   },
   "license": "Apache-2.0",
@@ -43,7 +42,6 @@
     "@semantic-release/changelog": "^3.0.4",
     "@semantic-release/git": "^7.0.12",
     "axios": "^0.21.1",
-    "codecov": "^3.5.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.9.0",
     "eslint-config-google": "^0.12.0",
