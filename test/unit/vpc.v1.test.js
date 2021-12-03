@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2020, 2021.
+ * (C) Copyright IBM Corp. 2021.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-'use strict';
+
 // need to import the whole package to mock getAuthenticatorFromEnvironment
 const core = require('ibm-cloud-sdk-core');
 
@@ -342,7 +342,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteVpc({});
@@ -351,17 +351,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteVpcPromise = vpcService.deleteVpc();
-        expectToBePromise(deleteVpcPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpc();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteVpcPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -427,7 +427,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVpc({});
@@ -436,17 +436,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVpcPromise = vpcService.getVpc();
-        expectToBePromise(getVpcPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpc();
+        } catch (e) {
+          err = e;
+        }
 
-        getVpcPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -515,7 +515,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateVpc({});
@@ -524,17 +524,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateVpcPromise = vpcService.updateVpc();
-        expectToBePromise(updateVpcPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateVpc();
+        } catch (e) {
+          err = e;
+        }
 
-        updateVpcPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -600,7 +600,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVpcDefaultNetworkAcl({});
@@ -609,17 +609,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVpcDefaultNetworkAclPromise = vpcService.getVpcDefaultNetworkAcl();
-        expectToBePromise(getVpcDefaultNetworkAclPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpcDefaultNetworkAcl();
+        } catch (e) {
+          err = e;
+        }
 
-        getVpcDefaultNetworkAclPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -685,7 +685,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVpcDefaultRoutingTable({});
@@ -694,17 +694,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVpcDefaultRoutingTablePromise = vpcService.getVpcDefaultRoutingTable();
-        expectToBePromise(getVpcDefaultRoutingTablePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpcDefaultRoutingTable();
+        } catch (e) {
+          err = e;
+        }
 
-        getVpcDefaultRoutingTablePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -770,7 +770,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVpcDefaultSecurityGroup({});
@@ -779,17 +779,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVpcDefaultSecurityGroupPromise = vpcService.getVpcDefaultSecurityGroup();
-        expectToBePromise(getVpcDefaultSecurityGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpcDefaultSecurityGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        getVpcDefaultSecurityGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -861,7 +861,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listVpcAddressPrefixes({});
@@ -870,17 +870,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listVpcAddressPrefixesPromise = vpcService.listVpcAddressPrefixes();
-        expectToBePromise(listVpcAddressPrefixesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listVpcAddressPrefixes();
+        } catch (e) {
+          err = e;
+        }
 
-        listVpcAddressPrefixesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -969,7 +969,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createVpcAddressPrefix({});
@@ -978,17 +978,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createVpcAddressPrefixPromise = vpcService.createVpcAddressPrefix();
-        expectToBePromise(createVpcAddressPrefixPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createVpcAddressPrefix();
+        } catch (e) {
+          err = e;
+        }
 
-        createVpcAddressPrefixPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1059,7 +1059,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteVpcAddressPrefix({});
@@ -1068,17 +1068,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteVpcAddressPrefixPromise = vpcService.deleteVpcAddressPrefix();
-        expectToBePromise(deleteVpcAddressPrefixPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpcAddressPrefix();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteVpcAddressPrefixPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1149,7 +1149,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVpcAddressPrefix({});
@@ -1158,17 +1158,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVpcAddressPrefixPromise = vpcService.getVpcAddressPrefix();
-        expectToBePromise(getVpcAddressPrefixPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpcAddressPrefix();
+        } catch (e) {
+          err = e;
+        }
 
-        getVpcAddressPrefixPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1245,7 +1245,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateVpcAddressPrefix({});
@@ -1254,17 +1254,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateVpcAddressPrefixPromise = vpcService.updateVpcAddressPrefix();
-        expectToBePromise(updateVpcAddressPrefixPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateVpcAddressPrefix();
+        } catch (e) {
+          err = e;
+        }
 
-        updateVpcAddressPrefixPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1339,7 +1339,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listVpcRoutes({});
@@ -1348,17 +1348,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listVpcRoutesPromise = vpcService.listVpcRoutes();
-        expectToBePromise(listVpcRoutesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listVpcRoutes();
+        } catch (e) {
+          err = e;
+        }
 
-        listVpcRoutesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1455,7 +1455,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createVpcRoute({});
@@ -1464,17 +1464,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createVpcRoutePromise = vpcService.createVpcRoute();
-        expectToBePromise(createVpcRoutePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createVpcRoute();
+        } catch (e) {
+          err = e;
+        }
 
-        createVpcRoutePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1545,7 +1545,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteVpcRoute({});
@@ -1554,17 +1554,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteVpcRoutePromise = vpcService.deleteVpcRoute();
-        expectToBePromise(deleteVpcRoutePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpcRoute();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteVpcRoutePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1635,7 +1635,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVpcRoute({});
@@ -1644,17 +1644,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVpcRoutePromise = vpcService.getVpcRoute();
-        expectToBePromise(getVpcRoutePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpcRoute();
+        } catch (e) {
+          err = e;
+        }
 
-        getVpcRoutePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1728,7 +1728,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateVpcRoute({});
@@ -1737,17 +1737,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateVpcRoutePromise = vpcService.updateVpcRoute();
-        expectToBePromise(updateVpcRoutePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateVpcRoute();
+        } catch (e) {
+          err = e;
+        }
 
-        updateVpcRoutePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1822,7 +1822,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listVpcRoutingTables({});
@@ -1831,17 +1831,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listVpcRoutingTablesPromise = vpcService.listVpcRoutingTables();
-        expectToBePromise(listVpcRoutingTablesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listVpcRoutingTables();
+        } catch (e) {
+          err = e;
+        }
 
-        listVpcRoutingTablesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -1945,7 +1945,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createVpcRoutingTable({});
@@ -1954,17 +1954,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createVpcRoutingTablePromise = vpcService.createVpcRoutingTable();
-        expectToBePromise(createVpcRoutingTablePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createVpcRoutingTable();
+        } catch (e) {
+          err = e;
+        }
 
-        createVpcRoutingTablePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -2035,7 +2035,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteVpcRoutingTable({});
@@ -2044,17 +2044,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteVpcRoutingTablePromise = vpcService.deleteVpcRoutingTable();
-        expectToBePromise(deleteVpcRoutingTablePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpcRoutingTable();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteVpcRoutingTablePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -2125,7 +2125,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVpcRoutingTable({});
@@ -2134,17 +2134,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVpcRoutingTablePromise = vpcService.getVpcRoutingTable();
-        expectToBePromise(getVpcRoutingTablePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpcRoutingTable();
+        } catch (e) {
+          err = e;
+        }
 
-        getVpcRoutingTablePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -2229,7 +2229,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateVpcRoutingTable({});
@@ -2238,17 +2238,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateVpcRoutingTablePromise = vpcService.updateVpcRoutingTable();
-        expectToBePromise(updateVpcRoutingTablePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateVpcRoutingTable();
+        } catch (e) {
+          err = e;
+        }
 
-        updateVpcRoutingTablePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -2329,7 +2329,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listVpcRoutingTableRoutes({});
@@ -2338,17 +2338,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listVpcRoutingTableRoutesPromise = vpcService.listVpcRoutingTableRoutes();
-        expectToBePromise(listVpcRoutingTableRoutesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listVpcRoutingTableRoutes();
+        } catch (e) {
+          err = e;
+        }
 
-        listVpcRoutingTableRoutesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -2454,7 +2454,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createVpcRoutingTableRoute({});
@@ -2463,17 +2463,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createVpcRoutingTableRoutePromise = vpcService.createVpcRoutingTableRoute();
-        expectToBePromise(createVpcRoutingTableRoutePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createVpcRoutingTableRoute();
+        } catch (e) {
+          err = e;
+        }
 
-        createVpcRoutingTableRoutePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -2553,7 +2553,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteVpcRoutingTableRoute({});
@@ -2562,17 +2562,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteVpcRoutingTableRoutePromise = vpcService.deleteVpcRoutingTableRoute();
-        expectToBePromise(deleteVpcRoutingTableRoutePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpcRoutingTableRoute();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteVpcRoutingTableRoutePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -2652,7 +2652,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVpcRoutingTableRoute({});
@@ -2661,17 +2661,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVpcRoutingTableRoutePromise = vpcService.getVpcRoutingTableRoute();
-        expectToBePromise(getVpcRoutingTableRoutePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpcRoutingTableRoute();
+        } catch (e) {
+          err = e;
+        }
 
-        getVpcRoutingTableRoutePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -2754,7 +2754,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateVpcRoutingTableRoute({});
@@ -2763,17 +2763,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateVpcRoutingTableRoutePromise = vpcService.updateVpcRoutingTableRoute();
-        expectToBePromise(updateVpcRoutingTableRoutePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateVpcRoutingTableRoute();
+        } catch (e) {
+          err = e;
+        }
 
-        updateVpcRoutingTableRoutePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -2961,7 +2961,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createSubnet({});
@@ -2970,17 +2970,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createSubnetPromise = vpcService.createSubnet();
-        expectToBePromise(createSubnetPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createSubnet();
+        } catch (e) {
+          err = e;
+        }
 
-        createSubnetPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3046,7 +3046,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteSubnet({});
@@ -3055,17 +3055,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteSubnetPromise = vpcService.deleteSubnet();
-        expectToBePromise(deleteSubnetPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteSubnet();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteSubnetPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3131,7 +3131,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getSubnet({});
@@ -3140,17 +3140,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getSubnetPromise = vpcService.getSubnet();
-        expectToBePromise(getSubnetPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSubnet();
+        } catch (e) {
+          err = e;
+        }
 
-        getSubnetPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3245,7 +3245,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateSubnet({});
@@ -3254,17 +3254,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateSubnetPromise = vpcService.updateSubnet();
-        expectToBePromise(updateSubnetPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateSubnet();
+        } catch (e) {
+          err = e;
+        }
 
-        updateSubnetPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3330,7 +3330,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getSubnetNetworkAcl({});
@@ -3339,17 +3339,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getSubnetNetworkAclPromise = vpcService.getSubnetNetworkAcl();
-        expectToBePromise(getSubnetNetworkAclPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSubnetNetworkAcl();
+        } catch (e) {
+          err = e;
+        }
 
-        getSubnetNetworkAclPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3427,7 +3427,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.replaceSubnetNetworkAcl({});
@@ -3436,17 +3436,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const replaceSubnetNetworkAclPromise = vpcService.replaceSubnetNetworkAcl();
-        expectToBePromise(replaceSubnetNetworkAclPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.replaceSubnetNetworkAcl();
+        } catch (e) {
+          err = e;
+        }
 
-        replaceSubnetNetworkAclPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3512,7 +3512,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.unsetSubnetPublicGateway({});
@@ -3521,17 +3521,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const unsetSubnetPublicGatewayPromise = vpcService.unsetSubnetPublicGateway();
-        expectToBePromise(unsetSubnetPublicGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.unsetSubnetPublicGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        unsetSubnetPublicGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3597,7 +3597,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getSubnetPublicGateway({});
@@ -3606,17 +3606,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getSubnetPublicGatewayPromise = vpcService.getSubnetPublicGateway();
-        expectToBePromise(getSubnetPublicGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSubnetPublicGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        getSubnetPublicGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3694,7 +3694,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.setSubnetPublicGateway({});
@@ -3703,17 +3703,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const setSubnetPublicGatewayPromise = vpcService.setSubnetPublicGateway();
-        expectToBePromise(setSubnetPublicGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.setSubnetPublicGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        setSubnetPublicGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3779,7 +3779,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getSubnetRoutingTable({});
@@ -3788,17 +3788,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getSubnetRoutingTablePromise = vpcService.getSubnetRoutingTable();
-        expectToBePromise(getSubnetRoutingTablePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSubnetRoutingTable();
+        } catch (e) {
+          err = e;
+        }
 
-        getSubnetRoutingTablePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3876,7 +3876,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.replaceSubnetRoutingTable({});
@@ -3885,17 +3885,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const replaceSubnetRoutingTablePromise = vpcService.replaceSubnetRoutingTable();
-        expectToBePromise(replaceSubnetRoutingTablePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.replaceSubnetRoutingTable();
+        } catch (e) {
+          err = e;
+        }
 
-        replaceSubnetRoutingTablePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -3970,7 +3970,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listSubnetReservedIps({});
@@ -3979,17 +3979,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listSubnetReservedIpsPromise = vpcService.listSubnetReservedIps();
-        expectToBePromise(listSubnetReservedIpsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listSubnetReservedIps();
+        } catch (e) {
+          err = e;
+        }
 
-        listSubnetReservedIpsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -4071,7 +4071,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createSubnetReservedIp({});
@@ -4080,17 +4080,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createSubnetReservedIpPromise = vpcService.createSubnetReservedIp();
-        expectToBePromise(createSubnetReservedIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createSubnetReservedIp();
+        } catch (e) {
+          err = e;
+        }
 
-        createSubnetReservedIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -4161,7 +4161,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteSubnetReservedIp({});
@@ -4170,17 +4170,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteSubnetReservedIpPromise = vpcService.deleteSubnetReservedIp();
-        expectToBePromise(deleteSubnetReservedIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteSubnetReservedIp();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteSubnetReservedIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -4251,7 +4251,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getSubnetReservedIp({});
@@ -4260,17 +4260,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getSubnetReservedIpPromise = vpcService.getSubnetReservedIp();
-        expectToBePromise(getSubnetReservedIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSubnetReservedIp();
+        } catch (e) {
+          err = e;
+        }
 
-        getSubnetReservedIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -4347,7 +4347,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateSubnetReservedIp({});
@@ -4356,17 +4356,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateSubnetReservedIpPromise = vpcService.updateSubnetReservedIp();
-        expectToBePromise(updateSubnetReservedIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateSubnetReservedIp();
+        } catch (e) {
+          err = e;
+        }
 
-        updateSubnetReservedIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -4542,7 +4542,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createImage({});
@@ -4551,17 +4551,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createImagePromise = vpcService.createImage();
-        expectToBePromise(createImagePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createImage();
+        } catch (e) {
+          err = e;
+        }
 
-        createImagePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -4627,7 +4627,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteImage({});
@@ -4636,17 +4636,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteImagePromise = vpcService.deleteImage();
-        expectToBePromise(deleteImagePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteImage();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteImagePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -4712,7 +4712,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getImage({});
@@ -4721,17 +4721,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getImagePromise = vpcService.getImage();
-        expectToBePromise(getImagePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getImage();
+        } catch (e) {
+          err = e;
+        }
 
-        getImagePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -4800,7 +4800,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateImage({});
@@ -4809,17 +4809,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateImagePromise = vpcService.updateImage();
-        expectToBePromise(updateImagePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateImage();
+        } catch (e) {
+          err = e;
+        }
 
-        updateImagePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -4953,7 +4953,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getOperatingSystem({});
@@ -4962,17 +4962,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getOperatingSystemPromise = vpcService.getOperatingSystem();
-        expectToBePromise(getOperatingSystemPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getOperatingSystem();
+        } catch (e) {
+          err = e;
+        }
 
-        getOperatingSystemPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -4982,11 +4982,9 @@ describe('VpcV1', () => {
         // Construct the params object for operation listKeys
         const start = 'testString';
         const limit = 1;
-        const resourceGroupId = 'testString';
         const params = {
           start: start,
           limit: limit,
-          resourceGroupId: resourceGroupId,
         };
 
         const listKeysResult = vpcService.listKeys(params);
@@ -5007,7 +5005,6 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
         expect(mockRequestOptions.qs.start).toEqual(start);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
-        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -5059,7 +5056,7 @@ describe('VpcV1', () => {
       function __createKeyTest() {
         // Construct the params object for operation createKey
         const publicKey =
-          'AAAAB3NzaC1yc2EAAAADAQABAAABAQDDGe50Bxa5T5NDddrrtbx2Y4/VGbiCgXqnBsYToIUKoFSHTQl5IX3PasGnneKanhcLwWz5M5MoCRvhxTp66NKzIfAz7r+FX9rxgR+ZgcM253YAqOVeIpOU408simDZKriTlN8kYsXL7P34tsWuAJf4MgZtJAQxous/2byetpdCv8ddnT4X3ltOg9w+LqSCPYfNivqH00Eh7S1Ldz7I8aw5WOp5a+sQFP/RbwfpwHp+ny7DfeIOokcuI42tJkoBn7UsLTVpCSmXr2EDRlSWe/1M/iHNRBzaT3CK0+SwZWd2AEjePxSnWKNGIEUJDlUYp7hKhiQcgT5ZAnWU121oc5En';
+          'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDGe50Bxa5T5NDddrrtbx2Y4/VGbiCgXqnBsYToIUKoFSHTQl5IX3PasGnneKanhcLwWz5M5MoCRvhxTp66NKzIfAz7r+FX9rxgR+ZgcM253YAqOVeIpOU408simDZKriTlN8kYsXL7P34tsWuAJf4MgZtJAQxous/2byetpdCv8ddnT4X3ltOg9w+LqSCPYfNivqH00Eh7S1Ldz7I8aw5WOp5a+sQFP/RbwfpwHp+ny7DfeIOokcuI42tJkoBn7UsLTVpCSmXr2EDRlSWe/1M/iHNRBzaT3CK0+SwZWd2AEjePxSnWKNGIEUJDlUYp7hKhiQcgT5ZAnWU121oc5En';
         const name = 'my-key';
         const resourceGroup = resourceGroupIdentityModel;
         const type = 'rsa';
@@ -5110,7 +5107,7 @@ describe('VpcV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const publicKey =
-          'AAAAB3NzaC1yc2EAAAADAQABAAABAQDDGe50Bxa5T5NDddrrtbx2Y4/VGbiCgXqnBsYToIUKoFSHTQl5IX3PasGnneKanhcLwWz5M5MoCRvhxTp66NKzIfAz7r+FX9rxgR+ZgcM253YAqOVeIpOU408simDZKriTlN8kYsXL7P34tsWuAJf4MgZtJAQxous/2byetpdCv8ddnT4X3ltOg9w+LqSCPYfNivqH00Eh7S1Ldz7I8aw5WOp5a+sQFP/RbwfpwHp+ny7DfeIOokcuI42tJkoBn7UsLTVpCSmXr2EDRlSWe/1M/iHNRBzaT3CK0+SwZWd2AEjePxSnWKNGIEUJDlUYp7hKhiQcgT5ZAnWU121oc5En';
+          'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDGe50Bxa5T5NDddrrtbx2Y4/VGbiCgXqnBsYToIUKoFSHTQl5IX3PasGnneKanhcLwWz5M5MoCRvhxTp66NKzIfAz7r+FX9rxgR+ZgcM253YAqOVeIpOU408simDZKriTlN8kYsXL7P34tsWuAJf4MgZtJAQxous/2byetpdCv8ddnT4X3ltOg9w+LqSCPYfNivqH00Eh7S1Ldz7I8aw5WOp5a+sQFP/RbwfpwHp+ny7DfeIOokcuI42tJkoBn7UsLTVpCSmXr2EDRlSWe/1M/iHNRBzaT3CK0+SwZWd2AEjePxSnWKNGIEUJDlUYp7hKhiQcgT5ZAnWU121oc5En';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
@@ -5127,7 +5124,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createKey({});
@@ -5136,17 +5133,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createKeyPromise = vpcService.createKey();
-        expectToBePromise(createKeyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createKey();
+        } catch (e) {
+          err = e;
+        }
 
-        createKeyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -5212,7 +5209,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteKey({});
@@ -5221,17 +5218,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteKeyPromise = vpcService.deleteKey();
-        expectToBePromise(deleteKeyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteKey();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteKeyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -5297,7 +5294,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getKey({});
@@ -5306,17 +5303,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getKeyPromise = vpcService.getKey();
-        expectToBePromise(getKeyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getKey();
+        } catch (e) {
+          err = e;
+        }
 
-        getKeyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -5385,7 +5382,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateKey({});
@@ -5394,17 +5391,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateKeyPromise = vpcService.updateKey();
-        expectToBePromise(updateKeyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateKey();
+        } catch (e) {
+          err = e;
+        }
 
-        updateKeyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -5531,7 +5528,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceProfile({});
@@ -5540,17 +5537,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceProfilePromise = vpcService.getInstanceProfile();
-        expectToBePromise(getInstanceProfilePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceProfile();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceProfilePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -5790,7 +5787,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createInstanceTemplate({});
@@ -5799,17 +5796,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createInstanceTemplatePromise = vpcService.createInstanceTemplate();
-        expectToBePromise(createInstanceTemplatePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceTemplate();
+        } catch (e) {
+          err = e;
+        }
 
-        createInstanceTemplatePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -5875,7 +5872,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstanceTemplate({});
@@ -5884,17 +5881,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstanceTemplatePromise = vpcService.deleteInstanceTemplate();
-        expectToBePromise(deleteInstanceTemplatePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceTemplate();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstanceTemplatePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -5960,7 +5957,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceTemplate({});
@@ -5969,17 +5966,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceTemplatePromise = vpcService.getInstanceTemplate();
-        expectToBePromise(getInstanceTemplatePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceTemplate();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceTemplatePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -6048,7 +6045,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateInstanceTemplate({});
@@ -6057,17 +6054,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateInstanceTemplatePromise = vpcService.updateInstanceTemplate();
-        expectToBePromise(updateInstanceTemplatePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceTemplate();
+        } catch (e) {
+          err = e;
+        }
 
-        updateInstanceTemplatePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -6350,7 +6347,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createInstance({});
@@ -6359,17 +6356,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createInstancePromise = vpcService.createInstance();
-        expectToBePromise(createInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        createInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -6435,7 +6432,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstance({});
@@ -6444,17 +6441,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstancePromise = vpcService.deleteInstance();
-        expectToBePromise(deleteInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -6520,7 +6517,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstance({});
@@ -6529,17 +6526,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstancePromise = vpcService.getInstance();
-        expectToBePromise(getInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -6621,7 +6618,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateInstance({});
@@ -6630,17 +6627,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateInstancePromise = vpcService.updateInstance();
-        expectToBePromise(updateInstancePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstance();
+        } catch (e) {
+          err = e;
+        }
 
-        updateInstancePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -6706,7 +6703,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceInitialization({});
@@ -6715,17 +6712,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceInitializationPromise = vpcService.getInstanceInitialization();
-        expectToBePromise(getInstanceInitializationPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceInitialization();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceInitializationPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -6799,7 +6796,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createInstanceAction({});
@@ -6808,17 +6805,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createInstanceActionPromise = vpcService.createInstanceAction();
-        expectToBePromise(createInstanceActionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceAction();
+        } catch (e) {
+          err = e;
+        }
 
-        createInstanceActionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -6898,7 +6895,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createInstanceConsoleAccessToken({});
@@ -6907,17 +6904,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createInstanceConsoleAccessTokenPromise = vpcService.createInstanceConsoleAccessToken();
-        expectToBePromise(createInstanceConsoleAccessTokenPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceConsoleAccessToken();
+        } catch (e) {
+          err = e;
+        }
 
-        createInstanceConsoleAccessTokenPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -6983,7 +6980,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listInstanceDisks({});
@@ -6992,17 +6989,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listInstanceDisksPromise = vpcService.listInstanceDisks();
-        expectToBePromise(listInstanceDisksPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceDisks();
+        } catch (e) {
+          err = e;
+        }
 
-        listInstanceDisksPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -7073,7 +7070,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceDisk({});
@@ -7082,17 +7079,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceDiskPromise = vpcService.getInstanceDisk();
-        expectToBePromise(getInstanceDiskPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceDisk();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceDiskPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -7166,7 +7163,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateInstanceDisk({});
@@ -7175,17 +7172,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateInstanceDiskPromise = vpcService.updateInstanceDisk();
-        expectToBePromise(updateInstanceDiskPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceDisk();
+        } catch (e) {
+          err = e;
+        }
 
-        updateInstanceDiskPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -7253,7 +7250,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listInstanceNetworkInterfaces({});
@@ -7262,17 +7259,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listInstanceNetworkInterfacesPromise = vpcService.listInstanceNetworkInterfaces();
-        expectToBePromise(listInstanceNetworkInterfacesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceNetworkInterfaces();
+        } catch (e) {
+          err = e;
+        }
 
-        listInstanceNetworkInterfacesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -7373,7 +7370,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createInstanceNetworkInterface({});
@@ -7382,17 +7379,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createInstanceNetworkInterfacePromise = vpcService.createInstanceNetworkInterface();
-        expectToBePromise(createInstanceNetworkInterfacePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
 
-        createInstanceNetworkInterfacePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -7469,7 +7466,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstanceNetworkInterface({});
@@ -7478,17 +7475,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstanceNetworkInterfacePromise = vpcService.deleteInstanceNetworkInterface();
-        expectToBePromise(deleteInstanceNetworkInterfacePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstanceNetworkInterfacePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -7563,7 +7560,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceNetworkInterface({});
@@ -7572,17 +7569,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceNetworkInterfacePromise = vpcService.getInstanceNetworkInterface();
-        expectToBePromise(getInstanceNetworkInterfacePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceNetworkInterfacePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -7665,7 +7662,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateInstanceNetworkInterface({});
@@ -7674,17 +7671,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateInstanceNetworkInterfacePromise = vpcService.updateInstanceNetworkInterface();
-        expectToBePromise(updateInstanceNetworkInterfacePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
 
-        updateInstanceNetworkInterfacePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -7761,7 +7758,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listInstanceNetworkInterfaceFloatingIps({});
@@ -7770,17 +7767,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listInstanceNetworkInterfaceFloatingIpsPromise = vpcService.listInstanceNetworkInterfaceFloatingIps();
-        expectToBePromise(listInstanceNetworkInterfaceFloatingIpsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceNetworkInterfaceFloatingIps();
+        } catch (e) {
+          err = e;
+        }
 
-        listInstanceNetworkInterfaceFloatingIpsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -7862,7 +7859,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.removeInstanceNetworkInterfaceFloatingIp({});
@@ -7871,17 +7868,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeInstanceNetworkInterfaceFloatingIpPromise = vpcService.removeInstanceNetworkInterfaceFloatingIp();
-        expectToBePromise(removeInstanceNetworkInterfaceFloatingIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.removeInstanceNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
 
-        removeInstanceNetworkInterfaceFloatingIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -7963,7 +7960,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceNetworkInterfaceFloatingIp({});
@@ -7972,17 +7969,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceNetworkInterfaceFloatingIpPromise = vpcService.getInstanceNetworkInterfaceFloatingIp();
-        expectToBePromise(getInstanceNetworkInterfaceFloatingIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceNetworkInterfaceFloatingIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -8064,7 +8061,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.addInstanceNetworkInterfaceFloatingIp({});
@@ -8073,17 +8070,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addInstanceNetworkInterfaceFloatingIpPromise = vpcService.addInstanceNetworkInterfaceFloatingIp();
-        expectToBePromise(addInstanceNetworkInterfaceFloatingIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.addInstanceNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
 
-        addInstanceNetworkInterfaceFloatingIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -8151,7 +8148,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listInstanceVolumeAttachments({});
@@ -8160,17 +8157,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listInstanceVolumeAttachmentsPromise = vpcService.listInstanceVolumeAttachments();
-        expectToBePromise(listInstanceVolumeAttachmentsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceVolumeAttachments();
+        } catch (e) {
+          err = e;
+        }
 
-        listInstanceVolumeAttachmentsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -8262,7 +8259,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createInstanceVolumeAttachment({});
@@ -8271,17 +8268,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createInstanceVolumeAttachmentPromise = vpcService.createInstanceVolumeAttachment();
-        expectToBePromise(createInstanceVolumeAttachmentPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceVolumeAttachment();
+        } catch (e) {
+          err = e;
+        }
 
-        createInstanceVolumeAttachmentPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -8358,7 +8355,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstanceVolumeAttachment({});
@@ -8367,17 +8364,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstanceVolumeAttachmentPromise = vpcService.deleteInstanceVolumeAttachment();
-        expectToBePromise(deleteInstanceVolumeAttachmentPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceVolumeAttachment();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstanceVolumeAttachmentPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -8452,7 +8449,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceVolumeAttachment({});
@@ -8461,17 +8458,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceVolumeAttachmentPromise = vpcService.getInstanceVolumeAttachment();
-        expectToBePromise(getInstanceVolumeAttachmentPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceVolumeAttachment();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceVolumeAttachmentPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -8556,7 +8553,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateInstanceVolumeAttachment({});
@@ -8565,17 +8562,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateInstanceVolumeAttachmentPromise = vpcService.updateInstanceVolumeAttachment();
-        expectToBePromise(updateInstanceVolumeAttachmentPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceVolumeAttachment();
+        } catch (e) {
+          err = e;
+        }
 
-        updateInstanceVolumeAttachmentPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -8759,7 +8756,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createInstanceGroup({});
@@ -8768,17 +8765,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createInstanceGroupPromise = vpcService.createInstanceGroup();
-        expectToBePromise(createInstanceGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        createInstanceGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -8844,7 +8841,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstanceGroup({});
@@ -8853,17 +8850,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstanceGroupPromise = vpcService.deleteInstanceGroup();
-        expectToBePromise(deleteInstanceGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstanceGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -8929,7 +8926,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceGroup({});
@@ -8938,17 +8935,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceGroupPromise = vpcService.getInstanceGroup();
-        expectToBePromise(getInstanceGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -9057,7 +9054,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateInstanceGroup({});
@@ -9066,17 +9063,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateInstanceGroupPromise = vpcService.updateInstanceGroup();
-        expectToBePromise(updateInstanceGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        updateInstanceGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -9148,7 +9145,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstanceGroupLoadBalancer({});
@@ -9157,17 +9154,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstanceGroupLoadBalancerPromise = vpcService.deleteInstanceGroupLoadBalancer();
-        expectToBePromise(deleteInstanceGroupLoadBalancerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceGroupLoadBalancer();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstanceGroupLoadBalancerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -9243,7 +9240,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listInstanceGroupManagers({});
@@ -9252,17 +9249,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listInstanceGroupManagersPromise = vpcService.listInstanceGroupManagers();
-        expectToBePromise(listInstanceGroupManagersPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceGroupManagers();
+        } catch (e) {
+          err = e;
+        }
 
-        listInstanceGroupManagersPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -9350,7 +9347,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createInstanceGroupManager({});
@@ -9359,17 +9356,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createInstanceGroupManagerPromise = vpcService.createInstanceGroupManager();
-        expectToBePromise(createInstanceGroupManagerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceGroupManager();
+        } catch (e) {
+          err = e;
+        }
 
-        createInstanceGroupManagerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -9444,7 +9441,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstanceGroupManager({});
@@ -9453,17 +9450,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstanceGroupManagerPromise = vpcService.deleteInstanceGroupManager();
-        expectToBePromise(deleteInstanceGroupManagerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceGroupManager();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstanceGroupManagerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -9538,7 +9535,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceGroupManager({});
@@ -9547,17 +9544,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceGroupManagerPromise = vpcService.getInstanceGroupManager();
-        expectToBePromise(getInstanceGroupManagerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceGroupManager();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceGroupManagerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -9650,7 +9647,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateInstanceGroupManager({});
@@ -9659,17 +9656,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateInstanceGroupManagerPromise = vpcService.updateInstanceGroupManager();
-        expectToBePromise(updateInstanceGroupManagerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceGroupManager();
+        } catch (e) {
+          err = e;
+        }
 
-        updateInstanceGroupManagerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -9752,7 +9749,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listInstanceGroupManagerActions({});
@@ -9761,17 +9758,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listInstanceGroupManagerActionsPromise = vpcService.listInstanceGroupManagerActions();
-        expectToBePromise(listInstanceGroupManagerActionsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceGroupManagerActions();
+        } catch (e) {
+          err = e;
+        }
 
-        listInstanceGroupManagerActionsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -9867,7 +9864,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createInstanceGroupManagerAction({});
@@ -9876,17 +9873,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createInstanceGroupManagerActionPromise = vpcService.createInstanceGroupManagerAction();
-        expectToBePromise(createInstanceGroupManagerActionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceGroupManagerAction();
+        } catch (e) {
+          err = e;
+        }
 
-        createInstanceGroupManagerActionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -9968,7 +9965,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstanceGroupManagerAction({});
@@ -9977,17 +9974,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstanceGroupManagerActionPromise = vpcService.deleteInstanceGroupManagerAction();
-        expectToBePromise(deleteInstanceGroupManagerActionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceGroupManagerAction();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstanceGroupManagerActionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -10069,7 +10066,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceGroupManagerAction({});
@@ -10078,17 +10075,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceGroupManagerActionPromise = vpcService.getInstanceGroupManagerAction();
-        expectToBePromise(getInstanceGroupManagerActionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceGroupManagerAction();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceGroupManagerActionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -10198,7 +10195,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateInstanceGroupManagerAction({});
@@ -10207,17 +10204,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateInstanceGroupManagerActionPromise = vpcService.updateInstanceGroupManagerAction();
-        expectToBePromise(updateInstanceGroupManagerActionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceGroupManagerAction();
+        } catch (e) {
+          err = e;
+        }
 
-        updateInstanceGroupManagerActionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -10300,7 +10297,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listInstanceGroupManagerPolicies({});
@@ -10309,17 +10306,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listInstanceGroupManagerPoliciesPromise = vpcService.listInstanceGroupManagerPolicies();
-        expectToBePromise(listInstanceGroupManagerPoliciesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceGroupManagerPolicies();
+        } catch (e) {
+          err = e;
+        }
 
-        listInstanceGroupManagerPoliciesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -10411,7 +10408,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createInstanceGroupManagerPolicy({});
@@ -10420,17 +10417,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createInstanceGroupManagerPolicyPromise = vpcService.createInstanceGroupManagerPolicy();
-        expectToBePromise(createInstanceGroupManagerPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceGroupManagerPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        createInstanceGroupManagerPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -10512,7 +10509,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstanceGroupManagerPolicy({});
@@ -10521,17 +10518,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstanceGroupManagerPolicyPromise = vpcService.deleteInstanceGroupManagerPolicy();
-        expectToBePromise(deleteInstanceGroupManagerPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceGroupManagerPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstanceGroupManagerPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -10613,7 +10610,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceGroupManagerPolicy({});
@@ -10622,17 +10619,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceGroupManagerPolicyPromise = vpcService.getInstanceGroupManagerPolicy();
-        expectToBePromise(getInstanceGroupManagerPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceGroupManagerPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceGroupManagerPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -10723,7 +10720,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateInstanceGroupManagerPolicy({});
@@ -10732,17 +10729,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateInstanceGroupManagerPolicyPromise = vpcService.updateInstanceGroupManagerPolicy();
-        expectToBePromise(updateInstanceGroupManagerPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceGroupManagerPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        updateInstanceGroupManagerPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -10814,7 +10811,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstanceGroupMemberships({});
@@ -10823,17 +10820,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstanceGroupMembershipsPromise = vpcService.deleteInstanceGroupMemberships();
-        expectToBePromise(deleteInstanceGroupMembershipsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceGroupMemberships();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstanceGroupMembershipsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -10909,7 +10906,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listInstanceGroupMemberships({});
@@ -10918,17 +10915,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listInstanceGroupMembershipsPromise = vpcService.listInstanceGroupMemberships();
-        expectToBePromise(listInstanceGroupMembershipsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceGroupMemberships();
+        } catch (e) {
+          err = e;
+        }
 
-        listInstanceGroupMembershipsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -11005,7 +11002,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteInstanceGroupMembership({});
@@ -11014,17 +11011,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteInstanceGroupMembershipPromise = vpcService.deleteInstanceGroupMembership();
-        expectToBePromise(deleteInstanceGroupMembershipPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceGroupMembership();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteInstanceGroupMembershipPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -11099,7 +11096,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getInstanceGroupMembership({});
@@ -11108,17 +11105,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getInstanceGroupMembershipPromise = vpcService.getInstanceGroupMembership();
-        expectToBePromise(getInstanceGroupMembershipPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceGroupMembership();
+        } catch (e) {
+          err = e;
+        }
 
-        getInstanceGroupMembershipPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -11198,7 +11195,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateInstanceGroupMembership({});
@@ -11207,17 +11204,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateInstanceGroupMembershipPromise = vpcService.updateInstanceGroupMembership();
-        expectToBePromise(updateInstanceGroupMembershipPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceGroupMembership();
+        } catch (e) {
+          err = e;
+        }
 
-        updateInstanceGroupMembershipPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -11229,11 +11226,13 @@ describe('VpcV1', () => {
         const limit = 1;
         const resourceGroupId = 'testString';
         const zoneName = 'testString';
+        const name = 'testString';
         const params = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
           zoneName: zoneName,
+          name: name,
         };
 
         const listDedicatedHostGroupsResult = vpcService.listDedicatedHostGroups(params);
@@ -11256,6 +11255,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
         expect(mockRequestOptions.qs['zone.name']).toEqual(zoneName);
+        expect(mockRequestOptions.qs.name).toEqual(name);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -11446,7 +11446,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteDedicatedHostGroup({});
@@ -11455,17 +11455,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteDedicatedHostGroupPromise = vpcService.deleteDedicatedHostGroup();
-        expectToBePromise(deleteDedicatedHostGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteDedicatedHostGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteDedicatedHostGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -11531,7 +11531,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getDedicatedHostGroup({});
@@ -11540,17 +11540,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getDedicatedHostGroupPromise = vpcService.getDedicatedHostGroup();
-        expectToBePromise(getDedicatedHostGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getDedicatedHostGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        getDedicatedHostGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -11619,7 +11619,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateDedicatedHostGroup({});
@@ -11628,17 +11628,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateDedicatedHostGroupPromise = vpcService.updateDedicatedHostGroup();
-        expectToBePromise(updateDedicatedHostGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateDedicatedHostGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        updateDedicatedHostGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -11772,7 +11772,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getDedicatedHostProfile({});
@@ -11781,17 +11781,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getDedicatedHostProfilePromise = vpcService.getDedicatedHostProfile();
-        expectToBePromise(getDedicatedHostProfilePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getDedicatedHostProfile();
+        } catch (e) {
+          err = e;
+        }
 
-        getDedicatedHostProfilePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -11804,12 +11804,14 @@ describe('VpcV1', () => {
         const limit = 1;
         const resourceGroupId = 'testString';
         const zoneName = 'testString';
+        const name = 'testString';
         const params = {
           dedicatedHostGroupId: dedicatedHostGroupId,
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
           zoneName: zoneName,
+          name: name,
         };
 
         const listDedicatedHostsResult = vpcService.listDedicatedHosts(params);
@@ -11833,6 +11835,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
         expect(mockRequestOptions.qs['zone.name']).toEqual(zoneName);
+        expect(mockRequestOptions.qs.name).toEqual(name);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -11960,7 +11963,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createDedicatedHost({});
@@ -11969,17 +11972,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createDedicatedHostPromise = vpcService.createDedicatedHost();
-        expectToBePromise(createDedicatedHostPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createDedicatedHost();
+        } catch (e) {
+          err = e;
+        }
 
-        createDedicatedHostPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -12045,7 +12048,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listDedicatedHostDisks({});
@@ -12054,17 +12057,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listDedicatedHostDisksPromise = vpcService.listDedicatedHostDisks();
-        expectToBePromise(listDedicatedHostDisksPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listDedicatedHostDisks();
+        } catch (e) {
+          err = e;
+        }
 
-        listDedicatedHostDisksPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -12139,7 +12142,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getDedicatedHostDisk({});
@@ -12148,17 +12151,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getDedicatedHostDiskPromise = vpcService.getDedicatedHostDisk();
-        expectToBePromise(getDedicatedHostDiskPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getDedicatedHostDisk();
+        } catch (e) {
+          err = e;
+        }
 
-        getDedicatedHostDiskPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -12236,7 +12239,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateDedicatedHostDisk({});
@@ -12245,17 +12248,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateDedicatedHostDiskPromise = vpcService.updateDedicatedHostDisk();
-        expectToBePromise(updateDedicatedHostDiskPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateDedicatedHostDisk();
+        } catch (e) {
+          err = e;
+        }
 
-        updateDedicatedHostDiskPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -12321,7 +12324,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteDedicatedHost({});
@@ -12330,17 +12333,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteDedicatedHostPromise = vpcService.deleteDedicatedHost();
-        expectToBePromise(deleteDedicatedHostPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteDedicatedHost();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteDedicatedHostPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -12406,7 +12409,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getDedicatedHost({});
@@ -12415,17 +12418,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getDedicatedHostPromise = vpcService.getDedicatedHost();
-        expectToBePromise(getDedicatedHostPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getDedicatedHost();
+        } catch (e) {
+          err = e;
+        }
 
-        getDedicatedHostPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -12499,7 +12502,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateDedicatedHost({});
@@ -12508,17 +12511,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateDedicatedHostPromise = vpcService.updateDedicatedHost();
-        expectToBePromise(updateDedicatedHostPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateDedicatedHost();
+        } catch (e) {
+          err = e;
+        }
 
-        updateDedicatedHostPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -12665,7 +12668,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createPlacementGroup({});
@@ -12674,17 +12677,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createPlacementGroupPromise = vpcService.createPlacementGroup();
-        expectToBePromise(createPlacementGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createPlacementGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        createPlacementGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -12750,7 +12753,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deletePlacementGroup({});
@@ -12759,17 +12762,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deletePlacementGroupPromise = vpcService.deletePlacementGroup();
-        expectToBePromise(deletePlacementGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deletePlacementGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        deletePlacementGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -12835,7 +12838,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getPlacementGroup({});
@@ -12844,17 +12847,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getPlacementGroupPromise = vpcService.getPlacementGroup();
-        expectToBePromise(getPlacementGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getPlacementGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        getPlacementGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -12923,7 +12926,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updatePlacementGroup({});
@@ -12932,17 +12935,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updatePlacementGroupPromise = vpcService.updatePlacementGroup();
-        expectToBePromise(updatePlacementGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updatePlacementGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        updatePlacementGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -13076,7 +13079,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVolumeProfile({});
@@ -13085,17 +13088,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVolumeProfilePromise = vpcService.getVolumeProfile();
-        expectToBePromise(getVolumeProfilePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVolumeProfile();
+        } catch (e) {
+          err = e;
+        }
 
-        getVolumeProfilePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -13269,7 +13272,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createVolume({});
@@ -13278,17 +13281,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createVolumePromise = vpcService.createVolume();
-        expectToBePromise(createVolumePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createVolume();
+        } catch (e) {
+          err = e;
+        }
 
-        createVolumePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -13354,7 +13357,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteVolume({});
@@ -13363,17 +13366,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteVolumePromise = vpcService.deleteVolume();
-        expectToBePromise(deleteVolumePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVolume();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteVolumePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -13439,7 +13442,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVolume({});
@@ -13448,17 +13451,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVolumePromise = vpcService.getVolume();
-        expectToBePromise(getVolumePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVolume();
+        } catch (e) {
+          err = e;
+        }
 
-        getVolumePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -13543,7 +13546,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateVolume({});
@@ -13552,17 +13555,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateVolumePromise = vpcService.updateVolume();
-        expectToBePromise(updateVolumePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateVolume();
+        } catch (e) {
+          err = e;
+        }
 
-        updateVolumePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -13628,7 +13631,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteSnapshots({});
@@ -13637,17 +13640,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteSnapshotsPromise = vpcService.deleteSnapshots();
-        expectToBePromise(deleteSnapshotsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteSnapshots();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteSnapshotsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -13820,7 +13823,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createSnapshot({});
@@ -13829,17 +13832,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createSnapshotPromise = vpcService.createSnapshot();
-        expectToBePromise(createSnapshotPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createSnapshot();
+        } catch (e) {
+          err = e;
+        }
 
-        createSnapshotPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -13905,7 +13908,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteSnapshot({});
@@ -13914,17 +13917,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteSnapshotPromise = vpcService.deleteSnapshot();
-        expectToBePromise(deleteSnapshotPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteSnapshot();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteSnapshotPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -13990,7 +13993,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getSnapshot({});
@@ -13999,17 +14002,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getSnapshotPromise = vpcService.getSnapshot();
-        expectToBePromise(getSnapshotPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSnapshot();
+        } catch (e) {
+          err = e;
+        }
 
-        getSnapshotPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -14078,7 +14081,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateSnapshot({});
@@ -14087,17 +14090,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateSnapshotPromise = vpcService.updateSnapshot();
-        expectToBePromise(updateSnapshotPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateSnapshot();
+        } catch (e) {
+          err = e;
+        }
 
-        updateSnapshotPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -14224,7 +14227,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getRegion({});
@@ -14233,17 +14236,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getRegionPromise = vpcService.getRegion();
-        expectToBePromise(getRegionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getRegion();
+        } catch (e) {
+          err = e;
+        }
 
-        getRegionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -14309,7 +14312,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listRegionZones({});
@@ -14318,17 +14321,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listRegionZonesPromise = vpcService.listRegionZones();
-        expectToBePromise(listRegionZonesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listRegionZones();
+        } catch (e) {
+          err = e;
+        }
 
-        listRegionZonesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -14399,7 +14402,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getRegionZone({});
@@ -14408,17 +14411,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getRegionZonePromise = vpcService.getRegionZone();
-        expectToBePromise(getRegionZonePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getRegionZone();
+        } catch (e) {
+          err = e;
+        }
 
-        getRegionZonePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -14591,7 +14594,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createPublicGateway({});
@@ -14600,17 +14603,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createPublicGatewayPromise = vpcService.createPublicGateway();
-        expectToBePromise(createPublicGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createPublicGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        createPublicGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -14676,7 +14679,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deletePublicGateway({});
@@ -14685,17 +14688,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deletePublicGatewayPromise = vpcService.deletePublicGateway();
-        expectToBePromise(deletePublicGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deletePublicGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        deletePublicGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -14761,7 +14764,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getPublicGateway({});
@@ -14770,17 +14773,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getPublicGatewayPromise = vpcService.getPublicGateway();
-        expectToBePromise(getPublicGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getPublicGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        getPublicGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -14849,7 +14852,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updatePublicGateway({});
@@ -14858,17 +14861,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updatePublicGatewayPromise = vpcService.updatePublicGateway();
-        expectToBePromise(updatePublicGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updatePublicGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        updatePublicGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -15024,7 +15027,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createFloatingIp({});
@@ -15033,17 +15036,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createFloatingIpPromise = vpcService.createFloatingIp();
-        expectToBePromise(createFloatingIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createFloatingIp();
+        } catch (e) {
+          err = e;
+        }
 
-        createFloatingIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -15109,7 +15112,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteFloatingIp({});
@@ -15118,17 +15121,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteFloatingIpPromise = vpcService.deleteFloatingIp();
-        expectToBePromise(deleteFloatingIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteFloatingIp();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteFloatingIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -15194,7 +15197,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getFloatingIp({});
@@ -15203,17 +15206,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getFloatingIpPromise = vpcService.getFloatingIp();
-        expectToBePromise(getFloatingIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getFloatingIp();
+        } catch (e) {
+          err = e;
+        }
 
-        getFloatingIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -15292,7 +15295,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateFloatingIp({});
@@ -15301,17 +15304,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateFloatingIpPromise = vpcService.updateFloatingIp();
-        expectToBePromise(updateFloatingIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateFloatingIp();
+        } catch (e) {
+          err = e;
+        }
 
-        updateFloatingIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -15543,7 +15546,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteNetworkAcl({});
@@ -15552,17 +15555,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteNetworkAclPromise = vpcService.deleteNetworkAcl();
-        expectToBePromise(deleteNetworkAclPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteNetworkAcl();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteNetworkAclPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -15628,7 +15631,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getNetworkAcl({});
@@ -15637,17 +15640,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getNetworkAclPromise = vpcService.getNetworkAcl();
-        expectToBePromise(getNetworkAclPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getNetworkAcl();
+        } catch (e) {
+          err = e;
+        }
 
-        getNetworkAclPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -15716,7 +15719,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateNetworkAcl({});
@@ -15725,17 +15728,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateNetworkAclPromise = vpcService.updateNetworkAcl();
-        expectToBePromise(updateNetworkAclPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateNetworkAcl();
+        } catch (e) {
+          err = e;
+        }
 
-        updateNetworkAclPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -15810,7 +15813,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listNetworkAclRules({});
@@ -15819,17 +15822,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listNetworkAclRulesPromise = vpcService.listNetworkAclRules();
-        expectToBePromise(listNetworkAclRulesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listNetworkAclRules();
+        } catch (e) {
+          err = e;
+        }
 
-        listNetworkAclRulesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -15920,7 +15923,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createNetworkAclRule({});
@@ -15929,17 +15932,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createNetworkAclRulePromise = vpcService.createNetworkAclRule();
-        expectToBePromise(createNetworkAclRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createNetworkAclRule();
+        } catch (e) {
+          err = e;
+        }
 
-        createNetworkAclRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -16014,7 +16017,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteNetworkAclRule({});
@@ -16023,17 +16026,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteNetworkAclRulePromise = vpcService.deleteNetworkAclRule();
-        expectToBePromise(deleteNetworkAclRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteNetworkAclRule();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteNetworkAclRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -16104,7 +16107,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getNetworkAclRule({});
@@ -16113,17 +16116,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getNetworkAclRulePromise = vpcService.getNetworkAclRule();
-        expectToBePromise(getNetworkAclRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getNetworkAclRule();
+        } catch (e) {
+          err = e;
+        }
 
-        getNetworkAclRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -16237,7 +16240,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateNetworkAclRule({});
@@ -16246,17 +16249,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateNetworkAclRulePromise = vpcService.updateNetworkAclRule();
-        expectToBePromise(updateNetworkAclRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateNetworkAclRule();
+        } catch (e) {
+          err = e;
+        }
 
-        updateNetworkAclRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -16438,7 +16441,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createSecurityGroup({});
@@ -16447,17 +16450,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createSecurityGroupPromise = vpcService.createSecurityGroup();
-        expectToBePromise(createSecurityGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createSecurityGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        createSecurityGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -16523,7 +16526,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteSecurityGroup({});
@@ -16532,17 +16535,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteSecurityGroupPromise = vpcService.deleteSecurityGroup();
-        expectToBePromise(deleteSecurityGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteSecurityGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteSecurityGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -16608,7 +16611,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getSecurityGroup({});
@@ -16617,17 +16620,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getSecurityGroupPromise = vpcService.getSecurityGroup();
-        expectToBePromise(getSecurityGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSecurityGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        getSecurityGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -16696,7 +16699,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateSecurityGroup({});
@@ -16705,17 +16708,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateSecurityGroupPromise = vpcService.updateSecurityGroup();
-        expectToBePromise(updateSecurityGroupPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateSecurityGroup();
+        } catch (e) {
+          err = e;
+        }
 
-        updateSecurityGroupPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -16793,7 +16796,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listSecurityGroupNetworkInterfaces({});
@@ -16802,17 +16805,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listSecurityGroupNetworkInterfacesPromise = vpcService.listSecurityGroupNetworkInterfaces();
-        expectToBePromise(listSecurityGroupNetworkInterfacesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listSecurityGroupNetworkInterfaces();
+        } catch (e) {
+          err = e;
+        }
 
-        listSecurityGroupNetworkInterfacesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -16889,7 +16892,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.removeSecurityGroupNetworkInterface({});
@@ -16898,17 +16901,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeSecurityGroupNetworkInterfacePromise = vpcService.removeSecurityGroupNetworkInterface();
-        expectToBePromise(removeSecurityGroupNetworkInterfacePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.removeSecurityGroupNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
 
-        removeSecurityGroupNetworkInterfacePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -16985,7 +16988,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getSecurityGroupNetworkInterface({});
@@ -16994,17 +16997,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getSecurityGroupNetworkInterfacePromise = vpcService.getSecurityGroupNetworkInterface();
-        expectToBePromise(getSecurityGroupNetworkInterfacePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSecurityGroupNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
 
-        getSecurityGroupNetworkInterfacePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -17081,7 +17084,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.addSecurityGroupNetworkInterface({});
@@ -17090,17 +17093,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addSecurityGroupNetworkInterfacePromise = vpcService.addSecurityGroupNetworkInterface();
-        expectToBePromise(addSecurityGroupNetworkInterfacePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.addSecurityGroupNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
 
-        addSecurityGroupNetworkInterfacePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -17166,7 +17169,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listSecurityGroupRules({});
@@ -17175,17 +17178,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listSecurityGroupRulesPromise = vpcService.listSecurityGroupRules();
-        expectToBePromise(listSecurityGroupRulesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listSecurityGroupRules();
+        } catch (e) {
+          err = e;
+        }
 
-        listSecurityGroupRulesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -17273,7 +17276,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createSecurityGroupRule({});
@@ -17282,17 +17285,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createSecurityGroupRulePromise = vpcService.createSecurityGroupRule();
-        expectToBePromise(createSecurityGroupRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createSecurityGroupRule();
+        } catch (e) {
+          err = e;
+        }
 
-        createSecurityGroupRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -17367,7 +17370,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteSecurityGroupRule({});
@@ -17376,17 +17379,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteSecurityGroupRulePromise = vpcService.deleteSecurityGroupRule();
-        expectToBePromise(deleteSecurityGroupRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteSecurityGroupRule();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteSecurityGroupRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -17461,7 +17464,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getSecurityGroupRule({});
@@ -17470,17 +17473,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getSecurityGroupRulePromise = vpcService.getSecurityGroupRule();
-        expectToBePromise(getSecurityGroupRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSecurityGroupRule();
+        } catch (e) {
+          err = e;
+        }
 
-        getSecurityGroupRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -17583,7 +17586,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateSecurityGroupRule({});
@@ -17592,17 +17595,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateSecurityGroupRulePromise = vpcService.updateSecurityGroupRule();
-        expectToBePromise(updateSecurityGroupRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateSecurityGroupRule();
+        } catch (e) {
+          err = e;
+        }
 
-        updateSecurityGroupRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -17678,7 +17681,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listSecurityGroupTargets({});
@@ -17687,17 +17690,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listSecurityGroupTargetsPromise = vpcService.listSecurityGroupTargets();
-        expectToBePromise(listSecurityGroupTargetsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listSecurityGroupTargets();
+        } catch (e) {
+          err = e;
+        }
 
-        listSecurityGroupTargetsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -17774,7 +17777,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteSecurityGroupTargetBinding({});
@@ -17783,17 +17786,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteSecurityGroupTargetBindingPromise = vpcService.deleteSecurityGroupTargetBinding();
-        expectToBePromise(deleteSecurityGroupTargetBindingPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteSecurityGroupTargetBinding();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteSecurityGroupTargetBindingPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -17868,7 +17871,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getSecurityGroupTarget({});
@@ -17877,17 +17880,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getSecurityGroupTargetPromise = vpcService.getSecurityGroupTarget();
-        expectToBePromise(getSecurityGroupTargetPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSecurityGroupTarget();
+        } catch (e) {
+          err = e;
+        }
 
-        getSecurityGroupTargetPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -17964,7 +17967,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createSecurityGroupTargetBinding({});
@@ -17973,17 +17976,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createSecurityGroupTargetBindingPromise = vpcService.createSecurityGroupTargetBinding();
-        expectToBePromise(createSecurityGroupTargetBindingPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createSecurityGroupTargetBinding();
+        } catch (e) {
+          err = e;
+        }
 
-        createSecurityGroupTargetBindingPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -18067,8 +18070,8 @@ describe('VpcV1', () => {
       function __createIkePolicyTest() {
         // Construct the params object for operation createIkePolicy
         const authenticationAlgorithm = 'md5';
-        const dhGroup = 2;
-        const encryptionAlgorithm = 'triple_des';
+        const dhGroup = 14;
+        const encryptionAlgorithm = 'aes128';
         const ikeVersion = 1;
         const keyLifetime = 28800;
         const name = 'my-ike-policy';
@@ -18126,8 +18129,8 @@ describe('VpcV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const authenticationAlgorithm = 'md5';
-        const dhGroup = 2;
-        const encryptionAlgorithm = 'triple_des';
+        const dhGroup = 14;
+        const encryptionAlgorithm = 'aes128';
         const ikeVersion = 1;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
@@ -18148,7 +18151,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createIkePolicy({});
@@ -18157,17 +18160,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createIkePolicyPromise = vpcService.createIkePolicy();
-        expectToBePromise(createIkePolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createIkePolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        createIkePolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -18233,7 +18236,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteIkePolicy({});
@@ -18242,17 +18245,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteIkePolicyPromise = vpcService.deleteIkePolicy();
-        expectToBePromise(deleteIkePolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteIkePolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteIkePolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -18318,7 +18321,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getIkePolicy({});
@@ -18327,17 +18330,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getIkePolicyPromise = vpcService.getIkePolicy();
-        expectToBePromise(getIkePolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getIkePolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        getIkePolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -18347,8 +18350,8 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateIkePolicy
         const id = 'testString';
         const authenticationAlgorithm = 'md5';
-        const dhGroup = 2;
-        const encryptionAlgorithm = 'triple_des';
+        const dhGroup = 14;
+        const encryptionAlgorithm = 'aes128';
         const ikeVersion = 1;
         const keyLifetime = 28800;
         const name = 'my-ike-policy';
@@ -18421,7 +18424,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateIkePolicy({});
@@ -18430,17 +18433,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateIkePolicyPromise = vpcService.updateIkePolicy();
-        expectToBePromise(updateIkePolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateIkePolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        updateIkePolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -18506,7 +18509,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listIkePolicyConnections({});
@@ -18515,17 +18518,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listIkePolicyConnectionsPromise = vpcService.listIkePolicyConnections();
-        expectToBePromise(listIkePolicyConnectionsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listIkePolicyConnections();
+        } catch (e) {
+          err = e;
+        }
 
-        listIkePolicyConnectionsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -18609,7 +18612,7 @@ describe('VpcV1', () => {
       function __createIpsecPolicyTest() {
         // Construct the params object for operation createIpsecPolicy
         const authenticationAlgorithm = 'md5';
-        const encryptionAlgorithm = 'triple_des';
+        const encryptionAlgorithm = 'aes128';
         const pfs = 'disabled';
         const keyLifetime = 3600;
         const name = 'my-ipsec-policy';
@@ -18665,7 +18668,7 @@ describe('VpcV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const authenticationAlgorithm = 'md5';
-        const encryptionAlgorithm = 'triple_des';
+        const encryptionAlgorithm = 'aes128';
         const pfs = 'disabled';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
@@ -18685,7 +18688,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createIpsecPolicy({});
@@ -18694,17 +18697,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createIpsecPolicyPromise = vpcService.createIpsecPolicy();
-        expectToBePromise(createIpsecPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createIpsecPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        createIpsecPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -18770,7 +18773,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteIpsecPolicy({});
@@ -18779,17 +18782,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteIpsecPolicyPromise = vpcService.deleteIpsecPolicy();
-        expectToBePromise(deleteIpsecPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteIpsecPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteIpsecPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -18855,7 +18858,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getIpsecPolicy({});
@@ -18864,17 +18867,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getIpsecPolicyPromise = vpcService.getIpsecPolicy();
-        expectToBePromise(getIpsecPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getIpsecPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        getIpsecPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -18884,7 +18887,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateIpsecPolicy
         const id = 'testString';
         const authenticationAlgorithm = 'md5';
-        const encryptionAlgorithm = 'triple_des';
+        const encryptionAlgorithm = 'aes128';
         const keyLifetime = 3600;
         const name = 'my-ipsec-policy';
         const pfs = 'disabled';
@@ -18955,7 +18958,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateIpsecPolicy({});
@@ -18964,17 +18967,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateIpsecPolicyPromise = vpcService.updateIpsecPolicy();
-        expectToBePromise(updateIpsecPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateIpsecPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        updateIpsecPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -19040,7 +19043,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listIpsecPolicyConnections({});
@@ -19049,17 +19052,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listIpsecPolicyConnectionsPromise = vpcService.listIpsecPolicyConnections();
-        expectToBePromise(listIpsecPolicyConnectionsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listIpsecPolicyConnections();
+        } catch (e) {
+          err = e;
+        }
 
-        listIpsecPolicyConnectionsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -19219,7 +19222,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createVpnGateway({});
@@ -19228,17 +19231,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createVpnGatewayPromise = vpcService.createVpnGateway();
-        expectToBePromise(createVpnGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createVpnGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        createVpnGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -19304,7 +19307,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteVpnGateway({});
@@ -19313,17 +19316,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteVpnGatewayPromise = vpcService.deleteVpnGateway();
-        expectToBePromise(deleteVpnGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpnGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteVpnGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -19389,7 +19392,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVpnGateway({});
@@ -19398,17 +19401,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVpnGatewayPromise = vpcService.getVpnGateway();
-        expectToBePromise(getVpnGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpnGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        getVpnGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -19477,7 +19480,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateVpnGateway({});
@@ -19486,17 +19489,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateVpnGatewayPromise = vpcService.updateVpnGateway();
-        expectToBePromise(updateVpnGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateVpnGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        updateVpnGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -19565,7 +19568,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listVpnGatewayConnections({});
@@ -19574,17 +19577,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listVpnGatewayConnectionsPromise = vpcService.listVpnGatewayConnections();
-        expectToBePromise(listVpnGatewayConnectionsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listVpnGatewayConnections();
+        } catch (e) {
+          err = e;
+        }
 
-        listVpnGatewayConnectionsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -19599,13 +19602,13 @@ describe('VpcV1', () => {
         timeout: 120,
       };
 
-      // IKEPolicyIdentityById
-      const ikePolicyIdentityModel = {
+      // VPNGatewayConnectionIKEPolicyPrototypeIKEPolicyIdentityById
+      const vpnGatewayConnectionIkePolicyPrototypeModel = {
         id: 'ddf51bec-3424-11e8-b467-0ed5f89f718b',
       };
 
-      // IPsecPolicyIdentityById
-      const iPsecPolicyIdentityModel = {
+      // VPNGatewayConnectionIPsecPolicyPrototypeIPsecPolicyIdentityById
+      const vpnGatewayConnectionIPsecPolicyPrototypeModel = {
         id: 'ddf51bec-3424-11e8-b467-0ed5f89f718b',
       };
 
@@ -19613,8 +19616,8 @@ describe('VpcV1', () => {
       const vpnGatewayConnectionPrototypeModel = {
         admin_state_up: true,
         dead_peer_detection: vpnGatewayConnectionDpdPrototypeModel,
-        ike_policy: ikePolicyIdentityModel,
-        ipsec_policy: iPsecPolicyIdentityModel,
+        ike_policy: vpnGatewayConnectionIkePolicyPrototypeModel,
+        ipsec_policy: vpnGatewayConnectionIPsecPolicyPrototypeModel,
         name: 'my-vpn-connection',
         peer_address: '169.21.50.5',
         psk: 'lkj14b1oi0alcniejkso',
@@ -19686,7 +19689,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createVpnGatewayConnection({});
@@ -19695,17 +19698,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createVpnGatewayConnectionPromise = vpcService.createVpnGatewayConnection();
-        expectToBePromise(createVpnGatewayConnectionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createVpnGatewayConnection();
+        } catch (e) {
+          err = e;
+        }
 
-        createVpnGatewayConnectionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -19780,7 +19783,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteVpnGatewayConnection({});
@@ -19789,17 +19792,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteVpnGatewayConnectionPromise = vpcService.deleteVpnGatewayConnection();
-        expectToBePromise(deleteVpnGatewayConnectionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpnGatewayConnection();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteVpnGatewayConnectionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -19874,7 +19877,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getVpnGatewayConnection({});
@@ -19883,17 +19886,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getVpnGatewayConnectionPromise = vpcService.getVpnGatewayConnection();
-        expectToBePromise(getVpnGatewayConnectionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpnGatewayConnection();
+        } catch (e) {
+          err = e;
+        }
 
-        getVpnGatewayConnectionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -19901,29 +19904,29 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // VPNGatewayConnectionDPDPrototype
-      const vpnGatewayConnectionDpdPrototypeModel = {
+      // VPNGatewayConnectionDPDPatch
+      const vpnGatewayConnectionDpdPatchModel = {
         action: 'restart',
         interval: 30,
         timeout: 120,
       };
 
-      // IKEPolicyIdentityById
-      const ikePolicyIdentityModel = {
+      // VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityById
+      const vpnGatewayConnectionIkePolicyPatchModel = {
         id: 'ddf51bec-3424-11e8-b467-0ed5f89f718b',
       };
 
-      // IPsecPolicyIdentityById
-      const iPsecPolicyIdentityModel = {
+      // VPNGatewayConnectionIPsecPolicyPatchIPsecPolicyIdentityById
+      const vpnGatewayConnectionIPsecPolicyPatchModel = {
         id: 'ddf51bec-3424-11e8-b467-0ed5f89f718b',
       };
 
       // VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch
       const vpnGatewayConnectionPatchModel = {
         admin_state_up: true,
-        dead_peer_detection: vpnGatewayConnectionDpdPrototypeModel,
-        ike_policy: ikePolicyIdentityModel,
-        ipsec_policy: iPsecPolicyIdentityModel,
+        dead_peer_detection: vpnGatewayConnectionDpdPatchModel,
+        ike_policy: vpnGatewayConnectionIkePolicyPatchModel,
+        ipsec_policy: vpnGatewayConnectionIPsecPolicyPatchModel,
         name: 'my-vpn-connection',
         peer_address: '169.21.50.5',
         psk: 'lkj14b1oi0alcniejkso',
@@ -20004,7 +20007,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateVpnGatewayConnection({});
@@ -20013,17 +20016,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateVpnGatewayConnectionPromise = vpcService.updateVpnGatewayConnection();
-        expectToBePromise(updateVpnGatewayConnectionPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateVpnGatewayConnection();
+        } catch (e) {
+          err = e;
+        }
 
-        updateVpnGatewayConnectionPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -20100,7 +20103,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listVpnGatewayConnectionLocalCidrs({});
@@ -20109,17 +20112,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listVpnGatewayConnectionLocalCidrsPromise = vpcService.listVpnGatewayConnectionLocalCidrs();
-        expectToBePromise(listVpnGatewayConnectionLocalCidrsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listVpnGatewayConnectionLocalCidrs();
+        } catch (e) {
+          err = e;
+        }
 
-        listVpnGatewayConnectionLocalCidrsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -20206,7 +20209,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.removeVpnGatewayConnectionLocalCidr({});
@@ -20215,17 +20218,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeVpnGatewayConnectionLocalCidrPromise = vpcService.removeVpnGatewayConnectionLocalCidr();
-        expectToBePromise(removeVpnGatewayConnectionLocalCidrPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.removeVpnGatewayConnectionLocalCidr();
+        } catch (e) {
+          err = e;
+        }
 
-        removeVpnGatewayConnectionLocalCidrPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -20312,7 +20315,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.checkVpnGatewayConnectionLocalCidr({});
@@ -20321,17 +20324,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const checkVpnGatewayConnectionLocalCidrPromise = vpcService.checkVpnGatewayConnectionLocalCidr();
-        expectToBePromise(checkVpnGatewayConnectionLocalCidrPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.checkVpnGatewayConnectionLocalCidr();
+        } catch (e) {
+          err = e;
+        }
 
-        checkVpnGatewayConnectionLocalCidrPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -20418,7 +20421,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.addVpnGatewayConnectionLocalCidr({});
@@ -20427,17 +20430,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addVpnGatewayConnectionLocalCidrPromise = vpcService.addVpnGatewayConnectionLocalCidr();
-        expectToBePromise(addVpnGatewayConnectionLocalCidrPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.addVpnGatewayConnectionLocalCidr();
+        } catch (e) {
+          err = e;
+        }
 
-        addVpnGatewayConnectionLocalCidrPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -20514,7 +20517,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listVpnGatewayConnectionPeerCidrs({});
@@ -20523,17 +20526,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listVpnGatewayConnectionPeerCidrsPromise = vpcService.listVpnGatewayConnectionPeerCidrs();
-        expectToBePromise(listVpnGatewayConnectionPeerCidrsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listVpnGatewayConnectionPeerCidrs();
+        } catch (e) {
+          err = e;
+        }
 
-        listVpnGatewayConnectionPeerCidrsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -20620,7 +20623,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.removeVpnGatewayConnectionPeerCidr({});
@@ -20629,17 +20632,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeVpnGatewayConnectionPeerCidrPromise = vpcService.removeVpnGatewayConnectionPeerCidr();
-        expectToBePromise(removeVpnGatewayConnectionPeerCidrPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.removeVpnGatewayConnectionPeerCidr();
+        } catch (e) {
+          err = e;
+        }
 
-        removeVpnGatewayConnectionPeerCidrPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -20726,7 +20729,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.checkVpnGatewayConnectionPeerCidr({});
@@ -20735,17 +20738,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const checkVpnGatewayConnectionPeerCidrPromise = vpcService.checkVpnGatewayConnectionPeerCidr();
-        expectToBePromise(checkVpnGatewayConnectionPeerCidrPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.checkVpnGatewayConnectionPeerCidr();
+        } catch (e) {
+          err = e;
+        }
 
-        checkVpnGatewayConnectionPeerCidrPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -20832,7 +20835,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.addVpnGatewayConnectionPeerCidr({});
@@ -20841,17 +20844,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addVpnGatewayConnectionPeerCidrPromise = vpcService.addVpnGatewayConnectionPeerCidr();
-        expectToBePromise(addVpnGatewayConnectionPeerCidrPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.addVpnGatewayConnectionPeerCidr();
+        } catch (e) {
+          err = e;
+        }
 
-        addVpnGatewayConnectionPeerCidrPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -20985,7 +20988,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getLoadBalancerProfile({});
@@ -20994,17 +20997,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getLoadBalancerProfilePromise = vpcService.getLoadBalancerProfile();
-        expectToBePromise(getLoadBalancerProfilePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getLoadBalancerProfile();
+        } catch (e) {
+          err = e;
+        }
 
-        getLoadBalancerProfilePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -21096,6 +21099,8 @@ describe('VpcV1', () => {
         connection_limit: 2000,
         default_pool: loadBalancerPoolIdentityByNameModel,
         port: 443,
+        port_max: 499,
+        port_min: 443,
         protocol: 'http',
       };
 
@@ -21134,7 +21139,7 @@ describe('VpcV1', () => {
       // LoadBalancerPoolSessionPersistencePrototype
       const loadBalancerPoolSessionPersistencePrototypeModel = {
         cookie_name: 'my-cookie-name',
-        type: 'source_ip',
+        type: 'app_cookie',
       };
 
       // LoadBalancerPoolPrototype
@@ -21173,6 +21178,7 @@ describe('VpcV1', () => {
         const pools = [loadBalancerPoolPrototypeModel];
         const profile = loadBalancerProfileIdentityModel;
         const resourceGroup = resourceGroupIdentityModel;
+        const routeMode = true;
         const securityGroups = [securityGroupIdentityModel];
         const params = {
           isPublic: isPublic,
@@ -21183,6 +21189,7 @@ describe('VpcV1', () => {
           pools: pools,
           profile: profile,
           resourceGroup: resourceGroup,
+          routeMode: routeMode,
           securityGroups: securityGroups,
         };
 
@@ -21208,6 +21215,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.body.pools).toEqual(pools);
         expect(mockRequestOptions.body.profile).toEqual(profile);
         expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.body.route_mode).toEqual(routeMode);
         expect(mockRequestOptions.body.security_groups).toEqual(securityGroups);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
@@ -21249,7 +21257,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createLoadBalancer({});
@@ -21258,17 +21266,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createLoadBalancerPromise = vpcService.createLoadBalancer();
-        expectToBePromise(createLoadBalancerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createLoadBalancer();
+        } catch (e) {
+          err = e;
+        }
 
-        createLoadBalancerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -21334,7 +21342,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteLoadBalancer({});
@@ -21343,17 +21351,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteLoadBalancerPromise = vpcService.deleteLoadBalancer();
-        expectToBePromise(deleteLoadBalancerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteLoadBalancer();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteLoadBalancerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -21419,7 +21427,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getLoadBalancer({});
@@ -21428,17 +21436,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getLoadBalancerPromise = vpcService.getLoadBalancer();
-        expectToBePromise(getLoadBalancerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getLoadBalancer();
+        } catch (e) {
+          err = e;
+        }
 
-        getLoadBalancerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -21522,7 +21530,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateLoadBalancer({});
@@ -21531,17 +21539,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateLoadBalancerPromise = vpcService.updateLoadBalancer();
-        expectToBePromise(updateLoadBalancerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateLoadBalancer();
+        } catch (e) {
+          err = e;
+        }
 
-        updateLoadBalancerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -21607,7 +21615,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getLoadBalancerStatistics({});
@@ -21616,17 +21624,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getLoadBalancerStatisticsPromise = vpcService.getLoadBalancerStatistics();
-        expectToBePromise(getLoadBalancerStatisticsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getLoadBalancerStatistics();
+        } catch (e) {
+          err = e;
+        }
 
-        getLoadBalancerStatisticsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -21696,7 +21704,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listLoadBalancerListeners({});
@@ -21705,17 +21713,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listLoadBalancerListenersPromise = vpcService.listLoadBalancerListeners();
-        expectToBePromise(listLoadBalancerListenersPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listLoadBalancerListeners();
+        } catch (e) {
+          err = e;
+        }
 
-        listLoadBalancerListenersPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -21750,7 +21758,7 @@ describe('VpcV1', () => {
       const loadBalancerListenerPolicyRulePrototypeModel = {
         condition: 'contains',
         field: 'MY-APP-HEADER',
-        type: 'header',
+        type: 'body',
         value: 'testString',
       };
 
@@ -21771,7 +21779,6 @@ describe('VpcV1', () => {
       function __createLoadBalancerListenerTest() {
         // Construct the params object for operation createLoadBalancerListener
         const loadBalancerId = 'testString';
-        const port = 443;
         const protocol = 'http';
         const acceptProxyProtocol = true;
         const certificateInstance = certificateInstanceIdentityModel;
@@ -21779,9 +21786,11 @@ describe('VpcV1', () => {
         const defaultPool = loadBalancerPoolIdentityModel;
         const httpsRedirect = loadBalancerListenerHttpsRedirectPrototypeModel;
         const policies = [loadBalancerListenerPolicyPrototypeModel];
+        const port = 443;
+        const portMax = 499;
+        const portMin = 443;
         const params = {
           loadBalancerId: loadBalancerId,
-          port: port,
           protocol: protocol,
           acceptProxyProtocol: acceptProxyProtocol,
           certificateInstance: certificateInstance,
@@ -21789,6 +21798,9 @@ describe('VpcV1', () => {
           defaultPool: defaultPool,
           httpsRedirect: httpsRedirect,
           policies: policies,
+          port: port,
+          portMax: portMax,
+          portMin: portMin,
         };
 
         const createLoadBalancerListenerResult = vpcService.createLoadBalancerListener(params);
@@ -21809,7 +21821,6 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body.port).toEqual(port);
         expect(mockRequestOptions.body.protocol).toEqual(protocol);
         expect(mockRequestOptions.body.accept_proxy_protocol).toEqual(acceptProxyProtocol);
         expect(mockRequestOptions.body.certificate_instance).toEqual(certificateInstance);
@@ -21817,6 +21828,9 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.body.default_pool).toEqual(defaultPool);
         expect(mockRequestOptions.body.https_redirect).toEqual(httpsRedirect);
         expect(mockRequestOptions.body.policies).toEqual(policies);
+        expect(mockRequestOptions.body.port).toEqual(port);
+        expect(mockRequestOptions.body.port_max).toEqual(portMax);
+        expect(mockRequestOptions.body.port_min).toEqual(portMin);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
         expect(mockRequestOptions.path.load_balancer_id).toEqual(loadBalancerId);
@@ -21840,13 +21854,11 @@ describe('VpcV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const loadBalancerId = 'testString';
-        const port = 443;
         const protocol = 'http';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const params = {
           loadBalancerId,
-          port,
           protocol,
           headers: {
             Accept: userAccept,
@@ -21860,7 +21872,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createLoadBalancerListener({});
@@ -21869,17 +21881,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createLoadBalancerListenerPromise = vpcService.createLoadBalancerListener();
-        expectToBePromise(createLoadBalancerListenerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createLoadBalancerListener();
+        } catch (e) {
+          err = e;
+        }
 
-        createLoadBalancerListenerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -21954,7 +21966,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteLoadBalancerListener({});
@@ -21963,17 +21975,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteLoadBalancerListenerPromise = vpcService.deleteLoadBalancerListener();
-        expectToBePromise(deleteLoadBalancerListenerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteLoadBalancerListener();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteLoadBalancerListenerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -22048,7 +22060,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getLoadBalancerListener({});
@@ -22057,17 +22069,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getLoadBalancerListenerPromise = vpcService.getLoadBalancerListener();
-        expectToBePromise(getLoadBalancerListenerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getLoadBalancerListener();
+        } catch (e) {
+          err = e;
+        }
 
-        getLoadBalancerListenerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -22108,6 +22120,8 @@ describe('VpcV1', () => {
         const defaultPool = loadBalancerPoolIdentityModel;
         const httpsRedirect = loadBalancerListenerHttpsRedirectPatchModel;
         const port = 443;
+        const portMax = 499;
+        const portMin = 443;
         const protocol = 'http';
         const params = {
           loadBalancerId: loadBalancerId,
@@ -22118,6 +22132,8 @@ describe('VpcV1', () => {
           defaultPool: defaultPool,
           httpsRedirect: httpsRedirect,
           port: port,
+          portMax: portMax,
+          portMin: portMin,
           protocol: protocol,
         };
 
@@ -22145,6 +22161,8 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.body.default_pool).toEqual(defaultPool);
         expect(mockRequestOptions.body.https_redirect).toEqual(httpsRedirect);
         expect(mockRequestOptions.body.port).toEqual(port);
+        expect(mockRequestOptions.body.port_max).toEqual(portMax);
+        expect(mockRequestOptions.body.port_min).toEqual(portMin);
         expect(mockRequestOptions.body.protocol).toEqual(protocol);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
@@ -22188,7 +22206,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateLoadBalancerListener({});
@@ -22197,17 +22215,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateLoadBalancerListenerPromise = vpcService.updateLoadBalancerListener();
-        expectToBePromise(updateLoadBalancerListenerPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateLoadBalancerListener();
+        } catch (e) {
+          err = e;
+        }
 
-        updateLoadBalancerListenerPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -22284,7 +22302,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listLoadBalancerListenerPolicies({});
@@ -22293,17 +22311,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listLoadBalancerListenerPoliciesPromise = vpcService.listLoadBalancerListenerPolicies();
-        expectToBePromise(listLoadBalancerListenerPoliciesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listLoadBalancerListenerPolicies();
+        } catch (e) {
+          err = e;
+        }
 
-        listLoadBalancerListenerPoliciesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -22315,7 +22333,7 @@ describe('VpcV1', () => {
       const loadBalancerListenerPolicyRulePrototypeModel = {
         condition: 'contains',
         field: 'MY-APP-HEADER',
-        type: 'header',
+        type: 'body',
         value: 'testString',
       };
 
@@ -22414,7 +22432,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createLoadBalancerListenerPolicy({});
@@ -22423,17 +22441,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createLoadBalancerListenerPolicyPromise = vpcService.createLoadBalancerListenerPolicy();
-        expectToBePromise(createLoadBalancerListenerPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createLoadBalancerListenerPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        createLoadBalancerListenerPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -22515,7 +22533,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteLoadBalancerListenerPolicy({});
@@ -22524,17 +22542,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteLoadBalancerListenerPolicyPromise = vpcService.deleteLoadBalancerListenerPolicy();
-        expectToBePromise(deleteLoadBalancerListenerPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteLoadBalancerListenerPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteLoadBalancerListenerPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -22616,7 +22634,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getLoadBalancerListenerPolicy({});
@@ -22625,17 +22643,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getLoadBalancerListenerPolicyPromise = vpcService.getLoadBalancerListenerPolicy();
-        expectToBePromise(getLoadBalancerListenerPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getLoadBalancerListenerPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        getLoadBalancerListenerPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -22733,7 +22751,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateLoadBalancerListenerPolicy({});
@@ -22742,17 +22760,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateLoadBalancerListenerPolicyPromise = vpcService.updateLoadBalancerListenerPolicy();
-        expectToBePromise(updateLoadBalancerListenerPolicyPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateLoadBalancerListenerPolicy();
+        } catch (e) {
+          err = e;
+        }
 
-        updateLoadBalancerListenerPolicyPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -22834,7 +22852,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listLoadBalancerListenerPolicyRules({});
@@ -22843,17 +22861,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listLoadBalancerListenerPolicyRulesPromise = vpcService.listLoadBalancerListenerPolicyRules();
-        expectToBePromise(listLoadBalancerListenerPolicyRulesPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listLoadBalancerListenerPolicyRules();
+        } catch (e) {
+          err = e;
+        }
 
-        listLoadBalancerListenerPolicyRulesPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -22865,7 +22883,7 @@ describe('VpcV1', () => {
         const listenerId = 'testString';
         const policyId = 'testString';
         const condition = 'contains';
-        const type = 'header';
+        const type = 'body';
         const value = 'testString';
         const field = 'MY-APP-HEADER';
         const params = {
@@ -22930,7 +22948,7 @@ describe('VpcV1', () => {
         const listenerId = 'testString';
         const policyId = 'testString';
         const condition = 'contains';
-        const type = 'header';
+        const type = 'body';
         const value = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
@@ -22953,7 +22971,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createLoadBalancerListenerPolicyRule({});
@@ -22962,17 +22980,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createLoadBalancerListenerPolicyRulePromise = vpcService.createLoadBalancerListenerPolicyRule();
-        expectToBePromise(createLoadBalancerListenerPolicyRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createLoadBalancerListenerPolicyRule();
+        } catch (e) {
+          err = e;
+        }
 
-        createLoadBalancerListenerPolicyRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -23059,7 +23077,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteLoadBalancerListenerPolicyRule({});
@@ -23068,17 +23086,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteLoadBalancerListenerPolicyRulePromise = vpcService.deleteLoadBalancerListenerPolicyRule();
-        expectToBePromise(deleteLoadBalancerListenerPolicyRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteLoadBalancerListenerPolicyRule();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteLoadBalancerListenerPolicyRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -23165,7 +23183,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getLoadBalancerListenerPolicyRule({});
@@ -23174,17 +23192,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getLoadBalancerListenerPolicyRulePromise = vpcService.getLoadBalancerListenerPolicyRule();
-        expectToBePromise(getLoadBalancerListenerPolicyRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getLoadBalancerListenerPolicyRule();
+        } catch (e) {
+          err = e;
+        }
 
-        getLoadBalancerListenerPolicyRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -23198,7 +23216,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const condition = 'contains';
         const field = 'MY-APP-HEADER';
-        const type = 'header';
+        const type = 'body';
         const value = 'testString';
         const params = {
           loadBalancerId: loadBalancerId,
@@ -23283,7 +23301,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateLoadBalancerListenerPolicyRule({});
@@ -23292,17 +23310,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateLoadBalancerListenerPolicyRulePromise = vpcService.updateLoadBalancerListenerPolicyRule();
-        expectToBePromise(updateLoadBalancerListenerPolicyRulePromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateLoadBalancerListenerPolicyRule();
+        } catch (e) {
+          err = e;
+        }
 
-        updateLoadBalancerListenerPolicyRulePromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -23368,7 +23386,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listLoadBalancerPools({});
@@ -23377,17 +23395,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listLoadBalancerPoolsPromise = vpcService.listLoadBalancerPools();
-        expectToBePromise(listLoadBalancerPoolsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listLoadBalancerPools();
+        } catch (e) {
+          err = e;
+        }
 
-        listLoadBalancerPoolsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -23420,7 +23438,7 @@ describe('VpcV1', () => {
       // LoadBalancerPoolSessionPersistencePrototype
       const loadBalancerPoolSessionPersistencePrototypeModel = {
         cookie_name: 'my-cookie-name',
-        type: 'source_ip',
+        type: 'app_cookie',
       };
 
       function __createLoadBalancerPoolTest() {
@@ -23510,7 +23528,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createLoadBalancerPool({});
@@ -23519,17 +23537,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createLoadBalancerPoolPromise = vpcService.createLoadBalancerPool();
-        expectToBePromise(createLoadBalancerPoolPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createLoadBalancerPool();
+        } catch (e) {
+          err = e;
+        }
 
-        createLoadBalancerPoolPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -23604,7 +23622,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteLoadBalancerPool({});
@@ -23613,17 +23631,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteLoadBalancerPoolPromise = vpcService.deleteLoadBalancerPool();
-        expectToBePromise(deleteLoadBalancerPoolPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteLoadBalancerPool();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteLoadBalancerPoolPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -23698,7 +23716,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getLoadBalancerPool({});
@@ -23707,17 +23725,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getLoadBalancerPoolPromise = vpcService.getLoadBalancerPool();
-        expectToBePromise(getLoadBalancerPoolPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getLoadBalancerPool();
+        } catch (e) {
+          err = e;
+        }
 
-        getLoadBalancerPoolPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -23738,7 +23756,7 @@ describe('VpcV1', () => {
       // LoadBalancerPoolSessionPersistencePatch
       const loadBalancerPoolSessionPersistencePatchModel = {
         cookie_name: 'my-cookie-name',
-        type: 'source_ip',
+        type: 'app_cookie',
       };
 
       function __updateLoadBalancerPoolTest() {
@@ -23828,7 +23846,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateLoadBalancerPool({});
@@ -23837,17 +23855,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateLoadBalancerPoolPromise = vpcService.updateLoadBalancerPool();
-        expectToBePromise(updateLoadBalancerPoolPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateLoadBalancerPool();
+        } catch (e) {
+          err = e;
+        }
 
-        updateLoadBalancerPoolPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -23922,7 +23940,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listLoadBalancerPoolMembers({});
@@ -23931,17 +23949,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listLoadBalancerPoolMembersPromise = vpcService.listLoadBalancerPoolMembers();
-        expectToBePromise(listLoadBalancerPoolMembersPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listLoadBalancerPoolMembers();
+        } catch (e) {
+          err = e;
+        }
 
-        listLoadBalancerPoolMembersPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -24036,7 +24054,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createLoadBalancerPoolMember({});
@@ -24045,17 +24063,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createLoadBalancerPoolMemberPromise = vpcService.createLoadBalancerPoolMember();
-        expectToBePromise(createLoadBalancerPoolMemberPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createLoadBalancerPoolMember();
+        } catch (e) {
+          err = e;
+        }
 
-        createLoadBalancerPoolMemberPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -24151,7 +24169,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.replaceLoadBalancerPoolMembers({});
@@ -24160,17 +24178,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const replaceLoadBalancerPoolMembersPromise = vpcService.replaceLoadBalancerPoolMembers();
-        expectToBePromise(replaceLoadBalancerPoolMembersPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.replaceLoadBalancerPoolMembers();
+        } catch (e) {
+          err = e;
+        }
 
-        replaceLoadBalancerPoolMembersPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -24250,7 +24268,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteLoadBalancerPoolMember({});
@@ -24259,17 +24277,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteLoadBalancerPoolMemberPromise = vpcService.deleteLoadBalancerPoolMember();
-        expectToBePromise(deleteLoadBalancerPoolMemberPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteLoadBalancerPoolMember();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteLoadBalancerPoolMemberPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -24349,7 +24367,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getLoadBalancerPoolMember({});
@@ -24358,17 +24376,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getLoadBalancerPoolMemberPromise = vpcService.getLoadBalancerPoolMember();
-        expectToBePromise(getLoadBalancerPoolMemberPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getLoadBalancerPoolMember();
+        } catch (e) {
+          err = e;
+        }
 
-        getLoadBalancerPoolMemberPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -24464,7 +24482,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateLoadBalancerPoolMember({});
@@ -24473,17 +24491,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateLoadBalancerPoolMemberPromise = vpcService.updateLoadBalancerPoolMember();
-        expectToBePromise(updateLoadBalancerPoolMemberPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateLoadBalancerPoolMember();
+        } catch (e) {
+          err = e;
+        }
 
-        updateLoadBalancerPoolMemberPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -24661,7 +24679,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createEndpointGateway({});
@@ -24670,17 +24688,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createEndpointGatewayPromise = vpcService.createEndpointGateway();
-        expectToBePromise(createEndpointGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createEndpointGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        createEndpointGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -24759,7 +24777,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.listEndpointGatewayIps({});
@@ -24768,17 +24786,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const listEndpointGatewayIpsPromise = vpcService.listEndpointGatewayIps();
-        expectToBePromise(listEndpointGatewayIpsPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listEndpointGatewayIps();
+        } catch (e) {
+          err = e;
+        }
 
-        listEndpointGatewayIpsPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -24853,7 +24871,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.removeEndpointGatewayIp({});
@@ -24862,17 +24880,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const removeEndpointGatewayIpPromise = vpcService.removeEndpointGatewayIp();
-        expectToBePromise(removeEndpointGatewayIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.removeEndpointGatewayIp();
+        } catch (e) {
+          err = e;
+        }
 
-        removeEndpointGatewayIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -24947,7 +24965,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getEndpointGatewayIp({});
@@ -24956,17 +24974,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getEndpointGatewayIpPromise = vpcService.getEndpointGatewayIp();
-        expectToBePromise(getEndpointGatewayIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getEndpointGatewayIp();
+        } catch (e) {
+          err = e;
+        }
 
-        getEndpointGatewayIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -25041,7 +25059,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.addEndpointGatewayIp({});
@@ -25050,17 +25068,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const addEndpointGatewayIpPromise = vpcService.addEndpointGatewayIp();
-        expectToBePromise(addEndpointGatewayIpPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.addEndpointGatewayIp();
+        } catch (e) {
+          err = e;
+        }
 
-        addEndpointGatewayIpPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -25126,7 +25144,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteEndpointGateway({});
@@ -25135,17 +25153,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteEndpointGatewayPromise = vpcService.deleteEndpointGateway();
-        expectToBePromise(deleteEndpointGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteEndpointGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteEndpointGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -25211,7 +25229,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getEndpointGateway({});
@@ -25220,17 +25238,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getEndpointGatewayPromise = vpcService.getEndpointGateway();
-        expectToBePromise(getEndpointGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getEndpointGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        getEndpointGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -25299,7 +25317,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateEndpointGateway({});
@@ -25308,17 +25326,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateEndpointGatewayPromise = vpcService.updateEndpointGateway();
-        expectToBePromise(updateEndpointGatewayPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateEndpointGateway();
+        } catch (e) {
+          err = e;
+        }
 
-        updateEndpointGatewayPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -25334,7 +25352,7 @@ describe('VpcV1', () => {
         const vpcCrn = 'testString';
         const vpcName = 'testString';
         const targetId = 'testString';
-        const targetResourceType = 'vpc';
+        const targetResourceType = 'instance';
         const params = {
           start: start,
           limit: limit,
@@ -25504,7 +25522,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.createFlowLogCollector({});
@@ -25513,17 +25531,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const createFlowLogCollectorPromise = vpcService.createFlowLogCollector();
-        expectToBePromise(createFlowLogCollectorPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createFlowLogCollector();
+        } catch (e) {
+          err = e;
+        }
 
-        createFlowLogCollectorPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -25589,7 +25607,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.deleteFlowLogCollector({});
@@ -25598,17 +25616,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const deleteFlowLogCollectorPromise = vpcService.deleteFlowLogCollector();
-        expectToBePromise(deleteFlowLogCollectorPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteFlowLogCollector();
+        } catch (e) {
+          err = e;
+        }
 
-        deleteFlowLogCollectorPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -25674,7 +25692,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.getFlowLogCollector({});
@@ -25683,17 +25701,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const getFlowLogCollectorPromise = vpcService.getFlowLogCollector();
-        expectToBePromise(getFlowLogCollectorPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getFlowLogCollector();
+        } catch (e) {
+          err = e;
+        }
 
-        getFlowLogCollectorPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -25765,7 +25783,7 @@ describe('VpcV1', () => {
     });
 
     describe('negative tests', () => {
-      test('should enforce required parameters', async done => {
+      test('should enforce required parameters', async () => {
         let err;
         try {
           await vpcService.updateFlowLogCollector({});
@@ -25774,17 +25792,17 @@ describe('VpcV1', () => {
         }
 
         expect(err.message).toMatch(/Missing required parameters/);
-        done();
       });
 
-      test('should reject promise when required params are not given', done => {
-        const updateFlowLogCollectorPromise = vpcService.updateFlowLogCollector();
-        expectToBePromise(updateFlowLogCollectorPromise);
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateFlowLogCollector();
+        } catch (e) {
+          err = e;
+        }
 
-        updateFlowLogCollectorPromise.catch(err => {
-          expect(err.message).toMatch(/Missing required parameters/);
-          done();
-        });
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
