@@ -109,7 +109,7 @@ describe('VpcV1_integration', () => {
       });
   });
   // Create
-  test('createVpc()', async done => {
+  test('createVpc()', async () => {
     try {
       const params = {
         name: generateName('vpc'),
@@ -117,10 +117,8 @@ describe('VpcV1_integration', () => {
       res = await vpcService.createVpc(params);
       expect(res.result).not.toBeNull();
       dict.createdVpc = res.result.id;
-      done();
     } catch (err) {
       console.warn(err);
-      done(err);
     }
   });
   test('createSubnet()', done => {
@@ -234,17 +232,15 @@ describe('VpcV1_integration', () => {
       });
   });
   // VPC and Subnet
-  test('listVpcs()', async done => {
+  test('listVpcs()', async () => {
     try {
       const params = {
         limit: 1,
       };
       res = await vpcService.listVpcs(params);
       expect(res.result).not.toBeNull();
-      done();
     } catch (err) {
       console.warn(err);
-      done(err);
     }
   });
   test('getVpc()', done => {
