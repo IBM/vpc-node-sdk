@@ -1358,6 +1358,304 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('listBareMetalServerProfiles()', done => {
+    vpcService
+      .listBareMetalServerProfiles({})
+      .then(res => {
+        dict.bareMetalServerProfileName = res.result.profiles[0].name;
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getBareMetalServerProfile()', async () => {
+    const params = {
+      name: dict.bareMetalServerProfileName,
+    };
+
+    const res = await vpcService.getBareMetalServerProfile(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('createBareMetalServer()', async () => {
+    // Request models needed by this operation.
+
+    // ImageIdentityById
+    const imageIdentityModel = {
+      id: dict.imageId,
+    };
+
+    // KeyIdentityById
+    const keyIdentityModel = {
+      id: dict.createdKey,
+    };
+
+    // BareMetalServerInitializationPrototype
+    const bareMetalServerInitializationPrototypeModel = {
+      image: imageIdentityModel,
+      keys: [keyIdentityModel],
+      user_data: 'testString',
+    };
+
+    // SubnetIdentityById
+    const subnetIdentityModel = {
+      id: dict.createdSubnet,
+    };
+
+    // BareMetalServerPrimaryNetworkInterfacePrototype
+    const bareMetalServerPrimaryNetworkInterfacePrototypeModel = {
+      allow_ip_spoofing: true,
+      allowed_vlans: [4],
+      enable_infrastructure_nat: true,
+      interface_type: 'pci',
+      name: 'my-network-interface',
+      subnet: subnetIdentityModel,
+    };
+
+    // BareMetalServerProfileIdentityByName
+    const bareMetalServerProfileIdentityModel = {
+      name: dict.bareMetalServerProfileName,
+    };
+
+    // ZoneIdentityByName
+    const zoneIdentityModel = {
+      name: dict.zoneName,
+    };
+
+    // VPCIdentityById
+    const vpcIdentityModel = {
+      id: dict.createdVpc,
+    };
+
+    const params = {
+      initialization: bareMetalServerInitializationPrototypeModel,
+      primaryNetworkInterface: bareMetalServerPrimaryNetworkInterfacePrototypeModel,
+      profile: bareMetalServerProfileIdentityModel,
+      zone: zoneIdentityModel,
+      name: 'my-bare-metal-server2',
+      // networkInterfaces: [bareMetalServerNetworkInterfacePrototypeModel],
+      // resourceGroup: resourceGroupIdentityModel,
+      // trustedPlatformModule: bareMetalServerTrustedPlatformModulePrototypeModel,
+      vpc: vpcIdentityModel,
+    };
+
+    const res = await vpcService.createBareMetalServer(params);
+    dict.createdBareMetalServerId = res.result.id;
+    dict.createdBareMetalServerDiskId = res.result.disks[0].id;
+    dict.createdBareMetalServerNicId = res.result.primary_network_interface.id;
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('listBareMetalServers()', async () => {
+    const res = await vpcService.listBareMetalServers();
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test.skip('createBareMetalServerConsoleAccessToken()', async () => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      consoleType: 'serial',
+      force: false,
+    };
+
+    const res = await vpcService.createBareMetalServerConsoleAccessToken(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('listBareMetalServerDisks()', async () => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+    };
+
+    const res = await vpcService.listBareMetalServerDisks(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('getBareMetalServerDisk()', async () => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      id: dict.createdBareMetalServerDiskId,
+    };
+
+    const res = await vpcService.getBareMetalServerDisk(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('updateBareMetalServerDisk()', async () => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      id: dict.createdBareMetalServerDiskId,
+      name: 'my-bare-metal-server-disk-updated',
+    };
+
+    const res = await vpcService.updateBareMetalServerDisk(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('listBareMetalServerNetworkInterfaces()', async () => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+    };
+
+    const res = await vpcService.listBareMetalServerNetworkInterfaces(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('createBareMetalServerNetworkInterface()', async () => {
+    // Request models needed by this operation.
+
+    // SubnetIdentityById
+    const subnetIdentityModel = {
+      id: dict.createdSubnet,
+    };
+
+    // BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype
+    const bareMetalServerNetworkInterfacePrototypeModel = {
+      allow_ip_spoofing: true,
+      enable_infrastructure_nat: true,
+      interface_type: 'vlan',
+      name: 'my-network-interface',
+      subnet: subnetIdentityModel,
+      allow_interface_to_float: false,
+      vlan: 4,
+    };
+
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      bareMetalServerNetworkInterfacePrototype: bareMetalServerNetworkInterfacePrototypeModel,
+    };
+
+    const res = await vpcService.createBareMetalServerNetworkInterface(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('getBareMetalServerNetworkInterface()', async () => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      id: dict.createdBareMetalServerNicId,
+    };
+
+    const res = await vpcService.getBareMetalServerNetworkInterface(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('updateBareMetalServerNetworkInterface()', async () => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      id: dict.createdBareMetalServerNicId,
+      allowIpSpoofing: true,
+      allowedVlans: [4],
+      enableInfrastructureNat: true,
+      name: 'my-network-interface-updated',
+    };
+
+    const res = await vpcService.updateBareMetalServerNetworkInterface(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('listBareMetalServerNetworkInterfaceFloatingIps()', async () => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      networkInterfaceId: dict.createdBareMetalServerNicId,
+    };
+
+    const res = await vpcService.listBareMetalServerNetworkInterfaceFloatingIps(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('addBareMetalServerNetworkInterfaceFloatingIp()', async () => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      networkInterfaceId: dict.createdBareMetalServerNicId,
+      id: dict.createdFloatingIp,
+    };
+
+    const res = await vpcService.addBareMetalServerNetworkInterfaceFloatingIp(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('getBareMetalServerNetworkInterfaceFloatingIp()', async () => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      networkInterfaceId: dict.createdBareMetalServerNicId,
+      id: dict.createdFloatingIp,
+    };
+
+    const res = await vpcService.getBareMetalServerNetworkInterfaceFloatingIp(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('getBareMetalServer()', async () => {
+    const params = {
+      id: dict.createdBareMetalServerId,
+    };
+
+    const res = await vpcService.getBareMetalServer(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('updateBareMetalServer()', async () => {
+    // Request models needed by this operation.
+
+    const params = {
+      id: dict.createdBareMetalServerId,
+      name: 'my-bare-metal-server-updated',
+    };
+
+    const res = await vpcService.updateBareMetalServer(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('getBareMetalServerInitialization()', async () => {
+    const params = {
+      id: dict.createdBareMetalServerId,
+    };
+
+    const res = await vpcService.getBareMetalServerInitialization(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('restartBareMetalServer()', async () => {
+    const params = {
+      id: dict.createdBareMetalServerId,
+    };
+
+    const res = await vpcService.restartBareMetalServer(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('startBareMetalServer()', async () => {
+    const params = {
+      id: dict.createdBareMetalServerId,
+    };
+
+    const res = await vpcService.startBareMetalServer(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+  test('stopBareMetalServer()', async () => {
+    const params = {
+      id: dict.createdBareMetalServerId,
+      type: 'soft',
+    };
+
+    const res = await vpcService.stopBareMetalServer(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteBareMetalServer()', async () => {
+    const params = {
+      id: dict.createdBareMetalServerId,
+    };
+
+    const res = await vpcService.deleteBareMetalServer(params);
+    expect(res).toBeDefined();
+    expect(res.result).toBeDefined();
+  });
   test('listFlowLogCollectors()', done => {
     const params = {
       limit: 1,
@@ -1741,8 +2039,8 @@ describe('VpcV1_integration', () => {
       instanceGroupId: dict.createdInstanceGroup,
       instanceGroupManagerId: dict.createdInstanceGroupManager,
       id: dict.createdInstanceGroupManagerPolicy,
-      metric_type: 'cpu',
-      metric_value: 33,
+      metricType: 'cpu',
+      metricValue: 33,
       // name: generateName('igm-policy'),
     };
 
