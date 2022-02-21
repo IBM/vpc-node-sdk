@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2021.
+ * (C) Copyright IBM Corp. 2022.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -133,14 +133,14 @@ describe('VpcV1', () => {
         const limit = 1;
         const resourceGroupId = 'testString';
         const classicAccess = true;
-        const params = {
+        const listVpcsParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
           classicAccess: classicAccess,
         };
 
-        const listVpcsResult = vpcService.listVpcs(params);
+        const listVpcsResult = vpcService.listVpcs(listVpcsParams);
 
         // all methods should return a Promise
         expectToBePromise(listVpcsResult);
@@ -181,14 +181,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVpcsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listVpcs(params);
+        vpcService.listVpcs(listVpcsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -214,14 +214,14 @@ describe('VpcV1', () => {
         const classicAccess = false;
         const name = 'my-vpc';
         const resourceGroup = resourceGroupIdentityModel;
-        const params = {
+        const createVpcParams = {
           addressPrefixManagement: addressPrefixManagement,
           classicAccess: classicAccess,
           name: name,
           resourceGroup: resourceGroup,
         };
 
-        const createVpcResult = vpcService.createVpc(params);
+        const createVpcResult = vpcService.createVpc(createVpcParams);
 
         // all methods should return a Promise
         expectToBePromise(createVpcResult);
@@ -262,14 +262,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createVpcParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.createVpc(params);
+        vpcService.createVpc(createVpcParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -285,11 +285,11 @@ describe('VpcV1', () => {
       function __deleteVpcTest() {
         // Construct the params object for operation deleteVpc
         const id = 'testString';
-        const params = {
+        const deleteVpcParams = {
           id: id,
         };
 
-        const deleteVpcResult = vpcService.deleteVpc(params);
+        const deleteVpcResult = vpcService.deleteVpc(deleteVpcParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteVpcResult);
@@ -328,7 +328,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteVpcParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -336,7 +336,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteVpc(params);
+        vpcService.deleteVpc(deleteVpcParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -370,11 +370,11 @@ describe('VpcV1', () => {
       function __getVpcTest() {
         // Construct the params object for operation getVpc
         const id = 'testString';
-        const params = {
+        const getVpcParams = {
           id: id,
         };
 
-        const getVpcResult = vpcService.getVpc(params);
+        const getVpcResult = vpcService.getVpc(getVpcParams);
 
         // all methods should return a Promise
         expectToBePromise(getVpcResult);
@@ -413,7 +413,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVpcParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -421,7 +421,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVpc(params);
+        vpcService.getVpc(getVpcParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -456,12 +456,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateVpc
         const id = 'testString';
         const name = 'my-vpc';
-        const params = {
+        const updateVpcParams = {
           id: id,
           name: name,
         };
 
-        const updateVpcResult = vpcService.updateVpc(params);
+        const updateVpcResult = vpcService.updateVpc(updateVpcParams);
 
         // all methods should return a Promise
         expectToBePromise(updateVpcResult);
@@ -501,7 +501,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateVpcParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -509,7 +509,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateVpc(params);
+        vpcService.updateVpc(updateVpcParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -543,11 +543,13 @@ describe('VpcV1', () => {
       function __getVpcDefaultNetworkAclTest() {
         // Construct the params object for operation getVpcDefaultNetworkAcl
         const id = 'testString';
-        const params = {
+        const getVpcDefaultNetworkAclParams = {
           id: id,
         };
 
-        const getVpcDefaultNetworkAclResult = vpcService.getVpcDefaultNetworkAcl(params);
+        const getVpcDefaultNetworkAclResult = vpcService.getVpcDefaultNetworkAcl(
+          getVpcDefaultNetworkAclParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getVpcDefaultNetworkAclResult);
@@ -586,7 +588,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVpcDefaultNetworkAclParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -594,7 +596,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVpcDefaultNetworkAcl(params);
+        vpcService.getVpcDefaultNetworkAcl(getVpcDefaultNetworkAclParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -628,11 +630,13 @@ describe('VpcV1', () => {
       function __getVpcDefaultRoutingTableTest() {
         // Construct the params object for operation getVpcDefaultRoutingTable
         const id = 'testString';
-        const params = {
+        const getVpcDefaultRoutingTableParams = {
           id: id,
         };
 
-        const getVpcDefaultRoutingTableResult = vpcService.getVpcDefaultRoutingTable(params);
+        const getVpcDefaultRoutingTableResult = vpcService.getVpcDefaultRoutingTable(
+          getVpcDefaultRoutingTableParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getVpcDefaultRoutingTableResult);
@@ -671,7 +675,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVpcDefaultRoutingTableParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -679,7 +683,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVpcDefaultRoutingTable(params);
+        vpcService.getVpcDefaultRoutingTable(getVpcDefaultRoutingTableParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -713,11 +717,13 @@ describe('VpcV1', () => {
       function __getVpcDefaultSecurityGroupTest() {
         // Construct the params object for operation getVpcDefaultSecurityGroup
         const id = 'testString';
-        const params = {
+        const getVpcDefaultSecurityGroupParams = {
           id: id,
         };
 
-        const getVpcDefaultSecurityGroupResult = vpcService.getVpcDefaultSecurityGroup(params);
+        const getVpcDefaultSecurityGroupResult = vpcService.getVpcDefaultSecurityGroup(
+          getVpcDefaultSecurityGroupParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getVpcDefaultSecurityGroupResult);
@@ -756,7 +762,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVpcDefaultSecurityGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -764,7 +770,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVpcDefaultSecurityGroup(params);
+        vpcService.getVpcDefaultSecurityGroup(getVpcDefaultSecurityGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -800,13 +806,15 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listVpcAddressPrefixesParams = {
           vpcId: vpcId,
           start: start,
           limit: limit,
         };
 
-        const listVpcAddressPrefixesResult = vpcService.listVpcAddressPrefixes(params);
+        const listVpcAddressPrefixesResult = vpcService.listVpcAddressPrefixes(
+          listVpcAddressPrefixesParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listVpcAddressPrefixesResult);
@@ -847,7 +855,7 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVpcAddressPrefixesParams = {
           vpcId,
           headers: {
             Accept: userAccept,
@@ -855,7 +863,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listVpcAddressPrefixes(params);
+        vpcService.listVpcAddressPrefixes(listVpcAddressPrefixesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -900,7 +908,7 @@ describe('VpcV1', () => {
         const zone = zoneIdentityModel;
         const isDefault = true;
         const name = 'my-address-prefix-2';
-        const params = {
+        const createVpcAddressPrefixParams = {
           vpcId: vpcId,
           cidr: cidr,
           zone: zone,
@@ -908,7 +916,9 @@ describe('VpcV1', () => {
           name: name,
         };
 
-        const createVpcAddressPrefixResult = vpcService.createVpcAddressPrefix(params);
+        const createVpcAddressPrefixResult = vpcService.createVpcAddressPrefix(
+          createVpcAddressPrefixParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createVpcAddressPrefixResult);
@@ -953,7 +963,7 @@ describe('VpcV1', () => {
         const zone = zoneIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createVpcAddressPrefixParams = {
           vpcId,
           cidr,
           zone,
@@ -963,7 +973,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createVpcAddressPrefix(params);
+        vpcService.createVpcAddressPrefix(createVpcAddressPrefixParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -998,12 +1008,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteVpcAddressPrefix
         const vpcId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteVpcAddressPrefixParams = {
           vpcId: vpcId,
           id: id,
         };
 
-        const deleteVpcAddressPrefixResult = vpcService.deleteVpcAddressPrefix(params);
+        const deleteVpcAddressPrefixResult = vpcService.deleteVpcAddressPrefix(
+          deleteVpcAddressPrefixParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteVpcAddressPrefixResult);
@@ -1044,7 +1056,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteVpcAddressPrefixParams = {
           vpcId,
           id,
           headers: {
@@ -1053,7 +1065,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteVpcAddressPrefix(params);
+        vpcService.deleteVpcAddressPrefix(deleteVpcAddressPrefixParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1088,12 +1100,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpcAddressPrefix
         const vpcId = 'testString';
         const id = 'testString';
-        const params = {
+        const getVpcAddressPrefixParams = {
           vpcId: vpcId,
           id: id,
         };
 
-        const getVpcAddressPrefixResult = vpcService.getVpcAddressPrefix(params);
+        const getVpcAddressPrefixResult = vpcService.getVpcAddressPrefix(getVpcAddressPrefixParams);
 
         // all methods should return a Promise
         expectToBePromise(getVpcAddressPrefixResult);
@@ -1134,7 +1146,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVpcAddressPrefixParams = {
           vpcId,
           id,
           headers: {
@@ -1143,7 +1155,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVpcAddressPrefix(params);
+        vpcService.getVpcAddressPrefix(getVpcAddressPrefixParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1180,14 +1192,16 @@ describe('VpcV1', () => {
         const id = 'testString';
         const isDefault = false;
         const name = 'my-address-prefix-2';
-        const params = {
+        const updateVpcAddressPrefixParams = {
           vpcId: vpcId,
           id: id,
           isDefault: isDefault,
           name: name,
         };
 
-        const updateVpcAddressPrefixResult = vpcService.updateVpcAddressPrefix(params);
+        const updateVpcAddressPrefixResult = vpcService.updateVpcAddressPrefix(
+          updateVpcAddressPrefixParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateVpcAddressPrefixResult);
@@ -1230,7 +1244,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateVpcAddressPrefixParams = {
           vpcId,
           id,
           headers: {
@@ -1239,7 +1253,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateVpcAddressPrefix(params);
+        vpcService.updateVpcAddressPrefix(updateVpcAddressPrefixParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1276,14 +1290,14 @@ describe('VpcV1', () => {
         const zoneName = 'testString';
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listVpcRoutesParams = {
           vpcId: vpcId,
           zoneName: zoneName,
           start: start,
           limit: limit,
         };
 
-        const listVpcRoutesResult = vpcService.listVpcRoutes(params);
+        const listVpcRoutesResult = vpcService.listVpcRoutes(listVpcRoutesParams);
 
         // all methods should return a Promise
         expectToBePromise(listVpcRoutesResult);
@@ -1325,7 +1339,7 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVpcRoutesParams = {
           vpcId,
           headers: {
             Accept: userAccept,
@@ -1333,7 +1347,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listVpcRoutes(params);
+        vpcService.listVpcRoutes(listVpcRoutesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1384,7 +1398,7 @@ describe('VpcV1', () => {
         const action = 'deliver';
         const name = 'my-route-2';
         const nextHop = routeNextHopPrototypeModel;
-        const params = {
+        const createVpcRouteParams = {
           vpcId: vpcId,
           destination: destination,
           zone: zone,
@@ -1393,7 +1407,7 @@ describe('VpcV1', () => {
           nextHop: nextHop,
         };
 
-        const createVpcRouteResult = vpcService.createVpcRoute(params);
+        const createVpcRouteResult = vpcService.createVpcRoute(createVpcRouteParams);
 
         // all methods should return a Promise
         expectToBePromise(createVpcRouteResult);
@@ -1439,7 +1453,7 @@ describe('VpcV1', () => {
         const zone = zoneIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createVpcRouteParams = {
           vpcId,
           destination,
           zone,
@@ -1449,7 +1463,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createVpcRoute(params);
+        vpcService.createVpcRoute(createVpcRouteParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1484,12 +1498,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteVpcRoute
         const vpcId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteVpcRouteParams = {
           vpcId: vpcId,
           id: id,
         };
 
-        const deleteVpcRouteResult = vpcService.deleteVpcRoute(params);
+        const deleteVpcRouteResult = vpcService.deleteVpcRoute(deleteVpcRouteParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteVpcRouteResult);
@@ -1530,7 +1544,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteVpcRouteParams = {
           vpcId,
           id,
           headers: {
@@ -1539,7 +1553,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteVpcRoute(params);
+        vpcService.deleteVpcRoute(deleteVpcRouteParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1574,12 +1588,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpcRoute
         const vpcId = 'testString';
         const id = 'testString';
-        const params = {
+        const getVpcRouteParams = {
           vpcId: vpcId,
           id: id,
         };
 
-        const getVpcRouteResult = vpcService.getVpcRoute(params);
+        const getVpcRouteResult = vpcService.getVpcRoute(getVpcRouteParams);
 
         // all methods should return a Promise
         expectToBePromise(getVpcRouteResult);
@@ -1620,7 +1634,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVpcRouteParams = {
           vpcId,
           id,
           headers: {
@@ -1629,7 +1643,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVpcRoute(params);
+        vpcService.getVpcRoute(getVpcRouteParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1665,13 +1679,13 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const id = 'testString';
         const name = 'my-route-2';
-        const params = {
+        const updateVpcRouteParams = {
           vpcId: vpcId,
           id: id,
           name: name,
         };
 
-        const updateVpcRouteResult = vpcService.updateVpcRoute(params);
+        const updateVpcRouteResult = vpcService.updateVpcRoute(updateVpcRouteParams);
 
         // all methods should return a Promise
         expectToBePromise(updateVpcRouteResult);
@@ -1713,7 +1727,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateVpcRouteParams = {
           vpcId,
           id,
           headers: {
@@ -1722,7 +1736,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateVpcRoute(params);
+        vpcService.updateVpcRoute(updateVpcRouteParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1759,14 +1773,16 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const isDefault = true;
-        const params = {
+        const listVpcRoutingTablesParams = {
           vpcId: vpcId,
           start: start,
           limit: limit,
           isDefault: isDefault,
         };
 
-        const listVpcRoutingTablesResult = vpcService.listVpcRoutingTables(params);
+        const listVpcRoutingTablesResult = vpcService.listVpcRoutingTables(
+          listVpcRoutingTablesParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listVpcRoutingTablesResult);
@@ -1808,7 +1824,7 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVpcRoutingTablesParams = {
           vpcId,
           headers: {
             Accept: userAccept,
@@ -1816,7 +1832,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listVpcRoutingTables(params);
+        vpcService.listVpcRoutingTables(listVpcRoutingTablesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1876,7 +1892,7 @@ describe('VpcV1', () => {
         const routeTransitGatewayIngress = false;
         const routeVpcZoneIngress = false;
         const routes = [routePrototypeModel];
-        const params = {
+        const createVpcRoutingTableParams = {
           vpcId: vpcId,
           name: name,
           routeDirectLinkIngress: routeDirectLinkIngress,
@@ -1885,7 +1901,9 @@ describe('VpcV1', () => {
           routes: routes,
         };
 
-        const createVpcRoutingTableResult = vpcService.createVpcRoutingTable(params);
+        const createVpcRoutingTableResult = vpcService.createVpcRoutingTable(
+          createVpcRoutingTableParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createVpcRoutingTableResult);
@@ -1931,7 +1949,7 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createVpcRoutingTableParams = {
           vpcId,
           headers: {
             Accept: userAccept,
@@ -1939,7 +1957,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createVpcRoutingTable(params);
+        vpcService.createVpcRoutingTable(createVpcRoutingTableParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -1974,12 +1992,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteVpcRoutingTable
         const vpcId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteVpcRoutingTableParams = {
           vpcId: vpcId,
           id: id,
         };
 
-        const deleteVpcRoutingTableResult = vpcService.deleteVpcRoutingTable(params);
+        const deleteVpcRoutingTableResult = vpcService.deleteVpcRoutingTable(
+          deleteVpcRoutingTableParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteVpcRoutingTableResult);
@@ -2020,7 +2040,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteVpcRoutingTableParams = {
           vpcId,
           id,
           headers: {
@@ -2029,7 +2049,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteVpcRoutingTable(params);
+        vpcService.deleteVpcRoutingTable(deleteVpcRoutingTableParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2064,12 +2084,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpcRoutingTable
         const vpcId = 'testString';
         const id = 'testString';
-        const params = {
+        const getVpcRoutingTableParams = {
           vpcId: vpcId,
           id: id,
         };
 
-        const getVpcRoutingTableResult = vpcService.getVpcRoutingTable(params);
+        const getVpcRoutingTableResult = vpcService.getVpcRoutingTable(getVpcRoutingTableParams);
 
         // all methods should return a Promise
         expectToBePromise(getVpcRoutingTableResult);
@@ -2110,7 +2130,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVpcRoutingTableParams = {
           vpcId,
           id,
           headers: {
@@ -2119,7 +2139,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVpcRoutingTable(params);
+        vpcService.getVpcRoutingTable(getVpcRoutingTableParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2158,7 +2178,7 @@ describe('VpcV1', () => {
         const routeDirectLinkIngress = true;
         const routeTransitGatewayIngress = true;
         const routeVpcZoneIngress = true;
-        const params = {
+        const updateVpcRoutingTableParams = {
           vpcId: vpcId,
           id: id,
           name: name,
@@ -2167,7 +2187,9 @@ describe('VpcV1', () => {
           routeVpcZoneIngress: routeVpcZoneIngress,
         };
 
-        const updateVpcRoutingTableResult = vpcService.updateVpcRoutingTable(params);
+        const updateVpcRoutingTableResult = vpcService.updateVpcRoutingTable(
+          updateVpcRoutingTableParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateVpcRoutingTableResult);
@@ -2214,7 +2236,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateVpcRoutingTableParams = {
           vpcId,
           id,
           headers: {
@@ -2223,7 +2245,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateVpcRoutingTable(params);
+        vpcService.updateVpcRoutingTable(updateVpcRoutingTableParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2260,14 +2282,16 @@ describe('VpcV1', () => {
         const routingTableId = 'testString';
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listVpcRoutingTableRoutesParams = {
           vpcId: vpcId,
           routingTableId: routingTableId,
           start: start,
           limit: limit,
         };
 
-        const listVpcRoutingTableRoutesResult = vpcService.listVpcRoutingTableRoutes(params);
+        const listVpcRoutingTableRoutesResult = vpcService.listVpcRoutingTableRoutes(
+          listVpcRoutingTableRoutesParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listVpcRoutingTableRoutesResult);
@@ -2314,7 +2338,7 @@ describe('VpcV1', () => {
         const routingTableId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVpcRoutingTableRoutesParams = {
           vpcId,
           routingTableId,
           headers: {
@@ -2323,7 +2347,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listVpcRoutingTableRoutes(params);
+        vpcService.listVpcRoutingTableRoutes(listVpcRoutingTableRoutesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2375,7 +2399,7 @@ describe('VpcV1', () => {
         const action = 'deliver';
         const name = 'my-route-2';
         const nextHop = routeNextHopPrototypeModel;
-        const params = {
+        const createVpcRoutingTableRouteParams = {
           vpcId: vpcId,
           routingTableId: routingTableId,
           destination: destination,
@@ -2385,7 +2409,9 @@ describe('VpcV1', () => {
           nextHop: nextHop,
         };
 
-        const createVpcRoutingTableRouteResult = vpcService.createVpcRoutingTableRoute(params);
+        const createVpcRoutingTableRouteResult = vpcService.createVpcRoutingTableRoute(
+          createVpcRoutingTableRouteParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createVpcRoutingTableRouteResult);
@@ -2437,7 +2463,7 @@ describe('VpcV1', () => {
         const zone = zoneIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createVpcRoutingTableRouteParams = {
           vpcId,
           routingTableId,
           destination,
@@ -2448,7 +2474,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createVpcRoutingTableRoute(params);
+        vpcService.createVpcRoutingTableRoute(createVpcRoutingTableRouteParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2484,13 +2510,15 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const routingTableId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteVpcRoutingTableRouteParams = {
           vpcId: vpcId,
           routingTableId: routingTableId,
           id: id,
         };
 
-        const deleteVpcRoutingTableRouteResult = vpcService.deleteVpcRoutingTableRoute(params);
+        const deleteVpcRoutingTableRouteResult = vpcService.deleteVpcRoutingTableRoute(
+          deleteVpcRoutingTableRouteParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteVpcRoutingTableRouteResult);
@@ -2537,7 +2565,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteVpcRoutingTableRouteParams = {
           vpcId,
           routingTableId,
           id,
@@ -2547,7 +2575,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteVpcRoutingTableRoute(params);
+        vpcService.deleteVpcRoutingTableRoute(deleteVpcRoutingTableRouteParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2583,13 +2611,15 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const routingTableId = 'testString';
         const id = 'testString';
-        const params = {
+        const getVpcRoutingTableRouteParams = {
           vpcId: vpcId,
           routingTableId: routingTableId,
           id: id,
         };
 
-        const getVpcRoutingTableRouteResult = vpcService.getVpcRoutingTableRoute(params);
+        const getVpcRoutingTableRouteResult = vpcService.getVpcRoutingTableRoute(
+          getVpcRoutingTableRouteParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getVpcRoutingTableRouteResult);
@@ -2636,7 +2666,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVpcRoutingTableRouteParams = {
           vpcId,
           routingTableId,
           id,
@@ -2646,7 +2676,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVpcRoutingTableRoute(params);
+        vpcService.getVpcRoutingTableRoute(getVpcRoutingTableRouteParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2683,14 +2713,16 @@ describe('VpcV1', () => {
         const routingTableId = 'testString';
         const id = 'testString';
         const name = 'my-route-2';
-        const params = {
+        const updateVpcRoutingTableRouteParams = {
           vpcId: vpcId,
           routingTableId: routingTableId,
           id: id,
           name: name,
         };
 
-        const updateVpcRoutingTableRouteResult = vpcService.updateVpcRoutingTableRoute(params);
+        const updateVpcRoutingTableRouteResult = vpcService.updateVpcRoutingTableRoute(
+          updateVpcRoutingTableRouteParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateVpcRoutingTableRouteResult);
@@ -2738,7 +2770,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateVpcRoutingTableRouteParams = {
           vpcId,
           routingTableId,
           id,
@@ -2748,7 +2780,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateVpcRoutingTableRoute(params);
+        vpcService.updateVpcRoutingTableRoute(updateVpcRoutingTableRouteParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2786,7 +2818,7 @@ describe('VpcV1', () => {
         const resourceGroupId = 'testString';
         const routingTableId = 'testString';
         const routingTableName = 'testString';
-        const params = {
+        const listSubnetsParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
@@ -2794,7 +2826,7 @@ describe('VpcV1', () => {
           routingTableName: routingTableName,
         };
 
-        const listSubnetsResult = vpcService.listSubnets(params);
+        const listSubnetsResult = vpcService.listSubnets(listSubnetsParams);
 
         // all methods should return a Promise
         expectToBePromise(listSubnetsResult);
@@ -2836,14 +2868,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listSubnetsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listSubnets(params);
+        vpcService.listSubnets(listSubnetsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -2863,7 +2895,7 @@ describe('VpcV1', () => {
         id: 'a4e28308-8ee7-46ab-8108-9f881f22bdbf',
       };
 
-      // PublicGatewayIdentityById
+      // PublicGatewayIdentityPublicGatewayIdentityById
       const publicGatewayIdentityModel = {
         id: 'dc5431ef-1fc6-4861-adc9-a59d077d1241',
       };
@@ -2904,11 +2936,11 @@ describe('VpcV1', () => {
       function __createSubnetTest() {
         // Construct the params object for operation createSubnet
         const subnetPrototype = subnetPrototypeModel;
-        const params = {
+        const createSubnetParams = {
           subnetPrototype: subnetPrototype,
         };
 
-        const createSubnetResult = vpcService.createSubnet(params);
+        const createSubnetResult = vpcService.createSubnet(createSubnetParams);
 
         // all methods should return a Promise
         expectToBePromise(createSubnetResult);
@@ -2947,7 +2979,7 @@ describe('VpcV1', () => {
         const subnetPrototype = subnetPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createSubnetParams = {
           subnetPrototype,
           headers: {
             Accept: userAccept,
@@ -2955,7 +2987,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createSubnet(params);
+        vpcService.createSubnet(createSubnetParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -2989,11 +3021,11 @@ describe('VpcV1', () => {
       function __deleteSubnetTest() {
         // Construct the params object for operation deleteSubnet
         const id = 'testString';
-        const params = {
+        const deleteSubnetParams = {
           id: id,
         };
 
-        const deleteSubnetResult = vpcService.deleteSubnet(params);
+        const deleteSubnetResult = vpcService.deleteSubnet(deleteSubnetParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteSubnetResult);
@@ -3032,7 +3064,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteSubnetParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -3040,7 +3072,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteSubnet(params);
+        vpcService.deleteSubnet(deleteSubnetParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3074,11 +3106,11 @@ describe('VpcV1', () => {
       function __getSubnetTest() {
         // Construct the params object for operation getSubnet
         const id = 'testString';
-        const params = {
+        const getSubnetParams = {
           id: id,
         };
 
-        const getSubnetResult = vpcService.getSubnet(params);
+        const getSubnetResult = vpcService.getSubnet(getSubnetParams);
 
         // all methods should return a Promise
         expectToBePromise(getSubnetResult);
@@ -3117,7 +3149,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSubnetParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -3125,7 +3157,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getSubnet(params);
+        vpcService.getSubnet(getSubnetParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3163,8 +3195,8 @@ describe('VpcV1', () => {
         id: 'a4e28308-8ee7-46ab-8108-9f881f22bdbf',
       };
 
-      // PublicGatewayIdentityById
-      const publicGatewayIdentityModel = {
+      // SubnetPublicGatewayPatchPublicGatewayIdentityById
+      const subnetPublicGatewayPatchModel = {
         id: 'dc5431ef-1fc6-4861-adc9-a59d077d1241',
       };
 
@@ -3178,9 +3210,9 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-subnet';
         const networkAcl = networkAclIdentityModel;
-        const publicGateway = publicGatewayIdentityModel;
+        const publicGateway = subnetPublicGatewayPatchModel;
         const routingTable = routingTableIdentityModel;
-        const params = {
+        const updateSubnetParams = {
           id: id,
           name: name,
           networkAcl: networkAcl,
@@ -3188,7 +3220,7 @@ describe('VpcV1', () => {
           routingTable: routingTable,
         };
 
-        const updateSubnetResult = vpcService.updateSubnet(params);
+        const updateSubnetResult = vpcService.updateSubnet(updateSubnetParams);
 
         // all methods should return a Promise
         expectToBePromise(updateSubnetResult);
@@ -3231,7 +3263,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateSubnetParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -3239,7 +3271,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateSubnet(params);
+        vpcService.updateSubnet(updateSubnetParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3273,11 +3305,11 @@ describe('VpcV1', () => {
       function __getSubnetNetworkAclTest() {
         // Construct the params object for operation getSubnetNetworkAcl
         const id = 'testString';
-        const params = {
+        const getSubnetNetworkAclParams = {
           id: id,
         };
 
-        const getSubnetNetworkAclResult = vpcService.getSubnetNetworkAcl(params);
+        const getSubnetNetworkAclResult = vpcService.getSubnetNetworkAcl(getSubnetNetworkAclParams);
 
         // all methods should return a Promise
         expectToBePromise(getSubnetNetworkAclResult);
@@ -3316,7 +3348,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSubnetNetworkAclParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -3324,7 +3356,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getSubnetNetworkAcl(params);
+        vpcService.getSubnetNetworkAcl(getSubnetNetworkAclParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3366,12 +3398,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation replaceSubnetNetworkAcl
         const id = 'testString';
         const networkAclIdentity = networkAclIdentityModel;
-        const params = {
+        const replaceSubnetNetworkAclParams = {
           id: id,
           networkAclIdentity: networkAclIdentity,
         };
 
-        const replaceSubnetNetworkAclResult = vpcService.replaceSubnetNetworkAcl(params);
+        const replaceSubnetNetworkAclResult = vpcService.replaceSubnetNetworkAcl(
+          replaceSubnetNetworkAclParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(replaceSubnetNetworkAclResult);
@@ -3412,7 +3446,7 @@ describe('VpcV1', () => {
         const networkAclIdentity = networkAclIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const replaceSubnetNetworkAclParams = {
           id,
           networkAclIdentity,
           headers: {
@@ -3421,7 +3455,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.replaceSubnetNetworkAcl(params);
+        vpcService.replaceSubnetNetworkAcl(replaceSubnetNetworkAclParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3455,11 +3489,13 @@ describe('VpcV1', () => {
       function __unsetSubnetPublicGatewayTest() {
         // Construct the params object for operation unsetSubnetPublicGateway
         const id = 'testString';
-        const params = {
+        const unsetSubnetPublicGatewayParams = {
           id: id,
         };
 
-        const unsetSubnetPublicGatewayResult = vpcService.unsetSubnetPublicGateway(params);
+        const unsetSubnetPublicGatewayResult = vpcService.unsetSubnetPublicGateway(
+          unsetSubnetPublicGatewayParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(unsetSubnetPublicGatewayResult);
@@ -3498,7 +3534,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const unsetSubnetPublicGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -3506,7 +3542,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.unsetSubnetPublicGateway(params);
+        vpcService.unsetSubnetPublicGateway(unsetSubnetPublicGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3540,11 +3576,13 @@ describe('VpcV1', () => {
       function __getSubnetPublicGatewayTest() {
         // Construct the params object for operation getSubnetPublicGateway
         const id = 'testString';
-        const params = {
+        const getSubnetPublicGatewayParams = {
           id: id,
         };
 
-        const getSubnetPublicGatewayResult = vpcService.getSubnetPublicGateway(params);
+        const getSubnetPublicGatewayResult = vpcService.getSubnetPublicGateway(
+          getSubnetPublicGatewayParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getSubnetPublicGatewayResult);
@@ -3583,7 +3621,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSubnetPublicGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -3591,7 +3629,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getSubnetPublicGateway(params);
+        vpcService.getSubnetPublicGateway(getSubnetPublicGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3624,7 +3662,7 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // PublicGatewayIdentityById
+      // PublicGatewayIdentityPublicGatewayIdentityById
       const publicGatewayIdentityModel = {
         id: 'dc5431ef-1fc6-4861-adc9-a59d077d1241',
       };
@@ -3633,12 +3671,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation setSubnetPublicGateway
         const id = 'testString';
         const publicGatewayIdentity = publicGatewayIdentityModel;
-        const params = {
+        const setSubnetPublicGatewayParams = {
           id: id,
           publicGatewayIdentity: publicGatewayIdentity,
         };
 
-        const setSubnetPublicGatewayResult = vpcService.setSubnetPublicGateway(params);
+        const setSubnetPublicGatewayResult = vpcService.setSubnetPublicGateway(
+          setSubnetPublicGatewayParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(setSubnetPublicGatewayResult);
@@ -3679,7 +3719,7 @@ describe('VpcV1', () => {
         const publicGatewayIdentity = publicGatewayIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const setSubnetPublicGatewayParams = {
           id,
           publicGatewayIdentity,
           headers: {
@@ -3688,7 +3728,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.setSubnetPublicGateway(params);
+        vpcService.setSubnetPublicGateway(setSubnetPublicGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3722,11 +3762,13 @@ describe('VpcV1', () => {
       function __getSubnetRoutingTableTest() {
         // Construct the params object for operation getSubnetRoutingTable
         const id = 'testString';
-        const params = {
+        const getSubnetRoutingTableParams = {
           id: id,
         };
 
-        const getSubnetRoutingTableResult = vpcService.getSubnetRoutingTable(params);
+        const getSubnetRoutingTableResult = vpcService.getSubnetRoutingTable(
+          getSubnetRoutingTableParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getSubnetRoutingTableResult);
@@ -3765,7 +3807,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSubnetRoutingTableParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -3773,7 +3815,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getSubnetRoutingTable(params);
+        vpcService.getSubnetRoutingTable(getSubnetRoutingTableParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3815,12 +3857,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation replaceSubnetRoutingTable
         const id = 'testString';
         const routingTableIdentity = routingTableIdentityModel;
-        const params = {
+        const replaceSubnetRoutingTableParams = {
           id: id,
           routingTableIdentity: routingTableIdentity,
         };
 
-        const replaceSubnetRoutingTableResult = vpcService.replaceSubnetRoutingTable(params);
+        const replaceSubnetRoutingTableResult = vpcService.replaceSubnetRoutingTable(
+          replaceSubnetRoutingTableParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(replaceSubnetRoutingTableResult);
@@ -3861,7 +3905,7 @@ describe('VpcV1', () => {
         const routingTableIdentity = routingTableIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const replaceSubnetRoutingTableParams = {
           id,
           routingTableIdentity,
           headers: {
@@ -3870,7 +3914,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.replaceSubnetRoutingTable(params);
+        vpcService.replaceSubnetRoutingTable(replaceSubnetRoutingTableParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -3907,14 +3951,16 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const sort = 'name';
-        const params = {
+        const listSubnetReservedIpsParams = {
           subnetId: subnetId,
           start: start,
           limit: limit,
           sort: sort,
         };
 
-        const listSubnetReservedIpsResult = vpcService.listSubnetReservedIps(params);
+        const listSubnetReservedIpsResult = vpcService.listSubnetReservedIps(
+          listSubnetReservedIpsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listSubnetReservedIpsResult);
@@ -3956,7 +4002,7 @@ describe('VpcV1', () => {
         const subnetId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listSubnetReservedIpsParams = {
           subnetId,
           headers: {
             Accept: userAccept,
@@ -3964,7 +4010,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listSubnetReservedIps(params);
+        vpcService.listSubnetReservedIps(listSubnetReservedIpsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4008,14 +4054,16 @@ describe('VpcV1', () => {
         const autoDelete = false;
         const name = 'my-reserved-ip';
         const target = reservedIpTargetPrototypeModel;
-        const params = {
+        const createSubnetReservedIpParams = {
           subnetId: subnetId,
           autoDelete: autoDelete,
           name: name,
           target: target,
         };
 
-        const createSubnetReservedIpResult = vpcService.createSubnetReservedIp(params);
+        const createSubnetReservedIpResult = vpcService.createSubnetReservedIp(
+          createSubnetReservedIpParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createSubnetReservedIpResult);
@@ -4057,7 +4105,7 @@ describe('VpcV1', () => {
         const subnetId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createSubnetReservedIpParams = {
           subnetId,
           headers: {
             Accept: userAccept,
@@ -4065,7 +4113,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createSubnetReservedIp(params);
+        vpcService.createSubnetReservedIp(createSubnetReservedIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4100,12 +4148,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteSubnetReservedIp
         const subnetId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteSubnetReservedIpParams = {
           subnetId: subnetId,
           id: id,
         };
 
-        const deleteSubnetReservedIpResult = vpcService.deleteSubnetReservedIp(params);
+        const deleteSubnetReservedIpResult = vpcService.deleteSubnetReservedIp(
+          deleteSubnetReservedIpParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteSubnetReservedIpResult);
@@ -4146,7 +4196,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteSubnetReservedIpParams = {
           subnetId,
           id,
           headers: {
@@ -4155,7 +4205,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteSubnetReservedIp(params);
+        vpcService.deleteSubnetReservedIp(deleteSubnetReservedIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4190,12 +4240,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation getSubnetReservedIp
         const subnetId = 'testString';
         const id = 'testString';
-        const params = {
+        const getSubnetReservedIpParams = {
           subnetId: subnetId,
           id: id,
         };
 
-        const getSubnetReservedIpResult = vpcService.getSubnetReservedIp(params);
+        const getSubnetReservedIpResult = vpcService.getSubnetReservedIp(getSubnetReservedIpParams);
 
         // all methods should return a Promise
         expectToBePromise(getSubnetReservedIpResult);
@@ -4236,7 +4286,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSubnetReservedIpParams = {
           subnetId,
           id,
           headers: {
@@ -4245,7 +4295,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getSubnetReservedIp(params);
+        vpcService.getSubnetReservedIp(getSubnetReservedIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4282,14 +4332,16 @@ describe('VpcV1', () => {
         const id = 'testString';
         const autoDelete = false;
         const name = 'my-reserved-ip';
-        const params = {
+        const updateSubnetReservedIpParams = {
           subnetId: subnetId,
           id: id,
           autoDelete: autoDelete,
           name: name,
         };
 
-        const updateSubnetReservedIpResult = vpcService.updateSubnetReservedIp(params);
+        const updateSubnetReservedIpResult = vpcService.updateSubnetReservedIp(
+          updateSubnetReservedIpParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateSubnetReservedIpResult);
@@ -4332,7 +4384,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateSubnetReservedIpParams = {
           subnetId,
           id,
           headers: {
@@ -4341,7 +4393,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateSubnetReservedIp(params);
+        vpcService.updateSubnetReservedIp(updateSubnetReservedIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4379,7 +4431,7 @@ describe('VpcV1', () => {
         const resourceGroupId = 'testString';
         const name = 'testString';
         const visibility = 'private';
-        const params = {
+        const listImagesParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
@@ -4387,7 +4439,7 @@ describe('VpcV1', () => {
           visibility: visibility,
         };
 
-        const listImagesResult = vpcService.listImages(params);
+        const listImagesResult = vpcService.listImages(listImagesParams);
 
         // all methods should return a Promise
         expectToBePromise(listImagesResult);
@@ -4429,14 +4481,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listImagesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listImages(params);
+        vpcService.listImages(listImagesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -4485,11 +4537,11 @@ describe('VpcV1', () => {
       function __createImageTest() {
         // Construct the params object for operation createImage
         const imagePrototype = imagePrototypeModel;
-        const params = {
+        const createImageParams = {
           imagePrototype: imagePrototype,
         };
 
-        const createImageResult = vpcService.createImage(params);
+        const createImageResult = vpcService.createImage(createImageParams);
 
         // all methods should return a Promise
         expectToBePromise(createImageResult);
@@ -4528,7 +4580,7 @@ describe('VpcV1', () => {
         const imagePrototype = imagePrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createImageParams = {
           imagePrototype,
           headers: {
             Accept: userAccept,
@@ -4536,7 +4588,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createImage(params);
+        vpcService.createImage(createImageParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4570,11 +4622,11 @@ describe('VpcV1', () => {
       function __deleteImageTest() {
         // Construct the params object for operation deleteImage
         const id = 'testString';
-        const params = {
+        const deleteImageParams = {
           id: id,
         };
 
-        const deleteImageResult = vpcService.deleteImage(params);
+        const deleteImageResult = vpcService.deleteImage(deleteImageParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteImageResult);
@@ -4613,7 +4665,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteImageParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -4621,7 +4673,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteImage(params);
+        vpcService.deleteImage(deleteImageParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4655,11 +4707,11 @@ describe('VpcV1', () => {
       function __getImageTest() {
         // Construct the params object for operation getImage
         const id = 'testString';
-        const params = {
+        const getImageParams = {
           id: id,
         };
 
-        const getImageResult = vpcService.getImage(params);
+        const getImageResult = vpcService.getImage(getImageParams);
 
         // all methods should return a Promise
         expectToBePromise(getImageResult);
@@ -4698,7 +4750,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getImageParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -4706,7 +4758,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getImage(params);
+        vpcService.getImage(getImageParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4741,12 +4793,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateImage
         const id = 'testString';
         const name = 'my-image';
-        const params = {
+        const updateImageParams = {
           id: id,
           name: name,
         };
 
-        const updateImageResult = vpcService.updateImage(params);
+        const updateImageResult = vpcService.updateImage(updateImageParams);
 
         // all methods should return a Promise
         expectToBePromise(updateImageResult);
@@ -4786,7 +4838,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateImageParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -4794,7 +4846,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateImage(params);
+        vpcService.updateImage(updateImageParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4829,12 +4881,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation listOperatingSystems
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listOperatingSystemsParams = {
           start: start,
           limit: limit,
         };
 
-        const listOperatingSystemsResult = vpcService.listOperatingSystems(params);
+        const listOperatingSystemsResult = vpcService.listOperatingSystems(
+          listOperatingSystemsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listOperatingSystemsResult);
@@ -4873,14 +4927,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listOperatingSystemsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listOperatingSystems(params);
+        vpcService.listOperatingSystems(listOperatingSystemsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -4896,11 +4950,11 @@ describe('VpcV1', () => {
       function __getOperatingSystemTest() {
         // Construct the params object for operation getOperatingSystem
         const name = 'testString';
-        const params = {
+        const getOperatingSystemParams = {
           name: name,
         };
 
-        const getOperatingSystemResult = vpcService.getOperatingSystem(params);
+        const getOperatingSystemResult = vpcService.getOperatingSystem(getOperatingSystemParams);
 
         // all methods should return a Promise
         expectToBePromise(getOperatingSystemResult);
@@ -4939,7 +4993,7 @@ describe('VpcV1', () => {
         const name = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getOperatingSystemParams = {
           name,
           headers: {
             Accept: userAccept,
@@ -4947,7 +5001,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getOperatingSystem(params);
+        vpcService.getOperatingSystem(getOperatingSystemParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -4982,12 +5036,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation listKeys
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listKeysParams = {
           start: start,
           limit: limit,
         };
 
-        const listKeysResult = vpcService.listKeys(params);
+        const listKeysResult = vpcService.listKeys(listKeysParams);
 
         // all methods should return a Promise
         expectToBePromise(listKeysResult);
@@ -5026,14 +5080,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listKeysParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listKeys(params);
+        vpcService.listKeys(listKeysParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -5060,14 +5114,14 @@ describe('VpcV1', () => {
         const name = 'my-key';
         const resourceGroup = resourceGroupIdentityModel;
         const type = 'rsa';
-        const params = {
+        const createKeyParams = {
           publicKey: publicKey,
           name: name,
           resourceGroup: resourceGroup,
           type: type,
         };
 
-        const createKeyResult = vpcService.createKey(params);
+        const createKeyResult = vpcService.createKey(createKeyParams);
 
         // all methods should return a Promise
         expectToBePromise(createKeyResult);
@@ -5110,7 +5164,7 @@ describe('VpcV1', () => {
           'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDDGe50Bxa5T5NDddrrtbx2Y4/VGbiCgXqnBsYToIUKoFSHTQl5IX3PasGnneKanhcLwWz5M5MoCRvhxTp66NKzIfAz7r+FX9rxgR+ZgcM253YAqOVeIpOU408simDZKriTlN8kYsXL7P34tsWuAJf4MgZtJAQxous/2byetpdCv8ddnT4X3ltOg9w+LqSCPYfNivqH00Eh7S1Ldz7I8aw5WOp5a+sQFP/RbwfpwHp+ny7DfeIOokcuI42tJkoBn7UsLTVpCSmXr2EDRlSWe/1M/iHNRBzaT3CK0+SwZWd2AEjePxSnWKNGIEUJDlUYp7hKhiQcgT5ZAnWU121oc5En';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createKeyParams = {
           publicKey,
           headers: {
             Accept: userAccept,
@@ -5118,7 +5172,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createKey(params);
+        vpcService.createKey(createKeyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5152,11 +5206,11 @@ describe('VpcV1', () => {
       function __deleteKeyTest() {
         // Construct the params object for operation deleteKey
         const id = 'testString';
-        const params = {
+        const deleteKeyParams = {
           id: id,
         };
 
-        const deleteKeyResult = vpcService.deleteKey(params);
+        const deleteKeyResult = vpcService.deleteKey(deleteKeyParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteKeyResult);
@@ -5195,7 +5249,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteKeyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -5203,7 +5257,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteKey(params);
+        vpcService.deleteKey(deleteKeyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5237,11 +5291,11 @@ describe('VpcV1', () => {
       function __getKeyTest() {
         // Construct the params object for operation getKey
         const id = 'testString';
-        const params = {
+        const getKeyParams = {
           id: id,
         };
 
-        const getKeyResult = vpcService.getKey(params);
+        const getKeyResult = vpcService.getKey(getKeyParams);
 
         // all methods should return a Promise
         expectToBePromise(getKeyResult);
@@ -5280,7 +5334,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getKeyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -5288,7 +5342,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getKey(params);
+        vpcService.getKey(getKeyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5323,12 +5377,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateKey
         const id = 'testString';
         const name = 'my-key';
-        const params = {
+        const updateKeyParams = {
           id: id,
           name: name,
         };
 
-        const updateKeyResult = vpcService.updateKey(params);
+        const updateKeyResult = vpcService.updateKey(updateKeyParams);
 
         // all methods should return a Promise
         expectToBePromise(updateKeyResult);
@@ -5368,7 +5422,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateKeyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -5376,7 +5430,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateKey(params);
+        vpcService.updateKey(updateKeyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5409,9 +5463,11 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       function __listInstanceProfilesTest() {
         // Construct the params object for operation listInstanceProfiles
-        const params = {};
+        const listInstanceProfilesParams = {};
 
-        const listInstanceProfilesResult = vpcService.listInstanceProfiles(params);
+        const listInstanceProfilesResult = vpcService.listInstanceProfiles(
+          listInstanceProfilesParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listInstanceProfilesResult);
@@ -5448,14 +5504,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceProfilesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listInstanceProfiles(params);
+        vpcService.listInstanceProfiles(listInstanceProfilesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -5471,11 +5527,11 @@ describe('VpcV1', () => {
       function __getInstanceProfileTest() {
         // Construct the params object for operation getInstanceProfile
         const name = 'testString';
-        const params = {
+        const getInstanceProfileParams = {
           name: name,
         };
 
-        const getInstanceProfileResult = vpcService.getInstanceProfile(params);
+        const getInstanceProfileResult = vpcService.getInstanceProfile(getInstanceProfileParams);
 
         // all methods should return a Promise
         expectToBePromise(getInstanceProfileResult);
@@ -5514,7 +5570,7 @@ describe('VpcV1', () => {
         const name = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceProfileParams = {
           name,
           headers: {
             Accept: userAccept,
@@ -5522,7 +5578,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceProfile(params);
+        vpcService.getInstanceProfile(getInstanceProfileParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5555,9 +5611,11 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       function __listInstanceTemplatesTest() {
         // Construct the params object for operation listInstanceTemplates
-        const params = {};
+        const listInstanceTemplatesParams = {};
 
-        const listInstanceTemplatesResult = vpcService.listInstanceTemplates(params);
+        const listInstanceTemplatesResult = vpcService.listInstanceTemplates(
+          listInstanceTemplatesParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listInstanceTemplatesResult);
@@ -5594,14 +5652,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceTemplatesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listInstanceTemplates(params);
+        vpcService.listInstanceTemplates(listInstanceTemplatesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -5730,11 +5788,13 @@ describe('VpcV1', () => {
       function __createInstanceTemplateTest() {
         // Construct the params object for operation createInstanceTemplate
         const instanceTemplatePrototype = instanceTemplatePrototypeModel;
-        const params = {
+        const createInstanceTemplateParams = {
           instanceTemplatePrototype: instanceTemplatePrototype,
         };
 
-        const createInstanceTemplateResult = vpcService.createInstanceTemplate(params);
+        const createInstanceTemplateResult = vpcService.createInstanceTemplate(
+          createInstanceTemplateParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createInstanceTemplateResult);
@@ -5773,7 +5833,7 @@ describe('VpcV1', () => {
         const instanceTemplatePrototype = instanceTemplatePrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createInstanceTemplateParams = {
           instanceTemplatePrototype,
           headers: {
             Accept: userAccept,
@@ -5781,7 +5841,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createInstanceTemplate(params);
+        vpcService.createInstanceTemplate(createInstanceTemplateParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5815,11 +5875,13 @@ describe('VpcV1', () => {
       function __deleteInstanceTemplateTest() {
         // Construct the params object for operation deleteInstanceTemplate
         const id = 'testString';
-        const params = {
+        const deleteInstanceTemplateParams = {
           id: id,
         };
 
-        const deleteInstanceTemplateResult = vpcService.deleteInstanceTemplate(params);
+        const deleteInstanceTemplateResult = vpcService.deleteInstanceTemplate(
+          deleteInstanceTemplateParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteInstanceTemplateResult);
@@ -5858,7 +5920,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceTemplateParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -5866,7 +5928,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstanceTemplate(params);
+        vpcService.deleteInstanceTemplate(deleteInstanceTemplateParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5900,11 +5962,11 @@ describe('VpcV1', () => {
       function __getInstanceTemplateTest() {
         // Construct the params object for operation getInstanceTemplate
         const id = 'testString';
-        const params = {
+        const getInstanceTemplateParams = {
           id: id,
         };
 
-        const getInstanceTemplateResult = vpcService.getInstanceTemplate(params);
+        const getInstanceTemplateResult = vpcService.getInstanceTemplate(getInstanceTemplateParams);
 
         // all methods should return a Promise
         expectToBePromise(getInstanceTemplateResult);
@@ -5943,7 +6005,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceTemplateParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -5951,7 +6013,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceTemplate(params);
+        vpcService.getInstanceTemplate(getInstanceTemplateParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -5986,12 +6048,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateInstanceTemplate
         const id = 'testString';
         const name = 'my-instance-template';
-        const params = {
+        const updateInstanceTemplateParams = {
           id: id,
           name: name,
         };
 
-        const updateInstanceTemplateResult = vpcService.updateInstanceTemplate(params);
+        const updateInstanceTemplateResult = vpcService.updateInstanceTemplate(
+          updateInstanceTemplateParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateInstanceTemplateResult);
@@ -6031,7 +6095,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateInstanceTemplateParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -6039,7 +6103,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateInstanceTemplate(params);
+        vpcService.updateInstanceTemplate(updateInstanceTemplateParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6085,7 +6149,7 @@ describe('VpcV1', () => {
         const placementGroupId = 'testString';
         const placementGroupCrn = 'testString';
         const placementGroupName = 'testString';
-        const params = {
+        const listInstancesParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
@@ -6101,7 +6165,7 @@ describe('VpcV1', () => {
           placementGroupName: placementGroupName,
         };
 
-        const listInstancesResult = vpcService.listInstances(params);
+        const listInstancesResult = vpcService.listInstances(listInstancesParams);
 
         // all methods should return a Promise
         expectToBePromise(listInstancesResult);
@@ -6151,14 +6215,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstancesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listInstances(params);
+        vpcService.listInstances(listInstancesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -6290,11 +6354,11 @@ describe('VpcV1', () => {
       function __createInstanceTest() {
         // Construct the params object for operation createInstance
         const instancePrototype = instancePrototypeModel;
-        const params = {
+        const createInstanceParams = {
           instancePrototype: instancePrototype,
         };
 
-        const createInstanceResult = vpcService.createInstance(params);
+        const createInstanceResult = vpcService.createInstance(createInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(createInstanceResult);
@@ -6333,7 +6397,7 @@ describe('VpcV1', () => {
         const instancePrototype = instancePrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createInstanceParams = {
           instancePrototype,
           headers: {
             Accept: userAccept,
@@ -6341,7 +6405,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createInstance(params);
+        vpcService.createInstance(createInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6375,11 +6439,11 @@ describe('VpcV1', () => {
       function __deleteInstanceTest() {
         // Construct the params object for operation deleteInstance
         const id = 'testString';
-        const params = {
+        const deleteInstanceParams = {
           id: id,
         };
 
-        const deleteInstanceResult = vpcService.deleteInstance(params);
+        const deleteInstanceResult = vpcService.deleteInstance(deleteInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteInstanceResult);
@@ -6418,7 +6482,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -6426,7 +6490,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstance(params);
+        vpcService.deleteInstance(deleteInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6460,11 +6524,11 @@ describe('VpcV1', () => {
       function __getInstanceTest() {
         // Construct the params object for operation getInstance
         const id = 'testString';
-        const params = {
+        const getInstanceParams = {
           id: id,
         };
 
-        const getInstanceResult = vpcService.getInstance(params);
+        const getInstanceResult = vpcService.getInstance(getInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(getInstanceResult);
@@ -6503,7 +6567,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -6511,7 +6575,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstance(params);
+        vpcService.getInstance(getInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6544,6 +6608,11 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
+      // InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityById
+      const instancePlacementTargetPatchModel = {
+        id: '1e09281b-f177-46fb-baf1-bc152b2e391a',
+      };
+
       // InstancePatchProfileInstanceProfileIdentityByName
       const instancePatchProfileModel = {
         name: 'bc1-4x16',
@@ -6553,16 +6622,18 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateInstance
         const id = 'testString';
         const name = 'my-instance';
+        const placementTarget = instancePlacementTargetPatchModel;
         const profile = instancePatchProfileModel;
         const totalVolumeBandwidth = 500;
-        const params = {
+        const updateInstanceParams = {
           id: id,
           name: name,
+          placementTarget: placementTarget,
           profile: profile,
           totalVolumeBandwidth: totalVolumeBandwidth,
         };
 
-        const updateInstanceResult = vpcService.updateInstance(params);
+        const updateInstanceResult = vpcService.updateInstance(updateInstanceParams);
 
         // all methods should return a Promise
         expectToBePromise(updateInstanceResult);
@@ -6577,6 +6648,7 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.placement_target).toEqual(placementTarget);
         expect(mockRequestOptions.body.profile).toEqual(profile);
         expect(mockRequestOptions.body.total_volume_bandwidth).toEqual(totalVolumeBandwidth);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
@@ -6604,7 +6676,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateInstanceParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -6612,7 +6684,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateInstance(params);
+        vpcService.updateInstance(updateInstanceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6646,11 +6718,13 @@ describe('VpcV1', () => {
       function __getInstanceInitializationTest() {
         // Construct the params object for operation getInstanceInitialization
         const id = 'testString';
-        const params = {
+        const getInstanceInitializationParams = {
           id: id,
         };
 
-        const getInstanceInitializationResult = vpcService.getInstanceInitialization(params);
+        const getInstanceInitializationResult = vpcService.getInstanceInitialization(
+          getInstanceInitializationParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getInstanceInitializationResult);
@@ -6689,7 +6763,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceInitializationParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -6697,7 +6771,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceInitialization(params);
+        vpcService.getInstanceInitialization(getInstanceInitializationParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6733,13 +6807,15 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const type = 'reboot';
         const force = true;
-        const params = {
+        const createInstanceActionParams = {
           instanceId: instanceId,
           type: type,
           force: force,
         };
 
-        const createInstanceActionResult = vpcService.createInstanceAction(params);
+        const createInstanceActionResult = vpcService.createInstanceAction(
+          createInstanceActionParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createInstanceActionResult);
@@ -6781,7 +6857,7 @@ describe('VpcV1', () => {
         const type = 'reboot';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createInstanceActionParams = {
           instanceId,
           type,
           headers: {
@@ -6790,7 +6866,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createInstanceAction(params);
+        vpcService.createInstanceAction(createInstanceActionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6826,14 +6902,14 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const consoleType = 'serial';
         const force = false;
-        const params = {
+        const createInstanceConsoleAccessTokenParams = {
           instanceId: instanceId,
           consoleType: consoleType,
           force: force,
         };
 
         const createInstanceConsoleAccessTokenResult = vpcService.createInstanceConsoleAccessToken(
-          params
+          createInstanceConsoleAccessTokenParams
         );
 
         // all methods should return a Promise
@@ -6880,7 +6956,7 @@ describe('VpcV1', () => {
         const consoleType = 'serial';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createInstanceConsoleAccessTokenParams = {
           instanceId,
           consoleType,
           headers: {
@@ -6889,7 +6965,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createInstanceConsoleAccessToken(params);
+        vpcService.createInstanceConsoleAccessToken(createInstanceConsoleAccessTokenParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -6923,11 +6999,11 @@ describe('VpcV1', () => {
       function __listInstanceDisksTest() {
         // Construct the params object for operation listInstanceDisks
         const instanceId = 'testString';
-        const params = {
+        const listInstanceDisksParams = {
           instanceId: instanceId,
         };
 
-        const listInstanceDisksResult = vpcService.listInstanceDisks(params);
+        const listInstanceDisksResult = vpcService.listInstanceDisks(listInstanceDisksParams);
 
         // all methods should return a Promise
         expectToBePromise(listInstanceDisksResult);
@@ -6966,7 +7042,7 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceDisksParams = {
           instanceId,
           headers: {
             Accept: userAccept,
@@ -6974,7 +7050,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listInstanceDisks(params);
+        vpcService.listInstanceDisks(listInstanceDisksParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7009,12 +7085,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation getInstanceDisk
         const instanceId = 'testString';
         const id = 'testString';
-        const params = {
+        const getInstanceDiskParams = {
           instanceId: instanceId,
           id: id,
         };
 
-        const getInstanceDiskResult = vpcService.getInstanceDisk(params);
+        const getInstanceDiskResult = vpcService.getInstanceDisk(getInstanceDiskParams);
 
         // all methods should return a Promise
         expectToBePromise(getInstanceDiskResult);
@@ -7055,7 +7131,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceDiskParams = {
           instanceId,
           id,
           headers: {
@@ -7064,7 +7140,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceDisk(params);
+        vpcService.getInstanceDisk(getInstanceDiskParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7100,13 +7176,13 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const id = 'testString';
         const name = 'my-instance-disk-updated';
-        const params = {
+        const updateInstanceDiskParams = {
           instanceId: instanceId,
           id: id,
           name: name,
         };
 
-        const updateInstanceDiskResult = vpcService.updateInstanceDisk(params);
+        const updateInstanceDiskResult = vpcService.updateInstanceDisk(updateInstanceDiskParams);
 
         // all methods should return a Promise
         expectToBePromise(updateInstanceDiskResult);
@@ -7148,7 +7224,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateInstanceDiskParams = {
           instanceId,
           id,
           headers: {
@@ -7157,7 +7233,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateInstanceDisk(params);
+        vpcService.updateInstanceDisk(updateInstanceDiskParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7191,12 +7267,12 @@ describe('VpcV1', () => {
       function __listInstanceNetworkInterfacesTest() {
         // Construct the params object for operation listInstanceNetworkInterfaces
         const instanceId = 'testString';
-        const params = {
+        const listInstanceNetworkInterfacesParams = {
           instanceId: instanceId,
         };
 
         const listInstanceNetworkInterfacesResult = vpcService.listInstanceNetworkInterfaces(
-          params
+          listInstanceNetworkInterfacesParams
         );
 
         // all methods should return a Promise
@@ -7236,7 +7312,7 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceNetworkInterfacesParams = {
           instanceId,
           headers: {
             Accept: userAccept,
@@ -7244,7 +7320,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listInstanceNetworkInterfaces(params);
+        vpcService.listInstanceNetworkInterfaces(listInstanceNetworkInterfacesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7295,7 +7371,7 @@ describe('VpcV1', () => {
         const name = 'my-network-interface';
         const primaryIpv4Address = '10.0.0.5';
         const securityGroups = [securityGroupIdentityModel];
-        const params = {
+        const createInstanceNetworkInterfaceParams = {
           instanceId: instanceId,
           subnet: subnet,
           allowIpSpoofing: allowIpSpoofing,
@@ -7305,7 +7381,7 @@ describe('VpcV1', () => {
         };
 
         const createInstanceNetworkInterfaceResult = vpcService.createInstanceNetworkInterface(
-          params
+          createInstanceNetworkInterfaceParams
         );
 
         // all methods should return a Promise
@@ -7355,7 +7431,7 @@ describe('VpcV1', () => {
         const subnet = subnetIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createInstanceNetworkInterfaceParams = {
           instanceId,
           subnet,
           headers: {
@@ -7364,7 +7440,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createInstanceNetworkInterface(params);
+        vpcService.createInstanceNetworkInterface(createInstanceNetworkInterfaceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7399,13 +7475,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteInstanceNetworkInterface
         const instanceId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteInstanceNetworkInterfaceParams = {
           instanceId: instanceId,
           id: id,
         };
 
         const deleteInstanceNetworkInterfaceResult = vpcService.deleteInstanceNetworkInterface(
-          params
+          deleteInstanceNetworkInterfaceParams
         );
 
         // all methods should return a Promise
@@ -7451,7 +7527,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceNetworkInterfaceParams = {
           instanceId,
           id,
           headers: {
@@ -7460,7 +7536,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstanceNetworkInterface(params);
+        vpcService.deleteInstanceNetworkInterface(deleteInstanceNetworkInterfaceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7495,12 +7571,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation getInstanceNetworkInterface
         const instanceId = 'testString';
         const id = 'testString';
-        const params = {
+        const getInstanceNetworkInterfaceParams = {
           instanceId: instanceId,
           id: id,
         };
 
-        const getInstanceNetworkInterfaceResult = vpcService.getInstanceNetworkInterface(params);
+        const getInstanceNetworkInterfaceResult = vpcService.getInstanceNetworkInterface(
+          getInstanceNetworkInterfaceParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getInstanceNetworkInterfaceResult);
@@ -7545,7 +7623,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceNetworkInterfaceParams = {
           instanceId,
           id,
           headers: {
@@ -7554,7 +7632,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceNetworkInterface(params);
+        vpcService.getInstanceNetworkInterface(getInstanceNetworkInterfaceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7591,7 +7669,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const allowIpSpoofing = true;
         const name = 'my-network-interface-1';
-        const params = {
+        const updateInstanceNetworkInterfaceParams = {
           instanceId: instanceId,
           id: id,
           allowIpSpoofing: allowIpSpoofing,
@@ -7599,7 +7677,7 @@ describe('VpcV1', () => {
         };
 
         const updateInstanceNetworkInterfaceResult = vpcService.updateInstanceNetworkInterface(
-          params
+          updateInstanceNetworkInterfaceParams
         );
 
         // all methods should return a Promise
@@ -7647,7 +7725,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateInstanceNetworkInterfaceParams = {
           instanceId,
           id,
           headers: {
@@ -7656,7 +7734,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateInstanceNetworkInterface(params);
+        vpcService.updateInstanceNetworkInterface(updateInstanceNetworkInterfaceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7691,13 +7769,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation listInstanceNetworkInterfaceFloatingIps
         const instanceId = 'testString';
         const networkInterfaceId = 'testString';
-        const params = {
+        const listInstanceNetworkInterfaceFloatingIpsParams = {
           instanceId: instanceId,
           networkInterfaceId: networkInterfaceId,
         };
 
         const listInstanceNetworkInterfaceFloatingIpsResult = vpcService.listInstanceNetworkInterfaceFloatingIps(
-          params
+          listInstanceNetworkInterfaceFloatingIpsParams
         );
 
         // all methods should return a Promise
@@ -7743,7 +7821,7 @@ describe('VpcV1', () => {
         const networkInterfaceId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceNetworkInterfaceFloatingIpsParams = {
           instanceId,
           networkInterfaceId,
           headers: {
@@ -7752,7 +7830,9 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listInstanceNetworkInterfaceFloatingIps(params);
+        vpcService.listInstanceNetworkInterfaceFloatingIps(
+          listInstanceNetworkInterfaceFloatingIpsParams
+        );
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7788,14 +7868,14 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const networkInterfaceId = 'testString';
         const id = 'testString';
-        const params = {
+        const removeInstanceNetworkInterfaceFloatingIpParams = {
           instanceId: instanceId,
           networkInterfaceId: networkInterfaceId,
           id: id,
         };
 
         const removeInstanceNetworkInterfaceFloatingIpResult = vpcService.removeInstanceNetworkInterfaceFloatingIp(
-          params
+          removeInstanceNetworkInterfaceFloatingIpParams
         );
 
         // all methods should return a Promise
@@ -7843,7 +7923,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeInstanceNetworkInterfaceFloatingIpParams = {
           instanceId,
           networkInterfaceId,
           id,
@@ -7853,7 +7933,9 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.removeInstanceNetworkInterfaceFloatingIp(params);
+        vpcService.removeInstanceNetworkInterfaceFloatingIp(
+          removeInstanceNetworkInterfaceFloatingIpParams
+        );
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7889,14 +7971,14 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const networkInterfaceId = 'testString';
         const id = 'testString';
-        const params = {
+        const getInstanceNetworkInterfaceFloatingIpParams = {
           instanceId: instanceId,
           networkInterfaceId: networkInterfaceId,
           id: id,
         };
 
         const getInstanceNetworkInterfaceFloatingIpResult = vpcService.getInstanceNetworkInterfaceFloatingIp(
-          params
+          getInstanceNetworkInterfaceFloatingIpParams
         );
 
         // all methods should return a Promise
@@ -7944,7 +8026,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceNetworkInterfaceFloatingIpParams = {
           instanceId,
           networkInterfaceId,
           id,
@@ -7954,7 +8036,9 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceNetworkInterfaceFloatingIp(params);
+        vpcService.getInstanceNetworkInterfaceFloatingIp(
+          getInstanceNetworkInterfaceFloatingIpParams
+        );
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -7990,14 +8074,14 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const networkInterfaceId = 'testString';
         const id = 'testString';
-        const params = {
+        const addInstanceNetworkInterfaceFloatingIpParams = {
           instanceId: instanceId,
           networkInterfaceId: networkInterfaceId,
           id: id,
         };
 
         const addInstanceNetworkInterfaceFloatingIpResult = vpcService.addInstanceNetworkInterfaceFloatingIp(
-          params
+          addInstanceNetworkInterfaceFloatingIpParams
         );
 
         // all methods should return a Promise
@@ -8045,7 +8129,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addInstanceNetworkInterfaceFloatingIpParams = {
           instanceId,
           networkInterfaceId,
           id,
@@ -8055,7 +8139,9 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.addInstanceNetworkInterfaceFloatingIp(params);
+        vpcService.addInstanceNetworkInterfaceFloatingIp(
+          addInstanceNetworkInterfaceFloatingIpParams
+        );
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -8089,12 +8175,12 @@ describe('VpcV1', () => {
       function __listInstanceVolumeAttachmentsTest() {
         // Construct the params object for operation listInstanceVolumeAttachments
         const instanceId = 'testString';
-        const params = {
+        const listInstanceVolumeAttachmentsParams = {
           instanceId: instanceId,
         };
 
         const listInstanceVolumeAttachmentsResult = vpcService.listInstanceVolumeAttachments(
-          params
+          listInstanceVolumeAttachmentsParams
         );
 
         // all methods should return a Promise
@@ -8134,7 +8220,7 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceVolumeAttachmentsParams = {
           instanceId,
           headers: {
             Accept: userAccept,
@@ -8142,7 +8228,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listInstanceVolumeAttachments(params);
+        vpcService.listInstanceVolumeAttachments(listInstanceVolumeAttachmentsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -8186,7 +8272,7 @@ describe('VpcV1', () => {
         const volume = volumeAttachmentPrototypeVolumeModel;
         const deleteVolumeOnInstanceDelete = false;
         const name = 'my-volume-attachment';
-        const params = {
+        const createInstanceVolumeAttachmentParams = {
           instanceId: instanceId,
           volume: volume,
           deleteVolumeOnInstanceDelete: deleteVolumeOnInstanceDelete,
@@ -8194,7 +8280,7 @@ describe('VpcV1', () => {
         };
 
         const createInstanceVolumeAttachmentResult = vpcService.createInstanceVolumeAttachment(
-          params
+          createInstanceVolumeAttachmentParams
         );
 
         // all methods should return a Promise
@@ -8244,7 +8330,7 @@ describe('VpcV1', () => {
         const volume = volumeAttachmentPrototypeVolumeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createInstanceVolumeAttachmentParams = {
           instanceId,
           volume,
           headers: {
@@ -8253,7 +8339,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createInstanceVolumeAttachment(params);
+        vpcService.createInstanceVolumeAttachment(createInstanceVolumeAttachmentParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -8288,13 +8374,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteInstanceVolumeAttachment
         const instanceId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteInstanceVolumeAttachmentParams = {
           instanceId: instanceId,
           id: id,
         };
 
         const deleteInstanceVolumeAttachmentResult = vpcService.deleteInstanceVolumeAttachment(
-          params
+          deleteInstanceVolumeAttachmentParams
         );
 
         // all methods should return a Promise
@@ -8340,7 +8426,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceVolumeAttachmentParams = {
           instanceId,
           id,
           headers: {
@@ -8349,7 +8435,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstanceVolumeAttachment(params);
+        vpcService.deleteInstanceVolumeAttachment(deleteInstanceVolumeAttachmentParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -8384,12 +8470,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation getInstanceVolumeAttachment
         const instanceId = 'testString';
         const id = 'testString';
-        const params = {
+        const getInstanceVolumeAttachmentParams = {
           instanceId: instanceId,
           id: id,
         };
 
-        const getInstanceVolumeAttachmentResult = vpcService.getInstanceVolumeAttachment(params);
+        const getInstanceVolumeAttachmentResult = vpcService.getInstanceVolumeAttachment(
+          getInstanceVolumeAttachmentParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getInstanceVolumeAttachmentResult);
@@ -8434,7 +8522,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceVolumeAttachmentParams = {
           instanceId,
           id,
           headers: {
@@ -8443,7 +8531,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceVolumeAttachment(params);
+        vpcService.getInstanceVolumeAttachment(getInstanceVolumeAttachmentParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -8480,7 +8568,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const deleteVolumeOnInstanceDelete = true;
         const name = 'my-volume-attachment';
-        const params = {
+        const updateInstanceVolumeAttachmentParams = {
           instanceId: instanceId,
           id: id,
           deleteVolumeOnInstanceDelete: deleteVolumeOnInstanceDelete,
@@ -8488,7 +8576,7 @@ describe('VpcV1', () => {
         };
 
         const updateInstanceVolumeAttachmentResult = vpcService.updateInstanceVolumeAttachment(
-          params
+          updateInstanceVolumeAttachmentParams
         );
 
         // all methods should return a Promise
@@ -8538,7 +8626,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateInstanceVolumeAttachmentParams = {
           instanceId,
           id,
           headers: {
@@ -8547,7 +8635,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateInstanceVolumeAttachment(params);
+        vpcService.updateInstanceVolumeAttachment(updateInstanceVolumeAttachmentParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -8582,12 +8670,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation listInstanceGroups
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listInstanceGroupsParams = {
           start: start,
           limit: limit,
         };
 
-        const listInstanceGroupsResult = vpcService.listInstanceGroups(params);
+        const listInstanceGroupsResult = vpcService.listInstanceGroups(listInstanceGroupsParams);
 
         // all methods should return a Promise
         expectToBePromise(listInstanceGroupsResult);
@@ -8626,14 +8714,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceGroupsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listInstanceGroups(params);
+        vpcService.listInstanceGroups(listInstanceGroupsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -8683,7 +8771,7 @@ describe('VpcV1', () => {
         const membershipCount = 10;
         const name = 'my-instance-group';
         const resourceGroup = resourceGroupIdentityModel;
-        const params = {
+        const createInstanceGroupParams = {
           instanceTemplate: instanceTemplate,
           subnets: subnets,
           applicationPort: applicationPort,
@@ -8694,7 +8782,7 @@ describe('VpcV1', () => {
           resourceGroup: resourceGroup,
         };
 
-        const createInstanceGroupResult = vpcService.createInstanceGroup(params);
+        const createInstanceGroupResult = vpcService.createInstanceGroup(createInstanceGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(createInstanceGroupResult);
@@ -8741,7 +8829,7 @@ describe('VpcV1', () => {
         const subnets = [subnetIdentityModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createInstanceGroupParams = {
           instanceTemplate,
           subnets,
           headers: {
@@ -8750,7 +8838,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createInstanceGroup(params);
+        vpcService.createInstanceGroup(createInstanceGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -8784,11 +8872,11 @@ describe('VpcV1', () => {
       function __deleteInstanceGroupTest() {
         // Construct the params object for operation deleteInstanceGroup
         const id = 'testString';
-        const params = {
+        const deleteInstanceGroupParams = {
           id: id,
         };
 
-        const deleteInstanceGroupResult = vpcService.deleteInstanceGroup(params);
+        const deleteInstanceGroupResult = vpcService.deleteInstanceGroup(deleteInstanceGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteInstanceGroupResult);
@@ -8827,7 +8915,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -8835,7 +8923,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstanceGroup(params);
+        vpcService.deleteInstanceGroup(deleteInstanceGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -8869,11 +8957,11 @@ describe('VpcV1', () => {
       function __getInstanceGroupTest() {
         // Construct the params object for operation getInstanceGroup
         const id = 'testString';
-        const params = {
+        const getInstanceGroupParams = {
           id: id,
         };
 
-        const getInstanceGroupResult = vpcService.getInstanceGroup(params);
+        const getInstanceGroupResult = vpcService.getInstanceGroup(getInstanceGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(getInstanceGroupResult);
@@ -8912,7 +9000,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -8920,7 +9008,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceGroup(params);
+        vpcService.getInstanceGroup(getInstanceGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -8983,7 +9071,7 @@ describe('VpcV1', () => {
         const membershipCount = 10;
         const name = 'my-instance-group';
         const subnets = [subnetIdentityModel];
-        const params = {
+        const updateInstanceGroupParams = {
           id: id,
           applicationPort: applicationPort,
           instanceTemplate: instanceTemplate,
@@ -8994,7 +9082,7 @@ describe('VpcV1', () => {
           subnets: subnets,
         };
 
-        const updateInstanceGroupResult = vpcService.updateInstanceGroup(params);
+        const updateInstanceGroupResult = vpcService.updateInstanceGroup(updateInstanceGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(updateInstanceGroupResult);
@@ -9040,7 +9128,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateInstanceGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -9048,7 +9136,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateInstanceGroup(params);
+        vpcService.updateInstanceGroup(updateInstanceGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -9082,12 +9170,12 @@ describe('VpcV1', () => {
       function __deleteInstanceGroupLoadBalancerTest() {
         // Construct the params object for operation deleteInstanceGroupLoadBalancer
         const instanceGroupId = 'testString';
-        const params = {
+        const deleteInstanceGroupLoadBalancerParams = {
           instanceGroupId: instanceGroupId,
         };
 
         const deleteInstanceGroupLoadBalancerResult = vpcService.deleteInstanceGroupLoadBalancer(
-          params
+          deleteInstanceGroupLoadBalancerParams
         );
 
         // all methods should return a Promise
@@ -9131,7 +9219,7 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceGroupLoadBalancerParams = {
           instanceGroupId,
           headers: {
             Accept: userAccept,
@@ -9139,7 +9227,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstanceGroupLoadBalancer(params);
+        vpcService.deleteInstanceGroupLoadBalancer(deleteInstanceGroupLoadBalancerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -9175,13 +9263,15 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listInstanceGroupManagersParams = {
           instanceGroupId: instanceGroupId,
           start: start,
           limit: limit,
         };
 
-        const listInstanceGroupManagersResult = vpcService.listInstanceGroupManagers(params);
+        const listInstanceGroupManagersResult = vpcService.listInstanceGroupManagers(
+          listInstanceGroupManagersParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listInstanceGroupManagersResult);
@@ -9226,7 +9316,7 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceGroupManagersParams = {
           instanceGroupId,
           headers: {
             Accept: userAccept,
@@ -9234,7 +9324,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listInstanceGroupManagers(params);
+        vpcService.listInstanceGroupManagers(listInstanceGroupManagersParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -9282,12 +9372,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation createInstanceGroupManager
         const instanceGroupId = 'testString';
         const instanceGroupManagerPrototype = instanceGroupManagerPrototypeModel;
-        const params = {
+        const createInstanceGroupManagerParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerPrototype: instanceGroupManagerPrototype,
         };
 
-        const createInstanceGroupManagerResult = vpcService.createInstanceGroupManager(params);
+        const createInstanceGroupManagerResult = vpcService.createInstanceGroupManager(
+          createInstanceGroupManagerParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createInstanceGroupManagerResult);
@@ -9332,7 +9424,7 @@ describe('VpcV1', () => {
         const instanceGroupManagerPrototype = instanceGroupManagerPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createInstanceGroupManagerParams = {
           instanceGroupId,
           instanceGroupManagerPrototype,
           headers: {
@@ -9341,7 +9433,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createInstanceGroupManager(params);
+        vpcService.createInstanceGroupManager(createInstanceGroupManagerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -9376,12 +9468,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteInstanceGroupManager
         const instanceGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteInstanceGroupManagerParams = {
           instanceGroupId: instanceGroupId,
           id: id,
         };
 
-        const deleteInstanceGroupManagerResult = vpcService.deleteInstanceGroupManager(params);
+        const deleteInstanceGroupManagerResult = vpcService.deleteInstanceGroupManager(
+          deleteInstanceGroupManagerParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteInstanceGroupManagerResult);
@@ -9426,7 +9520,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceGroupManagerParams = {
           instanceGroupId,
           id,
           headers: {
@@ -9435,7 +9529,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstanceGroupManager(params);
+        vpcService.deleteInstanceGroupManager(deleteInstanceGroupManagerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -9470,12 +9564,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation getInstanceGroupManager
         const instanceGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const getInstanceGroupManagerParams = {
           instanceGroupId: instanceGroupId,
           id: id,
         };
 
-        const getInstanceGroupManagerResult = vpcService.getInstanceGroupManager(params);
+        const getInstanceGroupManagerResult = vpcService.getInstanceGroupManager(
+          getInstanceGroupManagerParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getInstanceGroupManagerResult);
@@ -9520,7 +9616,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceGroupManagerParams = {
           instanceGroupId,
           id,
           headers: {
@@ -9529,7 +9625,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceGroupManager(params);
+        vpcService.getInstanceGroupManager(getInstanceGroupManagerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -9570,7 +9666,7 @@ describe('VpcV1', () => {
         const maxMembershipCount = 10;
         const minMembershipCount = 10;
         const name = 'my-instance-group-manager';
-        const params = {
+        const updateInstanceGroupManagerParams = {
           instanceGroupId: instanceGroupId,
           id: id,
           aggregationWindow: aggregationWindow,
@@ -9581,7 +9677,9 @@ describe('VpcV1', () => {
           name: name,
         };
 
-        const updateInstanceGroupManagerResult = vpcService.updateInstanceGroupManager(params);
+        const updateInstanceGroupManagerResult = vpcService.updateInstanceGroupManager(
+          updateInstanceGroupManagerParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateInstanceGroupManagerResult);
@@ -9632,7 +9730,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateInstanceGroupManagerParams = {
           instanceGroupId,
           id,
           headers: {
@@ -9641,7 +9739,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateInstanceGroupManager(params);
+        vpcService.updateInstanceGroupManager(updateInstanceGroupManagerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -9678,7 +9776,7 @@ describe('VpcV1', () => {
         const instanceGroupManagerId = 'testString';
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listInstanceGroupManagerActionsParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           start: start,
@@ -9686,7 +9784,7 @@ describe('VpcV1', () => {
         };
 
         const listInstanceGroupManagerActionsResult = vpcService.listInstanceGroupManagerActions(
-          params
+          listInstanceGroupManagerActionsParams
         );
 
         // all methods should return a Promise
@@ -9734,7 +9832,7 @@ describe('VpcV1', () => {
         const instanceGroupManagerId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceGroupManagerActionsParams = {
           instanceGroupId,
           instanceGroupManagerId,
           headers: {
@@ -9743,7 +9841,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listInstanceGroupManagerActions(params);
+        vpcService.listInstanceGroupManagerActions(listInstanceGroupManagerActionsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -9793,14 +9891,14 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
         const instanceGroupManagerActionPrototype = instanceGroupManagerActionPrototypeModel;
-        const params = {
+        const createInstanceGroupManagerActionParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           instanceGroupManagerActionPrototype: instanceGroupManagerActionPrototype,
         };
 
         const createInstanceGroupManagerActionResult = vpcService.createInstanceGroupManagerAction(
-          params
+          createInstanceGroupManagerActionParams
         );
 
         // all methods should return a Promise
@@ -9848,7 +9946,7 @@ describe('VpcV1', () => {
         const instanceGroupManagerActionPrototype = instanceGroupManagerActionPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createInstanceGroupManagerActionParams = {
           instanceGroupId,
           instanceGroupManagerId,
           instanceGroupManagerActionPrototype,
@@ -9858,7 +9956,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createInstanceGroupManagerAction(params);
+        vpcService.createInstanceGroupManagerAction(createInstanceGroupManagerActionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -9894,14 +9992,14 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteInstanceGroupManagerActionParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           id: id,
         };
 
         const deleteInstanceGroupManagerActionResult = vpcService.deleteInstanceGroupManagerAction(
-          params
+          deleteInstanceGroupManagerActionParams
         );
 
         // all methods should return a Promise
@@ -9949,7 +10047,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceGroupManagerActionParams = {
           instanceGroupId,
           instanceGroupManagerId,
           id,
@@ -9959,7 +10057,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstanceGroupManagerAction(params);
+        vpcService.deleteInstanceGroupManagerAction(deleteInstanceGroupManagerActionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -9995,14 +10093,14 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
-        const params = {
+        const getInstanceGroupManagerActionParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           id: id,
         };
 
         const getInstanceGroupManagerActionResult = vpcService.getInstanceGroupManagerAction(
-          params
+          getInstanceGroupManagerActionParams
         );
 
         // all methods should return a Promise
@@ -10050,7 +10148,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceGroupManagerActionParams = {
           instanceGroupId,
           instanceGroupManagerId,
           id,
@@ -10060,7 +10158,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceGroupManagerAction(params);
+        vpcService.getInstanceGroupManagerAction(getInstanceGroupManagerActionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -10114,7 +10212,7 @@ describe('VpcV1', () => {
         const manager = instanceGroupManagerActionManagerPatchModel;
         const name = 'my-instance-group-manager-action';
         const runAt = '2019-01-01T12:00:00.000Z';
-        const params = {
+        const updateInstanceGroupManagerActionParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           id: id,
@@ -10126,7 +10224,7 @@ describe('VpcV1', () => {
         };
 
         const updateInstanceGroupManagerActionResult = vpcService.updateInstanceGroupManagerAction(
-          params
+          updateInstanceGroupManagerActionParams
         );
 
         // all methods should return a Promise
@@ -10179,7 +10277,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateInstanceGroupManagerActionParams = {
           instanceGroupId,
           instanceGroupManagerId,
           id,
@@ -10189,7 +10287,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateInstanceGroupManagerAction(params);
+        vpcService.updateInstanceGroupManagerAction(updateInstanceGroupManagerActionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -10226,7 +10324,7 @@ describe('VpcV1', () => {
         const instanceGroupManagerId = 'testString';
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listInstanceGroupManagerPoliciesParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           start: start,
@@ -10234,7 +10332,7 @@ describe('VpcV1', () => {
         };
 
         const listInstanceGroupManagerPoliciesResult = vpcService.listInstanceGroupManagerPolicies(
-          params
+          listInstanceGroupManagerPoliciesParams
         );
 
         // all methods should return a Promise
@@ -10282,7 +10380,7 @@ describe('VpcV1', () => {
         const instanceGroupManagerId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceGroupManagerPoliciesParams = {
           instanceGroupId,
           instanceGroupManagerId,
           headers: {
@@ -10291,7 +10389,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listInstanceGroupManagerPolicies(params);
+        vpcService.listInstanceGroupManagerPolicies(listInstanceGroupManagerPoliciesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -10337,14 +10435,14 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
         const instanceGroupManagerPolicyPrototype = instanceGroupManagerPolicyPrototypeModel;
-        const params = {
+        const createInstanceGroupManagerPolicyParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           instanceGroupManagerPolicyPrototype: instanceGroupManagerPolicyPrototype,
         };
 
         const createInstanceGroupManagerPolicyResult = vpcService.createInstanceGroupManagerPolicy(
-          params
+          createInstanceGroupManagerPolicyParams
         );
 
         // all methods should return a Promise
@@ -10392,7 +10490,7 @@ describe('VpcV1', () => {
         const instanceGroupManagerPolicyPrototype = instanceGroupManagerPolicyPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createInstanceGroupManagerPolicyParams = {
           instanceGroupId,
           instanceGroupManagerId,
           instanceGroupManagerPolicyPrototype,
@@ -10402,7 +10500,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createInstanceGroupManagerPolicy(params);
+        vpcService.createInstanceGroupManagerPolicy(createInstanceGroupManagerPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -10438,14 +10536,14 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteInstanceGroupManagerPolicyParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           id: id,
         };
 
         const deleteInstanceGroupManagerPolicyResult = vpcService.deleteInstanceGroupManagerPolicy(
-          params
+          deleteInstanceGroupManagerPolicyParams
         );
 
         // all methods should return a Promise
@@ -10493,7 +10591,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceGroupManagerPolicyParams = {
           instanceGroupId,
           instanceGroupManagerId,
           id,
@@ -10503,7 +10601,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstanceGroupManagerPolicy(params);
+        vpcService.deleteInstanceGroupManagerPolicy(deleteInstanceGroupManagerPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -10539,14 +10637,14 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
-        const params = {
+        const getInstanceGroupManagerPolicyParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           id: id,
         };
 
         const getInstanceGroupManagerPolicyResult = vpcService.getInstanceGroupManagerPolicy(
-          params
+          getInstanceGroupManagerPolicyParams
         );
 
         // all methods should return a Promise
@@ -10594,7 +10692,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceGroupManagerPolicyParams = {
           instanceGroupId,
           instanceGroupManagerId,
           id,
@@ -10604,7 +10702,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceGroupManagerPolicy(params);
+        vpcService.getInstanceGroupManagerPolicy(getInstanceGroupManagerPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -10643,7 +10741,7 @@ describe('VpcV1', () => {
         const metricType = 'cpu';
         const metricValue = 38;
         const name = 'my-instance-group-manager-policy';
-        const params = {
+        const updateInstanceGroupManagerPolicyParams = {
           instanceGroupId: instanceGroupId,
           instanceGroupManagerId: instanceGroupManagerId,
           id: id,
@@ -10653,7 +10751,7 @@ describe('VpcV1', () => {
         };
 
         const updateInstanceGroupManagerPolicyResult = vpcService.updateInstanceGroupManagerPolicy(
-          params
+          updateInstanceGroupManagerPolicyParams
         );
 
         // all methods should return a Promise
@@ -10704,7 +10802,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateInstanceGroupManagerPolicyParams = {
           instanceGroupId,
           instanceGroupManagerId,
           id,
@@ -10714,7 +10812,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateInstanceGroupManagerPolicy(params);
+        vpcService.updateInstanceGroupManagerPolicy(updateInstanceGroupManagerPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -10748,12 +10846,12 @@ describe('VpcV1', () => {
       function __deleteInstanceGroupMembershipsTest() {
         // Construct the params object for operation deleteInstanceGroupMemberships
         const instanceGroupId = 'testString';
-        const params = {
+        const deleteInstanceGroupMembershipsParams = {
           instanceGroupId: instanceGroupId,
         };
 
         const deleteInstanceGroupMembershipsResult = vpcService.deleteInstanceGroupMemberships(
-          params
+          deleteInstanceGroupMembershipsParams
         );
 
         // all methods should return a Promise
@@ -10797,7 +10895,7 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceGroupMembershipsParams = {
           instanceGroupId,
           headers: {
             Accept: userAccept,
@@ -10805,7 +10903,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstanceGroupMemberships(params);
+        vpcService.deleteInstanceGroupMemberships(deleteInstanceGroupMembershipsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -10841,13 +10939,15 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listInstanceGroupMembershipsParams = {
           instanceGroupId: instanceGroupId,
           start: start,
           limit: limit,
         };
 
-        const listInstanceGroupMembershipsResult = vpcService.listInstanceGroupMemberships(params);
+        const listInstanceGroupMembershipsResult = vpcService.listInstanceGroupMemberships(
+          listInstanceGroupMembershipsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listInstanceGroupMembershipsResult);
@@ -10892,7 +10992,7 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listInstanceGroupMembershipsParams = {
           instanceGroupId,
           headers: {
             Accept: userAccept,
@@ -10900,7 +11000,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listInstanceGroupMemberships(params);
+        vpcService.listInstanceGroupMemberships(listInstanceGroupMembershipsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -10935,13 +11035,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteInstanceGroupMembership
         const instanceGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteInstanceGroupMembershipParams = {
           instanceGroupId: instanceGroupId,
           id: id,
         };
 
         const deleteInstanceGroupMembershipResult = vpcService.deleteInstanceGroupMembership(
-          params
+          deleteInstanceGroupMembershipParams
         );
 
         // all methods should return a Promise
@@ -10987,7 +11087,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteInstanceGroupMembershipParams = {
           instanceGroupId,
           id,
           headers: {
@@ -10996,7 +11096,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteInstanceGroupMembership(params);
+        vpcService.deleteInstanceGroupMembership(deleteInstanceGroupMembershipParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -11031,12 +11131,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation getInstanceGroupMembership
         const instanceGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const getInstanceGroupMembershipParams = {
           instanceGroupId: instanceGroupId,
           id: id,
         };
 
-        const getInstanceGroupMembershipResult = vpcService.getInstanceGroupMembership(params);
+        const getInstanceGroupMembershipResult = vpcService.getInstanceGroupMembership(
+          getInstanceGroupMembershipParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getInstanceGroupMembershipResult);
@@ -11081,7 +11183,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getInstanceGroupMembershipParams = {
           instanceGroupId,
           id,
           headers: {
@@ -11090,7 +11192,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getInstanceGroupMembership(params);
+        vpcService.getInstanceGroupMembership(getInstanceGroupMembershipParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -11126,14 +11228,14 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const id = 'testString';
         const name = 'my-instance-group-membership';
-        const params = {
+        const updateInstanceGroupMembershipParams = {
           instanceGroupId: instanceGroupId,
           id: id,
           name: name,
         };
 
         const updateInstanceGroupMembershipResult = vpcService.updateInstanceGroupMembership(
-          params
+          updateInstanceGroupMembershipParams
         );
 
         // all methods should return a Promise
@@ -11180,7 +11282,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateInstanceGroupMembershipParams = {
           instanceGroupId,
           id,
           headers: {
@@ -11189,7 +11291,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateInstanceGroupMembership(params);
+        vpcService.updateInstanceGroupMembership(updateInstanceGroupMembershipParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -11227,7 +11329,7 @@ describe('VpcV1', () => {
         const resourceGroupId = 'testString';
         const zoneName = 'testString';
         const name = 'testString';
-        const params = {
+        const listDedicatedHostGroupsParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
@@ -11235,7 +11337,9 @@ describe('VpcV1', () => {
           name: name,
         };
 
-        const listDedicatedHostGroupsResult = vpcService.listDedicatedHostGroups(params);
+        const listDedicatedHostGroupsResult = vpcService.listDedicatedHostGroups(
+          listDedicatedHostGroupsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listDedicatedHostGroupsResult);
@@ -11277,14 +11381,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listDedicatedHostGroupsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listDedicatedHostGroups(params);
+        vpcService.listDedicatedHostGroups(listDedicatedHostGroupsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -11316,7 +11420,7 @@ describe('VpcV1', () => {
         const zone = zoneIdentityModel;
         const name = 'testString';
         const resourceGroup = resourceGroupIdentityModel;
-        const params = {
+        const createDedicatedHostGroupParams = {
           _class: _class,
           family: family,
           zone: zone,
@@ -11324,7 +11428,9 @@ describe('VpcV1', () => {
           resourceGroup: resourceGroup,
         };
 
-        const createDedicatedHostGroupResult = vpcService.createDedicatedHostGroup(params);
+        const createDedicatedHostGroupResult = vpcService.createDedicatedHostGroup(
+          createDedicatedHostGroupParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createDedicatedHostGroupResult);
@@ -11366,14 +11472,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createDedicatedHostGroupParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.createDedicatedHostGroup(params);
+        vpcService.createDedicatedHostGroup(createDedicatedHostGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -11389,11 +11495,13 @@ describe('VpcV1', () => {
       function __deleteDedicatedHostGroupTest() {
         // Construct the params object for operation deleteDedicatedHostGroup
         const id = 'testString';
-        const params = {
+        const deleteDedicatedHostGroupParams = {
           id: id,
         };
 
-        const deleteDedicatedHostGroupResult = vpcService.deleteDedicatedHostGroup(params);
+        const deleteDedicatedHostGroupResult = vpcService.deleteDedicatedHostGroup(
+          deleteDedicatedHostGroupParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteDedicatedHostGroupResult);
@@ -11432,7 +11540,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteDedicatedHostGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -11440,7 +11548,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteDedicatedHostGroup(params);
+        vpcService.deleteDedicatedHostGroup(deleteDedicatedHostGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -11474,11 +11582,13 @@ describe('VpcV1', () => {
       function __getDedicatedHostGroupTest() {
         // Construct the params object for operation getDedicatedHostGroup
         const id = 'testString';
-        const params = {
+        const getDedicatedHostGroupParams = {
           id: id,
         };
 
-        const getDedicatedHostGroupResult = vpcService.getDedicatedHostGroup(params);
+        const getDedicatedHostGroupResult = vpcService.getDedicatedHostGroup(
+          getDedicatedHostGroupParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getDedicatedHostGroupResult);
@@ -11517,7 +11627,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getDedicatedHostGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -11525,7 +11635,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getDedicatedHostGroup(params);
+        vpcService.getDedicatedHostGroup(getDedicatedHostGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -11560,12 +11670,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateDedicatedHostGroup
         const id = 'testString';
         const name = 'my-host-group-modified';
-        const params = {
+        const updateDedicatedHostGroupParams = {
           id: id,
           name: name,
         };
 
-        const updateDedicatedHostGroupResult = vpcService.updateDedicatedHostGroup(params);
+        const updateDedicatedHostGroupResult = vpcService.updateDedicatedHostGroup(
+          updateDedicatedHostGroupParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateDedicatedHostGroupResult);
@@ -11605,7 +11717,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateDedicatedHostGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -11613,7 +11725,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateDedicatedHostGroup(params);
+        vpcService.updateDedicatedHostGroup(updateDedicatedHostGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -11648,12 +11760,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation listDedicatedHostProfiles
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listDedicatedHostProfilesParams = {
           start: start,
           limit: limit,
         };
 
-        const listDedicatedHostProfilesResult = vpcService.listDedicatedHostProfiles(params);
+        const listDedicatedHostProfilesResult = vpcService.listDedicatedHostProfiles(
+          listDedicatedHostProfilesParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listDedicatedHostProfilesResult);
@@ -11692,14 +11806,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listDedicatedHostProfilesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listDedicatedHostProfiles(params);
+        vpcService.listDedicatedHostProfiles(listDedicatedHostProfilesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -11715,11 +11829,13 @@ describe('VpcV1', () => {
       function __getDedicatedHostProfileTest() {
         // Construct the params object for operation getDedicatedHostProfile
         const name = 'testString';
-        const params = {
+        const getDedicatedHostProfileParams = {
           name: name,
         };
 
-        const getDedicatedHostProfileResult = vpcService.getDedicatedHostProfile(params);
+        const getDedicatedHostProfileResult = vpcService.getDedicatedHostProfile(
+          getDedicatedHostProfileParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getDedicatedHostProfileResult);
@@ -11758,7 +11874,7 @@ describe('VpcV1', () => {
         const name = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getDedicatedHostProfileParams = {
           name,
           headers: {
             Accept: userAccept,
@@ -11766,7 +11882,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getDedicatedHostProfile(params);
+        vpcService.getDedicatedHostProfile(getDedicatedHostProfileParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -11805,7 +11921,7 @@ describe('VpcV1', () => {
         const resourceGroupId = 'testString';
         const zoneName = 'testString';
         const name = 'testString';
-        const params = {
+        const listDedicatedHostsParams = {
           dedicatedHostGroupId: dedicatedHostGroupId,
           start: start,
           limit: limit,
@@ -11814,7 +11930,7 @@ describe('VpcV1', () => {
           name: name,
         };
 
-        const listDedicatedHostsResult = vpcService.listDedicatedHosts(params);
+        const listDedicatedHostsResult = vpcService.listDedicatedHosts(listDedicatedHostsParams);
 
         // all methods should return a Promise
         expectToBePromise(listDedicatedHostsResult);
@@ -11857,14 +11973,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listDedicatedHostsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listDedicatedHosts(params);
+        vpcService.listDedicatedHosts(listDedicatedHostsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -11906,11 +12022,11 @@ describe('VpcV1', () => {
       function __createDedicatedHostTest() {
         // Construct the params object for operation createDedicatedHost
         const dedicatedHostPrototype = dedicatedHostPrototypeModel;
-        const params = {
+        const createDedicatedHostParams = {
           dedicatedHostPrototype: dedicatedHostPrototype,
         };
 
-        const createDedicatedHostResult = vpcService.createDedicatedHost(params);
+        const createDedicatedHostResult = vpcService.createDedicatedHost(createDedicatedHostParams);
 
         // all methods should return a Promise
         expectToBePromise(createDedicatedHostResult);
@@ -11949,7 +12065,7 @@ describe('VpcV1', () => {
         const dedicatedHostPrototype = dedicatedHostPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createDedicatedHostParams = {
           dedicatedHostPrototype,
           headers: {
             Accept: userAccept,
@@ -11957,7 +12073,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createDedicatedHost(params);
+        vpcService.createDedicatedHost(createDedicatedHostParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -11991,11 +12107,13 @@ describe('VpcV1', () => {
       function __listDedicatedHostDisksTest() {
         // Construct the params object for operation listDedicatedHostDisks
         const dedicatedHostId = 'testString';
-        const params = {
+        const listDedicatedHostDisksParams = {
           dedicatedHostId: dedicatedHostId,
         };
 
-        const listDedicatedHostDisksResult = vpcService.listDedicatedHostDisks(params);
+        const listDedicatedHostDisksResult = vpcService.listDedicatedHostDisks(
+          listDedicatedHostDisksParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listDedicatedHostDisksResult);
@@ -12034,7 +12152,7 @@ describe('VpcV1', () => {
         const dedicatedHostId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listDedicatedHostDisksParams = {
           dedicatedHostId,
           headers: {
             Accept: userAccept,
@@ -12042,7 +12160,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listDedicatedHostDisks(params);
+        vpcService.listDedicatedHostDisks(listDedicatedHostDisksParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -12077,12 +12195,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation getDedicatedHostDisk
         const dedicatedHostId = 'testString';
         const id = 'testString';
-        const params = {
+        const getDedicatedHostDiskParams = {
           dedicatedHostId: dedicatedHostId,
           id: id,
         };
 
-        const getDedicatedHostDiskResult = vpcService.getDedicatedHostDisk(params);
+        const getDedicatedHostDiskResult = vpcService.getDedicatedHostDisk(
+          getDedicatedHostDiskParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getDedicatedHostDiskResult);
@@ -12127,7 +12247,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getDedicatedHostDiskParams = {
           dedicatedHostId,
           id,
           headers: {
@@ -12136,7 +12256,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getDedicatedHostDisk(params);
+        vpcService.getDedicatedHostDisk(getDedicatedHostDiskParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -12172,13 +12292,15 @@ describe('VpcV1', () => {
         const dedicatedHostId = 'testString';
         const id = 'testString';
         const name = 'my-disk-updated';
-        const params = {
+        const updateDedicatedHostDiskParams = {
           dedicatedHostId: dedicatedHostId,
           id: id,
           name: name,
         };
 
-        const updateDedicatedHostDiskResult = vpcService.updateDedicatedHostDisk(params);
+        const updateDedicatedHostDiskResult = vpcService.updateDedicatedHostDisk(
+          updateDedicatedHostDiskParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateDedicatedHostDiskResult);
@@ -12224,7 +12346,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateDedicatedHostDiskParams = {
           dedicatedHostId,
           id,
           headers: {
@@ -12233,7 +12355,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateDedicatedHostDisk(params);
+        vpcService.updateDedicatedHostDisk(updateDedicatedHostDiskParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -12267,11 +12389,11 @@ describe('VpcV1', () => {
       function __deleteDedicatedHostTest() {
         // Construct the params object for operation deleteDedicatedHost
         const id = 'testString';
-        const params = {
+        const deleteDedicatedHostParams = {
           id: id,
         };
 
-        const deleteDedicatedHostResult = vpcService.deleteDedicatedHost(params);
+        const deleteDedicatedHostResult = vpcService.deleteDedicatedHost(deleteDedicatedHostParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteDedicatedHostResult);
@@ -12310,7 +12432,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteDedicatedHostParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -12318,7 +12440,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteDedicatedHost(params);
+        vpcService.deleteDedicatedHost(deleteDedicatedHostParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -12352,11 +12474,11 @@ describe('VpcV1', () => {
       function __getDedicatedHostTest() {
         // Construct the params object for operation getDedicatedHost
         const id = 'testString';
-        const params = {
+        const getDedicatedHostParams = {
           id: id,
         };
 
-        const getDedicatedHostResult = vpcService.getDedicatedHost(params);
+        const getDedicatedHostResult = vpcService.getDedicatedHost(getDedicatedHostParams);
 
         // all methods should return a Promise
         expectToBePromise(getDedicatedHostResult);
@@ -12395,7 +12517,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getDedicatedHostParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -12403,7 +12525,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getDedicatedHost(params);
+        vpcService.getDedicatedHost(getDedicatedHostParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -12439,13 +12561,13 @@ describe('VpcV1', () => {
         const id = 'testString';
         const instancePlacementEnabled = true;
         const name = 'my-host';
-        const params = {
+        const updateDedicatedHostParams = {
           id: id,
           instancePlacementEnabled: instancePlacementEnabled,
           name: name,
         };
 
-        const updateDedicatedHostResult = vpcService.updateDedicatedHost(params);
+        const updateDedicatedHostResult = vpcService.updateDedicatedHost(updateDedicatedHostParams);
 
         // all methods should return a Promise
         expectToBePromise(updateDedicatedHostResult);
@@ -12488,7 +12610,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateDedicatedHostParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -12496,7 +12618,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateDedicatedHost(params);
+        vpcService.updateDedicatedHost(updateDedicatedHostParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -12531,12 +12653,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation listPlacementGroups
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listPlacementGroupsParams = {
           start: start,
           limit: limit,
         };
 
-        const listPlacementGroupsResult = vpcService.listPlacementGroups(params);
+        const listPlacementGroupsResult = vpcService.listPlacementGroups(listPlacementGroupsParams);
 
         // all methods should return a Promise
         expectToBePromise(listPlacementGroupsResult);
@@ -12575,14 +12697,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listPlacementGroupsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listPlacementGroups(params);
+        vpcService.listPlacementGroups(listPlacementGroupsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -12607,13 +12729,15 @@ describe('VpcV1', () => {
         const strategy = 'host_spread';
         const name = 'my-placement-group';
         const resourceGroup = resourceGroupIdentityModel;
-        const params = {
+        const createPlacementGroupParams = {
           strategy: strategy,
           name: name,
           resourceGroup: resourceGroup,
         };
 
-        const createPlacementGroupResult = vpcService.createPlacementGroup(params);
+        const createPlacementGroupResult = vpcService.createPlacementGroup(
+          createPlacementGroupParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createPlacementGroupResult);
@@ -12654,7 +12778,7 @@ describe('VpcV1', () => {
         const strategy = 'host_spread';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createPlacementGroupParams = {
           strategy,
           headers: {
             Accept: userAccept,
@@ -12662,7 +12786,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createPlacementGroup(params);
+        vpcService.createPlacementGroup(createPlacementGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -12696,11 +12820,13 @@ describe('VpcV1', () => {
       function __deletePlacementGroupTest() {
         // Construct the params object for operation deletePlacementGroup
         const id = 'testString';
-        const params = {
+        const deletePlacementGroupParams = {
           id: id,
         };
 
-        const deletePlacementGroupResult = vpcService.deletePlacementGroup(params);
+        const deletePlacementGroupResult = vpcService.deletePlacementGroup(
+          deletePlacementGroupParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deletePlacementGroupResult);
@@ -12739,7 +12865,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deletePlacementGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -12747,7 +12873,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deletePlacementGroup(params);
+        vpcService.deletePlacementGroup(deletePlacementGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -12781,11 +12907,11 @@ describe('VpcV1', () => {
       function __getPlacementGroupTest() {
         // Construct the params object for operation getPlacementGroup
         const id = 'testString';
-        const params = {
+        const getPlacementGroupParams = {
           id: id,
         };
 
-        const getPlacementGroupResult = vpcService.getPlacementGroup(params);
+        const getPlacementGroupResult = vpcService.getPlacementGroup(getPlacementGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(getPlacementGroupResult);
@@ -12824,7 +12950,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getPlacementGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -12832,7 +12958,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getPlacementGroup(params);
+        vpcService.getPlacementGroup(getPlacementGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -12867,12 +12993,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation updatePlacementGroup
         const id = 'testString';
         const name = 'my-placement-group';
-        const params = {
+        const updatePlacementGroupParams = {
           id: id,
           name: name,
         };
 
-        const updatePlacementGroupResult = vpcService.updatePlacementGroup(params);
+        const updatePlacementGroupResult = vpcService.updatePlacementGroup(
+          updatePlacementGroupParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updatePlacementGroupResult);
@@ -12912,7 +13040,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updatePlacementGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -12920,7 +13048,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updatePlacementGroup(params);
+        vpcService.updatePlacementGroup(updatePlacementGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -12949,18 +13077,2397 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('listBareMetalServerProfiles', () => {
+    describe('positive tests', () => {
+      function __listBareMetalServerProfilesTest() {
+        // Construct the params object for operation listBareMetalServerProfiles
+        const start = 'testString';
+        const limit = 1;
+        const listBareMetalServerProfilesParams = {
+          start: start,
+          limit: limit,
+        };
+
+        const listBareMetalServerProfilesResult = vpcService.listBareMetalServerProfiles(
+          listBareMetalServerProfilesParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listBareMetalServerProfilesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_server/profiles', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listBareMetalServerProfilesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listBareMetalServerProfilesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listBareMetalServerProfilesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listBareMetalServerProfilesParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listBareMetalServerProfiles(listBareMetalServerProfilesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listBareMetalServerProfiles({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('getBareMetalServerProfile', () => {
+    describe('positive tests', () => {
+      function __getBareMetalServerProfileTest() {
+        // Construct the params object for operation getBareMetalServerProfile
+        const name = 'testString';
+        const getBareMetalServerProfileParams = {
+          name: name,
+        };
+
+        const getBareMetalServerProfileResult = vpcService.getBareMetalServerProfile(
+          getBareMetalServerProfileParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getBareMetalServerProfileResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_server/profiles/{name}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.name).toEqual(name);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBareMetalServerProfileTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBareMetalServerProfileTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBareMetalServerProfileTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const name = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBareMetalServerProfileParams = {
+          name,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBareMetalServerProfile(getBareMetalServerProfileParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerProfile({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerProfile();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('listBareMetalServers', () => {
+    describe('positive tests', () => {
+      function __listBareMetalServersTest() {
+        // Construct the params object for operation listBareMetalServers
+        const start = 'testString';
+        const limit = 1;
+        const resourceGroupId = 'testString';
+        const name = 'testString';
+        const vpcId = 'testString';
+        const vpcCrn = 'testString';
+        const vpcName = 'testString';
+        const networkInterfacesSubnetId = 'testString';
+        const networkInterfacesSubnetCrn = 'testString';
+        const networkInterfacesSubnetName = 'testString';
+        const sort = 'name';
+        const listBareMetalServersParams = {
+          start: start,
+          limit: limit,
+          resourceGroupId: resourceGroupId,
+          name: name,
+          vpcId: vpcId,
+          vpcCrn: vpcCrn,
+          vpcName: vpcName,
+          networkInterfacesSubnetId: networkInterfacesSubnetId,
+          networkInterfacesSubnetCrn: networkInterfacesSubnetCrn,
+          networkInterfacesSubnetName: networkInterfacesSubnetName,
+          sort: sort,
+        };
+
+        const listBareMetalServersResult = vpcService.listBareMetalServers(
+          listBareMetalServersParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listBareMetalServersResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_servers', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs['vpc.id']).toEqual(vpcId);
+        expect(mockRequestOptions.qs['vpc.crn']).toEqual(vpcCrn);
+        expect(mockRequestOptions.qs['vpc.name']).toEqual(vpcName);
+        expect(mockRequestOptions.qs['network_interfaces.subnet.id']).toEqual(
+          networkInterfacesSubnetId
+        );
+        expect(mockRequestOptions.qs['network_interfaces.subnet.crn']).toEqual(
+          networkInterfacesSubnetCrn
+        );
+        expect(mockRequestOptions.qs['network_interfaces.subnet.name']).toEqual(
+          networkInterfacesSubnetName
+        );
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listBareMetalServersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listBareMetalServersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listBareMetalServersTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listBareMetalServersParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listBareMetalServers(listBareMetalServersParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listBareMetalServers({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('createBareMetalServer', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // ImageIdentityById
+      const imageIdentityModel = {
+        id: '72b27b5c-f4b0-48bb-b954-5becc7c1dcb8',
+      };
+
+      // KeyIdentityById
+      const keyIdentityModel = {
+        id: 'a6b1a881-2ce8-41a3-80fc-36316a73f803',
+      };
+
+      // BareMetalServerInitializationPrototype
+      const bareMetalServerInitializationPrototypeModel = {
+        image: imageIdentityModel,
+        keys: [keyIdentityModel],
+        user_data: 'testString',
+      };
+
+      // SecurityGroupIdentityById
+      const securityGroupIdentityModel = {
+        id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
+      };
+
+      // SubnetIdentityById
+      const subnetIdentityModel = {
+        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+      };
+
+      // BareMetalServerPrimaryNetworkInterfacePrototype
+      const bareMetalServerPrimaryNetworkInterfacePrototypeModel = {
+        allow_ip_spoofing: true,
+        allowed_vlans: [4],
+        enable_infrastructure_nat: true,
+        interface_type: 'pci',
+        name: 'my-network-interface',
+        primary_ipv4_address: '10.0.0.5',
+        security_groups: [securityGroupIdentityModel],
+        subnet: subnetIdentityModel,
+      };
+
+      // BareMetalServerProfileIdentityByName
+      const bareMetalServerProfileIdentityModel = {
+        name: 'bx2-metal-192x768',
+      };
+
+      // ZoneIdentityByName
+      const zoneIdentityModel = {
+        name: 'us-south-1',
+      };
+
+      // BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype
+      const bareMetalServerNetworkInterfacePrototypeModel = {
+        allow_ip_spoofing: true,
+        enable_infrastructure_nat: true,
+        interface_type: 'vlan',
+        name: 'my-network-interface',
+        primary_ipv4_address: '10.0.0.5',
+        security_groups: [securityGroupIdentityModel],
+        subnet: subnetIdentityModel,
+        allow_interface_to_float: false,
+        vlan: 4,
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      // VPCIdentityById
+      const vpcIdentityModel = {
+        id: '4727d842-f94f-4a2d-824a-9bc9b02c523b',
+      };
+
+      function __createBareMetalServerTest() {
+        // Construct the params object for operation createBareMetalServer
+        const initialization = bareMetalServerInitializationPrototypeModel;
+        const primaryNetworkInterface = bareMetalServerPrimaryNetworkInterfacePrototypeModel;
+        const profile = bareMetalServerProfileIdentityModel;
+        const zone = zoneIdentityModel;
+        const name = 'my-bare-metal-server';
+        const networkInterfaces = [bareMetalServerNetworkInterfacePrototypeModel];
+        const resourceGroup = resourceGroupIdentityModel;
+        const vpc = vpcIdentityModel;
+        const createBareMetalServerParams = {
+          initialization: initialization,
+          primaryNetworkInterface: primaryNetworkInterface,
+          profile: profile,
+          zone: zone,
+          name: name,
+          networkInterfaces: networkInterfaces,
+          resourceGroup: resourceGroup,
+          vpc: vpc,
+        };
+
+        const createBareMetalServerResult = vpcService.createBareMetalServer(
+          createBareMetalServerParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createBareMetalServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_servers', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.initialization).toEqual(initialization);
+        expect(mockRequestOptions.body.primary_network_interface).toEqual(primaryNetworkInterface);
+        expect(mockRequestOptions.body.profile).toEqual(profile);
+        expect(mockRequestOptions.body.zone).toEqual(zone);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.network_interfaces).toEqual(networkInterfaces);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.body.vpc).toEqual(vpc);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createBareMetalServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createBareMetalServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createBareMetalServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const initialization = bareMetalServerInitializationPrototypeModel;
+        const primaryNetworkInterface = bareMetalServerPrimaryNetworkInterfacePrototypeModel;
+        const profile = bareMetalServerProfileIdentityModel;
+        const zone = zoneIdentityModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createBareMetalServerParams = {
+          initialization,
+          primaryNetworkInterface,
+          profile,
+          zone,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createBareMetalServer(createBareMetalServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.createBareMetalServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createBareMetalServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('createBareMetalServerConsoleAccessToken', () => {
+    describe('positive tests', () => {
+      function __createBareMetalServerConsoleAccessTokenTest() {
+        // Construct the params object for operation createBareMetalServerConsoleAccessToken
+        const bareMetalServerId = 'testString';
+        const consoleType = 'serial';
+        const force = false;
+        const createBareMetalServerConsoleAccessTokenParams = {
+          bareMetalServerId: bareMetalServerId,
+          consoleType: consoleType,
+          force: force,
+        };
+
+        const createBareMetalServerConsoleAccessTokenResult = vpcService.createBareMetalServerConsoleAccessToken(
+          createBareMetalServerConsoleAccessTokenParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createBareMetalServerConsoleAccessTokenResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/console_access_token',
+          'POST'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.console_type).toEqual(consoleType);
+        expect(mockRequestOptions.body.force).toEqual(force);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createBareMetalServerConsoleAccessTokenTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createBareMetalServerConsoleAccessTokenTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createBareMetalServerConsoleAccessTokenTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const consoleType = 'serial';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createBareMetalServerConsoleAccessTokenParams = {
+          bareMetalServerId,
+          consoleType,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createBareMetalServerConsoleAccessToken(
+          createBareMetalServerConsoleAccessTokenParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.createBareMetalServerConsoleAccessToken({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createBareMetalServerConsoleAccessToken();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('listBareMetalServerDisks', () => {
+    describe('positive tests', () => {
+      function __listBareMetalServerDisksTest() {
+        // Construct the params object for operation listBareMetalServerDisks
+        const bareMetalServerId = 'testString';
+        const listBareMetalServerDisksParams = {
+          bareMetalServerId: bareMetalServerId,
+        };
+
+        const listBareMetalServerDisksResult = vpcService.listBareMetalServerDisks(
+          listBareMetalServerDisksParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listBareMetalServerDisksResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/disks',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listBareMetalServerDisksTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listBareMetalServerDisksTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listBareMetalServerDisksTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listBareMetalServerDisksParams = {
+          bareMetalServerId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listBareMetalServerDisks(listBareMetalServerDisksParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listBareMetalServerDisks({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listBareMetalServerDisks();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getBareMetalServerDisk', () => {
+    describe('positive tests', () => {
+      function __getBareMetalServerDiskTest() {
+        // Construct the params object for operation getBareMetalServerDisk
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const getBareMetalServerDiskParams = {
+          bareMetalServerId: bareMetalServerId,
+          id: id,
+        };
+
+        const getBareMetalServerDiskResult = vpcService.getBareMetalServerDisk(
+          getBareMetalServerDiskParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getBareMetalServerDiskResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/disks/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBareMetalServerDiskTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBareMetalServerDiskTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBareMetalServerDiskTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBareMetalServerDiskParams = {
+          bareMetalServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBareMetalServerDisk(getBareMetalServerDiskParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerDisk({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerDisk();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('updateBareMetalServerDisk', () => {
+    describe('positive tests', () => {
+      function __updateBareMetalServerDiskTest() {
+        // Construct the params object for operation updateBareMetalServerDisk
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const name = 'my-bare-metal-server-disk-updated';
+        const updateBareMetalServerDiskParams = {
+          bareMetalServerId: bareMetalServerId,
+          id: id,
+          name: name,
+        };
+
+        const updateBareMetalServerDiskResult = vpcService.updateBareMetalServerDisk(
+          updateBareMetalServerDiskParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(updateBareMetalServerDiskResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/disks/{id}',
+          'PATCH'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateBareMetalServerDiskTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateBareMetalServerDiskTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateBareMetalServerDiskTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateBareMetalServerDiskParams = {
+          bareMetalServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateBareMetalServerDisk(updateBareMetalServerDiskParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateBareMetalServerDisk({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateBareMetalServerDisk();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('listBareMetalServerNetworkInterfaces', () => {
+    describe('positive tests', () => {
+      function __listBareMetalServerNetworkInterfacesTest() {
+        // Construct the params object for operation listBareMetalServerNetworkInterfaces
+        const bareMetalServerId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const listBareMetalServerNetworkInterfacesParams = {
+          bareMetalServerId: bareMetalServerId,
+          start: start,
+          limit: limit,
+        };
+
+        const listBareMetalServerNetworkInterfacesResult = vpcService.listBareMetalServerNetworkInterfaces(
+          listBareMetalServerNetworkInterfacesParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listBareMetalServerNetworkInterfacesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listBareMetalServerNetworkInterfacesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listBareMetalServerNetworkInterfacesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listBareMetalServerNetworkInterfacesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listBareMetalServerNetworkInterfacesParams = {
+          bareMetalServerId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listBareMetalServerNetworkInterfaces(listBareMetalServerNetworkInterfacesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listBareMetalServerNetworkInterfaces({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listBareMetalServerNetworkInterfaces();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('createBareMetalServerNetworkInterface', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // SecurityGroupIdentityById
+      const securityGroupIdentityModel = {
+        id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
+      };
+
+      // SubnetIdentityById
+      const subnetIdentityModel = {
+        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+      };
+
+      // BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype
+      const bareMetalServerNetworkInterfacePrototypeModel = {
+        allow_ip_spoofing: true,
+        enable_infrastructure_nat: true,
+        interface_type: 'vlan',
+        name: 'my-network-interface',
+        primary_ipv4_address: '10.0.0.5',
+        security_groups: [securityGroupIdentityModel],
+        subnet: subnetIdentityModel,
+        allow_interface_to_float: false,
+        vlan: 4,
+      };
+
+      function __createBareMetalServerNetworkInterfaceTest() {
+        // Construct the params object for operation createBareMetalServerNetworkInterface
+        const bareMetalServerId = 'testString';
+        const bareMetalServerNetworkInterfacePrototype = bareMetalServerNetworkInterfacePrototypeModel;
+        const createBareMetalServerNetworkInterfaceParams = {
+          bareMetalServerId: bareMetalServerId,
+          bareMetalServerNetworkInterfacePrototype: bareMetalServerNetworkInterfacePrototype,
+        };
+
+        const createBareMetalServerNetworkInterfaceResult = vpcService.createBareMetalServerNetworkInterface(
+          createBareMetalServerNetworkInterfaceParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createBareMetalServerNetworkInterfaceResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces',
+          'POST'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body).toEqual(bareMetalServerNetworkInterfacePrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createBareMetalServerNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createBareMetalServerNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createBareMetalServerNetworkInterfaceTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const bareMetalServerNetworkInterfacePrototype = bareMetalServerNetworkInterfacePrototypeModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createBareMetalServerNetworkInterfaceParams = {
+          bareMetalServerId,
+          bareMetalServerNetworkInterfacePrototype,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createBareMetalServerNetworkInterface(
+          createBareMetalServerNetworkInterfaceParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.createBareMetalServerNetworkInterface({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createBareMetalServerNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('deleteBareMetalServerNetworkInterface', () => {
+    describe('positive tests', () => {
+      function __deleteBareMetalServerNetworkInterfaceTest() {
+        // Construct the params object for operation deleteBareMetalServerNetworkInterface
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const deleteBareMetalServerNetworkInterfaceParams = {
+          bareMetalServerId: bareMetalServerId,
+          id: id,
+        };
+
+        const deleteBareMetalServerNetworkInterfaceResult = vpcService.deleteBareMetalServerNetworkInterface(
+          deleteBareMetalServerNetworkInterfaceParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteBareMetalServerNetworkInterfaceResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{id}',
+          'DELETE'
+        );
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteBareMetalServerNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteBareMetalServerNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteBareMetalServerNetworkInterfaceTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteBareMetalServerNetworkInterfaceParams = {
+          bareMetalServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteBareMetalServerNetworkInterface(
+          deleteBareMetalServerNetworkInterfaceParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteBareMetalServerNetworkInterface({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteBareMetalServerNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getBareMetalServerNetworkInterface', () => {
+    describe('positive tests', () => {
+      function __getBareMetalServerNetworkInterfaceTest() {
+        // Construct the params object for operation getBareMetalServerNetworkInterface
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const getBareMetalServerNetworkInterfaceParams = {
+          bareMetalServerId: bareMetalServerId,
+          id: id,
+        };
+
+        const getBareMetalServerNetworkInterfaceResult = vpcService.getBareMetalServerNetworkInterface(
+          getBareMetalServerNetworkInterfaceParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getBareMetalServerNetworkInterfaceResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBareMetalServerNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBareMetalServerNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBareMetalServerNetworkInterfaceTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBareMetalServerNetworkInterfaceParams = {
+          bareMetalServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBareMetalServerNetworkInterface(getBareMetalServerNetworkInterfaceParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerNetworkInterface({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('updateBareMetalServerNetworkInterface', () => {
+    describe('positive tests', () => {
+      function __updateBareMetalServerNetworkInterfaceTest() {
+        // Construct the params object for operation updateBareMetalServerNetworkInterface
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const allowIpSpoofing = true;
+        const allowedVlans = [4];
+        const enableInfrastructureNat = true;
+        const name = 'my-network-interface';
+        const updateBareMetalServerNetworkInterfaceParams = {
+          bareMetalServerId: bareMetalServerId,
+          id: id,
+          allowIpSpoofing: allowIpSpoofing,
+          allowedVlans: allowedVlans,
+          enableInfrastructureNat: enableInfrastructureNat,
+          name: name,
+        };
+
+        const updateBareMetalServerNetworkInterfaceResult = vpcService.updateBareMetalServerNetworkInterface(
+          updateBareMetalServerNetworkInterfaceParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(updateBareMetalServerNetworkInterfaceResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{id}',
+          'PATCH'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.allow_ip_spoofing).toEqual(allowIpSpoofing);
+        expect(mockRequestOptions.body.allowed_vlans).toEqual(allowedVlans);
+        expect(mockRequestOptions.body.enable_infrastructure_nat).toEqual(enableInfrastructureNat);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateBareMetalServerNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateBareMetalServerNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateBareMetalServerNetworkInterfaceTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateBareMetalServerNetworkInterfaceParams = {
+          bareMetalServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateBareMetalServerNetworkInterface(
+          updateBareMetalServerNetworkInterfaceParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateBareMetalServerNetworkInterface({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateBareMetalServerNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('listBareMetalServerNetworkInterfaceFloatingIps', () => {
+    describe('positive tests', () => {
+      function __listBareMetalServerNetworkInterfaceFloatingIpsTest() {
+        // Construct the params object for operation listBareMetalServerNetworkInterfaceFloatingIps
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const listBareMetalServerNetworkInterfaceFloatingIpsParams = {
+          bareMetalServerId: bareMetalServerId,
+          networkInterfaceId: networkInterfaceId,
+        };
+
+        const listBareMetalServerNetworkInterfaceFloatingIpsResult = vpcService.listBareMetalServerNetworkInterfaceFloatingIps(
+          listBareMetalServerNetworkInterfaceFloatingIpsParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listBareMetalServerNetworkInterfaceFloatingIpsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/floating_ips',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listBareMetalServerNetworkInterfaceFloatingIpsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listBareMetalServerNetworkInterfaceFloatingIpsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listBareMetalServerNetworkInterfaceFloatingIpsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listBareMetalServerNetworkInterfaceFloatingIpsParams = {
+          bareMetalServerId,
+          networkInterfaceId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listBareMetalServerNetworkInterfaceFloatingIps(
+          listBareMetalServerNetworkInterfaceFloatingIpsParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listBareMetalServerNetworkInterfaceFloatingIps({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listBareMetalServerNetworkInterfaceFloatingIps();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('removeBareMetalServerNetworkInterfaceFloatingIp', () => {
+    describe('positive tests', () => {
+      function __removeBareMetalServerNetworkInterfaceFloatingIpTest() {
+        // Construct the params object for operation removeBareMetalServerNetworkInterfaceFloatingIp
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const id = 'testString';
+        const removeBareMetalServerNetworkInterfaceFloatingIpParams = {
+          bareMetalServerId: bareMetalServerId,
+          networkInterfaceId: networkInterfaceId,
+          id: id,
+        };
+
+        const removeBareMetalServerNetworkInterfaceFloatingIpResult = vpcService.removeBareMetalServerNetworkInterfaceFloatingIp(
+          removeBareMetalServerNetworkInterfaceFloatingIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(removeBareMetalServerNetworkInterfaceFloatingIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
+          'DELETE'
+        );
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeBareMetalServerNetworkInterfaceFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __removeBareMetalServerNetworkInterfaceFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __removeBareMetalServerNetworkInterfaceFloatingIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const removeBareMetalServerNetworkInterfaceFloatingIpParams = {
+          bareMetalServerId,
+          networkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.removeBareMetalServerNetworkInterfaceFloatingIp(
+          removeBareMetalServerNetworkInterfaceFloatingIpParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.removeBareMetalServerNetworkInterfaceFloatingIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.removeBareMetalServerNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getBareMetalServerNetworkInterfaceFloatingIp', () => {
+    describe('positive tests', () => {
+      function __getBareMetalServerNetworkInterfaceFloatingIpTest() {
+        // Construct the params object for operation getBareMetalServerNetworkInterfaceFloatingIp
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const id = 'testString';
+        const getBareMetalServerNetworkInterfaceFloatingIpParams = {
+          bareMetalServerId: bareMetalServerId,
+          networkInterfaceId: networkInterfaceId,
+          id: id,
+        };
+
+        const getBareMetalServerNetworkInterfaceFloatingIpResult = vpcService.getBareMetalServerNetworkInterfaceFloatingIp(
+          getBareMetalServerNetworkInterfaceFloatingIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getBareMetalServerNetworkInterfaceFloatingIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBareMetalServerNetworkInterfaceFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBareMetalServerNetworkInterfaceFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBareMetalServerNetworkInterfaceFloatingIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBareMetalServerNetworkInterfaceFloatingIpParams = {
+          bareMetalServerId,
+          networkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBareMetalServerNetworkInterfaceFloatingIp(
+          getBareMetalServerNetworkInterfaceFloatingIpParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerNetworkInterfaceFloatingIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('addBareMetalServerNetworkInterfaceFloatingIp', () => {
+    describe('positive tests', () => {
+      function __addBareMetalServerNetworkInterfaceFloatingIpTest() {
+        // Construct the params object for operation addBareMetalServerNetworkInterfaceFloatingIp
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const id = 'testString';
+        const addBareMetalServerNetworkInterfaceFloatingIpParams = {
+          bareMetalServerId: bareMetalServerId,
+          networkInterfaceId: networkInterfaceId,
+          id: id,
+        };
+
+        const addBareMetalServerNetworkInterfaceFloatingIpResult = vpcService.addBareMetalServerNetworkInterfaceFloatingIp(
+          addBareMetalServerNetworkInterfaceFloatingIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(addBareMetalServerNetworkInterfaceFloatingIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
+          'PUT'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addBareMetalServerNetworkInterfaceFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __addBareMetalServerNetworkInterfaceFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __addBareMetalServerNetworkInterfaceFloatingIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const addBareMetalServerNetworkInterfaceFloatingIpParams = {
+          bareMetalServerId,
+          networkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.addBareMetalServerNetworkInterfaceFloatingIp(
+          addBareMetalServerNetworkInterfaceFloatingIpParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.addBareMetalServerNetworkInterfaceFloatingIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.addBareMetalServerNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('deleteBareMetalServer', () => {
+    describe('positive tests', () => {
+      function __deleteBareMetalServerTest() {
+        // Construct the params object for operation deleteBareMetalServer
+        const id = 'testString';
+        const deleteBareMetalServerParams = {
+          id: id,
+        };
+
+        const deleteBareMetalServerResult = vpcService.deleteBareMetalServer(
+          deleteBareMetalServerParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteBareMetalServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_servers/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteBareMetalServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteBareMetalServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteBareMetalServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteBareMetalServerParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteBareMetalServer(deleteBareMetalServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteBareMetalServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteBareMetalServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getBareMetalServer', () => {
+    describe('positive tests', () => {
+      function __getBareMetalServerTest() {
+        // Construct the params object for operation getBareMetalServer
+        const id = 'testString';
+        const getBareMetalServerParams = {
+          id: id,
+        };
+
+        const getBareMetalServerResult = vpcService.getBareMetalServer(getBareMetalServerParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getBareMetalServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_servers/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBareMetalServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBareMetalServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBareMetalServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBareMetalServerParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBareMetalServer(getBareMetalServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('updateBareMetalServer', () => {
+    describe('positive tests', () => {
+      function __updateBareMetalServerTest() {
+        // Construct the params object for operation updateBareMetalServer
+        const id = 'testString';
+        const name = 'my-bare-metal-server';
+        const updateBareMetalServerParams = {
+          id: id,
+          name: name,
+        };
+
+        const updateBareMetalServerResult = vpcService.updateBareMetalServer(
+          updateBareMetalServerParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(updateBareMetalServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_servers/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateBareMetalServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateBareMetalServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateBareMetalServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateBareMetalServerParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateBareMetalServer(updateBareMetalServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateBareMetalServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateBareMetalServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getBareMetalServerInitialization', () => {
+    describe('positive tests', () => {
+      function __getBareMetalServerInitializationTest() {
+        // Construct the params object for operation getBareMetalServerInitialization
+        const id = 'testString';
+        const getBareMetalServerInitializationParams = {
+          id: id,
+        };
+
+        const getBareMetalServerInitializationResult = vpcService.getBareMetalServerInitialization(
+          getBareMetalServerInitializationParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getBareMetalServerInitializationResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_servers/{id}/initialization', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBareMetalServerInitializationTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBareMetalServerInitializationTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBareMetalServerInitializationTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBareMetalServerInitializationParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBareMetalServerInitialization(getBareMetalServerInitializationParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerInitialization({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerInitialization();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('restartBareMetalServer', () => {
+    describe('positive tests', () => {
+      function __restartBareMetalServerTest() {
+        // Construct the params object for operation restartBareMetalServer
+        const id = 'testString';
+        const restartBareMetalServerParams = {
+          id: id,
+        };
+
+        const restartBareMetalServerResult = vpcService.restartBareMetalServer(
+          restartBareMetalServerParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(restartBareMetalServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_servers/{id}/restart', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __restartBareMetalServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __restartBareMetalServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __restartBareMetalServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const restartBareMetalServerParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.restartBareMetalServer(restartBareMetalServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.restartBareMetalServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.restartBareMetalServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('startBareMetalServer', () => {
+    describe('positive tests', () => {
+      function __startBareMetalServerTest() {
+        // Construct the params object for operation startBareMetalServer
+        const id = 'testString';
+        const startBareMetalServerParams = {
+          id: id,
+        };
+
+        const startBareMetalServerResult = vpcService.startBareMetalServer(
+          startBareMetalServerParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(startBareMetalServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_servers/{id}/start', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __startBareMetalServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __startBareMetalServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __startBareMetalServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const startBareMetalServerParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.startBareMetalServer(startBareMetalServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.startBareMetalServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.startBareMetalServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('stopBareMetalServer', () => {
+    describe('positive tests', () => {
+      function __stopBareMetalServerTest() {
+        // Construct the params object for operation stopBareMetalServer
+        const id = 'testString';
+        const type = 'hard';
+        const stopBareMetalServerParams = {
+          id: id,
+          type: type,
+        };
+
+        const stopBareMetalServerResult = vpcService.stopBareMetalServer(stopBareMetalServerParams);
+
+        // all methods should return a Promise
+        expectToBePromise(stopBareMetalServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/bare_metal_servers/{id}/stop', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.type).toEqual(type);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __stopBareMetalServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __stopBareMetalServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __stopBareMetalServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const type = 'hard';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const stopBareMetalServerParams = {
+          id,
+          type,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.stopBareMetalServer(stopBareMetalServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.stopBareMetalServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.stopBareMetalServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
   describe('listVolumeProfiles', () => {
     describe('positive tests', () => {
       function __listVolumeProfilesTest() {
         // Construct the params object for operation listVolumeProfiles
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listVolumeProfilesParams = {
           start: start,
           limit: limit,
         };
 
-        const listVolumeProfilesResult = vpcService.listVolumeProfiles(params);
+        const listVolumeProfilesResult = vpcService.listVolumeProfiles(listVolumeProfilesParams);
 
         // all methods should return a Promise
         expectToBePromise(listVolumeProfilesResult);
@@ -12999,14 +15506,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVolumeProfilesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listVolumeProfiles(params);
+        vpcService.listVolumeProfiles(listVolumeProfilesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -13022,11 +15529,11 @@ describe('VpcV1', () => {
       function __getVolumeProfileTest() {
         // Construct the params object for operation getVolumeProfile
         const name = 'testString';
-        const params = {
+        const getVolumeProfileParams = {
           name: name,
         };
 
-        const getVolumeProfileResult = vpcService.getVolumeProfile(params);
+        const getVolumeProfileResult = vpcService.getVolumeProfile(getVolumeProfileParams);
 
         // all methods should return a Promise
         expectToBePromise(getVolumeProfileResult);
@@ -13065,7 +15572,7 @@ describe('VpcV1', () => {
         const name = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVolumeProfileParams = {
           name,
           headers: {
             Accept: userAccept,
@@ -13073,7 +15580,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVolumeProfile(params);
+        vpcService.getVolumeProfile(getVolumeProfileParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -13110,14 +15617,14 @@ describe('VpcV1', () => {
         const limit = 1;
         const name = 'testString';
         const zoneName = 'testString';
-        const params = {
+        const listVolumesParams = {
           start: start,
           limit: limit,
           name: name,
           zoneName: zoneName,
         };
 
-        const listVolumesResult = vpcService.listVolumes(params);
+        const listVolumesResult = vpcService.listVolumes(listVolumesParams);
 
         // all methods should return a Promise
         expectToBePromise(listVolumesResult);
@@ -13158,14 +15665,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVolumesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listVolumes(params);
+        vpcService.listVolumes(listVolumesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -13215,11 +15722,11 @@ describe('VpcV1', () => {
       function __createVolumeTest() {
         // Construct the params object for operation createVolume
         const volumePrototype = volumePrototypeModel;
-        const params = {
+        const createVolumeParams = {
           volumePrototype: volumePrototype,
         };
 
-        const createVolumeResult = vpcService.createVolume(params);
+        const createVolumeResult = vpcService.createVolume(createVolumeParams);
 
         // all methods should return a Promise
         expectToBePromise(createVolumeResult);
@@ -13258,7 +15765,7 @@ describe('VpcV1', () => {
         const volumePrototype = volumePrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createVolumeParams = {
           volumePrototype,
           headers: {
             Accept: userAccept,
@@ -13266,7 +15773,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createVolume(params);
+        vpcService.createVolume(createVolumeParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -13300,11 +15807,11 @@ describe('VpcV1', () => {
       function __deleteVolumeTest() {
         // Construct the params object for operation deleteVolume
         const id = 'testString';
-        const params = {
+        const deleteVolumeParams = {
           id: id,
         };
 
-        const deleteVolumeResult = vpcService.deleteVolume(params);
+        const deleteVolumeResult = vpcService.deleteVolume(deleteVolumeParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteVolumeResult);
@@ -13343,7 +15850,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteVolumeParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -13351,7 +15858,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteVolume(params);
+        vpcService.deleteVolume(deleteVolumeParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -13385,11 +15892,11 @@ describe('VpcV1', () => {
       function __getVolumeTest() {
         // Construct the params object for operation getVolume
         const id = 'testString';
-        const params = {
+        const getVolumeParams = {
           id: id,
         };
 
-        const getVolumeResult = vpcService.getVolume(params);
+        const getVolumeResult = vpcService.getVolume(getVolumeParams);
 
         // all methods should return a Promise
         expectToBePromise(getVolumeResult);
@@ -13428,7 +15935,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVolumeParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -13436,7 +15943,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVolume(params);
+        vpcService.getVolume(getVolumeParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -13481,7 +15988,7 @@ describe('VpcV1', () => {
         const iops = 10000;
         const name = 'my-volume';
         const profile = volumeProfileIdentityModel;
-        const params = {
+        const updateVolumeParams = {
           id: id,
           capacity: capacity,
           iops: iops,
@@ -13489,7 +15996,7 @@ describe('VpcV1', () => {
           profile: profile,
         };
 
-        const updateVolumeResult = vpcService.updateVolume(params);
+        const updateVolumeResult = vpcService.updateVolume(updateVolumeParams);
 
         // all methods should return a Promise
         expectToBePromise(updateVolumeResult);
@@ -13532,7 +16039,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateVolumeParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -13540,7 +16047,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateVolume(params);
+        vpcService.updateVolume(updateVolumeParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -13574,11 +16081,11 @@ describe('VpcV1', () => {
       function __deleteSnapshotsTest() {
         // Construct the params object for operation deleteSnapshots
         const sourceVolumeId = 'testString';
-        const params = {
+        const deleteSnapshotsParams = {
           sourceVolumeId: sourceVolumeId,
         };
 
-        const deleteSnapshotsResult = vpcService.deleteSnapshots(params);
+        const deleteSnapshotsResult = vpcService.deleteSnapshots(deleteSnapshotsParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteSnapshotsResult);
@@ -13617,7 +16124,7 @@ describe('VpcV1', () => {
         const sourceVolumeId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteSnapshotsParams = {
           sourceVolumeId,
           headers: {
             Accept: userAccept,
@@ -13625,7 +16132,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteSnapshots(params);
+        vpcService.deleteSnapshots(deleteSnapshotsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -13667,7 +16174,7 @@ describe('VpcV1', () => {
         const sourceImageId = 'testString';
         const sourceImageCrn = 'testString';
         const sort = 'name';
-        const params = {
+        const listSnapshotsParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
@@ -13679,7 +16186,7 @@ describe('VpcV1', () => {
           sort: sort,
         };
 
-        const listSnapshotsResult = vpcService.listSnapshots(params);
+        const listSnapshotsResult = vpcService.listSnapshots(listSnapshotsParams);
 
         // all methods should return a Promise
         expectToBePromise(listSnapshotsResult);
@@ -13725,14 +16232,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listSnapshotsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listSnapshots(params);
+        vpcService.listSnapshots(listSnapshotsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -13762,13 +16269,13 @@ describe('VpcV1', () => {
         const sourceVolume = volumeIdentityModel;
         const name = 'my-snapshot';
         const resourceGroup = resourceGroupIdentityModel;
-        const params = {
+        const createSnapshotParams = {
           sourceVolume: sourceVolume,
           name: name,
           resourceGroup: resourceGroup,
         };
 
-        const createSnapshotResult = vpcService.createSnapshot(params);
+        const createSnapshotResult = vpcService.createSnapshot(createSnapshotParams);
 
         // all methods should return a Promise
         expectToBePromise(createSnapshotResult);
@@ -13809,7 +16316,7 @@ describe('VpcV1', () => {
         const sourceVolume = volumeIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createSnapshotParams = {
           sourceVolume,
           headers: {
             Accept: userAccept,
@@ -13817,7 +16324,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createSnapshot(params);
+        vpcService.createSnapshot(createSnapshotParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -13851,11 +16358,11 @@ describe('VpcV1', () => {
       function __deleteSnapshotTest() {
         // Construct the params object for operation deleteSnapshot
         const id = 'testString';
-        const params = {
+        const deleteSnapshotParams = {
           id: id,
         };
 
-        const deleteSnapshotResult = vpcService.deleteSnapshot(params);
+        const deleteSnapshotResult = vpcService.deleteSnapshot(deleteSnapshotParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteSnapshotResult);
@@ -13894,7 +16401,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteSnapshotParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -13902,7 +16409,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteSnapshot(params);
+        vpcService.deleteSnapshot(deleteSnapshotParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -13936,11 +16443,11 @@ describe('VpcV1', () => {
       function __getSnapshotTest() {
         // Construct the params object for operation getSnapshot
         const id = 'testString';
-        const params = {
+        const getSnapshotParams = {
           id: id,
         };
 
-        const getSnapshotResult = vpcService.getSnapshot(params);
+        const getSnapshotResult = vpcService.getSnapshot(getSnapshotParams);
 
         // all methods should return a Promise
         expectToBePromise(getSnapshotResult);
@@ -13979,7 +16486,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSnapshotParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -13987,7 +16494,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getSnapshot(params);
+        vpcService.getSnapshot(getSnapshotParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -14022,12 +16529,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateSnapshot
         const id = 'testString';
         const name = 'my-snapshot';
-        const params = {
+        const updateSnapshotParams = {
           id: id,
           name: name,
         };
 
-        const updateSnapshotResult = vpcService.updateSnapshot(params);
+        const updateSnapshotResult = vpcService.updateSnapshot(updateSnapshotParams);
 
         // all methods should return a Promise
         expectToBePromise(updateSnapshotResult);
@@ -14067,7 +16574,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateSnapshotParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -14075,7 +16582,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateSnapshot(params);
+        vpcService.updateSnapshot(updateSnapshotParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -14108,9 +16615,9 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       function __listRegionsTest() {
         // Construct the params object for operation listRegions
-        const params = {};
+        const listRegionsParams = {};
 
-        const listRegionsResult = vpcService.listRegions(params);
+        const listRegionsResult = vpcService.listRegions(listRegionsParams);
 
         // all methods should return a Promise
         expectToBePromise(listRegionsResult);
@@ -14147,14 +16654,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listRegionsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listRegions(params);
+        vpcService.listRegions(listRegionsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -14170,11 +16677,11 @@ describe('VpcV1', () => {
       function __getRegionTest() {
         // Construct the params object for operation getRegion
         const name = 'testString';
-        const params = {
+        const getRegionParams = {
           name: name,
         };
 
-        const getRegionResult = vpcService.getRegion(params);
+        const getRegionResult = vpcService.getRegion(getRegionParams);
 
         // all methods should return a Promise
         expectToBePromise(getRegionResult);
@@ -14213,7 +16720,7 @@ describe('VpcV1', () => {
         const name = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getRegionParams = {
           name,
           headers: {
             Accept: userAccept,
@@ -14221,7 +16728,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getRegion(params);
+        vpcService.getRegion(getRegionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -14255,11 +16762,11 @@ describe('VpcV1', () => {
       function __listRegionZonesTest() {
         // Construct the params object for operation listRegionZones
         const regionName = 'testString';
-        const params = {
+        const listRegionZonesParams = {
           regionName: regionName,
         };
 
-        const listRegionZonesResult = vpcService.listRegionZones(params);
+        const listRegionZonesResult = vpcService.listRegionZones(listRegionZonesParams);
 
         // all methods should return a Promise
         expectToBePromise(listRegionZonesResult);
@@ -14298,7 +16805,7 @@ describe('VpcV1', () => {
         const regionName = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listRegionZonesParams = {
           regionName,
           headers: {
             Accept: userAccept,
@@ -14306,7 +16813,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listRegionZones(params);
+        vpcService.listRegionZones(listRegionZonesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -14341,12 +16848,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation getRegionZone
         const regionName = 'testString';
         const name = 'testString';
-        const params = {
+        const getRegionZoneParams = {
           regionName: regionName,
           name: name,
         };
 
-        const getRegionZoneResult = vpcService.getRegionZone(params);
+        const getRegionZoneResult = vpcService.getRegionZone(getRegionZoneParams);
 
         // all methods should return a Promise
         expectToBePromise(getRegionZoneResult);
@@ -14387,7 +16894,7 @@ describe('VpcV1', () => {
         const name = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getRegionZoneParams = {
           regionName,
           name,
           headers: {
@@ -14396,7 +16903,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getRegionZone(params);
+        vpcService.getRegionZone(getRegionZoneParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -14432,13 +16939,13 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const resourceGroupId = 'testString';
-        const params = {
+        const listPublicGatewaysParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
         };
 
-        const listPublicGatewaysResult = vpcService.listPublicGateways(params);
+        const listPublicGatewaysResult = vpcService.listPublicGateways(listPublicGatewaysParams);
 
         // all methods should return a Promise
         expectToBePromise(listPublicGatewaysResult);
@@ -14478,14 +16985,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listPublicGatewaysParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listPublicGateways(params);
+        vpcService.listPublicGateways(listPublicGatewaysParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -14527,7 +17034,7 @@ describe('VpcV1', () => {
         const floatingIp = publicGatewayFloatingIpPrototypeModel;
         const name = 'my-public-gateway';
         const resourceGroup = resourceGroupIdentityModel;
-        const params = {
+        const createPublicGatewayParams = {
           vpc: vpc,
           zone: zone,
           floatingIp: floatingIp,
@@ -14535,7 +17042,7 @@ describe('VpcV1', () => {
           resourceGroup: resourceGroup,
         };
 
-        const createPublicGatewayResult = vpcService.createPublicGateway(params);
+        const createPublicGatewayResult = vpcService.createPublicGateway(createPublicGatewayParams);
 
         // all methods should return a Promise
         expectToBePromise(createPublicGatewayResult);
@@ -14579,7 +17086,7 @@ describe('VpcV1', () => {
         const zone = zoneIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createPublicGatewayParams = {
           vpc,
           zone,
           headers: {
@@ -14588,7 +17095,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createPublicGateway(params);
+        vpcService.createPublicGateway(createPublicGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -14622,11 +17129,11 @@ describe('VpcV1', () => {
       function __deletePublicGatewayTest() {
         // Construct the params object for operation deletePublicGateway
         const id = 'testString';
-        const params = {
+        const deletePublicGatewayParams = {
           id: id,
         };
 
-        const deletePublicGatewayResult = vpcService.deletePublicGateway(params);
+        const deletePublicGatewayResult = vpcService.deletePublicGateway(deletePublicGatewayParams);
 
         // all methods should return a Promise
         expectToBePromise(deletePublicGatewayResult);
@@ -14665,7 +17172,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deletePublicGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -14673,7 +17180,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deletePublicGateway(params);
+        vpcService.deletePublicGateway(deletePublicGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -14707,11 +17214,11 @@ describe('VpcV1', () => {
       function __getPublicGatewayTest() {
         // Construct the params object for operation getPublicGateway
         const id = 'testString';
-        const params = {
+        const getPublicGatewayParams = {
           id: id,
         };
 
-        const getPublicGatewayResult = vpcService.getPublicGateway(params);
+        const getPublicGatewayResult = vpcService.getPublicGateway(getPublicGatewayParams);
 
         // all methods should return a Promise
         expectToBePromise(getPublicGatewayResult);
@@ -14750,7 +17257,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getPublicGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -14758,7 +17265,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getPublicGateway(params);
+        vpcService.getPublicGateway(getPublicGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -14793,12 +17300,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation updatePublicGateway
         const id = 'testString';
         const name = 'my-public-gateway';
-        const params = {
+        const updatePublicGatewayParams = {
           id: id,
           name: name,
         };
 
-        const updatePublicGatewayResult = vpcService.updatePublicGateway(params);
+        const updatePublicGatewayResult = vpcService.updatePublicGateway(updatePublicGatewayParams);
 
         // all methods should return a Promise
         expectToBePromise(updatePublicGatewayResult);
@@ -14838,7 +17345,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updatePublicGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -14846,7 +17353,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updatePublicGateway(params);
+        vpcService.updatePublicGateway(updatePublicGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -14882,13 +17389,13 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const resourceGroupId = 'testString';
-        const params = {
+        const listFloatingIpsParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
         };
 
-        const listFloatingIpsResult = vpcService.listFloatingIps(params);
+        const listFloatingIpsResult = vpcService.listFloatingIps(listFloatingIpsParams);
 
         // all methods should return a Promise
         expectToBePromise(listFloatingIpsResult);
@@ -14928,14 +17435,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listFloatingIpsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listFloatingIps(params);
+        vpcService.listFloatingIps(listFloatingIpsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -14970,11 +17477,11 @@ describe('VpcV1', () => {
       function __createFloatingIpTest() {
         // Construct the params object for operation createFloatingIp
         const floatingIpPrototype = floatingIpPrototypeModel;
-        const params = {
+        const createFloatingIpParams = {
           floatingIpPrototype: floatingIpPrototype,
         };
 
-        const createFloatingIpResult = vpcService.createFloatingIp(params);
+        const createFloatingIpResult = vpcService.createFloatingIp(createFloatingIpParams);
 
         // all methods should return a Promise
         expectToBePromise(createFloatingIpResult);
@@ -15013,7 +17520,7 @@ describe('VpcV1', () => {
         const floatingIpPrototype = floatingIpPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createFloatingIpParams = {
           floatingIpPrototype,
           headers: {
             Accept: userAccept,
@@ -15021,7 +17528,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createFloatingIp(params);
+        vpcService.createFloatingIp(createFloatingIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -15055,11 +17562,11 @@ describe('VpcV1', () => {
       function __deleteFloatingIpTest() {
         // Construct the params object for operation deleteFloatingIp
         const id = 'testString';
-        const params = {
+        const deleteFloatingIpParams = {
           id: id,
         };
 
-        const deleteFloatingIpResult = vpcService.deleteFloatingIp(params);
+        const deleteFloatingIpResult = vpcService.deleteFloatingIp(deleteFloatingIpParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteFloatingIpResult);
@@ -15098,7 +17605,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteFloatingIpParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -15106,7 +17613,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteFloatingIp(params);
+        vpcService.deleteFloatingIp(deleteFloatingIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -15140,11 +17647,11 @@ describe('VpcV1', () => {
       function __getFloatingIpTest() {
         // Construct the params object for operation getFloatingIp
         const id = 'testString';
-        const params = {
+        const getFloatingIpParams = {
           id: id,
         };
 
-        const getFloatingIpResult = vpcService.getFloatingIp(params);
+        const getFloatingIpResult = vpcService.getFloatingIp(getFloatingIpParams);
 
         // all methods should return a Promise
         expectToBePromise(getFloatingIpResult);
@@ -15183,7 +17690,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getFloatingIpParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -15191,7 +17698,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getFloatingIp(params);
+        vpcService.getFloatingIp(getFloatingIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -15224,23 +17731,23 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // FloatingIPPatchTargetNetworkInterfaceIdentityNetworkInterfaceIdentityById
-      const floatingIpPatchTargetNetworkInterfaceIdentityModel = {
-        id: '69e55145-cc7d-4d8e-9e1f-cc3fb60b1793',
+      // FloatingIPTargetPatchNetworkInterfaceIdentityById
+      const floatingIpTargetPatchModel = {
+        id: '10c02d81-0ecb-4dc5-897d-28392913b81e',
       };
 
       function __updateFloatingIpTest() {
         // Construct the params object for operation updateFloatingIp
         const id = 'testString';
         const name = 'my-floating-ip';
-        const target = floatingIpPatchTargetNetworkInterfaceIdentityModel;
-        const params = {
+        const target = floatingIpTargetPatchModel;
+        const updateFloatingIpParams = {
           id: id,
           name: name,
           target: target,
         };
 
-        const updateFloatingIpResult = vpcService.updateFloatingIp(params);
+        const updateFloatingIpResult = vpcService.updateFloatingIp(updateFloatingIpParams);
 
         // all methods should return a Promise
         expectToBePromise(updateFloatingIpResult);
@@ -15281,7 +17788,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateFloatingIpParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -15289,7 +17796,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateFloatingIp(params);
+        vpcService.updateFloatingIp(updateFloatingIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -15325,13 +17832,13 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const resourceGroupId = 'testString';
-        const params = {
+        const listNetworkAclsParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
         };
 
-        const listNetworkAclsResult = vpcService.listNetworkAcls(params);
+        const listNetworkAclsResult = vpcService.listNetworkAcls(listNetworkAclsParams);
 
         // all methods should return a Promise
         expectToBePromise(listNetworkAclsResult);
@@ -15371,14 +17878,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listNetworkAclsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listNetworkAcls(params);
+        vpcService.listNetworkAcls(listNetworkAclsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -15403,14 +17910,18 @@ describe('VpcV1', () => {
         id: 'f0aae929-7047-46d1-92e1-9102b07a7f6f',
       };
 
-      // NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAll
+      // NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDP
       const networkAclRulePrototypeNetworkAclContextModel = {
         action: 'allow',
         destination: '192.168.3.2/32',
         direction: 'inbound',
         name: 'my-rule-2',
         source: '192.168.3.2/32',
-        protocol: 'all',
+        destination_port_max: 22,
+        destination_port_min: 22,
+        protocol: 'udp',
+        source_port_max: 65535,
+        source_port_min: 49152,
       };
 
       // NetworkACLPrototypeNetworkACLByRules
@@ -15424,11 +17935,11 @@ describe('VpcV1', () => {
       function __createNetworkAclTest() {
         // Construct the params object for operation createNetworkAcl
         const networkAclPrototype = networkAclPrototypeModel;
-        const params = {
+        const createNetworkAclParams = {
           networkAclPrototype: networkAclPrototype,
         };
 
-        const createNetworkAclResult = vpcService.createNetworkAcl(params);
+        const createNetworkAclResult = vpcService.createNetworkAcl(createNetworkAclParams);
 
         // all methods should return a Promise
         expectToBePromise(createNetworkAclResult);
@@ -15466,14 +17977,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createNetworkAclParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.createNetworkAcl(params);
+        vpcService.createNetworkAcl(createNetworkAclParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -15489,11 +18000,11 @@ describe('VpcV1', () => {
       function __deleteNetworkAclTest() {
         // Construct the params object for operation deleteNetworkAcl
         const id = 'testString';
-        const params = {
+        const deleteNetworkAclParams = {
           id: id,
         };
 
-        const deleteNetworkAclResult = vpcService.deleteNetworkAcl(params);
+        const deleteNetworkAclResult = vpcService.deleteNetworkAcl(deleteNetworkAclParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteNetworkAclResult);
@@ -15532,7 +18043,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteNetworkAclParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -15540,7 +18051,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteNetworkAcl(params);
+        vpcService.deleteNetworkAcl(deleteNetworkAclParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -15574,11 +18085,11 @@ describe('VpcV1', () => {
       function __getNetworkAclTest() {
         // Construct the params object for operation getNetworkAcl
         const id = 'testString';
-        const params = {
+        const getNetworkAclParams = {
           id: id,
         };
 
-        const getNetworkAclResult = vpcService.getNetworkAcl(params);
+        const getNetworkAclResult = vpcService.getNetworkAcl(getNetworkAclParams);
 
         // all methods should return a Promise
         expectToBePromise(getNetworkAclResult);
@@ -15617,7 +18128,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getNetworkAclParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -15625,7 +18136,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getNetworkAcl(params);
+        vpcService.getNetworkAcl(getNetworkAclParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -15660,12 +18171,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateNetworkAcl
         const id = 'testString';
         const name = 'my-network-acl';
-        const params = {
+        const updateNetworkAclParams = {
           id: id,
           name: name,
         };
 
-        const updateNetworkAclResult = vpcService.updateNetworkAcl(params);
+        const updateNetworkAclResult = vpcService.updateNetworkAcl(updateNetworkAclParams);
 
         // all methods should return a Promise
         expectToBePromise(updateNetworkAclResult);
@@ -15705,7 +18216,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateNetworkAclParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -15713,7 +18224,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateNetworkAcl(params);
+        vpcService.updateNetworkAcl(updateNetworkAclParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -15750,14 +18261,14 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const direction = 'inbound';
-        const params = {
+        const listNetworkAclRulesParams = {
           networkAclId: networkAclId,
           start: start,
           limit: limit,
           direction: direction,
         };
 
-        const listNetworkAclRulesResult = vpcService.listNetworkAclRules(params);
+        const listNetworkAclRulesResult = vpcService.listNetworkAclRules(listNetworkAclRulesParams);
 
         // all methods should return a Promise
         expectToBePromise(listNetworkAclRulesResult);
@@ -15799,7 +18310,7 @@ describe('VpcV1', () => {
         const networkAclId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listNetworkAclRulesParams = {
           networkAclId,
           headers: {
             Accept: userAccept,
@@ -15807,7 +18318,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listNetworkAclRules(params);
+        vpcService.listNetworkAclRules(listNetworkAclRulesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -15862,12 +18373,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation createNetworkAclRule
         const networkAclId = 'testString';
         const networkAclRulePrototype = networkAclRulePrototypeModel;
-        const params = {
+        const createNetworkAclRuleParams = {
           networkAclId: networkAclId,
           networkAclRulePrototype: networkAclRulePrototype,
         };
 
-        const createNetworkAclRuleResult = vpcService.createNetworkAclRule(params);
+        const createNetworkAclRuleResult = vpcService.createNetworkAclRule(
+          createNetworkAclRuleParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createNetworkAclRuleResult);
@@ -15908,7 +18421,7 @@ describe('VpcV1', () => {
         const networkAclRulePrototype = networkAclRulePrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createNetworkAclRuleParams = {
           networkAclId,
           networkAclRulePrototype,
           headers: {
@@ -15917,7 +18430,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createNetworkAclRule(params);
+        vpcService.createNetworkAclRule(createNetworkAclRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -15952,12 +18465,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteNetworkAclRule
         const networkAclId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteNetworkAclRuleParams = {
           networkAclId: networkAclId,
           id: id,
         };
 
-        const deleteNetworkAclRuleResult = vpcService.deleteNetworkAclRule(params);
+        const deleteNetworkAclRuleResult = vpcService.deleteNetworkAclRule(
+          deleteNetworkAclRuleParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteNetworkAclRuleResult);
@@ -16002,7 +18517,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteNetworkAclRuleParams = {
           networkAclId,
           id,
           headers: {
@@ -16011,7 +18526,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteNetworkAclRule(params);
+        vpcService.deleteNetworkAclRule(deleteNetworkAclRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -16046,12 +18561,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation getNetworkAclRule
         const networkAclId = 'testString';
         const id = 'testString';
-        const params = {
+        const getNetworkAclRuleParams = {
           networkAclId: networkAclId,
           id: id,
         };
 
-        const getNetworkAclRuleResult = vpcService.getNetworkAclRule(params);
+        const getNetworkAclRuleResult = vpcService.getNetworkAclRule(getNetworkAclRuleParams);
 
         // all methods should return a Promise
         expectToBePromise(getNetworkAclRuleResult);
@@ -16092,7 +18607,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getNetworkAclRuleParams = {
           networkAclId,
           id,
           headers: {
@@ -16101,7 +18616,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getNetworkAclRule(params);
+        vpcService.getNetworkAclRule(getNetworkAclRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -16155,7 +18670,7 @@ describe('VpcV1', () => {
         const sourcePortMax = 65535;
         const sourcePortMin = 49152;
         const type = 8;
-        const params = {
+        const updateNetworkAclRuleParams = {
           networkAclId: networkAclId,
           id: id,
           action: action,
@@ -16172,7 +18687,9 @@ describe('VpcV1', () => {
           type: type,
         };
 
-        const updateNetworkAclRuleResult = vpcService.updateNetworkAclRule(params);
+        const updateNetworkAclRuleResult = vpcService.updateNetworkAclRule(
+          updateNetworkAclRuleParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateNetworkAclRuleResult);
@@ -16225,7 +18742,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateNetworkAclRuleParams = {
           networkAclId,
           id,
           headers: {
@@ -16234,7 +18751,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateNetworkAclRule(params);
+        vpcService.updateNetworkAclRule(updateNetworkAclRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -16273,7 +18790,7 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const vpcCrn = 'testString';
         const vpcName = 'testString';
-        const params = {
+        const listSecurityGroupsParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
@@ -16282,7 +18799,7 @@ describe('VpcV1', () => {
           vpcName: vpcName,
         };
 
-        const listSecurityGroupsResult = vpcService.listSecurityGroups(params);
+        const listSecurityGroupsResult = vpcService.listSecurityGroups(listSecurityGroupsParams);
 
         // all methods should return a Promise
         expectToBePromise(listSecurityGroupsResult);
@@ -16325,14 +18842,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listSecurityGroupsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listSecurityGroups(params);
+        vpcService.listSecurityGroups(listSecurityGroupsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -16378,14 +18895,14 @@ describe('VpcV1', () => {
         const name = 'my-security-group';
         const resourceGroup = resourceGroupIdentityModel;
         const rules = [securityGroupRulePrototypeModel];
-        const params = {
+        const createSecurityGroupParams = {
           vpc: vpc,
           name: name,
           resourceGroup: resourceGroup,
           rules: rules,
         };
 
-        const createSecurityGroupResult = vpcService.createSecurityGroup(params);
+        const createSecurityGroupResult = vpcService.createSecurityGroup(createSecurityGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(createSecurityGroupResult);
@@ -16427,7 +18944,7 @@ describe('VpcV1', () => {
         const vpc = vpcIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createSecurityGroupParams = {
           vpc,
           headers: {
             Accept: userAccept,
@@ -16435,7 +18952,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createSecurityGroup(params);
+        vpcService.createSecurityGroup(createSecurityGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -16469,11 +18986,11 @@ describe('VpcV1', () => {
       function __deleteSecurityGroupTest() {
         // Construct the params object for operation deleteSecurityGroup
         const id = 'testString';
-        const params = {
+        const deleteSecurityGroupParams = {
           id: id,
         };
 
-        const deleteSecurityGroupResult = vpcService.deleteSecurityGroup(params);
+        const deleteSecurityGroupResult = vpcService.deleteSecurityGroup(deleteSecurityGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteSecurityGroupResult);
@@ -16512,7 +19029,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteSecurityGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -16520,7 +19037,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteSecurityGroup(params);
+        vpcService.deleteSecurityGroup(deleteSecurityGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -16554,11 +19071,11 @@ describe('VpcV1', () => {
       function __getSecurityGroupTest() {
         // Construct the params object for operation getSecurityGroup
         const id = 'testString';
-        const params = {
+        const getSecurityGroupParams = {
           id: id,
         };
 
-        const getSecurityGroupResult = vpcService.getSecurityGroup(params);
+        const getSecurityGroupResult = vpcService.getSecurityGroup(getSecurityGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(getSecurityGroupResult);
@@ -16597,7 +19114,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSecurityGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -16605,7 +19122,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getSecurityGroup(params);
+        vpcService.getSecurityGroup(getSecurityGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -16640,12 +19157,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateSecurityGroup
         const id = 'testString';
         const name = 'my-security-group';
-        const params = {
+        const updateSecurityGroupParams = {
           id: id,
           name: name,
         };
 
-        const updateSecurityGroupResult = vpcService.updateSecurityGroup(params);
+        const updateSecurityGroupResult = vpcService.updateSecurityGroup(updateSecurityGroupParams);
 
         // all methods should return a Promise
         expectToBePromise(updateSecurityGroupResult);
@@ -16685,7 +19202,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateSecurityGroupParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -16693,7 +19210,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateSecurityGroup(params);
+        vpcService.updateSecurityGroup(updateSecurityGroupParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -16729,14 +19246,14 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listSecurityGroupNetworkInterfacesParams = {
           securityGroupId: securityGroupId,
           start: start,
           limit: limit,
         };
 
         const listSecurityGroupNetworkInterfacesResult = vpcService.listSecurityGroupNetworkInterfaces(
-          params
+          listSecurityGroupNetworkInterfacesParams
         );
 
         // all methods should return a Promise
@@ -16782,7 +19299,7 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listSecurityGroupNetworkInterfacesParams = {
           securityGroupId,
           headers: {
             Accept: userAccept,
@@ -16790,7 +19307,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listSecurityGroupNetworkInterfaces(params);
+        vpcService.listSecurityGroupNetworkInterfaces(listSecurityGroupNetworkInterfacesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -16825,13 +19342,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation removeSecurityGroupNetworkInterface
         const securityGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const removeSecurityGroupNetworkInterfaceParams = {
           securityGroupId: securityGroupId,
           id: id,
         };
 
         const removeSecurityGroupNetworkInterfaceResult = vpcService.removeSecurityGroupNetworkInterface(
-          params
+          removeSecurityGroupNetworkInterfaceParams
         );
 
         // all methods should return a Promise
@@ -16877,7 +19394,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeSecurityGroupNetworkInterfaceParams = {
           securityGroupId,
           id,
           headers: {
@@ -16886,7 +19403,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.removeSecurityGroupNetworkInterface(params);
+        vpcService.removeSecurityGroupNetworkInterface(removeSecurityGroupNetworkInterfaceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -16921,13 +19438,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation getSecurityGroupNetworkInterface
         const securityGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const getSecurityGroupNetworkInterfaceParams = {
           securityGroupId: securityGroupId,
           id: id,
         };
 
         const getSecurityGroupNetworkInterfaceResult = vpcService.getSecurityGroupNetworkInterface(
-          params
+          getSecurityGroupNetworkInterfaceParams
         );
 
         // all methods should return a Promise
@@ -16973,7 +19490,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSecurityGroupNetworkInterfaceParams = {
           securityGroupId,
           id,
           headers: {
@@ -16982,7 +19499,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getSecurityGroupNetworkInterface(params);
+        vpcService.getSecurityGroupNetworkInterface(getSecurityGroupNetworkInterfaceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17017,13 +19534,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation addSecurityGroupNetworkInterface
         const securityGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const addSecurityGroupNetworkInterfaceParams = {
           securityGroupId: securityGroupId,
           id: id,
         };
 
         const addSecurityGroupNetworkInterfaceResult = vpcService.addSecurityGroupNetworkInterface(
-          params
+          addSecurityGroupNetworkInterfaceParams
         );
 
         // all methods should return a Promise
@@ -17069,7 +19586,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addSecurityGroupNetworkInterfaceParams = {
           securityGroupId,
           id,
           headers: {
@@ -17078,7 +19595,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.addSecurityGroupNetworkInterface(params);
+        vpcService.addSecurityGroupNetworkInterface(addSecurityGroupNetworkInterfaceParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17112,11 +19629,13 @@ describe('VpcV1', () => {
       function __listSecurityGroupRulesTest() {
         // Construct the params object for operation listSecurityGroupRules
         const securityGroupId = 'testString';
-        const params = {
+        const listSecurityGroupRulesParams = {
           securityGroupId: securityGroupId,
         };
 
-        const listSecurityGroupRulesResult = vpcService.listSecurityGroupRules(params);
+        const listSecurityGroupRulesResult = vpcService.listSecurityGroupRules(
+          listSecurityGroupRulesParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listSecurityGroupRulesResult);
@@ -17155,7 +19674,7 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listSecurityGroupRulesParams = {
           securityGroupId,
           headers: {
             Accept: userAccept,
@@ -17163,7 +19682,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listSecurityGroupRules(params);
+        vpcService.listSecurityGroupRules(listSecurityGroupRulesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17215,12 +19734,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation createSecurityGroupRule
         const securityGroupId = 'testString';
         const securityGroupRulePrototype = securityGroupRulePrototypeModel;
-        const params = {
+        const createSecurityGroupRuleParams = {
           securityGroupId: securityGroupId,
           securityGroupRulePrototype: securityGroupRulePrototype,
         };
 
-        const createSecurityGroupRuleResult = vpcService.createSecurityGroupRule(params);
+        const createSecurityGroupRuleResult = vpcService.createSecurityGroupRule(
+          createSecurityGroupRuleParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createSecurityGroupRuleResult);
@@ -17261,7 +19782,7 @@ describe('VpcV1', () => {
         const securityGroupRulePrototype = securityGroupRulePrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createSecurityGroupRuleParams = {
           securityGroupId,
           securityGroupRulePrototype,
           headers: {
@@ -17270,7 +19791,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createSecurityGroupRule(params);
+        vpcService.createSecurityGroupRule(createSecurityGroupRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17305,12 +19826,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteSecurityGroupRule
         const securityGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteSecurityGroupRuleParams = {
           securityGroupId: securityGroupId,
           id: id,
         };
 
-        const deleteSecurityGroupRuleResult = vpcService.deleteSecurityGroupRule(params);
+        const deleteSecurityGroupRuleResult = vpcService.deleteSecurityGroupRule(
+          deleteSecurityGroupRuleParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteSecurityGroupRuleResult);
@@ -17355,7 +19878,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteSecurityGroupRuleParams = {
           securityGroupId,
           id,
           headers: {
@@ -17364,7 +19887,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteSecurityGroupRule(params);
+        vpcService.deleteSecurityGroupRule(deleteSecurityGroupRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17399,12 +19922,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation getSecurityGroupRule
         const securityGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const getSecurityGroupRuleParams = {
           securityGroupId: securityGroupId,
           id: id,
         };
 
-        const getSecurityGroupRuleResult = vpcService.getSecurityGroupRule(params);
+        const getSecurityGroupRuleResult = vpcService.getSecurityGroupRule(
+          getSecurityGroupRuleParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getSecurityGroupRuleResult);
@@ -17449,7 +19974,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSecurityGroupRuleParams = {
           securityGroupId,
           id,
           headers: {
@@ -17458,7 +19983,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getSecurityGroupRule(params);
+        vpcService.getSecurityGroupRule(getSecurityGroupRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17507,7 +20032,7 @@ describe('VpcV1', () => {
         const portMin = 22;
         const remote = securityGroupRuleRemotePatchModel;
         const type = 8;
-        const params = {
+        const updateSecurityGroupRuleParams = {
           securityGroupId: securityGroupId,
           id: id,
           code: code,
@@ -17519,7 +20044,9 @@ describe('VpcV1', () => {
           type: type,
         };
 
-        const updateSecurityGroupRuleResult = vpcService.updateSecurityGroupRule(params);
+        const updateSecurityGroupRuleResult = vpcService.updateSecurityGroupRule(
+          updateSecurityGroupRuleParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateSecurityGroupRuleResult);
@@ -17571,7 +20098,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateSecurityGroupRuleParams = {
           securityGroupId,
           id,
           headers: {
@@ -17580,7 +20107,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateSecurityGroupRule(params);
+        vpcService.updateSecurityGroupRule(updateSecurityGroupRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17616,13 +20143,15 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listSecurityGroupTargetsParams = {
           securityGroupId: securityGroupId,
           start: start,
           limit: limit,
         };
 
-        const listSecurityGroupTargetsResult = vpcService.listSecurityGroupTargets(params);
+        const listSecurityGroupTargetsResult = vpcService.listSecurityGroupTargets(
+          listSecurityGroupTargetsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listSecurityGroupTargetsResult);
@@ -17667,7 +20196,7 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listSecurityGroupTargetsParams = {
           securityGroupId,
           headers: {
             Accept: userAccept,
@@ -17675,7 +20204,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listSecurityGroupTargets(params);
+        vpcService.listSecurityGroupTargets(listSecurityGroupTargetsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17710,13 +20239,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteSecurityGroupTargetBinding
         const securityGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteSecurityGroupTargetBindingParams = {
           securityGroupId: securityGroupId,
           id: id,
         };
 
         const deleteSecurityGroupTargetBindingResult = vpcService.deleteSecurityGroupTargetBinding(
-          params
+          deleteSecurityGroupTargetBindingParams
         );
 
         // all methods should return a Promise
@@ -17762,7 +20291,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteSecurityGroupTargetBindingParams = {
           securityGroupId,
           id,
           headers: {
@@ -17771,7 +20300,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteSecurityGroupTargetBinding(params);
+        vpcService.deleteSecurityGroupTargetBinding(deleteSecurityGroupTargetBindingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17806,12 +20335,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation getSecurityGroupTarget
         const securityGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const getSecurityGroupTargetParams = {
           securityGroupId: securityGroupId,
           id: id,
         };
 
-        const getSecurityGroupTargetResult = vpcService.getSecurityGroupTarget(params);
+        const getSecurityGroupTargetResult = vpcService.getSecurityGroupTarget(
+          getSecurityGroupTargetParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getSecurityGroupTargetResult);
@@ -17856,7 +20387,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getSecurityGroupTargetParams = {
           securityGroupId,
           id,
           headers: {
@@ -17865,7 +20396,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getSecurityGroupTarget(params);
+        vpcService.getSecurityGroupTarget(getSecurityGroupTargetParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17900,13 +20431,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation createSecurityGroupTargetBinding
         const securityGroupId = 'testString';
         const id = 'testString';
-        const params = {
+        const createSecurityGroupTargetBindingParams = {
           securityGroupId: securityGroupId,
           id: id,
         };
 
         const createSecurityGroupTargetBindingResult = vpcService.createSecurityGroupTargetBinding(
-          params
+          createSecurityGroupTargetBindingParams
         );
 
         // all methods should return a Promise
@@ -17952,7 +20483,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createSecurityGroupTargetBindingParams = {
           securityGroupId,
           id,
           headers: {
@@ -17961,7 +20492,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createSecurityGroupTargetBinding(params);
+        vpcService.createSecurityGroupTargetBinding(createSecurityGroupTargetBindingParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -17996,12 +20527,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation listIkePolicies
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listIkePoliciesParams = {
           start: start,
           limit: limit,
         };
 
-        const listIkePoliciesResult = vpcService.listIkePolicies(params);
+        const listIkePoliciesResult = vpcService.listIkePolicies(listIkePoliciesParams);
 
         // all methods should return a Promise
         expectToBePromise(listIkePoliciesResult);
@@ -18040,14 +20571,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listIkePoliciesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listIkePolicies(params);
+        vpcService.listIkePolicies(listIkePoliciesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -18076,7 +20607,7 @@ describe('VpcV1', () => {
         const keyLifetime = 28800;
         const name = 'my-ike-policy';
         const resourceGroup = resourceGroupIdentityModel;
-        const params = {
+        const createIkePolicyParams = {
           authenticationAlgorithm: authenticationAlgorithm,
           dhGroup: dhGroup,
           encryptionAlgorithm: encryptionAlgorithm,
@@ -18086,7 +20617,7 @@ describe('VpcV1', () => {
           resourceGroup: resourceGroup,
         };
 
-        const createIkePolicyResult = vpcService.createIkePolicy(params);
+        const createIkePolicyResult = vpcService.createIkePolicy(createIkePolicyParams);
 
         // all methods should return a Promise
         expectToBePromise(createIkePolicyResult);
@@ -18134,7 +20665,7 @@ describe('VpcV1', () => {
         const ikeVersion = 1;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createIkePolicyParams = {
           authenticationAlgorithm,
           dhGroup,
           encryptionAlgorithm,
@@ -18145,7 +20676,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createIkePolicy(params);
+        vpcService.createIkePolicy(createIkePolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -18179,11 +20710,11 @@ describe('VpcV1', () => {
       function __deleteIkePolicyTest() {
         // Construct the params object for operation deleteIkePolicy
         const id = 'testString';
-        const params = {
+        const deleteIkePolicyParams = {
           id: id,
         };
 
-        const deleteIkePolicyResult = vpcService.deleteIkePolicy(params);
+        const deleteIkePolicyResult = vpcService.deleteIkePolicy(deleteIkePolicyParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteIkePolicyResult);
@@ -18222,7 +20753,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteIkePolicyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -18230,7 +20761,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteIkePolicy(params);
+        vpcService.deleteIkePolicy(deleteIkePolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -18264,11 +20795,11 @@ describe('VpcV1', () => {
       function __getIkePolicyTest() {
         // Construct the params object for operation getIkePolicy
         const id = 'testString';
-        const params = {
+        const getIkePolicyParams = {
           id: id,
         };
 
-        const getIkePolicyResult = vpcService.getIkePolicy(params);
+        const getIkePolicyResult = vpcService.getIkePolicy(getIkePolicyParams);
 
         // all methods should return a Promise
         expectToBePromise(getIkePolicyResult);
@@ -18307,7 +20838,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getIkePolicyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -18315,7 +20846,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getIkePolicy(params);
+        vpcService.getIkePolicy(getIkePolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -18355,7 +20886,7 @@ describe('VpcV1', () => {
         const ikeVersion = 1;
         const keyLifetime = 28800;
         const name = 'my-ike-policy';
-        const params = {
+        const updateIkePolicyParams = {
           id: id,
           authenticationAlgorithm: authenticationAlgorithm,
           dhGroup: dhGroup,
@@ -18365,7 +20896,7 @@ describe('VpcV1', () => {
           name: name,
         };
 
-        const updateIkePolicyResult = vpcService.updateIkePolicy(params);
+        const updateIkePolicyResult = vpcService.updateIkePolicy(updateIkePolicyParams);
 
         // all methods should return a Promise
         expectToBePromise(updateIkePolicyResult);
@@ -18410,7 +20941,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateIkePolicyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -18418,7 +20949,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateIkePolicy(params);
+        vpcService.updateIkePolicy(updateIkePolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -18452,11 +20983,13 @@ describe('VpcV1', () => {
       function __listIkePolicyConnectionsTest() {
         // Construct the params object for operation listIkePolicyConnections
         const id = 'testString';
-        const params = {
+        const listIkePolicyConnectionsParams = {
           id: id,
         };
 
-        const listIkePolicyConnectionsResult = vpcService.listIkePolicyConnections(params);
+        const listIkePolicyConnectionsResult = vpcService.listIkePolicyConnections(
+          listIkePolicyConnectionsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listIkePolicyConnectionsResult);
@@ -18495,7 +21028,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listIkePolicyConnectionsParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -18503,7 +21036,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listIkePolicyConnections(params);
+        vpcService.listIkePolicyConnections(listIkePolicyConnectionsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -18538,12 +21071,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation listIpsecPolicies
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listIpsecPoliciesParams = {
           start: start,
           limit: limit,
         };
 
-        const listIpsecPoliciesResult = vpcService.listIpsecPolicies(params);
+        const listIpsecPoliciesResult = vpcService.listIpsecPolicies(listIpsecPoliciesParams);
 
         // all methods should return a Promise
         expectToBePromise(listIpsecPoliciesResult);
@@ -18582,14 +21115,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listIpsecPoliciesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listIpsecPolicies(params);
+        vpcService.listIpsecPolicies(listIpsecPoliciesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -18617,7 +21150,7 @@ describe('VpcV1', () => {
         const keyLifetime = 3600;
         const name = 'my-ipsec-policy';
         const resourceGroup = resourceGroupIdentityModel;
-        const params = {
+        const createIpsecPolicyParams = {
           authenticationAlgorithm: authenticationAlgorithm,
           encryptionAlgorithm: encryptionAlgorithm,
           pfs: pfs,
@@ -18626,7 +21159,7 @@ describe('VpcV1', () => {
           resourceGroup: resourceGroup,
         };
 
-        const createIpsecPolicyResult = vpcService.createIpsecPolicy(params);
+        const createIpsecPolicyResult = vpcService.createIpsecPolicy(createIpsecPolicyParams);
 
         // all methods should return a Promise
         expectToBePromise(createIpsecPolicyResult);
@@ -18672,7 +21205,7 @@ describe('VpcV1', () => {
         const pfs = 'disabled';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createIpsecPolicyParams = {
           authenticationAlgorithm,
           encryptionAlgorithm,
           pfs,
@@ -18682,7 +21215,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createIpsecPolicy(params);
+        vpcService.createIpsecPolicy(createIpsecPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -18716,11 +21249,11 @@ describe('VpcV1', () => {
       function __deleteIpsecPolicyTest() {
         // Construct the params object for operation deleteIpsecPolicy
         const id = 'testString';
-        const params = {
+        const deleteIpsecPolicyParams = {
           id: id,
         };
 
-        const deleteIpsecPolicyResult = vpcService.deleteIpsecPolicy(params);
+        const deleteIpsecPolicyResult = vpcService.deleteIpsecPolicy(deleteIpsecPolicyParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteIpsecPolicyResult);
@@ -18759,7 +21292,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteIpsecPolicyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -18767,7 +21300,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteIpsecPolicy(params);
+        vpcService.deleteIpsecPolicy(deleteIpsecPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -18801,11 +21334,11 @@ describe('VpcV1', () => {
       function __getIpsecPolicyTest() {
         // Construct the params object for operation getIpsecPolicy
         const id = 'testString';
-        const params = {
+        const getIpsecPolicyParams = {
           id: id,
         };
 
-        const getIpsecPolicyResult = vpcService.getIpsecPolicy(params);
+        const getIpsecPolicyResult = vpcService.getIpsecPolicy(getIpsecPolicyParams);
 
         // all methods should return a Promise
         expectToBePromise(getIpsecPolicyResult);
@@ -18844,7 +21377,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getIpsecPolicyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -18852,7 +21385,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getIpsecPolicy(params);
+        vpcService.getIpsecPolicy(getIpsecPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -18891,7 +21424,7 @@ describe('VpcV1', () => {
         const keyLifetime = 3600;
         const name = 'my-ipsec-policy';
         const pfs = 'disabled';
-        const params = {
+        const updateIpsecPolicyParams = {
           id: id,
           authenticationAlgorithm: authenticationAlgorithm,
           encryptionAlgorithm: encryptionAlgorithm,
@@ -18900,7 +21433,7 @@ describe('VpcV1', () => {
           pfs: pfs,
         };
 
-        const updateIpsecPolicyResult = vpcService.updateIpsecPolicy(params);
+        const updateIpsecPolicyResult = vpcService.updateIpsecPolicy(updateIpsecPolicyParams);
 
         // all methods should return a Promise
         expectToBePromise(updateIpsecPolicyResult);
@@ -18944,7 +21477,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateIpsecPolicyParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -18952,7 +21485,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateIpsecPolicy(params);
+        vpcService.updateIpsecPolicy(updateIpsecPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -18986,11 +21519,13 @@ describe('VpcV1', () => {
       function __listIpsecPolicyConnectionsTest() {
         // Construct the params object for operation listIpsecPolicyConnections
         const id = 'testString';
-        const params = {
+        const listIpsecPolicyConnectionsParams = {
           id: id,
         };
 
-        const listIpsecPolicyConnectionsResult = vpcService.listIpsecPolicyConnections(params);
+        const listIpsecPolicyConnectionsResult = vpcService.listIpsecPolicyConnections(
+          listIpsecPolicyConnectionsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listIpsecPolicyConnectionsResult);
@@ -19029,7 +21564,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listIpsecPolicyConnectionsParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -19037,7 +21572,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listIpsecPolicyConnections(params);
+        vpcService.listIpsecPolicyConnections(listIpsecPolicyConnectionsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -19074,14 +21609,14 @@ describe('VpcV1', () => {
         const limit = 1;
         const resourceGroupId = 'testString';
         const mode = 'route';
-        const params = {
+        const listVpnGatewaysParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
           mode: mode,
         };
 
-        const listVpnGatewaysResult = vpcService.listVpnGateways(params);
+        const listVpnGatewaysResult = vpcService.listVpnGateways(listVpnGatewaysParams);
 
         // all methods should return a Promise
         expectToBePromise(listVpnGatewaysResult);
@@ -19122,14 +21657,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVpnGatewaysParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listVpnGateways(params);
+        vpcService.listVpnGateways(listVpnGatewaysParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -19165,11 +21700,11 @@ describe('VpcV1', () => {
       function __createVpnGatewayTest() {
         // Construct the params object for operation createVpnGateway
         const vpnGatewayPrototype = vpnGatewayPrototypeModel;
-        const params = {
+        const createVpnGatewayParams = {
           vpnGatewayPrototype: vpnGatewayPrototype,
         };
 
-        const createVpnGatewayResult = vpcService.createVpnGateway(params);
+        const createVpnGatewayResult = vpcService.createVpnGateway(createVpnGatewayParams);
 
         // all methods should return a Promise
         expectToBePromise(createVpnGatewayResult);
@@ -19208,7 +21743,7 @@ describe('VpcV1', () => {
         const vpnGatewayPrototype = vpnGatewayPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createVpnGatewayParams = {
           vpnGatewayPrototype,
           headers: {
             Accept: userAccept,
@@ -19216,7 +21751,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createVpnGateway(params);
+        vpcService.createVpnGateway(createVpnGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -19250,11 +21785,11 @@ describe('VpcV1', () => {
       function __deleteVpnGatewayTest() {
         // Construct the params object for operation deleteVpnGateway
         const id = 'testString';
-        const params = {
+        const deleteVpnGatewayParams = {
           id: id,
         };
 
-        const deleteVpnGatewayResult = vpcService.deleteVpnGateway(params);
+        const deleteVpnGatewayResult = vpcService.deleteVpnGateway(deleteVpnGatewayParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteVpnGatewayResult);
@@ -19293,7 +21828,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteVpnGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -19301,7 +21836,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteVpnGateway(params);
+        vpcService.deleteVpnGateway(deleteVpnGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -19335,11 +21870,11 @@ describe('VpcV1', () => {
       function __getVpnGatewayTest() {
         // Construct the params object for operation getVpnGateway
         const id = 'testString';
-        const params = {
+        const getVpnGatewayParams = {
           id: id,
         };
 
-        const getVpnGatewayResult = vpcService.getVpnGateway(params);
+        const getVpnGatewayResult = vpcService.getVpnGateway(getVpnGatewayParams);
 
         // all methods should return a Promise
         expectToBePromise(getVpnGatewayResult);
@@ -19378,7 +21913,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVpnGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -19386,7 +21921,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVpnGateway(params);
+        vpcService.getVpnGateway(getVpnGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -19421,12 +21956,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateVpnGateway
         const id = 'testString';
         const name = 'my-vpn-gateway';
-        const params = {
+        const updateVpnGatewayParams = {
           id: id,
           name: name,
         };
 
-        const updateVpnGatewayResult = vpcService.updateVpnGateway(params);
+        const updateVpnGatewayResult = vpcService.updateVpnGateway(updateVpnGatewayParams);
 
         // all methods should return a Promise
         expectToBePromise(updateVpnGatewayResult);
@@ -19466,7 +22001,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateVpnGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -19474,7 +22009,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateVpnGateway(params);
+        vpcService.updateVpnGateway(updateVpnGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -19509,12 +22044,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation listVpnGatewayConnections
         const vpnGatewayId = 'testString';
         const status = 'testString';
-        const params = {
+        const listVpnGatewayConnectionsParams = {
           vpnGatewayId: vpnGatewayId,
           status: status,
         };
 
-        const listVpnGatewayConnectionsResult = vpcService.listVpnGatewayConnections(params);
+        const listVpnGatewayConnectionsResult = vpcService.listVpnGatewayConnections(
+          listVpnGatewayConnectionsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listVpnGatewayConnectionsResult);
@@ -19554,7 +22091,7 @@ describe('VpcV1', () => {
         const vpnGatewayId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVpnGatewayConnectionsParams = {
           vpnGatewayId,
           headers: {
             Accept: userAccept,
@@ -19562,7 +22099,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listVpnGatewayConnections(params);
+        vpcService.listVpnGatewayConnections(listVpnGatewayConnectionsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -19628,12 +22165,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation createVpnGatewayConnection
         const vpnGatewayId = 'testString';
         const vpnGatewayConnectionPrototype = vpnGatewayConnectionPrototypeModel;
-        const params = {
+        const createVpnGatewayConnectionParams = {
           vpnGatewayId: vpnGatewayId,
           vpnGatewayConnectionPrototype: vpnGatewayConnectionPrototype,
         };
 
-        const createVpnGatewayConnectionResult = vpcService.createVpnGatewayConnection(params);
+        const createVpnGatewayConnectionResult = vpcService.createVpnGatewayConnection(
+          createVpnGatewayConnectionParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createVpnGatewayConnectionResult);
@@ -19674,7 +22213,7 @@ describe('VpcV1', () => {
         const vpnGatewayConnectionPrototype = vpnGatewayConnectionPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createVpnGatewayConnectionParams = {
           vpnGatewayId,
           vpnGatewayConnectionPrototype,
           headers: {
@@ -19683,7 +22222,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createVpnGatewayConnection(params);
+        vpcService.createVpnGatewayConnection(createVpnGatewayConnectionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -19718,12 +22257,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteVpnGatewayConnection
         const vpnGatewayId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteVpnGatewayConnectionParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
         };
 
-        const deleteVpnGatewayConnectionResult = vpcService.deleteVpnGatewayConnection(params);
+        const deleteVpnGatewayConnectionResult = vpcService.deleteVpnGatewayConnection(
+          deleteVpnGatewayConnectionParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteVpnGatewayConnectionResult);
@@ -19768,7 +22309,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteVpnGatewayConnectionParams = {
           vpnGatewayId,
           id,
           headers: {
@@ -19777,7 +22318,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteVpnGatewayConnection(params);
+        vpcService.deleteVpnGatewayConnection(deleteVpnGatewayConnectionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -19812,12 +22353,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpnGatewayConnection
         const vpnGatewayId = 'testString';
         const id = 'testString';
-        const params = {
+        const getVpnGatewayConnectionParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
         };
 
-        const getVpnGatewayConnectionResult = vpcService.getVpnGatewayConnection(params);
+        const getVpnGatewayConnectionResult = vpcService.getVpnGatewayConnection(
+          getVpnGatewayConnectionParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getVpnGatewayConnectionResult);
@@ -19862,7 +22405,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getVpnGatewayConnectionParams = {
           vpnGatewayId,
           id,
           headers: {
@@ -19871,7 +22414,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getVpnGatewayConnection(params);
+        vpcService.getVpnGatewayConnection(getVpnGatewayConnectionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -19938,13 +22481,15 @@ describe('VpcV1', () => {
         const vpnGatewayId = 'testString';
         const id = 'testString';
         const vpnGatewayConnectionPatch = vpnGatewayConnectionPatchModel;
-        const params = {
+        const updateVpnGatewayConnectionParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
           vpnGatewayConnectionPatch: vpnGatewayConnectionPatch,
         };
 
-        const updateVpnGatewayConnectionResult = vpcService.updateVpnGatewayConnection(params);
+        const updateVpnGatewayConnectionResult = vpcService.updateVpnGatewayConnection(
+          updateVpnGatewayConnectionParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateVpnGatewayConnectionResult);
@@ -19991,7 +22536,7 @@ describe('VpcV1', () => {
         const vpnGatewayConnectionPatch = vpnGatewayConnectionPatchModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateVpnGatewayConnectionParams = {
           vpnGatewayId,
           id,
           vpnGatewayConnectionPatch,
@@ -20001,7 +22546,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateVpnGatewayConnection(params);
+        vpcService.updateVpnGatewayConnection(updateVpnGatewayConnectionParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -20036,13 +22581,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation listVpnGatewayConnectionLocalCidrs
         const vpnGatewayId = 'testString';
         const id = 'testString';
-        const params = {
+        const listVpnGatewayConnectionLocalCidrsParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
         };
 
         const listVpnGatewayConnectionLocalCidrsResult = vpcService.listVpnGatewayConnectionLocalCidrs(
-          params
+          listVpnGatewayConnectionLocalCidrsParams
         );
 
         // all methods should return a Promise
@@ -20088,7 +22633,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVpnGatewayConnectionLocalCidrsParams = {
           vpnGatewayId,
           id,
           headers: {
@@ -20097,7 +22642,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listVpnGatewayConnectionLocalCidrs(params);
+        vpcService.listVpnGatewayConnectionLocalCidrs(listVpnGatewayConnectionLocalCidrsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -20134,7 +22679,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
-        const params = {
+        const removeVpnGatewayConnectionLocalCidrParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
           cidrPrefix: cidrPrefix,
@@ -20142,7 +22687,7 @@ describe('VpcV1', () => {
         };
 
         const removeVpnGatewayConnectionLocalCidrResult = vpcService.removeVpnGatewayConnectionLocalCidr(
-          params
+          removeVpnGatewayConnectionLocalCidrParams
         );
 
         // all methods should return a Promise
@@ -20192,7 +22737,7 @@ describe('VpcV1', () => {
         const prefixLength = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeVpnGatewayConnectionLocalCidrParams = {
           vpnGatewayId,
           id,
           cidrPrefix,
@@ -20203,7 +22748,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.removeVpnGatewayConnectionLocalCidr(params);
+        vpcService.removeVpnGatewayConnectionLocalCidr(removeVpnGatewayConnectionLocalCidrParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -20240,7 +22785,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
-        const params = {
+        const checkVpnGatewayConnectionLocalCidrParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
           cidrPrefix: cidrPrefix,
@@ -20248,7 +22793,7 @@ describe('VpcV1', () => {
         };
 
         const checkVpnGatewayConnectionLocalCidrResult = vpcService.checkVpnGatewayConnectionLocalCidr(
-          params
+          checkVpnGatewayConnectionLocalCidrParams
         );
 
         // all methods should return a Promise
@@ -20298,7 +22843,7 @@ describe('VpcV1', () => {
         const prefixLength = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const checkVpnGatewayConnectionLocalCidrParams = {
           vpnGatewayId,
           id,
           cidrPrefix,
@@ -20309,7 +22854,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.checkVpnGatewayConnectionLocalCidr(params);
+        vpcService.checkVpnGatewayConnectionLocalCidr(checkVpnGatewayConnectionLocalCidrParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -20346,7 +22891,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
-        const params = {
+        const addVpnGatewayConnectionLocalCidrParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
           cidrPrefix: cidrPrefix,
@@ -20354,7 +22899,7 @@ describe('VpcV1', () => {
         };
 
         const addVpnGatewayConnectionLocalCidrResult = vpcService.addVpnGatewayConnectionLocalCidr(
-          params
+          addVpnGatewayConnectionLocalCidrParams
         );
 
         // all methods should return a Promise
@@ -20404,7 +22949,7 @@ describe('VpcV1', () => {
         const prefixLength = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addVpnGatewayConnectionLocalCidrParams = {
           vpnGatewayId,
           id,
           cidrPrefix,
@@ -20415,7 +22960,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.addVpnGatewayConnectionLocalCidr(params);
+        vpcService.addVpnGatewayConnectionLocalCidr(addVpnGatewayConnectionLocalCidrParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -20450,13 +22995,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation listVpnGatewayConnectionPeerCidrs
         const vpnGatewayId = 'testString';
         const id = 'testString';
-        const params = {
+        const listVpnGatewayConnectionPeerCidrsParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
         };
 
         const listVpnGatewayConnectionPeerCidrsResult = vpcService.listVpnGatewayConnectionPeerCidrs(
-          params
+          listVpnGatewayConnectionPeerCidrsParams
         );
 
         // all methods should return a Promise
@@ -20502,7 +23047,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listVpnGatewayConnectionPeerCidrsParams = {
           vpnGatewayId,
           id,
           headers: {
@@ -20511,7 +23056,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listVpnGatewayConnectionPeerCidrs(params);
+        vpcService.listVpnGatewayConnectionPeerCidrs(listVpnGatewayConnectionPeerCidrsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -20548,7 +23093,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
-        const params = {
+        const removeVpnGatewayConnectionPeerCidrParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
           cidrPrefix: cidrPrefix,
@@ -20556,7 +23101,7 @@ describe('VpcV1', () => {
         };
 
         const removeVpnGatewayConnectionPeerCidrResult = vpcService.removeVpnGatewayConnectionPeerCidr(
-          params
+          removeVpnGatewayConnectionPeerCidrParams
         );
 
         // all methods should return a Promise
@@ -20606,7 +23151,7 @@ describe('VpcV1', () => {
         const prefixLength = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeVpnGatewayConnectionPeerCidrParams = {
           vpnGatewayId,
           id,
           cidrPrefix,
@@ -20617,7 +23162,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.removeVpnGatewayConnectionPeerCidr(params);
+        vpcService.removeVpnGatewayConnectionPeerCidr(removeVpnGatewayConnectionPeerCidrParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -20654,7 +23199,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
-        const params = {
+        const checkVpnGatewayConnectionPeerCidrParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
           cidrPrefix: cidrPrefix,
@@ -20662,7 +23207,7 @@ describe('VpcV1', () => {
         };
 
         const checkVpnGatewayConnectionPeerCidrResult = vpcService.checkVpnGatewayConnectionPeerCidr(
-          params
+          checkVpnGatewayConnectionPeerCidrParams
         );
 
         // all methods should return a Promise
@@ -20712,7 +23257,7 @@ describe('VpcV1', () => {
         const prefixLength = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const checkVpnGatewayConnectionPeerCidrParams = {
           vpnGatewayId,
           id,
           cidrPrefix,
@@ -20723,7 +23268,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.checkVpnGatewayConnectionPeerCidr(params);
+        vpcService.checkVpnGatewayConnectionPeerCidr(checkVpnGatewayConnectionPeerCidrParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -20760,7 +23305,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
-        const params = {
+        const addVpnGatewayConnectionPeerCidrParams = {
           vpnGatewayId: vpnGatewayId,
           id: id,
           cidrPrefix: cidrPrefix,
@@ -20768,7 +23313,7 @@ describe('VpcV1', () => {
         };
 
         const addVpnGatewayConnectionPeerCidrResult = vpcService.addVpnGatewayConnectionPeerCidr(
-          params
+          addVpnGatewayConnectionPeerCidrParams
         );
 
         // all methods should return a Promise
@@ -20818,7 +23363,7 @@ describe('VpcV1', () => {
         const prefixLength = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addVpnGatewayConnectionPeerCidrParams = {
           vpnGatewayId,
           id,
           cidrPrefix,
@@ -20829,7 +23374,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.addVpnGatewayConnectionPeerCidr(params);
+        vpcService.addVpnGatewayConnectionPeerCidr(addVpnGatewayConnectionPeerCidrParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -20864,12 +23409,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation listLoadBalancerProfiles
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listLoadBalancerProfilesParams = {
           start: start,
           limit: limit,
         };
 
-        const listLoadBalancerProfilesResult = vpcService.listLoadBalancerProfiles(params);
+        const listLoadBalancerProfilesResult = vpcService.listLoadBalancerProfiles(
+          listLoadBalancerProfilesParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listLoadBalancerProfilesResult);
@@ -20908,14 +23455,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listLoadBalancerProfilesParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listLoadBalancerProfiles(params);
+        vpcService.listLoadBalancerProfiles(listLoadBalancerProfilesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -20931,11 +23478,13 @@ describe('VpcV1', () => {
       function __getLoadBalancerProfileTest() {
         // Construct the params object for operation getLoadBalancerProfile
         const name = 'testString';
-        const params = {
+        const getLoadBalancerProfileParams = {
           name: name,
         };
 
-        const getLoadBalancerProfileResult = vpcService.getLoadBalancerProfile(params);
+        const getLoadBalancerProfileResult = vpcService.getLoadBalancerProfile(
+          getLoadBalancerProfileParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getLoadBalancerProfileResult);
@@ -20974,7 +23523,7 @@ describe('VpcV1', () => {
         const name = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getLoadBalancerProfileParams = {
           name,
           headers: {
             Accept: userAccept,
@@ -20982,7 +23531,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getLoadBalancerProfile(params);
+        vpcService.getLoadBalancerProfile(getLoadBalancerProfileParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -21017,12 +23566,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation listLoadBalancers
         const start = 'testString';
         const limit = 1;
-        const params = {
+        const listLoadBalancersParams = {
           start: start,
           limit: limit,
         };
 
-        const listLoadBalancersResult = vpcService.listLoadBalancers(params);
+        const listLoadBalancersResult = vpcService.listLoadBalancers(listLoadBalancersParams);
 
         // all methods should return a Promise
         expectToBePromise(listLoadBalancersResult);
@@ -21061,14 +23610,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listLoadBalancersParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listLoadBalancers(params);
+        vpcService.listLoadBalancers(listLoadBalancersParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -21180,7 +23729,7 @@ describe('VpcV1', () => {
         const resourceGroup = resourceGroupIdentityModel;
         const routeMode = true;
         const securityGroups = [securityGroupIdentityModel];
-        const params = {
+        const createLoadBalancerParams = {
           isPublic: isPublic,
           subnets: subnets,
           listeners: listeners,
@@ -21193,7 +23742,7 @@ describe('VpcV1', () => {
           securityGroups: securityGroups,
         };
 
-        const createLoadBalancerResult = vpcService.createLoadBalancer(params);
+        const createLoadBalancerResult = vpcService.createLoadBalancer(createLoadBalancerParams);
 
         // all methods should return a Promise
         expectToBePromise(createLoadBalancerResult);
@@ -21242,7 +23791,7 @@ describe('VpcV1', () => {
         const subnets = [subnetIdentityModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createLoadBalancerParams = {
           isPublic,
           subnets,
           headers: {
@@ -21251,7 +23800,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createLoadBalancer(params);
+        vpcService.createLoadBalancer(createLoadBalancerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -21285,11 +23834,11 @@ describe('VpcV1', () => {
       function __deleteLoadBalancerTest() {
         // Construct the params object for operation deleteLoadBalancer
         const id = 'testString';
-        const params = {
+        const deleteLoadBalancerParams = {
           id: id,
         };
 
-        const deleteLoadBalancerResult = vpcService.deleteLoadBalancer(params);
+        const deleteLoadBalancerResult = vpcService.deleteLoadBalancer(deleteLoadBalancerParams);
 
         // all methods should return a Promise
         expectToBePromise(deleteLoadBalancerResult);
@@ -21328,7 +23877,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteLoadBalancerParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -21336,7 +23885,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteLoadBalancer(params);
+        vpcService.deleteLoadBalancer(deleteLoadBalancerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -21370,11 +23919,11 @@ describe('VpcV1', () => {
       function __getLoadBalancerTest() {
         // Construct the params object for operation getLoadBalancer
         const id = 'testString';
-        const params = {
+        const getLoadBalancerParams = {
           id: id,
         };
 
-        const getLoadBalancerResult = vpcService.getLoadBalancer(params);
+        const getLoadBalancerResult = vpcService.getLoadBalancer(getLoadBalancerParams);
 
         // all methods should return a Promise
         expectToBePromise(getLoadBalancerResult);
@@ -21413,7 +23962,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getLoadBalancerParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -21421,7 +23970,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getLoadBalancer(params);
+        vpcService.getLoadBalancer(getLoadBalancerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -21469,13 +24018,13 @@ describe('VpcV1', () => {
         const id = 'testString';
         const logging = loadBalancerLoggingModel;
         const name = 'my-load-balancer';
-        const params = {
+        const updateLoadBalancerParams = {
           id: id,
           logging: logging,
           name: name,
         };
 
-        const updateLoadBalancerResult = vpcService.updateLoadBalancer(params);
+        const updateLoadBalancerResult = vpcService.updateLoadBalancer(updateLoadBalancerParams);
 
         // all methods should return a Promise
         expectToBePromise(updateLoadBalancerResult);
@@ -21516,7 +24065,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateLoadBalancerParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -21524,7 +24073,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateLoadBalancer(params);
+        vpcService.updateLoadBalancer(updateLoadBalancerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -21558,11 +24107,13 @@ describe('VpcV1', () => {
       function __getLoadBalancerStatisticsTest() {
         // Construct the params object for operation getLoadBalancerStatistics
         const id = 'testString';
-        const params = {
+        const getLoadBalancerStatisticsParams = {
           id: id,
         };
 
-        const getLoadBalancerStatisticsResult = vpcService.getLoadBalancerStatistics(params);
+        const getLoadBalancerStatisticsResult = vpcService.getLoadBalancerStatistics(
+          getLoadBalancerStatisticsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getLoadBalancerStatisticsResult);
@@ -21601,7 +24152,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getLoadBalancerStatisticsParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -21609,7 +24160,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getLoadBalancerStatistics(params);
+        vpcService.getLoadBalancerStatistics(getLoadBalancerStatisticsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -21643,11 +24194,13 @@ describe('VpcV1', () => {
       function __listLoadBalancerListenersTest() {
         // Construct the params object for operation listLoadBalancerListeners
         const loadBalancerId = 'testString';
-        const params = {
+        const listLoadBalancerListenersParams = {
           loadBalancerId: loadBalancerId,
         };
 
-        const listLoadBalancerListenersResult = vpcService.listLoadBalancerListeners(params);
+        const listLoadBalancerListenersResult = vpcService.listLoadBalancerListeners(
+          listLoadBalancerListenersParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listLoadBalancerListenersResult);
@@ -21690,7 +24243,7 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listLoadBalancerListenersParams = {
           loadBalancerId,
           headers: {
             Accept: userAccept,
@@ -21698,7 +24251,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listLoadBalancerListeners(params);
+        vpcService.listLoadBalancerListeners(listLoadBalancerListenersParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -21789,7 +24342,7 @@ describe('VpcV1', () => {
         const port = 443;
         const portMax = 499;
         const portMin = 443;
-        const params = {
+        const createLoadBalancerListenerParams = {
           loadBalancerId: loadBalancerId,
           protocol: protocol,
           acceptProxyProtocol: acceptProxyProtocol,
@@ -21803,7 +24356,9 @@ describe('VpcV1', () => {
           portMin: portMin,
         };
 
-        const createLoadBalancerListenerResult = vpcService.createLoadBalancerListener(params);
+        const createLoadBalancerListenerResult = vpcService.createLoadBalancerListener(
+          createLoadBalancerListenerParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createLoadBalancerListenerResult);
@@ -21857,7 +24412,7 @@ describe('VpcV1', () => {
         const protocol = 'http';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createLoadBalancerListenerParams = {
           loadBalancerId,
           protocol,
           headers: {
@@ -21866,7 +24421,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createLoadBalancerListener(params);
+        vpcService.createLoadBalancerListener(createLoadBalancerListenerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -21901,12 +24456,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteLoadBalancerListener
         const loadBalancerId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteLoadBalancerListenerParams = {
           loadBalancerId: loadBalancerId,
           id: id,
         };
 
-        const deleteLoadBalancerListenerResult = vpcService.deleteLoadBalancerListener(params);
+        const deleteLoadBalancerListenerResult = vpcService.deleteLoadBalancerListener(
+          deleteLoadBalancerListenerParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteLoadBalancerListenerResult);
@@ -21951,7 +24508,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteLoadBalancerListenerParams = {
           loadBalancerId,
           id,
           headers: {
@@ -21960,7 +24517,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteLoadBalancerListener(params);
+        vpcService.deleteLoadBalancerListener(deleteLoadBalancerListenerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -21995,12 +24552,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation getLoadBalancerListener
         const loadBalancerId = 'testString';
         const id = 'testString';
-        const params = {
+        const getLoadBalancerListenerParams = {
           loadBalancerId: loadBalancerId,
           id: id,
         };
 
-        const getLoadBalancerListenerResult = vpcService.getLoadBalancerListener(params);
+        const getLoadBalancerListenerResult = vpcService.getLoadBalancerListener(
+          getLoadBalancerListenerParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getLoadBalancerListenerResult);
@@ -22045,7 +24604,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getLoadBalancerListenerParams = {
           loadBalancerId,
           id,
           headers: {
@@ -22054,7 +24613,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getLoadBalancerListener(params);
+        vpcService.getLoadBalancerListener(getLoadBalancerListenerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -22123,7 +24682,7 @@ describe('VpcV1', () => {
         const portMax = 499;
         const portMin = 443;
         const protocol = 'http';
-        const params = {
+        const updateLoadBalancerListenerParams = {
           loadBalancerId: loadBalancerId,
           id: id,
           acceptProxyProtocol: acceptProxyProtocol,
@@ -22137,7 +24696,9 @@ describe('VpcV1', () => {
           protocol: protocol,
         };
 
-        const updateLoadBalancerListenerResult = vpcService.updateLoadBalancerListener(params);
+        const updateLoadBalancerListenerResult = vpcService.updateLoadBalancerListener(
+          updateLoadBalancerListenerParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateLoadBalancerListenerResult);
@@ -22191,7 +24752,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateLoadBalancerListenerParams = {
           loadBalancerId,
           id,
           headers: {
@@ -22200,7 +24761,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateLoadBalancerListener(params);
+        vpcService.updateLoadBalancerListener(updateLoadBalancerListenerParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -22235,13 +24796,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation listLoadBalancerListenerPolicies
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
-        const params = {
+        const listLoadBalancerListenerPoliciesParams = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
         };
 
         const listLoadBalancerListenerPoliciesResult = vpcService.listLoadBalancerListenerPolicies(
-          params
+          listLoadBalancerListenerPoliciesParams
         );
 
         // all methods should return a Promise
@@ -22287,7 +24848,7 @@ describe('VpcV1', () => {
         const listenerId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listLoadBalancerListenerPoliciesParams = {
           loadBalancerId,
           listenerId,
           headers: {
@@ -22296,7 +24857,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listLoadBalancerListenerPolicies(params);
+        vpcService.listLoadBalancerListenerPolicies(listLoadBalancerListenerPoliciesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -22351,7 +24912,7 @@ describe('VpcV1', () => {
         const name = 'my-policy';
         const rules = [loadBalancerListenerPolicyRulePrototypeModel];
         const target = loadBalancerListenerPolicyTargetPrototypeModel;
-        const params = {
+        const createLoadBalancerListenerPolicyParams = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
           action: action,
@@ -22362,7 +24923,7 @@ describe('VpcV1', () => {
         };
 
         const createLoadBalancerListenerPolicyResult = vpcService.createLoadBalancerListenerPolicy(
-          params
+          createLoadBalancerListenerPolicyParams
         );
 
         // all methods should return a Promise
@@ -22415,7 +24976,7 @@ describe('VpcV1', () => {
         const priority = 5;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createLoadBalancerListenerPolicyParams = {
           loadBalancerId,
           listenerId,
           action,
@@ -22426,7 +24987,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createLoadBalancerListenerPolicy(params);
+        vpcService.createLoadBalancerListenerPolicy(createLoadBalancerListenerPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -22462,14 +25023,14 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteLoadBalancerListenerPolicyParams = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
           id: id,
         };
 
         const deleteLoadBalancerListenerPolicyResult = vpcService.deleteLoadBalancerListenerPolicy(
-          params
+          deleteLoadBalancerListenerPolicyParams
         );
 
         // all methods should return a Promise
@@ -22517,7 +25078,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteLoadBalancerListenerPolicyParams = {
           loadBalancerId,
           listenerId,
           id,
@@ -22527,7 +25088,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteLoadBalancerListenerPolicy(params);
+        vpcService.deleteLoadBalancerListenerPolicy(deleteLoadBalancerListenerPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -22563,14 +25124,14 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
         const id = 'testString';
-        const params = {
+        const getLoadBalancerListenerPolicyParams = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
           id: id,
         };
 
         const getLoadBalancerListenerPolicyResult = vpcService.getLoadBalancerListenerPolicy(
-          params
+          getLoadBalancerListenerPolicyParams
         );
 
         // all methods should return a Promise
@@ -22618,7 +25179,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getLoadBalancerListenerPolicyParams = {
           loadBalancerId,
           listenerId,
           id,
@@ -22628,7 +25189,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getLoadBalancerListenerPolicy(params);
+        vpcService.getLoadBalancerListenerPolicy(getLoadBalancerListenerPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -22674,7 +25235,7 @@ describe('VpcV1', () => {
         const name = 'my-policy';
         const priority = 5;
         const target = loadBalancerListenerPolicyTargetPatchModel;
-        const params = {
+        const updateLoadBalancerListenerPolicyParams = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
           id: id,
@@ -22684,7 +25245,7 @@ describe('VpcV1', () => {
         };
 
         const updateLoadBalancerListenerPolicyResult = vpcService.updateLoadBalancerListenerPolicy(
-          params
+          updateLoadBalancerListenerPolicyParams
         );
 
         // all methods should return a Promise
@@ -22735,7 +25296,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateLoadBalancerListenerPolicyParams = {
           loadBalancerId,
           listenerId,
           id,
@@ -22745,7 +25306,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateLoadBalancerListenerPolicy(params);
+        vpcService.updateLoadBalancerListenerPolicy(updateLoadBalancerListenerPolicyParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -22781,14 +25342,14 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
         const policyId = 'testString';
-        const params = {
+        const listLoadBalancerListenerPolicyRulesParams = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
           policyId: policyId,
         };
 
         const listLoadBalancerListenerPolicyRulesResult = vpcService.listLoadBalancerListenerPolicyRules(
-          params
+          listLoadBalancerListenerPolicyRulesParams
         );
 
         // all methods should return a Promise
@@ -22836,7 +25397,7 @@ describe('VpcV1', () => {
         const policyId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listLoadBalancerListenerPolicyRulesParams = {
           loadBalancerId,
           listenerId,
           policyId,
@@ -22846,7 +25407,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listLoadBalancerListenerPolicyRules(params);
+        vpcService.listLoadBalancerListenerPolicyRules(listLoadBalancerListenerPolicyRulesParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -22886,7 +25447,7 @@ describe('VpcV1', () => {
         const type = 'body';
         const value = 'testString';
         const field = 'MY-APP-HEADER';
-        const params = {
+        const createLoadBalancerListenerPolicyRuleParams = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
           policyId: policyId,
@@ -22897,7 +25458,7 @@ describe('VpcV1', () => {
         };
 
         const createLoadBalancerListenerPolicyRuleResult = vpcService.createLoadBalancerListenerPolicyRule(
-          params
+          createLoadBalancerListenerPolicyRuleParams
         );
 
         // all methods should return a Promise
@@ -22952,7 +25513,7 @@ describe('VpcV1', () => {
         const value = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createLoadBalancerListenerPolicyRuleParams = {
           loadBalancerId,
           listenerId,
           policyId,
@@ -22965,7 +25526,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createLoadBalancerListenerPolicyRule(params);
+        vpcService.createLoadBalancerListenerPolicyRule(createLoadBalancerListenerPolicyRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -23002,7 +25563,7 @@ describe('VpcV1', () => {
         const listenerId = 'testString';
         const policyId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteLoadBalancerListenerPolicyRuleParams = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
           policyId: policyId,
@@ -23010,7 +25571,7 @@ describe('VpcV1', () => {
         };
 
         const deleteLoadBalancerListenerPolicyRuleResult = vpcService.deleteLoadBalancerListenerPolicyRule(
-          params
+          deleteLoadBalancerListenerPolicyRuleParams
         );
 
         // all methods should return a Promise
@@ -23060,7 +25621,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteLoadBalancerListenerPolicyRuleParams = {
           loadBalancerId,
           listenerId,
           policyId,
@@ -23071,7 +25632,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteLoadBalancerListenerPolicyRule(params);
+        vpcService.deleteLoadBalancerListenerPolicyRule(deleteLoadBalancerListenerPolicyRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -23108,7 +25669,7 @@ describe('VpcV1', () => {
         const listenerId = 'testString';
         const policyId = 'testString';
         const id = 'testString';
-        const params = {
+        const getLoadBalancerListenerPolicyRuleParams = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
           policyId: policyId,
@@ -23116,7 +25677,7 @@ describe('VpcV1', () => {
         };
 
         const getLoadBalancerListenerPolicyRuleResult = vpcService.getLoadBalancerListenerPolicyRule(
-          params
+          getLoadBalancerListenerPolicyRuleParams
         );
 
         // all methods should return a Promise
@@ -23166,7 +25727,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getLoadBalancerListenerPolicyRuleParams = {
           loadBalancerId,
           listenerId,
           policyId,
@@ -23177,7 +25738,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getLoadBalancerListenerPolicyRule(params);
+        vpcService.getLoadBalancerListenerPolicyRule(getLoadBalancerListenerPolicyRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -23218,7 +25779,7 @@ describe('VpcV1', () => {
         const field = 'MY-APP-HEADER';
         const type = 'body';
         const value = 'testString';
-        const params = {
+        const updateLoadBalancerListenerPolicyRuleParams = {
           loadBalancerId: loadBalancerId,
           listenerId: listenerId,
           policyId: policyId,
@@ -23230,7 +25791,7 @@ describe('VpcV1', () => {
         };
 
         const updateLoadBalancerListenerPolicyRuleResult = vpcService.updateLoadBalancerListenerPolicyRule(
-          params
+          updateLoadBalancerListenerPolicyRuleParams
         );
 
         // all methods should return a Promise
@@ -23284,7 +25845,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateLoadBalancerListenerPolicyRuleParams = {
           loadBalancerId,
           listenerId,
           policyId,
@@ -23295,7 +25856,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateLoadBalancerListenerPolicyRule(params);
+        vpcService.updateLoadBalancerListenerPolicyRule(updateLoadBalancerListenerPolicyRuleParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -23329,11 +25890,13 @@ describe('VpcV1', () => {
       function __listLoadBalancerPoolsTest() {
         // Construct the params object for operation listLoadBalancerPools
         const loadBalancerId = 'testString';
-        const params = {
+        const listLoadBalancerPoolsParams = {
           loadBalancerId: loadBalancerId,
         };
 
-        const listLoadBalancerPoolsResult = vpcService.listLoadBalancerPools(params);
+        const listLoadBalancerPoolsResult = vpcService.listLoadBalancerPools(
+          listLoadBalancerPoolsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listLoadBalancerPoolsResult);
@@ -23372,7 +25935,7 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listLoadBalancerPoolsParams = {
           loadBalancerId,
           headers: {
             Accept: userAccept,
@@ -23380,7 +25943,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listLoadBalancerPools(params);
+        vpcService.listLoadBalancerPools(listLoadBalancerPoolsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -23451,7 +26014,7 @@ describe('VpcV1', () => {
         const name = 'my-load-balancer-pool';
         const proxyProtocol = 'disabled';
         const sessionPersistence = loadBalancerPoolSessionPersistencePrototypeModel;
-        const params = {
+        const createLoadBalancerPoolParams = {
           loadBalancerId: loadBalancerId,
           algorithm: algorithm,
           healthMonitor: healthMonitor,
@@ -23462,7 +26025,9 @@ describe('VpcV1', () => {
           sessionPersistence: sessionPersistence,
         };
 
-        const createLoadBalancerPoolResult = vpcService.createLoadBalancerPool(params);
+        const createLoadBalancerPoolResult = vpcService.createLoadBalancerPool(
+          createLoadBalancerPoolParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createLoadBalancerPoolResult);
@@ -23511,7 +26076,7 @@ describe('VpcV1', () => {
         const protocol = 'http';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createLoadBalancerPoolParams = {
           loadBalancerId,
           algorithm,
           healthMonitor,
@@ -23522,7 +26087,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createLoadBalancerPool(params);
+        vpcService.createLoadBalancerPool(createLoadBalancerPoolParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -23557,12 +26122,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteLoadBalancerPool
         const loadBalancerId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteLoadBalancerPoolParams = {
           loadBalancerId: loadBalancerId,
           id: id,
         };
 
-        const deleteLoadBalancerPoolResult = vpcService.deleteLoadBalancerPool(params);
+        const deleteLoadBalancerPoolResult = vpcService.deleteLoadBalancerPool(
+          deleteLoadBalancerPoolParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteLoadBalancerPoolResult);
@@ -23607,7 +26174,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteLoadBalancerPoolParams = {
           loadBalancerId,
           id,
           headers: {
@@ -23616,7 +26183,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteLoadBalancerPool(params);
+        vpcService.deleteLoadBalancerPool(deleteLoadBalancerPoolParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -23651,12 +26218,12 @@ describe('VpcV1', () => {
         // Construct the params object for operation getLoadBalancerPool
         const loadBalancerId = 'testString';
         const id = 'testString';
-        const params = {
+        const getLoadBalancerPoolParams = {
           loadBalancerId: loadBalancerId,
           id: id,
         };
 
-        const getLoadBalancerPoolResult = vpcService.getLoadBalancerPool(params);
+        const getLoadBalancerPoolResult = vpcService.getLoadBalancerPool(getLoadBalancerPoolParams);
 
         // all methods should return a Promise
         expectToBePromise(getLoadBalancerPoolResult);
@@ -23701,7 +26268,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getLoadBalancerPoolParams = {
           loadBalancerId,
           id,
           headers: {
@@ -23710,7 +26277,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getLoadBalancerPool(params);
+        vpcService.getLoadBalancerPool(getLoadBalancerPoolParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -23769,7 +26336,7 @@ describe('VpcV1', () => {
         const protocol = 'http';
         const proxyProtocol = 'disabled';
         const sessionPersistence = loadBalancerPoolSessionPersistencePatchModel;
-        const params = {
+        const updateLoadBalancerPoolParams = {
           loadBalancerId: loadBalancerId,
           id: id,
           algorithm: algorithm,
@@ -23780,7 +26347,9 @@ describe('VpcV1', () => {
           sessionPersistence: sessionPersistence,
         };
 
-        const updateLoadBalancerPoolResult = vpcService.updateLoadBalancerPool(params);
+        const updateLoadBalancerPoolResult = vpcService.updateLoadBalancerPool(
+          updateLoadBalancerPoolParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateLoadBalancerPoolResult);
@@ -23831,7 +26400,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateLoadBalancerPoolParams = {
           loadBalancerId,
           id,
           headers: {
@@ -23840,7 +26409,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateLoadBalancerPool(params);
+        vpcService.updateLoadBalancerPool(updateLoadBalancerPoolParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -23875,12 +26444,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation listLoadBalancerPoolMembers
         const loadBalancerId = 'testString';
         const poolId = 'testString';
-        const params = {
+        const listLoadBalancerPoolMembersParams = {
           loadBalancerId: loadBalancerId,
           poolId: poolId,
         };
 
-        const listLoadBalancerPoolMembersResult = vpcService.listLoadBalancerPoolMembers(params);
+        const listLoadBalancerPoolMembersResult = vpcService.listLoadBalancerPoolMembers(
+          listLoadBalancerPoolMembersParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listLoadBalancerPoolMembersResult);
@@ -23925,7 +26496,7 @@ describe('VpcV1', () => {
         const poolId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listLoadBalancerPoolMembersParams = {
           loadBalancerId,
           poolId,
           headers: {
@@ -23934,7 +26505,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listLoadBalancerPoolMembers(params);
+        vpcService.listLoadBalancerPoolMembers(listLoadBalancerPoolMembersParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -23979,7 +26550,7 @@ describe('VpcV1', () => {
         const port = 80;
         const target = loadBalancerPoolMemberTargetPrototypeModel;
         const weight = 50;
-        const params = {
+        const createLoadBalancerPoolMemberParams = {
           loadBalancerId: loadBalancerId,
           poolId: poolId,
           port: port,
@@ -23987,7 +26558,9 @@ describe('VpcV1', () => {
           weight: weight,
         };
 
-        const createLoadBalancerPoolMemberResult = vpcService.createLoadBalancerPoolMember(params);
+        const createLoadBalancerPoolMemberResult = vpcService.createLoadBalancerPoolMember(
+          createLoadBalancerPoolMemberParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createLoadBalancerPoolMemberResult);
@@ -24037,7 +26610,7 @@ describe('VpcV1', () => {
         const target = loadBalancerPoolMemberTargetPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createLoadBalancerPoolMemberParams = {
           loadBalancerId,
           poolId,
           port,
@@ -24048,7 +26621,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createLoadBalancerPoolMember(params);
+        vpcService.createLoadBalancerPoolMember(createLoadBalancerPoolMemberParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -24098,14 +26671,14 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const poolId = 'testString';
         const members = [loadBalancerPoolMemberPrototypeModel];
-        const params = {
+        const replaceLoadBalancerPoolMembersParams = {
           loadBalancerId: loadBalancerId,
           poolId: poolId,
           members: members,
         };
 
         const replaceLoadBalancerPoolMembersResult = vpcService.replaceLoadBalancerPoolMembers(
-          params
+          replaceLoadBalancerPoolMembersParams
         );
 
         // all methods should return a Promise
@@ -24153,7 +26726,7 @@ describe('VpcV1', () => {
         const members = [loadBalancerPoolMemberPrototypeModel];
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const replaceLoadBalancerPoolMembersParams = {
           loadBalancerId,
           poolId,
           members,
@@ -24163,7 +26736,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.replaceLoadBalancerPoolMembers(params);
+        vpcService.replaceLoadBalancerPoolMembers(replaceLoadBalancerPoolMembersParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -24199,13 +26772,15 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const poolId = 'testString';
         const id = 'testString';
-        const params = {
+        const deleteLoadBalancerPoolMemberParams = {
           loadBalancerId: loadBalancerId,
           poolId: poolId,
           id: id,
         };
 
-        const deleteLoadBalancerPoolMemberResult = vpcService.deleteLoadBalancerPoolMember(params);
+        const deleteLoadBalancerPoolMemberResult = vpcService.deleteLoadBalancerPoolMember(
+          deleteLoadBalancerPoolMemberParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteLoadBalancerPoolMemberResult);
@@ -24252,7 +26827,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteLoadBalancerPoolMemberParams = {
           loadBalancerId,
           poolId,
           id,
@@ -24262,7 +26837,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteLoadBalancerPoolMember(params);
+        vpcService.deleteLoadBalancerPoolMember(deleteLoadBalancerPoolMemberParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -24298,13 +26873,15 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const poolId = 'testString';
         const id = 'testString';
-        const params = {
+        const getLoadBalancerPoolMemberParams = {
           loadBalancerId: loadBalancerId,
           poolId: poolId,
           id: id,
         };
 
-        const getLoadBalancerPoolMemberResult = vpcService.getLoadBalancerPoolMember(params);
+        const getLoadBalancerPoolMemberResult = vpcService.getLoadBalancerPoolMember(
+          getLoadBalancerPoolMemberParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getLoadBalancerPoolMemberResult);
@@ -24351,7 +26928,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getLoadBalancerPoolMemberParams = {
           loadBalancerId,
           poolId,
           id,
@@ -24361,7 +26938,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getLoadBalancerPoolMember(params);
+        vpcService.getLoadBalancerPoolMember(getLoadBalancerPoolMemberParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -24407,7 +26984,7 @@ describe('VpcV1', () => {
         const port = 80;
         const target = loadBalancerPoolMemberTargetPrototypeModel;
         const weight = 50;
-        const params = {
+        const updateLoadBalancerPoolMemberParams = {
           loadBalancerId: loadBalancerId,
           poolId: poolId,
           id: id,
@@ -24416,7 +26993,9 @@ describe('VpcV1', () => {
           weight: weight,
         };
 
-        const updateLoadBalancerPoolMemberResult = vpcService.updateLoadBalancerPoolMember(params);
+        const updateLoadBalancerPoolMemberResult = vpcService.updateLoadBalancerPoolMember(
+          updateLoadBalancerPoolMemberParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateLoadBalancerPoolMemberResult);
@@ -24466,7 +27045,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateLoadBalancerPoolMemberParams = {
           loadBalancerId,
           poolId,
           id,
@@ -24476,7 +27055,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateLoadBalancerPoolMember(params);
+        vpcService.updateLoadBalancerPoolMember(updateLoadBalancerPoolMemberParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -24513,14 +27092,16 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const resourceGroupId = 'testString';
-        const params = {
+        const listEndpointGatewaysParams = {
           name: name,
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
         };
 
-        const listEndpointGatewaysResult = vpcService.listEndpointGateways(params);
+        const listEndpointGatewaysResult = vpcService.listEndpointGateways(
+          listEndpointGatewaysParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listEndpointGatewaysResult);
@@ -24561,14 +27142,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listEndpointGatewaysParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listEndpointGateways(params);
+        vpcService.listEndpointGateways(listEndpointGatewaysParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -24605,6 +27186,11 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
+      // SecurityGroupIdentityById
+      const securityGroupIdentityModel = {
+        id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
+      };
+
       function __createEndpointGatewayTest() {
         // Construct the params object for operation createEndpointGateway
         const target = endpointGatewayTargetPrototypeModel;
@@ -24612,15 +27198,19 @@ describe('VpcV1', () => {
         const ips = [endpointGatewayReservedIpModel];
         const name = 'testString';
         const resourceGroup = resourceGroupIdentityModel;
-        const params = {
+        const securityGroups = [securityGroupIdentityModel];
+        const createEndpointGatewayParams = {
           target: target,
           vpc: vpc,
           ips: ips,
           name: name,
           resourceGroup: resourceGroup,
+          securityGroups: securityGroups,
         };
 
-        const createEndpointGatewayResult = vpcService.createEndpointGateway(params);
+        const createEndpointGatewayResult = vpcService.createEndpointGateway(
+          createEndpointGatewayParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createEndpointGatewayResult);
@@ -24639,6 +27229,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.body.ips).toEqual(ips);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.body.security_groups).toEqual(securityGroups);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
       }
@@ -24664,7 +27255,7 @@ describe('VpcV1', () => {
         const vpc = vpcIdentityModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createEndpointGatewayParams = {
           target,
           vpc,
           headers: {
@@ -24673,7 +27264,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createEndpointGateway(params);
+        vpcService.createEndpointGateway(createEndpointGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -24710,14 +27301,16 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const sort = 'name';
-        const params = {
+        const listEndpointGatewayIpsParams = {
           endpointGatewayId: endpointGatewayId,
           start: start,
           limit: limit,
           sort: sort,
         };
 
-        const listEndpointGatewayIpsResult = vpcService.listEndpointGatewayIps(params);
+        const listEndpointGatewayIpsResult = vpcService.listEndpointGatewayIps(
+          listEndpointGatewayIpsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listEndpointGatewayIpsResult);
@@ -24763,7 +27356,7 @@ describe('VpcV1', () => {
         const endpointGatewayId = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listEndpointGatewayIpsParams = {
           endpointGatewayId,
           headers: {
             Accept: userAccept,
@@ -24771,7 +27364,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.listEndpointGatewayIps(params);
+        vpcService.listEndpointGatewayIps(listEndpointGatewayIpsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -24806,12 +27399,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation removeEndpointGatewayIp
         const endpointGatewayId = 'testString';
         const id = 'testString';
-        const params = {
+        const removeEndpointGatewayIpParams = {
           endpointGatewayId: endpointGatewayId,
           id: id,
         };
 
-        const removeEndpointGatewayIpResult = vpcService.removeEndpointGatewayIp(params);
+        const removeEndpointGatewayIpResult = vpcService.removeEndpointGatewayIp(
+          removeEndpointGatewayIpParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(removeEndpointGatewayIpResult);
@@ -24856,7 +27451,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const removeEndpointGatewayIpParams = {
           endpointGatewayId,
           id,
           headers: {
@@ -24865,7 +27460,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.removeEndpointGatewayIp(params);
+        vpcService.removeEndpointGatewayIp(removeEndpointGatewayIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -24900,12 +27495,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation getEndpointGatewayIp
         const endpointGatewayId = 'testString';
         const id = 'testString';
-        const params = {
+        const getEndpointGatewayIpParams = {
           endpointGatewayId: endpointGatewayId,
           id: id,
         };
 
-        const getEndpointGatewayIpResult = vpcService.getEndpointGatewayIp(params);
+        const getEndpointGatewayIpResult = vpcService.getEndpointGatewayIp(
+          getEndpointGatewayIpParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(getEndpointGatewayIpResult);
@@ -24950,7 +27547,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getEndpointGatewayIpParams = {
           endpointGatewayId,
           id,
           headers: {
@@ -24959,7 +27556,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getEndpointGatewayIp(params);
+        vpcService.getEndpointGatewayIp(getEndpointGatewayIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -24994,12 +27591,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation addEndpointGatewayIp
         const endpointGatewayId = 'testString';
         const id = 'testString';
-        const params = {
+        const addEndpointGatewayIpParams = {
           endpointGatewayId: endpointGatewayId,
           id: id,
         };
 
-        const addEndpointGatewayIpResult = vpcService.addEndpointGatewayIp(params);
+        const addEndpointGatewayIpResult = vpcService.addEndpointGatewayIp(
+          addEndpointGatewayIpParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(addEndpointGatewayIpResult);
@@ -25044,7 +27643,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const addEndpointGatewayIpParams = {
           endpointGatewayId,
           id,
           headers: {
@@ -25053,7 +27652,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.addEndpointGatewayIp(params);
+        vpcService.addEndpointGatewayIp(addEndpointGatewayIpParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -25087,11 +27686,13 @@ describe('VpcV1', () => {
       function __deleteEndpointGatewayTest() {
         // Construct the params object for operation deleteEndpointGateway
         const id = 'testString';
-        const params = {
+        const deleteEndpointGatewayParams = {
           id: id,
         };
 
-        const deleteEndpointGatewayResult = vpcService.deleteEndpointGateway(params);
+        const deleteEndpointGatewayResult = vpcService.deleteEndpointGateway(
+          deleteEndpointGatewayParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteEndpointGatewayResult);
@@ -25130,7 +27731,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteEndpointGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -25138,7 +27739,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteEndpointGateway(params);
+        vpcService.deleteEndpointGateway(deleteEndpointGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -25172,11 +27773,11 @@ describe('VpcV1', () => {
       function __getEndpointGatewayTest() {
         // Construct the params object for operation getEndpointGateway
         const id = 'testString';
-        const params = {
+        const getEndpointGatewayParams = {
           id: id,
         };
 
-        const getEndpointGatewayResult = vpcService.getEndpointGateway(params);
+        const getEndpointGatewayResult = vpcService.getEndpointGateway(getEndpointGatewayParams);
 
         // all methods should return a Promise
         expectToBePromise(getEndpointGatewayResult);
@@ -25215,7 +27816,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getEndpointGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -25223,7 +27824,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getEndpointGateway(params);
+        vpcService.getEndpointGateway(getEndpointGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -25258,12 +27859,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateEndpointGateway
         const id = 'testString';
         const name = 'my-endpoint-gateway';
-        const params = {
+        const updateEndpointGatewayParams = {
           id: id,
           name: name,
         };
 
-        const updateEndpointGatewayResult = vpcService.updateEndpointGateway(params);
+        const updateEndpointGatewayResult = vpcService.updateEndpointGateway(
+          updateEndpointGatewayParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateEndpointGatewayResult);
@@ -25303,7 +27906,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateEndpointGatewayParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -25311,7 +27914,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateEndpointGateway(params);
+        vpcService.updateEndpointGateway(updateEndpointGatewayParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -25353,7 +27956,7 @@ describe('VpcV1', () => {
         const vpcName = 'testString';
         const targetId = 'testString';
         const targetResourceType = 'instance';
-        const params = {
+        const listFlowLogCollectorsParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
@@ -25365,7 +27968,9 @@ describe('VpcV1', () => {
           targetResourceType: targetResourceType,
         };
 
-        const listFlowLogCollectorsResult = vpcService.listFlowLogCollectors(params);
+        const listFlowLogCollectorsResult = vpcService.listFlowLogCollectors(
+          listFlowLogCollectorsParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(listFlowLogCollectorsResult);
@@ -25411,14 +28016,14 @@ describe('VpcV1', () => {
         // parameters
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const listFlowLogCollectorsParams = {
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
           },
         };
 
-        vpcService.listFlowLogCollectors(params);
+        vpcService.listFlowLogCollectors(listFlowLogCollectorsParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
 
@@ -25455,7 +28060,7 @@ describe('VpcV1', () => {
         const active = false;
         const name = 'my-flow-log-collector';
         const resourceGroup = resourceGroupIdentityModel;
-        const params = {
+        const createFlowLogCollectorParams = {
           storageBucket: storageBucket,
           target: target,
           active: active,
@@ -25463,7 +28068,9 @@ describe('VpcV1', () => {
           resourceGroup: resourceGroup,
         };
 
-        const createFlowLogCollectorResult = vpcService.createFlowLogCollector(params);
+        const createFlowLogCollectorResult = vpcService.createFlowLogCollector(
+          createFlowLogCollectorParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(createFlowLogCollectorResult);
@@ -25507,7 +28114,7 @@ describe('VpcV1', () => {
         const target = flowLogCollectorTargetPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const createFlowLogCollectorParams = {
           storageBucket,
           target,
           headers: {
@@ -25516,7 +28123,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.createFlowLogCollector(params);
+        vpcService.createFlowLogCollector(createFlowLogCollectorParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -25550,11 +28157,13 @@ describe('VpcV1', () => {
       function __deleteFlowLogCollectorTest() {
         // Construct the params object for operation deleteFlowLogCollector
         const id = 'testString';
-        const params = {
+        const deleteFlowLogCollectorParams = {
           id: id,
         };
 
-        const deleteFlowLogCollectorResult = vpcService.deleteFlowLogCollector(params);
+        const deleteFlowLogCollectorResult = vpcService.deleteFlowLogCollector(
+          deleteFlowLogCollectorParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(deleteFlowLogCollectorResult);
@@ -25593,7 +28202,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const deleteFlowLogCollectorParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -25601,7 +28210,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.deleteFlowLogCollector(params);
+        vpcService.deleteFlowLogCollector(deleteFlowLogCollectorParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -25635,11 +28244,11 @@ describe('VpcV1', () => {
       function __getFlowLogCollectorTest() {
         // Construct the params object for operation getFlowLogCollector
         const id = 'testString';
-        const params = {
+        const getFlowLogCollectorParams = {
           id: id,
         };
 
-        const getFlowLogCollectorResult = vpcService.getFlowLogCollector(params);
+        const getFlowLogCollectorResult = vpcService.getFlowLogCollector(getFlowLogCollectorParams);
 
         // all methods should return a Promise
         expectToBePromise(getFlowLogCollectorResult);
@@ -25678,7 +28287,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const getFlowLogCollectorParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -25686,7 +28295,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.getFlowLogCollector(params);
+        vpcService.getFlowLogCollector(getFlowLogCollectorParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
@@ -25722,13 +28331,15 @@ describe('VpcV1', () => {
         const id = 'testString';
         const active = true;
         const name = 'my-flow-log-collector';
-        const params = {
+        const updateFlowLogCollectorParams = {
           id: id,
           active: active,
           name: name,
         };
 
-        const updateFlowLogCollectorResult = vpcService.updateFlowLogCollector(params);
+        const updateFlowLogCollectorResult = vpcService.updateFlowLogCollector(
+          updateFlowLogCollectorParams
+        );
 
         // all methods should return a Promise
         expectToBePromise(updateFlowLogCollectorResult);
@@ -25769,7 +28380,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
-        const params = {
+        const updateFlowLogCollectorParams = {
           id,
           headers: {
             Accept: userAccept,
@@ -25777,7 +28388,7 @@ describe('VpcV1', () => {
           },
         };
 
-        vpcService.updateFlowLogCollector(params);
+        vpcService.updateFlowLogCollector(updateFlowLogCollectorParams);
         checkMediaHeaders(createRequestMock, userAccept, userContentType);
       });
     });
