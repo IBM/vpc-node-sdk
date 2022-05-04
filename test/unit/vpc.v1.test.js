@@ -26,6 +26,7 @@ const {
   checkUrlAndMethod,
   checkMediaHeaders,
   expectToBePromise,
+  checkUserHeader,
   checkForSuccessfulExecution,
 } = unitTestUtils;
 
@@ -4051,11 +4052,13 @@ describe('VpcV1', () => {
       function __createSubnetReservedIpTest() {
         // Construct the params object for operation createSubnetReservedIp
         const subnetId = 'testString';
+        const address = '192.168.3.4';
         const autoDelete = false;
         const name = 'my-reserved-ip';
         const target = reservedIpTargetPrototypeModel;
         const createSubnetReservedIpParams = {
           subnetId: subnetId,
+          address: address,
           autoDelete: autoDelete,
           name: name,
           target: target,
@@ -4077,6 +4080,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.address).toEqual(address);
         expect(mockRequestOptions.body.auto_delete).toEqual(autoDelete);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.target).toEqual(target);
@@ -5674,9 +5678,37 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
+      // InstanceAvailabilityPrototype
+      const instanceAvailabilityPrototypeModel = {
+        host_failure: 'restart',
+      };
+
+      // TrustedProfileIdentityTrustedProfileById
+      const trustedProfileIdentityModel = {
+        id: 'Profile-9fd84246-7df4-4667-94e4-8ecde51d5ac5',
+      };
+
+      // InstanceDefaultTrustedProfilePrototype
+      const instanceDefaultTrustedProfilePrototypeModel = {
+        auto_link: false,
+        target: trustedProfileIdentityModel,
+      };
+
       // KeyIdentityById
       const keyIdentityModel = {
         id: '363f6d70-0000-0001-0000-00000013b96c',
+      };
+
+      // InstanceMetadataServicePrototype
+      const instanceMetadataServicePrototypeModel = {
+        enabled: true,
+      };
+
+      // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
+      const networkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
       };
 
       // SecurityGroupIdentityById
@@ -5693,7 +5725,7 @@ describe('VpcV1', () => {
       const networkInterfacePrototypeModel = {
         allow_ip_spoofing: true,
         name: 'my-network-interface',
-        primary_ipv4_address: '10.0.0.5',
+        primary_ip: networkInterfaceIpPrototypeModel,
         security_groups: [securityGroupIdentityModel],
         subnet: subnetIdentityModel,
       };
@@ -5743,7 +5775,7 @@ describe('VpcV1', () => {
 
       // VolumePrototypeInstanceByImageContext
       const volumePrototypeInstanceByImageContextModel = {
-        capacity: 38,
+        capacity: 250,
         encryption_key: encryptionKeyIdentityModel,
         iops: 10000,
         name: 'my-volume',
@@ -5769,7 +5801,10 @@ describe('VpcV1', () => {
 
       // InstanceTemplatePrototypeInstanceByImage
       const instanceTemplatePrototypeModel = {
+        availability_policy: instanceAvailabilityPrototypeModel,
+        default_trusted_profile: instanceDefaultTrustedProfilePrototypeModel,
         keys: [keyIdentityModel],
+        metadata_service: instanceMetadataServicePrototypeModel,
         name: 'my-instance-template',
         network_interfaces: [networkInterfacePrototypeModel],
         placement_target: instancePlacementTargetPrototypeModel,
@@ -6237,9 +6272,37 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
+      // InstanceAvailabilityPrototype
+      const instanceAvailabilityPrototypeModel = {
+        host_failure: 'restart',
+      };
+
+      // TrustedProfileIdentityTrustedProfileById
+      const trustedProfileIdentityModel = {
+        id: 'Profile-9fd84246-7df4-4667-94e4-8ecde51d5ac5',
+      };
+
+      // InstanceDefaultTrustedProfilePrototype
+      const instanceDefaultTrustedProfilePrototypeModel = {
+        auto_link: false,
+        target: trustedProfileIdentityModel,
+      };
+
       // KeyIdentityById
       const keyIdentityModel = {
         id: '363f6d70-0000-0001-0000-00000013b96c',
+      };
+
+      // InstanceMetadataServicePrototype
+      const instanceMetadataServicePrototypeModel = {
+        enabled: true,
+      };
+
+      // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
+      const networkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
       };
 
       // SecurityGroupIdentityById
@@ -6256,7 +6319,7 @@ describe('VpcV1', () => {
       const networkInterfacePrototypeModel = {
         allow_ip_spoofing: true,
         name: 'my-network-interface',
-        primary_ipv4_address: '10.0.0.5',
+        primary_ip: networkInterfaceIpPrototypeModel,
         security_groups: [securityGroupIdentityModel],
         subnet: subnetIdentityModel,
       };
@@ -6309,7 +6372,7 @@ describe('VpcV1', () => {
 
       // VolumePrototypeInstanceByImageContext
       const volumePrototypeInstanceByImageContextModel = {
-        capacity: 38,
+        capacity: 250,
         encryption_key: encryptionKeyIdentityModel,
         iops: 10000,
         name: 'my-boot-volume',
@@ -6335,7 +6398,10 @@ describe('VpcV1', () => {
 
       // InstancePrototypeInstanceByImage
       const instancePrototypeModel = {
+        availability_policy: instanceAvailabilityPrototypeModel,
+        default_trusted_profile: instanceDefaultTrustedProfilePrototypeModel,
         keys: [keyIdentityModel],
+        metadata_service: instanceMetadataServicePrototypeModel,
         name: 'my-instance',
         network_interfaces: [networkInterfacePrototypeModel],
         placement_target: instancePlacementTargetPrototypeModel,
@@ -6608,6 +6674,16 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
+      // InstanceAvailabilityPolicyPatch
+      const instanceAvailabilityPolicyPatchModel = {
+        host_failure: 'restart',
+      };
+
+      // InstanceMetadataServicePatch
+      const instanceMetadataServicePatchModel = {
+        enabled: true,
+      };
+
       // InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityById
       const instancePlacementTargetPatchModel = {
         id: '1e09281b-f177-46fb-baf1-bc152b2e391a',
@@ -6615,18 +6691,22 @@ describe('VpcV1', () => {
 
       // InstancePatchProfileInstanceProfileIdentityByName
       const instancePatchProfileModel = {
-        name: 'bc1-4x16',
+        name: 'bx2-4x16',
       };
 
       function __updateInstanceTest() {
         // Construct the params object for operation updateInstance
         const id = 'testString';
+        const availabilityPolicy = instanceAvailabilityPolicyPatchModel;
+        const metadataService = instanceMetadataServicePatchModel;
         const name = 'my-instance';
         const placementTarget = instancePlacementTargetPatchModel;
         const profile = instancePatchProfileModel;
         const totalVolumeBandwidth = 500;
         const updateInstanceParams = {
           id: id,
+          availabilityPolicy: availabilityPolicy,
+          metadataService: metadataService,
           name: name,
           placementTarget: placementTarget,
           profile: profile,
@@ -6647,6 +6727,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.availability_policy).toEqual(availabilityPolicy);
+        expect(mockRequestOptions.body.metadata_service).toEqual(metadataService);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.placement_target).toEqual(placementTarget);
         expect(mockRequestOptions.body.profile).toEqual(profile);
@@ -7358,6 +7440,13 @@ describe('VpcV1', () => {
         id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
       };
 
+      // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
+      const networkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
       // SecurityGroupIdentityById
       const securityGroupIdentityModel = {
         id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
@@ -7369,14 +7458,14 @@ describe('VpcV1', () => {
         const subnet = subnetIdentityModel;
         const allowIpSpoofing = true;
         const name = 'my-network-interface';
-        const primaryIpv4Address = '10.0.0.5';
+        const primaryIp = networkInterfaceIpPrototypeModel;
         const securityGroups = [securityGroupIdentityModel];
         const createInstanceNetworkInterfaceParams = {
           instanceId: instanceId,
           subnet: subnet,
           allowIpSpoofing: allowIpSpoofing,
           name: name,
-          primaryIpv4Address: primaryIpv4Address,
+          primaryIp: primaryIp,
           securityGroups: securityGroups,
         };
 
@@ -7403,7 +7492,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.body.subnet).toEqual(subnet);
         expect(mockRequestOptions.body.allow_ip_spoofing).toEqual(allowIpSpoofing);
         expect(mockRequestOptions.body.name).toEqual(name);
-        expect(mockRequestOptions.body.primary_ipv4_address).toEqual(primaryIpv4Address);
+        expect(mockRequestOptions.body.primary_ip).toEqual(primaryIp);
         expect(mockRequestOptions.body.security_groups).toEqual(securityGroups);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
@@ -8162,6 +8251,209 @@ describe('VpcV1', () => {
         let err;
         try {
           await vpcService.addInstanceNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('listInstanceNetworkInterfaceIps', () => {
+    describe('positive tests', () => {
+      function __listInstanceNetworkInterfaceIpsTest() {
+        // Construct the params object for operation listInstanceNetworkInterfaceIps
+        const instanceId = 'testString';
+        const networkInterfaceId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const listInstanceNetworkInterfaceIpsParams = {
+          instanceId: instanceId,
+          networkInterfaceId: networkInterfaceId,
+          start: start,
+          limit: limit,
+        };
+
+        const listInstanceNetworkInterfaceIpsResult = vpcService.listInstanceNetworkInterfaceIps(
+          listInstanceNetworkInterfaceIpsParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listInstanceNetworkInterfaceIpsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_interfaces/{network_interface_id}/ips',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceNetworkInterfaceIpsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceNetworkInterfaceIpsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceNetworkInterfaceIpsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const networkInterfaceId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listInstanceNetworkInterfaceIpsParams = {
+          instanceId,
+          networkInterfaceId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listInstanceNetworkInterfaceIps(listInstanceNetworkInterfaceIpsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceNetworkInterfaceIps({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceNetworkInterfaceIps();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getInstanceNetworkInterfaceIp', () => {
+    describe('positive tests', () => {
+      function __getInstanceNetworkInterfaceIpTest() {
+        // Construct the params object for operation getInstanceNetworkInterfaceIp
+        const instanceId = 'testString';
+        const networkInterfaceId = 'testString';
+        const id = 'testString';
+        const getInstanceNetworkInterfaceIpParams = {
+          instanceId: instanceId,
+          networkInterfaceId: networkInterfaceId,
+          id: id,
+        };
+
+        const getInstanceNetworkInterfaceIpResult = vpcService.getInstanceNetworkInterfaceIp(
+          getInstanceNetworkInterfaceIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getInstanceNetworkInterfaceIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_interfaces/{network_interface_id}/ips/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceNetworkInterfaceIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceNetworkInterfaceIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceNetworkInterfaceIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const networkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getInstanceNetworkInterfaceIpParams = {
+          instanceId,
+          networkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getInstanceNetworkInterfaceIp(getInstanceNetworkInterfaceIpParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceNetworkInterfaceIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceNetworkInterfaceIp();
         } catch (e) {
           err = e;
         }
@@ -13358,6 +13650,13 @@ describe('VpcV1', () => {
         user_data: 'testString',
       };
 
+      // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
+      const networkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
       // SecurityGroupIdentityById
       const securityGroupIdentityModel = {
         id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
@@ -13375,7 +13674,7 @@ describe('VpcV1', () => {
         enable_infrastructure_nat: true,
         interface_type: 'pci',
         name: 'my-network-interface',
-        primary_ipv4_address: '10.0.0.5',
+        primary_ip: networkInterfaceIpPrototypeModel,
         security_groups: [securityGroupIdentityModel],
         subnet: subnetIdentityModel,
       };
@@ -13396,7 +13695,7 @@ describe('VpcV1', () => {
         enable_infrastructure_nat: true,
         interface_type: 'vlan',
         name: 'my-network-interface',
-        primary_ipv4_address: '10.0.0.5',
+        primary_ip: networkInterfaceIpPrototypeModel,
         security_groups: [securityGroupIdentityModel],
         subnet: subnetIdentityModel,
         allow_interface_to_float: false,
@@ -14013,6 +14312,13 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
+      // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
+      const networkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
       // SecurityGroupIdentityById
       const securityGroupIdentityModel = {
         id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
@@ -14029,7 +14335,7 @@ describe('VpcV1', () => {
         enable_infrastructure_nat: true,
         interface_type: 'vlan',
         name: 'my-network-interface',
-        primary_ipv4_address: '10.0.0.5',
+        primary_ip: networkInterfaceIpPrototypeModel,
         security_groups: [securityGroupIdentityModel],
         subnet: subnetIdentityModel,
         allow_interface_to_float: false,
@@ -14835,6 +15141,205 @@ describe('VpcV1', () => {
         let err;
         try {
           await vpcService.addBareMetalServerNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('listBareMetalServerNetworkInterfaceIps', () => {
+    describe('positive tests', () => {
+      function __listBareMetalServerNetworkInterfaceIpsTest() {
+        // Construct the params object for operation listBareMetalServerNetworkInterfaceIps
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const listBareMetalServerNetworkInterfaceIpsParams = {
+          bareMetalServerId: bareMetalServerId,
+          networkInterfaceId: networkInterfaceId,
+        };
+
+        const listBareMetalServerNetworkInterfaceIpsResult = vpcService.listBareMetalServerNetworkInterfaceIps(
+          listBareMetalServerNetworkInterfaceIpsParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listBareMetalServerNetworkInterfaceIpsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/ips',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listBareMetalServerNetworkInterfaceIpsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listBareMetalServerNetworkInterfaceIpsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listBareMetalServerNetworkInterfaceIpsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listBareMetalServerNetworkInterfaceIpsParams = {
+          bareMetalServerId,
+          networkInterfaceId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listBareMetalServerNetworkInterfaceIps(
+          listBareMetalServerNetworkInterfaceIpsParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listBareMetalServerNetworkInterfaceIps({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listBareMetalServerNetworkInterfaceIps();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getBareMetalServerNetworkInterfaceIp', () => {
+    describe('positive tests', () => {
+      function __getBareMetalServerNetworkInterfaceIpTest() {
+        // Construct the params object for operation getBareMetalServerNetworkInterfaceIp
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const id = 'testString';
+        const getBareMetalServerNetworkInterfaceIpParams = {
+          bareMetalServerId: bareMetalServerId,
+          networkInterfaceId: networkInterfaceId,
+          id: id,
+        };
+
+        const getBareMetalServerNetworkInterfaceIpResult = vpcService.getBareMetalServerNetworkInterfaceIp(
+          getBareMetalServerNetworkInterfaceIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getBareMetalServerNetworkInterfaceIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/ips/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBareMetalServerNetworkInterfaceIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBareMetalServerNetworkInterfaceIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBareMetalServerNetworkInterfaceIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const networkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBareMetalServerNetworkInterfaceIpParams = {
+          bareMetalServerId,
+          networkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBareMetalServerNetworkInterfaceIp(getBareMetalServerNetworkInterfaceIpParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerNetworkInterfaceIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerNetworkInterfaceIp();
         } catch (e) {
           err = e;
         }
@@ -15714,6 +16219,7 @@ describe('VpcV1', () => {
         name: 'my-volume',
         profile: volumeProfileIdentityModel,
         resource_group: resourceGroupIdentityModel,
+        user_tags: ['testString'],
         zone: zoneIdentityModel,
         capacity: 100,
         encryption_key: encryptionKeyIdentityModel,
@@ -15807,8 +16313,10 @@ describe('VpcV1', () => {
       function __deleteVolumeTest() {
         // Construct the params object for operation deleteVolume
         const id = 'testString';
+        const ifMatch = '96d225c4-56bd-43d9-98fc-d7148e5c5028';
         const deleteVolumeParams = {
           id: id,
+          ifMatch: ifMatch,
         };
 
         const deleteVolumeResult = vpcService.deleteVolume(deleteVolumeParams);
@@ -15825,6 +16333,7 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
         expect(mockRequestOptions.path.id).toEqual(id);
@@ -15988,12 +16497,16 @@ describe('VpcV1', () => {
         const iops = 10000;
         const name = 'my-volume';
         const profile = volumeProfileIdentityModel;
+        const userTags = ['testString'];
+        const ifMatch = '96d225c4-56bd-43d9-98fc-d7148e5c5028';
         const updateVolumeParams = {
           id: id,
           capacity: capacity,
           iops: iops,
           name: name,
           profile: profile,
+          userTags: userTags,
+          ifMatch: ifMatch,
         };
 
         const updateVolumeResult = vpcService.updateVolume(updateVolumeParams);
@@ -16010,10 +16523,12 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.body.capacity).toEqual(capacity);
         expect(mockRequestOptions.body.iops).toEqual(iops);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.profile).toEqual(profile);
+        expect(mockRequestOptions.body.user_tags).toEqual(userTags);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
         expect(mockRequestOptions.path.id).toEqual(id);
@@ -16254,25 +16769,29 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // VolumeIdentityById
-      const volumeIdentityModel = {
-        id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
-      };
-
       // ResourceGroupIdentityById
       const resourceGroupIdentityModel = {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
+      // VolumeIdentityById
+      const volumeIdentityModel = {
+        id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
+      };
+
+      // SnapshotPrototypeSnapshotBySourceVolume
+      const snapshotPrototypeModel = {
+        name: 'my-snapshot',
+        resource_group: resourceGroupIdentityModel,
+        user_tags: ['testString'],
+        source_volume: volumeIdentityModel,
+      };
+
       function __createSnapshotTest() {
         // Construct the params object for operation createSnapshot
-        const sourceVolume = volumeIdentityModel;
-        const name = 'my-snapshot';
-        const resourceGroup = resourceGroupIdentityModel;
+        const snapshotPrototype = snapshotPrototypeModel;
         const createSnapshotParams = {
-          sourceVolume: sourceVolume,
-          name: name,
-          resourceGroup: resourceGroup,
+          snapshotPrototype: snapshotPrototype,
         };
 
         const createSnapshotResult = vpcService.createSnapshot(createSnapshotParams);
@@ -16289,9 +16808,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body.source_volume).toEqual(sourceVolume);
-        expect(mockRequestOptions.body.name).toEqual(name);
-        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.body).toEqual(snapshotPrototype);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
       }
@@ -16313,11 +16830,11 @@ describe('VpcV1', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const sourceVolume = volumeIdentityModel;
+        const snapshotPrototype = snapshotPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const createSnapshotParams = {
-          sourceVolume,
+          snapshotPrototype,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -16358,8 +16875,10 @@ describe('VpcV1', () => {
       function __deleteSnapshotTest() {
         // Construct the params object for operation deleteSnapshot
         const id = 'testString';
+        const ifMatch = '96d225c4-56bd-43d9-98fc-d7148e5c5028';
         const deleteSnapshotParams = {
           id: id,
+          ifMatch: ifMatch,
         };
 
         const deleteSnapshotResult = vpcService.deleteSnapshot(deleteSnapshotParams);
@@ -16376,6 +16895,7 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
         expect(mockRequestOptions.path.id).toEqual(id);
@@ -16529,9 +17049,13 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateSnapshot
         const id = 'testString';
         const name = 'my-snapshot';
+        const userTags = ['testString'];
+        const ifMatch = '96d225c4-56bd-43d9-98fc-d7148e5c5028';
         const updateSnapshotParams = {
           id: id,
           name: name,
+          userTags: userTags,
+          ifMatch: ifMatch,
         };
 
         const updateSnapshotResult = vpcService.updateSnapshot(updateSnapshotParams);
@@ -16548,7 +17072,9 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.user_tags).toEqual(userTags);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
         expect(mockRequestOptions.path.id).toEqual(id);
@@ -17389,10 +17915,12 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const resourceGroupId = 'testString';
+        const sort = 'name';
         const listFloatingIpsParams = {
           start: start,
           limit: limit,
           resourceGroupId: resourceGroupId,
+          sort: sort,
         };
 
         const listFloatingIpsResult = vpcService.listFloatingIps(listFloatingIpsParams);
@@ -17414,6 +17942,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.qs.start).toEqual(start);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -19231,391 +19760,6 @@ describe('VpcV1', () => {
         let err;
         try {
           await vpcService.updateSecurityGroup();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
-  describe('listSecurityGroupNetworkInterfaces', () => {
-    describe('positive tests', () => {
-      function __listSecurityGroupNetworkInterfacesTest() {
-        // Construct the params object for operation listSecurityGroupNetworkInterfaces
-        const securityGroupId = 'testString';
-        const start = 'testString';
-        const limit = 1;
-        const listSecurityGroupNetworkInterfacesParams = {
-          securityGroupId: securityGroupId,
-          start: start,
-          limit: limit,
-        };
-
-        const listSecurityGroupNetworkInterfacesResult = vpcService.listSecurityGroupNetworkInterfaces(
-          listSecurityGroupNetworkInterfacesParams
-        );
-
-        // all methods should return a Promise
-        expectToBePromise(listSecurityGroupNetworkInterfacesResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/security_groups/{security_group_id}/network_interfaces',
-          'GET'
-        );
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
-        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
-        expect(mockRequestOptions.qs.start).toEqual(start);
-        expect(mockRequestOptions.qs.limit).toEqual(limit);
-        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __listSecurityGroupNetworkInterfacesTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        vpcService.enableRetries();
-        __listSecurityGroupNetworkInterfacesTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        vpcService.disableRetries();
-        __listSecurityGroupNetworkInterfacesTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const securityGroupId = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const listSecurityGroupNetworkInterfacesParams = {
-          securityGroupId,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        vpcService.listSecurityGroupNetworkInterfaces(listSecurityGroupNetworkInterfacesParams);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await vpcService.listSecurityGroupNetworkInterfaces({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await vpcService.listSecurityGroupNetworkInterfaces();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
-  describe('removeSecurityGroupNetworkInterface', () => {
-    describe('positive tests', () => {
-      function __removeSecurityGroupNetworkInterfaceTest() {
-        // Construct the params object for operation removeSecurityGroupNetworkInterface
-        const securityGroupId = 'testString';
-        const id = 'testString';
-        const removeSecurityGroupNetworkInterfaceParams = {
-          securityGroupId: securityGroupId,
-          id: id,
-        };
-
-        const removeSecurityGroupNetworkInterfaceResult = vpcService.removeSecurityGroupNetworkInterface(
-          removeSecurityGroupNetworkInterfaceParams
-        );
-
-        // all methods should return a Promise
-        expectToBePromise(removeSecurityGroupNetworkInterfaceResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/security_groups/{security_group_id}/network_interfaces/{id}',
-          'DELETE'
-        );
-        const expectedAccept = undefined;
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
-        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
-        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
-        expect(mockRequestOptions.path.id).toEqual(id);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __removeSecurityGroupNetworkInterfaceTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        vpcService.enableRetries();
-        __removeSecurityGroupNetworkInterfaceTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        vpcService.disableRetries();
-        __removeSecurityGroupNetworkInterfaceTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const securityGroupId = 'testString';
-        const id = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const removeSecurityGroupNetworkInterfaceParams = {
-          securityGroupId,
-          id,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        vpcService.removeSecurityGroupNetworkInterface(removeSecurityGroupNetworkInterfaceParams);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await vpcService.removeSecurityGroupNetworkInterface({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await vpcService.removeSecurityGroupNetworkInterface();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
-  describe('getSecurityGroupNetworkInterface', () => {
-    describe('positive tests', () => {
-      function __getSecurityGroupNetworkInterfaceTest() {
-        // Construct the params object for operation getSecurityGroupNetworkInterface
-        const securityGroupId = 'testString';
-        const id = 'testString';
-        const getSecurityGroupNetworkInterfaceParams = {
-          securityGroupId: securityGroupId,
-          id: id,
-        };
-
-        const getSecurityGroupNetworkInterfaceResult = vpcService.getSecurityGroupNetworkInterface(
-          getSecurityGroupNetworkInterfaceParams
-        );
-
-        // all methods should return a Promise
-        expectToBePromise(getSecurityGroupNetworkInterfaceResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/security_groups/{security_group_id}/network_interfaces/{id}',
-          'GET'
-        );
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
-        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
-        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
-        expect(mockRequestOptions.path.id).toEqual(id);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __getSecurityGroupNetworkInterfaceTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        vpcService.enableRetries();
-        __getSecurityGroupNetworkInterfaceTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        vpcService.disableRetries();
-        __getSecurityGroupNetworkInterfaceTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const securityGroupId = 'testString';
-        const id = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const getSecurityGroupNetworkInterfaceParams = {
-          securityGroupId,
-          id,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        vpcService.getSecurityGroupNetworkInterface(getSecurityGroupNetworkInterfaceParams);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await vpcService.getSecurityGroupNetworkInterface({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await vpcService.getSecurityGroupNetworkInterface();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
-  describe('addSecurityGroupNetworkInterface', () => {
-    describe('positive tests', () => {
-      function __addSecurityGroupNetworkInterfaceTest() {
-        // Construct the params object for operation addSecurityGroupNetworkInterface
-        const securityGroupId = 'testString';
-        const id = 'testString';
-        const addSecurityGroupNetworkInterfaceParams = {
-          securityGroupId: securityGroupId,
-          id: id,
-        };
-
-        const addSecurityGroupNetworkInterfaceResult = vpcService.addSecurityGroupNetworkInterface(
-          addSecurityGroupNetworkInterfaceParams
-        );
-
-        // all methods should return a Promise
-        expectToBePromise(addSecurityGroupNetworkInterfaceResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/security_groups/{security_group_id}/network_interfaces/{id}',
-          'PUT'
-        );
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
-        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
-        expect(mockRequestOptions.path.security_group_id).toEqual(securityGroupId);
-        expect(mockRequestOptions.path.id).toEqual(id);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __addSecurityGroupNetworkInterfaceTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        vpcService.enableRetries();
-        __addSecurityGroupNetworkInterfaceTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        vpcService.disableRetries();
-        __addSecurityGroupNetworkInterfaceTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const securityGroupId = 'testString';
-        const id = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const addSecurityGroupNetworkInterfaceParams = {
-          securityGroupId,
-          id,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        vpcService.addSecurityGroupNetworkInterface(addSecurityGroupNetworkInterfaceParams);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await vpcService.addSecurityGroupNetworkInterface({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await vpcService.addSecurityGroupNetworkInterface();
         } catch (e) {
           err = e;
         }
@@ -24287,7 +24431,7 @@ describe('VpcV1', () => {
       // CertificateInstanceIdentityByCRN
       const certificateInstanceIdentityModel = {
         crn:
-          'crn:v1:bluemix:public:cloudcerts:us-south:a/123456:b8866ea4-b8df-467e-801a-da1db7e020bf:certificate:78ff9c4c97d013fb2a95b21dddde7758',
+          'crn:v1:bluemix:public:secrets-manager:us-south:a/123456:36fa422d-080d-4d83-8d2d-86851b4001df:secret:2e786aab-42fa-63ed-14f8-d66d552f4dd5',
       };
 
       // LoadBalancerPoolIdentityById
@@ -24649,7 +24793,7 @@ describe('VpcV1', () => {
       // CertificateInstanceIdentityByCRN
       const certificateInstanceIdentityModel = {
         crn:
-          'crn:v1:bluemix:public:cloudcerts:us-south:a/123456:b8866ea4-b8df-467e-801a-da1db7e020bf:certificate:78ff9c4c97d013fb2a95b21dddde7758',
+          'crn:v1:bluemix:public:secrets-manager:us-south:a/123456:36fa422d-080d-4d83-8d2d-86851b4001df:secret:2e786aab-42fa-63ed-14f8-d66d552f4dd5',
       };
 
       // LoadBalancerPoolIdentityById
@@ -28038,8 +28182,8 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // CloudObjectStorageBucketIdentityByName
-      const cloudObjectStorageBucketIdentityModel = {
+      // LegacyCloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName
+      const legacyCloudObjectStorageBucketIdentityModel = {
         name: 'bucket-27200-lwx4cfvcue',
       };
 
@@ -28055,7 +28199,7 @@ describe('VpcV1', () => {
 
       function __createFlowLogCollectorTest() {
         // Construct the params object for operation createFlowLogCollector
-        const storageBucket = cloudObjectStorageBucketIdentityModel;
+        const storageBucket = legacyCloudObjectStorageBucketIdentityModel;
         const target = flowLogCollectorTargetPrototypeModel;
         const active = false;
         const name = 'my-flow-log-collector';
@@ -28110,7 +28254,7 @@ describe('VpcV1', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const storageBucket = cloudObjectStorageBucketIdentityModel;
+        const storageBucket = legacyCloudObjectStorageBucketIdentityModel;
         const target = flowLogCollectorTargetPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
