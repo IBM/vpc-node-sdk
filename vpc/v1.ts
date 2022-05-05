@@ -33,7 +33,7 @@
   * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
   * instances, along with subnets, volumes, load balancers, and more.
   *
-  * API Version: 2022-02-08
+  * API Version: 2022-03-29
   */
  
  class VpcV1 extends BaseService {
@@ -72,20 +72,20 @@
      return service;
    }
  
-   /** Requests the API version as of a date, in format `YYYY-MM-DD`. Any date between `2019-01-01` and the current
-    *  date may be specified. Specify the current date to request the latest version.
+   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
+    *  `2022-03-29` and today's date (UTC).
     */
    version: string;
  
-   /** The infrastructure generation for the request. For the API behavior documented here, use `2`. */
+   /** The infrastructure generation. For the API behavior documented here, specify `2`. */
    generation?: number;
  
    /**
     * Construct a VpcV1 object.
     *
     * @param {Object} options - Options for the service.
-    * @param {string} options.version - Requests the API version as of a date, in format `YYYY-MM-DD`. Any date between
-    * `2019-01-01` and the current date may be specified. Specify the current date to request the latest version.
+    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
+    * specify any date between `2022-03-29` and today's date (UTC).
     * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
     * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
     * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -94,7 +94,7 @@
     */
    constructor(options: UserOptions) {
      options = options || {};
- 
+
      options.generation = 2;
      super(options);
      if (options.serviceUrl) {
@@ -102,7 +102,7 @@
      } else {
        this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
      }
-     this.version = options.version ||'2022-02-08';
+     this.version = options.version || '2022-03-29';
      this.generation = options.generation;
    }
  
@@ -180,13 +180,12 @@
     * retrieved VPC, and contains the information necessary to create the new VPC.
     *
     * @param {Object} [params] - The parameters to send to the service.
-    * @param {string} [params.addressPrefixManagement] - Indicates whether a default address prefix should be
-    * automatically created for each zone in this VPC. If `manual`, this VPC will be created with no default address
-    * prefixes.
+    * @param {string} [params.addressPrefixManagement] - Indicates whether a default address prefix will be automatically
+    * created for each zone in this VPC. If `manual`, this VPC will be created with no default address prefixes.
     *
-    * This property's value is used only when creating the VPC. Since address prefixes are managed identically regardless
-    * of whether they were automatically created, the value is not preserved as a VPC property.
-    * @param {boolean} [params.classicAccess] - Indicates whether this VPC should be connected to Classic Infrastructure.
+    * Since address prefixes are managed identically regardless of whether they were automatically created, the value is
+    * not preserved as a VPC property.
+    * @param {boolean} [params.classicAccess] - Indicates whether this VPC will be connected to Classic Infrastructure.
     * If true, this VPC's resources will have private network connectivity to the account's Classic Infrastructure
     * resources. Only one VPC, per region, may be connected in this way. This value is set at creation and subsequently
     * immutable.
@@ -1373,17 +1372,17 @@
     * VPC must not already have a routing table with this property set to `true`.
     *
     * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-    * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
-    * connection, the packet will be dropped.
+    * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
+    * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
+    * address or a VPN gateway connection, the packet will be dropped.
     * @param {boolean} [params.routeTransitGatewayIngress] - If set to `true`, this routing table will be used to route
     * traffic that originates from [Transit Gateway](https://cloud.ibm.com/cloud/transit-gateway/) to this VPC. For this
     * to succeed, the VPC must not already have a routing table with this property set to `true`.
     *
     * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-    * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
-    * connection, the packet will be dropped.
+    * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
+    * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
+    * address or a VPN gateway connection, the packet will be dropped.
     *
     * If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
     * enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -1597,9 +1596,9 @@
     * routing table. Updating to `false` deselects this routing table.
     *
     * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-    * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
-    * connection, the packet will be dropped.
+    * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
+    * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
+    * address or a VPN gateway connection, the packet will be dropped.
     * @param {boolean} [params.routeTransitGatewayIngress] - Indicates whether this routing table is used to route
     * traffic that originates from
     * [Transit Gateway](https://cloud.ibm.com/cloud/transit-gateway/) to this VPC. Updating to
@@ -1607,9 +1606,9 @@
     * `true`, and no subnets are attached to this routing table. Updating to `false` deselects this routing table.
     *
     * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-    * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
-    * connection, the packet will be dropped.
+    * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
+    * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
+    * address or a VPN gateway connection, the packet will be dropped.
     *
     * If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
     * enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -1620,9 +1619,9 @@
     * table. Updating to `false` deselects this routing table.
     *
     * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-    * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-    * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
-    * connection, the packet will be dropped.
+    * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
+    * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
+    * address or a VPN gateway connection, the packet will be dropped.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.RoutingTable>>}
     */
@@ -2780,7 +2779,8 @@
    /**
     * List all reserved IPs in a subnet.
     *
-    * This request lists reserved IPs in a subnet that are unbound or bound to an endpoint gateway.
+    * This request lists all reserved IPs in a subnet. A reserved IP resource will exist for every address in the subnet
+    * which is not available for use.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.subnetId - The subnet identifier.
@@ -2847,10 +2847,14 @@
    /**
     * Reserve an IP in a subnet.
     *
-    * This request reserves a system-selected IP address in a subnet.
+    * This request reserves an IP address in a subnet. If the provided prototype object includes an `address`, the
+    * address must not already be reserved.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.subnetId - The subnet identifier.
+    * @param {string} [params.address] - The IP address to reserve, which must not already be reserved on the subnet.
+    *
+    * If unspecified, an available address on the subnet will automatically be selected.
     * @param {boolean} [params.autoDelete] - Indicates whether this reserved IP member will be automatically deleted when
     * either
     * `target` is deleted, or the reserved IP is unbound. Must be `false` if the reserved IP is unbound.
@@ -2868,13 +2872,14 @@
    ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
      const _params = { ...params };
      const _requiredParams = ['subnetId'];
-     const _validParams = ['subnetId', 'autoDelete', 'name', 'target', 'headers'];
+     const _validParams = ['subnetId', 'address', 'autoDelete', 'name', 'target', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
      }
  
      const body = {
+       'address': _params.address,
        'auto_delete': _params.autoDelete,
        'name': _params.name,
        'target': _params.target,
@@ -4528,6 +4533,9 @@
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.id - The instance identifier.
+    * @param {InstanceAvailabilityPolicyPatch} [params.availabilityPolicy] - The availability policy for this virtual
+    * server instance.
+    * @param {InstanceMetadataServicePatch} [params.metadataService] - The metadata service configuration.
     * @param {string} [params.name] - The user-defined name for this virtual server instance (and default system
     * hostname).
     * @param {InstancePlacementTargetPatch} [params.placementTarget] - The placement restrictions to use for the virtual
@@ -4554,13 +4562,15 @@
    ): Promise<VpcV1.Response<VpcV1.Instance>> {
      const _params = { ...params };
      const _requiredParams = ['id'];
-     const _validParams = ['id', 'name', 'placementTarget', 'profile', 'totalVolumeBandwidth', 'headers'];
+     const _validParams = ['id', 'availabilityPolicy', 'metadataService', 'name', 'placementTarget', 'profile', 'totalVolumeBandwidth', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
      }
  
      const body = {
+       'availability_policy': _params.availabilityPolicy,
+       'metadata_service': _params.metadataService,
        'name': _params.name,
        'placement_target': _params.placementTarget,
        'profile': _params.profile,
@@ -5069,9 +5079,13 @@
     * @param {string} [params.name] - The user-defined name for network interface. Names must be unique within the
     * instance the network interface resides in. If unspecified, the name will be a hyphenated list of randomly-selected
     * words.
-    * @param {string} [params.primaryIpv4Address] - The primary IPv4 address. If specified, it must be an available
-    * address on the network interface's subnet. If unspecified, an available address on the subnet will be automatically
-    * selected.
+    * @param {NetworkInterfaceIPPrototype} [params.primaryIp] - The primary IP address to bind to the network interface.
+    * This can be specified using
+    * an existing reserved IP, or a prototype object for a new reserved IP.
+    *
+    * If an existing reserved IP or a prototype object with an address is specified, it must
+    * be available on the network interface's subnet. Otherwise, an available address on the
+    * subnet will be automatically selected and reserved.
     * @param {SecurityGroupIdentity[]} [params.securityGroups] - The security groups to use for this network interface.
     * If unspecified, the VPC's default security group is used.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -5082,7 +5096,7 @@
    ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
      const _params = { ...params };
      const _requiredParams = ['instanceId', 'subnet'];
-     const _validParams = ['instanceId', 'subnet', 'allowIpSpoofing', 'name', 'primaryIpv4Address', 'securityGroups', 'headers'];
+     const _validParams = ['instanceId', 'subnet', 'allowIpSpoofing', 'name', 'primaryIp', 'securityGroups', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
@@ -5092,7 +5106,7 @@
        'subnet': _params.subnet,
        'allow_ip_spoofing': _params.allowIpSpoofing,
        'name': _params.name,
-       'primary_ipv4_address': _params.primaryIpv4Address,
+       'primary_ip': _params.primaryIp,
        'security_groups': _params.securityGroups,
      };
  
@@ -5578,6 +5592,133 @@
    }
  
    /**
+    * List all reserved IPs bound to a network interface.
+    *
+    * This request lists all reserved IPs bound to a network interface.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.instanceId - The instance identifier.
+    * @param {string} params.networkInterfaceId - The network interface identifier.
+    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+    * @param {number} [params.limit] - The number of resources to return on a page.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionNetworkInterfaceContext>>}
+    */
+   public listInstanceNetworkInterfaceIps(
+     params: VpcV1.ListInstanceNetworkInterfaceIpsParams
+   ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionNetworkInterfaceContext>> {
+     const _params = { ...params };
+     const _requiredParams = ['instanceId', 'networkInterfaceId'];
+     const _validParams = ['instanceId', 'networkInterfaceId', 'start', 'limit', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+       'start': _params.start,
+       'limit': _params.limit,
+     };
+ 
+     const path = {
+       'instance_id': _params.instanceId,
+       'network_interface_id': _params.networkInterfaceId,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'listInstanceNetworkInterfaceIps'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/instances/{instance_id}/network_interfaces/{network_interface_id}/ips',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Retrieve bound reserved IP.
+    *
+    * This request a retrieves the specified reserved IP address if it is bound to the network interface and instance
+    * specified in the URL.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.instanceId - The instance identifier.
+    * @param {string} params.networkInterfaceId - The network interface identifier.
+    * @param {string} params.id - The reserved IP identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
+    */
+   public getInstanceNetworkInterfaceIp(
+     params: VpcV1.GetInstanceNetworkInterfaceIpParams
+   ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
+     const _params = { ...params };
+     const _requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
+     const _validParams = ['instanceId', 'networkInterfaceId', 'id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'instance_id': _params.instanceId,
+       'network_interface_id': _params.networkInterfaceId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'getInstanceNetworkInterfaceIp'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/instances/{instance_id}/network_interfaces/{network_interface_id}/ips/{id}',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
     * List all volumes attachments on an instance.
     *
     * This request lists all volume attachments on an instance. A volume attachment connects a volume to an instance.
@@ -5971,7 +6112,10 @@
     * This request creates a new instance group.
     *
     * @param {Object} params - The parameters to send to the service.
-    * @param {InstanceTemplateIdentity} params.instanceTemplate - Identifies an instance template by a unique property.
+    * @param {InstanceTemplateIdentity} params.instanceTemplate - Instance template to use when creating new instances.
+    *
+    * Instance groups are not compatible with instance templates that specify `true` for
+    * `default_trusted_profile.auto_link`.
     * @param {SubnetIdentity[]} params.subnets - The subnets to use when creating new instances.
     * @param {number} [params.applicationPort] - Required if specifying a load balancer pool only. Used by the instance
     * group when scaling up instances to supply the port for the load balancer pool member.
@@ -6174,7 +6318,10 @@
     * @param {string} params.id - The instance group identifier.
     * @param {number} [params.applicationPort] - Required if specifying a load balancer pool only. Used by the instance
     * group when scaling up instances to supply the port for the load balancer pool member.
-    * @param {InstanceTemplateIdentity} [params.instanceTemplate] - Identifies an instance template by a unique property.
+    * @param {InstanceTemplateIdentity} [params.instanceTemplate] - Instance template to use when creating new instances.
+    *
+    * Instance groups are not compatible with instance templates that specify `true` for
+    * `default_trusted_profile.auto_link`.
     * @param {LoadBalancerIdentity} [params.loadBalancer] - The load balancer that the load balancer pool used by this
     * group
     * is in. Required when using a load balancer pool.
@@ -9961,6 +10108,129 @@
    }
  
    /**
+    * List all reserved IPs bound to a network interface.
+    *
+    * This request lists all reserved IPs bound to a network interface.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.bareMetalServerId - The bare metal server identifier.
+    * @param {string} params.networkInterfaceId - The network interface identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionNetworkInterfaceContext>>}
+    */
+   public listBareMetalServerNetworkInterfaceIps(
+     params: VpcV1.ListBareMetalServerNetworkInterfaceIpsParams
+   ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionNetworkInterfaceContext>> {
+     const _params = { ...params };
+     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId'];
+     const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'bare_metal_server_id': _params.bareMetalServerId,
+       'network_interface_id': _params.networkInterfaceId,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'listBareMetalServerNetworkInterfaceIps'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/ips',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Retrieve bound reserved IP.
+    *
+    * This request a retrieves the specified reserved IP address if it is bound to the network interface and bare metal
+    * server specified in the URL.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.bareMetalServerId - The bare metal server identifier.
+    * @param {string} params.networkInterfaceId - The network interface identifier.
+    * @param {string} params.id - The reserved IP identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
+    */
+   public getBareMetalServerNetworkInterfaceIp(
+     params: VpcV1.GetBareMetalServerNetworkInterfaceIpParams
+   ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
+     const _params = { ...params };
+     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId', 'id'];
+     const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'bare_metal_server_id': _params.bareMetalServerId,
+       'network_interface_id': _params.networkInterfaceId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'getBareMetalServerNetworkInterfaceIp'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/ips/{id}',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
     * Delete a bare metal server.
     *
     * This request deletes a bare metal server. This operation cannot be reversed. Any floating IPs associated with the
@@ -10628,6 +10898,8 @@
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.id - The volume identifier.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
     */
@@ -10636,7 +10908,7 @@
    ): Promise<VpcV1.Response<VpcV1.Empty>> {
      const _params = { ...params };
      const _requiredParams = ['id'];
-     const _validParams = ['id', 'headers'];
+     const _validParams = ['id', 'ifMatch', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
@@ -10669,6 +10941,7 @@
            true,
            sdkHeaders,
            {
+             'If-Match': _params.ifMatch,
            },
            _params.headers
          ),
@@ -10745,18 +11018,22 @@
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.id - The volume identifier.
     * @param {number} [params.capacity] - The capacity to use for the volume (in gigabytes). The volume must be attached
-    * as a data volume to a running virtual server instance, and the specified value must not be less than the current
-    * capacity.
+    * to a running virtual server instance, and the specified value must not be less than the current capacity.
+    * Additionally, if the volume is attached as a boot volume, the maximum value is 250 gigabytes.
     *
     * The minimum and maximum capacity limits for creating or updating volumes may expand in the future.
     * @param {number} [params.iops] - The maximum I/O operations per second (IOPS) to use for the volume. Applicable only
     * to volumes using a profile `family` of `custom`. The volume must be attached as a data volume to a running virtual
     * server instance.
     * @param {string} [params.name] - The unique user-defined name for this volume.
-    * @param {VolumeProfileIdentity} [params.profile] - The profile to use for this volume.  The requested profile must
-    * be in the same
-    * `family` as the current profile.  The volume must be attached as a data volume to a
-    *  running virtual server instance.
+    * @param {VolumeProfileIdentity} [params.profile] - The profile to use for this volume. The requested profile must be
+    * in the same
+    * `family` as the current profile. The volume must be attached as a data volume to a
+    * running virtual server instance, and must have a `capacity` within the range
+    * supported by the specified profile.
+    * @param {string[]} [params.userTags] - Tags for this resource.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value. Required if the request body includes an array.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.Volume>>}
     */
@@ -10765,7 +11042,7 @@
    ): Promise<VpcV1.Response<VpcV1.Volume>> {
      const _params = { ...params };
      const _requiredParams = ['id'];
-     const _validParams = ['id', 'capacity', 'iops', 'name', 'profile', 'headers'];
+     const _validParams = ['id', 'capacity', 'iops', 'name', 'profile', 'userTags', 'ifMatch', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
@@ -10776,6 +11053,7 @@
        'iops': _params.iops,
        'name': _params.name,
        'profile': _params.profile,
+       'user_tags': _params.userTags,
      };
  
      const query = {
@@ -10808,6 +11086,7 @@
            {
              'Accept': 'application/json',
              'Content-Type': 'application/merge-patch+json',
+             'If-Match': _params.ifMatch,
            },
            _params.headers
          ),
@@ -10966,12 +11245,7 @@
     * same way as a retrieved snapshot, and contains the information necessary to provision the new snapshot.
     *
     * @param {Object} params - The parameters to send to the service.
-    * @param {VolumeIdentity} params.sourceVolume - The volume to snapshot.
-    * @param {string} [params.name] - The unique user-defined name for this snapshot. If unspecified, the name will be a
-    * hyphenated list of randomly-selected words.
-    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
-    * [default resource
-    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+    * @param {SnapshotPrototype} params.snapshotPrototype - The snapshot prototype object.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.Snapshot>>}
     */
@@ -10979,19 +11253,14 @@
      params: VpcV1.CreateSnapshotParams
    ): Promise<VpcV1.Response<VpcV1.Snapshot>> {
      const _params = { ...params };
-     const _requiredParams = ['sourceVolume'];
-     const _validParams = ['sourceVolume', 'name', 'resourceGroup', 'headers'];
+     const _requiredParams = ['snapshotPrototype'];
+     const _validParams = ['snapshotPrototype', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
      }
  
-     const body = {
-       'source_volume': _params.sourceVolume,
-       'name': _params.name,
-       'resource_group': _params.resourceGroup,
-     };
- 
+     const body = _params.snapshotPrototype;
      const query = {
        'version': this.version,
        'generation': this.generation,
@@ -11033,6 +11302,8 @@
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.id - The snapshot identifier.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
     */
@@ -11041,7 +11312,7 @@
    ): Promise<VpcV1.Response<VpcV1.Empty>> {
      const _params = { ...params };
      const _requiredParams = ['id'];
-     const _validParams = ['id', 'headers'];
+     const _validParams = ['id', 'ifMatch', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
@@ -11074,6 +11345,7 @@
            true,
            sdkHeaders,
            {
+             'If-Match': _params.ifMatch,
            },
            _params.headers
          ),
@@ -11149,6 +11421,9 @@
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.id - The snapshot identifier.
     * @param {string} [params.name] - The user-defined name for this snapshot.
+    * @param {string[]} [params.userTags] - The user tags associated with this snapshot.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value. Required if the request body includes an array.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.Snapshot>>}
     */
@@ -11157,7 +11432,7 @@
    ): Promise<VpcV1.Response<VpcV1.Snapshot>> {
      const _params = { ...params };
      const _requiredParams = ['id'];
-     const _validParams = ['id', 'name', 'headers'];
+     const _validParams = ['id', 'name', 'userTags', 'ifMatch', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
@@ -11165,6 +11440,7 @@
  
      const body = {
        'name': _params.name,
+       'user_tags': _params.userTags,
      };
  
      const query = {
@@ -11197,6 +11473,7 @@
            {
              'Accept': 'application/json',
              'Content-Type': 'application/merge-patch+json',
+             'If-Match': _params.ifMatch,
            },
            _params.headers
          ),
@@ -11778,6 +12055,10 @@
     * @param {number} [params.limit] - The number of resources to return on a page.
     * @param {string} [params.resourceGroupId] - Filters the collection to resources in the resource group with the
     * specified identifier.
+    * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+    * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+    * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+    * in ascending order.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.FloatingIPCollection>>}
     */
@@ -11786,7 +12067,7 @@
    ): Promise<VpcV1.Response<VpcV1.FloatingIPCollection>> {
      const _params = { ...params };
      const _requiredParams = [];
-     const _validParams = ['start', 'limit', 'resourceGroupId', 'headers'];
+     const _validParams = ['start', 'limit', 'resourceGroupId', 'sort', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
@@ -11798,6 +12079,7 @@
        'start': _params.start,
        'limit': _params.limit,
        'resource_group.id': _params.resourceGroupId,
+       'sort': _params.sort,
      };
  
      const sdkHeaders = getSdkHeaders(
@@ -13044,254 +13326,6 @@
    }
  
    /**
-    * List all network interfaces associated with a security group.
-    *
-    * This request lists all network interfaces associated with a security group, to which the rules in the security
-    * group are applied.
-    *
-    * @param {Object} params - The parameters to send to the service.
-    * @param {string} params.securityGroupId - The security group identifier.
-    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
-    * @param {number} [params.limit] - The number of resources to return on a page.
-    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterfaceCollection>>}
-    */
-   public listSecurityGroupNetworkInterfaces(
-     params: VpcV1.ListSecurityGroupNetworkInterfacesParams
-   ): Promise<VpcV1.Response<VpcV1.NetworkInterfaceCollection>> {
-     const _params = { ...params };
-     const _requiredParams = ['securityGroupId'];
-     const _validParams = ['securityGroupId', 'start', 'limit', 'headers'];
-     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-     if (_validationErrors) {
-       return Promise.reject(_validationErrors);
-     }
- 
-     const query = {
-       'version': this.version,
-       'generation': this.generation,
-       'start': _params.start,
-       'limit': _params.limit,
-     };
- 
-     const path = {
-       'security_group_id': _params.securityGroupId,
-     };
- 
-     const sdkHeaders = getSdkHeaders(
-       VpcV1.DEFAULT_SERVICE_NAME,
-       'v1',
-       'listSecurityGroupNetworkInterfaces'
-     );
- 
-     const parameters = {
-       options: {
-         url: '/security_groups/{security_group_id}/network_interfaces',
-         method: 'GET',
-         qs: query,
-         path,
-       },
-       defaultOptions: extend(true, {}, this.baseOptions, {
-         headers: extend(
-           true,
-           sdkHeaders,
-           {
-             'Accept': 'application/json',
-           },
-           _params.headers
-         ),
-       }),
-     };
- 
-     return this.createRequest(parameters);
-   }
- 
-   /**
-    * Remove a network interface from a security group.
-    *
-    * This request removes a network interface from a security group. Security groups are stateful, so any changes to a
-    * network interface's security groups are applied to new connections. Existing connections are not affected. If the
-    * network interface being removed has no other security groups, it will be attached to the VPC's default security
-    * group.
-    *
-    * @param {Object} params - The parameters to send to the service.
-    * @param {string} params.securityGroupId - The security group identifier.
-    * @param {string} params.id - The network interface identifier.
-    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
-    */
-   public removeSecurityGroupNetworkInterface(
-     params: VpcV1.RemoveSecurityGroupNetworkInterfaceParams
-   ): Promise<VpcV1.Response<VpcV1.Empty>> {
-     const _params = { ...params };
-     const _requiredParams = ['securityGroupId', 'id'];
-     const _validParams = ['securityGroupId', 'id', 'headers'];
-     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-     if (_validationErrors) {
-       return Promise.reject(_validationErrors);
-     }
- 
-     const query = {
-       'version': this.version,
-       'generation': this.generation,
-     };
- 
-     const path = {
-       'security_group_id': _params.securityGroupId,
-       'id': _params.id,
-     };
- 
-     const sdkHeaders = getSdkHeaders(
-       VpcV1.DEFAULT_SERVICE_NAME,
-       'v1',
-       'removeSecurityGroupNetworkInterface'
-     );
- 
-     const parameters = {
-       options: {
-         url: '/security_groups/{security_group_id}/network_interfaces/{id}',
-         method: 'DELETE',
-         qs: query,
-         path,
-       },
-       defaultOptions: extend(true, {}, this.baseOptions, {
-         headers: extend(
-           true,
-           sdkHeaders,
-           {
-           },
-           _params.headers
-         ),
-       }),
-     };
- 
-     return this.createRequest(parameters);
-   }
- 
-   /**
-    * Retrieve a network interface in a security group.
-    *
-    * This request retrieves a single network interface specified by the identifier in the URL path. The network
-    * interface must be an existing member of the security group.
-    *
-    * @param {Object} params - The parameters to send to the service.
-    * @param {string} params.securityGroupId - The security group identifier.
-    * @param {string} params.id - The network interface identifier.
-    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
-    */
-   public getSecurityGroupNetworkInterface(
-     params: VpcV1.GetSecurityGroupNetworkInterfaceParams
-   ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
-     const _params = { ...params };
-     const _requiredParams = ['securityGroupId', 'id'];
-     const _validParams = ['securityGroupId', 'id', 'headers'];
-     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-     if (_validationErrors) {
-       return Promise.reject(_validationErrors);
-     }
- 
-     const query = {
-       'version': this.version,
-       'generation': this.generation,
-     };
- 
-     const path = {
-       'security_group_id': _params.securityGroupId,
-       'id': _params.id,
-     };
- 
-     const sdkHeaders = getSdkHeaders(
-       VpcV1.DEFAULT_SERVICE_NAME,
-       'v1',
-       'getSecurityGroupNetworkInterface'
-     );
- 
-     const parameters = {
-       options: {
-         url: '/security_groups/{security_group_id}/network_interfaces/{id}',
-         method: 'GET',
-         qs: query,
-         path,
-       },
-       defaultOptions: extend(true, {}, this.baseOptions, {
-         headers: extend(
-           true,
-           sdkHeaders,
-           {
-             'Accept': 'application/json',
-           },
-           _params.headers
-         ),
-       }),
-     };
- 
-     return this.createRequest(parameters);
-   }
- 
-   /**
-    * Add a network interface to a security group.
-    *
-    * This request adds an existing network interface to an existing security group. When a network interface is added to
-    * a security group, the security group rules are applied to the network interface. A request body is not required,
-    * and if provided, is ignored.
-    *
-    * @param {Object} params - The parameters to send to the service.
-    * @param {string} params.securityGroupId - The security group identifier.
-    * @param {string} params.id - The network interface identifier.
-    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
-    */
-   public addSecurityGroupNetworkInterface(
-     params: VpcV1.AddSecurityGroupNetworkInterfaceParams
-   ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
-     const _params = { ...params };
-     const _requiredParams = ['securityGroupId', 'id'];
-     const _validParams = ['securityGroupId', 'id', 'headers'];
-     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-     if (_validationErrors) {
-       return Promise.reject(_validationErrors);
-     }
- 
-     const query = {
-       'version': this.version,
-       'generation': this.generation,
-     };
- 
-     const path = {
-       'security_group_id': _params.securityGroupId,
-       'id': _params.id,
-     };
- 
-     const sdkHeaders = getSdkHeaders(
-       VpcV1.DEFAULT_SERVICE_NAME,
-       'v1',
-       'addSecurityGroupNetworkInterface'
-     );
- 
-     const parameters = {
-       options: {
-         url: '/security_groups/{security_group_id}/network_interfaces/{id}',
-         method: 'PUT',
-         qs: query,
-         path,
-       },
-       defaultOptions: extend(true, {}, this.baseOptions, {
-         headers: extend(
-           true,
-           sdkHeaders,
-           {
-             'Accept': 'application/json',
-           },
-           _params.headers
-         ),
-       }),
-     };
- 
-     return this.createRequest(parameters);
-   }
- 
-   /**
     * List all rules in a security group.
     *
     * This request lists all rules in a security group. These rules define what traffic the security group permits.
@@ -13357,9 +13391,9 @@
     * This request creates a new security group rule from a security group rule prototype object. The prototype object is
     * structured in the same way as a retrieved security group rule and contains the information necessary to create the
     * rule. As part of creating a new rule in a security group, the rule is applied to all the networking interfaces in
-    * the security group. Rules specify which IP traffic a security group should allow. Security group rules are
-    * stateful, such that reverse traffic in response to allowed traffic is automatically permitted. A rule allowing
-    * inbound TCP traffic on port 80 also allows outbound TCP traffic on port 80 without the need for an additional rule.
+    * the security group. Rules specify which IP traffic a security group will allow. Security group rules are stateful,
+    * such that reverse traffic in response to allowed traffic is automatically permitted. A rule allowing inbound TCP
+    * traffic on port 80 also allows outbound TCP traffic on port 80 without the need for an additional rule.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.securityGroupId - The security group identifier.
@@ -16020,7 +16054,8 @@
    /**
     * Delete a load balancer.
     *
-    * This request deletes a load balancer. This operation cannot be reversed.
+    * This request deletes a load balancer. This operation cannot be reversed. A load balancer cannot be deleted if its
+    * `provisioning_status` is `delete_pending`.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.id - The load balancer identifier.
@@ -16326,9 +16361,10 @@
     * @param {string} params.loadBalancerId - The load balancer identifier.
     * @param {string} params.protocol - The listener protocol. Each listener in the load balancer must have a unique
     * `port` and `protocol` combination.  Additional restrictions:
-    * - If this load balancer is in the `network` family, the protocol must be `tcp`.
-    * - If this listener has `https_redirect` specified, the protocol must be `http`.
-    * - If this listener is a listener's `https_redirect` target, the protocol must be `https`.
+    * - If this load balancer is in the `network` family:
+    *   - The protocol must be `tcp` or `udp` (if `udp_supported` is `true`).
+    *   - If `default_pool` is set, the pool protocol must match.
+    * - If `https_redirect` is set, the protocol must be `http`.
     * @param {boolean} [params.acceptProxyProtocol] - If set to `true`, this listener will accept and forward PROXY
     * protocol information. Supported by load balancers in the `application` family (otherwise always `false`).
     * Additional restrictions:
@@ -16344,10 +16380,9 @@
     * must:
     *
     * - Belong to this load balancer
-    * - Have the same `protocol` as this listener
-    * - Not already be the `default_pool` for another listener
-    *
-    * Specify `null` to remove an existing default pool.
+    * - Have the same `protocol` as this listener, or have a compatible protocol.
+    *   At present, the compatible protocols are `http` and `https`.
+    * - Not already be the `default_pool` for another listener.
     * @param {LoadBalancerListenerHTTPSRedirectPrototype} [params.httpsRedirect] - The target listener that requests will
     * be redirected to. This listener must have a
     * `protocol` of `http`, and the target listener must have a `protocol` of `https`.
@@ -16583,13 +16618,15 @@
     * must:
     *
     * - Belong to this load balancer
-    * - Have the same `protocol` as this listener
+    * - Have the same `protocol` as this listener, or have a compatible protocol.
+    *   At present, the compatible protocols are `http` and `https`.
     * - Not already be the `default_pool` for another listener
     *
     * Specify `null` to remove an existing default pool.
     * @param {LoadBalancerListenerHTTPSRedirectPatch} [params.httpsRedirect] - The target listener that requests will be
     * redirected to. This listener must have a
     * `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+    *
     * Specify `null` to remove any existing https redirect.
     * @param {number} [params.port] - The listener port number, or the inclusive lower bound of the port range. Each
     * listener in the load balancer must have a unique `port` and `protocol` combination.
@@ -16615,9 +16652,12 @@
     * same protocol.
     * @param {string} [params.protocol] - The listener protocol. Each listener in the load balancer must have a unique
     * `port` and `protocol` combination.  Additional restrictions:
-    * - If this load balancer is in the `network` family, the protocol must be `tcp`.
-    * - If this listener has `https_redirect` specified, the protocol must be `http`.
-    * - If this listener is a listener's `https_redirect` target, the protocol must be `https`.
+    * - If this load balancer is in the `network` family, the protocol must be `tcp`
+    *   or `udp` (if `udp_supported` is `true`) , and it cannot be changed while
+    *   `default_pool` is set.
+    * - If `https_redirect` is set, the protocol must be `http`.
+    * - If this listener is a listener's `https_redirect` target, the protocol must be
+    *   `https`.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListener>>}
     */
@@ -17460,8 +17500,8 @@
     * @param {string} params.algorithm - The load balancing algorithm.
     * @param {LoadBalancerPoolHealthMonitorPrototype} params.healthMonitor - The health monitor of this pool.
     * @param {string} params.protocol - The protocol used for this load balancer pool. Load balancers in the `network`
-    * family support `tcp`. Load balancers in the `application` family support `tcp`, `http`, and
-    * `https`.
+    * family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the
+    * `application` family support `tcp`, `http`, and `https`.
     * @param {LoadBalancerPoolMemberPrototype[]} [params.members] - The members for this load balancer pool. For load
     * balancers in the `network` family, the same `port` and `target` tuple cannot be shared by a pool member of any
     * other load balancer in the same VPC.
@@ -17669,11 +17709,12 @@
     * @param {string} [params.algorithm] - The load balancing algorithm.
     * @param {LoadBalancerPoolHealthMonitorPatch} [params.healthMonitor] - The health monitor of this pool.
     * @param {string} [params.name] - The user-defined name for this load balancer pool.
-    * @param {string} [params.protocol] - The protocol used for this load balancer pool.
+    * @param {string} [params.protocol] - The protocol to use for this load balancer pool. Load balancers in the
+    * `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family
+    * support `tcp`, `http` and `https`.
     *
-    * The enumerated values for this property are expected to expand in the future. When processing this property, check
-    * for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which the
-    * unexpected property value was encountered.
+    * If this pool is associated with a load balancer listener, the specified protocol must be compatible with the
+    * listener's protocol. At present, the compatible protocols are `http` and `https`.
     * @param {string} [params.proxyProtocol] - The PROXY protocol setting for this pool:
     * - `v1`: Enabled with version 1 (human-readable header format)
     * - `v2`: Enabled with version 2 (binary header format)
@@ -18820,7 +18861,7 @@
     * create and start the new flow log collector.
     *
     * @param {Object} params - The parameters to send to the service.
-    * @param {CloudObjectStorageBucketIdentity} params.storageBucket - The Cloud Object Storage bucket where the
+    * @param {LegacyCloudObjectStorageBucketIdentity} params.storageBucket - The Cloud Object Storage bucket where the
     * collected flows will be logged.
     * The bucket must exist and an IAM service authorization must grant
     * `IBM Cloud Flow Logs` resources of `VPC Infrastructure Services` writer
@@ -19086,11 +19127,11 @@
  namespace VpcV1 {
    /** Options for the `VpcV1` constructor. */
    export interface Options extends UserOptions {
-     /** Requests the API version as of a date, in format `YYYY-MM-DD`. Any date between `2019-01-01` and the current
-      *  date may be specified. Specify the current date to request the latest version.
+     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
+      *  `2022-03-29` and today's date (UTC).
       */
      version: string;
-     /** The infrastructure generation for the request. For the API behavior documented here, use `2`. */
+     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
      generation?: number;
    }
  
@@ -19132,14 +19173,14 @@
  
    /** Parameters for the `createVpc` operation. */
    export interface CreateVpcParams {
-     /** Indicates whether a default address prefix should be automatically created for each zone in this VPC. If
+     /** Indicates whether a default address prefix will be automatically created for each zone in this VPC. If
       *  `manual`, this VPC will be created with no default address prefixes.
       *
-      *  This property's value is used only when creating the VPC. Since address prefixes are managed identically
-      *  regardless of whether they were automatically created, the value is not preserved as a VPC property.
+      *  Since address prefixes are managed identically regardless of whether they were automatically created, the value
+      *  is not preserved as a VPC property.
       */
      addressPrefixManagement?: CreateVpcConstants.AddressPrefixManagement | string;
-     /** Indicates whether this VPC should be connected to Classic Infrastructure. If true, this VPC's resources will
+     /** Indicates whether this VPC will be connected to Classic Infrastructure. If true, this VPC's resources will
       *  have private network connectivity to the account's Classic Infrastructure resources. Only one VPC, per region,
       *  may be connected in this way. This value is set at creation and subsequently immutable.
       */
@@ -19157,7 +19198,7 @@
  
    /** Constants for the `createVpc` operation. */
    export namespace CreateVpcConstants {
-     /** Indicates whether a default address prefix should be automatically created for each zone in this VPC. If `manual`, this VPC will be created with no default address prefixes. This property's value is used only when creating the VPC. Since address prefixes are managed identically regardless of whether they were automatically created, the value is not preserved as a VPC property. */
+     /** Indicates whether a default address prefix will be automatically created for each zone in this VPC. If `manual`, this VPC will be created with no default address prefixes. Since address prefixes are managed identically regardless of whether they were automatically created, the value is not preserved as a VPC property. */
      export enum AddressPrefixManagement {
        AUTO = 'auto',
        MANUAL = 'manual',
@@ -19395,9 +19436,9 @@
       *  table with this property set to `true`.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       */
      routeDirectLinkIngress?: boolean;
      /** If set to `true`, this routing table will be used to route traffic that originates from [Transit
@@ -19405,9 +19446,9 @@
       *  already have a routing table with this property set to `true`.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       *
       *  If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
       *  enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -19465,9 +19506,9 @@
       *  to this routing table. Updating to `false` deselects this routing table.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       */
      routeDirectLinkIngress?: boolean;
      /** Indicates whether this routing table is used to route traffic that originates from
@@ -19476,9 +19517,9 @@
       *  `true`, and no subnets are attached to this routing table. Updating to `false` deselects this routing table.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       *
       *  If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
       *  enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -19491,9 +19532,9 @@
       *  this routing table.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       */
      routeVpcZoneIngress?: boolean;
      headers?: OutgoingHttpHeaders;
@@ -19732,6 +19773,11 @@
    export interface CreateSubnetReservedIpParams {
      /** The subnet identifier. */
      subnetId: string;
+     /** The IP address to reserve, which must not already be reserved on the subnet.
+      *
+      *  If unspecified, an available address on the subnet will automatically be selected.
+      */
+     address?: string;
      /** Indicates whether this reserved IP member will be automatically deleted when either
       *  `target` is deleted, or the reserved IP is unbound. Must be `false` if the reserved IP is unbound.
       */
@@ -20016,6 +20062,10 @@
    export interface UpdateInstanceParams {
      /** The instance identifier. */
      id: string;
+     /** The availability policy for this virtual server instance. */
+     availabilityPolicy?: InstanceAvailabilityPolicyPatch;
+     /** The metadata service configuration. */
+     metadataService?: InstanceMetadataServicePatch;
      /** The user-defined name for this virtual server instance (and default system hostname). */
      name?: string;
      /** The placement restrictions to use for the virtual server instance. For the placement
@@ -20141,10 +20191,14 @@
       *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
       */
      name?: string;
-     /** The primary IPv4 address. If specified, it must be an available address on the network interface's subnet.
-      *  If unspecified, an available address on the subnet will be automatically selected.
+     /** The primary IP address to bind to the network interface. This can be specified using
+      *  an existing reserved IP, or a prototype object for a new reserved IP.
+      *
+      *  If an existing reserved IP or a prototype object with an address is specified, it must
+      *  be available on the network interface's subnet. Otherwise, an available address on the
+      *  subnet will be automatically selected and reserved.
       */
-     primaryIpv4Address?: string;
+     primaryIp?: NetworkInterfaceIPPrototype;
      /** The security groups to use for this network interface. If unspecified, the VPC's default security group is
       *  used.
       */
@@ -20229,6 +20283,30 @@
      headers?: OutgoingHttpHeaders;
    }
  
+   /** Parameters for the `listInstanceNetworkInterfaceIps` operation. */
+   export interface ListInstanceNetworkInterfaceIpsParams {
+     /** The instance identifier. */
+     instanceId: string;
+     /** The network interface identifier. */
+     networkInterfaceId: string;
+     /** A server-provided token determining what resource to start the page on. */
+     start?: string;
+     /** The number of resources to return on a page. */
+     limit?: number;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `getInstanceNetworkInterfaceIp` operation. */
+   export interface GetInstanceNetworkInterfaceIpParams {
+     /** The instance identifier. */
+     instanceId: string;
+     /** The network interface identifier. */
+     networkInterfaceId: string;
+     /** The reserved IP identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
    /** Parameters for the `listInstanceVolumeAttachments` operation. */
    export interface ListInstanceVolumeAttachmentsParams {
      /** The instance identifier. */
@@ -20295,7 +20373,11 @@
  
    /** Parameters for the `createInstanceGroup` operation. */
    export interface CreateInstanceGroupParams {
-     /** Identifies an instance template by a unique property. */
+     /** Instance template to use when creating new instances.
+      *
+      *  Instance groups are not compatible with instance templates that specify `true` for
+      *  `default_trusted_profile.auto_link`.
+      */
      instanceTemplate: InstanceTemplateIdentity;
      /** The subnets to use when creating new instances. */
      subnets: SubnetIdentity[];
@@ -20348,7 +20430,11 @@
       *  supply the port for the load balancer pool member.
       */
      applicationPort?: number;
-     /** Identifies an instance template by a unique property. */
+     /** Instance template to use when creating new instances.
+      *
+      *  Instance groups are not compatible with instance templates that specify `true` for
+      *  `default_trusted_profile.auto_link`.
+      */
      instanceTemplate?: InstanceTemplateIdentity;
      /** The load balancer that the load balancer pool used by this group
       *  is in. Required when using a load balancer pool.
@@ -21088,6 +21174,26 @@
      headers?: OutgoingHttpHeaders;
    }
  
+   /** Parameters for the `listBareMetalServerNetworkInterfaceIps` operation. */
+   export interface ListBareMetalServerNetworkInterfaceIpsParams {
+     /** The bare metal server identifier. */
+     bareMetalServerId: string;
+     /** The network interface identifier. */
+     networkInterfaceId: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `getBareMetalServerNetworkInterfaceIp` operation. */
+   export interface GetBareMetalServerNetworkInterfaceIpParams {
+     /** The bare metal server identifier. */
+     bareMetalServerId: string;
+     /** The network interface identifier. */
+     networkInterfaceId: string;
+     /** The reserved IP identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
    /** Parameters for the `deleteBareMetalServer` operation. */
    export interface DeleteBareMetalServerParams {
      /** The bare metal server identifier. */
@@ -21193,6 +21299,10 @@
    export interface DeleteVolumeParams {
      /** The volume identifier. */
      id: string;
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value.
+      */
+     ifMatch?: string;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -21207,8 +21317,9 @@
    export interface UpdateVolumeParams {
      /** The volume identifier. */
      id: string;
-     /** The capacity to use for the volume (in gigabytes). The volume must be attached as a data volume to a running
-      *  virtual server instance, and the specified value must not be less than the current capacity.
+     /** The capacity to use for the volume (in gigabytes). The volume must be attached to a running virtual server
+      *  instance, and the specified value must not be less than the current capacity. Additionally, if the volume is
+      *  attached as a boot volume, the maximum value is 250 gigabytes.
       *
       *  The minimum and maximum capacity limits for creating or updating volumes may expand in the future.
       */
@@ -21219,11 +21330,18 @@
      iops?: number;
      /** The unique user-defined name for this volume. */
      name?: string;
-     /** The profile to use for this volume.  The requested profile must be in the same
-      *  `family` as the current profile.  The volume must be attached as a data volume to a
-      *   running virtual server instance.
+     /** The profile to use for this volume. The requested profile must be in the same
+      *  `family` as the current profile. The volume must be attached as a data volume to a
+      *  running virtual server instance, and must have a `capacity` within the range
+      *  supported by the specified profile.
       */
      profile?: VolumeProfileIdentity;
+     /** Tags for this resource. */
+     userTags?: string[];
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value. Required if the request body includes an array.
+      */
+     ifMatch?: string;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -21280,16 +21398,8 @@
  
    /** Parameters for the `createSnapshot` operation. */
    export interface CreateSnapshotParams {
-     /** The volume to snapshot. */
-     sourceVolume: VolumeIdentity;
-     /** The unique user-defined name for this snapshot. If unspecified, the name will be a hyphenated list of
-      *  randomly-selected words.
-      */
-     name?: string;
-     /** The resource group to use. If unspecified, the account's [default resource
-      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
-      */
-     resourceGroup?: ResourceGroupIdentity;
+     /** The snapshot prototype object. */
+     snapshotPrototype: SnapshotPrototype;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -21297,6 +21407,10 @@
    export interface DeleteSnapshotParams {
      /** The snapshot identifier. */
      id: string;
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value.
+      */
+     ifMatch?: string;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -21313,6 +21427,12 @@
      id: string;
      /** The user-defined name for this snapshot. */
      name?: string;
+     /** The user tags associated with this snapshot. */
+     userTags?: string[];
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value. Required if the request body includes an array.
+      */
+     ifMatch?: string;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -21406,7 +21526,22 @@
      limit?: number;
      /** Filters the collection to resources in the resource group with the specified identifier. */
      resourceGroupId?: string;
+     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+      *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+      *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+      *  order.
+      */
+     sort?: ListFloatingIpsConstants.Sort | string;
      headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Constants for the `listFloatingIps` operation. */
+   export namespace ListFloatingIpsConstants {
+     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+     export enum Sort {
+       CREATED_AT = 'created_at',
+       NAME = 'name',
+     }
    }
  
    /** Parameters for the `createFloatingIp` operation. */
@@ -21639,44 +21774,6 @@
       *  resides in.
       */
      name?: string;
-     headers?: OutgoingHttpHeaders;
-   }
- 
-   /** Parameters for the `listSecurityGroupNetworkInterfaces` operation. */
-   export interface ListSecurityGroupNetworkInterfacesParams {
-     /** The security group identifier. */
-     securityGroupId: string;
-     /** A server-provided token determining what resource to start the page on. */
-     start?: string;
-     /** The number of resources to return on a page. */
-     limit?: number;
-     headers?: OutgoingHttpHeaders;
-   }
- 
-   /** Parameters for the `removeSecurityGroupNetworkInterface` operation. */
-   export interface RemoveSecurityGroupNetworkInterfaceParams {
-     /** The security group identifier. */
-     securityGroupId: string;
-     /** The network interface identifier. */
-     id: string;
-     headers?: OutgoingHttpHeaders;
-   }
- 
-   /** Parameters for the `getSecurityGroupNetworkInterface` operation. */
-   export interface GetSecurityGroupNetworkInterfaceParams {
-     /** The security group identifier. */
-     securityGroupId: string;
-     /** The network interface identifier. */
-     id: string;
-     headers?: OutgoingHttpHeaders;
-   }
- 
-   /** Parameters for the `addSecurityGroupNetworkInterface` operation. */
-   export interface AddSecurityGroupNetworkInterfaceParams {
-     /** The security group identifier. */
-     securityGroupId: string;
-     /** The network interface identifier. */
-     id: string;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -22331,9 +22428,10 @@
      loadBalancerId: string;
      /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol`
       *  combination.  Additional restrictions:
-      *  - If this load balancer is in the `network` family, the protocol must be `tcp`.
-      *  - If this listener has `https_redirect` specified, the protocol must be `http`.
-      *  - If this listener is a listener's `https_redirect` target, the protocol must be `https`.
+      *  - If this load balancer is in the `network` family:
+      *    - The protocol must be `tcp` or `udp` (if `udp_supported` is `true`).
+      *    - If `default_pool` is set, the pool protocol must match.
+      *  - If `https_redirect` is set, the protocol must be `http`.
       */
      protocol: CreateLoadBalancerListenerConstants.Protocol | string;
      /** If set to `true`, this listener will accept and forward PROXY protocol information. Supported by load
@@ -22351,10 +22449,9 @@
      /** The default pool for this listener. The specified pool must:
       *
       *  - Belong to this load balancer
-      *  - Have the same `protocol` as this listener
-      *  - Not already be the `default_pool` for another listener
-      *
-      *  Specify `null` to remove an existing default pool.
+      *  - Have the same `protocol` as this listener, or have a compatible protocol.
+      *    At present, the compatible protocols are `http` and `https`.
+      *  - Not already be the `default_pool` for another listener.
       */
      defaultPool?: LoadBalancerPoolIdentity;
      /** The target listener that requests will be redirected to. This listener must have a
@@ -22394,11 +22491,12 @@
  
    /** Constants for the `createLoadBalancerListener` operation. */
    export namespace CreateLoadBalancerListenerConstants {
-     /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol` combination.  Additional restrictions: - If this load balancer is in the `network` family, the protocol must be `tcp`. - If this listener has `https_redirect` specified, the protocol must be `http`. - If this listener is a listener's `https_redirect` target, the protocol must be `https`. */
+     /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol` combination.  Additional restrictions: - If this load balancer is in the `network` family: - The protocol must be `tcp` or `udp` (if `udp_supported` is `true`). - If `default_pool` is set, the pool protocol must match. - If `https_redirect` is set, the protocol must be `http`. */
      export enum Protocol {
        HTTP = 'http',
        HTTPS = 'https',
        TCP = 'tcp',
+       UDP = 'udp',
      }
    }
  
@@ -22441,7 +22539,8 @@
      /** The default pool for this listener. The specified pool must:
       *
       *  - Belong to this load balancer
-      *  - Have the same `protocol` as this listener
+      *  - Have the same `protocol` as this listener, or have a compatible protocol.
+      *    At present, the compatible protocols are `http` and `https`.
       *  - Not already be the `default_pool` for another listener
       *
       *  Specify `null` to remove an existing default pool.
@@ -22449,6 +22548,7 @@
      defaultPool?: LoadBalancerPoolIdentity;
      /** The target listener that requests will be redirected to. This listener must have a
       *  `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+      *
       *  Specify `null` to remove any existing https redirect.
       */
      httpsRedirect?: LoadBalancerListenerHTTPSRedirectPatch;
@@ -22480,9 +22580,12 @@
      portMin?: number;
      /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol`
       *  combination.  Additional restrictions:
-      *  - If this load balancer is in the `network` family, the protocol must be `tcp`.
-      *  - If this listener has `https_redirect` specified, the protocol must be `http`.
-      *  - If this listener is a listener's `https_redirect` target, the protocol must be `https`.
+      *  - If this load balancer is in the `network` family, the protocol must be `tcp`
+      *    or `udp` (if `udp_supported` is `true`) , and it cannot be changed while
+      *    `default_pool` is set.
+      *  - If `https_redirect` is set, the protocol must be `http`.
+      *  - If this listener is a listener's `https_redirect` target, the protocol must be
+      *    `https`.
       */
      protocol?: UpdateLoadBalancerListenerConstants.Protocol | string;
      headers?: OutgoingHttpHeaders;
@@ -22490,11 +22593,12 @@
  
    /** Constants for the `updateLoadBalancerListener` operation. */
    export namespace UpdateLoadBalancerListenerConstants {
-     /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol` combination.  Additional restrictions: - If this load balancer is in the `network` family, the protocol must be `tcp`. - If this listener has `https_redirect` specified, the protocol must be `http`. - If this listener is a listener's `https_redirect` target, the protocol must be `https`. */
+     /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol` combination.  Additional restrictions: - If this load balancer is in the `network` family, the protocol must be `tcp` or `udp` (if `udp_supported` is `true`) , and it cannot be changed while `default_pool` is set. - If `https_redirect` is set, the protocol must be `http`. - If this listener is a listener's `https_redirect` target, the protocol must be `https`. */
      export enum Protocol {
        HTTP = 'http',
        HTTPS = 'https',
        TCP = 'tcp',
+       UDP = 'udp',
      }
    }
  
@@ -22749,9 +22853,9 @@
      algorithm: CreateLoadBalancerPoolConstants.Algorithm | string;
      /** The health monitor of this pool. */
      healthMonitor: LoadBalancerPoolHealthMonitorPrototype;
-     /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp`. Load
-      *  balancers in the `application` family support `tcp`, `http`, and
-      *  `https`.
+     /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and
+      *  `udp` (if `udp_supported` is `true`). Load balancers in the
+      *  `application` family support `tcp`, `http`, and `https`.
       */
      protocol: CreateLoadBalancerPoolConstants.Protocol | string;
      /** The members for this load balancer pool. For load balancers in the `network` family, the same `port` and
@@ -22783,11 +22887,12 @@
        ROUND_ROBIN = 'round_robin',
        WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
      }
-     /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp`. Load balancers in the `application` family support `tcp`, `http`, and `https`. */
+     /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http`, and `https`. */
      export enum Protocol {
        HTTP = 'http',
        HTTPS = 'https',
        TCP = 'tcp',
+       UDP = 'udp',
      }
      /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled Supported by load balancers in the `application` family (otherwise always `disabled`). */
      export enum ProxyProtocol {
@@ -22827,11 +22932,12 @@
      healthMonitor?: LoadBalancerPoolHealthMonitorPatch;
      /** The user-defined name for this load balancer pool. */
      name?: string;
-     /** The protocol used for this load balancer pool.
+     /** The protocol to use for this load balancer pool. Load balancers in the `network` family support `tcp` and
+      *  `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and
+      *  `https`.
       *
-      *  The enumerated values for this property are expected to expand in the future. When processing this property,
-      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which
-      *  the unexpected property value was encountered.
+      *  If this pool is associated with a load balancer listener, the specified protocol must be compatible with the
+      *  listener's protocol. At present, the compatible protocols are `http` and `https`.
       */
      protocol?: UpdateLoadBalancerPoolConstants.Protocol | string;
      /** The PROXY protocol setting for this pool:
@@ -22855,11 +22961,12 @@
        ROUND_ROBIN = 'round_robin',
        WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
      }
-     /** The protocol used for this load balancer pool. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which the unexpected property value was encountered. */
+     /** The protocol to use for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. If this pool is associated with a load balancer listener, the specified protocol must be compatible with the listener's protocol. At present, the compatible protocols are `http` and `https`. */
      export enum Protocol {
        HTTP = 'http',
        HTTPS = 'https',
        TCP = 'tcp',
+       UDP = 'udp',
      }
      /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled Supported by load balancers in the `application` family (otherwise always `disabled`). */
      export enum ProxyProtocol {
@@ -23119,7 +23226,7 @@
       *  `IBM Cloud Flow Logs` resources of `VPC Infrastructure Services` writer
       *  access to the bucket.
       */
-     storageBucket: CloudObjectStorageBucketIdentity;
+     storageBucket: LegacyCloudObjectStorageBucketIdentity;
      /** The target this collector will collect flow logs for. If the target is an instance,
       *  subnet, or VPC, flow logs will not be collected for any network interfaces within the
       *  target that are themselves the target of a more specific flow log collector.
@@ -23444,11 +23551,7 @@
      name: string;
      /** The network interface port speed in Mbps. */
      port_speed: number;
-     /** The primary IPv4 address.
-      *
-      *  If the address has not yet been selected, the value will be `0.0.0.0`.
-      */
-     primary_ipv4_address: string;
+     primary_ip: ReservedIPReference;
      /** The resource type. */
      resource_type: string;
      /** The security groups targeting this network interface. */
@@ -23521,10 +23624,14 @@
       *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
       */
      name?: string;
-     /** The primary IPv4 address. If specified, it must be an available address on the network interface's subnet.
-      *  If unspecified, an available address on the subnet will be automatically selected.
+     /** The primary IP address to bind to the network interface. This can be specified using
+      *  an existing reserved IP, or a prototype object for a new reserved IP.
+      *
+      *  If an existing reserved IP or a prototype object with an address is specified, it must
+      *  be available on the network interface's subnet. Otherwise, an available address on the
+      *  subnet will be automatically selected and reserved.
       */
-     primary_ipv4_address?: string;
+     primary_ip?: NetworkInterfaceIPPrototype;
      /** The security groups to use for this network interface. If unspecified, the VPC's default security group is
       *  used.
       */
@@ -23566,10 +23673,14 @@
       *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
       */
      name?: string;
-     /** The primary IPv4 address. If specified, it must be an available address on the network interface's subnet.
-      *  If unspecified, an available address on the subnet will be automatically selected.
+     /** The primary IP address to bind to the network interface. This can be specified using
+      *  an existing reserved IP, or a prototype object for a new reserved IP.
+      *
+      *  If an existing reserved IP or a prototype object with an address is specified, it must
+      *  be available on the network interface's subnet. Otherwise, an available address on the
+      *  subnet will be automatically selected and reserved.
       */
-     primary_ipv4_address?: string;
+     primary_ip?: NetworkInterfaceIPPrototype;
      /** The security groups to use for this network interface. If unspecified, the VPC's default security group is
       *  used.
       */
@@ -23753,16 +23864,6 @@
    export interface CertificateInstanceReference {
      /** The CRN for this certificate instance. */
      crn: string;
-   }
- 
-   /** Identifies a Cloud Object Storage bucket by a unique property. */
-   export interface CloudObjectStorageBucketIdentity {
-   }
- 
-   /** CloudObjectStorageBucketReference. */
-   export interface CloudObjectStorageBucketReference {
-     /** The globally unique name of this COS bucket. */
-     name: string;
    }
  
    /** DedicatedHost. */
@@ -24191,27 +24292,27 @@
       *  [Direct Link](https://cloud.ibm.com/docs/dl/) to this VPC.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       */
      route_direct_link_ingress: boolean;
      /** Indicates whether this routing table is used to route traffic that originates from from [Transit
       *  Gateway](https://cloud.ibm.com/cloud/transit-gateway/) to this VPC.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       */
      route_transit_gateway_ingress: boolean;
      /** Indicates whether this routing table is used to route traffic that originates from subnets in other zones in
       *  this VPC.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       */
      route_vpc_zone_ingress: boolean;
      /** The routes for the default routing table for this VPC. The table is created with no routes, but routes may
@@ -24474,7 +24575,7 @@
      /** The resource group for this flow log collector. */
      resource_group: ResourceGroupReference;
      /** The Cloud Object Storage bucket where the collected flows are logged. */
-     storage_bucket: CloudObjectStorageBucketReference;
+     storage_bucket: LegacyCloudObjectStorageBucketReference;
      /** The target this collector is collecting flow logs for. If the target is an instance,
       *  subnet, or VPC, flow logs will not be collected for any network interfaces within the
       *  target that are themselves the target of a more specific flow log collector.
@@ -24516,6 +24617,12 @@
  
    /** The target this collector will collect flow logs for. If the target is an instance, subnet, or VPC, flow logs will not be collected for any network interfaces within the target that are themselves the target of a more specific flow log collector. */
    export interface FlowLogCollectorTargetPrototype {
+   }
+ 
+   /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+   export interface GenericResourceReferenceDeleted {
+     /** Link to documentation about deleted resources. */
+     more_info: string;
    }
  
    /** IKEPolicy. */
@@ -24597,6 +24704,7 @@
    }
  
    /** IP. */
+   // tslint:disable-next-line: interface-name
    export interface IP {
      /** The IP address.
       *
@@ -24606,7 +24714,7 @@
       */
      address: string;
    }
- 
+   
    /** IPsecPolicy. */
    // tslint:disable-next-line: interface-name
    export interface IPsecPolicy {
@@ -24803,7 +24911,7 @@
  
    /** ImageFilePrototype. */
    export interface ImageFilePrototype {
-     /** The Cloud Object Store (COS) location of the image file. */
+     /** The Cloud Object Storage location of the image file. */
      href: string;
    }
  
@@ -24857,6 +24965,8 @@
  
    /** Instance. */
    export interface Instance {
+     /** The availability policy for this virtual server instance. */
+     availability_policy: InstanceAvailabilityPolicy;
      /** The total bandwidth (in megabits per second) shared across the virtual server instance's network interfaces
       *  and storage volumes.
       */
@@ -24881,6 +24991,8 @@
      image?: ImageReference;
      /** The amount of memory, truncated to whole gibibytes. */
      memory: number;
+     /** The metadata service configuration. */
+     metadata_service: InstanceMetadataService;
      /** The user-defined name for this virtual server instance (and default system hostname). */
      name: string;
      /** The network interfaces for this virtual server instance, including the primary network interface. */
@@ -24943,6 +25055,45 @@
      type: string;
    }
  
+   /** InstanceAvailabilityPolicy. */
+   export interface InstanceAvailabilityPolicy {
+     /** The action to perform if the compute host experiences a failure.
+      *  - `restart`: Automatically restart the virtual server instance after host failure
+      *  - `stop`: Leave the virtual server instance stopped after host failure
+      *
+      *  The enumerated values for this property are expected to expand in the future. When processing this property,
+      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on
+      *  which the unexpected property value was encountered.
+      */
+     host_failure: string;
+   }
+ 
+   /** InstanceAvailabilityPolicyPatch. */
+   export interface InstanceAvailabilityPolicyPatch {
+     /** The action to perform if the compute host experiences a failure.
+      *  - `restart`: Automatically restart the virtual server instance after host failure
+      *  - `stop`: Leave the virtual server instance stopped after host failure
+      *
+      *  The enumerated values for this property are expected to expand in the future. When processing this property,
+      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on
+      *  which the unexpected property value was encountered.
+      */
+     host_failure?: string;
+   }
+ 
+   /** InstanceAvailabilityPrototype. */
+   export interface InstanceAvailabilityPrototype {
+     /** The action to perform if the compute host experiences a failure.
+      *  - `restart`: Automatically restart the virtual server instance after host failure
+      *  - `stop`: Leave the virtual server instance stopped after host failure
+      *
+      *  The enumerated values for this property are expected to expand in the future. When processing this property,
+      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on
+      *  which the unexpected property value was encountered.
+      */
+     host_failure?: string;
+   }
+ 
    /** InstanceCollection. */
    export interface InstanceCollection {
      /** A link to the first page of resources. */
@@ -24985,6 +25136,17 @@
      force: boolean;
      /** The URL to access this instance console. */
      href: string;
+   }
+ 
+   /** InstanceDefaultTrustedProfilePrototype. */
+   export interface InstanceDefaultTrustedProfilePrototype {
+     /** If set to `true`, the system will create a link to the specified `target` trusted profile during instance
+      *  creation. Regardless of whether a link is created by the system or manually using the IAM Identity service, it
+      *  will be automatically deleted when the instance is deleted.
+      */
+     auto_link?: boolean;
+     /** The default IAM trusted profile to use for this virtual server instance. */
+     target: TrustedProfileIdentity;
    }
  
    /** InstanceDisk. */
@@ -25172,15 +25334,15 @@
  
    /** InstanceGroupManagerActionGroupPatch. */
    export interface InstanceGroupManagerActionGroupPatch {
-     /** The number of members the instance group should have at the scheduled time. */
+     /** The desired number of instance group members at the scheduled time. */
      membership_count?: number;
    }
  
    /** InstanceGroupManagerActionManagerPatch. */
    export interface InstanceGroupManagerActionManagerPatch {
-     /** The maximum number of members the instance group should have at the scheduled time. */
+     /** The desired maximum number of instance group members at the scheduled time. */
      max_membership_count?: number;
-     /** The minimum number of members the instance group should have at the scheduled time. */
+     /** The desired minimum number of instance group members at the scheduled time. */
      min_membership_count?: number;
    }
  
@@ -25366,13 +25528,13 @@
  
    /** InstanceGroupManagerScheduledActionGroup. */
    export interface InstanceGroupManagerScheduledActionGroup {
-     /** The number of members the instance group should have at the scheduled time. */
+     /** The desired number of instance group members at the scheduled time. */
      membership_count: number;
    }
  
    /** InstanceGroupManagerScheduledActionGroupPrototype. */
    export interface InstanceGroupManagerScheduledActionGroupPrototype {
-     /** The number of members the instance group should have at the scheduled time. */
+     /** The desired number of instance group members at the scheduled time. */
      membership_count: number;
    }
  
@@ -25461,9 +25623,24 @@
  
    /** InstanceInitialization. */
    export interface InstanceInitialization {
+     /** The default trusted profile configuration specified at virtual server instance
+      *  creation. If absent, no default trusted profile was specified.
+      */
+     default_trusted_profile?: InstanceInitializationDefaultTrustedProfile;
      /** The public SSH keys used at instance initialization. */
      keys: KeyReference[];
      password?: InstanceInitializationPassword;
+   }
+ 
+   /** InstanceInitializationDefaultTrustedProfile. */
+   export interface InstanceInitializationDefaultTrustedProfile {
+     /** If set to `true`, the system created a link to the specified `target` trusted profile during instance
+      *  creation. Regardless of whether a link was created by the system or manually using the IAM Identity service, it
+      *  will be automatically deleted when the instance is deleted.
+      */
+     auto_link: boolean;
+     /** The default IAM trusted profile to use for this virtual server instance. */
+     target: TrustedProfileReference;
    }
  
    /** InstanceInitializationPassword. */
@@ -25472,6 +25649,24 @@
      encrypted_password: string;
      /** The public SSH key used to encrypt the administrator password. */
      encryption_key: KeyIdentityByFingerprint;
+   }
+ 
+   /** InstanceMetadataService. */
+   export interface InstanceMetadataService {
+     /** Indicates whether the metadata service endpoint is available to the virtual server instance. */
+     enabled: boolean;
+   }
+ 
+   /** InstanceMetadataServicePatch. */
+   export interface InstanceMetadataServicePatch {
+     /** Indicates whether the metadata service endpoint is available to the virtual server instance. */
+     enabled?: boolean;
+   }
+ 
+   /** InstanceMetadataServicePrototype. */
+   export interface InstanceMetadataServicePrototype {
+     /** Indicates whether the metadata service endpoint is available to the virtual server instance. */
+     enabled?: boolean;
    }
  
    /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. */
@@ -25627,6 +25822,16 @@
  
    /** InstancePrototype. */
    export interface InstancePrototype {
+     /** The availability policy to use for this virtual server instance. */
+     availability_policy?: InstanceAvailabilityPrototype;
+     /** The default trusted profile configuration to use for this virtual server instance
+      *
+      *  This property's value is used when provisioning the virtual server instance, but not
+      *  subsequently managed. Accordingly, it is reflected as an [instance
+      *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization)
+      *  property.
+      */
+     default_trusted_profile?: InstanceDefaultTrustedProfilePrototype;
      /** The public SSH keys for the administrative user of the virtual server instance. Keys will be made available
       *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
       *  added as SSH authorized keys for the administrative user.
@@ -25641,6 +25846,8 @@
       *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization) property.
       */
      keys?: KeyIdentity[];
+     /** Configuration options for the instance metadata service. */
+     metadata_service?: InstanceMetadataServicePrototype;
      /** The unique user-defined name for this virtual server instance (and default system hostname). If unspecified,
       *  the name will be a hyphenated list of randomly-selected words.
       */
@@ -25649,7 +25856,9 @@
      network_interfaces?: NetworkInterfacePrototype[];
      /** The placement restrictions to use for the virtual server instance. */
      placement_target?: InstancePlacementTargetPrototype;
-     /** The profile to use for this virtual server instance. */
+     /** The profile to use for this virtual server instance. If unspecified, `bx2-2x8` will
+      *  be used, but this default value is expected to change in the future.
+      */
      profile?: InstanceProfileIdentity;
      /** The resource group to use. If unspecified, the account's [default resource
       *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
@@ -25704,10 +25913,20 @@
  
    /** InstanceTemplate. */
    export interface InstanceTemplate {
+     /** The availability policy to use for this virtual server instance. */
+     availability_policy?: InstanceAvailabilityPrototype;
      /** The date and time that the instance template was created. */
      created_at: string;
      /** The CRN for this instance template. */
      crn: string;
+     /** The default trusted profile configuration to use for this virtual server instance
+      *
+      *  This property's value is used when provisioning the virtual server instance, but not
+      *  subsequently managed. Accordingly, it is reflected as an [instance
+      *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization)
+      *  property.
+      */
+     default_trusted_profile?: InstanceDefaultTrustedProfilePrototype;
      /** The URL for this instance template. */
      href: string;
      /** The unique identifier for this instance template. */
@@ -25726,13 +25945,17 @@
       *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization) property.
       */
      keys?: KeyIdentity[];
+     /** Configuration options for the instance metadata service. */
+     metadata_service?: InstanceMetadataServicePrototype;
      /** The unique user-defined name for this instance template. */
      name: string;
      /** The additional network interfaces to create for the virtual server instance. */
      network_interfaces?: NetworkInterfacePrototype[];
      /** The placement restrictions to use for the virtual server instance. */
      placement_target?: InstancePlacementTargetPrototype;
-     /** The profile to use for this virtual server instance. */
+     /** The profile to use for this virtual server instance. If unspecified, `bx2-2x8` will
+      *  be used, but this default value is expected to change in the future.
+      */
      profile?: InstanceProfileIdentity;
      /** The resource group for this instance template. */
      resource_group: ResourceGroupReference;
@@ -25783,6 +26006,16 @@
  
    /** InstanceTemplatePrototype. */
    export interface InstanceTemplatePrototype {
+     /** The availability policy to use for this virtual server instance. */
+     availability_policy?: InstanceAvailabilityPrototype;
+     /** The default trusted profile configuration to use for this virtual server instance
+      *
+      *  This property's value is used when provisioning the virtual server instance, but not
+      *  subsequently managed. Accordingly, it is reflected as an [instance
+      *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization)
+      *  property.
+      */
+     default_trusted_profile?: InstanceDefaultTrustedProfilePrototype;
      /** The public SSH keys for the administrative user of the virtual server instance. Keys will be made available
       *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
       *  added as SSH authorized keys for the administrative user.
@@ -25797,6 +26030,8 @@
       *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization) property.
       */
      keys?: KeyIdentity[];
+     /** Configuration options for the instance metadata service. */
+     metadata_service?: InstanceMetadataServicePrototype;
      /** The unique user-defined name for this virtual server instance (and default system hostname). If unspecified,
       *  the name will be a hyphenated list of randomly-selected words.
       */
@@ -25805,7 +26040,9 @@
      network_interfaces?: NetworkInterfacePrototype[];
      /** The placement restrictions to use for the virtual server instance. */
      placement_target?: InstancePlacementTargetPrototype;
-     /** The profile to use for this virtual server instance. */
+     /** The profile to use for this virtual server instance. If unspecified, `bx2-2x8` will
+      *  be used, but this default value is expected to change in the future.
+      */
      profile?: InstanceProfileIdentity;
      /** The resource group to use. If unspecified, the account's [default resource
       *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
@@ -25942,6 +26179,16 @@
      more_info: string;
    }
  
+   /** Identifies a Cloud Object Storage bucket by a unique property. */
+   export interface LegacyCloudObjectStorageBucketIdentity {
+   }
+ 
+   /** LegacyCloudObjectStorageBucketReference. */
+   export interface LegacyCloudObjectStorageBucketReference {
+     /** The globally unique name of this Cloud Object Storage bucket. */
+     name: string;
+   }
+ 
    /** LoadBalancer. */
    export interface LoadBalancer {
      /** The date and time that this load balancer was created. */
@@ -25967,7 +26214,7 @@
      /** The pools of this load balancer. */
      pools: LoadBalancerPoolReference[];
      /** The private IP addresses assigned to this load balancer. */
-     private_ips: IP[];
+     private_ips: LoadBalancerPrivateIpsItem[];
      /** The profile to use for this load balancer. */
      profile: LoadBalancerProfileReference;
      /** The provisioning status of this load balancer. */
@@ -25979,6 +26226,8 @@
      public_ips: IP[];
      /** The resource group for this load balancer. */
      resource_group: ResourceGroupReference;
+     /** The resource type. */
+     resource_type: string;
      /** Indicates whether route mode is enabled for this load balancer.
       *
       *  At present, public load balancers are not supported with route mode enabled.
@@ -25993,6 +26242,8 @@
      security_groups_supported: boolean;
      /** The subnets this load balancer is part of. */
      subnets: SubnetReference[];
+     /** Indicates whether this load balancer supports UDP. */
+     udp_supported: boolean;
    }
  
    /** LoadBalancerCollection. */
@@ -26063,9 +26314,13 @@
       *  At present, only load balancers in the `network` family support more than one port per listener.
       */
      port_min: number;
-     /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
-      *  `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer must have a unique
-      *  `port` and `protocol` combination.
+     /** The listener protocol. Load balancers in the `network` family support `tcp` and
+      *  `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http`, and
+      *  `https`. Each listener in the load balancer must have a unique `port` and `protocol` combination.
+      *
+      *  The enumerated values for this property are expected to expand in the future. When processing this property,
+      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the listener on
+      *  which the unexpected property value was encountered.
       */
      protocol: string;
      /** The provisioning status of this listener. */
@@ -26298,8 +26553,12 @@
      accept_proxy_protocol?: boolean;
      /** The connection limit of the listener. */
      connection_limit?: number;
-     /** The default pool for this listener. If unspecified, this listener will be created
-      *  with no default pool, but one may be subsequently set.
+     /** The default pool for this listener. If specified, the pool's protocol must match the
+      *  listener's protocol, or the protocols must be compatible. At present, the compatible
+      *  protocols are `http` and `https`.
+      *
+      *  If unspecified, this listener will be created with no default pool, but one may be
+      *  subsequently set.
       */
      default_pool?: LoadBalancerPoolIdentityByName;
      /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
@@ -26328,9 +26587,13 @@
       *  the same protocol.
       */
      port_min?: number;
-     /** The listener protocol. Load balancers in the `network` family support `tcp`. Load balancers in the
-      *  `application` family support `tcp`, `http`, and `https`. Each listener in the load balancer must have a unique
-      *  `port` and `protocol` combination.
+     /** The listener protocol. Load balancers in the `network` family support `tcp` and
+      *  `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http`, and
+      *  `https`. Each listener in the load balancer must have a unique `port` and `protocol` combination.
+      *
+      *  The enumerated values for this property are expected to expand in the future. When processing this property,
+      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the listener on
+      *  which the unexpected property value was encountered.
       */
      protocol: string;
    }
@@ -26588,9 +26851,9 @@
       *  randomly-selected words.
       */
      name?: string;
-     /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp`. Load
-      *  balancers in the `application` family support `tcp`, `http`, and
-      *  `https`.
+     /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and
+      *  `udp` (if `udp_supported` is `true`). Load balancers in the
+      *  `application` family support `tcp`, `http`, and `https`.
       */
      protocol: string;
      /** The PROXY protocol setting for this pool:
@@ -26661,6 +26924,31 @@
      type: string;
    }
  
+   /** LoadBalancerPrivateIpsItem. */
+   export interface LoadBalancerPrivateIpsItem {
+     /** The IP address.
+      *
+      *  If the address has not yet been selected, the value will be `0.0.0.0`.
+      *
+      *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+      *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+      *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+      */
+     address: string;
+     /** If present, this property indicates the referenced resource has been deleted and provides
+      *  some supplementary information.
+      */
+     deleted?: ReservedIPReferenceDeleted;
+     /** The URL for this reserved IP. */
+     href: string;
+     /** The unique identifier for this reserved IP. */
+     id: string;
+     /** The user-defined or system-provided name for this reserved IP. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
    /** LoadBalancerProfile. */
    export interface LoadBalancerProfile {
      /** The product family this load balancer profile belongs to. */
@@ -26673,6 +26961,7 @@
      name: string;
      route_mode_supported: LoadBalancerProfileRouteModeSupported;
      security_groups_supported: LoadBalancerProfileSecurityGroupsSupported;
+     udp_supported: LoadBalancerProfileUDPSupported;
    }
  
    /** LoadBalancerProfileCollection. */
@@ -26729,6 +27018,10 @@
  
    /** LoadBalancerProfileSecurityGroupsSupported. */
    export interface LoadBalancerProfileSecurityGroupsSupported {
+   }
+ 
+   /** LoadBalancerProfileUDPSupported. */
+   export interface LoadBalancerProfileUDPSupported {
    }
  
    /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
@@ -27007,11 +27300,7 @@
      name: string;
      /** The network interface port speed in Mbps. */
      port_speed: number;
-     /** The primary IPv4 address.
-      *
-      *  If the address has not yet been selected, the value will be `0.0.0.0`.
-      */
-     primary_ipv4_address: string;
+     primary_ip: ReservedIPReference;
      /** The resource type. */
      resource_type: string;
      /** The security groups targeting this network interface. */
@@ -27036,11 +27325,7 @@
      id: string;
      /** The user-defined name for this network interface. */
      name: string;
-     /** The primary IPv4 address.
-      *
-      *  If the address has not yet been selected, the value will be `0.0.0.0`.
-      */
-     primary_ipv4_address: string;
+     primary_ip: ReservedIPReference;
      /** The resource type. */
      resource_type: string;
      /** The associated subnet. */
@@ -27053,30 +27338,8 @@
      more_info: string;
    }
  
-   /** NetworkInterfaceCollection. */
-   export interface NetworkInterfaceCollection {
-     /** A link to the first page of resources. */
-     first: NetworkInterfaceCollectionFirst;
-     /** The maximum number of resources that can be returned by the request. */
-     limit: number;
-     /** Collection of network interfaces. */
-     network_interfaces: NetworkInterface[];
-     /** A link to the next page of resources. This property is present for all pages except the last page. */
-     next?: NetworkInterfaceCollectionNext;
-     /** The total number of resources across all pages. */
-     total_count: number;
-   }
- 
-   /** A link to the first page of resources. */
-   export interface NetworkInterfaceCollectionFirst {
-     /** The URL for a page of resources. */
-     href: string;
-   }
- 
-   /** A link to the next page of resources. This property is present for all pages except the last page. */
-   export interface NetworkInterfaceCollectionNext {
-     /** The URL for a page of resources. */
-     href: string;
+   /** NetworkInterfaceIPPrototype. */
+   export interface NetworkInterfaceIPPrototype {
    }
  
    /** NetworkInterfaceInstanceContextReference. */
@@ -27091,11 +27354,7 @@
      id: string;
      /** The user-defined name for this network interface. */
      name: string;
-     /** The primary IPv4 address.
-      *
-      *  If the address has not yet been selected, the value will be `0.0.0.0`.
-      */
-     primary_ipv4_address: string;
+     primary_ip: ReservedIPReference;
      /** The resource type. */
      resource_type: string;
      /** The associated subnet. */
@@ -27118,37 +27377,20 @@
       *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
       */
      name?: string;
-     /** The primary IPv4 address. If specified, it must be an available address on the network interface's subnet.
-      *  If unspecified, an available address on the subnet will be automatically selected.
+     /** The primary IP address to bind to the network interface. This can be specified using
+      *  an existing reserved IP, or a prototype object for a new reserved IP.
+      *
+      *  If an existing reserved IP or a prototype object with an address is specified, it must
+      *  be available on the network interface's subnet. Otherwise, an available address on the
+      *  subnet will be automatically selected and reserved.
       */
-     primary_ipv4_address?: string;
+     primary_ip?: NetworkInterfaceIPPrototype;
      /** The security groups to use for this network interface. If unspecified, the VPC's default security group is
       *  used.
       */
      security_groups?: SecurityGroupIdentity[];
      /** The associated subnet. */
      subnet: SubnetIdentity;
-   }
- 
-   /** NetworkInterfaceReference. */
-   export interface NetworkInterfaceReference {
-     /** If present, this property indicates the referenced resource has been deleted and provides
-      *  some supplementary information.
-      */
-     deleted?: NetworkInterfaceReferenceDeleted;
-     /** The URL for this network interface. */
-     href: string;
-     /** The unique identifier for this network interface. */
-     id: string;
-     /** The user-defined name for this network interface. */
-     name: string;
-     /** The primary IPv4 address.
-      *
-      *  If the address has not yet been selected, the value will be `0.0.0.0`.
-      */
-     primary_ipv4_address: string;
-     /** The resource type. */
-     resource_type: string;
    }
  
    /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
@@ -27435,13 +27677,18 @@
      href: string;
      /** The unique identifier for this reserved IP. */
      id: string;
+     /** The lifecycle state of the reserved IP. */
+     lifecycle_state: string;
      /** The user-defined or system-provided name for this reserved IP. */
      name: string;
-     /** The owner of a reserved IP, defining whether it is managed by the user or the provider. */
+     /** The owner of the reserved IP. */
      owner: string;
      /** The resource type. */
      resource_type: string;
-     /** The target of this reserved IP. */
+     /** The target of this reserved IP.
+      *
+      *  If absent, this reserved IP is provider-owned or unbound.
+      */
      target?: ReservedIPTarget;
    }
  
@@ -27491,6 +27738,32 @@
      href: string;
    }
  
+   /** ReservedIPCollectionNetworkInterfaceContext. */
+   export interface ReservedIPCollectionNetworkInterfaceContext {
+     /** A link to the first page of resources. */
+     first: ReservedIPCollectionNetworkInterfaceContextFirst;
+     /** Collection of reserved IPs bound to a network interface. */
+     ips: ReservedIP[];
+     /** The maximum number of resources that can be returned by the request. */
+     limit: number;
+     /** A link to the next page of resources. This property is present for all pages except the last page. */
+     next?: ReservedIPCollectionNetworkInterfaceContextNext;
+     /** The total number of resources across all pages. */
+     total_count: number;
+   }
+ 
+   /** A link to the first page of resources. */
+   export interface ReservedIPCollectionNetworkInterfaceContextFirst {
+     /** The URL for a page of resources. */
+     href: string;
+   }
+ 
+   /** A link to the next page of resources. This property is present for all pages except the last page. */
+   export interface ReservedIPCollectionNetworkInterfaceContextNext {
+     /** The URL for a page of resources. */
+     href: string;
+   }
+ 
    /** A link to the next page of resources. This property is present for all pages except the last page. */
    export interface ReservedIPCollectionNext {
      /** The URL for a page of resources. */
@@ -27528,7 +27801,7 @@
      more_info: string;
    }
  
-   /** The target of this reserved IP. */
+   /** The target of this reserved IP. If absent, this reserved IP is provider-owned or unbound. */
    export interface ReservedIPTarget {
    }
  
@@ -27681,27 +27954,27 @@
       *  [Direct Link](https://cloud.ibm.com/docs/dl/) to this VPC.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       */
      route_direct_link_ingress: boolean;
      /** Indicates whether this routing table is used to route traffic that originates from from [Transit
       *  Gateway](https://cloud.ibm.com/cloud/transit-gateway/) to this VPC.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       */
      route_transit_gateway_ingress: boolean;
      /** Indicates whether this routing table is used to route traffic that originates from subnets in other zones in
       *  this VPC.
       *
       *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
-      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-      *  gateway connection, the packet will be dropped.
+      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
+      *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
+      *  IP address or a VPN gateway connection, the packet will be dropped.
       */
      route_vpc_zone_ingress: boolean;
      /** The routes for this routing table. */
@@ -27776,8 +28049,6 @@
       *  resides in.
       */
      name: string;
-     /** The network interfaces for this security group. */
-     network_interfaces: NetworkInterfaceReference[];
      /** The resource group for this security group. */
      resource_group: ResourceGroupReference;
      /** The rules for this security group. If no rules exist, all traffic will be denied. */
@@ -27944,7 +28215,7 @@
      captured_at?: string;
      /** The date and time that this snapshot was created. */
      created_at: string;
-     /** The CRN for this snapshot. */
+     /** The CRN of this snapshot. */
      crn: string;
      /** Indicates whether this snapshot can be deleted. This value will always be `true`. */
      deletable: boolean;
@@ -27974,14 +28245,18 @@
      resource_group: ResourceGroupReference;
      /** The resource type. */
      resource_type: string;
+     /** The service tags prefixed with `is.snapshot:` associated with this snapshot. */
+     service_tags: string[];
      /** The size of this snapshot rounded up to the next gigabyte. */
      size: number;
-     /** If present, the image from which the data on this volume was most directly provisioned. */
+     /** If present, the image from which the data on this snapshot was most directly provisioned. */
      source_image?: ImageReference;
      /** The source volume this snapshot was created from (may be
       *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
       */
      source_volume: VolumeReference;
+     /** The user tags associated with this snapshot. */
+     user_tags: string[];
    }
  
    /** SnapshotCollection. */
@@ -28014,9 +28289,23 @@
    export interface SnapshotIdentity {
    }
  
+   /** SnapshotPrototype. */
+   export interface SnapshotPrototype {
+     /** The unique user-defined name for this snapshot. If unspecified, the name will be a hyphenated list of
+      *  randomly-selected words.
+      */
+     name?: string;
+     /** The resource group to use. If unspecified, the account's [default resource
+      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+      */
+     resource_group?: ResourceGroupIdentity;
+     /** The user tags associated with this snapshot. */
+     user_tags?: string[];
+   }
+ 
    /** SnapshotReference. */
    export interface SnapshotReference {
-     /** The CRN for this snapshot. */
+     /** The CRN of this snapshot. */
      crn: string;
      /** If present, this property indicates the referenced resource has been deleted and provides
       *  some supplementary information.
@@ -28070,8 +28359,8 @@
      status: string;
      /** The total number of IPv4 addresses in this subnet.
       *
-      *  Note: This is calculated as 2<sup>(32 − prefix length)</sup>. For example, the prefix length `/24` gives:<br>
-      *  2<sup>(32 − 24)</sup> = 2<sup>8</sup> = 256 addresses.
+      *  Note: This is calculated as 2<sup>(32 - prefix length)</sup>. For example, the prefix length `/24` gives:<br>
+      *  2<sup>(32 - 24)</sup> = 2<sup>8</sup> = 256 addresses.
       */
      total_ipv4_address_count: number;
      /** The VPC this subnet is a part of. */
@@ -28161,6 +28450,20 @@
    export interface SubnetReferenceDeleted {
      /** Link to documentation about deleted resources. */
      more_info: string;
+   }
+ 
+   /** Identifies a trusted profile by a unique property. */
+   export interface TrustedProfileIdentity {
+   }
+ 
+   /** TrustedProfileReference. */
+   export interface TrustedProfileReference {
+     /** The CRN for this trusted profile. */
+     crn: string;
+     /** The unique identifier for this trusted profile. */
+     id: string;
+     /** The resource type. */
+     resource_type: string;
    }
  
    /** The VCPU configuration. */
@@ -28491,9 +28794,9 @@
  
    /** VPNGatewayMember. */
    export interface VPNGatewayMember {
-     /** The private IP address assigned to the VPN gateway member. This
-      *  property will be present only when the VPN gateway status is
-      *  `available`.
+     /** The private IP address assigned to the VPN gateway member.
+      *
+      *  This property will be present only when the VPN gateway status is `available`.
       */
      private_ip?: IP;
      /** The public IP address assigned to the VPN gateway member. */
@@ -28514,6 +28817,12 @@
      resource_group?: ResourceGroupIdentity;
      /** Identifies a subnet by a unique property. */
      subnet: SubnetIdentity;
+   }
+ 
+   /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+   export interface VPNGatewayReferenceDeleted {
+     /** Link to documentation about deleted resources. */
+     more_info: string;
    }
  
    /** Volume. */
@@ -28581,6 +28890,8 @@
       *  which the unexpected reason code was encountered.
       */
      status_reasons: VolumeStatusReason[];
+     /** Tags for this resource. */
+     user_tags: string[];
      /** The volume attachments for this volume. */
      volume_attachments: VolumeAttachmentReferenceVolumeContext[];
      /** The zone this volume resides in. */
@@ -28640,16 +28951,16 @@
      volume: VolumePrototypeInstanceByImageContext;
    }
  
-   /** VolumeAttachmentPrototypeInstanceByVolumeContext. */
-   export interface VolumeAttachmentPrototypeInstanceByVolumeContext {
+   /** VolumeAttachmentPrototypeInstanceBySourceSnapshotContext. */
+   export interface VolumeAttachmentPrototypeInstanceBySourceSnapshotContext {
      /** If set to true, when deleting the instance the volume will also be deleted. */
      delete_volume_on_instance_delete?: boolean;
      /** The user-defined name for this volume attachment. Names must be unique within the instance the volume
       *  attachment resides in.
       */
      name?: string;
-     /** An existing volume to attach to the instance, or a prototype object for a new volume. */
-     volume: VolumeAttachmentVolumePrototypeInstanceByVolumeContext;
+     /** A prototype object for a new volume from a snapshot. */
+     volume: VolumePrototypeInstanceBySourceSnapshotContext;
    }
  
    /** VolumeAttachmentPrototypeInstanceContext. */
@@ -28724,10 +29035,6 @@
    export interface VolumeAttachmentReferenceVolumeContextDeleted {
      /** Link to documentation about deleted resources. */
      more_info: string;
-   }
- 
-   /** An existing volume to attach to the instance, or a prototype object for a new volume. */
-   export interface VolumeAttachmentVolumePrototypeInstanceByVolumeContext {
    }
  
    /** An existing volume to attach to the instance, or a prototype object for a new volume. */
@@ -28829,14 +29136,16 @@
       *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
       */
      resource_group?: ResourceGroupIdentity;
+     /** Tags for this resource. */
+     user_tags?: string[];
      /** The zone this volume will reside in. */
      zone: ZoneIdentity;
    }
  
    /** VolumePrototypeInstanceByImageContext. */
    export interface VolumePrototypeInstanceByImageContext {
-     /** The capacity to use for the volume (in gigabytes). The only allowed value is the image's
-      *  `minimum_provisioned_size`, but the allowed values are expected to expand in the future.
+     /** The capacity to use for the volume (in gigabytes). Must be at least the image's
+      *  `minimum_provisioned_size`. The maximum value may increase in the future.
       *
       *  If unspecified, the capacity will be the image's `minimum_provisioned_size`.
       */
@@ -28855,6 +29164,31 @@
      name?: string;
      /** The profile to use for this volume. */
      profile: VolumeProfileIdentity;
+   }
+ 
+   /** VolumePrototypeInstanceBySourceSnapshotContext. */
+   export interface VolumePrototypeInstanceBySourceSnapshotContext {
+     /** The capacity to use for the volume (in gigabytes). Must be at least the snapshot's
+      *  `minimum_capacity`. The maximum value may increase in the future.
+      *
+      *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
+      */
+     capacity?: number;
+     /** The root key to use to wrap the data encryption key for the volume.
+      *
+      *  If unspecified, the snapshot's `encryption_key` will be used.
+      */
+     encryption_key?: EncryptionKeyIdentity;
+     /** The maximum I/O operations per second (IOPS) to use for the volume. Applicable only to volumes using a
+      *  profile `family` of `custom`.
+      */
+     iops?: number;
+     /** The unique user-defined name for this volume. */
+     name?: string;
+     /** The profile to use for this volume. */
+     profile: VolumeProfileIdentity;
+     /** The snapshot from which to clone the volume. */
+     source_snapshot: SnapshotIdentity;
    }
  
    /** VolumeReference. */
@@ -29231,12 +29565,6 @@
      crn: string;
    }
  
-   /** CloudObjectStorageBucketIdentityByName. */
-   export interface CloudObjectStorageBucketIdentityByName extends CloudObjectStorageBucketIdentity {
-     /** The globally unique name of this COS bucket. */
-     name: string;
-   }
- 
    /** DedicatedHostGroupIdentityByCRN. */
    export interface DedicatedHostGroupIdentityByCRN extends DedicatedHostGroupIdentity {
      /** The CRN for this dedicated host group. */
@@ -29409,6 +29737,11 @@
  
    /** EndpointGatewayReservedIPReservedIPPrototypeTargetContext. */
    export interface EndpointGatewayReservedIPReservedIPPrototypeTargetContext extends EndpointGatewayReservedIP {
+     /** The IP address to reserve, which must not already be reserved on the subnet.
+      *
+      *  If unspecified, an available address on the subnet will automatically be selected.
+      */
+     address?: string;
      /** Indicates whether this reserved IP member will be automatically deleted when either
       *  `target` is deleted, or the reserved IP is unbound.
       */
@@ -29496,11 +29829,7 @@
      id: string;
      /** The user-defined name for this network interface. */
      name: string;
-     /** The primary IPv4 address.
-      *
-      *  If the address has not yet been selected, the value will be `0.0.0.0`.
-      */
-     primary_ipv4_address: string;
+     primary_ip: ReservedIPReference;
      /** The resource type. */
      resource_type: string;
    }
@@ -29763,17 +30092,17 @@
      id: string;
      /** The user-defined name for this instance group manager. */
      name: string;
-     /** The maximum number of members the instance group should have at the scheduled time. */
+     /** The desired maximum number of instance group members at the scheduled time. */
      max_membership_count?: number;
-     /** The minimum number of members the instance group should have at the scheduled time. */
+     /** The desired minimum number of instance group members at the scheduled time. */
      min_membership_count?: number;
    }
  
    /** The auto scale manager to update, and one or more properties to be updated. Either `id` or `href` must be specified, in addition to at least one of `min_membership_count` and `max_membership_count`. */
    export interface InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototype extends InstanceGroupManagerScheduledActionManagerPrototype {
-     /** The maximum number of members the instance group should have at the scheduled time. */
+     /** The desired maximum number of instance group members at the scheduled time. */
      max_membership_count?: number;
-     /** The minimum number of members the instance group should have at the scheduled time. */
+     /** The desired minimum number of instance group members at the scheduled time. */
      min_membership_count?: number;
    }
  
@@ -30205,6 +30534,16 @@
      zone: ZoneIdentity;
    }
  
+   /** InstancePrototypeInstanceBySourceSnapshot. */
+   export interface InstancePrototypeInstanceBySourceSnapshot extends InstancePrototype {
+     /** The boot volume attachment for the virtual server instance. */
+     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
+     /** Primary network interface. */
+     primary_network_interface: NetworkInterfacePrototype;
+     /** The zone this virtual server instance will reside in. */
+     zone: ZoneIdentity;
+   }
+ 
    /** InstancePrototypeInstanceBySourceTemplate. */
    export interface InstancePrototypeInstanceBySourceTemplate extends InstancePrototype {
      /** The boot volume attachment for the virtual server instance. */
@@ -30217,16 +30556,6 @@
      source_template: InstanceTemplateIdentity;
      /** The zone this virtual server instance will reside in. */
      zone?: ZoneIdentity;
-   }
- 
-   /** InstancePrototypeInstanceByVolume. */
-   export interface InstancePrototypeInstanceByVolume extends InstancePrototype {
-     /** The boot volume attachment for the virtual server instance. */
-     boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
-     /** Primary network interface. */
-     primary_network_interface: NetworkInterfacePrototype;
-     /** The zone this virtual server instance will reside in. */
-     zone: ZoneIdentity;
    }
  
    /** InstanceTemplateIdentityByCRN. */
@@ -30273,32 +30602,12 @@
      zone?: ZoneIdentity;
    }
  
-   /** InstanceTemplatePrototypeInstanceByVolume. */
-   export interface InstanceTemplatePrototypeInstanceByVolume extends InstanceTemplatePrototype {
-     /** The boot volume attachment for the virtual server instance. */
-     boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
-     /** Primary network interface. */
-     primary_network_interface: NetworkInterfacePrototype;
-     /** The zone this virtual server instance will reside in. */
-     zone: ZoneIdentity;
-   }
- 
    /** InstanceTemplateInstanceByImage. */
    export interface InstanceTemplateInstanceByImage extends InstanceTemplate {
      /** The boot volume attachment for the virtual server instance. */
      boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
      /** The image to use when provisioning the virtual server instance. */
      image: ImageIdentity;
-     /** Primary network interface. */
-     primary_network_interface: NetworkInterfacePrototype;
-     /** The zone this virtual server instance will reside in. */
-     zone: ZoneIdentity;
-   }
- 
-   /** InstanceTemplateInstanceByVolume. */
-   export interface InstanceTemplateInstanceByVolume extends InstanceTemplate {
-     /** The boot volume attachment for the virtual server instance. */
-     boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
      /** Primary network interface. */
      primary_network_interface: NetworkInterfacePrototype;
      /** The zone this virtual server instance will reside in. */
@@ -30329,6 +30638,12 @@
    export interface KeyIdentityById extends KeyIdentity {
      /** The unique identifier for this key. */
      id: string;
+   }
+ 
+   /** LegacyCloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName. */
+   export interface LegacyCloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName extends LegacyCloudObjectStorageBucketIdentity {
+     /** The globally unique name of this Cloud Object Storage bucket. */
+     name: string;
    }
  
    /** LoadBalancerIdentityByCRN. */
@@ -30530,6 +30845,20 @@
      value: boolean;
    }
  
+   /** The UDP support for a load balancer with this profile depends on its configuration. */
+   export interface LoadBalancerProfileUDPSupportedDependent extends LoadBalancerProfileUDPSupported {
+     /** The type for this profile field. */
+     type: string;
+   }
+ 
+   /** The UDP support for a load balancer with this profile. */
+   export interface LoadBalancerProfileUDPSupportedFixed extends LoadBalancerProfileUDPSupported {
+     /** The type for this profile field. */
+     type: string;
+     /** The value for this profile field. */
+     value: boolean;
+   }
+ 
    /** NetworkACLIdentityByCRN. */
    export interface NetworkACLIdentityByCRN extends NetworkACLIdentity {
      /** The CRN for this network ACL. */
@@ -30714,6 +31043,28 @@
      source_port_min?: number;
    }
  
+   /** Identifies a reserved IP by a unique property. */
+   export interface NetworkInterfaceIPPrototypeReservedIPIdentity extends NetworkInterfaceIPPrototype {
+   }
+ 
+   /** NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext. */
+   export interface NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext extends NetworkInterfaceIPPrototype {
+     /** The IP address to reserve, which must not already be reserved on the subnet.
+      *
+      *  If unspecified, an available address on the subnet will automatically be selected.
+      */
+     address?: string;
+     /** Indicates whether this reserved IP member will be automatically deleted when either
+      *  `target` is deleted, or the reserved IP is unbound.
+      */
+     auto_delete?: boolean;
+     /** The user-defined name for this reserved IP. If unspecified, the name will be a hyphenated list of
+      *  randomly-selected words. Names must be unique within the subnet the reserved IP resides in. Names beginning with
+      *  `ibm-` are reserved for provider-owned resources.
+      */
+     name?: string;
+   }
+ 
    /** OperatingSystemIdentityByHref. */
    export interface OperatingSystemIdentityByHref extends OperatingSystemIdentity {
      /** The URL for this operating system. */
@@ -30777,6 +31128,70 @@
      /** The unique identifier for this endpoint gateway. */
      id: string;
      /** The unique user-defined name for this endpoint gateway. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
+   /** Identifying information for a resource that is not native to the VPC API. */
+   export interface ReservedIPTargetGenericResourceReference extends ReservedIPTarget {
+     /** The CRN for the resource. */
+     crn: string;
+     /** If present, this property indicates the referenced resource has been deleted and provides
+      *  some supplementary information.
+      */
+     deleted?: GenericResourceReferenceDeleted;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
+   /** ReservedIPTargetLoadBalancerReference. */
+   export interface ReservedIPTargetLoadBalancerReference extends ReservedIPTarget {
+     /** The load balancer's CRN. */
+     crn: string;
+     /** If present, this property indicates the referenced resource has been deleted and provides
+      *  some supplementary information.
+      */
+     deleted?: LoadBalancerReferenceDeleted;
+     /** The load balancer's canonical URL. */
+     href: string;
+     /** The unique identifier for this load balancer. */
+     id: string;
+     /** The unique user-defined name for this load balancer. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
+   /** ReservedIPTargetNetworkInterfaceReferenceTargetContext. */
+   export interface ReservedIPTargetNetworkInterfaceReferenceTargetContext extends ReservedIPTarget {
+     /** If present, this property indicates the referenced resource has been deleted and provides
+      *  some supplementary information.
+      */
+     deleted?: NetworkInterfaceReferenceTargetContextDeleted;
+     /** The URL for this network interface. */
+     href: string;
+     /** The unique identifier for this network interface. */
+     id: string;
+     /** The user-defined name for this network interface. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
+   /** ReservedIPTargetVPNGatewayReference. */
+   export interface ReservedIPTargetVPNGatewayReference extends ReservedIPTarget {
+     /** The VPN gateway's CRN. */
+     crn: string;
+     /** If present, this property indicates the referenced resource has been deleted and provides
+      *  some supplementary information.
+      */
+     deleted?: VPNGatewayReferenceDeleted;
+     /** The VPN gateway's canonical URL. */
+     href: string;
+     /** The unique identifier for this VPN gateway. */
+     id: string;
+     /** The user-defined name for this VPN gateway. */
      name: string;
      /** The resource type. */
      resource_type: string;
@@ -31072,6 +31487,8 @@
      id: string;
      /** The unique user-defined name for this load balancer. */
      name: string;
+     /** The resource type. */
+     resource_type: string;
    }
  
    /** SecurityGroupTargetReferenceNetworkInterfaceReferenceTargetContext. */
@@ -31092,7 +31509,7 @@
  
    /** SnapshotIdentityByCRN. */
    export interface SnapshotIdentityByCRN extends SnapshotIdentity {
-     /** The CRN for this snapshot. */
+     /** The CRN of this snapshot. */
      crn: string;
    }
  
@@ -31106,6 +31523,12 @@
    export interface SnapshotIdentityById extends SnapshotIdentity {
      /** The unique identifier for this snapshot. */
      id: string;
+   }
+ 
+   /** SnapshotPrototypeSnapshotBySourceVolume. */
+   export interface SnapshotPrototypeSnapshotBySourceVolume extends SnapshotPrototype {
+     /** The volume to create this snapshot from. */
+     source_volume: VolumeIdentity;
    }
  
    /** SubnetIdentityByCRN. */
@@ -31130,9 +31553,9 @@
    export interface SubnetPrototypeSubnetByCIDR extends SubnetPrototype {
      /** The IPv4 range of the subnet, expressed in CIDR format. The prefix length of the subnet's CIDR must be
       *  between `/9` (8,388,608 addresses) and `/29` (8 addresses). The IPv4 range of the subnet's CIDR must fall within
-      *  an existing address prefix in the VPC. The subnet will be created in the zone of the address prefix that
-      *  contains the IPv4 CIDR. If zone is specified, it must match the zone of the address prefix that contains the
-      *  subnet's IPv4 CIDR.
+      *  an existing address prefix in the VPC and must not overlap with any existing subnet. The subnet will be created
+      *  in the zone of the address prefix that contains the IPv4 CIDR. If zone is specified, it must match the zone of
+      *  the address prefix that contains the subnet's IPv4 CIDR.
       */
      ipv4_cidr_block: string;
      /** The zone this subnet will reside in. */
@@ -31165,6 +31588,18 @@
    /** SubnetPublicGatewayPatchPublicGatewayIdentityById. */
    export interface SubnetPublicGatewayPatchPublicGatewayIdentityById extends SubnetPublicGatewayPatch {
      /** The unique identifier for this public gateway. */
+     id: string;
+   }
+ 
+   /** TrustedProfileIdentityTrustedProfileByCRN. */
+   export interface TrustedProfileIdentityTrustedProfileByCRN extends TrustedProfileIdentity {
+     /** The CRN for this trusted profile. */
+     crn: string;
+   }
+ 
+   /** TrustedProfileIdentityTrustedProfileById. */
+   export interface TrustedProfileIdentityTrustedProfileById extends TrustedProfileIdentity {
+     /** The unique identifier for this trusted profile. */
      id: string;
    }
  
@@ -31308,31 +31743,6 @@
      name?: string;
      /** The profile to use for this volume. */
      profile: VolumeProfileIdentity;
-   }
- 
-   /** VolumeAttachmentVolumePrototypeInstanceByVolumeContextVolumePrototypeInstanceByVolumeContext. */
-   export interface VolumeAttachmentVolumePrototypeInstanceByVolumeContextVolumePrototypeInstanceByVolumeContext extends VolumeAttachmentVolumePrototypeInstanceByVolumeContext {
-     /** The capacity to use for the volume (in gigabytes). The only allowed value is the source snapshot's
-      *  `minimum_capacity`, but the allowed values are expected to expand in the future.
-      *
-      *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
-      */
-     capacity?: number;
-     /** The root key to use to wrap the data encryption key for the volume.
-      *
-      *  If unspecified, the snapshot's `encryption_key` will be used.
-      */
-     encryption_key?: EncryptionKeyIdentity;
-     /** The maximum I/O operations per second (IOPS) to use for the volume. Applicable only to volumes using a
-      *  profile `family` of `custom`.
-      */
-     iops?: number;
-     /** The unique user-defined name for this volume. */
-     name?: string;
-     /** The profile to use for this volume. */
-     profile: VolumeProfileIdentity;
-     /** The snapshot from which to clone the volume. */
-     source_snapshot: SnapshotIdentity;
    }
  
    /** Identifies a volume by a unique property. */
@@ -31666,6 +32076,18 @@
      id: string;
    }
  
+   /** NetworkInterfaceIPPrototypeReservedIPIdentityReservedIPIdentityByHref. */
+   export interface NetworkInterfaceIPPrototypeReservedIPIdentityReservedIPIdentityByHref extends NetworkInterfaceIPPrototypeReservedIPIdentity {
+     /** The URL for this reserved IP. */
+     href: string;
+   }
+ 
+   /** NetworkInterfaceIPPrototypeReservedIPIdentityReservedIPIdentityById. */
+   export interface NetworkInterfaceIPPrototypeReservedIPIdentityReservedIPIdentityById extends NetworkInterfaceIPPrototypeReservedIPIdentity {
+     /** The unique identifier for this reserved IP. */
+     id: string;
+   }
+ 
    /** PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByAddress. */
    export interface PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByAddress extends PublicGatewayFloatingIPPrototypeFloatingIPIdentity {
      /** The globally unique IP address. */
@@ -31789,8 +32211,8 @@
  
    /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot. */
    export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot extends VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext {
-     /** The capacity to use for the volume (in gigabytes). The only allowed value is the source snapshot's
-      *  `minimum_capacity`, but the allowed values are expected to expand in the future.
+     /** The capacity to use for the volume (in gigabytes). Must be at least the snapshot's
+      *  `minimum_capacity`. The maximum value may increase in the future.
       *
       *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
       */
@@ -31837,8 +32259,8 @@
  
    /** VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot. */
    export interface VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot extends VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContext {
-     /** The capacity to use for the volume (in gigabytes). The only allowed value is the source snapshot's
-      *  `minimum_capacity`, but the allowed values are expected to expand in the future.
+     /** The capacity to use for the volume (in gigabytes). Must be at least the snapshot's
+      *  `minimum_capacity`. The maximum value may increase in the future.
       *
       *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
       */

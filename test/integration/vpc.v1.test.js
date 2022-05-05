@@ -822,18 +822,24 @@ describe('VpcV1_integration', () => {
       id: dict.createdVolume,
     };
     const params = {
-      sourceVolume: volumeIdentityModel,
+      source_volume: volumeIdentityModel,
       name: generateName('snap1'),
     };
-
-    const res = await vpcService.createSnapshot(params);
+    const snapshotPrototype = {
+      snapshotPrototype: params,
+    };
+    // SnapshotPrototypeSnapshotBySourceVolume
+    const res = await vpcService.createSnapshot(snapshotPrototype);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
     const params2 = {
-      sourceVolume: volumeIdentityModel,
+      source_volume: volumeIdentityModel,
       name: generateName('snap2'),
     };
-    const res2 = await vpcService.createSnapshot(params2);
+    const snapshotPrototype2 = {
+      snapshotPrototype: params2,
+    };
+    const res2 = await vpcService.createSnapshot(snapshotPrototype2);
     expect(res2).toBeDefined();
     expect(res2.result).toBeDefined();
     dict.snapshotId = res2.result.id;
@@ -1283,6 +1289,41 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('listInstanceNetworkInterfaceReservedIps()', done => {
+    const params = {
+      instanceId: dict.createdInstance,
+      networkInterfaceId: dict.createdSecondVnic,
+    };
+    vpcService
+      .listInstanceNetworkInterfaceIps(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdFirstReservedIpNi = res.result.ips[0].id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getInstanceNetworkInterfaceReservedIp()', done => {
+    const params = {
+      instanceId: dict.createdInstance,
+      networkInterfaceId: dict.createdSecondVnic,
+      id: dict.createdFirstReservedIpNi,
+    };
+
+    vpcService
+      .getInstanceNetworkInterfaceIp(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('listInstanceVolumeAttachments()', done => {
     const params = {
       instanceId: dict.createdInstance,
@@ -1635,6 +1676,42 @@ describe('VpcV1_integration', () => {
     const res = await vpcService.startBareMetalServer(params);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+  });
+  // mock server doesn't support
+  test.skip('listBareMetalServerNetworkInterfaceReservedIps()', done => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      networkInterfaceId: dict.createdBareMetalServerNicId,
+    };
+    vpcService
+      .listBareMetalServerNetworkInterfaceIps(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdBareMetalFirstReservedIpNi = res.result.ips[0].id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  // mock server doesn't support
+  test.skip('getBareMetalServerNetworkInterfaceReservedIp()', done => {
+    const params = {
+      bareMetalServerId: dict.createdBareMetalServerId,
+      networkInterfaceId: dict.createdBareMetalServerNicId,
+      id: dict.createdBareMetalFirstReservedIpNi,
+    };
+    vpcService
+      .getBareMetalServerNetworkInterfaceIp(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
   });
   test('stopBareMetalServer()', async () => {
     const params = {
@@ -2498,74 +2575,6 @@ describe('VpcV1_integration', () => {
 
     vpcService
       .updateSecurityGroup(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('addSecurityGroupNetworkInterface()', done => {
-    const params = {
-      securityGroupId: dict.createdSG,
-      id: dict.createdSecondVnic,
-    };
-
-    vpcService
-      .addSecurityGroupNetworkInterface(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('listSecurityGroupNetworkInterfaces()', done => {
-    const params = {
-      securityGroupId: dict.createdSG,
-      limit: 1,
-    };
-
-    vpcService
-      .listSecurityGroupNetworkInterfaces(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('getSecurityGroupNetworkInterface()', done => {
-    const params = {
-      securityGroupId: dict.createdSG,
-      id: dict.createdSecondVnic,
-    };
-
-    vpcService
-      .getSecurityGroupNetworkInterface(params)
-      .then(res => {
-        expect(res.result).not.toBeNull();
-        done();
-      })
-      .catch(err => {
-        console.warn(err);
-        done(err);
-      });
-  });
-  test('removeSecurityGroupNetworkInterface()', done => {
-    const params = {
-      securityGroupId: dict.createdSG,
-      id: dict.createdSecondVnic,
-    };
-
-    vpcService
-      .removeSecurityGroupNetworkInterface(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
