@@ -1108,6 +1108,142 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('listBackupPolicies()', done => {
+    const params = {
+      limit: 1,
+    };
+
+    vpcService
+      .listBackupPolicies(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createBackupPolicy()', done => {
+    const params = {
+      matchUserTags: ['tag1', 'tag2'],
+      name: 'my-backup-policy',
+    };
+
+    vpcService
+      .createBackupPolicy(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdBackupPolicy = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getBackupPolicy()', done => {
+    const params = {
+      id: dict.createdBackupPolicy,
+    };
+
+    vpcService
+      .getBackupPolicy(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateBackupPolicy()', done => {
+    const params = {
+      id: dict.createdBackupPolicy,
+      name: 'my-backup-policy-updated',
+    };
+
+    vpcService
+      .updateBackupPolicy(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('listBackupPolicyPlans()', done => {
+    const params = {
+      backupPolicyId: dict.createdBackupPolicy,
+    };
+
+    vpcService
+      .listBackupPolicyPlans(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createBackupPolicyPlan()', done => {
+    const params = {
+      backupPolicyId: dict.createdBackupPolicy,
+      name: 'my-backup-policy-plan',
+      cronSpec: '40 3 * * *',
+    };
+    vpcService
+      .createBackupPolicyPlan(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdBackupPolicyPlan = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getBackupPolicyPlan()', done => {
+    const params = {
+      backupPolicyId: dict.createdBackupPolicy,
+      id: dict.createdBackupPolicyPlan,
+    };
+
+    vpcService
+      .getBackupPolicyPlan(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateBackupPolicyPlan()', done => {
+    const params = {
+      backupPolicyId: dict.createdBackupPolicy,
+      id: dict.createdBackupPolicyPlan,
+      name: 'my-backup-policy-plan-updated',
+    };
+
+    vpcService
+      .updateBackupPolicyPlan(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('getInstanceInitialization()', done => {
     const params = {
       id: dict.createdInstance,
@@ -2184,7 +2320,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('deleteInstanceGroupLoadBalancer()', done => {
+  test.skip('deleteInstanceGroupLoadBalancer()', done => {
     const params = {
       instanceGroupId: dict.createdInstanceGroup,
     };
@@ -3236,6 +3372,282 @@ describe('VpcV1_integration', () => {
 
     vpcService
       .deleteVpnGateway(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  // VPN Server
+  test('listVpnServers()', done => {
+    const params = {};
+
+    vpcService
+      .listVpnServers(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createVpnServer()', done => {
+    // Request models needed by this operation.
+
+    // CertificateInstanceIdentityByCRN
+    const certificateInstanceIdentityModel = {
+      crn:
+        'crn:v1:bluemix:public:secrets-manager:us-south:a/123456:36fa422d-080d-4d83-8d2d-86851b4001df:secret:2e786aab-42fa-63ed-14f8-d66d552f4dd5',
+    };
+
+    // VPNServerAuthenticationByUsernameIdProviderByIAM
+    const vpnServerAuthenticationByUsernameIdProviderModel = {
+      provider_type: 'iam',
+    };
+
+    // VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype
+    const vpnServerAuthenticationPrototypeModel = {
+      method: 'certificate',
+      identity_provider: vpnServerAuthenticationByUsernameIdProviderModel,
+    };
+
+    // SubnetIdentityById
+    const subnetIdentityModel = {
+      id: dict.createdSubnet,
+    };
+
+    const params = {
+      certificate: certificateInstanceIdentityModel,
+      clientAuthentication: [vpnServerAuthenticationPrototypeModel],
+      clientIpPool: '127.0.0.0/8',
+      subnets: [subnetIdentityModel],
+      name: 'my-vpn-server',
+    };
+
+    vpcService
+      .createVpnServer(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdVPNServer = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getVpnServer()', done => {
+    const params = {
+      id: dict.createdVPNServer,
+    };
+
+    vpcService
+      .getVpnServer(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateVpnServer()', done => {
+    const params = {
+      id: dict.createdVPNServer,
+      name: 'my-reserved-ip',
+    };
+
+    vpcService
+      .updateVpnServer(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getVpnServerClientConfiguration()', done => {
+    const params = {
+      id: dict.createdVPNServer,
+    };
+
+    vpcService
+      .getVpnServerClientConfiguration(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('listVpnServerClients()', done => {
+    const params = {
+      vpnServerId: dict.createdVPNServer,
+    };
+
+    vpcService
+      .listVpnServerClients(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdVPNServerClient = res.result.clients[0].id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getVpnServerClient()', done => {
+    const params = {
+      vpnServerId: dict.createdVPNServer,
+      id: dict.createdVPNServerClient,
+    };
+
+    vpcService
+      .getVpnServerClient(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('disconnectVpnClient()', done => {
+    const params = {
+      vpnServerId: dict.createdVPNServer,
+      id: dict.createdVPNServerClient,
+    };
+
+    vpcService
+      .disconnectVpnClient(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('listVpnServerRoutes()', done => {
+    const params = {
+      vpnServerId: dict.createdVPNServer,
+    };
+
+    vpcService
+      .listVpnServerRoutes(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createVpnServerRoute()', done => {
+    const params = {
+      vpnServerId: dict.createdVPNServer,
+      destination: '172.16.0.0/16',
+      action: 'deliver',
+      name: 'my-vpn-route-1',
+    };
+    vpcService
+      .createVpnServerRoute(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        dict.createdVPNServerRoute = res.result.id;
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getVpnServerRoute()', done => {
+    const params = {
+      vpnServerId: dict.createdVPNServer,
+      id: dict.createdVPNServerRoute,
+    };
+    vpcService
+      .getVpnServerRoute(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateVpnServerRoute()', done => {
+    const params = {
+      vpnServerId: dict.createdVPNServer,
+      id: dict.createdVPNServerRoute,
+      name: 'my-vpn-route-2',
+    };
+    vpcService
+      .updateVpnServerRoute(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  // VPN Server Delete
+  test('deleteVpnServerRoute()', done => {
+    const params = {
+      vpnServerId: dict.createdVPNServer,
+      id: dict.createdVPNServerRoute,
+    };
+    vpcService
+      .deleteVpnServerRoute(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteVpnServerClient()', done => {
+    const params = {
+      vpnServerId: dict.createdVPNServer,
+      id: dict.createdVPNServerClient,
+    };
+    vpcService
+      .deleteVpnServerClient(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteVpnServer()', done => {
+    const params = {
+      id: dict.createdVPNServer,
+    };
+    vpcService
+      .deleteVpnServer(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();
@@ -4803,6 +5215,39 @@ describe('VpcV1_integration', () => {
 
     vpcService
       .deleteInstanceVolumeAttachment(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteBackupPolicyPlan()', done => {
+    const params = {
+      backupPolicyId: dict.createdBackupPolicy,
+      id: dict.createdBackupPolicyPlan,
+    };
+
+    vpcService
+      .deleteBackupPolicyPlan(params)
+      .then(res => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch(err => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteBackupPolicy()', done => {
+    const params = {
+      id: dict.createdBackupPolicy,
+    };
+
+    vpcService
+      .deleteBackupPolicy(params)
       .then(res => {
         expect(res.result).not.toBeNull();
         done();

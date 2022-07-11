@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.44.0-98838c07-20220128-151531
+ * IBM OpenAPI SDK Code Generator Version: 3.50.0-af9e48c4-20220523-163800
  */
 
  import * as extend from 'extend';
@@ -94,7 +94,6 @@
     */
    constructor(options: UserOptions) {
      options = options || {};
-
      options.generation = 2;
      super(options);
      if (options.serviceUrl) {
@@ -1036,9 +1035,9 @@
     * - `drop`: drop the packet.
     * @param {string} [params.name] - The user-defined name for this route. If unspecified, the name will be a hyphenated
     * list of randomly-selected words. Names must be unique within the VPC routing table the route resides in.
-    * @param {RouteNextHopPrototype} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
-    * delivered to.  For
-    * other `action` values, it must be omitted or specified as `0.0.0.0`.
+    * @param {RoutePrototypeNextHop} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
+    * delivered to. For other `action`
+    * values, it must be omitted or specified as `0.0.0.0`.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
     */
@@ -1365,6 +1364,11 @@
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpcId - The VPC identifier.
+    * @param {ResourceFilter[]} [params.acceptRoutesFrom] - The filters specifying the resources that may create routes
+    * in this routing table.
+    *
+    * At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but filter
+    * support is expected to expand in the future.
     * @param {string} [params.name] - The user-defined name for this routing table. Names must be unique within the VPC
     * the routing table resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
     * @param {boolean} [params.routeDirectLinkIngress] - If set to `true`, this routing table will be used to route
@@ -1405,13 +1409,14 @@
    ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
      const _params = { ...params };
      const _requiredParams = ['vpcId'];
-     const _validParams = ['vpcId', 'name', 'routeDirectLinkIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'routes', 'headers'];
+     const _validParams = ['vpcId', 'acceptRoutesFrom', 'name', 'routeDirectLinkIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'routes', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
      }
  
      const body = {
+       'accept_routes_from': _params.acceptRoutesFrom,
        'name': _params.name,
        'route_direct_link_ingress': _params.routeDirectLinkIngress,
        'route_transit_gateway_ingress': _params.routeTransitGatewayIngress,
@@ -1467,6 +1472,8 @@
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpcId - The VPC identifier.
     * @param {string} params.id - The routing table identifier.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
     */
@@ -1475,7 +1482,7 @@
    ): Promise<VpcV1.Response<VpcV1.Empty>> {
      const _params = { ...params };
      const _requiredParams = ['vpcId', 'id'];
-     const _validParams = ['vpcId', 'id', 'headers'];
+     const _validParams = ['vpcId', 'id', 'ifMatch', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
@@ -1509,6 +1516,7 @@
            true,
            sdkHeaders,
            {
+             'If-Match': _params.ifMatch,
            },
            _params.headers
          ),
@@ -1587,6 +1595,14 @@
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpcId - The VPC identifier.
     * @param {string} params.id - The routing table identifier.
+    * @param {ResourceFilter[]} [params.acceptRoutesFrom] - The filters specifying the resources that may create routes
+    * in this routing table
+    * (replacing any existing filters). All routes learned from resources that match a given filter will be removed when
+    * an existing filter is removed. Therefore, if an empty array is specified, all filters will be removed, resulting in
+    * all learned routes being removed.
+    *
+    * At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but filter
+    * support is expected to expand in the future.
     * @param {string} [params.name] - The user-defined name for this routing table. Names must be unique within the VPC
     * the routing table resides in.
     * @param {boolean} [params.routeDirectLinkIngress] - Indicates whether this routing table is used to route traffic
@@ -1622,6 +1638,8 @@
     * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
     * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
     * address or a VPN gateway connection, the packet will be dropped.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value. Required if the request body includes an array.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.RoutingTable>>}
     */
@@ -1630,13 +1648,14 @@
    ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
      const _params = { ...params };
      const _requiredParams = ['vpcId', 'id'];
-     const _validParams = ['vpcId', 'id', 'name', 'routeDirectLinkIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'headers'];
+     const _validParams = ['vpcId', 'id', 'acceptRoutesFrom', 'name', 'routeDirectLinkIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'ifMatch', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
      }
  
      const body = {
+       'accept_routes_from': _params.acceptRoutesFrom,
        'name': _params.name,
        'route_direct_link_ingress': _params.routeDirectLinkIngress,
        'route_transit_gateway_ingress': _params.routeTransitGatewayIngress,
@@ -1674,6 +1693,7 @@
            {
              'Accept': 'application/json',
              'Content-Type': 'application/merge-patch+json',
+             'If-Match': _params.ifMatch,
            },
            _params.headers
          ),
@@ -1772,9 +1792,9 @@
     * - `drop`: drop the packet.
     * @param {string} [params.name] - The user-defined name for this route. If unspecified, the name will be a hyphenated
     * list of randomly-selected words. Names must be unique within the VPC routing table the route resides in.
-    * @param {RouteNextHopPrototype} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
-    * delivered to.  For
-    * other `action` values, it must be omitted or specified as `0.0.0.0`.
+    * @param {RoutePrototypeNextHop} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
+    * delivered to. For other `action`
+    * values, it must be omitted or specified as `0.0.0.0`.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
     */
@@ -2925,7 +2945,7 @@
    }
  
    /**
-    * Release a reserved IP.
+    * Delete a reserved IP.
     *
     * This request releases a reserved IP. This operation cannot be reversed.
     *
@@ -6119,9 +6139,11 @@
     * @param {SubnetIdentity[]} params.subnets - The subnets to use when creating new instances.
     * @param {number} [params.applicationPort] - Required if specifying a load balancer pool only. Used by the instance
     * group when scaling up instances to supply the port for the load balancer pool member.
-    * @param {LoadBalancerIdentity} [params.loadBalancer] - The load balancer that the load balancer pool used by this
-    * group
-    * is in. Required when using a load balancer pool.
+    * @param {LoadBalancerIdentity} [params.loadBalancer] - The load balancer associated with the specified load balancer
+    * pool.
+    * Required if `load_balancer_pool` is specified.
+    *
+    * At present, only load balancers in the `application` family are supported.
     * @param {LoadBalancerPoolIdentity} [params.loadBalancerPool] - If specified, the load balancer pool will be managed
     * by this
     * group. Instances created by this group will have a new load
@@ -6322,9 +6344,11 @@
     *
     * Instance groups are not compatible with instance templates that specify `true` for
     * `default_trusted_profile.auto_link`.
-    * @param {LoadBalancerIdentity} [params.loadBalancer] - The load balancer that the load balancer pool used by this
-    * group
-    * is in. Required when using a load balancer pool.
+    * @param {LoadBalancerIdentity} [params.loadBalancer] - The load balancer associated with the specified load balancer
+    * pool.
+    * Required if `load_balancer_pool` is specified.
+    *
+    * At present, only load balancers in the `application` family are supported.
     * @param {LoadBalancerPoolIdentity} [params.loadBalancerPool] - If specified, the load balancer pool will be managed
     * by this
     * group. Instances created by this group will have a new load
@@ -8666,6 +8690,711 @@
      return this.createRequest(parameters);
    }
    /*************************
+    * backupPolicies
+    ************************/
+ 
+   /**
+    * List all backup policies.
+    *
+    * This request lists all backup policies in the region. Backup policies control which sources are selected for backup
+    * and include a set of backup policy plans that provide the backup schedules and deletion triggers.
+    *
+    * @param {Object} [params] - The parameters to send to the service.
+    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+    * @param {number} [params.limit] - The number of resources to return on a page.
+    * @param {string} [params.resourceGroupId] - Filters the collection to resources in the resource group with the
+    * specified identifier.
+    * @param {string} [params.name] - Filters the collection to resources with the exact specified name.
+    * @param {string} [params.tag] - Filters the collection to resources with the exact tag value.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyCollection>>}
+    */
+   public listBackupPolicies(
+     params?: VpcV1.ListBackupPoliciesParams
+   ): Promise<VpcV1.Response<VpcV1.BackupPolicyCollection>> {
+     const _params = { ...params };
+     const _requiredParams = [];
+     const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'tag', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+       'start': _params.start,
+       'limit': _params.limit,
+       'resource_group.id': _params.resourceGroupId,
+       'name': _params.name,
+       'tag': _params.tag,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'listBackupPolicies'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/backup_policies',
+         method: 'GET',
+         qs: query,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Create a backup policy.
+    *
+    * This request creates a new backup policy from a backup policy prototype object. The prototype object is structured
+    * in the same way as a retrieved backup policy, and contains the information necessary to create the new backup
+    * policy.
+    *
+    * @param {Object} [params] - The parameters to send to the service.
+    * @param {string[]} [params.matchUserTags] - The user tags this backup policy applies to. Resources that have both a
+    * matching user tag and a matching type will be subject to the backup policy.
+    * @param {string[]} [params.matchResourceTypes] - A resource type this backup policy applies to. Resources that have
+    * both a matching type and a matching user tag will be subject to the backup policy.
+    * @param {string} [params.name] - The user-defined name for this backup policy. Names must be unique within the
+    * region this backup policy resides in. If unspecified, the name will be a hyphenated list of randomly-selected
+    * words.
+    * @param {BackupPolicyPlanPrototype[]} [params.plans] - The prototype objects for backup plans to be created for this
+    * backup policy.
+    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
+    * [default resource
+    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
+    */
+   public createBackupPolicy(
+     params?: VpcV1.CreateBackupPolicyParams
+   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
+     const _params = { ...params };
+     const _requiredParams = [];
+     const _validParams = ['matchUserTags', 'matchResourceTypes', 'name', 'plans', 'resourceGroup', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const body = {
+       'match_user_tags': _params.matchUserTags,
+       'match_resource_types': _params.matchResourceTypes,
+       'name': _params.name,
+       'plans': _params.plans,
+       'resource_group': _params.resourceGroup,
+     };
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'createBackupPolicy'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/backup_policies',
+         method: 'POST',
+         body,
+         qs: query,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+             'Content-Type': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * List all plans for a backup policy.
+    *
+    * This request retrieves all plans for a backup policy. Backup plans provide the backup schedule and deletion
+    * triggers.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.backupPolicyId - The backup policy identifier.
+    * @param {string} [params.name] - Filters the collection to resources with the exact specified name.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlanCollection>>}
+    */
+   public listBackupPolicyPlans(
+     params: VpcV1.ListBackupPolicyPlansParams
+   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlanCollection>> {
+     const _params = { ...params };
+     const _requiredParams = ['backupPolicyId'];
+     const _validParams = ['backupPolicyId', 'name', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+       'name': _params.name,
+     };
+ 
+     const path = {
+       'backup_policy_id': _params.backupPolicyId,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'listBackupPolicyPlans'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/backup_policies/{backup_policy_id}/plans',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Create a plan for a backup policy.
+    *
+    * This request creates a new backup policy plan from a backup policy plan prototype object. The prototype object is
+    * structured in the same way as a retrieved backup policy plan, and contains the information necessary to create the
+    * new backup policy plan.
+    *
+    * Backups created by this plan will use the resource group of the source being backed up.
+    *
+    * Backups created by this plan will use the plan's name truncated to 46 characters, followed by a unique 16-character
+    * suffix.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.backupPolicyId - The backup policy identifier.
+    * @param {string} params.cronSpec - The cron specification for the backup schedule. The backup policy jobs
+    * (which create and delete backups for this plan) will not start until this time, and may start for up to 90 minutes
+    * after this time.
+    *
+    * All backup schedules for plans in the same policy must be at least an hour apart.
+    * @param {boolean} [params.active] - Indicates whether the plan is active.
+    * @param {string[]} [params.attachUserTags] - User tags to attach to each backup (snapshot) created by this plan. If
+    * unspecified, no user tags will be attached.
+    * @param {boolean} [params.copyUserTags] - Indicates whether to copy the source's user tags to the created backups
+    * (snapshots).
+    * @param {BackupPolicyPlanDeletionTriggerPrototype} [params.deletionTrigger] -
+    * @param {string} [params.name] - The user-defined name for this backup policy plan. Names must be unique within the
+    * backup policy this plan resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
+    */
+   public createBackupPolicyPlan(
+     params: VpcV1.CreateBackupPolicyPlanParams
+   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
+     const _params = { ...params };
+     const _requiredParams = ['backupPolicyId', 'cronSpec'];
+     const _validParams = ['backupPolicyId', 'cronSpec', 'active', 'attachUserTags', 'copyUserTags', 'deletionTrigger', 'name', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const body = {
+       'cron_spec': _params.cronSpec,
+       'active': _params.active,
+       'attach_user_tags': _params.attachUserTags,
+       'copy_user_tags': _params.copyUserTags,
+       'deletion_trigger': _params.deletionTrigger,
+       'name': _params.name,
+     };
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'backup_policy_id': _params.backupPolicyId,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'createBackupPolicyPlan'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/backup_policies/{backup_policy_id}/plans',
+         method: 'POST',
+         body,
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+             'Content-Type': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Delete a backup policy plan.
+    *
+    * This request deletes a backup policy plan. This operation cannot be reversed. Any backups that have been created by
+    * the plan will remain but will no longer be subject to the plan's deletion trigger. Any running jobs associated with
+    * the plan will run to completion before the plan is deleted.
+    *
+    * If the request is accepted, the backup policy plan `status` will be set to `deleting`. Once deletion processing
+    * completes, the backup policy plan will no longer be retrievable.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.backupPolicyId - The backup policy identifier.
+    * @param {string} params.id - The backup policy plan identifier.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
+    */
+   public deleteBackupPolicyPlan(
+     params: VpcV1.DeleteBackupPolicyPlanParams
+   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
+     const _params = { ...params };
+     const _requiredParams = ['backupPolicyId', 'id'];
+     const _validParams = ['backupPolicyId', 'id', 'ifMatch', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'backup_policy_id': _params.backupPolicyId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'deleteBackupPolicyPlan'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/backup_policies/{backup_policy_id}/plans/{id}',
+         method: 'DELETE',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+             'If-Match': _params.ifMatch,
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Retrieve a backup policy plan.
+    *
+    * This request retrieves a single backup policy plan specified by the identifier in the URL.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.backupPolicyId - The backup policy identifier.
+    * @param {string} params.id - The backup policy plan identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
+    */
+   public getBackupPolicyPlan(
+     params: VpcV1.GetBackupPolicyPlanParams
+   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
+     const _params = { ...params };
+     const _requiredParams = ['backupPolicyId', 'id'];
+     const _validParams = ['backupPolicyId', 'id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'backup_policy_id': _params.backupPolicyId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'getBackupPolicyPlan'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/backup_policies/{backup_policy_id}/plans/{id}',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Update a backup policy plan.
+    *
+    * This request updates a backup policy plan with the information in a provided plan patch. The plan patch object is
+    * structured in the same way as a retrieved backup policy plan and can contains only the information to be updated.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.backupPolicyId - The backup policy identifier.
+    * @param {string} params.id - The backup policy plan identifier.
+    * @param {boolean} [params.active] - Indicates whether the plan is active.
+    * @param {string[]} [params.attachUserTags] - The user tags to attach to backups (snapshots) created by this plan.
+    * Updating this value does not change the user tags for backups that have already been created by this plan.
+    * @param {boolean} [params.copyUserTags] - Indicates whether to copy the source's user tags to the created backups
+    * (snapshots).
+    * @param {string} [params.cronSpec] - The cron specification for the backup schedule. The backup policy jobs
+    * (which create and delete backups for this plan) will not start until this time, and may start for up to 90 minutes
+    * after this time.
+    *
+    * All backup schedules for plans in the same policy must be at least an hour apart.
+    * @param {BackupPolicyPlanDeletionTriggerPatch} [params.deletionTrigger] -
+    * @param {string} [params.name] - The user-defined name for this backup policy plan. Names must be unique within the
+    * backup policy this plan resides in.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value. Required if the request body includes an array.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
+    */
+   public updateBackupPolicyPlan(
+     params: VpcV1.UpdateBackupPolicyPlanParams
+   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
+     const _params = { ...params };
+     const _requiredParams = ['backupPolicyId', 'id'];
+     const _validParams = ['backupPolicyId', 'id', 'active', 'attachUserTags', 'copyUserTags', 'cronSpec', 'deletionTrigger', 'name', 'ifMatch', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const body = {
+       'active': _params.active,
+       'attach_user_tags': _params.attachUserTags,
+       'copy_user_tags': _params.copyUserTags,
+       'cron_spec': _params.cronSpec,
+       'deletion_trigger': _params.deletionTrigger,
+       'name': _params.name,
+     };
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'backup_policy_id': _params.backupPolicyId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'updateBackupPolicyPlan'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/backup_policies/{backup_policy_id}/plans/{id}',
+         method: 'PATCH',
+         body,
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+             'Content-Type': 'application/merge-patch+json',
+             'If-Match': _params.ifMatch,
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Delete a backup policy.
+    *
+    * This request deletes a backup policy. This operation cannot be reversed.
+    *
+    * If the request is accepted, the backup policy `status` will be set to `deleting`. Once deletion processing
+    * completes, the backup policy will no longer be retrievable.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.id - The backup policy identifier.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
+    */
+   public deleteBackupPolicy(
+     params: VpcV1.DeleteBackupPolicyParams
+   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
+     const _params = { ...params };
+     const _requiredParams = ['id'];
+     const _validParams = ['id', 'ifMatch', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'deleteBackupPolicy'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/backup_policies/{id}',
+         method: 'DELETE',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+             'If-Match': _params.ifMatch,
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Retrieve a backup policy.
+    *
+    * This request retrieves a single backup policy specified by the identifier in the URL.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.id - The backup policy identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
+    */
+   public getBackupPolicy(
+     params: VpcV1.GetBackupPolicyParams
+   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
+     const _params = { ...params };
+     const _requiredParams = ['id'];
+     const _validParams = ['id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'getBackupPolicy'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/backup_policies/{id}',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Update a backup policy.
+    *
+    * This request updates a backup policy with the information in a provided backup policy patch. The backup policy
+    * patch object is structured in the same way as a retrieved backup policy and contains only the information to be
+    * updated.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.id - The backup policy identifier.
+    * @param {string[]} [params.matchUserTags] - The user tags this backup policy applies to (replacing any existing
+    * tags). Resources that have both a matching user tag and a matching type will be subject to the backup policy.
+    * @param {string} [params.name] - The user-defined name for this backup policy. Names must be unique within the
+    * region this backup policy resides in.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value. Required if the request body includes an array.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
+    */
+   public updateBackupPolicy(
+     params: VpcV1.UpdateBackupPolicyParams
+   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
+     const _params = { ...params };
+     const _requiredParams = ['id'];
+     const _validParams = ['id', 'matchUserTags', 'name', 'ifMatch', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const body = {
+       'match_user_tags': _params.matchUserTags,
+       'name': _params.name,
+     };
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'updateBackupPolicy'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/backup_policies/{id}',
+         method: 'PATCH',
+         body,
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+             'Content-Type': 'application/merge-patch+json',
+             'If-Match': _params.ifMatch,
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+   /*************************
     * placementGroups
     ************************/
  
@@ -9118,10 +9847,6 @@
     * with the specified CRN.
     * @param {string} [params.networkInterfacesSubnetName] - Filters the collection to bare metal servers on the subnet
     * with the specified name.
-    * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
-    * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
-    * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
-    * in ascending order.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerCollection>>}
     */
@@ -9130,7 +9855,7 @@
    ): Promise<VpcV1.Response<VpcV1.BareMetalServerCollection>> {
      const _params = { ...params };
      const _requiredParams = [];
-     const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'vpcId', 'vpcCrn', 'vpcName', 'networkInterfacesSubnetId', 'networkInterfacesSubnetCrn', 'networkInterfacesSubnetName', 'sort', 'headers'];
+     const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'vpcId', 'vpcCrn', 'vpcName', 'networkInterfacesSubnetId', 'networkInterfacesSubnetCrn', 'networkInterfacesSubnetName', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
@@ -9149,7 +9874,6 @@
        'network_interfaces.subnet.id': _params.networkInterfacesSubnetId,
        'network_interfaces.subnet.crn': _params.networkInterfacesSubnetCrn,
        'network_interfaces.subnet.name': _params.networkInterfacesSubnetName,
-       'sort': _params.sort,
      };
  
      const sdkHeaders = getSdkHeaders(
@@ -9783,17 +10507,17 @@
     * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this interface. If
     * false, source IP spoofing is prevented on this interface. If true, source IP spoofing is allowed on this interface.
     * @param {number[]} [params.allowedVlans] - Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI
-    * type) interface. A given VLAN can only be in the `allowed_vlans` array for one PCI type adapter per bare metal
+    * type) interface.  A given VLAN can only be in the `allowed_vlans` array for one PCI type adapter per bare metal
     * server.
     * @param {boolean} [params.enableInfrastructureNat] - If `true`:
-    *    - The VPC infrastructure performs any needed NAT operations.
-    *    - A single floating IP can be assigned to the network interface.
+    *   - The VPC infrastructure performs any needed NAT operations.
+    *   - A single floating IP can be assigned to the network interface.
     *
     * If `false`:
-    *    - The packet is passed unmodified to/from the network interface,
-    *      allowing the workload to perform any needed NAT operations.
-    *    - Multiple floating IPs can be assigned to the network interface.
-    *    - `allow_ip_spoofing` must be set to `false`.
+    *   - Packets are passed unmodified to/from the network interface,
+    *     allowing the workload to perform any needed NAT operations.
+    *   - Multiple floating IPs can be assigned to the network interface.
+    *   - `allow_ip_spoofing` must be set to `false`.
     * @param {string} [params.name] - The user-defined name for network interface. Names must be unique within the
     * instance the network interface resides in.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -10089,129 +10813,6 @@
        options: {
          url: '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/floating_ips/{id}',
          method: 'PUT',
-         qs: query,
-         path,
-       },
-       defaultOptions: extend(true, {}, this.baseOptions, {
-         headers: extend(
-           true,
-           sdkHeaders,
-           {
-             'Accept': 'application/json',
-           },
-           _params.headers
-         ),
-       }),
-     };
- 
-     return this.createRequest(parameters);
-   }
- 
-   /**
-    * List all reserved IPs bound to a network interface.
-    *
-    * This request lists all reserved IPs bound to a network interface.
-    *
-    * @param {Object} params - The parameters to send to the service.
-    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-    * @param {string} params.networkInterfaceId - The network interface identifier.
-    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionNetworkInterfaceContext>>}
-    */
-   public listBareMetalServerNetworkInterfaceIps(
-     params: VpcV1.ListBareMetalServerNetworkInterfaceIpsParams
-   ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionNetworkInterfaceContext>> {
-     const _params = { ...params };
-     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId'];
-     const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'headers'];
-     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-     if (_validationErrors) {
-       return Promise.reject(_validationErrors);
-     }
- 
-     const query = {
-       'version': this.version,
-       'generation': this.generation,
-     };
- 
-     const path = {
-       'bare_metal_server_id': _params.bareMetalServerId,
-       'network_interface_id': _params.networkInterfaceId,
-     };
- 
-     const sdkHeaders = getSdkHeaders(
-       VpcV1.DEFAULT_SERVICE_NAME,
-       'v1',
-       'listBareMetalServerNetworkInterfaceIps'
-     );
- 
-     const parameters = {
-       options: {
-         url: '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/ips',
-         method: 'GET',
-         qs: query,
-         path,
-       },
-       defaultOptions: extend(true, {}, this.baseOptions, {
-         headers: extend(
-           true,
-           sdkHeaders,
-           {
-             'Accept': 'application/json',
-           },
-           _params.headers
-         ),
-       }),
-     };
- 
-     return this.createRequest(parameters);
-   }
- 
-   /**
-    * Retrieve bound reserved IP.
-    *
-    * This request a retrieves the specified reserved IP address if it is bound to the network interface and bare metal
-    * server specified in the URL.
-    *
-    * @param {Object} params - The parameters to send to the service.
-    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-    * @param {string} params.networkInterfaceId - The network interface identifier.
-    * @param {string} params.id - The reserved IP identifier.
-    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
-    */
-   public getBareMetalServerNetworkInterfaceIp(
-     params: VpcV1.GetBareMetalServerNetworkInterfaceIpParams
-   ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
-     const _params = { ...params };
-     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId', 'id'];
-     const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'headers'];
-     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-     if (_validationErrors) {
-       return Promise.reject(_validationErrors);
-     }
- 
-     const query = {
-       'version': this.version,
-       'generation': this.generation,
-     };
- 
-     const path = {
-       'bare_metal_server_id': _params.bareMetalServerId,
-       'network_interface_id': _params.networkInterfaceId,
-       'id': _params.id,
-     };
- 
-     const sdkHeaders = getSdkHeaders(
-       VpcV1.DEFAULT_SERVICE_NAME,
-       'v1',
-       'getBareMetalServerNetworkInterfaceIp'
-     );
- 
-     const parameters = {
-       options: {
-         url: '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/ips/{id}',
-         method: 'GET',
          qs: query,
          path,
        },
@@ -11031,7 +11632,8 @@
     * `family` as the current profile. The volume must be attached as a data volume to a
     * running virtual server instance, and must have a `capacity` within the range
     * supported by the specified profile.
-    * @param {string[]} [params.userTags] - Tags for this resource.
+    * @param {string[]} [params.userTags] - The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags)
+    * associated with this volume.
     * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
     * resource's current ETag value. Required if the request body includes an array.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -11162,6 +11764,7 @@
     * @param {Object} [params] - The parameters to send to the service.
     * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
     * @param {number} [params.limit] - The number of resources to return on a page.
+    * @param {string} [params.tag] - Filters the collection to resources with the exact tag value.
     * @param {string} [params.resourceGroupId] - Filters the collection to resources in the resource group with the
     * specified identifier.
     * @param {string} [params.name] - Filters the collection to resources with the exact specified name.
@@ -11183,6 +11786,8 @@
     * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
     * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
     * in ascending order.
+    * @param {string} [params.backupPolicyPlanId] - Filters the collection to backup policy jobs with the backup plan
+    * with the specified identifier.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
     * @returns {Promise<VpcV1.Response<VpcV1.SnapshotCollection>>}
     */
@@ -11191,7 +11796,7 @@
    ): Promise<VpcV1.Response<VpcV1.SnapshotCollection>> {
      const _params = { ...params };
      const _requiredParams = [];
-     const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sourceVolumeId', 'sourceVolumeCrn', 'sourceImageId', 'sourceImageCrn', 'sort', 'headers'];
+     const _validParams = ['start', 'limit', 'tag', 'resourceGroupId', 'name', 'sourceVolumeId', 'sourceVolumeCrn', 'sourceImageId', 'sourceImageCrn', 'sort', 'backupPolicyPlanId', 'headers'];
      const _validationErrors = validateParams(_params, _requiredParams, _validParams);
      if (_validationErrors) {
        return Promise.reject(_validationErrors);
@@ -11202,6 +11807,7 @@
        'generation': this.generation,
        'start': _params.start,
        'limit': _params.limit,
+       'tag': _params.tag,
        'resource_group.id': _params.resourceGroupId,
        'name': _params.name,
        'source_volume.id': _params.sourceVolumeId,
@@ -11209,6 +11815,7 @@
        'source_image.id': _params.sourceImageId,
        'source_image.crn': _params.sourceImageCrn,
        'sort': _params.sort,
+       'backup_policy_plan.id': _params.backupPolicyPlanId,
      };
  
      const sdkHeaders = getSdkHeaders(
@@ -11421,7 +12028,8 @@
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.id - The snapshot identifier.
     * @param {string} [params.name] - The user-defined name for this snapshot.
-    * @param {string[]} [params.userTags] - The user tags associated with this snapshot.
+    * @param {string[]} [params.userTags] - The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags)
+    * associated with this snapshot.
     * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
     * resource's current ETag value. Required if the request body includes an array.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -12166,7 +12774,7 @@
    }
  
    /**
-    * Release a floating IP.
+    * Delete a floating IP.
     *
     * This request disassociates (if associated) and releases a floating IP. This operation cannot be reversed. For this
     * request to succeed, the floating IP must not be required by another resource, such as a public gateway.
@@ -13143,9 +13751,9 @@
    /**
     * Delete a security group.
     *
-    * This request deletes a security group. A security group cannot be deleted if it is referenced by any network
-    * interfaces or other security group rules. Additionally, a VPC's default security group cannot be deleted. This
-    * operation cannot be reversed.
+    * This request deletes a security group. A security group cannot be deleted if it is referenced by any security group
+    * targets or rules. Additionally, a VPC's default security group cannot be deleted. This operation cannot be
+    * reversed.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.id - The security group identifier.
@@ -13734,6 +14342,7 @@
     * least one other security group.  The specified target identifier can be:
     *
     * - A network interface identifier
+    * - A VPN server identifier
     * - An application load balancer identifier
     * - An endpoint gateway identifier
     *
@@ -13861,6 +14470,7 @@
     * This request adds a resource to an existing security group. The specified target identifier can be:
     *
     * - A network interface identifier
+    * - A VPN server identifier
     * - An application load balancer identifier
     * - An endpoint gateway identifier
     *
@@ -15288,6 +15898,8 @@
     *
     * This request lists all local CIDRs for a VPN gateway connection.
     *
+    * This request is only supported for policy mode VPN gateways.
+    *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpnGatewayId - The VPN gateway identifier.
     * @param {string} params.id - The VPN gateway connection identifier.
@@ -15347,6 +15959,8 @@
     * Remove a local CIDR from a VPN gateway connection.
     *
     * This request removes a CIDR from a VPN gateway connection.
+    *
+    * This request is only supported for policy mode VPN gateways.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpnGatewayId - The VPN gateway identifier.
@@ -15409,7 +16023,9 @@
    /**
     * Check if the specified local CIDR exists on a VPN gateway connection.
     *
-    * This request succeeds if a CIDR exists on the specified VPN gateway connection and fails otherwise.
+    * This request succeeds if a CIDR exists on the specified VPN gateway connection, and fails otherwise.
+    *
+    * This request is only supported for policy mode VPN gateways.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpnGatewayId - The VPN gateway identifier.
@@ -15472,8 +16088,10 @@
    /**
     * Set a local CIDR on a VPN gateway connection.
     *
-    * This request adds the specified CIDR to the specified VPN gateway connection. A request body is not required, and
-    * if provided, is ignored. This request succeeds if the CIDR already exists on the specified VPN gateway connection.
+    * This request adds the specified CIDR to the specified VPN gateway connection. This request succeeds if the
+    * specified CIDR already exists. A request body is not required, and if provided, is ignored.
+    *
+    * This request is only supported for policy mode VPN gateways.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpnGatewayId - The VPN gateway identifier.
@@ -15538,6 +16156,8 @@
     *
     * This request lists all peer CIDRs for a VPN gateway connection.
     *
+    * This request is only supported for policy mode VPN gateways.
+    *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpnGatewayId - The VPN gateway identifier.
     * @param {string} params.id - The VPN gateway connection identifier.
@@ -15597,6 +16217,8 @@
     * Remove a peer CIDR from a VPN gateway connection.
     *
     * This request removes a CIDR from a VPN gateway connection.
+    *
+    * This request is only supported for policy mode VPN gateways.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpnGatewayId - The VPN gateway identifier.
@@ -15659,7 +16281,9 @@
    /**
     * Check if the specified peer CIDR exists on a VPN gateway connection.
     *
-    * This request succeeds if a CIDR exists on the specified VPN gateway connection and fails otherwise.
+    * This request succeeds if a CIDR exists on the specified VPN gateway connection, and fails otherwise.
+    *
+    * This request is only supported for policy mode VPN gateways.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpnGatewayId - The VPN gateway identifier.
@@ -15722,8 +16346,10 @@
    /**
     * Set a peer CIDR on a VPN gateway connection.
     *
-    * This request adds the specified CIDR to the specified VPN gateway connection. A request body is not required, and
-    * if provided, is ignored. This request succeeds if the CIDR already exists on the specified VPN gateway connection.
+    * This request adds the specified CIDR to the specified VPN gateway connection. This request succeeds if the
+    * specified CIDR already exists. A request body is not required, and if provided, is ignored.
+    *
+    * This request is only supported for policy mode VPN gateways.
     *
     * @param {Object} params - The parameters to send to the service.
     * @param {string} params.vpnGatewayId - The VPN gateway identifier.
@@ -15774,6 +16400,1044 @@
            true,
            sdkHeaders,
            {
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+   /*************************
+    * vPNServers
+    ************************/
+ 
+   /**
+    * List all VPN servers.
+    *
+    * This request lists all VPN servers.
+    *
+    * @param {Object} [params] - The parameters to send to the service.
+    * @param {string} [params.name] - Filters the collection to resources with the exact specified name.
+    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+    * @param {number} [params.limit] - The number of resources to return on a page.
+    * @param {string} [params.resourceGroupId] - Filters the collection to resources in the resource group with the
+    * specified identifier.
+    * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+    * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+    * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+    * in ascending order.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.VPNServerCollection>>}
+    */
+   public listVpnServers(
+     params?: VpcV1.ListVpnServersParams
+   ): Promise<VpcV1.Response<VpcV1.VPNServerCollection>> {
+     const _params = { ...params };
+     const _requiredParams = [];
+     const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'sort', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+       'name': _params.name,
+       'start': _params.start,
+       'limit': _params.limit,
+       'resource_group.id': _params.resourceGroupId,
+       'sort': _params.sort,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'listVpnServers'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers',
+         method: 'GET',
+         qs: query,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Create a VPN server.
+    *
+    * This request creates a new VPN server.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {CertificateInstanceIdentity} params.certificate - The certificate instance for this VPN server.
+    * @param {VPNServerAuthenticationPrototype[]} params.clientAuthentication - The methods used to authenticate VPN
+    * clients to this VPN server. VPN clients must authenticate against all specified methods.
+    * @param {string} params.clientIpPool - The VPN client IPv4 address pool, expressed in CIDR format. The request must
+    * not overlap with any existing address prefixes in the VPC or any of the following reserved address ranges:
+    *   - `127.0.0.0/8` (IPv4 loopback addresses)
+    *   - `161.26.0.0/16` (IBM services)
+    *   - `166.8.0.0/14` (Cloud Service Endpoints)
+    *   - `169.254.0.0/16` (IPv4 link-local addresses)
+    *   - `224.0.0.0/4` (IPv4 multicast addresses)
+    *
+    * The prefix length of the client IP address pool's CIDR must be between
+    * `/9` (8,388,608 addresses) and `/22` (1024 addresses). A CIDR block that contains twice the number of IP addresses
+    * that are required to enable the maximum number of concurrent connections is recommended.
+    * @param {SubnetIdentity[]} params.subnets - The subnets to provision this VPN server in.  Use subnets in different
+    * zones for high availability.
+    * @param {IP[]} [params.clientDnsServerIps] - The DNS server addresses that will be provided to VPN clients connected
+    * to this VPN server.
+    * @param {number} [params.clientIdleTimeout] - The seconds a VPN client can be idle before this VPN server will
+    * disconnect it.   Specify `0` to prevent the server from disconnecting idle clients.
+    * @param {boolean} [params.enableSplitTunneling] - Indicates whether the split tunneling is enabled on this VPN
+    * server.
+    * @param {string} [params.name] - The user-defined name for this VPN server. If unspecified, the name will be a
+    * hyphenated list of randomly-selected words. Names must be unique within the VPC this VPN server is serving.
+    * @param {number} [params.port] - The port number to use for this VPN server.
+    * @param {string} [params.protocol] - The transport protocol to use for this VPN server.
+    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
+    * [default resource
+    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+    * @param {SecurityGroupIdentity[]} [params.securityGroups] - The security groups to use for this VPN server. If
+    * unspecified, the VPC's default security group is used.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.VPNServer>>}
+    */
+   public createVpnServer(
+     params: VpcV1.CreateVpnServerParams
+   ): Promise<VpcV1.Response<VpcV1.VPNServer>> {
+     const _params = { ...params };
+     const _requiredParams = ['certificate', 'clientAuthentication', 'clientIpPool', 'subnets'];
+     const _validParams = ['certificate', 'clientAuthentication', 'clientIpPool', 'subnets', 'clientDnsServerIps', 'clientIdleTimeout', 'enableSplitTunneling', 'name', 'port', 'protocol', 'resourceGroup', 'securityGroups', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const body = {
+       'certificate': _params.certificate,
+       'client_authentication': _params.clientAuthentication,
+       'client_ip_pool': _params.clientIpPool,
+       'subnets': _params.subnets,
+       'client_dns_server_ips': _params.clientDnsServerIps,
+       'client_idle_timeout': _params.clientIdleTimeout,
+       'enable_split_tunneling': _params.enableSplitTunneling,
+       'name': _params.name,
+       'port': _params.port,
+       'protocol': _params.protocol,
+       'resource_group': _params.resourceGroup,
+       'security_groups': _params.securityGroups,
+     };
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'createVpnServer'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers',
+         method: 'POST',
+         body,
+         qs: query,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+             'Content-Type': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Delete a VPN server.
+    *
+    * This request deletes a VPN server. This operation cannot be reversed.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.id - The VPN server identifier.
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+    */
+   public deleteVpnServer(
+     params: VpcV1.DeleteVpnServerParams
+   ): Promise<VpcV1.Response<VpcV1.Empty>> {
+     const _params = { ...params };
+     const _requiredParams = ['id'];
+     const _validParams = ['id', 'ifMatch', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'deleteVpnServer'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{id}',
+         method: 'DELETE',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'If-Match': _params.ifMatch,
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Retrieve a VPN server.
+    *
+    * This request retrieves a single VPN server specified by the identifier in the URL.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.id - The VPN server identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.VPNServer>>}
+    */
+   public getVpnServer(
+     params: VpcV1.GetVpnServerParams
+   ): Promise<VpcV1.Response<VpcV1.VPNServer>> {
+     const _params = { ...params };
+     const _requiredParams = ['id'];
+     const _validParams = ['id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'getVpnServer'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{id}',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Update a VPN server.
+    *
+    * This request updates the properties of an existing VPN server. Any property changes will cause all connected VPN
+    * clients are disconnected from this VPN server except for the name change.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.id - The VPN server identifier.
+    * @param {CertificateInstanceIdentity} [params.certificate] - The certificate instance for this VPN server.
+    * @param {VPNServerAuthenticationPrototype[]} [params.clientAuthentication] - The authentication methods to use to
+    * authenticate VPN client on this VPN server
+    * (replacing any existing methods).
+    * @param {IP[]} [params.clientDnsServerIps] - The DNS server addresses that will be provided to VPN clients connected
+    * to this VPN server (replacing any existing addresses).
+    * @param {number} [params.clientIdleTimeout] - The seconds a VPN client can be idle before this VPN server will
+    * disconnect it.  If `0`, the server will not disconnect idle clients.
+    * @param {string} [params.clientIpPool] - The VPN client IPv4 address pool, expressed in CIDR format. The request
+    * must not overlap with any existing address prefixes in the VPC or any of the following reserved address ranges:
+    *   - `127.0.0.0/8` (IPv4 loopback addresses)
+    *   - `161.26.0.0/16` (IBM services)
+    *   - `166.8.0.0/14` (Cloud Service Endpoints)
+    *   - `169.254.0.0/16` (IPv4 link-local addresses)
+    *   - `224.0.0.0/4` (IPv4 multicast addresses)
+    *
+    * The prefix length of the client IP address pool's CIDR must be between
+    * `/9` (8,388,608 addresses) and `/22` (1024 addresses). A CIDR block that contains twice the number of IP addresses
+    * that are required to enable the maximum number of concurrent connections is recommended.
+    * @param {boolean} [params.enableSplitTunneling] - Indicates whether the split tunneling is enabled on this VPN
+    * server.
+    * @param {string} [params.name] - The user-defined name for this VPN server. Names must be unique within the VPC this
+    * VPN server is serving.
+    * @param {number} [params.port] - The port number used by this VPN server.
+    * @param {string} [params.protocol] - The transport protocol used by this VPN server.
+    * @param {SubnetIdentity[]} [params.subnets] - The subnets to provision this VPN server in (replacing the existing
+    * subnets).
+    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+    * resource's current ETag value. Required if the request body includes an array.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.VPNServer>>}
+    */
+   public updateVpnServer(
+     params: VpcV1.UpdateVpnServerParams
+   ): Promise<VpcV1.Response<VpcV1.VPNServer>> {
+     const _params = { ...params };
+     const _requiredParams = ['id'];
+     const _validParams = ['id', 'certificate', 'clientAuthentication', 'clientDnsServerIps', 'clientIdleTimeout', 'clientIpPool', 'enableSplitTunneling', 'name', 'port', 'protocol', 'subnets', 'ifMatch', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const body = {
+       'certificate': _params.certificate,
+       'client_authentication': _params.clientAuthentication,
+       'client_dns_server_ips': _params.clientDnsServerIps,
+       'client_idle_timeout': _params.clientIdleTimeout,
+       'client_ip_pool': _params.clientIpPool,
+       'enable_split_tunneling': _params.enableSplitTunneling,
+       'name': _params.name,
+       'port': _params.port,
+       'protocol': _params.protocol,
+       'subnets': _params.subnets,
+     };
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'updateVpnServer'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{id}',
+         method: 'PATCH',
+         body,
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+             'Content-Type': 'application/merge-patch+json',
+             'If-Match': _params.ifMatch,
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Retrieve client configuration.
+    *
+    * This request retrieves OpenVPN client configuration on a single VPN server specified by the identifier in the URL.
+    * This configuration includes directives compatible with OpenVPN releases 2.4 and 2.5.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.id - The VPN server identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<string>>}
+    */
+   public getVpnServerClientConfiguration(
+     params: VpcV1.GetVpnServerClientConfigurationParams
+   ): Promise<VpcV1.Response<string>> {
+     const _params = { ...params };
+     const _requiredParams = ['id'];
+     const _validParams = ['id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'getVpnServerClientConfiguration'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{id}/client_configuration',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'text/plain',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * List all VPN clients for a VPN server.
+    *
+    * This request retrieves all connected VPN clients, and any disconnected VPN clients that the VPN server has not yet
+    * deleted based on its auto-deletion policy.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.vpnServerId - The VPN server identifier.
+    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+    * @param {number} [params.limit] - The number of resources to return on a page.
+    * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+    * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+    * collection by the `created_at` property in descending order.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.VPNServerClientCollection>>}
+    */
+   public listVpnServerClients(
+     params: VpcV1.ListVpnServerClientsParams
+   ): Promise<VpcV1.Response<VpcV1.VPNServerClientCollection>> {
+     const _params = { ...params };
+     const _requiredParams = ['vpnServerId'];
+     const _validParams = ['vpnServerId', 'start', 'limit', 'sort', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+       'start': _params.start,
+       'limit': _params.limit,
+       'sort': _params.sort,
+     };
+ 
+     const path = {
+       'vpn_server_id': _params.vpnServerId,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'listVpnServerClients'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{vpn_server_id}/clients',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Delete a VPN client.
+    *
+    * This request disconnects and deletes the VPN client from the VPN server. The VPN client may reconnect unless its
+    * authentication permissions for the configured authentication methods (such as its client certificate) have been
+    * revoked.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.vpnServerId - The VPN server identifier.
+    * @param {string} params.id - The VPN client identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+    */
+   public deleteVpnServerClient(
+     params: VpcV1.DeleteVpnServerClientParams
+   ): Promise<VpcV1.Response<VpcV1.Empty>> {
+     const _params = { ...params };
+     const _requiredParams = ['vpnServerId', 'id'];
+     const _validParams = ['vpnServerId', 'id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'vpn_server_id': _params.vpnServerId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'deleteVpnServerClient'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{vpn_server_id}/clients/{id}',
+         method: 'DELETE',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Retrieve a VPN client.
+    *
+    * This request retrieves a single VPN client specified by the identifier in the URL.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.vpnServerId - The VPN server identifier.
+    * @param {string} params.id - The VPN client identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.VPNServerClient>>}
+    */
+   public getVpnServerClient(
+     params: VpcV1.GetVpnServerClientParams
+   ): Promise<VpcV1.Response<VpcV1.VPNServerClient>> {
+     const _params = { ...params };
+     const _requiredParams = ['vpnServerId', 'id'];
+     const _validParams = ['vpnServerId', 'id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'vpn_server_id': _params.vpnServerId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'getVpnServerClient'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{vpn_server_id}/clients/{id}',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Disconnect a VPN client.
+    *
+    * This request disconnects the specified VPN client, and deletes the client according to the VPN server's
+    * auto-deletion policy. The VPN client may reconnect unless its authentication permissions for the configured
+    * authentication methods (such as its client certificate) have been revoked.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.vpnServerId - The VPN server identifier.
+    * @param {string} params.id - The VPN client identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+    */
+   public disconnectVpnClient(
+     params: VpcV1.DisconnectVpnClientParams
+   ): Promise<VpcV1.Response<VpcV1.Empty>> {
+     const _params = { ...params };
+     const _requiredParams = ['vpnServerId', 'id'];
+     const _validParams = ['vpnServerId', 'id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'vpn_server_id': _params.vpnServerId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'disconnectVpnClient'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{vpn_server_id}/clients/{id}/disconnect',
+         method: 'POST',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * List all VPN routes for a VPN server.
+    *
+    * This request lists all VPN routes in a VPN server. All VPN routes are provided to the VPN client when the
+    * connection is established.  Packets received from the VPN client will be dropped by the VPN server if there is no
+    * VPN route matching their specified destinations. All VPN routes must be unique within the VPN server.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.vpnServerId - The VPN server identifier.
+    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+    * @param {number} [params.limit] - The number of resources to return on a page.
+    * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+    * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+    * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+    * in ascending order.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.VPNServerRouteCollection>>}
+    */
+   public listVpnServerRoutes(
+     params: VpcV1.ListVpnServerRoutesParams
+   ): Promise<VpcV1.Response<VpcV1.VPNServerRouteCollection>> {
+     const _params = { ...params };
+     const _requiredParams = ['vpnServerId'];
+     const _validParams = ['vpnServerId', 'start', 'limit', 'sort', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+       'start': _params.start,
+       'limit': _params.limit,
+       'sort': _params.sort,
+     };
+ 
+     const path = {
+       'vpn_server_id': _params.vpnServerId,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'listVpnServerRoutes'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{vpn_server_id}/routes',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Create a VPN route for a VPN server.
+    *
+    * This request creates a new VPN route in the VPN server. All VPN routes are provided to the VPN client when the
+    * connection is established. Packets received from the VPN client will be dropped by the VPN server if there is no
+    * VPN route matching their specified destinations. All VPN routes must be unique within the VPN server. destination
+    * of the packet.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.vpnServerId - The VPN server identifier.
+    * @param {string} params.destination - The destination to use for this VPN route in the VPN server. Must be unique
+    * within the VPN server. If an incoming packet does not match any destination, it will be dropped.
+    * @param {string} [params.action] - The action to perform with a packet matching the VPN route:
+    * - `translate`: translate the source IP address to one of the private IP addresses of the VPN server, then deliver
+    * the packet to target.
+    * - `deliver`: deliver the packet to the target.
+    * - `drop`: drop the packet
+    *
+    * The enumerated values for this property are expected to expand in the future. When processing this property, check
+    * for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on which the
+    * unexpected property value was encountered.
+    * @param {string} [params.name] - The user-defined name for this VPN route. If unspecified, the name will be a
+    * hyphenated list of randomly-selected words. Names must be unique within the VPN server the VPN route resides in.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.VPNServerRoute>>}
+    */
+   public createVpnServerRoute(
+     params: VpcV1.CreateVpnServerRouteParams
+   ): Promise<VpcV1.Response<VpcV1.VPNServerRoute>> {
+     const _params = { ...params };
+     const _requiredParams = ['vpnServerId', 'destination'];
+     const _validParams = ['vpnServerId', 'destination', 'action', 'name', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const body = {
+       'destination': _params.destination,
+       'action': _params.action,
+       'name': _params.name,
+     };
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'vpn_server_id': _params.vpnServerId,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'createVpnServerRoute'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{vpn_server_id}/routes',
+         method: 'POST',
+         body,
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+             'Content-Type': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Delete a VPN route.
+    *
+    * This request deletes a VPN route. This operation cannot be reversed.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.vpnServerId - The VPN server identifier.
+    * @param {string} params.id - The VPN route identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.Empty>>}
+    */
+   public deleteVpnServerRoute(
+     params: VpcV1.DeleteVpnServerRouteParams
+   ): Promise<VpcV1.Response<VpcV1.Empty>> {
+     const _params = { ...params };
+     const _requiredParams = ['vpnServerId', 'id'];
+     const _validParams = ['vpnServerId', 'id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'vpn_server_id': _params.vpnServerId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'deleteVpnServerRoute'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{vpn_server_id}/routes/{id}',
+         method: 'DELETE',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Retrieve a VPN route.
+    *
+    * This request retrieves a single VPN route specified by the identifier in the URL.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.vpnServerId - The VPN server identifier.
+    * @param {string} params.id - The VPN route identifier.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.VPNServerRoute>>}
+    */
+   public getVpnServerRoute(
+     params: VpcV1.GetVpnServerRouteParams
+   ): Promise<VpcV1.Response<VpcV1.VPNServerRoute>> {
+     const _params = { ...params };
+     const _requiredParams = ['vpnServerId', 'id'];
+     const _validParams = ['vpnServerId', 'id', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'vpn_server_id': _params.vpnServerId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'getVpnServerRoute'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{vpn_server_id}/routes/{id}',
+         method: 'GET',
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+           },
+           _params.headers
+         ),
+       }),
+     };
+ 
+     return this.createRequest(parameters);
+   }
+ 
+   /**
+    * Update a VPN route.
+    *
+    * This request updates a VPN route with the information in a provided VPN route patch. The VPN route patch object is
+    * structured in the same way as a retrieved VPN route and contains only the information to be updated.
+    *
+    * @param {Object} params - The parameters to send to the service.
+    * @param {string} params.vpnServerId - The VPN server identifier.
+    * @param {string} params.id - The VPN route identifier.
+    * @param {string} [params.name] - The user-defined name for this VPN route. Names must be unique within the VPN
+    * server the VPN route resides in.
+    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+    * @returns {Promise<VpcV1.Response<VpcV1.VPNServerRoute>>}
+    */
+   public updateVpnServerRoute(
+     params: VpcV1.UpdateVpnServerRouteParams
+   ): Promise<VpcV1.Response<VpcV1.VPNServerRoute>> {
+     const _params = { ...params };
+     const _requiredParams = ['vpnServerId', 'id'];
+     const _validParams = ['vpnServerId', 'id', 'name', 'headers'];
+     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+     if (_validationErrors) {
+       return Promise.reject(_validationErrors);
+     }
+ 
+     const body = {
+       'name': _params.name,
+     };
+ 
+     const query = {
+       'version': this.version,
+       'generation': this.generation,
+     };
+ 
+     const path = {
+       'vpn_server_id': _params.vpnServerId,
+       'id': _params.id,
+     };
+ 
+     const sdkHeaders = getSdkHeaders(
+       VpcV1.DEFAULT_SERVICE_NAME,
+       'v1',
+       'updateVpnServerRoute'
+     );
+ 
+     const parameters = {
+       options: {
+         url: '/vpn_servers/{vpn_server_id}/routes/{id}',
+         method: 'PATCH',
+         body,
+         qs: query,
+         path,
+       },
+       defaultOptions: extend(true, {}, this.baseOptions, {
+         headers: extend(
+           true,
+           sdkHeaders,
+           {
+             'Accept': 'application/json',
+             'Content-Type': 'application/merge-patch+json',
            },
            _params.headers
          ),
@@ -15966,7 +17630,10 @@
     * @param {boolean} params.isPublic - Indicates whether this load balancer is public or private.
     *
     * At present, if route mode is enabled, the load balancer must be private.
-    * @param {SubnetIdentity[]} params.subnets - The subnets to provision this load balancer.
+    * @param {SubnetIdentity[]} params.subnets - The subnets to provision this load balancer in.  The load balancer's
+    * availability will depend on the availability of the zones the specified subnets reside in.
+    *
+    * Load balancers in the `network` family allow only one subnet to be specified.
     * @param {LoadBalancerListenerPrototypeLoadBalancerContext[]} [params.listeners] - The listeners of this load
     * balancer.
     * @param {LoadBalancerLogging} [params.logging] - The logging configuration to use for this load balancer. See [VPC
@@ -15979,7 +17646,9 @@
     * @param {string} [params.name] - The user-defined name for this load balancer. If unspecified, the name will be a
     * hyphenated list of randomly-selected words.
     * @param {LoadBalancerPoolPrototype[]} [params.pools] - The pools of this load balancer.
-    * @param {LoadBalancerProfileIdentity} [params.profile] - The profile to use for this load balancer.
+    * @param {LoadBalancerProfileIdentity} [params.profile] - The profile to use for this load balancer
+    *
+    * If unspecified, `application` will be used.
     * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
     * [default resource
     * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
@@ -17864,7 +19533,9 @@
     * The port must be unique across all members for all pools associated with this pool's listener.
     * @param {LoadBalancerPoolMemberTargetPrototype} params.target - The pool member target. Load balancers in the
     * `network` family support virtual server
-    * instances. Load balancers in the `application` family support IP addresses.
+    * instances. Load balancers in the `application` family support IP addresses. If the load
+    * balancer has route mode enabled, the member must be in a zone the load balancer has a
+    * subnet in.
     * @param {number} [params.weight] - Weight of the server member. Applicable only if the pool algorithm is
     * `weighted_round_robin`.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -18137,7 +19808,9 @@
     * The port must be unique across all members for all pools associated with this pool's listener.
     * @param {LoadBalancerPoolMemberTargetPrototype} [params.target] - The pool member target. Load balancers in the
     * `network` family support virtual server
-    * instances. Load balancers in the `application` family support IP addresses.
+    * instances. Load balancers in the `application` family support IP addresses. If the load
+    * balancer has route mode enabled, the member must be in a zone the load balancer has a
+    * subnet in.
     * @param {number} [params.weight] - Weight of the server member. Applicable only if the pool algorithm is
     * `weighted_round_robin`.
     * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -19361,10 +21034,10 @@
       *  randomly-selected words. Names must be unique within the VPC routing table the route resides in.
       */
      name?: string;
-     /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
-      *  other `action` values, it must be omitted or specified as `0.0.0.0`.
+     /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action`
+      *  values, it must be omitted or specified as `0.0.0.0`.
       */
-     nextHop?: RouteNextHopPrototype;
+     nextHop?: RoutePrototypeNextHop;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -19427,6 +21100,12 @@
    export interface CreateVpcRoutingTableParams {
      /** The VPC identifier. */
      vpcId: string;
+     /** The filters specifying the resources that may create routes in this routing table.
+      *
+      *  At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but
+      *  filter support is expected to expand in the future.
+      */
+     acceptRoutesFrom?: ResourceFilter[];
      /** The user-defined name for this routing table. Names must be unique within the VPC the routing table resides
       *  in. If unspecified, the name will be a hyphenated list of randomly-selected words.
       */
@@ -19478,6 +21157,10 @@
      vpcId: string;
      /** The routing table identifier. */
      id: string;
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value.
+      */
+     ifMatch?: string;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -19496,6 +21179,15 @@
      vpcId: string;
      /** The routing table identifier. */
      id: string;
+     /** The filters specifying the resources that may create routes in this routing table
+      *  (replacing any existing filters). All routes learned from resources that match a given filter will be removed
+      *  when an existing filter is removed. Therefore, if an empty array is specified, all filters will be removed,
+      *  resulting in all learned routes being removed.
+      *
+      *  At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but
+      *  filter support is expected to expand in the future.
+      */
+     acceptRoutesFrom?: ResourceFilter[];
      /** The user-defined name for this routing table. Names must be unique within the VPC the routing table resides
       *  in.
       */
@@ -19537,6 +21229,10 @@
       *  IP address or a VPN gateway connection, the packet will be dropped.
       */
      routeVpcZoneIngress?: boolean;
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value. Required if the request body includes an array.
+      */
+     ifMatch?: string;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -19578,10 +21274,10 @@
       *  randomly-selected words. Names must be unique within the VPC routing table the route resides in.
       */
      name?: string;
-     /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
-      *  other `action` values, it must be omitted or specified as `0.0.0.0`.
+     /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action`
+      *  values, it must be omitted or specified as `0.0.0.0`.
       */
-     nextHop?: RouteNextHopPrototype;
+     nextHop?: RoutePrototypeNextHop;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -20385,8 +22081,10 @@
       *  supply the port for the load balancer pool member.
       */
      applicationPort?: number;
-     /** The load balancer that the load balancer pool used by this group
-      *  is in. Required when using a load balancer pool.
+     /** The load balancer associated with the specified load balancer pool.
+      *  Required if `load_balancer_pool` is specified.
+      *
+      *  At present, only load balancers in the `application` family are supported.
       */
      loadBalancer?: LoadBalancerIdentity;
      /** If specified, the load balancer pool will be managed by this
@@ -20436,8 +22134,10 @@
       *  `default_trusted_profile.auto_link`.
       */
      instanceTemplate?: InstanceTemplateIdentity;
-     /** The load balancer that the load balancer pool used by this group
-      *  is in. Required when using a load balancer pool.
+     /** The load balancer associated with the specified load balancer pool.
+      *  Required if `load_balancer_pool` is specified.
+      *
+      *  At present, only load balancers in the `application` family are supported.
       */
      loadBalancer?: LoadBalancerIdentity;
      /** If specified, the load balancer pool will be managed by this
@@ -20868,6 +22568,180 @@
      headers?: OutgoingHttpHeaders;
    }
  
+   /** Parameters for the `listBackupPolicies` operation. */
+   export interface ListBackupPoliciesParams {
+     /** A server-provided token determining what resource to start the page on. */
+     start?: string;
+     /** The number of resources to return on a page. */
+     limit?: number;
+     /** Filters the collection to resources in the resource group with the specified identifier. */
+     resourceGroupId?: string;
+     /** Filters the collection to resources with the exact specified name. */
+     name?: string;
+     /** Filters the collection to resources with the exact tag value. */
+     tag?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `createBackupPolicy` operation. */
+   export interface CreateBackupPolicyParams {
+     /** The user tags this backup policy applies to. Resources that have both a matching user tag and a matching
+      *  type will be subject to the backup policy.
+      */
+     matchUserTags?: string[];
+     /** A resource type this backup policy applies to. Resources that have both a matching type and a matching user
+      *  tag will be subject to the backup policy.
+      */
+     matchResourceTypes?: CreateBackupPolicyConstants.MatchResourceTypes | string[];
+     /** The user-defined name for this backup policy. Names must be unique within the region this backup policy
+      *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
+      */
+     name?: string;
+     /** The prototype objects for backup plans to be created for this backup policy. */
+     plans?: BackupPolicyPlanPrototype[];
+     /** The resource group to use. If unspecified, the account's [default resource
+      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+      */
+     resourceGroup?: ResourceGroupIdentity;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Constants for the `createBackupPolicy` operation. */
+   export namespace CreateBackupPolicyConstants {
+     /** The resource type. */
+     export enum MatchResourceTypes {
+       VOLUME = 'volume',
+     }
+   }
+ 
+   /** Parameters for the `listBackupPolicyPlans` operation. */
+   export interface ListBackupPolicyPlansParams {
+     /** The backup policy identifier. */
+     backupPolicyId: string;
+     /** Filters the collection to resources with the exact specified name. */
+     name?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `createBackupPolicyPlan` operation. */
+   export interface CreateBackupPolicyPlanParams {
+     /** The backup policy identifier. */
+     backupPolicyId: string;
+     /** The cron specification for the backup schedule. The backup policy jobs
+      *  (which create and delete backups for this plan) will not start until this time, and may start for up to 90
+      *  minutes after this time.
+      *
+      *  All backup schedules for plans in the same policy must be at least an hour apart.
+      */
+     cronSpec: string;
+     /** Indicates whether the plan is active. */
+     active?: boolean;
+     /** User tags to attach to each backup (snapshot) created by this plan. If unspecified, no user tags will be
+      *  attached.
+      */
+     attachUserTags?: string[];
+     /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
+     copyUserTags?: boolean;
+     deletionTrigger?: BackupPolicyPlanDeletionTriggerPrototype;
+     /** The user-defined name for this backup policy plan. Names must be unique within the backup policy this plan
+      *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
+      */
+     name?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `deleteBackupPolicyPlan` operation. */
+   export interface DeleteBackupPolicyPlanParams {
+     /** The backup policy identifier. */
+     backupPolicyId: string;
+     /** The backup policy plan identifier. */
+     id: string;
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value.
+      */
+     ifMatch?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `getBackupPolicyPlan` operation. */
+   export interface GetBackupPolicyPlanParams {
+     /** The backup policy identifier. */
+     backupPolicyId: string;
+     /** The backup policy plan identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `updateBackupPolicyPlan` operation. */
+   export interface UpdateBackupPolicyPlanParams {
+     /** The backup policy identifier. */
+     backupPolicyId: string;
+     /** The backup policy plan identifier. */
+     id: string;
+     /** Indicates whether the plan is active. */
+     active?: boolean;
+     /** The user tags to attach to backups (snapshots) created by this plan. Updating this value does not change the
+      *  user tags for backups that have already been created by this plan.
+      */
+     attachUserTags?: string[];
+     /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
+     copyUserTags?: boolean;
+     /** The cron specification for the backup schedule. The backup policy jobs
+      *  (which create and delete backups for this plan) will not start until this time, and may start for up to 90
+      *  minutes after this time.
+      *
+      *  All backup schedules for plans in the same policy must be at least an hour apart.
+      */
+     cronSpec?: string;
+     deletionTrigger?: BackupPolicyPlanDeletionTriggerPatch;
+     /** The user-defined name for this backup policy plan. Names must be unique within the backup policy this plan
+      *  resides in.
+      */
+     name?: string;
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value. Required if the request body includes an array.
+      */
+     ifMatch?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `deleteBackupPolicy` operation. */
+   export interface DeleteBackupPolicyParams {
+     /** The backup policy identifier. */
+     id: string;
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value.
+      */
+     ifMatch?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `getBackupPolicy` operation. */
+   export interface GetBackupPolicyParams {
+     /** The backup policy identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `updateBackupPolicy` operation. */
+   export interface UpdateBackupPolicyParams {
+     /** The backup policy identifier. */
+     id: string;
+     /** The user tags this backup policy applies to (replacing any existing tags). Resources that have both a
+      *  matching user tag and a matching type will be subject to the backup policy.
+      */
+     matchUserTags?: string[];
+     /** The user-defined name for this backup policy. Names must be unique within the region this backup policy
+      *  resides in.
+      */
+     name?: string;
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value. Required if the request body includes an array.
+      */
+     ifMatch?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
    /** Parameters for the `listPlacementGroups` operation. */
    export interface ListPlacementGroupsParams {
      /** A server-provided token determining what resource to start the page on. */
@@ -20969,22 +22843,7 @@
      networkInterfacesSubnetCrn?: string;
      /** Filters the collection to bare metal servers on the subnet with the specified name. */
      networkInterfacesSubnetName?: string;
-     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
-      *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
-      *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
-      *  order.
-      */
-     sort?: ListBareMetalServersConstants.Sort | string;
      headers?: OutgoingHttpHeaders;
-   }
- 
-   /** Constants for the `listBareMetalServers` operation. */
-   export namespace ListBareMetalServersConstants {
-     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
-     export enum Sort {
-       CREATED_AT = 'created_at',
-       NAME = 'name',
-     }
    }
  
    /** Parameters for the `createBareMetalServer` operation. */
@@ -21110,19 +22969,19 @@
       *  on this interface. If true, source IP spoofing is allowed on this interface.
       */
      allowIpSpoofing?: boolean;
-     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. A given VLAN can
+     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface.  A given VLAN can
       *  only be in the `allowed_vlans` array for one PCI type adapter per bare metal server.
       */
      allowedVlans?: number[];
      /** If `true`:
-      *     - The VPC infrastructure performs any needed NAT operations.
-      *     - A single floating IP can be assigned to the network interface.
+      *    - The VPC infrastructure performs any needed NAT operations.
+      *    - A single floating IP can be assigned to the network interface.
       *
       *  If `false`:
-      *     - The packet is passed unmodified to/from the network interface,
-      *       allowing the workload to perform any needed NAT operations.
-      *     - Multiple floating IPs can be assigned to the network interface.
-      *     - `allow_ip_spoofing` must be set to `false`.
+      *    - Packets are passed unmodified to/from the network interface,
+      *      allowing the workload to perform any needed NAT operations.
+      *    - Multiple floating IPs can be assigned to the network interface.
+      *    - `allow_ip_spoofing` must be set to `false`.
       */
      enableInfrastructureNat?: boolean;
      /** The user-defined name for network interface. Names must be unique within the instance the network interface
@@ -21170,26 +23029,6 @@
      /** The network interface identifier. */
      networkInterfaceId: string;
      /** The floating IP identifier. */
-     id: string;
-     headers?: OutgoingHttpHeaders;
-   }
- 
-   /** Parameters for the `listBareMetalServerNetworkInterfaceIps` operation. */
-   export interface ListBareMetalServerNetworkInterfaceIpsParams {
-     /** The bare metal server identifier. */
-     bareMetalServerId: string;
-     /** The network interface identifier. */
-     networkInterfaceId: string;
-     headers?: OutgoingHttpHeaders;
-   }
- 
-   /** Parameters for the `getBareMetalServerNetworkInterfaceIp` operation. */
-   export interface GetBareMetalServerNetworkInterfaceIpParams {
-     /** The bare metal server identifier. */
-     bareMetalServerId: string;
-     /** The network interface identifier. */
-     networkInterfaceId: string;
-     /** The reserved IP identifier. */
      id: string;
      headers?: OutgoingHttpHeaders;
    }
@@ -21336,7 +23175,7 @@
       *  supported by the specified profile.
       */
      profile?: VolumeProfileIdentity;
-     /** Tags for this resource. */
+     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume. */
      userTags?: string[];
      /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
       *  value. Required if the request body includes an array.
@@ -21358,6 +23197,8 @@
      start?: string;
      /** The number of resources to return on a page. */
      limit?: number;
+     /** Filters the collection to resources with the exact tag value. */
+     tag?: string;
      /** Filters the collection to resources in the resource group with the specified identifier. */
      resourceGroupId?: string;
      /** Filters the collection to resources with the exact specified name. */
@@ -21384,6 +23225,8 @@
       *  order.
       */
      sort?: ListSnapshotsConstants.Sort | string;
+     /** Filters the collection to backup policy jobs with the backup plan with the specified identifier. */
+     backupPolicyPlanId?: string;
      headers?: OutgoingHttpHeaders;
    }
  
@@ -21427,7 +23270,7 @@
      id: string;
      /** The user-defined name for this snapshot. */
      name?: string;
-     /** The user tags associated with this snapshot. */
+     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this snapshot. */
      userTags?: string[];
      /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
       *  value. Required if the request body includes an array.
@@ -22311,6 +24154,317 @@
      headers?: OutgoingHttpHeaders;
    }
  
+   /** Parameters for the `listVpnServers` operation. */
+   export interface ListVpnServersParams {
+     /** Filters the collection to resources with the exact specified name. */
+     name?: string;
+     /** A server-provided token determining what resource to start the page on. */
+     start?: string;
+     /** The number of resources to return on a page. */
+     limit?: number;
+     /** Filters the collection to resources in the resource group with the specified identifier. */
+     resourceGroupId?: string;
+     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+      *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+      *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+      *  order.
+      */
+     sort?: ListVpnServersConstants.Sort | string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Constants for the `listVpnServers` operation. */
+   export namespace ListVpnServersConstants {
+     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+     export enum Sort {
+       CREATED_AT = 'created_at',
+       NAME = 'name',
+     }
+   }
+ 
+   /** Parameters for the `createVpnServer` operation. */
+   export interface CreateVpnServerParams {
+     /** The certificate instance for this VPN server. */
+     certificate: CertificateInstanceIdentity;
+     /** The methods used to authenticate VPN clients to this VPN server. VPN clients must authenticate against all
+      *  specified methods.
+      */
+     clientAuthentication: VPNServerAuthenticationPrototype[];
+     /** The VPN client IPv4 address pool, expressed in CIDR format. The request must not overlap with any existing
+      *  address prefixes in the VPC or any of the following reserved address ranges:
+      *    - `127.0.0.0/8` (IPv4 loopback addresses)
+      *    - `161.26.0.0/16` (IBM services)
+      *    - `166.8.0.0/14` (Cloud Service Endpoints)
+      *    - `169.254.0.0/16` (IPv4 link-local addresses)
+      *    - `224.0.0.0/4` (IPv4 multicast addresses)
+      *
+      *  The prefix length of the client IP address pool's CIDR must be between
+      *  `/9` (8,388,608 addresses) and `/22` (1024 addresses). A CIDR block that contains twice the number of IP
+      *  addresses that are required to enable the maximum number of concurrent connections is recommended.
+      */
+     clientIpPool: string;
+     /** The subnets to provision this VPN server in.  Use subnets in different zones for high availability. */
+     subnets: SubnetIdentity[];
+     /** The DNS server addresses that will be provided to VPN clients connected to this VPN server. */
+     clientDnsServerIps?: IP[];
+     /** The seconds a VPN client can be idle before this VPN server will disconnect it.   Specify `0` to prevent the
+      *  server from disconnecting idle clients.
+      */
+     clientIdleTimeout?: number;
+     /** Indicates whether the split tunneling is enabled on this VPN server. */
+     enableSplitTunneling?: boolean;
+     /** The user-defined name for this VPN server. If unspecified, the name will be a hyphenated list of
+      *  randomly-selected words. Names must be unique within the VPC this VPN server is serving.
+      */
+     name?: string;
+     /** The port number to use for this VPN server. */
+     port?: number;
+     /** The transport protocol to use for this VPN server. */
+     protocol?: CreateVpnServerConstants.Protocol | string;
+     /** The resource group to use. If unspecified, the account's [default resource
+      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+      */
+     resourceGroup?: ResourceGroupIdentity;
+     /** The security groups to use for this VPN server. If unspecified, the VPC's default security group is used. */
+     securityGroups?: SecurityGroupIdentity[];
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Constants for the `createVpnServer` operation. */
+   export namespace CreateVpnServerConstants {
+     /** The transport protocol to use for this VPN server. */
+     export enum Protocol {
+       TCP = 'tcp',
+       UDP = 'udp',
+     }
+   }
+ 
+   /** Parameters for the `deleteVpnServer` operation. */
+   export interface DeleteVpnServerParams {
+     /** The VPN server identifier. */
+     id: string;
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value.
+      */
+     ifMatch?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `getVpnServer` operation. */
+   export interface GetVpnServerParams {
+     /** The VPN server identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `updateVpnServer` operation. */
+   export interface UpdateVpnServerParams {
+     /** The VPN server identifier. */
+     id: string;
+     /** The certificate instance for this VPN server. */
+     certificate?: CertificateInstanceIdentity;
+     /** The authentication methods to use to authenticate VPN client on this VPN server
+      *  (replacing any existing methods).
+      */
+     clientAuthentication?: VPNServerAuthenticationPrototype[];
+     /** The DNS server addresses that will be provided to VPN clients connected to this VPN server (replacing any
+      *  existing addresses).
+      */
+     clientDnsServerIps?: IP[];
+     /** The seconds a VPN client can be idle before this VPN server will disconnect it.  If `0`, the server will not
+      *  disconnect idle clients.
+      */
+     clientIdleTimeout?: number;
+     /** The VPN client IPv4 address pool, expressed in CIDR format. The request must not overlap with any existing
+      *  address prefixes in the VPC or any of the following reserved address ranges:
+      *    - `127.0.0.0/8` (IPv4 loopback addresses)
+      *    - `161.26.0.0/16` (IBM services)
+      *    - `166.8.0.0/14` (Cloud Service Endpoints)
+      *    - `169.254.0.0/16` (IPv4 link-local addresses)
+      *    - `224.0.0.0/4` (IPv4 multicast addresses)
+      *
+      *  The prefix length of the client IP address pool's CIDR must be between
+      *  `/9` (8,388,608 addresses) and `/22` (1024 addresses). A CIDR block that contains twice the number of IP
+      *  addresses that are required to enable the maximum number of concurrent connections is recommended.
+      */
+     clientIpPool?: string;
+     /** Indicates whether the split tunneling is enabled on this VPN server. */
+     enableSplitTunneling?: boolean;
+     /** The user-defined name for this VPN server. Names must be unique within the VPC this VPN server is serving. */
+     name?: string;
+     /** The port number used by this VPN server. */
+     port?: number;
+     /** The transport protocol used by this VPN server. */
+     protocol?: UpdateVpnServerConstants.Protocol | string;
+     /** The subnets to provision this VPN server in (replacing the existing subnets). */
+     subnets?: SubnetIdentity[];
+     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+      *  value. Required if the request body includes an array.
+      */
+     ifMatch?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Constants for the `updateVpnServer` operation. */
+   export namespace UpdateVpnServerConstants {
+     /** The transport protocol used by this VPN server. */
+     export enum Protocol {
+       TCP = 'tcp',
+       UDP = 'udp',
+     }
+   }
+ 
+   /** Parameters for the `getVpnServerClientConfiguration` operation. */
+   export interface GetVpnServerClientConfigurationParams {
+     /** The VPN server identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `listVpnServerClients` operation. */
+   export interface ListVpnServerClientsParams {
+     /** The VPN server identifier. */
+     vpnServerId: string;
+     /** A server-provided token determining what resource to start the page on. */
+     start?: string;
+     /** The number of resources to return on a page. */
+     limit?: number;
+     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+      *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+      *  `created_at` property in descending order.
+      */
+     sort?: ListVpnServerClientsConstants.Sort | string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Constants for the `listVpnServerClients` operation. */
+   export namespace ListVpnServerClientsConstants {
+     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order. */
+     export enum Sort {
+       CREATED_AT = 'created_at',
+     }
+   }
+ 
+   /** Parameters for the `deleteVpnServerClient` operation. */
+   export interface DeleteVpnServerClientParams {
+     /** The VPN server identifier. */
+     vpnServerId: string;
+     /** The VPN client identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `getVpnServerClient` operation. */
+   export interface GetVpnServerClientParams {
+     /** The VPN server identifier. */
+     vpnServerId: string;
+     /** The VPN client identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `disconnectVpnClient` operation. */
+   export interface DisconnectVpnClientParams {
+     /** The VPN server identifier. */
+     vpnServerId: string;
+     /** The VPN client identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `listVpnServerRoutes` operation. */
+   export interface ListVpnServerRoutesParams {
+     /** The VPN server identifier. */
+     vpnServerId: string;
+     /** A server-provided token determining what resource to start the page on. */
+     start?: string;
+     /** The number of resources to return on a page. */
+     limit?: number;
+     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+      *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+      *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+      *  order.
+      */
+     sort?: ListVpnServerRoutesConstants.Sort | string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Constants for the `listVpnServerRoutes` operation. */
+   export namespace ListVpnServerRoutesConstants {
+     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+     export enum Sort {
+       CREATED_AT = 'created_at',
+       NAME = 'name',
+     }
+   }
+ 
+   /** Parameters for the `createVpnServerRoute` operation. */
+   export interface CreateVpnServerRouteParams {
+     /** The VPN server identifier. */
+     vpnServerId: string;
+     /** The destination to use for this VPN route in the VPN server. Must be unique within the VPN server. If an
+      *  incoming packet does not match any destination, it will be dropped.
+      */
+     destination: string;
+     /** The action to perform with a packet matching the VPN route:
+      *  - `translate`: translate the source IP address to one of the private IP addresses of the VPN server, then
+      *  deliver the packet to target.
+      *  - `deliver`: deliver the packet to the target.
+      *  - `drop`: drop the packet
+      *
+      *  The enumerated values for this property are expected to expand in the future. When processing this property,
+      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on
+      *  which the unexpected property value was encountered.
+      */
+     action?: CreateVpnServerRouteConstants.Action | string;
+     /** The user-defined name for this VPN route. If unspecified, the name will be a hyphenated list of
+      *  randomly-selected words. Names must be unique within the VPN server the VPN route resides in.
+      */
+     name?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Constants for the `createVpnServerRoute` operation. */
+   export namespace CreateVpnServerRouteConstants {
+     /** The action to perform with a packet matching the VPN route: - `translate`: translate the source IP address to one of the private IP addresses of the VPN server, then deliver the packet to target. - `deliver`: deliver the packet to the target. - `drop`: drop the packet The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on which the unexpected property value was encountered. */
+     export enum Action {
+       DELIVER = 'deliver',
+       DROP = 'drop',
+       TRANSLATE = 'translate',
+     }
+   }
+ 
+   /** Parameters for the `deleteVpnServerRoute` operation. */
+   export interface DeleteVpnServerRouteParams {
+     /** The VPN server identifier. */
+     vpnServerId: string;
+     /** The VPN route identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `getVpnServerRoute` operation. */
+   export interface GetVpnServerRouteParams {
+     /** The VPN server identifier. */
+     vpnServerId: string;
+     /** The VPN route identifier. */
+     id: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
+   /** Parameters for the `updateVpnServerRoute` operation. */
+   export interface UpdateVpnServerRouteParams {
+     /** The VPN server identifier. */
+     vpnServerId: string;
+     /** The VPN route identifier. */
+     id: string;
+     /** The user-defined name for this VPN route. Names must be unique within the VPN server the VPN route resides
+      *  in.
+      */
+     name?: string;
+     headers?: OutgoingHttpHeaders;
+   }
+ 
    /** Parameters for the `listLoadBalancerProfiles` operation. */
    export interface ListLoadBalancerProfilesParams {
      /** A server-provided token determining what resource to start the page on. */
@@ -22343,7 +24497,11 @@
       *  At present, if route mode is enabled, the load balancer must be private.
       */
      isPublic: boolean;
-     /** The subnets to provision this load balancer. */
+     /** The subnets to provision this load balancer in.  The load balancer's availability will depend on the
+      *  availability of the zones the specified subnets reside in.
+      *
+      *  Load balancers in the `network` family allow only one subnet to be specified.
+      */
      subnets: SubnetIdentity[];
      /** The listeners of this load balancer. */
      listeners?: LoadBalancerListenerPrototypeLoadBalancerContext[];
@@ -22361,7 +24519,10 @@
      name?: string;
      /** The pools of this load balancer. */
      pools?: LoadBalancerPoolPrototype[];
-     /** The profile to use for this load balancer. */
+     /** The profile to use for this load balancer
+      *
+      *  If unspecified, `application` will be used.
+      */
      profile?: LoadBalancerProfileIdentity;
      /** The resource group to use. If unspecified, the account's [default resource
       *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
@@ -23002,7 +25163,9 @@
       */
      port: number;
      /** The pool member target. Load balancers in the `network` family support virtual server
-      *  instances. Load balancers in the `application` family support IP addresses.
+      *  instances. Load balancers in the `application` family support IP addresses. If the load
+      *  balancer has route mode enabled, the member must be in a zone the load balancer has a
+      *  subnet in.
       */
      target: LoadBalancerPoolMemberTargetPrototype;
      /** Weight of the server member. Applicable only if the pool algorithm is `weighted_round_robin`. */
@@ -23062,7 +25225,9 @@
       */
      port?: number;
      /** The pool member target. Load balancers in the `network` family support virtual server
-      *  instances. Load balancers in the `application` family support IP addresses.
+      *  instances. Load balancers in the `application` family support IP addresses. If the load
+      *  balancer has route mode enabled, the member must be in a zone the load balancer has a
+      *  subnet in.
       */
      target?: LoadBalancerPoolMemberTargetPrototype;
      /** Weight of the server member. Applicable only if the pool algorithm is `weighted_round_robin`. */
@@ -23327,6 +25492,177 @@
      href: string;
    }
  
+   /** BackupPolicy. */
+   export interface BackupPolicy {
+     /** The date and time that the backup policy was created. */
+     created_at: string;
+     /** The CRN for this backup policy. */
+     crn: string;
+     /** The URL for this backup policy. */
+     href: string;
+     /** The unique identifier for this backup policy. */
+     id: string;
+     /** The date and time that the most recent job for this backup policy completed.
+      *
+      *  If absent, no job has yet completed for this backup policy.
+      */
+     last_job_completed_at?: string;
+     /** The lifecycle state of the backup policy. */
+     lifecycle_state: string;
+     /** A resource type this backup policy applies to. Resources that have both a matching type and a matching user
+      *  tag will be subject to the backup policy.
+      *
+      *  The enumerated values for this property will expand in the future. When processing this property, check for and
+      *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
+      *  unexpected property value was encountered.
+      */
+     match_resource_types: string[];
+     /** The user tags this backup policy applies to. Resources that have both a matching user tag and a matching
+      *  type will be subject to the backup policy.
+      */
+     match_user_tags: string[];
+     /** The unique user-defined name for this backup policy. */
+     name: string;
+     /** The plans for the backup policy. */
+     plans: BackupPolicyPlanReference[];
+     /** The resource group for this backup policy. */
+     resource_group: ResourceGroupReference;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
+   /** BackupPolicyCollection. */
+   export interface BackupPolicyCollection {
+     /** Collection of backup policies. */
+     backup_policies: BackupPolicy[];
+     /** A link to the first page of resources. */
+     first: BackupPolicyCollectionFirst;
+     /** The maximum number of resources that can be returned by the request. */
+     limit: number;
+     /** A link to the next page of resources. This property is present for all pages except the last page. */
+     next?: BackupPolicyCollectionNext;
+     /** The total number of resources across all pages. */
+     total_count: number;
+   }
+ 
+   /** A link to the first page of resources. */
+   export interface BackupPolicyCollectionFirst {
+     /** The URL for a page of resources. */
+     href: string;
+   }
+ 
+   /** A link to the next page of resources. This property is present for all pages except the last page. */
+   export interface BackupPolicyCollectionNext {
+     /** The URL for a page of resources. */
+     href: string;
+   }
+ 
+   /** BackupPolicyPlan. */
+   export interface BackupPolicyPlan {
+     /** Indicates whether the plan is active. */
+     active: boolean;
+     /** The user tags to attach to backups (snapshots) created by this plan. */
+     attach_user_tags: string[];
+     /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
+     copy_user_tags: boolean;
+     /** The date and time that the backup policy plan was created. */
+     created_at: string;
+     /** The cron specification for the backup schedule. The backup policy jobs
+      *  (which create and delete backups for this plan) will not start until this time, and may start for up to 90
+      *  minutes after this time.
+      *
+      *  All backup schedules for plans in the same policy must be at least an hour apart.
+      */
+     cron_spec: string;
+     deletion_trigger: BackupPolicyPlanDeletionTrigger;
+     /** The URL for this backup policy plan. */
+     href: string;
+     /** The unique identifier for this backup policy plan. */
+     id: string;
+     /** The lifecycle state of this backup policy plan. */
+     lifecycle_state: string;
+     /** The unique user-defined name for this backup policy plan. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
+   /** BackupPolicyPlanCollection. */
+   export interface BackupPolicyPlanCollection {
+     /** Collection of backup policy plans. */
+     plans: BackupPolicyPlan[];
+   }
+ 
+   /** BackupPolicyPlanDeletionTrigger. */
+   export interface BackupPolicyPlanDeletionTrigger {
+     /** The maximum number of days to keep each backup after creation. */
+     delete_after: number;
+     /** The maximum number of recent backups to keep. If absent, there is no maximum. */
+     delete_over_count?: number;
+   }
+ 
+   /** BackupPolicyPlanDeletionTriggerPatch. */
+   export interface BackupPolicyPlanDeletionTriggerPatch {
+     /** The maximum number of days to keep each backup after creation. */
+     delete_after?: number;
+     /** The maximum number of recent backups to keep. Specify `null` to remove any existing maximum. */
+     delete_over_count?: number;
+   }
+ 
+   /** BackupPolicyPlanDeletionTriggerPrototype. */
+   export interface BackupPolicyPlanDeletionTriggerPrototype {
+     /** The maximum number of days to keep each backup after creation. */
+     delete_after?: number;
+     /** The maximum number of recent backups to keep. If unspecified, there will be no maximum. */
+     delete_over_count?: number;
+   }
+ 
+   /** BackupPolicyPlanPrototype. */
+   export interface BackupPolicyPlanPrototype {
+     /** Indicates whether the plan is active. */
+     active?: boolean;
+     /** User tags to attach to each backup (snapshot) created by this plan. If unspecified, no user tags will be
+      *  attached.
+      */
+     attach_user_tags?: string[];
+     /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
+     copy_user_tags?: boolean;
+     /** The cron specification for the backup schedule. The backup policy jobs
+      *  (which create and delete backups for this plan) will not start until this time, and may start for up to 90
+      *  minutes after this time.
+      *
+      *  All backup schedules for plans in the same policy must be at least an hour apart.
+      */
+     cron_spec: string;
+     deletion_trigger?: BackupPolicyPlanDeletionTriggerPrototype;
+     /** The user-defined name for this backup policy plan. Names must be unique within the backup policy this plan
+      *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
+      */
+     name?: string;
+   }
+ 
+   /** BackupPolicyPlanReference. */
+   export interface BackupPolicyPlanReference {
+     /** If present, this property indicates the referenced resource has been deleted and provides
+      *  some supplementary information.
+      */
+     deleted?: BackupPolicyPlanReferenceDeleted;
+     /** The URL for this backup policy plan. */
+     href: string;
+     /** The unique identifier for this backup policy plan. */
+     id: string;
+     /** The unique user-defined name for this backup policy plan. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
+   /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+   export interface BackupPolicyPlanReferenceDeleted {
+     /** Link to documentation about deleted resources. */
+     more_info: string;
+   }
+ 
    /** BareMetalServer. */
    export interface BareMetalServer {
      /** The total bandwidth (in megabits per second) shared across the bare metal server's network interfaces. */
@@ -23516,14 +25852,14 @@
      /** The date and time that the network interface was created. */
      created_at: string;
      /** If `true`:
-      *     - The VPC infrastructure performs any needed NAT operations.
-      *     - A single floating IP can be assigned to the network interface.
+      *    - The VPC infrastructure performs any needed NAT operations.
+      *    - A single floating IP can be assigned to the network interface.
       *
       *  If `false`:
-      *     - The packet is passed unmodified to/from the network interface,
-      *       allowing the workload to perform any needed NAT operations.
-      *     - Multiple floating IPs can be assigned to the network interface.
-      *     - `allow_ip_spoofing` must be set to `false`.
+      *    - Packets are passed unmodified to/from the network interface,
+      *      allowing the workload to perform any needed NAT operations.
+      *    - Multiple floating IPs can be assigned to the network interface.
+      *    - `allow_ip_spoofing` must be set to `false`.
       */
      enable_infrastructure_nat: boolean;
      /** The floating IPs associated with this network interface. */
@@ -23536,10 +25872,10 @@
       *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
       *    server is stopped
       *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
-      *      to use the pci interface
+      *      to use the PCI interface
       *    - Cannot directly use an IEEE 802.1q VLAN tag.
-      *  - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array
-      *     of `allowed_vlans`.
+      *  - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its
+      *    array of `allowed_vlans`.
       *    - Must use an IEEE 802.1q tag.
       *    - Has its own security groups and does not inherit those of the PCI device through
       *      which traffic flows.
@@ -23597,24 +25933,24 @@
       */
      allow_ip_spoofing?: boolean;
      /** If `true`:
-      *     - The VPC infrastructure performs any needed NAT operations.
-      *     - A single floating IP can be assigned to the network interface.
+      *    - The VPC infrastructure performs any needed NAT operations.
+      *    - A single floating IP can be assigned to the network interface.
       *
       *  If `false`:
-      *     - The packet is passed unmodified to/from the network interface,
-      *       allowing the workload to perform any needed NAT operations.
-      *     - Multiple floating IPs can be assigned to the network interface.
-      *     - `allow_ip_spoofing` must be set to `false`.
+      *    - Packets are passed unmodified to/from the network interface,
+      *      allowing the workload to perform any needed NAT operations.
+      *    - Multiple floating IPs can be assigned to the network interface.
+      *    - `allow_ip_spoofing` must be set to `false`.
       */
      enable_infrastructure_nat?: boolean;
      /** The network interface type:
       *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
       *    server is stopped
       *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
-      *      to use the pci interface
+      *      to use the PCI interface
       *    - Cannot directly use an IEEE 802.1q VLAN tag.
-      *  - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array
-      *     of `allowed_vlans`.
+      *  - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its
+      *    array of `allowed_vlans`.
       *    - Must use an IEEE 802.1q tag.
       *    - Has its own security groups and does not inherit those of the PCI device through
       *      which traffic flows.
@@ -23646,26 +25982,26 @@
       *  on this interface. If true, source IP spoofing is allowed on this interface.
       */
      allow_ip_spoofing?: boolean;
-     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. A given VLAN can
+     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface.  A given VLAN can
       *  only be in the `allowed_vlans` array for one PCI type adapter per bare metal server.
       */
      allowed_vlans?: number[];
      /** If `true`:
-      *     - The VPC infrastructure performs any needed NAT operations.
-      *     - A single floating IP can be assigned to the network interface.
+      *    - The VPC infrastructure performs any needed NAT operations.
+      *    - A single floating IP can be assigned to the network interface.
       *
       *  If `false`:
-      *     - The packet is passed unmodified to/from the network interface,
-      *       allowing the workload to perform any needed NAT operations.
-      *     - Multiple floating IPs can be assigned to the network interface.
-      *     - `allow_ip_spoofing` must be set to `false`.
+      *    - Packets are passed unmodified to/from the network interface,
+      *      allowing the workload to perform any needed NAT operations.
+      *    - Multiple floating IPs can be assigned to the network interface.
+      *    - `allow_ip_spoofing` must be set to `false`.
       */
      enable_infrastructure_nat?: boolean;
      /** The network interface type:
       *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
       *    server is stopped
       *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
-      *      to use the pci interface
+      *      to use the PCI interface
       *    - Cannot directly use an IEEE 802.1q VLAN tag.
       */
      interface_type?: string;
@@ -24272,6 +26608,12 @@
  
    /** DefaultRoutingTable. */
    export interface DefaultRoutingTable {
+     /** The filters specifying the resources that may create routes in this routing table.
+      *
+      *  At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but
+      *  filter support is expected to expand in the future.
+      */
+     accept_routes_from: ResourceFilter[];
      /** The date and time that this routing table was created. */
      created_at: string;
      /** The URL for this routing table. */
@@ -24344,6 +26686,8 @@
       *  group may be changed, added or removed.
       */
      rules: SecurityGroupRule[];
+     /** The targets for this security group. */
+     targets: SecurityGroupTargetReference[];
      /** The VPC this security group is a part of. */
      vpc: VPCReference;
    }
@@ -24356,7 +26700,7 @@
    export interface EncryptionKeyReference {
      /** The CRN of the [Key Protect Root
       *  Key](https://cloud.ibm.com/docs/key-protect?topic=key-protect-getting-started-tutorial) or [Hyper Protect Crypto
-      *  Service Root Key](https://cloud.ibm.com/docs/hs-crypto?topic=hs-crypto-get-started) for this resource.
+      *  Services Root Key](https://cloud.ibm.com/docs/hs-crypto?topic=hs-crypto-get-started) for this resource.
       */
      crn: string;
    }
@@ -24704,7 +27048,6 @@
    }
  
    /** IP. */
-   // tslint:disable-next-line: interface-name
    export interface IP {
      /** The IP address.
       *
@@ -24714,7 +27057,7 @@
       */
      address: string;
    }
-   
+ 
    /** IPsecPolicy. */
    // tslint:disable-next-line: interface-name
    export interface IPsecPolicy {
@@ -25005,6 +27348,8 @@
      profile: InstanceProfileReference;
      /** The resource group for this instance. */
      resource_group: ResourceGroupReference;
+     /** The resource type. */
+     resource_type: string;
      /** Indicates whether the state of the virtual server instance permits a start request. */
      startable: boolean;
      /** The status of the virtual server instance. */
@@ -25651,21 +27996,21 @@
      encryption_key: KeyIdentityByFingerprint;
    }
  
-   /** InstanceMetadataService. */
+   /** The metadata service configuration. */
    export interface InstanceMetadataService {
      /** Indicates whether the metadata service endpoint is available to the virtual server instance. */
      enabled: boolean;
    }
  
-   /** InstanceMetadataServicePatch. */
+   /** The metadata service configuration. */
    export interface InstanceMetadataServicePatch {
-     /** Indicates whether the metadata service endpoint is available to the virtual server instance. */
+     /** Indicates whether the metadata service endpoint will be available to the virtual server instance. */
      enabled?: boolean;
    }
  
-   /** InstanceMetadataServicePrototype. */
+   /** The metadata service configuration. */
    export interface InstanceMetadataServicePrototype {
-     /** Indicates whether the metadata service endpoint is available to the virtual server instance. */
+     /** Indicates whether the metadata service endpoint will be available to the virtual server instance. */
      enabled?: boolean;
    }
  
@@ -25846,7 +28191,7 @@
       *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization) property.
       */
      keys?: KeyIdentity[];
-     /** Configuration options for the instance metadata service. */
+     /** The metadata service configuration. */
      metadata_service?: InstanceMetadataServicePrototype;
      /** The unique user-defined name for this virtual server instance (and default system hostname). If unspecified,
       *  the name will be a hyphenated list of randomly-selected words.
@@ -25869,9 +28214,11 @@
       *  `total_network_bandwidth`.
       */
      total_volume_bandwidth?: number;
-     /** User data to be made available when setting up the virtual server instance. */
+     /** [User data](https://cloud.ibm.com/docs/vpc?topic=vpc-user-data) to make available when setting up the
+      *  virtual server instance.
+      */
      user_data?: string;
-     /** The volume attachments for this virtual server instance. */
+     /** The additional volume attachments to create for the virtual server instance. */
      volume_attachments?: VolumeAttachmentPrototypeInstanceContext[];
      /** The VPC the virtual server instance is to be a part of. If specified, it must match
       *  the VPC referenced by the subnets of the instance's network interfaces.
@@ -25945,7 +28292,7 @@
       *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization) property.
       */
      keys?: KeyIdentity[];
-     /** Configuration options for the instance metadata service. */
+     /** The metadata service configuration. */
      metadata_service?: InstanceMetadataServicePrototype;
      /** The unique user-defined name for this instance template. */
      name: string;
@@ -25964,9 +28311,11 @@
       *  `total_network_bandwidth`.
       */
      total_volume_bandwidth?: number;
-     /** User data to be made available when setting up the virtual server instance. */
+     /** [User data](https://cloud.ibm.com/docs/vpc?topic=vpc-user-data) to make available when setting up the
+      *  virtual server instance.
+      */
      user_data?: string;
-     /** The volume attachments for this virtual server instance. */
+     /** The additional volume attachments to create for the virtual server instance. */
      volume_attachments?: VolumeAttachmentPrototypeInstanceContext[];
      /** The VPC the virtual server instance is to be a part of. If specified, it must match
       *  the VPC referenced by the subnets of the instance's network interfaces.
@@ -26030,7 +28379,7 @@
       *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization) property.
       */
      keys?: KeyIdentity[];
-     /** Configuration options for the instance metadata service. */
+     /** The metadata service configuration. */
      metadata_service?: InstanceMetadataServicePrototype;
      /** The unique user-defined name for this virtual server instance (and default system hostname). If unspecified,
       *  the name will be a hyphenated list of randomly-selected words.
@@ -26053,9 +28402,11 @@
       *  `total_network_bandwidth`.
       */
      total_volume_bandwidth?: number;
-     /** User data to be made available when setting up the virtual server instance. */
+     /** [User data](https://cloud.ibm.com/docs/vpc?topic=vpc-user-data) to make available when setting up the
+      *  virtual server instance.
+      */
      user_data?: string;
-     /** The volume attachments for this virtual server instance. */
+     /** The additional volume attachments to create for the virtual server instance. */
      volume_attachments?: VolumeAttachmentPrototypeInstanceContext[];
      /** The VPC the virtual server instance is to be a part of. If specified, it must match
       *  the VPC referenced by the subnets of the instance's network interfaces.
@@ -26215,7 +28566,7 @@
      pools: LoadBalancerPoolReference[];
      /** The private IP addresses assigned to this load balancer. */
      private_ips: LoadBalancerPrivateIpsItem[];
-     /** The profile to use for this load balancer. */
+     /** The profile for this load balancer. */
      profile: LoadBalancerProfileReference;
      /** The provisioning status of this load balancer. */
      provisioning_status: string;
@@ -26778,7 +29129,9 @@
      /** The provisioning status of this member. */
      provisioning_status: string;
      /** The pool member target. Load balancers in the `network` family support virtual server
-      *  instances. Load balancers in the `application` family support IP addresses.
+      *  instances. Load balancers in the `application` family support IP addresses. If the load
+      *  balancer has route mode enabled, the member must be in a zone the load balancer has a
+      *  subnet in.
       */
      target: LoadBalancerPoolMemberTarget;
      /** Weight of the server member. Applicable only if the pool algorithm is `weighted_round_robin`. */
@@ -26804,7 +29157,9 @@
       */
      port: number;
      /** The pool member target. Load balancers in the `network` family support virtual server
-      *  instances. Load balancers in the `application` family support IP addresses.
+      *  instances. Load balancers in the `application` family support IP addresses. If the load
+      *  balancer has route mode enabled, the member must be in a zone the load balancer has a
+      *  subnet in.
       */
      target: LoadBalancerPoolMemberTargetPrototype;
      /** Weight of the server member. Applicable only if the pool algorithm is `weighted_round_robin`. */
@@ -26829,11 +29184,11 @@
      more_info: string;
    }
  
-   /** The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in the `application` family support IP addresses. */
+   /** The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in the `application` family support IP addresses. If the load balancer has route mode enabled, the member must be in a zone the load balancer has a subnet in. */
    export interface LoadBalancerPoolMemberTarget {
    }
  
-   /** The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in the `application` family support IP addresses. */
+   /** The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in the `application` family support IP addresses. If the load balancer has route mode enabled, the member must be in a zone the load balancer has a subnet in. */
    export interface LoadBalancerPoolMemberTargetPrototype {
    }
  
@@ -27419,7 +29774,7 @@
      dedicated_host_only: boolean;
      /** A unique, display-friendly name for the operating system. */
      display_name: string;
-     /** The name of the software family this operating system belongs to. */
+     /** The software family for this operating system. */
      family: string;
      /** The URL for this operating system. */
      href: string;
@@ -27809,6 +30164,12 @@
    export interface ReservedIPTargetPrototype {
    }
  
+   /** Identifies one or more resources according to the specified filter property. */
+   export interface ResourceFilter {
+     /** The resource type. */
+     resource_type?: string;
+   }
+ 
    /** The resource group to use. If unspecified, the account's [default resource group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used. */
    export interface ResourceGroupIdentity {
    }
@@ -27835,6 +30196,11 @@
      action: string;
      /** The date and time that the route was created. */
      created_at: string;
+     /** If present, the resource that created the route. Routes with this property present cannot be
+      *  directly deleted. All routes with an `origin` of `learned` or `service` will have this
+      *  property set, and future `origin` values may also have this property set.
+      */
+     creator?: RouteCreator;
      /** The destination of the route. */
      destination: string;
      /** The URL for this route. */
@@ -27849,6 +30215,15 @@
       *  other `action` values, its `address` will be `0.0.0.0`.
       */
      next_hop: RouteNextHop;
+     /** The origin of this route:
+      *  - `service`: route was directly created by a service
+      *  - `user`: route was directly created by a user
+      *
+      *  The enumerated values for this property are expected to expand in the future. When processing this property,
+      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which
+      *  the unexpected property value was encountered.
+      */
+     origin?: string;
      /** The zone the route applies to. (Traffic from subnets in this zone will be subject to this route.). */
      zone: ZoneReference;
    }
@@ -27879,12 +30254,12 @@
      href: string;
    }
  
-   /** RouteNextHop. */
-   export interface RouteNextHop {
+   /** If present, the resource that created the route. Routes with this property present cannot be directly deleted. All routes with an `origin` of `learned` or `service` will have this property set, and future `origin` values may also have this property set. */
+   export interface RouteCreator {
    }
  
-   /** The next hop packets will be routed to. */
-   export interface RouteNextHopPrototype {
+   /** RouteNextHop. */
+   export interface RouteNextHop {
    }
  
    /** RoutePrototype. */
@@ -27906,12 +30281,16 @@
       *  randomly-selected words. Names must be unique within the VPC routing table the route resides in.
       */
      name?: string;
-     /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
-      *  other `action` values, it must be omitted or specified as `0.0.0.0`.
+     /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action`
+      *  values, it must be omitted or specified as `0.0.0.0`.
       */
-     next_hop?: RouteNextHopPrototype;
+     next_hop?: RoutePrototypeNextHop;
      /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
      zone: ZoneIdentity;
+   }
+ 
+   /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action` values, it must be omitted or specified as `0.0.0.0`. */
+   export interface RoutePrototypeNextHop {
    }
  
    /** RouteReference. */
@@ -27936,6 +30315,12 @@
  
    /** RoutingTable. */
    export interface RoutingTable {
+     /** The filters specifying the resources that may create routes in this routing table.
+      *
+      *  At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but
+      *  filter support is expected to expand in the future.
+      */
+     accept_routes_from: ResourceFilter[];
      /** The date and time that this routing table was created. */
      created_at: string;
      /** The URL for this routing table. */
@@ -28205,6 +30590,8 @@
  
    /** Snapshot. */
    export interface Snapshot {
+     /** If present, the backup policy plan which created this snapshot. */
+     backup_policy_plan?: BackupPolicyPlanReference;
      /** Indicates if a boot volume attachment can be created with a volume created from this snapshot. */
      bootable: boolean;
      /** The date and time the data capture for this snapshot was completed.
@@ -28245,7 +30632,9 @@
      resource_group: ResourceGroupReference;
      /** The resource type. */
      resource_type: string;
-     /** The service tags prefixed with `is.snapshot:` associated with this snapshot. */
+     /** The [service tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) prefixed with `is.snapshot:`
+      *  associated with this snapshot.
+      */
      service_tags: string[];
      /** The size of this snapshot rounded up to the next gigabyte. */
      size: number;
@@ -28255,7 +30644,7 @@
       *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
       */
      source_volume: VolumeReference;
-     /** The user tags associated with this snapshot. */
+     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this snapshot. */
      user_tags: string[];
    }
  
@@ -28299,7 +30688,7 @@
       *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
       */
      resource_group?: ResourceGroupIdentity;
-     /** The user tags associated with this snapshot. */
+     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this snapshot. */
      user_tags?: string[];
    }
  
@@ -28353,6 +30742,8 @@
      public_gateway?: PublicGatewayReference;
      /** The resource group for this subnet. */
      resource_group: ResourceGroupReference;
+     /** The resource type. */
+     resource_type: string;
      /** The routing table for this subnet. */
      routing_table: RoutingTableReference;
      /** The status of the subnet. */
@@ -28444,6 +30835,8 @@
      id: string;
      /** The user-defined name for this subnet. */
      name: string;
+     /** The resource type. */
+     resource_type: string;
    }
  
    /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
@@ -28503,6 +30896,8 @@
      name: string;
      /** The resource group for this VPC. */
      resource_group: ResourceGroupReference;
+     /** The resource type. */
+     resource_type: string;
      /** The status of this VPC. */
      status: string;
    }
@@ -28559,6 +30954,8 @@
      id: string;
      /** The unique user-defined name for this VPC. */
      name: string;
+     /** The resource type. */
+     resource_type: string;
    }
  
    /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
@@ -28825,6 +31222,249 @@
      more_info: string;
    }
  
+   /** VPNServer. */
+   export interface VPNServer {
+     /** The certificate instance for this VPN server. */
+     certificate: CertificateInstanceReference;
+     /** The methods used to authenticate VPN clients to this VPN server. VPN clients must authenticate against all
+      *  specified methods.
+      */
+     client_authentication: VPNServerAuthentication[];
+     /** Indicates whether disconnected VPN clients will be automatically deleted after
+      *  `client_auto_delete_timeout` hours have passed. At present, this is always `true`, but may be modifiable in the
+      *  future.
+      */
+     client_auto_delete: boolean;
+     /** If `client_auto_delete` is `true`, the hours after which disconnected VPN clients will be automatically
+      *  deleted. If the value is `0`, disconnected VPN clients will be deleted immediately. This value may be modifiable
+      *  in the future.
+      */
+     client_auto_delete_timeout: number;
+     /** The DNS server addresses that will be provided to VPN clients that are connected to this VPN server. */
+     client_dns_server_ips: IP[];
+     /** The seconds a VPN client can be idle before this VPN server will disconnect it.  If `0`, the server will not
+      *  disconnect idle clients.
+      */
+     client_idle_timeout: number;
+     /** The VPN client IPv4 address pool, expressed in CIDR format. */
+     client_ip_pool: string;
+     /** The date and time that the VPN server was created. */
+     created_at: string;
+     /** The CRN for this VPN server. */
+     crn: string;
+     /** Indicates whether the split tunneling is enabled on this VPN server. */
+     enable_split_tunneling: boolean;
+     /** The health of this resource.
+      *  - `ok`: No abnormal behavior detected
+      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
+      *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
+      *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
+      *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
+      *  also have this state.
+      */
+     health_state: string;
+     /** Fully qualified domain name assigned to this VPN server. */
+     hostname: string;
+     /** The URL for this VPN server. */
+     href: string;
+     /** The unique identifier for this VPN server. */
+     id: string;
+     /** The lifecycle state of the VPN server. */
+     lifecycle_state: string;
+     /** The unique user-defined name for this VPN server. */
+     name: string;
+     /** The port number used by this VPN server. */
+     port: number;
+     /** The reserved IPs bound to this VPN server. */
+     private_ips: ReservedIPReference[];
+     /** The transport protocol used by this VPN server. */
+     protocol: string;
+     /** The resource group for this VPN server. */
+     resource_group: ResourceGroupReference;
+     /** The resource type. */
+     resource_type: string;
+     /** The security groups targeting this VPN server. */
+     security_groups: SecurityGroupReference[];
+     /** The subnets this VPN server is provisioned in. */
+     subnets: SubnetReference[];
+     /** The VPC this VPN server resides in. */
+     vpc: VPCReference;
+   }
+ 
+   /** An authentication method for this VPN server. */
+   export interface VPNServerAuthentication {
+     /** The type of authentication. */
+     method: string;
+   }
+ 
+   /** The type of identity provider to be used by VPN client. */
+   export interface VPNServerAuthenticationByUsernameIdProvider {
+   }
+ 
+   /** An authentication method for this VPN server. */
+   export interface VPNServerAuthenticationPrototype {
+     /** The type of authentication. */
+     method: string;
+   }
+ 
+   /** VPNServerClient. */
+   export interface VPNServerClient {
+     /** The IP address assigned to this VPN client from `client_ip_pool`. */
+     client_ip: IP;
+     /** The common name of client certificate that the VPN client provided when connecting to the server.
+      *
+      *  This property will be present only when the `certificate` client authentication method is enabled on the VPN
+      *  server.
+      */
+     common_name?: string;
+     /** The date and time that the VPN client was created. */
+     created_at: string;
+     /** The date and time that the VPN client was disconnected.
+      *
+      *  This property will be present only when the client `status` is `disconnected`.
+      */
+     disconnected_at?: string;
+     /** The URL for this VPN client. */
+     href: string;
+     /** The unique identifier for this VPN client. */
+     id: string;
+     /** The remote IP address of this VPN client. */
+     remote_ip: IP;
+     /** The remote port of this VPN client. */
+     remote_port: number;
+     /** The resource type. */
+     resource_type: string;
+     /** The status of the VPN client:
+      *  - `connected`: the VPN client is `connected` to this VPN server.
+      *  - `disconnected`: the VPN client is `disconnected` from this VPN server.
+      *
+      *  The enumerated values for this property are expected to expand in the future. When processing this property,
+      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN client on
+      *  which the unexpected property value was encountered.
+      */
+     status: string;
+     /** The username that this VPN client provided when connecting to the VPN server.
+      *
+      *  This property will be present only when the `username` client authentication method is enabled on the VPN
+      *  server.
+      */
+     username?: string;
+   }
+ 
+   /** VPNServerClientCollection. */
+   export interface VPNServerClientCollection {
+     /** Collection of VPN clients. */
+     clients: VPNServerClient[];
+     /** A link to the first page of resources. */
+     first: VPNServerClientCollectionFirst;
+     /** The maximum number of resources that can be returned by the request. */
+     limit: number;
+     /** A link to the next page of resources. This property is present for all pages except the last page. */
+     next?: VPNServerClientCollectionNext;
+     /** The total number of resources across all pages. */
+     total_count: number;
+   }
+ 
+   /** A link to the first page of resources. */
+   export interface VPNServerClientCollectionFirst {
+     /** The URL for a page of resources. */
+     href: string;
+   }
+ 
+   /** A link to the next page of resources. This property is present for all pages except the last page. */
+   export interface VPNServerClientCollectionNext {
+     /** The URL for a page of resources. */
+     href: string;
+   }
+ 
+   /** VPNServerCollection. */
+   export interface VPNServerCollection {
+     /** A link to the first page of resources. */
+     first: VPNServerCollectionFirst;
+     /** The maximum number of resources that can be returned by the request. */
+     limit: number;
+     /** A link to the next page of resources. This property is present for all pages except the last page. */
+     next?: VPNServerCollectionNext;
+     /** The total number of resources across all pages. */
+     total_count: number;
+     /** Collection of VPN servers. */
+     vpn_servers: VPNServer[];
+   }
+ 
+   /** A link to the first page of resources. */
+   export interface VPNServerCollectionFirst {
+     /** The URL for a page of resources. */
+     href: string;
+   }
+ 
+   /** A link to the next page of resources. This property is present for all pages except the last page. */
+   export interface VPNServerCollectionNext {
+     /** The URL for a page of resources. */
+     href: string;
+   }
+ 
+   /** If present, this property indicates the referenced resource has been deleted and provides some supplementary information. */
+   export interface VPNServerReferenceDeleted {
+     /** Link to documentation about deleted resources. */
+     more_info: string;
+   }
+ 
+   /** VPNServerRoute. */
+   export interface VPNServerRoute {
+     /** The action to perform with a packet matching the VPN route:
+      *  - `translate`: translate the source IP address to one of the private IP addresses of the VPN server.
+      *  - `deliver`: deliver the packet into the VPC.
+      *  - `drop`: drop the packet
+      *
+      *  The enumerated values for this property are expected to expand in the future. When processing this property,
+      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on
+      *  which the unexpected property value was encountered.
+      */
+     action: string;
+     /** The date and time that the VPN route was created. */
+     created_at: string;
+     /** The destination for this VPN route in the VPN server. If an incoming packet does not match any destination,
+      *  it will be dropped.
+      */
+     destination: string;
+     /** The URL for this VPN route. */
+     href: string;
+     /** The unique identifier for this VPN route. */
+     id: string;
+     /** The lifecycle state of the VPN route. */
+     lifecycle_state: string;
+     /** The user-defined name for this VPN route. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
+   /** VPNServerRouteCollection. */
+   export interface VPNServerRouteCollection {
+     /** A link to the first page of resources. */
+     first: VPNServerRouteCollectionFirst;
+     /** The maximum number of resources that can be returned by the request. */
+     limit: number;
+     /** A link to the next page of resources. This property is present for all pages except the last page. */
+     next?: VPNServerRouteCollectionNext;
+     /** Collection of VPN routes. */
+     routes: VPNServerRoute[];
+     /** The total number of resources across all pages. */
+     total_count: number;
+   }
+ 
+   /** A link to the first page of resources. */
+   export interface VPNServerRouteCollectionFirst {
+     /** The URL for a page of resources. */
+     href: string;
+   }
+ 
+   /** A link to the next page of resources. This property is present for all pages except the last page. */
+   export interface VPNServerRouteCollectionNext {
+     /** The URL for a page of resources. */
+     href: string;
+   }
+ 
    /** Volume. */
    export interface Volume {
      /** Indicates whether a running virtual server instance has an attachment to this volume. */
@@ -28890,7 +31530,7 @@
       *  which the unexpected reason code was encountered.
       */
      status_reasons: VolumeStatusReason[];
-     /** Tags for this resource. */
+     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume. */
      user_tags: string[];
      /** The volume attachments for this volume. */
      volume_attachments: VolumeAttachmentReferenceVolumeContext[];
@@ -29136,7 +31776,7 @@
       *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
       */
      resource_group?: ResourceGroupIdentity;
-     /** Tags for this resource. */
+     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume. */
      user_tags?: string[];
      /** The zone this volume will reside in. */
      zone: ZoneIdentity;
@@ -29283,10 +31923,17 @@
  
    /** BareMetalServerNetworkInterfaceByPCI. */
    export interface BareMetalServerNetworkInterfaceByPCI extends BareMetalServerNetworkInterface {
-     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. A given VLAN can
+     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface.  A given VLAN can
       *  only be in the `allowed_vlans` array for one PCI type adapter per bare metal server.
       */
      allowed_vlans: number[];
+     /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal
+      *    server is stopped
+      *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
+      *      to use the PCI interface
+      *    - Cannot directly use an IEEE 802.1q VLAN tag.
+      */
+     interface_type: string;
    }
  
    /** BareMetalServerNetworkInterfaceByVLAN. */
@@ -29296,16 +31943,30 @@
       *  metal server in the resource group.  Applies only to `vlan` type interfaces.
       */
      allow_interface_to_float: boolean;
+     /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array
+      *     of `allowed_vlans`.
+      *    - Must use an IEEE 802.1q tag.
+      *    - Has its own security groups and does not inherit those of the PCI device through
+      *      which traffic flows.
+      */
+     interface_type: string;
      /** Indicates the 802.1Q VLAN ID tag that must be used for all traffic on this interface. */
      vlan: number;
    }
  
    /** BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByPCIPrototype. */
    export interface BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByPCIPrototype extends BareMetalServerNetworkInterfacePrototype {
-     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. A given VLAN can
+     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface.  A given VLAN can
       *  only be in the `allowed_vlans` array for one PCI type adapter per bare metal server.
       */
      allowed_vlans?: number[];
+     /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal
+      *    server is stopped
+      *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
+      *      to use the PCI interface
+      *    - Cannot directly use an IEEE 802.1q VLAN tag.
+      */
+     interface_type: string;
    }
  
    /** BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype. */
@@ -29315,6 +31976,13 @@
       *  metal server in the resource group.  Applies only to `vlan` type interfaces.
       */
      allow_interface_to_float?: boolean;
+     /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array
+      *     of `allowed_vlans`.
+      *    - Must use an IEEE 802.1q tag.
+      *    - Has its own security groups and does not inherit those of the PCI device through
+      *      which traffic flows.
+      */
+     interface_type: string;
      /** Indicates the 802.1Q VLAN ID tag that must be used for all traffic on this interface. */
      vlan: number;
    }
@@ -29726,7 +32394,7 @@
    export interface EncryptionKeyIdentityByCRN extends EncryptionKeyIdentity {
      /** The CRN of the [Key Protect Root
       *  Key](https://cloud.ibm.com/docs/key-protect?topic=key-protect-getting-started-tutorial) or [Hyper Protect Crypto
-      *  Service Root Key](https://cloud.ibm.com/docs/hs-crypto?topic=hs-crypto-get-started) for this resource.
+      *  Services Root Key](https://cloud.ibm.com/docs/hs-crypto?topic=hs-crypto-get-started) for this resource.
       */
      crn: string;
    }
@@ -29914,6 +32582,8 @@
      id: string;
      /** The user-defined name for this subnet. */
      name: string;
+     /** The resource type. */
+     resource_type: string;
    }
  
    /** FlowLogCollectorTargetVPCReference. */
@@ -29930,6 +32600,8 @@
      id: string;
      /** The unique user-defined name for this VPC. */
      name: string;
+     /** The resource type. */
+     resource_type: string;
    }
  
    /** ImageIdentityByCRN. */
@@ -29957,7 +32629,7 @@
       *  That representation is created by wrapping the key's value with the `encryption_key` root key (which must also
       *  be specified), using either [Key Protect](https://cloud.ibm.com/docs/key-protect?topic=key-protect-wrap-keys) or
       *  the
-      *  [Hyper Protect Crypto Service](https://cloud.ibm.com/docs/services/hs-crypto?topic=hs-crypto-wrap-keys).
+      *  [Hyper Protect Crypto Services](https://cloud.ibm.com/docs/services/hs-crypto?topic=hs-crypto-wrap-keys).
       *
       *  If unspecified, the imported image is treated as unencrypted.
       */
@@ -30614,6 +33286,16 @@
      zone: ZoneIdentity;
    }
  
+   /** InstanceTemplateInstanceBySourceSnapshot. */
+   export interface InstanceTemplateInstanceBySourceSnapshot extends InstanceTemplate {
+     /** The boot volume attachment for the virtual server instance. */
+     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
+     /** Primary network interface. */
+     primary_network_interface: NetworkInterfacePrototype;
+     /** The zone this virtual server instance will reside in. */
+     zone: ZoneIdentity;
+   }
+ 
    /** KeyIdentityByCRN. */
    export interface KeyIdentityByCRN extends KeyIdentity {
      /** The CRN for this key. */
@@ -31197,10 +33879,64 @@
      resource_type: string;
    }
  
+   /** ReservedIPTargetVPNServerReference. */
+   export interface ReservedIPTargetVPNServerReference extends ReservedIPTarget {
+     /** The CRN for this VPN server. */
+     crn: string;
+     /** If present, this property indicates the referenced resource has been deleted and provides
+      *  some supplementary information.
+      */
+     deleted?: VPNServerReferenceDeleted;
+     /** The URL for this VPN server. */
+     href: string;
+     /** The unique identifier for this VPN server. */
+     id: string;
+     /** The unique user-defined name for this VPN server. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
    /** ResourceGroupIdentityById. */
    export interface ResourceGroupIdentityById extends ResourceGroupIdentity {
      /** The unique identifier for this resource group. */
      id: string;
+   }
+ 
+   /** RouteCreatorVPNGatewayReference. */
+   export interface RouteCreatorVPNGatewayReference extends RouteCreator {
+     /** The VPN gateway's CRN. */
+     crn: string;
+     /** If present, this property indicates the referenced resource has been deleted and provides
+      *  some supplementary information.
+      */
+     deleted?: VPNGatewayReferenceDeleted;
+     /** The VPN gateway's canonical URL. */
+     href: string;
+     /** The unique identifier for this VPN gateway. */
+     id: string;
+     /** The user-defined name for this VPN gateway. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
+   /** RouteCreatorVPNServerReference. */
+   export interface RouteCreatorVPNServerReference extends RouteCreator {
+     /** The CRN for this VPN server. */
+     crn: string;
+     /** If present, this property indicates the referenced resource has been deleted and provides
+      *  some supplementary information.
+      */
+     deleted?: VPNServerReferenceDeleted;
+     /** The URL for this VPN server. */
+     href: string;
+     /** The unique identifier for this VPN server. */
+     id: string;
+     /** The unique user-defined name for this VPN server. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
    }
  
    /** RouteNextHopIP. */
@@ -31212,21 +33948,6 @@
       *  the error, or bypass the resource on which the unexpected IP address format was encountered.
       */
      address: string;
-   }
- 
-   /** The IP address of the next hop to which to route packets. */
-   export interface RouteNextHopPrototypeRouteNextHopIP extends RouteNextHopPrototype {
-     /** The IP address.
-      *
-      *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-      *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-      *  the error, or bypass the resource on which the unexpected IP address format was encountered.
-      */
-     address: string;
-   }
- 
-   /** Identifies a VPN gateway connection by a unique property. */
-   export interface RouteNextHopPrototypeVPNGatewayConnectionIdentity extends RouteNextHopPrototype {
    }
  
    /** RouteNextHopVPNGatewayConnectionReference. */
@@ -31243,6 +33964,21 @@
      name: string;
      /** The resource type. */
      resource_type: string;
+   }
+ 
+   /** The IP address of the next hop to which to route packets. */
+   export interface RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP extends RoutePrototypeNextHop {
+     /** The IP address.
+      *
+      *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+      *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+      *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+      */
+     address: string;
+   }
+ 
+   /** Identifies a VPN gateway connection by a unique property. */
+   export interface RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentity extends RoutePrototypeNextHop {
    }
  
    /** RoutingTableIdentityByHref. */
@@ -31507,6 +34243,24 @@
      resource_type: string;
    }
  
+   /** SecurityGroupTargetReferenceVPNServerReference. */
+   export interface SecurityGroupTargetReferenceVPNServerReference extends SecurityGroupTargetReference {
+     /** The CRN for this VPN server. */
+     crn: string;
+     /** If present, this property indicates the referenced resource has been deleted and provides
+      *  some supplementary information.
+      */
+     deleted?: VPNServerReferenceDeleted;
+     /** The URL for this VPN server. */
+     href: string;
+     /** The unique identifier for this VPN server. */
+     id: string;
+     /** The unique user-defined name for this VPN server. */
+     name: string;
+     /** The resource type. */
+     resource_type: string;
+   }
+ 
    /** SnapshotIdentityByCRN. */
    export interface SnapshotIdentityByCRN extends SnapshotIdentity {
      /** The CRN of this snapshot. */
@@ -31729,6 +34483,46 @@
      mode: string;
    }
  
+   /** VPNServerAuthenticationByCertificate. */
+   export interface VPNServerAuthenticationByCertificate extends VPNServerAuthentication {
+     /** The certificate instance used for the VPN client certificate authority (CA). */
+     client_ca: CertificateInstanceReference;
+     /** The certificate revocation list contents, encoded in PEM format. */
+     crl?: string;
+   }
+ 
+   /** VPNServerAuthenticationByUsername. */
+   export interface VPNServerAuthenticationByUsername extends VPNServerAuthentication {
+     /** The type of identity provider to be used by VPN client. */
+     identity_provider: VPNServerAuthenticationByUsernameIdProvider;
+   }
+ 
+   /** VPNServerAuthenticationByUsernameIdProviderByIAM. */
+   export interface VPNServerAuthenticationByUsernameIdProviderByIAM extends VPNServerAuthenticationByUsernameIdProvider {
+     /** The type of identity provider to be used by the VPN client.
+      *  - `iam`: IBM identity and access management
+      *
+      *  The enumerated values for this property are expected to expand in the future. When processing this property,
+      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which
+      *  the unexpected property value was encountered.
+      */
+     provider_type: string;
+   }
+ 
+   /** VPNServerAuthenticationPrototypeVPNServerAuthenticationByCertificatePrototype. */
+   export interface VPNServerAuthenticationPrototypeVPNServerAuthenticationByCertificatePrototype extends VPNServerAuthenticationPrototype {
+     /** The certificate instance to use for the VPN client certificate authority (CA). */
+     client_ca: CertificateInstanceIdentity;
+     /** The certificate revocation list contents, encoded in PEM format. */
+     crl?: string;
+   }
+ 
+   /** VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype. */
+   export interface VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype extends VPNServerAuthenticationPrototype {
+     /** The type of identity provider to be used by VPN client. */
+     identity_provider: VPNServerAuthenticationByUsernameIdProvider;
+   }
+ 
    /** Identifies a volume by a unique property. */
    export interface VolumeAttachmentPrototypeVolumeVolumeIdentity extends VolumeAttachmentPrototypeVolume {
    }
@@ -31802,6 +34596,23 @@
       *  If unspecified, the `encryption` type for the volume will be `provider_managed`.
       */
      encryption_key?: EncryptionKeyIdentity;
+   }
+ 
+   /** VolumePrototypeVolumeBySourceSnapshot. */
+   export interface VolumePrototypeVolumeBySourceSnapshot extends VolumePrototype {
+     /** The capacity to use for the volume (in gigabytes). Must be at least the snapshot's
+      *  `minimum_capacity`. The maximum value may increase in the future.
+      *
+      *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
+      */
+     capacity?: number;
+     /** The root key to use to wrap the data encryption key for the volume.
+      *
+      *  If unspecified, the snapshot's `encryption_key` will be used.
+      */
+     encryption_key?: EncryptionKeyIdentity;
+     /** The snapshot from which to clone the volume. */
+     source_snapshot: SnapshotIdentity;
    }
  
    /** ZoneIdentityByHref. */
@@ -32130,14 +34941,14 @@
      id: string;
    }
  
-   /** RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
-   export interface RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref extends RouteNextHopPrototypeVPNGatewayConnectionIdentity {
+   /** RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentityRouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
+   export interface RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentityRouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref extends RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentity {
      /** The VPN connection's canonical URL. */
      href: string;
    }
  
-   /** RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById. */
-   export interface RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById extends RouteNextHopPrototypeVPNGatewayConnectionIdentity {
+   /** RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentityRouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById. */
+   export interface RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentityRouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById extends RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentity {
      /** The unique identifier for this VPN gateway connection. */
      id: string;
    }
