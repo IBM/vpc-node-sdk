@@ -1386,8 +1386,8 @@ describe('VpcV1', () => {
         name: 'us-south-1',
       };
 
-      // RouteNextHopPrototypeRouteNextHopIP
-      const routeNextHopPrototypeModel = {
+      // RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP
+      const routePrototypeNextHopModel = {
         address: '192.168.3.4',
       };
 
@@ -1397,8 +1397,8 @@ describe('VpcV1', () => {
         const destination = '192.168.3.0/24';
         const zone = zoneIdentityModel;
         const action = 'deliver';
-        const name = 'my-route-2';
-        const nextHop = routeNextHopPrototypeModel;
+        const name = 'my-route-1';
+        const nextHop = routePrototypeNextHopModel;
         const createVpcRouteParams = {
           vpcId: vpcId,
           destination: destination,
@@ -1866,8 +1866,13 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
-      // RouteNextHopPrototypeRouteNextHopIP
-      const routeNextHopPrototypeModel = {
+      // ResourceFilter
+      const resourceFilterModel = {
+        resource_type: 'vpn_server',
+      };
+
+      // RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP
+      const routePrototypeNextHopModel = {
         address: '192.168.3.4',
       };
 
@@ -1880,14 +1885,15 @@ describe('VpcV1', () => {
       const routePrototypeModel = {
         action: 'deliver',
         destination: '192.168.3.0/24',
-        name: 'my-route-2',
-        next_hop: routeNextHopPrototypeModel,
+        name: 'my-route-1',
+        next_hop: routePrototypeNextHopModel,
         zone: zoneIdentityModel,
       };
 
       function __createVpcRoutingTableTest() {
         // Construct the params object for operation createVpcRoutingTable
         const vpcId = 'testString';
+        const acceptRoutesFrom = [resourceFilterModel];
         const name = 'my-routing-table-2';
         const routeDirectLinkIngress = false;
         const routeTransitGatewayIngress = false;
@@ -1895,6 +1901,7 @@ describe('VpcV1', () => {
         const routes = [routePrototypeModel];
         const createVpcRoutingTableParams = {
           vpcId: vpcId,
+          acceptRoutesFrom: acceptRoutesFrom,
           name: name,
           routeDirectLinkIngress: routeDirectLinkIngress,
           routeTransitGatewayIngress: routeTransitGatewayIngress,
@@ -1918,6 +1925,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.accept_routes_from).toEqual(acceptRoutesFrom);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.route_direct_link_ingress).toEqual(routeDirectLinkIngress);
         expect(mockRequestOptions.body.route_transit_gateway_ingress).toEqual(
@@ -1993,9 +2001,11 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteVpcRoutingTable
         const vpcId = 'testString';
         const id = 'testString';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteVpcRoutingTableParams = {
           vpcId: vpcId,
           id: id,
+          ifMatch: ifMatch,
         };
 
         const deleteVpcRoutingTableResult = vpcService.deleteVpcRoutingTable(
@@ -2014,6 +2024,7 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
         expect(mockRequestOptions.path.vpc_id).toEqual(vpcId);
@@ -2171,21 +2182,32 @@ describe('VpcV1', () => {
   });
   describe('updateVpcRoutingTable', () => {
     describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // ResourceFilter
+      const resourceFilterModel = {
+        resource_type: 'vpn_server',
+      };
+
       function __updateVpcRoutingTableTest() {
         // Construct the params object for operation updateVpcRoutingTable
         const vpcId = 'testString';
         const id = 'testString';
+        const acceptRoutesFrom = [resourceFilterModel];
         const name = 'my-routing-table-2';
         const routeDirectLinkIngress = true;
         const routeTransitGatewayIngress = true;
         const routeVpcZoneIngress = true;
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateVpcRoutingTableParams = {
           vpcId: vpcId,
           id: id,
+          acceptRoutesFrom: acceptRoutesFrom,
           name: name,
           routeDirectLinkIngress: routeDirectLinkIngress,
           routeTransitGatewayIngress: routeTransitGatewayIngress,
           routeVpcZoneIngress: routeVpcZoneIngress,
+          ifMatch: ifMatch,
         };
 
         const updateVpcRoutingTableResult = vpcService.updateVpcRoutingTable(
@@ -2204,6 +2226,8 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.accept_routes_from).toEqual(acceptRoutesFrom);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.route_direct_link_ingress).toEqual(routeDirectLinkIngress);
         expect(mockRequestOptions.body.route_transit_gateway_ingress).toEqual(
@@ -2386,8 +2410,8 @@ describe('VpcV1', () => {
         name: 'us-south-1',
       };
 
-      // RouteNextHopPrototypeRouteNextHopIP
-      const routeNextHopPrototypeModel = {
+      // RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP
+      const routePrototypeNextHopModel = {
         address: '192.168.3.4',
       };
 
@@ -2398,8 +2422,8 @@ describe('VpcV1', () => {
         const destination = '192.168.3.0/24';
         const zone = zoneIdentityModel;
         const action = 'deliver';
-        const name = 'my-route-2';
-        const nextHop = routeNextHopPrototypeModel;
+        const name = 'my-route-1';
+        const nextHop = routePrototypeNextHopModel;
         const createVpcRoutingTableRouteParams = {
           vpcId: vpcId,
           routingTableId: routingTableId,
@@ -5701,7 +5725,7 @@ describe('VpcV1', () => {
 
       // InstanceMetadataServicePrototype
       const instanceMetadataServicePrototypeModel = {
-        enabled: true,
+        enabled: false,
       };
 
       // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
@@ -6295,7 +6319,7 @@ describe('VpcV1', () => {
 
       // InstanceMetadataServicePrototype
       const instanceMetadataServicePrototypeModel = {
-        enabled: true,
+        enabled: false,
       };
 
       // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
@@ -12939,6 +12963,973 @@ describe('VpcV1', () => {
       });
     });
   });
+  describe('listBackupPolicies', () => {
+    describe('positive tests', () => {
+      function __listBackupPoliciesTest() {
+        // Construct the params object for operation listBackupPolicies
+        const start = 'testString';
+        const limit = 1;
+        const resourceGroupId = 'testString';
+        const name = 'testString';
+        const tag = 'testString';
+        const listBackupPoliciesParams = {
+          start: start,
+          limit: limit,
+          resourceGroupId: resourceGroupId,
+          name: name,
+          tag: tag,
+        };
+
+        const listBackupPoliciesResult = vpcService.listBackupPolicies(listBackupPoliciesParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listBackupPoliciesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/backup_policies', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.tag).toEqual(tag);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listBackupPoliciesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listBackupPoliciesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listBackupPoliciesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listBackupPoliciesParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listBackupPolicies(listBackupPoliciesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listBackupPolicies({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('createBackupPolicy', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // BackupPolicyPlanDeletionTriggerPrototype
+      const backupPolicyPlanDeletionTriggerPrototypeModel = {
+        delete_after: 20,
+        delete_over_count: 20,
+      };
+
+      // BackupPolicyPlanPrototype
+      const backupPolicyPlanPrototypeModel = {
+        active: true,
+        attach_user_tags: ['my-daily-backup-plan'],
+        copy_user_tags: true,
+        cron_spec: '*/5 1,2,3 * * *',
+        deletion_trigger: backupPolicyPlanDeletionTriggerPrototypeModel,
+        name: 'my-policy-plan',
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      function __createBackupPolicyTest() {
+        // Construct the params object for operation createBackupPolicy
+        const matchUserTags = ['my-daily-backup-policy'];
+        const matchResourceTypes = ['volume'];
+        const name = 'my-backup-policy';
+        const plans = [backupPolicyPlanPrototypeModel];
+        const resourceGroup = resourceGroupIdentityModel;
+        const createBackupPolicyParams = {
+          matchUserTags: matchUserTags,
+          matchResourceTypes: matchResourceTypes,
+          name: name,
+          plans: plans,
+          resourceGroup: resourceGroup,
+        };
+
+        const createBackupPolicyResult = vpcService.createBackupPolicy(createBackupPolicyParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createBackupPolicyResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/backup_policies', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.match_user_tags).toEqual(matchUserTags);
+        expect(mockRequestOptions.body.match_resource_types).toEqual(matchResourceTypes);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.plans).toEqual(plans);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createBackupPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createBackupPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createBackupPolicyTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createBackupPolicyParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createBackupPolicy(createBackupPolicyParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.createBackupPolicy({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('listBackupPolicyPlans', () => {
+    describe('positive tests', () => {
+      function __listBackupPolicyPlansTest() {
+        // Construct the params object for operation listBackupPolicyPlans
+        const backupPolicyId = 'testString';
+        const name = 'testString';
+        const listBackupPolicyPlansParams = {
+          backupPolicyId: backupPolicyId,
+          name: name,
+        };
+
+        const listBackupPolicyPlansResult = vpcService.listBackupPolicyPlans(
+          listBackupPolicyPlansParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listBackupPolicyPlansResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/backup_policies/{backup_policy_id}/plans', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.path.backup_policy_id).toEqual(backupPolicyId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listBackupPolicyPlansTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listBackupPolicyPlansTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listBackupPolicyPlansTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const backupPolicyId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listBackupPolicyPlansParams = {
+          backupPolicyId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listBackupPolicyPlans(listBackupPolicyPlansParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listBackupPolicyPlans({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listBackupPolicyPlans();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('createBackupPolicyPlan', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // BackupPolicyPlanDeletionTriggerPrototype
+      const backupPolicyPlanDeletionTriggerPrototypeModel = {
+        delete_after: 20,
+        delete_over_count: 20,
+      };
+
+      function __createBackupPolicyPlanTest() {
+        // Construct the params object for operation createBackupPolicyPlan
+        const backupPolicyId = 'testString';
+        const cronSpec = '*/5 1,2,3 * * *';
+        const active = true;
+        const attachUserTags = ['my-daily-backup-plan'];
+        const copyUserTags = true;
+        const deletionTrigger = backupPolicyPlanDeletionTriggerPrototypeModel;
+        const name = 'my-policy-plan';
+        const createBackupPolicyPlanParams = {
+          backupPolicyId: backupPolicyId,
+          cronSpec: cronSpec,
+          active: active,
+          attachUserTags: attachUserTags,
+          copyUserTags: copyUserTags,
+          deletionTrigger: deletionTrigger,
+          name: name,
+        };
+
+        const createBackupPolicyPlanResult = vpcService.createBackupPolicyPlan(
+          createBackupPolicyPlanParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createBackupPolicyPlanResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/backup_policies/{backup_policy_id}/plans', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.cron_spec).toEqual(cronSpec);
+        expect(mockRequestOptions.body.active).toEqual(active);
+        expect(mockRequestOptions.body.attach_user_tags).toEqual(attachUserTags);
+        expect(mockRequestOptions.body.copy_user_tags).toEqual(copyUserTags);
+        expect(mockRequestOptions.body.deletion_trigger).toEqual(deletionTrigger);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.backup_policy_id).toEqual(backupPolicyId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createBackupPolicyPlanTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createBackupPolicyPlanTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createBackupPolicyPlanTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const backupPolicyId = 'testString';
+        const cronSpec = '*/5 1,2,3 * * *';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createBackupPolicyPlanParams = {
+          backupPolicyId,
+          cronSpec,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createBackupPolicyPlan(createBackupPolicyPlanParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.createBackupPolicyPlan({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createBackupPolicyPlan();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('deleteBackupPolicyPlan', () => {
+    describe('positive tests', () => {
+      function __deleteBackupPolicyPlanTest() {
+        // Construct the params object for operation deleteBackupPolicyPlan
+        const backupPolicyId = 'testString';
+        const id = 'testString';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
+        const deleteBackupPolicyPlanParams = {
+          backupPolicyId: backupPolicyId,
+          id: id,
+          ifMatch: ifMatch,
+        };
+
+        const deleteBackupPolicyPlanResult = vpcService.deleteBackupPolicyPlan(
+          deleteBackupPolicyPlanParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteBackupPolicyPlanResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/backup_policies/{backup_policy_id}/plans/{id}',
+          'DELETE'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.backup_policy_id).toEqual(backupPolicyId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteBackupPolicyPlanTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteBackupPolicyPlanTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteBackupPolicyPlanTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const backupPolicyId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteBackupPolicyPlanParams = {
+          backupPolicyId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteBackupPolicyPlan(deleteBackupPolicyPlanParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteBackupPolicyPlan({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteBackupPolicyPlan();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getBackupPolicyPlan', () => {
+    describe('positive tests', () => {
+      function __getBackupPolicyPlanTest() {
+        // Construct the params object for operation getBackupPolicyPlan
+        const backupPolicyId = 'testString';
+        const id = 'testString';
+        const getBackupPolicyPlanParams = {
+          backupPolicyId: backupPolicyId,
+          id: id,
+        };
+
+        const getBackupPolicyPlanResult = vpcService.getBackupPolicyPlan(getBackupPolicyPlanParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getBackupPolicyPlanResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/backup_policies/{backup_policy_id}/plans/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.backup_policy_id).toEqual(backupPolicyId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBackupPolicyPlanTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBackupPolicyPlanTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBackupPolicyPlanTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const backupPolicyId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBackupPolicyPlanParams = {
+          backupPolicyId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBackupPolicyPlan(getBackupPolicyPlanParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBackupPolicyPlan({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBackupPolicyPlan();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('updateBackupPolicyPlan', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // BackupPolicyPlanDeletionTriggerPatch
+      const backupPolicyPlanDeletionTriggerPatchModel = {
+        delete_after: 20,
+        delete_over_count: 38,
+      };
+
+      function __updateBackupPolicyPlanTest() {
+        // Construct the params object for operation updateBackupPolicyPlan
+        const backupPolicyId = 'testString';
+        const id = 'testString';
+        const active = true;
+        const attachUserTags = ['my-daily-backup-plan'];
+        const copyUserTags = true;
+        const cronSpec = '*/5 1,2,3 * * *';
+        const deletionTrigger = backupPolicyPlanDeletionTriggerPatchModel;
+        const name = 'my-policy-plan';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
+        const updateBackupPolicyPlanParams = {
+          backupPolicyId: backupPolicyId,
+          id: id,
+          active: active,
+          attachUserTags: attachUserTags,
+          copyUserTags: copyUserTags,
+          cronSpec: cronSpec,
+          deletionTrigger: deletionTrigger,
+          name: name,
+          ifMatch: ifMatch,
+        };
+
+        const updateBackupPolicyPlanResult = vpcService.updateBackupPolicyPlan(
+          updateBackupPolicyPlanParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(updateBackupPolicyPlanResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/backup_policies/{backup_policy_id}/plans/{id}',
+          'PATCH'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.active).toEqual(active);
+        expect(mockRequestOptions.body.attach_user_tags).toEqual(attachUserTags);
+        expect(mockRequestOptions.body.copy_user_tags).toEqual(copyUserTags);
+        expect(mockRequestOptions.body.cron_spec).toEqual(cronSpec);
+        expect(mockRequestOptions.body.deletion_trigger).toEqual(deletionTrigger);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.backup_policy_id).toEqual(backupPolicyId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateBackupPolicyPlanTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateBackupPolicyPlanTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateBackupPolicyPlanTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const backupPolicyId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateBackupPolicyPlanParams = {
+          backupPolicyId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateBackupPolicyPlan(updateBackupPolicyPlanParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateBackupPolicyPlan({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateBackupPolicyPlan();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('deleteBackupPolicy', () => {
+    describe('positive tests', () => {
+      function __deleteBackupPolicyTest() {
+        // Construct the params object for operation deleteBackupPolicy
+        const id = 'testString';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
+        const deleteBackupPolicyParams = {
+          id: id,
+          ifMatch: ifMatch,
+        };
+
+        const deleteBackupPolicyResult = vpcService.deleteBackupPolicy(deleteBackupPolicyParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteBackupPolicyResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/backup_policies/{id}', 'DELETE');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteBackupPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteBackupPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteBackupPolicyTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteBackupPolicyParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteBackupPolicy(deleteBackupPolicyParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteBackupPolicy({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteBackupPolicy();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getBackupPolicy', () => {
+    describe('positive tests', () => {
+      function __getBackupPolicyTest() {
+        // Construct the params object for operation getBackupPolicy
+        const id = 'testString';
+        const getBackupPolicyParams = {
+          id: id,
+        };
+
+        const getBackupPolicyResult = vpcService.getBackupPolicy(getBackupPolicyParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getBackupPolicyResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/backup_policies/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBackupPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBackupPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBackupPolicyTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBackupPolicyParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBackupPolicy(getBackupPolicyParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBackupPolicy({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBackupPolicy();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('updateBackupPolicy', () => {
+    describe('positive tests', () => {
+      function __updateBackupPolicyTest() {
+        // Construct the params object for operation updateBackupPolicy
+        const id = 'testString';
+        const matchUserTags = ['my-daily-backup-policy'];
+        const name = 'my-backup-policy';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
+        const updateBackupPolicyParams = {
+          id: id,
+          matchUserTags: matchUserTags,
+          name: name,
+          ifMatch: ifMatch,
+        };
+
+        const updateBackupPolicyResult = vpcService.updateBackupPolicy(updateBackupPolicyParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateBackupPolicyResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/backup_policies/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.match_user_tags).toEqual(matchUserTags);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateBackupPolicyTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateBackupPolicyTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateBackupPolicyTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateBackupPolicyParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateBackupPolicy(updateBackupPolicyParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateBackupPolicy({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateBackupPolicy();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
   describe('listPlacementGroups', () => {
     describe('positive tests', () => {
       function __listPlacementGroupsTest() {
@@ -13540,7 +14531,6 @@ describe('VpcV1', () => {
         const networkInterfacesSubnetId = 'testString';
         const networkInterfacesSubnetCrn = 'testString';
         const networkInterfacesSubnetName = 'testString';
-        const sort = 'name';
         const listBareMetalServersParams = {
           start: start,
           limit: limit,
@@ -13552,7 +14542,6 @@ describe('VpcV1', () => {
           networkInterfacesSubnetId: networkInterfacesSubnetId,
           networkInterfacesSubnetCrn: networkInterfacesSubnetCrn,
           networkInterfacesSubnetName: networkInterfacesSubnetName,
-          sort: sort,
         };
 
         const listBareMetalServersResult = vpcService.listBareMetalServers(
@@ -13589,7 +14578,6 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.qs['network_interfaces.subnet.name']).toEqual(
           networkInterfacesSubnetName
         );
-        expect(mockRequestOptions.qs.sort).toEqual(sort);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -13693,12 +14681,12 @@ describe('VpcV1', () => {
       const bareMetalServerNetworkInterfacePrototypeModel = {
         allow_ip_spoofing: true,
         enable_infrastructure_nat: true,
-        interface_type: 'vlan',
         name: 'my-network-interface',
         primary_ip: networkInterfaceIpPrototypeModel,
         security_groups: [securityGroupIdentityModel],
         subnet: subnetIdentityModel,
         allow_interface_to_float: false,
+        interface_type: 'vlan',
         vlan: 4,
       };
 
@@ -14333,12 +15321,12 @@ describe('VpcV1', () => {
       const bareMetalServerNetworkInterfacePrototypeModel = {
         allow_ip_spoofing: true,
         enable_infrastructure_nat: true,
-        interface_type: 'vlan',
         name: 'my-network-interface',
         primary_ip: networkInterfaceIpPrototypeModel,
         security_groups: [securityGroupIdentityModel],
         subnet: subnetIdentityModel,
         allow_interface_to_float: false,
+        interface_type: 'vlan',
         vlan: 4,
       };
 
@@ -15141,205 +16129,6 @@ describe('VpcV1', () => {
         let err;
         try {
           await vpcService.addBareMetalServerNetworkInterfaceFloatingIp();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
-  describe('listBareMetalServerNetworkInterfaceIps', () => {
-    describe('positive tests', () => {
-      function __listBareMetalServerNetworkInterfaceIpsTest() {
-        // Construct the params object for operation listBareMetalServerNetworkInterfaceIps
-        const bareMetalServerId = 'testString';
-        const networkInterfaceId = 'testString';
-        const listBareMetalServerNetworkInterfaceIpsParams = {
-          bareMetalServerId: bareMetalServerId,
-          networkInterfaceId: networkInterfaceId,
-        };
-
-        const listBareMetalServerNetworkInterfaceIpsResult = vpcService.listBareMetalServerNetworkInterfaceIps(
-          listBareMetalServerNetworkInterfaceIpsParams
-        );
-
-        // all methods should return a Promise
-        expectToBePromise(listBareMetalServerNetworkInterfaceIpsResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/ips',
-          'GET'
-        );
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
-        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
-        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
-        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __listBareMetalServerNetworkInterfaceIpsTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        vpcService.enableRetries();
-        __listBareMetalServerNetworkInterfaceIpsTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        vpcService.disableRetries();
-        __listBareMetalServerNetworkInterfaceIpsTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const bareMetalServerId = 'testString';
-        const networkInterfaceId = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const listBareMetalServerNetworkInterfaceIpsParams = {
-          bareMetalServerId,
-          networkInterfaceId,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        vpcService.listBareMetalServerNetworkInterfaceIps(
-          listBareMetalServerNetworkInterfaceIpsParams
-        );
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await vpcService.listBareMetalServerNetworkInterfaceIps({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await vpcService.listBareMetalServerNetworkInterfaceIps();
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-    });
-  });
-  describe('getBareMetalServerNetworkInterfaceIp', () => {
-    describe('positive tests', () => {
-      function __getBareMetalServerNetworkInterfaceIpTest() {
-        // Construct the params object for operation getBareMetalServerNetworkInterfaceIp
-        const bareMetalServerId = 'testString';
-        const networkInterfaceId = 'testString';
-        const id = 'testString';
-        const getBareMetalServerNetworkInterfaceIpParams = {
-          bareMetalServerId: bareMetalServerId,
-          networkInterfaceId: networkInterfaceId,
-          id: id,
-        };
-
-        const getBareMetalServerNetworkInterfaceIpResult = vpcService.getBareMetalServerNetworkInterfaceIp(
-          getBareMetalServerNetworkInterfaceIpParams
-        );
-
-        // all methods should return a Promise
-        expectToBePromise(getBareMetalServerNetworkInterfaceIpResult);
-
-        // assert that create request was called
-        expect(createRequestMock).toHaveBeenCalledTimes(1);
-
-        const mockRequestOptions = getOptions(createRequestMock);
-
-        checkUrlAndMethod(
-          mockRequestOptions,
-          '/bare_metal_servers/{bare_metal_server_id}/network_interfaces/{network_interface_id}/ips/{id}',
-          'GET'
-        );
-        const expectedAccept = 'application/json';
-        const expectedContentType = undefined;
-        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
-        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
-        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
-        expect(mockRequestOptions.path.network_interface_id).toEqual(networkInterfaceId);
-        expect(mockRequestOptions.path.id).toEqual(id);
-      }
-
-      test('should pass the right params to createRequest with enable and disable retries', () => {
-        // baseline test
-        __getBareMetalServerNetworkInterfaceIpTest();
-
-        // enable retries and test again
-        createRequestMock.mockClear();
-        vpcService.enableRetries();
-        __getBareMetalServerNetworkInterfaceIpTest();
-
-        // disable retries and test again
-        createRequestMock.mockClear();
-        vpcService.disableRetries();
-        __getBareMetalServerNetworkInterfaceIpTest();
-      });
-
-      test('should prioritize user-given headers', () => {
-        // parameters
-        const bareMetalServerId = 'testString';
-        const networkInterfaceId = 'testString';
-        const id = 'testString';
-        const userAccept = 'fake/accept';
-        const userContentType = 'fake/contentType';
-        const getBareMetalServerNetworkInterfaceIpParams = {
-          bareMetalServerId,
-          networkInterfaceId,
-          id,
-          headers: {
-            Accept: userAccept,
-            'Content-Type': userContentType,
-          },
-        };
-
-        vpcService.getBareMetalServerNetworkInterfaceIp(getBareMetalServerNetworkInterfaceIpParams);
-        checkMediaHeaders(createRequestMock, userAccept, userContentType);
-      });
-    });
-
-    describe('negative tests', () => {
-      test('should enforce required parameters', async () => {
-        let err;
-        try {
-          await vpcService.getBareMetalServerNetworkInterfaceIp({});
-        } catch (e) {
-          err = e;
-        }
-
-        expect(err.message).toMatch(/Missing required parameters/);
-      });
-
-      test('should reject promise when required params are not given', async () => {
-        let err;
-        try {
-          await vpcService.getBareMetalServerNetworkInterfaceIp();
         } catch (e) {
           err = e;
         }
@@ -16313,7 +17102,7 @@ describe('VpcV1', () => {
       function __deleteVolumeTest() {
         // Construct the params object for operation deleteVolume
         const id = 'testString';
-        const ifMatch = '96d225c4-56bd-43d9-98fc-d7148e5c5028';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteVolumeParams = {
           id: id,
           ifMatch: ifMatch,
@@ -16498,7 +17287,7 @@ describe('VpcV1', () => {
         const name = 'my-volume';
         const profile = volumeProfileIdentityModel;
         const userTags = ['testString'];
-        const ifMatch = '96d225c4-56bd-43d9-98fc-d7148e5c5028';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateVolumeParams = {
           id: id,
           capacity: capacity,
@@ -16682,6 +17471,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listSnapshots
         const start = 'testString';
         const limit = 1;
+        const tag = 'testString';
         const resourceGroupId = 'testString';
         const name = 'testString';
         const sourceVolumeId = 'testString';
@@ -16689,9 +17479,11 @@ describe('VpcV1', () => {
         const sourceImageId = 'testString';
         const sourceImageCrn = 'testString';
         const sort = 'name';
+        const backupPolicyPlanId = 'testString';
         const listSnapshotsParams = {
           start: start,
           limit: limit,
+          tag: tag,
           resourceGroupId: resourceGroupId,
           name: name,
           sourceVolumeId: sourceVolumeId,
@@ -16699,6 +17491,7 @@ describe('VpcV1', () => {
           sourceImageId: sourceImageId,
           sourceImageCrn: sourceImageCrn,
           sort: sort,
+          backupPolicyPlanId: backupPolicyPlanId,
         };
 
         const listSnapshotsResult = vpcService.listSnapshots(listSnapshotsParams);
@@ -16719,6 +17512,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
         expect(mockRequestOptions.qs.start).toEqual(start);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.tag).toEqual(tag);
         expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
         expect(mockRequestOptions.qs.name).toEqual(name);
         expect(mockRequestOptions.qs['source_volume.id']).toEqual(sourceVolumeId);
@@ -16726,6 +17520,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.qs['source_image.id']).toEqual(sourceImageId);
         expect(mockRequestOptions.qs['source_image.crn']).toEqual(sourceImageCrn);
         expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs['backup_policy_plan.id']).toEqual(backupPolicyPlanId);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -16875,7 +17670,7 @@ describe('VpcV1', () => {
       function __deleteSnapshotTest() {
         // Construct the params object for operation deleteSnapshot
         const id = 'testString';
-        const ifMatch = '96d225c4-56bd-43d9-98fc-d7148e5c5028';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteSnapshotParams = {
           id: id,
           ifMatch: ifMatch,
@@ -17050,7 +17845,7 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-snapshot';
         const userTags = ['testString'];
-        const ifMatch = '96d225c4-56bd-43d9-98fc-d7148e5c5028';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateSnapshotParams = {
           id: id,
           name: name,
@@ -23539,6 +24334,1498 @@ describe('VpcV1', () => {
         let err;
         try {
           await vpcService.addVpnGatewayConnectionPeerCidr();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('listVpnServers', () => {
+    describe('positive tests', () => {
+      function __listVpnServersTest() {
+        // Construct the params object for operation listVpnServers
+        const name = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const resourceGroupId = 'testString';
+        const sort = 'name';
+        const listVpnServersParams = {
+          name: name,
+          start: start,
+          limit: limit,
+          resourceGroupId: resourceGroupId,
+          sort: sort,
+        };
+
+        const listVpnServersResult = vpcService.listVpnServers(listVpnServersParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listVpnServersResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpnServersTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpnServersTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpnServersTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listVpnServersParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listVpnServers(listVpnServersParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listVpnServers({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+  describe('createVpnServer', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // CertificateInstanceIdentityByCRN
+      const certificateInstanceIdentityModel = {
+        crn:
+          'crn:v1:bluemix:public:secrets-manager:us-south:a/123456:36fa422d-080d-4d83-8d2d-86851b4001df:secret:2e786aab-42fa-63ed-14f8-d66d552f4dd5',
+      };
+
+      // VPNServerAuthenticationByUsernameIdProviderByIAM
+      const vpnServerAuthenticationByUsernameIdProviderModel = {
+        provider_type: 'iam',
+      };
+
+      // VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype
+      const vpnServerAuthenticationPrototypeModel = {
+        method: 'username',
+        identity_provider: vpnServerAuthenticationByUsernameIdProviderModel,
+      };
+
+      // SubnetIdentityById
+      const subnetIdentityModel = {
+        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+      };
+
+      // IP
+      const ipModel = {
+        address: '192.168.3.4',
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      // SecurityGroupIdentityById
+      const securityGroupIdentityModel = {
+        id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
+      };
+
+      function __createVpnServerTest() {
+        // Construct the params object for operation createVpnServer
+        const certificate = certificateInstanceIdentityModel;
+        const clientAuthentication = [vpnServerAuthenticationPrototypeModel];
+        const clientIpPool = '172.16.0.0/16';
+        const subnets = [subnetIdentityModel];
+        const clientDnsServerIps = [ipModel];
+        const clientIdleTimeout = 600;
+        const enableSplitTunneling = false;
+        const name = 'my-vpn-server';
+        const port = 443;
+        const protocol = 'udp';
+        const resourceGroup = resourceGroupIdentityModel;
+        const securityGroups = [securityGroupIdentityModel];
+        const createVpnServerParams = {
+          certificate: certificate,
+          clientAuthentication: clientAuthentication,
+          clientIpPool: clientIpPool,
+          subnets: subnets,
+          clientDnsServerIps: clientDnsServerIps,
+          clientIdleTimeout: clientIdleTimeout,
+          enableSplitTunneling: enableSplitTunneling,
+          name: name,
+          port: port,
+          protocol: protocol,
+          resourceGroup: resourceGroup,
+          securityGroups: securityGroups,
+        };
+
+        const createVpnServerResult = vpcService.createVpnServer(createVpnServerParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createVpnServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.certificate).toEqual(certificate);
+        expect(mockRequestOptions.body.client_authentication).toEqual(clientAuthentication);
+        expect(mockRequestOptions.body.client_ip_pool).toEqual(clientIpPool);
+        expect(mockRequestOptions.body.subnets).toEqual(subnets);
+        expect(mockRequestOptions.body.client_dns_server_ips).toEqual(clientDnsServerIps);
+        expect(mockRequestOptions.body.client_idle_timeout).toEqual(clientIdleTimeout);
+        expect(mockRequestOptions.body.enable_split_tunneling).toEqual(enableSplitTunneling);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.port).toEqual(port);
+        expect(mockRequestOptions.body.protocol).toEqual(protocol);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.body.security_groups).toEqual(securityGroups);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVpnServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVpnServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVpnServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const certificate = certificateInstanceIdentityModel;
+        const clientAuthentication = [vpnServerAuthenticationPrototypeModel];
+        const clientIpPool = '172.16.0.0/16';
+        const subnets = [subnetIdentityModel];
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createVpnServerParams = {
+          certificate,
+          clientAuthentication,
+          clientIpPool,
+          subnets,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createVpnServer(createVpnServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.createVpnServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createVpnServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('deleteVpnServer', () => {
+    describe('positive tests', () => {
+      function __deleteVpnServerTest() {
+        // Construct the params object for operation deleteVpnServer
+        const id = 'testString';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
+        const deleteVpnServerParams = {
+          id: id,
+          ifMatch: ifMatch,
+        };
+
+        const deleteVpnServerResult = vpcService.deleteVpnServer(deleteVpnServerParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteVpnServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVpnServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVpnServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVpnServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteVpnServerParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteVpnServer(deleteVpnServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpnServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpnServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getVpnServer', () => {
+    describe('positive tests', () => {
+      function __getVpnServerTest() {
+        // Construct the params object for operation getVpnServer
+        const id = 'testString';
+        const getVpnServerParams = {
+          id: id,
+        };
+
+        const getVpnServerResult = vpcService.getVpnServer(getVpnServerParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getVpnServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpnServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpnServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpnServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getVpnServerParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getVpnServer(getVpnServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getVpnServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpnServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('updateVpnServer', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // CertificateInstanceIdentityByCRN
+      const certificateInstanceIdentityModel = {
+        crn:
+          'crn:v1:bluemix:public:secrets-manager:us-south:a/123456:36fa422d-080d-4d83-8d2d-86851b4001df:secret:2e786aab-42fa-63ed-14f8-d66d552f4dd5',
+      };
+
+      // VPNServerAuthenticationByUsernameIdProviderByIAM
+      const vpnServerAuthenticationByUsernameIdProviderModel = {
+        provider_type: 'iam',
+      };
+
+      // VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype
+      const vpnServerAuthenticationPrototypeModel = {
+        method: 'username',
+        identity_provider: vpnServerAuthenticationByUsernameIdProviderModel,
+      };
+
+      // IP
+      const ipModel = {
+        address: '192.168.3.4',
+      };
+
+      // SubnetIdentityById
+      const subnetIdentityModel = {
+        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+      };
+
+      function __updateVpnServerTest() {
+        // Construct the params object for operation updateVpnServer
+        const id = 'testString';
+        const certificate = certificateInstanceIdentityModel;
+        const clientAuthentication = [vpnServerAuthenticationPrototypeModel];
+        const clientDnsServerIps = [ipModel];
+        const clientIdleTimeout = 600;
+        const clientIpPool = '172.16.0.0/16';
+        const enableSplitTunneling = true;
+        const name = 'my-vpn-server';
+        const port = 443;
+        const protocol = 'udp';
+        const subnets = [subnetIdentityModel];
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
+        const updateVpnServerParams = {
+          id: id,
+          certificate: certificate,
+          clientAuthentication: clientAuthentication,
+          clientDnsServerIps: clientDnsServerIps,
+          clientIdleTimeout: clientIdleTimeout,
+          clientIpPool: clientIpPool,
+          enableSplitTunneling: enableSplitTunneling,
+          name: name,
+          port: port,
+          protocol: protocol,
+          subnets: subnets,
+          ifMatch: ifMatch,
+        };
+
+        const updateVpnServerResult = vpcService.updateVpnServer(updateVpnServerParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateVpnServerResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.certificate).toEqual(certificate);
+        expect(mockRequestOptions.body.client_authentication).toEqual(clientAuthentication);
+        expect(mockRequestOptions.body.client_dns_server_ips).toEqual(clientDnsServerIps);
+        expect(mockRequestOptions.body.client_idle_timeout).toEqual(clientIdleTimeout);
+        expect(mockRequestOptions.body.client_ip_pool).toEqual(clientIpPool);
+        expect(mockRequestOptions.body.enable_split_tunneling).toEqual(enableSplitTunneling);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.port).toEqual(port);
+        expect(mockRequestOptions.body.protocol).toEqual(protocol);
+        expect(mockRequestOptions.body.subnets).toEqual(subnets);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVpnServerTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateVpnServerTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateVpnServerTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateVpnServerParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateVpnServer(updateVpnServerParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateVpnServer({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateVpnServer();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getVpnServerClientConfiguration', () => {
+    describe('positive tests', () => {
+      function __getVpnServerClientConfigurationTest() {
+        // Construct the params object for operation getVpnServerClientConfiguration
+        const id = 'testString';
+        const getVpnServerClientConfigurationParams = {
+          id: id,
+        };
+
+        const getVpnServerClientConfigurationResult = vpcService.getVpnServerClientConfiguration(
+          getVpnServerClientConfigurationParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getVpnServerClientConfigurationResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{id}/client_configuration', 'GET');
+        const expectedAccept = 'text/plain';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpnServerClientConfigurationTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpnServerClientConfigurationTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpnServerClientConfigurationTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getVpnServerClientConfigurationParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getVpnServerClientConfiguration(getVpnServerClientConfigurationParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getVpnServerClientConfiguration({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpnServerClientConfiguration();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('listVpnServerClients', () => {
+    describe('positive tests', () => {
+      function __listVpnServerClientsTest() {
+        // Construct the params object for operation listVpnServerClients
+        const vpnServerId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const sort = 'created_at';
+        const listVpnServerClientsParams = {
+          vpnServerId: vpnServerId,
+          start: start,
+          limit: limit,
+          sort: sort,
+        };
+
+        const listVpnServerClientsResult = vpcService.listVpnServerClients(
+          listVpnServerClientsParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listVpnServerClientsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{vpn_server_id}/clients', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.path.vpn_server_id).toEqual(vpnServerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpnServerClientsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpnServerClientsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpnServerClientsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpnServerId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listVpnServerClientsParams = {
+          vpnServerId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listVpnServerClients(listVpnServerClientsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listVpnServerClients({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listVpnServerClients();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('deleteVpnServerClient', () => {
+    describe('positive tests', () => {
+      function __deleteVpnServerClientTest() {
+        // Construct the params object for operation deleteVpnServerClient
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const deleteVpnServerClientParams = {
+          vpnServerId: vpnServerId,
+          id: id,
+        };
+
+        const deleteVpnServerClientResult = vpcService.deleteVpnServerClient(
+          deleteVpnServerClientParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteVpnServerClientResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/vpn_servers/{vpn_server_id}/clients/{id}',
+          'DELETE'
+        );
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_server_id).toEqual(vpnServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVpnServerClientTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVpnServerClientTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVpnServerClientTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteVpnServerClientParams = {
+          vpnServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteVpnServerClient(deleteVpnServerClientParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpnServerClient({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpnServerClient();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getVpnServerClient', () => {
+    describe('positive tests', () => {
+      function __getVpnServerClientTest() {
+        // Construct the params object for operation getVpnServerClient
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const getVpnServerClientParams = {
+          vpnServerId: vpnServerId,
+          id: id,
+        };
+
+        const getVpnServerClientResult = vpcService.getVpnServerClient(getVpnServerClientParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getVpnServerClientResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{vpn_server_id}/clients/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_server_id).toEqual(vpnServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpnServerClientTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpnServerClientTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpnServerClientTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getVpnServerClientParams = {
+          vpnServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getVpnServerClient(getVpnServerClientParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getVpnServerClient({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpnServerClient();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('disconnectVpnClient', () => {
+    describe('positive tests', () => {
+      function __disconnectVpnClientTest() {
+        // Construct the params object for operation disconnectVpnClient
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const disconnectVpnClientParams = {
+          vpnServerId: vpnServerId,
+          id: id,
+        };
+
+        const disconnectVpnClientResult = vpcService.disconnectVpnClient(disconnectVpnClientParams);
+
+        // all methods should return a Promise
+        expectToBePromise(disconnectVpnClientResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/vpn_servers/{vpn_server_id}/clients/{id}/disconnect',
+          'POST'
+        );
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_server_id).toEqual(vpnServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __disconnectVpnClientTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __disconnectVpnClientTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __disconnectVpnClientTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const disconnectVpnClientParams = {
+          vpnServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.disconnectVpnClient(disconnectVpnClientParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.disconnectVpnClient({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.disconnectVpnClient();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('listVpnServerRoutes', () => {
+    describe('positive tests', () => {
+      function __listVpnServerRoutesTest() {
+        // Construct the params object for operation listVpnServerRoutes
+        const vpnServerId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const sort = 'name';
+        const listVpnServerRoutesParams = {
+          vpnServerId: vpnServerId,
+          start: start,
+          limit: limit,
+          sort: sort,
+        };
+
+        const listVpnServerRoutesResult = vpcService.listVpnServerRoutes(listVpnServerRoutesParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listVpnServerRoutesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{vpn_server_id}/routes', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.path.vpn_server_id).toEqual(vpnServerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVpnServerRoutesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVpnServerRoutesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVpnServerRoutesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpnServerId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listVpnServerRoutesParams = {
+          vpnServerId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listVpnServerRoutes(listVpnServerRoutesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listVpnServerRoutes({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listVpnServerRoutes();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('createVpnServerRoute', () => {
+    describe('positive tests', () => {
+      function __createVpnServerRouteTest() {
+        // Construct the params object for operation createVpnServerRoute
+        const vpnServerId = 'testString';
+        const destination = '172.16.0.0/16';
+        const action = 'deliver';
+        const name = 'my-vpn-route-2';
+        const createVpnServerRouteParams = {
+          vpnServerId: vpnServerId,
+          destination: destination,
+          action: action,
+          name: name,
+        };
+
+        const createVpnServerRouteResult = vpcService.createVpnServerRoute(
+          createVpnServerRouteParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createVpnServerRouteResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{vpn_server_id}/routes', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.destination).toEqual(destination);
+        expect(mockRequestOptions.body.action).toEqual(action);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_server_id).toEqual(vpnServerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVpnServerRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVpnServerRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVpnServerRouteTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpnServerId = 'testString';
+        const destination = '172.16.0.0/16';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createVpnServerRouteParams = {
+          vpnServerId,
+          destination,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createVpnServerRoute(createVpnServerRouteParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.createVpnServerRoute({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createVpnServerRoute();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('deleteVpnServerRoute', () => {
+    describe('positive tests', () => {
+      function __deleteVpnServerRouteTest() {
+        // Construct the params object for operation deleteVpnServerRoute
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const deleteVpnServerRouteParams = {
+          vpnServerId: vpnServerId,
+          id: id,
+        };
+
+        const deleteVpnServerRouteResult = vpcService.deleteVpnServerRoute(
+          deleteVpnServerRouteParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteVpnServerRouteResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{vpn_server_id}/routes/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_server_id).toEqual(vpnServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVpnServerRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVpnServerRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVpnServerRouteTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteVpnServerRouteParams = {
+          vpnServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteVpnServerRoute(deleteVpnServerRouteParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpnServerRoute({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVpnServerRoute();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('getVpnServerRoute', () => {
+    describe('positive tests', () => {
+      function __getVpnServerRouteTest() {
+        // Construct the params object for operation getVpnServerRoute
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const getVpnServerRouteParams = {
+          vpnServerId: vpnServerId,
+          id: id,
+        };
+
+        const getVpnServerRouteResult = vpcService.getVpnServerRoute(getVpnServerRouteParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getVpnServerRouteResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{vpn_server_id}/routes/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_server_id).toEqual(vpnServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVpnServerRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVpnServerRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVpnServerRouteTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getVpnServerRouteParams = {
+          vpnServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getVpnServerRoute(getVpnServerRouteParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getVpnServerRoute({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVpnServerRoute();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+  describe('updateVpnServerRoute', () => {
+    describe('positive tests', () => {
+      function __updateVpnServerRouteTest() {
+        // Construct the params object for operation updateVpnServerRoute
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const name = 'my-vpn-route-2';
+        const updateVpnServerRouteParams = {
+          vpnServerId: vpnServerId,
+          id: id,
+          name: name,
+        };
+
+        const updateVpnServerRouteResult = vpcService.updateVpnServerRoute(
+          updateVpnServerRouteParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(updateVpnServerRouteResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/vpn_servers/{vpn_server_id}/routes/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.vpn_server_id).toEqual(vpnServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateVpnServerRouteTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateVpnServerRouteTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateVpnServerRouteTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const vpnServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateVpnServerRouteParams = {
+          vpnServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateVpnServerRoute(updateVpnServerRouteParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateVpnServerRoute({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateVpnServerRoute();
         } catch (e) {
           err = e;
         }
