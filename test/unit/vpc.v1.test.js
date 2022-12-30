@@ -155,10 +155,10 @@ describe('VpcV1', () => {
         const resourceGroupId = 'testString';
         const classicAccess = true;
         const listVpcsParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          classicAccess: classicAccess,
+          start,
+          limit,
+          resourceGroupId,
+          classicAccess,
         };
 
         const listVpcsResult = vpcService.listVpcs(listVpcsParams);
@@ -289,10 +289,10 @@ describe('VpcV1', () => {
         const name = 'my-vpc';
         const resourceGroup = resourceGroupIdentityModel;
         const createVpcParams = {
-          addressPrefixManagement: addressPrefixManagement,
-          classicAccess: classicAccess,
-          name: name,
-          resourceGroup: resourceGroup,
+          addressPrefixManagement,
+          classicAccess,
+          name,
+          resourceGroup,
         };
 
         const createVpcResult = vpcService.createVpc(createVpcParams);
@@ -361,7 +361,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteVpc
         const id = 'testString';
         const deleteVpcParams = {
-          id: id,
+          id,
         };
 
         const deleteVpcResult = vpcService.deleteVpc(deleteVpcParams);
@@ -447,7 +447,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpc
         const id = 'testString';
         const getVpcParams = {
-          id: id,
+          id,
         };
 
         const getVpcResult = vpcService.getVpc(getVpcParams);
@@ -534,8 +534,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-vpc';
         const updateVpcParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updateVpcResult = vpcService.updateVpc(updateVpcParams);
@@ -622,7 +622,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpcDefaultNetworkAcl
         const id = 'testString';
         const getVpcDefaultNetworkAclParams = {
-          id: id,
+          id,
         };
 
         const getVpcDefaultNetworkAclResult = vpcService.getVpcDefaultNetworkAcl(
@@ -710,7 +710,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpcDefaultRoutingTable
         const id = 'testString';
         const getVpcDefaultRoutingTableParams = {
-          id: id,
+          id,
         };
 
         const getVpcDefaultRoutingTableResult = vpcService.getVpcDefaultRoutingTable(
@@ -798,7 +798,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpcDefaultSecurityGroup
         const id = 'testString';
         const getVpcDefaultSecurityGroupParams = {
-          id: id,
+          id,
         };
 
         const getVpcDefaultSecurityGroupResult = vpcService.getVpcDefaultSecurityGroup(
@@ -888,9 +888,9 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listVpcAddressPrefixesParams = {
-          vpcId: vpcId,
-          start: start,
-          limit: limit,
+          vpcId,
+          start,
+          limit,
         };
 
         const listVpcAddressPrefixesResult = vpcService.listVpcAddressPrefixes(
@@ -977,9 +977,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/vpcs/testString/address_prefixes';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"address_prefixes":[{"cidr":"192.168.3.0/24","created_at":"2019-01-01T12:00:00.000Z","has_subnets":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/address_prefixes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":false,"name":"my-address-prefix-2","zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"address_prefixes":[{"cidr":"192.168.3.0/24","created_at":"2019-01-01T12:00:00.000Z","has_subnets":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/address_prefixes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":false,"name":"my-address-prefix-1","zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"address_prefixes":[{"cidr":"192.168.3.0/24","created_at":"2019-01-01T12:00:00.000Z","has_subnets":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/address_prefixes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":false,"name":"my-address-prefix-2","zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"address_prefixes":[{"cidr":"192.168.3.0/24","created_at":"2019-01-01T12:00:00.000Z","has_subnets":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/address_prefixes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":false,"name":"my-address-prefix-1","zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -1039,13 +1039,13 @@ describe('VpcV1', () => {
         const cidr = '10.0.0.0/24';
         const zone = zoneIdentityModel;
         const isDefault = true;
-        const name = 'my-address-prefix-2';
+        const name = 'my-address-prefix-1';
         const createVpcAddressPrefixParams = {
-          vpcId: vpcId,
-          cidr: cidr,
-          zone: zone,
-          isDefault: isDefault,
-          name: name,
+          vpcId,
+          cidr,
+          zone,
+          isDefault,
+          name,
         };
 
         const createVpcAddressPrefixResult = vpcService.createVpcAddressPrefix(
@@ -1142,8 +1142,8 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const id = 'testString';
         const deleteVpcAddressPrefixParams = {
-          vpcId: vpcId,
-          id: id,
+          vpcId,
+          id,
         };
 
         const deleteVpcAddressPrefixResult = vpcService.deleteVpcAddressPrefix(
@@ -1235,8 +1235,8 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const id = 'testString';
         const getVpcAddressPrefixParams = {
-          vpcId: vpcId,
-          id: id,
+          vpcId,
+          id,
         };
 
         const getVpcAddressPrefixResult = vpcService.getVpcAddressPrefix(getVpcAddressPrefixParams);
@@ -1326,12 +1326,12 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const id = 'testString';
         const isDefault = false;
-        const name = 'my-address-prefix-2';
+        const name = 'my-address-prefix-1';
         const updateVpcAddressPrefixParams = {
-          vpcId: vpcId,
-          id: id,
-          isDefault: isDefault,
-          name: name,
+          vpcId,
+          id,
+          isDefault,
+          name,
         };
 
         const updateVpcAddressPrefixResult = vpcService.updateVpcAddressPrefix(
@@ -1427,10 +1427,10 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listVpcRoutesParams = {
-          vpcId: vpcId,
-          zoneName: zoneName,
-          start: start,
-          limit: limit,
+          vpcId,
+          zoneName,
+          start,
+          limit,
         };
 
         const listVpcRoutesResult = vpcService.listVpcRoutes(listVpcRoutesParams);
@@ -1588,12 +1588,12 @@ describe('VpcV1', () => {
         const name = 'my-route-1';
         const nextHop = routePrototypeNextHopModel;
         const createVpcRouteParams = {
-          vpcId: vpcId,
-          destination: destination,
-          zone: zone,
-          action: action,
-          name: name,
-          nextHop: nextHop,
+          vpcId,
+          destination,
+          zone,
+          action,
+          name,
+          nextHop,
         };
 
         const createVpcRouteResult = vpcService.createVpcRoute(createVpcRouteParams);
@@ -1689,8 +1689,8 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const id = 'testString';
         const deleteVpcRouteParams = {
-          vpcId: vpcId,
-          id: id,
+          vpcId,
+          id,
         };
 
         const deleteVpcRouteResult = vpcService.deleteVpcRoute(deleteVpcRouteParams);
@@ -1780,8 +1780,8 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const id = 'testString';
         const getVpcRouteParams = {
-          vpcId: vpcId,
-          id: id,
+          vpcId,
+          id,
         };
 
         const getVpcRouteResult = vpcService.getVpcRoute(getVpcRouteParams);
@@ -1872,9 +1872,9 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-route-2';
         const updateVpcRouteParams = {
-          vpcId: vpcId,
-          id: id,
-          name: name,
+          vpcId,
+          id,
+          name,
         };
 
         const updateVpcRouteResult = vpcService.updateVpcRoute(updateVpcRouteParams);
@@ -1967,10 +1967,10 @@ describe('VpcV1', () => {
         const limit = 1;
         const isDefault = true;
         const listVpcRoutingTablesParams = {
-          vpcId: vpcId,
-          start: start,
-          limit: limit,
-          isDefault: isDefault,
+          vpcId,
+          start,
+          limit,
+          isDefault,
         };
 
         const listVpcRoutingTablesResult = vpcService.listVpcRoutingTables(
@@ -2058,9 +2058,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/vpcs/testString/routing_tables';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"routing_tables":[{"accept_routes_from":[{"resource_type":"vpn_gateway"}],"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":true,"lifecycle_state":"stable","name":"my-routing-table-1","resource_type":"routing_table","route_direct_link_ingress":false,"route_transit_gateway_ingress":false,"route_vpc_zone_ingress":true,"routes":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-route-1"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}]}],"total_count":2,"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"routing_tables":[{"accept_routes_from":[{"resource_type":"vpn_gateway"}],"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":true,"lifecycle_state":"stable","name":"my-routing-table-1","resource_type":"routing_table","route_direct_link_ingress":false,"route_internet_ingress":true,"route_transit_gateway_ingress":false,"route_vpc_zone_ingress":true,"routes":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-route-1"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}]}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"routing_tables":[{"accept_routes_from":[{"resource_type":"vpn_gateway"}],"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":true,"lifecycle_state":"stable","name":"my-routing-table-1","resource_type":"routing_table","route_direct_link_ingress":false,"route_transit_gateway_ingress":false,"route_vpc_zone_ingress":true,"routes":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-route-1"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}]}],"total_count":2,"limit":1}';
+        '{"routing_tables":[{"accept_routes_from":[{"resource_type":"vpn_gateway"}],"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":true,"lifecycle_state":"stable","name":"my-routing-table-1","resource_type":"routing_table","route_direct_link_ingress":false,"route_internet_ingress":true,"route_transit_gateway_ingress":false,"route_vpc_zone_ingress":true,"routes":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-route-1"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}]}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -2141,17 +2141,19 @@ describe('VpcV1', () => {
         const acceptRoutesFrom = [resourceFilterModel];
         const name = 'my-routing-table-2';
         const routeDirectLinkIngress = false;
+        const routeInternetIngress = false;
         const routeTransitGatewayIngress = false;
         const routeVpcZoneIngress = false;
         const routes = [routePrototypeModel];
         const createVpcRoutingTableParams = {
-          vpcId: vpcId,
-          acceptRoutesFrom: acceptRoutesFrom,
-          name: name,
-          routeDirectLinkIngress: routeDirectLinkIngress,
-          routeTransitGatewayIngress: routeTransitGatewayIngress,
-          routeVpcZoneIngress: routeVpcZoneIngress,
-          routes: routes,
+          vpcId,
+          acceptRoutesFrom,
+          name,
+          routeDirectLinkIngress,
+          routeInternetIngress,
+          routeTransitGatewayIngress,
+          routeVpcZoneIngress,
+          routes,
         };
 
         const createVpcRoutingTableResult = vpcService.createVpcRoutingTable(
@@ -2173,6 +2175,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.body.accept_routes_from).toEqual(acceptRoutesFrom);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.route_direct_link_ingress).toEqual(routeDirectLinkIngress);
+        expect(mockRequestOptions.body.route_internet_ingress).toEqual(routeInternetIngress);
         expect(mockRequestOptions.body.route_transit_gateway_ingress).toEqual(
           routeTransitGatewayIngress
         );
@@ -2249,9 +2252,9 @@ describe('VpcV1', () => {
         const id = 'testString';
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteVpcRoutingTableParams = {
-          vpcId: vpcId,
-          id: id,
-          ifMatch: ifMatch,
+          vpcId,
+          id,
+          ifMatch,
         };
 
         const deleteVpcRoutingTableResult = vpcService.deleteVpcRoutingTable(
@@ -2344,8 +2347,8 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const id = 'testString';
         const getVpcRoutingTableParams = {
-          vpcId: vpcId,
-          id: id,
+          vpcId,
+          id,
         };
 
         const getVpcRoutingTableResult = vpcService.getVpcRoutingTable(getVpcRoutingTableParams);
@@ -2444,18 +2447,20 @@ describe('VpcV1', () => {
         const acceptRoutesFrom = [resourceFilterModel];
         const name = 'my-routing-table-2';
         const routeDirectLinkIngress = true;
+        const routeInternetIngress = true;
         const routeTransitGatewayIngress = true;
         const routeVpcZoneIngress = true;
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateVpcRoutingTableParams = {
-          vpcId: vpcId,
-          id: id,
-          acceptRoutesFrom: acceptRoutesFrom,
-          name: name,
-          routeDirectLinkIngress: routeDirectLinkIngress,
-          routeTransitGatewayIngress: routeTransitGatewayIngress,
-          routeVpcZoneIngress: routeVpcZoneIngress,
-          ifMatch: ifMatch,
+          vpcId,
+          id,
+          acceptRoutesFrom,
+          name,
+          routeDirectLinkIngress,
+          routeInternetIngress,
+          routeTransitGatewayIngress,
+          routeVpcZoneIngress,
+          ifMatch,
         };
 
         const updateVpcRoutingTableResult = vpcService.updateVpcRoutingTable(
@@ -2478,6 +2483,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.body.accept_routes_from).toEqual(acceptRoutesFrom);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.route_direct_link_ingress).toEqual(routeDirectLinkIngress);
+        expect(mockRequestOptions.body.route_internet_ingress).toEqual(routeInternetIngress);
         expect(mockRequestOptions.body.route_transit_gateway_ingress).toEqual(
           routeTransitGatewayIngress
         );
@@ -2557,10 +2563,10 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listVpcRoutingTableRoutesParams = {
-          vpcId: vpcId,
-          routingTableId: routingTableId,
-          start: start,
-          limit: limit,
+          vpcId,
+          routingTableId,
+          start,
+          limit,
         };
 
         const listVpcRoutingTableRoutesResult = vpcService.listVpcRoutingTableRoutes(
@@ -2727,13 +2733,13 @@ describe('VpcV1', () => {
         const name = 'my-route-1';
         const nextHop = routePrototypeNextHopModel;
         const createVpcRoutingTableRouteParams = {
-          vpcId: vpcId,
-          routingTableId: routingTableId,
-          destination: destination,
-          zone: zone,
-          action: action,
-          name: name,
-          nextHop: nextHop,
+          vpcId,
+          routingTableId,
+          destination,
+          zone,
+          action,
+          name,
+          nextHop,
         };
 
         const createVpcRoutingTableRouteResult = vpcService.createVpcRoutingTableRoute(
@@ -2839,9 +2845,9 @@ describe('VpcV1', () => {
         const routingTableId = 'testString';
         const id = 'testString';
         const deleteVpcRoutingTableRouteParams = {
-          vpcId: vpcId,
-          routingTableId: routingTableId,
-          id: id,
+          vpcId,
+          routingTableId,
+          id,
         };
 
         const deleteVpcRoutingTableRouteResult = vpcService.deleteVpcRoutingTableRoute(
@@ -2941,9 +2947,9 @@ describe('VpcV1', () => {
         const routingTableId = 'testString';
         const id = 'testString';
         const getVpcRoutingTableRouteParams = {
-          vpcId: vpcId,
-          routingTableId: routingTableId,
-          id: id,
+          vpcId,
+          routingTableId,
+          id,
         };
 
         const getVpcRoutingTableRouteResult = vpcService.getVpcRoutingTableRoute(
@@ -3044,10 +3050,10 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-route-2';
         const updateVpcRoutingTableRouteParams = {
-          vpcId: vpcId,
-          routingTableId: routingTableId,
-          id: id,
-          name: name,
+          vpcId,
+          routingTableId,
+          id,
+          name,
         };
 
         const updateVpcRoutingTableRouteResult = vpcService.updateVpcRoutingTableRoute(
@@ -3150,11 +3156,11 @@ describe('VpcV1', () => {
         const routingTableId = 'testString';
         const routingTableName = 'testString';
         const listSubnetsParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          routingTableId: routingTableId,
-          routingTableName: routingTableName,
+          start,
+          limit,
+          resourceGroupId,
+          routingTableId,
+          routingTableName,
         };
 
         const listSubnetsResult = vpcService.listSubnets(listSubnetsParams);
@@ -3323,7 +3329,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createSubnet
         const subnetPrototype = subnetPrototypeModel;
         const createSubnetParams = {
-          subnetPrototype: subnetPrototype,
+          subnetPrototype,
         };
 
         const createSubnetResult = vpcService.createSubnet(createSubnetParams);
@@ -3409,7 +3415,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteSubnet
         const id = 'testString';
         const deleteSubnetParams = {
-          id: id,
+          id,
         };
 
         const deleteSubnetResult = vpcService.deleteSubnet(deleteSubnetParams);
@@ -3495,7 +3501,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getSubnet
         const id = 'testString';
         const getSubnetParams = {
-          id: id,
+          id,
         };
 
         const getSubnetResult = vpcService.getSubnet(getSubnetParams);
@@ -3602,11 +3608,11 @@ describe('VpcV1', () => {
         const publicGateway = subnetPublicGatewayPatchModel;
         const routingTable = routingTableIdentityModel;
         const updateSubnetParams = {
-          id: id,
-          name: name,
-          networkAcl: networkAcl,
-          publicGateway: publicGateway,
-          routingTable: routingTable,
+          id,
+          name,
+          networkAcl,
+          publicGateway,
+          routingTable,
         };
 
         const updateSubnetResult = vpcService.updateSubnet(updateSubnetParams);
@@ -3696,7 +3702,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getSubnetNetworkAcl
         const id = 'testString';
         const getSubnetNetworkAclParams = {
-          id: id,
+          id,
         };
 
         const getSubnetNetworkAclResult = vpcService.getSubnetNetworkAcl(getSubnetNetworkAclParams);
@@ -3790,8 +3796,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const networkAclIdentity = networkAclIdentityModel;
         const replaceSubnetNetworkAclParams = {
-          id: id,
-          networkAclIdentity: networkAclIdentity,
+          id,
+          networkAclIdentity,
         };
 
         const replaceSubnetNetworkAclResult = vpcService.replaceSubnetNetworkAcl(
@@ -3882,7 +3888,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation unsetSubnetPublicGateway
         const id = 'testString';
         const unsetSubnetPublicGatewayParams = {
-          id: id,
+          id,
         };
 
         const unsetSubnetPublicGatewayResult = vpcService.unsetSubnetPublicGateway(
@@ -3970,7 +3976,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getSubnetPublicGateway
         const id = 'testString';
         const getSubnetPublicGatewayParams = {
-          id: id,
+          id,
         };
 
         const getSubnetPublicGatewayResult = vpcService.getSubnetPublicGateway(
@@ -4066,8 +4072,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const publicGatewayIdentity = publicGatewayIdentityModel;
         const setSubnetPublicGatewayParams = {
-          id: id,
-          publicGatewayIdentity: publicGatewayIdentity,
+          id,
+          publicGatewayIdentity,
         };
 
         const setSubnetPublicGatewayResult = vpcService.setSubnetPublicGateway(
@@ -4158,7 +4164,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getSubnetRoutingTable
         const id = 'testString';
         const getSubnetRoutingTableParams = {
-          id: id,
+          id,
         };
 
         const getSubnetRoutingTableResult = vpcService.getSubnetRoutingTable(
@@ -4254,8 +4260,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const routingTableIdentity = routingTableIdentityModel;
         const replaceSubnetRoutingTableParams = {
-          id: id,
-          routingTableIdentity: routingTableIdentity,
+          id,
+          routingTableIdentity,
         };
 
         const replaceSubnetRoutingTableResult = vpcService.replaceSubnetRoutingTable(
@@ -4349,10 +4355,10 @@ describe('VpcV1', () => {
         const limit = 1;
         const sort = 'name';
         const listSubnetReservedIpsParams = {
-          subnetId: subnetId,
-          start: start,
-          limit: limit,
-          sort: sort,
+          subnetId,
+          start,
+          limit,
+          sort,
         };
 
         const listSubnetReservedIpsResult = vpcService.listSubnetReservedIps(
@@ -4506,11 +4512,11 @@ describe('VpcV1', () => {
         const name = 'my-reserved-ip';
         const target = reservedIpTargetPrototypeModel;
         const createSubnetReservedIpParams = {
-          subnetId: subnetId,
-          address: address,
-          autoDelete: autoDelete,
-          name: name,
-          target: target,
+          subnetId,
+          address,
+          autoDelete,
+          name,
+          target,
         };
 
         const createSubnetReservedIpResult = vpcService.createSubnetReservedIp(
@@ -4603,8 +4609,8 @@ describe('VpcV1', () => {
         const subnetId = 'testString';
         const id = 'testString';
         const deleteSubnetReservedIpParams = {
-          subnetId: subnetId,
-          id: id,
+          subnetId,
+          id,
         };
 
         const deleteSubnetReservedIpResult = vpcService.deleteSubnetReservedIp(
@@ -4696,8 +4702,8 @@ describe('VpcV1', () => {
         const subnetId = 'testString';
         const id = 'testString';
         const getSubnetReservedIpParams = {
-          subnetId: subnetId,
-          id: id,
+          subnetId,
+          id,
         };
 
         const getSubnetReservedIpResult = vpcService.getSubnetReservedIp(getSubnetReservedIpParams);
@@ -4789,10 +4795,10 @@ describe('VpcV1', () => {
         const autoDelete = false;
         const name = 'my-reserved-ip';
         const updateSubnetReservedIpParams = {
-          subnetId: subnetId,
-          id: id,
-          autoDelete: autoDelete,
-          name: name,
+          subnetId,
+          id,
+          autoDelete,
+          name,
         };
 
         const updateSubnetReservedIpResult = vpcService.updateSubnetReservedIp(
@@ -4889,11 +4895,11 @@ describe('VpcV1', () => {
         const name = 'testString';
         const visibility = 'private';
         const listImagesParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          name: name,
-          visibility: visibility,
+          start,
+          limit,
+          resourceGroupId,
+          name,
+          visibility,
         };
 
         const listImagesResult = vpcService.listImages(listImagesParams);
@@ -5049,7 +5055,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createImage
         const imagePrototype = imagePrototypeModel;
         const createImageParams = {
-          imagePrototype: imagePrototype,
+          imagePrototype,
         };
 
         const createImageResult = vpcService.createImage(createImageParams);
@@ -5135,7 +5141,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteImage
         const id = 'testString';
         const deleteImageParams = {
-          id: id,
+          id,
         };
 
         const deleteImageResult = vpcService.deleteImage(deleteImageParams);
@@ -5221,7 +5227,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getImage
         const id = 'testString';
         const getImageParams = {
-          id: id,
+          id,
         };
 
         const getImageResult = vpcService.getImage(getImageParams);
@@ -5308,8 +5314,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-image';
         const updateImageParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updateImageResult = vpcService.updateImage(updateImageParams);
@@ -5397,8 +5403,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listOperatingSystemsParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listOperatingSystemsResult = vpcService.listOperatingSystems(
@@ -5515,7 +5521,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getOperatingSystem
         const name = 'testString';
         const getOperatingSystemParams = {
-          name: name,
+          name,
         };
 
         const getOperatingSystemResult = vpcService.getOperatingSystem(getOperatingSystemParams);
@@ -5602,8 +5608,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listKeysParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listKeysResult = vpcService.listKeys(listKeysParams);
@@ -5729,10 +5735,10 @@ describe('VpcV1', () => {
         const resourceGroup = resourceGroupIdentityModel;
         const type = 'rsa';
         const createKeyParams = {
-          publicKey: publicKey,
-          name: name,
-          resourceGroup: resourceGroup,
-          type: type,
+          publicKey,
+          name,
+          resourceGroup,
+          type,
         };
 
         const createKeyResult = vpcService.createKey(createKeyParams);
@@ -5822,7 +5828,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteKey
         const id = 'testString';
         const deleteKeyParams = {
-          id: id,
+          id,
         };
 
         const deleteKeyResult = vpcService.deleteKey(deleteKeyParams);
@@ -5908,7 +5914,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getKey
         const id = 'testString';
         const getKeyParams = {
-          id: id,
+          id,
         };
 
         const getKeyResult = vpcService.getKey(getKeyParams);
@@ -5995,8 +6001,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-key';
         const updateKeyParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updateKeyResult = vpcService.updateKey(updateKeyParams);
@@ -6147,7 +6153,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getInstanceProfile
         const name = 'testString';
         const getInstanceProfileParams = {
-          name: name,
+          name,
         };
 
         const getInstanceProfileResult = vpcService.getInstanceProfile(getInstanceProfileParams);
@@ -6362,16 +6368,16 @@ describe('VpcV1', () => {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
       };
 
-      // VolumeAttachmentVolumePrototypeInstanceContextVolumeIdentityVolumeIdentityById
-      const volumeAttachmentVolumePrototypeInstanceContextModel = {
+      // VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityById
+      const volumeAttachmentPrototypeVolumeModel = {
         id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
       };
 
-      // VolumeAttachmentPrototypeInstanceContext
-      const volumeAttachmentPrototypeInstanceContextModel = {
-        delete_volume_on_instance_delete: true,
+      // VolumeAttachmentPrototype
+      const volumeAttachmentPrototypeModel = {
+        delete_volume_on_instance_delete: false,
         name: 'my-volume-attachment',
-        volume: volumeAttachmentVolumePrototypeInstanceContextModel,
+        volume: volumeAttachmentPrototypeVolumeModel,
       };
 
       // VPCIdentityById
@@ -6429,7 +6435,7 @@ describe('VpcV1', () => {
         resource_group: resourceGroupIdentityModel,
         total_volume_bandwidth: 500,
         user_data: 'testString',
-        volume_attachments: [volumeAttachmentPrototypeInstanceContextModel],
+        volume_attachments: [volumeAttachmentPrototypeModel],
         vpc: vpcIdentityModel,
         boot_volume_attachment: volumeAttachmentPrototypeInstanceByImageContextModel,
         image: imageIdentityModel,
@@ -6441,7 +6447,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createInstanceTemplate
         const instanceTemplatePrototype = instanceTemplatePrototypeModel;
         const createInstanceTemplateParams = {
-          instanceTemplatePrototype: instanceTemplatePrototype,
+          instanceTemplatePrototype,
         };
 
         const createInstanceTemplateResult = vpcService.createInstanceTemplate(
@@ -6529,7 +6535,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteInstanceTemplate
         const id = 'testString';
         const deleteInstanceTemplateParams = {
-          id: id,
+          id,
         };
 
         const deleteInstanceTemplateResult = vpcService.deleteInstanceTemplate(
@@ -6617,7 +6623,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getInstanceTemplate
         const id = 'testString';
         const getInstanceTemplateParams = {
-          id: id,
+          id,
         };
 
         const getInstanceTemplateResult = vpcService.getInstanceTemplate(getInstanceTemplateParams);
@@ -6704,8 +6710,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-instance-template';
         const updateInstanceTemplateParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updateInstanceTemplateResult = vpcService.updateInstanceTemplate(
@@ -6806,19 +6812,19 @@ describe('VpcV1', () => {
         const placementGroupCrn = 'testString';
         const placementGroupName = 'testString';
         const listInstancesParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          name: name,
-          vpcId: vpcId,
-          vpcCrn: vpcCrn,
-          vpcName: vpcName,
-          dedicatedHostId: dedicatedHostId,
-          dedicatedHostCrn: dedicatedHostCrn,
-          dedicatedHostName: dedicatedHostName,
-          placementGroupId: placementGroupId,
-          placementGroupCrn: placementGroupCrn,
-          placementGroupName: placementGroupName,
+          start,
+          limit,
+          resourceGroupId,
+          name,
+          vpcId,
+          vpcCrn,
+          vpcName,
+          dedicatedHostId,
+          dedicatedHostCrn,
+          dedicatedHostName,
+          placementGroupId,
+          placementGroupCrn,
+          placementGroupName,
         };
 
         const listInstancesResult = vpcService.listInstances(listInstancesParams);
@@ -7041,8 +7047,8 @@ describe('VpcV1', () => {
         crn: 'crn:[...]',
       };
 
-      // VolumeAttachmentVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity
-      const volumeAttachmentVolumePrototypeInstanceContextModel = {
+      // VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity
+      const volumeAttachmentPrototypeVolumeModel = {
         iops: 10000,
         name: 'my-data-volume',
         profile: volumeProfileIdentityModel,
@@ -7051,11 +7057,11 @@ describe('VpcV1', () => {
         encryption_key: encryptionKeyIdentityModel,
       };
 
-      // VolumeAttachmentPrototypeInstanceContext
-      const volumeAttachmentPrototypeInstanceContextModel = {
-        delete_volume_on_instance_delete: true,
+      // VolumeAttachmentPrototype
+      const volumeAttachmentPrototypeModel = {
+        delete_volume_on_instance_delete: false,
         name: 'my-volume-attachment',
-        volume: volumeAttachmentVolumePrototypeInstanceContextModel,
+        volume: volumeAttachmentPrototypeVolumeModel,
       };
 
       // VPCIdentityById
@@ -7103,7 +7109,7 @@ describe('VpcV1', () => {
         resource_group: resourceGroupIdentityModel,
         total_volume_bandwidth: 500,
         user_data: 'testString',
-        volume_attachments: [volumeAttachmentPrototypeInstanceContextModel],
+        volume_attachments: [volumeAttachmentPrototypeModel],
         vpc: vpcIdentityModel,
         boot_volume_attachment: volumeAttachmentPrototypeInstanceByImageContextModel,
         image: imageIdentityModel,
@@ -7115,7 +7121,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createInstance
         const instancePrototype = instancePrototypeModel;
         const createInstanceParams = {
-          instancePrototype: instancePrototype,
+          instancePrototype,
         };
 
         const createInstanceResult = vpcService.createInstance(createInstanceParams);
@@ -7201,7 +7207,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteInstance
         const id = 'testString';
         const deleteInstanceParams = {
-          id: id,
+          id,
         };
 
         const deleteInstanceResult = vpcService.deleteInstance(deleteInstanceParams);
@@ -7287,7 +7293,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getInstance
         const id = 'testString';
         const getInstanceParams = {
-          id: id,
+          id,
         };
 
         const getInstanceResult = vpcService.getInstance(getInstanceParams);
@@ -7401,13 +7407,13 @@ describe('VpcV1', () => {
         const profile = instancePatchProfileModel;
         const totalVolumeBandwidth = 500;
         const updateInstanceParams = {
-          id: id,
-          availabilityPolicy: availabilityPolicy,
-          metadataService: metadataService,
-          name: name,
-          placementTarget: placementTarget,
-          profile: profile,
-          totalVolumeBandwidth: totalVolumeBandwidth,
+          id,
+          availabilityPolicy,
+          metadataService,
+          name,
+          placementTarget,
+          profile,
+          totalVolumeBandwidth,
         };
 
         const updateInstanceResult = vpcService.updateInstance(updateInstanceParams);
@@ -7499,7 +7505,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getInstanceInitialization
         const id = 'testString';
         const getInstanceInitializationParams = {
-          id: id,
+          id,
         };
 
         const getInstanceInitializationResult = vpcService.getInstanceInitialization(
@@ -7589,9 +7595,9 @@ describe('VpcV1', () => {
         const type = 'reboot';
         const force = true;
         const createInstanceActionParams = {
-          instanceId: instanceId,
-          type: type,
-          force: force,
+          instanceId,
+          type,
+          force,
         };
 
         const createInstanceActionResult = vpcService.createInstanceAction(
@@ -7685,9 +7691,9 @@ describe('VpcV1', () => {
         const consoleType = 'serial';
         const force = false;
         const createInstanceConsoleAccessTokenParams = {
-          instanceId: instanceId,
-          consoleType: consoleType,
-          force: force,
+          instanceId,
+          consoleType,
+          force,
         };
 
         const createInstanceConsoleAccessTokenResult = vpcService.createInstanceConsoleAccessToken(
@@ -7783,7 +7789,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listInstanceDisks
         const instanceId = 'testString';
         const listInstanceDisksParams = {
-          instanceId: instanceId,
+          instanceId,
         };
 
         const listInstanceDisksResult = vpcService.listInstanceDisks(listInstanceDisksParams);
@@ -7870,8 +7876,8 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const id = 'testString';
         const getInstanceDiskParams = {
-          instanceId: instanceId,
-          id: id,
+          instanceId,
+          id,
         };
 
         const getInstanceDiskResult = vpcService.getInstanceDisk(getInstanceDiskParams);
@@ -7962,9 +7968,9 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-instance-disk-updated';
         const updateInstanceDiskParams = {
-          instanceId: instanceId,
-          id: id,
-          name: name,
+          instanceId,
+          id,
+          name,
         };
 
         const updateInstanceDiskResult = vpcService.updateInstanceDisk(updateInstanceDiskParams);
@@ -8054,7 +8060,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listInstanceNetworkInterfaces
         const instanceId = 'testString';
         const listInstanceNetworkInterfacesParams = {
-          instanceId: instanceId,
+          instanceId,
         };
 
         const listInstanceNetworkInterfacesResult = vpcService.listInstanceNetworkInterfaces(
@@ -8166,12 +8172,12 @@ describe('VpcV1', () => {
         const primaryIp = networkInterfaceIpPrototypeModel;
         const securityGroups = [securityGroupIdentityModel];
         const createInstanceNetworkInterfaceParams = {
-          instanceId: instanceId,
-          subnet: subnet,
-          allowIpSpoofing: allowIpSpoofing,
-          name: name,
-          primaryIp: primaryIp,
-          securityGroups: securityGroups,
+          instanceId,
+          subnet,
+          allowIpSpoofing,
+          name,
+          primaryIp,
+          securityGroups,
         };
 
         const createInstanceNetworkInterfaceResult = vpcService.createInstanceNetworkInterface(
@@ -8271,8 +8277,8 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const id = 'testString';
         const deleteInstanceNetworkInterfaceParams = {
-          instanceId: instanceId,
-          id: id,
+          instanceId,
+          id,
         };
 
         const deleteInstanceNetworkInterfaceResult = vpcService.deleteInstanceNetworkInterface(
@@ -8368,8 +8374,8 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const id = 'testString';
         const getInstanceNetworkInterfaceParams = {
-          instanceId: instanceId,
-          id: id,
+          instanceId,
+          id,
         };
 
         const getInstanceNetworkInterfaceResult = vpcService.getInstanceNetworkInterface(
@@ -8467,10 +8473,10 @@ describe('VpcV1', () => {
         const allowIpSpoofing = true;
         const name = 'my-network-interface-1';
         const updateInstanceNetworkInterfaceParams = {
-          instanceId: instanceId,
-          id: id,
-          allowIpSpoofing: allowIpSpoofing,
-          name: name,
+          instanceId,
+          id,
+          allowIpSpoofing,
+          name,
         };
 
         const updateInstanceNetworkInterfaceResult = vpcService.updateInstanceNetworkInterface(
@@ -8568,8 +8574,8 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const networkInterfaceId = 'testString';
         const listInstanceNetworkInterfaceFloatingIpsParams = {
-          instanceId: instanceId,
-          networkInterfaceId: networkInterfaceId,
+          instanceId,
+          networkInterfaceId,
         };
 
         const listInstanceNetworkInterfaceFloatingIpsResult =
@@ -8669,9 +8675,9 @@ describe('VpcV1', () => {
         const networkInterfaceId = 'testString';
         const id = 'testString';
         const removeInstanceNetworkInterfaceFloatingIpParams = {
-          instanceId: instanceId,
-          networkInterfaceId: networkInterfaceId,
-          id: id,
+          instanceId,
+          networkInterfaceId,
+          id,
         };
 
         const removeInstanceNetworkInterfaceFloatingIpResult =
@@ -8774,9 +8780,9 @@ describe('VpcV1', () => {
         const networkInterfaceId = 'testString';
         const id = 'testString';
         const getInstanceNetworkInterfaceFloatingIpParams = {
-          instanceId: instanceId,
-          networkInterfaceId: networkInterfaceId,
-          id: id,
+          instanceId,
+          networkInterfaceId,
+          id,
         };
 
         const getInstanceNetworkInterfaceFloatingIpResult =
@@ -8879,9 +8885,9 @@ describe('VpcV1', () => {
         const networkInterfaceId = 'testString';
         const id = 'testString';
         const addInstanceNetworkInterfaceFloatingIpParams = {
-          instanceId: instanceId,
-          networkInterfaceId: networkInterfaceId,
-          id: id,
+          instanceId,
+          networkInterfaceId,
+          id,
         };
 
         const addInstanceNetworkInterfaceFloatingIpResult =
@@ -8985,10 +8991,10 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listInstanceNetworkInterfaceIpsParams = {
-          instanceId: instanceId,
-          networkInterfaceId: networkInterfaceId,
-          start: start,
-          limit: limit,
+          instanceId,
+          networkInterfaceId,
+          start,
+          limit,
         };
 
         const listInstanceNetworkInterfaceIpsResult = vpcService.listInstanceNetworkInterfaceIps(
@@ -9139,9 +9145,9 @@ describe('VpcV1', () => {
         const networkInterfaceId = 'testString';
         const id = 'testString';
         const getInstanceNetworkInterfaceIpParams = {
-          instanceId: instanceId,
-          networkInterfaceId: networkInterfaceId,
-          id: id,
+          instanceId,
+          networkInterfaceId,
+          id,
         };
 
         const getInstanceNetworkInterfaceIpResult = vpcService.getInstanceNetworkInterfaceIp(
@@ -9239,7 +9245,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listInstanceVolumeAttachments
         const instanceId = 'testString';
         const listInstanceVolumeAttachmentsParams = {
-          instanceId: instanceId,
+          instanceId,
         };
 
         const listInstanceVolumeAttachmentsResult = vpcService.listInstanceVolumeAttachments(
@@ -9337,10 +9343,10 @@ describe('VpcV1', () => {
         const deleteVolumeOnInstanceDelete = false;
         const name = 'my-volume-attachment';
         const createInstanceVolumeAttachmentParams = {
-          instanceId: instanceId,
-          volume: volume,
-          deleteVolumeOnInstanceDelete: deleteVolumeOnInstanceDelete,
-          name: name,
+          instanceId,
+          volume,
+          deleteVolumeOnInstanceDelete,
+          name,
         };
 
         const createInstanceVolumeAttachmentResult = vpcService.createInstanceVolumeAttachment(
@@ -9440,8 +9446,8 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const id = 'testString';
         const deleteInstanceVolumeAttachmentParams = {
-          instanceId: instanceId,
-          id: id,
+          instanceId,
+          id,
         };
 
         const deleteInstanceVolumeAttachmentResult = vpcService.deleteInstanceVolumeAttachment(
@@ -9537,8 +9543,8 @@ describe('VpcV1', () => {
         const instanceId = 'testString';
         const id = 'testString';
         const getInstanceVolumeAttachmentParams = {
-          instanceId: instanceId,
-          id: id,
+          instanceId,
+          id,
         };
 
         const getInstanceVolumeAttachmentResult = vpcService.getInstanceVolumeAttachment(
@@ -9636,10 +9642,10 @@ describe('VpcV1', () => {
         const deleteVolumeOnInstanceDelete = true;
         const name = 'my-volume-attachment';
         const updateInstanceVolumeAttachmentParams = {
-          instanceId: instanceId,
-          id: id,
-          deleteVolumeOnInstanceDelete: deleteVolumeOnInstanceDelete,
-          name: name,
+          instanceId,
+          id,
+          deleteVolumeOnInstanceDelete,
+          name,
         };
 
         const updateInstanceVolumeAttachmentResult = vpcService.updateInstanceVolumeAttachment(
@@ -9739,8 +9745,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listInstanceGroupsParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listInstanceGroupsResult = vpcService.listInstanceGroups(listInstanceGroupsParams);
@@ -9889,14 +9895,14 @@ describe('VpcV1', () => {
         const name = 'my-instance-group';
         const resourceGroup = resourceGroupIdentityModel;
         const createInstanceGroupParams = {
-          instanceTemplate: instanceTemplate,
-          subnets: subnets,
-          applicationPort: applicationPort,
-          loadBalancer: loadBalancer,
-          loadBalancerPool: loadBalancerPool,
-          membershipCount: membershipCount,
-          name: name,
-          resourceGroup: resourceGroup,
+          instanceTemplate,
+          subnets,
+          applicationPort,
+          loadBalancer,
+          loadBalancerPool,
+          membershipCount,
+          name,
+          resourceGroup,
         };
 
         const createInstanceGroupResult = vpcService.createInstanceGroup(createInstanceGroupParams);
@@ -9991,7 +9997,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteInstanceGroup
         const id = 'testString';
         const deleteInstanceGroupParams = {
-          id: id,
+          id,
         };
 
         const deleteInstanceGroupResult = vpcService.deleteInstanceGroup(deleteInstanceGroupParams);
@@ -10077,7 +10083,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getInstanceGroup
         const id = 'testString';
         const getInstanceGroupParams = {
-          id: id,
+          id,
         };
 
         const getInstanceGroupResult = vpcService.getInstanceGroup(getInstanceGroupParams);
@@ -10192,14 +10198,14 @@ describe('VpcV1', () => {
         const name = 'my-instance-group';
         const subnets = [subnetIdentityModel];
         const updateInstanceGroupParams = {
-          id: id,
-          applicationPort: applicationPort,
-          instanceTemplate: instanceTemplate,
-          loadBalancer: loadBalancer,
-          loadBalancerPool: loadBalancerPool,
-          membershipCount: membershipCount,
-          name: name,
-          subnets: subnets,
+          id,
+          applicationPort,
+          instanceTemplate,
+          loadBalancer,
+          loadBalancerPool,
+          membershipCount,
+          name,
+          subnets,
         };
 
         const updateInstanceGroupResult = vpcService.updateInstanceGroup(updateInstanceGroupParams);
@@ -10292,7 +10298,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteInstanceGroupLoadBalancer
         const instanceGroupId = 'testString';
         const deleteInstanceGroupLoadBalancerParams = {
-          instanceGroupId: instanceGroupId,
+          instanceGroupId,
         };
 
         const deleteInstanceGroupLoadBalancerResult = vpcService.deleteInstanceGroupLoadBalancer(
@@ -10386,9 +10392,9 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listInstanceGroupManagersParams = {
-          instanceGroupId: instanceGroupId,
-          start: start,
-          limit: limit,
+          instanceGroupId,
+          start,
+          limit,
         };
 
         const listInstanceGroupManagersResult = vpcService.listInstanceGroupManagers(
@@ -10546,8 +10552,8 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerPrototype = instanceGroupManagerPrototypeModel;
         const createInstanceGroupManagerParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerPrototype: instanceGroupManagerPrototype,
+          instanceGroupId,
+          instanceGroupManagerPrototype,
         };
 
         const createInstanceGroupManagerResult = vpcService.createInstanceGroupManager(
@@ -10643,8 +10649,8 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const id = 'testString';
         const deleteInstanceGroupManagerParams = {
-          instanceGroupId: instanceGroupId,
-          id: id,
+          instanceGroupId,
+          id,
         };
 
         const deleteInstanceGroupManagerResult = vpcService.deleteInstanceGroupManager(
@@ -10740,8 +10746,8 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const id = 'testString';
         const getInstanceGroupManagerParams = {
-          instanceGroupId: instanceGroupId,
-          id: id,
+          instanceGroupId,
+          id,
         };
 
         const getInstanceGroupManagerResult = vpcService.getInstanceGroupManager(
@@ -10843,14 +10849,14 @@ describe('VpcV1', () => {
         const minMembershipCount = 10;
         const name = 'my-instance-group-manager';
         const updateInstanceGroupManagerParams = {
-          instanceGroupId: instanceGroupId,
-          id: id,
-          aggregationWindow: aggregationWindow,
-          cooldown: cooldown,
-          managementEnabled: managementEnabled,
-          maxMembershipCount: maxMembershipCount,
-          minMembershipCount: minMembershipCount,
-          name: name,
+          instanceGroupId,
+          id,
+          aggregationWindow,
+          cooldown,
+          managementEnabled,
+          maxMembershipCount,
+          minMembershipCount,
+          name,
         };
 
         const updateInstanceGroupManagerResult = vpcService.updateInstanceGroupManager(
@@ -10954,10 +10960,10 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listInstanceGroupManagerActionsParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerId: instanceGroupManagerId,
-          start: start,
-          limit: limit,
+          instanceGroupId,
+          instanceGroupManagerId,
+          start,
+          limit,
         };
 
         const listInstanceGroupManagerActionsResult = vpcService.listInstanceGroupManagerActions(
@@ -11051,9 +11057,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/instance_groups/testString/managers/testString/actions';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"actions":[{"auto_delete":true,"auto_delete_timeout":24,"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/instance_groups/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/managers/4c939b00-601f-11ea-bca2-000c29475bed/actions/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance-group-manager-action","resource_type":"instance_group_manager_action","status":"active","updated_at":"2019-01-01T12:00:00.000Z","action_type":"scheduled","cron_spec":"*/5 1,2,3 * * *","last_applied_at":"2019-01-01T12:00:00.000Z","next_run_at":"2019-01-01T12:00:00.000Z","group":{"membership_count":10}}]}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"actions":[{"auto_delete":true,"auto_delete_timeout":24,"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/instance_groups/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/managers/4c939b00-601f-11ea-bca2-000c29475bed/actions/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance-group-manager-action","resource_type":"instance_group_manager_action","status":"active","updated_at":"2019-01-01T12:00:00.000Z","action_type":"scheduled","cron_spec":"30 */2 * * 1-5","last_applied_at":"2019-01-01T12:00:00.000Z","next_run_at":"2019-01-01T12:00:00.000Z","group":{"membership_count":10}}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"actions":[{"auto_delete":true,"auto_delete_timeout":24,"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/instance_groups/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/managers/4c939b00-601f-11ea-bca2-000c29475bed/actions/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance-group-manager-action","resource_type":"instance_group_manager_action","status":"active","updated_at":"2019-01-01T12:00:00.000Z","action_type":"scheduled","cron_spec":"*/5 1,2,3 * * *","last_applied_at":"2019-01-01T12:00:00.000Z","next_run_at":"2019-01-01T12:00:00.000Z","group":{"membership_count":10}}]}';
+        '{"total_count":2,"limit":1,"actions":[{"auto_delete":true,"auto_delete_timeout":24,"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/instance_groups/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/managers/4c939b00-601f-11ea-bca2-000c29475bed/actions/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance-group-manager-action","resource_type":"instance_group_manager_action","status":"active","updated_at":"2019-01-01T12:00:00.000Z","action_type":"scheduled","cron_spec":"30 */2 * * 1-5","last_applied_at":"2019-01-01T12:00:00.000Z","next_run_at":"2019-01-01T12:00:00.000Z","group":{"membership_count":10}}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -11122,9 +11128,9 @@ describe('VpcV1', () => {
         const instanceGroupManagerId = 'testString';
         const instanceGroupManagerActionPrototype = instanceGroupManagerActionPrototypeModel;
         const createInstanceGroupManagerActionParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerId: instanceGroupManagerId,
-          instanceGroupManagerActionPrototype: instanceGroupManagerActionPrototype,
+          instanceGroupId,
+          instanceGroupManagerId,
+          instanceGroupManagerActionPrototype,
         };
 
         const createInstanceGroupManagerActionResult = vpcService.createInstanceGroupManagerAction(
@@ -11224,9 +11230,9 @@ describe('VpcV1', () => {
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
         const deleteInstanceGroupManagerActionParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerId: instanceGroupManagerId,
-          id: id,
+          instanceGroupId,
+          instanceGroupManagerId,
+          id,
         };
 
         const deleteInstanceGroupManagerActionResult = vpcService.deleteInstanceGroupManagerAction(
@@ -11326,9 +11332,9 @@ describe('VpcV1', () => {
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
         const getInstanceGroupManagerActionParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerId: instanceGroupManagerId,
-          id: id,
+          instanceGroupId,
+          instanceGroupManagerId,
+          id,
         };
 
         const getInstanceGroupManagerActionResult = vpcService.getInstanceGroupManagerAction(
@@ -11440,20 +11446,20 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
-        const cronSpec = '*/5 1,2,3 * * *';
+        const cronSpec = '30 */2 * * 1-5';
         const group = instanceGroupManagerActionGroupPatchModel;
         const manager = instanceGroupManagerActionManagerPatchModel;
         const name = 'my-instance-group-manager-action';
         const runAt = '2019-01-01T12:00:00.000Z';
         const updateInstanceGroupManagerActionParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerId: instanceGroupManagerId,
-          id: id,
-          cronSpec: cronSpec,
-          group: group,
-          manager: manager,
-          name: name,
-          runAt: runAt,
+          instanceGroupId,
+          instanceGroupManagerId,
+          id,
+          cronSpec,
+          group,
+          manager,
+          name,
+          runAt,
         };
 
         const updateInstanceGroupManagerActionResult = vpcService.updateInstanceGroupManagerAction(
@@ -11559,10 +11565,10 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listInstanceGroupManagerPoliciesParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerId: instanceGroupManagerId,
-          start: start,
-          limit: limit,
+          instanceGroupId,
+          instanceGroupManagerId,
+          start,
+          limit,
         };
 
         const listInstanceGroupManagerPoliciesResult = vpcService.listInstanceGroupManagerPolicies(
@@ -11723,9 +11729,9 @@ describe('VpcV1', () => {
         const instanceGroupManagerId = 'testString';
         const instanceGroupManagerPolicyPrototype = instanceGroupManagerPolicyPrototypeModel;
         const createInstanceGroupManagerPolicyParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerId: instanceGroupManagerId,
-          instanceGroupManagerPolicyPrototype: instanceGroupManagerPolicyPrototype,
+          instanceGroupId,
+          instanceGroupManagerId,
+          instanceGroupManagerPolicyPrototype,
         };
 
         const createInstanceGroupManagerPolicyResult = vpcService.createInstanceGroupManagerPolicy(
@@ -11825,9 +11831,9 @@ describe('VpcV1', () => {
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
         const deleteInstanceGroupManagerPolicyParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerId: instanceGroupManagerId,
-          id: id,
+          instanceGroupId,
+          instanceGroupManagerId,
+          id,
         };
 
         const deleteInstanceGroupManagerPolicyResult = vpcService.deleteInstanceGroupManagerPolicy(
@@ -11927,9 +11933,9 @@ describe('VpcV1', () => {
         const instanceGroupManagerId = 'testString';
         const id = 'testString';
         const getInstanceGroupManagerPolicyParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerId: instanceGroupManagerId,
-          id: id,
+          instanceGroupId,
+          instanceGroupManagerId,
+          id,
         };
 
         const getInstanceGroupManagerPolicyResult = vpcService.getInstanceGroupManagerPolicy(
@@ -12032,12 +12038,12 @@ describe('VpcV1', () => {
         const metricValue = 38;
         const name = 'my-instance-group-manager-policy';
         const updateInstanceGroupManagerPolicyParams = {
-          instanceGroupId: instanceGroupId,
-          instanceGroupManagerId: instanceGroupManagerId,
-          id: id,
-          metricType: metricType,
-          metricValue: metricValue,
-          name: name,
+          instanceGroupId,
+          instanceGroupManagerId,
+          id,
+          metricType,
+          metricValue,
+          name,
         };
 
         const updateInstanceGroupManagerPolicyResult = vpcService.updateInstanceGroupManagerPolicy(
@@ -12138,7 +12144,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteInstanceGroupMemberships
         const instanceGroupId = 'testString';
         const deleteInstanceGroupMembershipsParams = {
-          instanceGroupId: instanceGroupId,
+          instanceGroupId,
         };
 
         const deleteInstanceGroupMembershipsResult = vpcService.deleteInstanceGroupMemberships(
@@ -12232,9 +12238,9 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listInstanceGroupMembershipsParams = {
-          instanceGroupId: instanceGroupId,
-          start: start,
-          limit: limit,
+          instanceGroupId,
+          start,
+          limit,
         };
 
         const listInstanceGroupMembershipsResult = vpcService.listInstanceGroupMemberships(
@@ -12379,8 +12385,8 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const id = 'testString';
         const deleteInstanceGroupMembershipParams = {
-          instanceGroupId: instanceGroupId,
-          id: id,
+          instanceGroupId,
+          id,
         };
 
         const deleteInstanceGroupMembershipResult = vpcService.deleteInstanceGroupMembership(
@@ -12476,8 +12482,8 @@ describe('VpcV1', () => {
         const instanceGroupId = 'testString';
         const id = 'testString';
         const getInstanceGroupMembershipParams = {
-          instanceGroupId: instanceGroupId,
-          id: id,
+          instanceGroupId,
+          id,
         };
 
         const getInstanceGroupMembershipResult = vpcService.getInstanceGroupMembership(
@@ -12574,9 +12580,9 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-instance-group-membership';
         const updateInstanceGroupMembershipParams = {
-          instanceGroupId: instanceGroupId,
-          id: id,
-          name: name,
+          instanceGroupId,
+          id,
+          name,
         };
 
         const updateInstanceGroupMembershipResult = vpcService.updateInstanceGroupMembership(
@@ -12676,11 +12682,11 @@ describe('VpcV1', () => {
         const zoneName = 'testString';
         const name = 'testString';
         const listDedicatedHostGroupsParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          zoneName: zoneName,
-          name: name,
+          start,
+          limit,
+          resourceGroupId,
+          zoneName,
+          name,
         };
 
         const listDedicatedHostGroupsResult = vpcService.listDedicatedHostGroups(
@@ -12822,11 +12828,11 @@ describe('VpcV1', () => {
         const name = 'testString';
         const resourceGroup = resourceGroupIdentityModel;
         const createDedicatedHostGroupParams = {
-          _class: _class,
-          family: family,
-          zone: zone,
-          name: name,
-          resourceGroup: resourceGroup,
+          _class,
+          family,
+          zone,
+          name,
+          resourceGroup,
         };
 
         const createDedicatedHostGroupResult = vpcService.createDedicatedHostGroup(
@@ -12898,7 +12904,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteDedicatedHostGroup
         const id = 'testString';
         const deleteDedicatedHostGroupParams = {
-          id: id,
+          id,
         };
 
         const deleteDedicatedHostGroupResult = vpcService.deleteDedicatedHostGroup(
@@ -12986,7 +12992,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getDedicatedHostGroup
         const id = 'testString';
         const getDedicatedHostGroupParams = {
-          id: id,
+          id,
         };
 
         const getDedicatedHostGroupResult = vpcService.getDedicatedHostGroup(
@@ -13075,8 +13081,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-host-group-updated';
         const updateDedicatedHostGroupParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updateDedicatedHostGroupResult = vpcService.updateDedicatedHostGroup(
@@ -13166,8 +13172,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listDedicatedHostProfilesParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listDedicatedHostProfilesResult = vpcService.listDedicatedHostProfiles(
@@ -13284,7 +13290,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getDedicatedHostProfile
         const name = 'testString';
         const getDedicatedHostProfileParams = {
-          name: name,
+          name,
         };
 
         const getDedicatedHostProfileResult = vpcService.getDedicatedHostProfile(
@@ -13377,12 +13383,12 @@ describe('VpcV1', () => {
         const zoneName = 'testString';
         const name = 'testString';
         const listDedicatedHostsParams = {
-          dedicatedHostGroupId: dedicatedHostGroupId,
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          zoneName: zoneName,
-          name: name,
+          dedicatedHostGroupId,
+          start,
+          limit,
+          resourceGroupId,
+          zoneName,
+          name,
         };
 
         const listDedicatedHostsResult = vpcService.listDedicatedHosts(listDedicatedHostsParams);
@@ -13535,7 +13541,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createDedicatedHost
         const dedicatedHostPrototype = dedicatedHostPrototypeModel;
         const createDedicatedHostParams = {
-          dedicatedHostPrototype: dedicatedHostPrototype,
+          dedicatedHostPrototype,
         };
 
         const createDedicatedHostResult = vpcService.createDedicatedHost(createDedicatedHostParams);
@@ -13621,7 +13627,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listDedicatedHostDisks
         const dedicatedHostId = 'testString';
         const listDedicatedHostDisksParams = {
-          dedicatedHostId: dedicatedHostId,
+          dedicatedHostId,
         };
 
         const listDedicatedHostDisksResult = vpcService.listDedicatedHostDisks(
@@ -13710,8 +13716,8 @@ describe('VpcV1', () => {
         const dedicatedHostId = 'testString';
         const id = 'testString';
         const getDedicatedHostDiskParams = {
-          dedicatedHostId: dedicatedHostId,
-          id: id,
+          dedicatedHostId,
+          id,
         };
 
         const getDedicatedHostDiskResult = vpcService.getDedicatedHostDisk(
@@ -13808,9 +13814,9 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-disk-updated';
         const updateDedicatedHostDiskParams = {
-          dedicatedHostId: dedicatedHostId,
-          id: id,
-          name: name,
+          dedicatedHostId,
+          id,
+          name,
         };
 
         const updateDedicatedHostDiskResult = vpcService.updateDedicatedHostDisk(
@@ -13906,7 +13912,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteDedicatedHost
         const id = 'testString';
         const deleteDedicatedHostParams = {
-          id: id,
+          id,
         };
 
         const deleteDedicatedHostResult = vpcService.deleteDedicatedHost(deleteDedicatedHostParams);
@@ -13992,7 +13998,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getDedicatedHost
         const id = 'testString';
         const getDedicatedHostParams = {
-          id: id,
+          id,
         };
 
         const getDedicatedHostResult = vpcService.getDedicatedHost(getDedicatedHostParams);
@@ -14080,9 +14086,9 @@ describe('VpcV1', () => {
         const instancePlacementEnabled = true;
         const name = 'my-host';
         const updateDedicatedHostParams = {
-          id: id,
-          instancePlacementEnabled: instancePlacementEnabled,
-          name: name,
+          id,
+          instancePlacementEnabled,
+          name,
         };
 
         const updateDedicatedHostResult = vpcService.updateDedicatedHost(updateDedicatedHostParams);
@@ -14176,11 +14182,11 @@ describe('VpcV1', () => {
         const name = 'testString';
         const tag = 'testString';
         const listBackupPoliciesParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          name: name,
-          tag: tag,
+          start,
+          limit,
+          resourceGroupId,
+          name,
+          tag,
         };
 
         const listBackupPoliciesResult = vpcService.listBackupPolicies(listBackupPoliciesParams);
@@ -14313,7 +14319,7 @@ describe('VpcV1', () => {
         active: true,
         attach_user_tags: ['my-daily-backup-plan'],
         copy_user_tags: true,
-        cron_spec: '*/5 1,2,3 * * *',
+        cron_spec: '30 */2 * * 1-5',
         deletion_trigger: backupPolicyPlanDeletionTriggerPrototypeModel,
         name: 'my-policy-plan',
       };
@@ -14331,11 +14337,11 @@ describe('VpcV1', () => {
         const plans = [backupPolicyPlanPrototypeModel];
         const resourceGroup = resourceGroupIdentityModel;
         const createBackupPolicyParams = {
-          matchUserTags: matchUserTags,
-          matchResourceTypes: matchResourceTypes,
-          name: name,
-          plans: plans,
-          resourceGroup: resourceGroup,
+          matchUserTags,
+          matchResourceTypes,
+          name,
+          plans,
+          resourceGroup,
         };
 
         const createBackupPolicyResult = vpcService.createBackupPolicy(createBackupPolicyParams);
@@ -14399,6 +14405,275 @@ describe('VpcV1', () => {
     });
   });
 
+  describe('listBackupPolicyJobs', () => {
+    describe('positive tests', () => {
+      function __listBackupPolicyJobsTest() {
+        // Construct the params object for operation listBackupPolicyJobs
+        const backupPolicyId = 'testString';
+        const status = 'testString';
+        const backupPolicyPlanId = 'testString';
+        const start = 'testString';
+        const limit = 1;
+        const sort = 'name';
+        const sourceId = 'testString';
+        const targetSnapshotsId = 'testString';
+        const targetSnapshotsCrn = 'testString';
+        const listBackupPolicyJobsParams = {
+          backupPolicyId,
+          status,
+          backupPolicyPlanId,
+          start,
+          limit,
+          sort,
+          sourceId,
+          targetSnapshotsId,
+          targetSnapshotsCrn,
+        };
+
+        const listBackupPolicyJobsResult = vpcService.listBackupPolicyJobs(
+          listBackupPolicyJobsParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listBackupPolicyJobsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/backup_policies/{backup_policy_id}/jobs', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.status).toEqual(status);
+        expect(mockRequestOptions.qs['backup_policy_plan.id']).toEqual(backupPolicyPlanId);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs['source.id']).toEqual(sourceId);
+        expect(mockRequestOptions.qs['target_snapshots[].id']).toEqual(targetSnapshotsId);
+        expect(mockRequestOptions.qs['target_snapshots[].crn']).toEqual(targetSnapshotsCrn);
+        expect(mockRequestOptions.path.backup_policy_id).toEqual(backupPolicyId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listBackupPolicyJobsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listBackupPolicyJobsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listBackupPolicyJobsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const backupPolicyId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listBackupPolicyJobsParams = {
+          backupPolicyId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listBackupPolicyJobs(listBackupPolicyJobsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listBackupPolicyJobs({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listBackupPolicyJobs();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('BackupPolicyJobsPager tests', () => {
+      const serviceUrl = vpcServiceOptions.url;
+      const path = '/backup_policies/testString/jobs';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"jobs":[{"auto_delete":true,"auto_delete_after":90,"backup_policy_plan":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","resource_type":"backup_policy_plan"},"completed_at":"2019-01-01T12:00:00.000Z","created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/0fe9e5d8-0a4d-4818-96ec-e99708644a58/jobs/4cf9171a-0043-4434-8727-15b53dbc374c","id":"4cf9171a-0043-4434-8727-15b53dbc374c","job_type":"creation","resource_type":"backup_policy_job","source":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume"},"status":"failed","status_reasons":[{"code":"source_volume_busy","message":"message","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-troubleshooting-backup-for-vpc"}],"target_snapshots":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","resource_type":"snapshot"}]}],"limit":1}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"jobs":[{"auto_delete":true,"auto_delete_after":90,"backup_policy_plan":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","resource_type":"backup_policy_plan"},"completed_at":"2019-01-01T12:00:00.000Z","created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/0fe9e5d8-0a4d-4818-96ec-e99708644a58/jobs/4cf9171a-0043-4434-8727-15b53dbc374c","id":"4cf9171a-0043-4434-8727-15b53dbc374c","job_type":"creation","resource_type":"backup_policy_job","source":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume"},"status":"failed","status_reasons":[{"code":"source_volume_busy","message":"message","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-troubleshooting-backup-for-vpc"}],"target_snapshots":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","resource_type":"snapshot"}]}],"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          backupPolicyId: 'testString',
+          status: 'testString',
+          backupPolicyPlanId: 'testString',
+          limit: 10,
+          sort: 'name',
+          sourceId: 'testString',
+          targetSnapshotsId: 'testString',
+          targetSnapshotsCrn: 'testString',
+        };
+        const allResults = [];
+        const pager = new VpcV1.BackupPolicyJobsPager(vpcService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          backupPolicyId: 'testString',
+          status: 'testString',
+          backupPolicyPlanId: 'testString',
+          limit: 10,
+          sort: 'name',
+          sourceId: 'testString',
+          targetSnapshotsId: 'testString',
+          targetSnapshotsCrn: 'testString',
+        };
+        const pager = new VpcV1.BackupPolicyJobsPager(vpcService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('getBackupPolicyJob', () => {
+    describe('positive tests', () => {
+      function __getBackupPolicyJobTest() {
+        // Construct the params object for operation getBackupPolicyJob
+        const backupPolicyId = 'testString';
+        const id = 'testString';
+        const getBackupPolicyJobParams = {
+          backupPolicyId,
+          id,
+        };
+
+        const getBackupPolicyJobResult = vpcService.getBackupPolicyJob(getBackupPolicyJobParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getBackupPolicyJobResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/backup_policies/{backup_policy_id}/jobs/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.backup_policy_id).toEqual(backupPolicyId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBackupPolicyJobTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBackupPolicyJobTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBackupPolicyJobTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const backupPolicyId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBackupPolicyJobParams = {
+          backupPolicyId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBackupPolicyJob(getBackupPolicyJobParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBackupPolicyJob({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBackupPolicyJob();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('listBackupPolicyPlans', () => {
     describe('positive tests', () => {
       function __listBackupPolicyPlansTest() {
@@ -14406,8 +14681,8 @@ describe('VpcV1', () => {
         const backupPolicyId = 'testString';
         const name = 'testString';
         const listBackupPolicyPlansParams = {
-          backupPolicyId: backupPolicyId,
-          name: name,
+          backupPolicyId,
+          name,
         };
 
         const listBackupPolicyPlansResult = vpcService.listBackupPolicyPlans(
@@ -14503,20 +14778,20 @@ describe('VpcV1', () => {
       function __createBackupPolicyPlanTest() {
         // Construct the params object for operation createBackupPolicyPlan
         const backupPolicyId = 'testString';
-        const cronSpec = '*/5 1,2,3 * * *';
+        const cronSpec = '30 */2 * * 1-5';
         const active = true;
         const attachUserTags = ['my-daily-backup-plan'];
         const copyUserTags = true;
         const deletionTrigger = backupPolicyPlanDeletionTriggerPrototypeModel;
         const name = 'my-policy-plan';
         const createBackupPolicyPlanParams = {
-          backupPolicyId: backupPolicyId,
-          cronSpec: cronSpec,
-          active: active,
-          attachUserTags: attachUserTags,
-          copyUserTags: copyUserTags,
-          deletionTrigger: deletionTrigger,
-          name: name,
+          backupPolicyId,
+          cronSpec,
+          active,
+          attachUserTags,
+          copyUserTags,
+          deletionTrigger,
+          name,
         };
 
         const createBackupPolicyPlanResult = vpcService.createBackupPolicyPlan(
@@ -14564,7 +14839,7 @@ describe('VpcV1', () => {
       test('should prioritize user-given headers', () => {
         // parameters
         const backupPolicyId = 'testString';
-        const cronSpec = '*/5 1,2,3 * * *';
+        const cronSpec = '30 */2 * * 1-5';
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const createBackupPolicyPlanParams = {
@@ -14614,9 +14889,9 @@ describe('VpcV1', () => {
         const id = 'testString';
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteBackupPolicyPlanParams = {
-          backupPolicyId: backupPolicyId,
-          id: id,
-          ifMatch: ifMatch,
+          backupPolicyId,
+          id,
+          ifMatch,
         };
 
         const deleteBackupPolicyPlanResult = vpcService.deleteBackupPolicyPlan(
@@ -14713,8 +14988,8 @@ describe('VpcV1', () => {
         const backupPolicyId = 'testString';
         const id = 'testString';
         const getBackupPolicyPlanParams = {
-          backupPolicyId: backupPolicyId,
-          id: id,
+          backupPolicyId,
+          id,
         };
 
         const getBackupPolicyPlanResult = vpcService.getBackupPolicyPlan(getBackupPolicyPlanParams);
@@ -14818,20 +15093,20 @@ describe('VpcV1', () => {
         const active = true;
         const attachUserTags = ['my-daily-backup-plan'];
         const copyUserTags = true;
-        const cronSpec = '*/5 1,2,3 * * *';
+        const cronSpec = '30 */2 * * 1-5';
         const deletionTrigger = backupPolicyPlanDeletionTriggerPatchModel;
         const name = 'my-policy-plan';
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateBackupPolicyPlanParams = {
-          backupPolicyId: backupPolicyId,
-          id: id,
-          active: active,
-          attachUserTags: attachUserTags,
-          copyUserTags: copyUserTags,
-          cronSpec: cronSpec,
-          deletionTrigger: deletionTrigger,
-          name: name,
-          ifMatch: ifMatch,
+          backupPolicyId,
+          id,
+          active,
+          attachUserTags,
+          copyUserTags,
+          cronSpec,
+          deletionTrigger,
+          name,
+          ifMatch,
         };
 
         const updateBackupPolicyPlanResult = vpcService.updateBackupPolicyPlan(
@@ -14934,8 +15209,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteBackupPolicyParams = {
-          id: id,
-          ifMatch: ifMatch,
+          id,
+          ifMatch,
         };
 
         const deleteBackupPolicyResult = vpcService.deleteBackupPolicy(deleteBackupPolicyParams);
@@ -15022,7 +15297,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getBackupPolicy
         const id = 'testString';
         const getBackupPolicyParams = {
-          id: id,
+          id,
         };
 
         const getBackupPolicyResult = vpcService.getBackupPolicy(getBackupPolicyParams);
@@ -15111,10 +15386,10 @@ describe('VpcV1', () => {
         const name = 'my-backup-policy';
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateBackupPolicyParams = {
-          id: id,
-          matchUserTags: matchUserTags,
-          name: name,
-          ifMatch: ifMatch,
+          id,
+          matchUserTags,
+          name,
+          ifMatch,
         };
 
         const updateBackupPolicyResult = vpcService.updateBackupPolicy(updateBackupPolicyParams);
@@ -15204,8 +15479,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listPlacementGroupsParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listPlacementGroupsResult = vpcService.listPlacementGroups(listPlacementGroupsParams);
@@ -15329,9 +15604,9 @@ describe('VpcV1', () => {
         const name = 'my-placement-group';
         const resourceGroup = resourceGroupIdentityModel;
         const createPlacementGroupParams = {
-          strategy: strategy,
-          name: name,
-          resourceGroup: resourceGroup,
+          strategy,
+          name,
+          resourceGroup,
         };
 
         const createPlacementGroupResult = vpcService.createPlacementGroup(
@@ -15421,7 +15696,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deletePlacementGroup
         const id = 'testString';
         const deletePlacementGroupParams = {
-          id: id,
+          id,
         };
 
         const deletePlacementGroupResult = vpcService.deletePlacementGroup(
@@ -15509,7 +15784,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getPlacementGroup
         const id = 'testString';
         const getPlacementGroupParams = {
-          id: id,
+          id,
         };
 
         const getPlacementGroupResult = vpcService.getPlacementGroup(getPlacementGroupParams);
@@ -15596,8 +15871,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-placement-group';
         const updatePlacementGroupParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updatePlacementGroupResult = vpcService.updatePlacementGroup(
@@ -15687,8 +15962,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listBareMetalServerProfilesParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listBareMetalServerProfilesResult = vpcService.listBareMetalServerProfiles(
@@ -15805,7 +16080,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getBareMetalServerProfile
         const name = 'testString';
         const getBareMetalServerProfileParams = {
-          name: name,
+          name,
         };
 
         const getBareMetalServerProfileResult = vpcService.getBareMetalServerProfile(
@@ -15902,16 +16177,16 @@ describe('VpcV1', () => {
         const networkInterfacesSubnetCrn = 'testString';
         const networkInterfacesSubnetName = 'testString';
         const listBareMetalServersParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          name: name,
-          vpcId: vpcId,
-          vpcCrn: vpcCrn,
-          vpcName: vpcName,
-          networkInterfacesSubnetId: networkInterfacesSubnetId,
-          networkInterfacesSubnetCrn: networkInterfacesSubnetCrn,
-          networkInterfacesSubnetName: networkInterfacesSubnetName,
+          start,
+          limit,
+          resourceGroupId,
+          name,
+          vpcId,
+          vpcCrn,
+          vpcName,
+          networkInterfacesSubnetId,
+          networkInterfacesSubnetCrn,
+          networkInterfacesSubnetName,
         };
 
         const listBareMetalServersResult = vpcService.listBareMetalServers(
@@ -15991,9 +16266,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/bare_metal_servers';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"bare_metal_servers":[{"bandwidth":20000,"boot_target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-disk","resource_type":"bare_metal_server_disk"},"cpu":{"architecture":"amd64","core_count":80,"socket_count":4,"threads_per_core":2},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::bare-metal-server:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"fcp","name":"my-bare-metal-disk","resource_type":"bare_metal_server_disk","size":100}],"enable_secure_boot":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","memory":1536,"name":"my-bare-metal-server","network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","name":"bx2-metal-192x768","resource_type":"bare_metal_server_profile"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"bare_metal_server","status":"failed","status_reasons":[{"code":"cannot_start_capacity","message":"The bare metal server cannot start as there is no more capacity in this\\nzone for a bare metal server with the requested profile.","more_info":"https://console.bluemix.net/docs/iaas/bare_metal_server.html"}],"trusted_platform_module":{"enabled":true,"mode":"tpm_2"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"bare_metal_servers":[{"bandwidth":20000,"boot_target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk"},"cpu":{"architecture":"amd64","core_count":80,"socket_count":4,"threads_per_core":2},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::bare-metal-server:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"fcp","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk","size":100}],"enable_secure_boot":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","memory":1536,"name":"my-bare-metal-server","network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","name":"bx2-metal-192x768","resource_type":"bare_metal_server_profile"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"bare_metal_server","status":"failed","status_reasons":[{"code":"cannot_start_capacity","message":"The bare metal server cannot start as there is no more capacity in this\\nzone for a bare metal server with the requested profile.","more_info":"https://console.bluemix.net/docs/iaas/bare_metal_server.html"}],"trusted_platform_module":{"enabled":true,"mode":"tpm_2"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"bare_metal_servers":[{"bandwidth":20000,"boot_target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-disk","resource_type":"bare_metal_server_disk"},"cpu":{"architecture":"amd64","core_count":80,"socket_count":4,"threads_per_core":2},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::bare-metal-server:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"fcp","name":"my-bare-metal-disk","resource_type":"bare_metal_server_disk","size":100}],"enable_secure_boot":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","memory":1536,"name":"my-bare-metal-server","network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","name":"bx2-metal-192x768","resource_type":"bare_metal_server_profile"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"bare_metal_server","status":"failed","status_reasons":[{"code":"cannot_start_capacity","message":"The bare metal server cannot start as there is no more capacity in this\\nzone for a bare metal server with the requested profile.","more_info":"https://console.bluemix.net/docs/iaas/bare_metal_server.html"}],"trusted_platform_module":{"enabled":true,"mode":"tpm_2"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
+        '{"total_count":2,"limit":1,"bare_metal_servers":[{"bandwidth":20000,"boot_target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk"},"cpu":{"architecture":"amd64","core_count":80,"socket_count":4,"threads_per_core":2},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::bare-metal-server:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"fcp","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk","size":100}],"enable_secure_boot":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","memory":1536,"name":"my-bare-metal-server","network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","name":"bx2-metal-192x768","resource_type":"bare_metal_server_profile"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"bare_metal_server","status":"failed","status_reasons":[{"code":"cannot_start_capacity","message":"The bare metal server cannot start as there is no more capacity in this\\nzone for a bare metal server with the requested profile.","more_info":"https://console.bluemix.net/docs/iaas/bare_metal_server.html"}],"trusted_platform_module":{"enabled":true,"mode":"tpm_2"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -16144,14 +16419,14 @@ describe('VpcV1', () => {
         const resourceGroup = resourceGroupIdentityModel;
         const vpc = vpcIdentityModel;
         const createBareMetalServerParams = {
-          initialization: initialization,
-          primaryNetworkInterface: primaryNetworkInterface,
-          profile: profile,
-          zone: zone,
-          name: name,
-          networkInterfaces: networkInterfaces,
-          resourceGroup: resourceGroup,
-          vpc: vpc,
+          initialization,
+          primaryNetworkInterface,
+          profile,
+          zone,
+          name,
+          networkInterfaces,
+          resourceGroup,
+          vpc,
         };
 
         const createBareMetalServerResult = vpcService.createBareMetalServer(
@@ -16254,9 +16529,9 @@ describe('VpcV1', () => {
         const consoleType = 'serial';
         const force = false;
         const createBareMetalServerConsoleAccessTokenParams = {
-          bareMetalServerId: bareMetalServerId,
-          consoleType: consoleType,
-          force: force,
+          bareMetalServerId,
+          consoleType,
+          force,
         };
 
         const createBareMetalServerConsoleAccessTokenResult =
@@ -16355,7 +16630,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listBareMetalServerDisks
         const bareMetalServerId = 'testString';
         const listBareMetalServerDisksParams = {
-          bareMetalServerId: bareMetalServerId,
+          bareMetalServerId,
         };
 
         const listBareMetalServerDisksResult = vpcService.listBareMetalServerDisks(
@@ -16448,8 +16723,8 @@ describe('VpcV1', () => {
         const bareMetalServerId = 'testString';
         const id = 'testString';
         const getBareMetalServerDiskParams = {
-          bareMetalServerId: bareMetalServerId,
-          id: id,
+          bareMetalServerId,
+          id,
         };
 
         const getBareMetalServerDiskResult = vpcService.getBareMetalServerDisk(
@@ -16546,9 +16821,9 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-bare-metal-server-disk-updated';
         const updateBareMetalServerDiskParams = {
-          bareMetalServerId: bareMetalServerId,
-          id: id,
-          name: name,
+          bareMetalServerId,
+          id,
+          name,
         };
 
         const updateBareMetalServerDiskResult = vpcService.updateBareMetalServerDisk(
@@ -16646,9 +16921,9 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listBareMetalServerNetworkInterfacesParams = {
-          bareMetalServerId: bareMetalServerId,
-          start: start,
-          limit: limit,
+          bareMetalServerId,
+          start,
+          limit,
         };
 
         const listBareMetalServerNetworkInterfacesResult =
@@ -16825,8 +17100,8 @@ describe('VpcV1', () => {
         const bareMetalServerNetworkInterfacePrototype =
           bareMetalServerNetworkInterfacePrototypeModel;
         const createBareMetalServerNetworkInterfaceParams = {
-          bareMetalServerId: bareMetalServerId,
-          bareMetalServerNetworkInterfacePrototype: bareMetalServerNetworkInterfacePrototype,
+          bareMetalServerId,
+          bareMetalServerNetworkInterfacePrototype,
         };
 
         const createBareMetalServerNetworkInterfaceResult =
@@ -16926,8 +17201,8 @@ describe('VpcV1', () => {
         const bareMetalServerId = 'testString';
         const id = 'testString';
         const deleteBareMetalServerNetworkInterfaceParams = {
-          bareMetalServerId: bareMetalServerId,
-          id: id,
+          bareMetalServerId,
+          id,
         };
 
         const deleteBareMetalServerNetworkInterfaceResult =
@@ -17026,8 +17301,8 @@ describe('VpcV1', () => {
         const bareMetalServerId = 'testString';
         const id = 'testString';
         const getBareMetalServerNetworkInterfaceParams = {
-          bareMetalServerId: bareMetalServerId,
-          id: id,
+          bareMetalServerId,
+          id,
         };
 
         const getBareMetalServerNetworkInterfaceResult =
@@ -17126,12 +17401,12 @@ describe('VpcV1', () => {
         const enableInfrastructureNat = true;
         const name = 'my-network-interface';
         const updateBareMetalServerNetworkInterfaceParams = {
-          bareMetalServerId: bareMetalServerId,
-          id: id,
-          allowIpSpoofing: allowIpSpoofing,
-          allowedVlans: allowedVlans,
-          enableInfrastructureNat: enableInfrastructureNat,
-          name: name,
+          bareMetalServerId,
+          id,
+          allowIpSpoofing,
+          allowedVlans,
+          enableInfrastructureNat,
+          name,
         };
 
         const updateBareMetalServerNetworkInterfaceResult =
@@ -17234,8 +17509,8 @@ describe('VpcV1', () => {
         const bareMetalServerId = 'testString';
         const networkInterfaceId = 'testString';
         const listBareMetalServerNetworkInterfaceFloatingIpsParams = {
-          bareMetalServerId: bareMetalServerId,
-          networkInterfaceId: networkInterfaceId,
+          bareMetalServerId,
+          networkInterfaceId,
         };
 
         const listBareMetalServerNetworkInterfaceFloatingIpsResult =
@@ -17335,9 +17610,9 @@ describe('VpcV1', () => {
         const networkInterfaceId = 'testString';
         const id = 'testString';
         const removeBareMetalServerNetworkInterfaceFloatingIpParams = {
-          bareMetalServerId: bareMetalServerId,
-          networkInterfaceId: networkInterfaceId,
-          id: id,
+          bareMetalServerId,
+          networkInterfaceId,
+          id,
         };
 
         const removeBareMetalServerNetworkInterfaceFloatingIpResult =
@@ -17440,9 +17715,9 @@ describe('VpcV1', () => {
         const networkInterfaceId = 'testString';
         const id = 'testString';
         const getBareMetalServerNetworkInterfaceFloatingIpParams = {
-          bareMetalServerId: bareMetalServerId,
-          networkInterfaceId: networkInterfaceId,
-          id: id,
+          bareMetalServerId,
+          networkInterfaceId,
+          id,
         };
 
         const getBareMetalServerNetworkInterfaceFloatingIpResult =
@@ -17545,9 +17820,9 @@ describe('VpcV1', () => {
         const networkInterfaceId = 'testString';
         const id = 'testString';
         const addBareMetalServerNetworkInterfaceFloatingIpParams = {
-          bareMetalServerId: bareMetalServerId,
-          networkInterfaceId: networkInterfaceId,
-          id: id,
+          bareMetalServerId,
+          networkInterfaceId,
+          id,
         };
 
         const addBareMetalServerNetworkInterfaceFloatingIpResult =
@@ -17649,8 +17924,8 @@ describe('VpcV1', () => {
         const bareMetalServerId = 'testString';
         const networkInterfaceId = 'testString';
         const listBareMetalServerNetworkInterfaceIpsParams = {
-          bareMetalServerId: bareMetalServerId,
-          networkInterfaceId: networkInterfaceId,
+          bareMetalServerId,
+          networkInterfaceId,
         };
 
         const listBareMetalServerNetworkInterfaceIpsResult =
@@ -17750,9 +18025,9 @@ describe('VpcV1', () => {
         const networkInterfaceId = 'testString';
         const id = 'testString';
         const getBareMetalServerNetworkInterfaceIpParams = {
-          bareMetalServerId: bareMetalServerId,
-          networkInterfaceId: networkInterfaceId,
-          id: id,
+          bareMetalServerId,
+          networkInterfaceId,
+          id,
         };
 
         const getBareMetalServerNetworkInterfaceIpResult =
@@ -17851,7 +18126,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteBareMetalServer
         const id = 'testString';
         const deleteBareMetalServerParams = {
-          id: id,
+          id,
         };
 
         const deleteBareMetalServerResult = vpcService.deleteBareMetalServer(
@@ -17939,7 +18214,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getBareMetalServer
         const id = 'testString';
         const getBareMetalServerParams = {
-          id: id,
+          id,
         };
 
         const getBareMetalServerResult = vpcService.getBareMetalServer(getBareMetalServerParams);
@@ -18026,8 +18301,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-bare-metal-server';
         const updateBareMetalServerParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updateBareMetalServerResult = vpcService.updateBareMetalServer(
@@ -18116,7 +18391,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getBareMetalServerInitialization
         const id = 'testString';
         const getBareMetalServerInitializationParams = {
-          id: id,
+          id,
         };
 
         const getBareMetalServerInitializationResult = vpcService.getBareMetalServerInitialization(
@@ -18204,7 +18479,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation restartBareMetalServer
         const id = 'testString';
         const restartBareMetalServerParams = {
-          id: id,
+          id,
         };
 
         const restartBareMetalServerResult = vpcService.restartBareMetalServer(
@@ -18292,7 +18567,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation startBareMetalServer
         const id = 'testString';
         const startBareMetalServerParams = {
-          id: id,
+          id,
         };
 
         const startBareMetalServerResult = vpcService.startBareMetalServer(
@@ -18381,8 +18656,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const type = 'hard';
         const stopBareMetalServerParams = {
-          id: id,
-          type: type,
+          id,
+          type,
         };
 
         const stopBareMetalServerResult = vpcService.stopBareMetalServer(stopBareMetalServerParams);
@@ -18472,8 +18747,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listVolumeProfilesParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listVolumeProfilesResult = vpcService.listVolumeProfiles(listVolumeProfilesParams);
@@ -18588,7 +18863,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVolumeProfile
         const name = 'testString';
         const getVolumeProfileParams = {
-          name: name,
+          name,
         };
 
         const getVolumeProfileResult = vpcService.getVolumeProfile(getVolumeProfileParams);
@@ -18677,10 +18952,10 @@ describe('VpcV1', () => {
         const name = 'testString';
         const zoneName = 'testString';
         const listVolumesParams = {
-          start: start,
-          limit: limit,
-          name: name,
-          zoneName: zoneName,
+          start,
+          limit,
+          name,
+          zoneName,
         };
 
         const listVolumesResult = vpcService.listVolumes(listVolumesParams);
@@ -18746,9 +19021,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/volumes';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"volumes":[{"active":true,"bandwidth":1000,"busy":true,"capacity":1000,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","iops":10000,"name":"my-volume","operating_system":{"href":"https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-16-amd64","name":"ubuntu-16-amd64"},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/volume/profiles/general-purpose","name":"general-purpose"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"source_image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image"},"source_snapshot":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","resource_type":"snapshot"},"status":"available","status_reasons":[{"code":"encryption_key_deleted","message":"message","more_info":"https://cloud.ibm.com/docs/key-protect?topic=key-protect-restore-keys"}],"user_tags":["user_tags"],"volume_attachments":[{"delete_volume_on_instance_delete":true,"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","instance":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance"},"name":"my-volume-attachment","type":"boot"}],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"volumes":[{"active":true,"bandwidth":1000,"busy":true,"capacity":1000,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"health_reasons":[{"code":"initializing_from_snapshot","message":"Performance will be degraded while this volume is being initialized from its snapshot","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-snapshots-vpc-troubleshooting&interface=ui#snapshot_ts_degraded_perf"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","iops":10000,"name":"my-volume","operating_system":{"href":"https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-16-amd64","name":"ubuntu-16-amd64"},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/volume/profiles/general-purpose","name":"general-purpose"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"source_image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image"},"source_snapshot":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","resource_type":"snapshot"},"status":"available","status_reasons":[{"code":"encryption_key_deleted","message":"message","more_info":"https://cloud.ibm.com/docs/key-protect?topic=key-protect-restore-keys"}],"user_tags":["user_tags"],"volume_attachments":[{"delete_volume_on_instance_delete":true,"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","instance":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance"},"name":"my-volume-attachment","type":"boot"}],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"volumes":[{"active":true,"bandwidth":1000,"busy":true,"capacity":1000,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","iops":10000,"name":"my-volume","operating_system":{"href":"https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-16-amd64","name":"ubuntu-16-amd64"},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/volume/profiles/general-purpose","name":"general-purpose"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"source_image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image"},"source_snapshot":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","resource_type":"snapshot"},"status":"available","status_reasons":[{"code":"encryption_key_deleted","message":"message","more_info":"https://cloud.ibm.com/docs/key-protect?topic=key-protect-restore-keys"}],"user_tags":["user_tags"],"volume_attachments":[{"delete_volume_on_instance_delete":true,"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","instance":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance"},"name":"my-volume-attachment","type":"boot"}],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
+        '{"total_count":2,"limit":1,"volumes":[{"active":true,"bandwidth":1000,"busy":true,"capacity":1000,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/dffc98a0f1f0f95f6613b3b752286b87:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"health_reasons":[{"code":"initializing_from_snapshot","message":"Performance will be degraded while this volume is being initialized from its snapshot","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-snapshots-vpc-troubleshooting&interface=ui#snapshot_ts_degraded_perf"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","iops":10000,"name":"my-volume","operating_system":{"href":"https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-16-amd64","name":"ubuntu-16-amd64"},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/volume/profiles/general-purpose","name":"general-purpose"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"source_image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image"},"source_snapshot":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","resource_type":"snapshot"},"status":"available","status_reasons":[{"code":"encryption_key_deleted","message":"message","more_info":"https://cloud.ibm.com/docs/key-protect?topic=key-protect-restore-keys"}],"user_tags":["user_tags"],"volume_attachments":[{"delete_volume_on_instance_delete":true,"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","instance":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance"},"name":"my-volume-attachment","type":"boot"}],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -18835,7 +19110,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createVolume
         const volumePrototype = volumePrototypeModel;
         const createVolumeParams = {
-          volumePrototype: volumePrototype,
+          volumePrototype,
         };
 
         const createVolumeResult = vpcService.createVolume(createVolumeParams);
@@ -18922,8 +19197,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteVolumeParams = {
-          id: id,
-          ifMatch: ifMatch,
+          id,
+          ifMatch,
         };
 
         const deleteVolumeResult = vpcService.deleteVolume(deleteVolumeParams);
@@ -19010,7 +19285,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVolume
         const id = 'testString';
         const getVolumeParams = {
-          id: id,
+          id,
         };
 
         const getVolumeResult = vpcService.getVolume(getVolumeParams);
@@ -19109,13 +19384,13 @@ describe('VpcV1', () => {
         const userTags = ['testString'];
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateVolumeParams = {
-          id: id,
-          capacity: capacity,
-          iops: iops,
-          name: name,
-          profile: profile,
-          userTags: userTags,
-          ifMatch: ifMatch,
+          id,
+          capacity,
+          iops,
+          name,
+          profile,
+          userTags,
+          ifMatch,
         };
 
         const updateVolumeResult = vpcService.updateVolume(updateVolumeParams);
@@ -19207,7 +19482,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteSnapshots
         const sourceVolumeId = 'testString';
         const deleteSnapshotsParams = {
-          sourceVolumeId: sourceVolumeId,
+          sourceVolumeId,
         };
 
         const deleteSnapshotsResult = vpcService.deleteSnapshots(deleteSnapshotsParams);
@@ -19303,17 +19578,17 @@ describe('VpcV1', () => {
         const sort = 'name';
         const backupPolicyPlanId = 'testString';
         const listSnapshotsParams = {
-          start: start,
-          limit: limit,
-          tag: tag,
-          resourceGroupId: resourceGroupId,
-          name: name,
-          sourceVolumeId: sourceVolumeId,
-          sourceVolumeCrn: sourceVolumeCrn,
-          sourceImageId: sourceImageId,
-          sourceImageCrn: sourceImageCrn,
-          sort: sort,
-          backupPolicyPlanId: backupPolicyPlanId,
+          start,
+          limit,
+          tag,
+          resourceGroupId,
+          name,
+          sourceVolumeId,
+          sourceVolumeCrn,
+          sourceImageId,
+          sourceImageCrn,
+          sort,
+          backupPolicyPlanId,
         };
 
         const listSnapshotsResult = vpcService.listSnapshots(listSnapshotsParams);
@@ -19475,7 +19750,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createSnapshot
         const snapshotPrototype = snapshotPrototypeModel;
         const createSnapshotParams = {
-          snapshotPrototype: snapshotPrototype,
+          snapshotPrototype,
         };
 
         const createSnapshotResult = vpcService.createSnapshot(createSnapshotParams);
@@ -19562,8 +19837,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteSnapshotParams = {
-          id: id,
-          ifMatch: ifMatch,
+          id,
+          ifMatch,
         };
 
         const deleteSnapshotResult = vpcService.deleteSnapshot(deleteSnapshotParams);
@@ -19650,7 +19925,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getSnapshot
         const id = 'testString';
         const getSnapshotParams = {
-          id: id,
+          id,
         };
 
         const getSnapshotResult = vpcService.getSnapshot(getSnapshotParams);
@@ -19739,10 +20014,10 @@ describe('VpcV1', () => {
         const userTags = ['testString'];
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateSnapshotParams = {
-          id: id,
-          name: name,
-          userTags: userTags,
-          ifMatch: ifMatch,
+          id,
+          name,
+          userTags,
+          ifMatch,
         };
 
         const updateSnapshotResult = vpcService.updateSnapshot(updateSnapshotParams);
@@ -19893,7 +20168,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getRegion
         const name = 'testString';
         const getRegionParams = {
-          name: name,
+          name,
         };
 
         const getRegionResult = vpcService.getRegion(getRegionParams);
@@ -19979,7 +20254,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listRegionZones
         const regionName = 'testString';
         const listRegionZonesParams = {
-          regionName: regionName,
+          regionName,
         };
 
         const listRegionZonesResult = vpcService.listRegionZones(listRegionZonesParams);
@@ -20066,8 +20341,8 @@ describe('VpcV1', () => {
         const regionName = 'testString';
         const name = 'testString';
         const getRegionZoneParams = {
-          regionName: regionName,
-          name: name,
+          regionName,
+          name,
         };
 
         const getRegionZoneResult = vpcService.getRegionZone(getRegionZoneParams);
@@ -20158,9 +20433,9 @@ describe('VpcV1', () => {
         const limit = 1;
         const resourceGroupId = 'testString';
         const listPublicGatewaysParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
+          start,
+          limit,
+          resourceGroupId,
         };
 
         const listPublicGatewaysResult = vpcService.listPublicGateways(listPublicGatewaysParams);
@@ -20304,11 +20579,11 @@ describe('VpcV1', () => {
         const name = 'my-public-gateway';
         const resourceGroup = resourceGroupIdentityModel;
         const createPublicGatewayParams = {
-          vpc: vpc,
-          zone: zone,
-          floatingIp: floatingIp,
-          name: name,
-          resourceGroup: resourceGroup,
+          vpc,
+          zone,
+          floatingIp,
+          name,
+          resourceGroup,
         };
 
         const createPublicGatewayResult = vpcService.createPublicGateway(createPublicGatewayParams);
@@ -20400,7 +20675,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deletePublicGateway
         const id = 'testString';
         const deletePublicGatewayParams = {
-          id: id,
+          id,
         };
 
         const deletePublicGatewayResult = vpcService.deletePublicGateway(deletePublicGatewayParams);
@@ -20486,7 +20761,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getPublicGateway
         const id = 'testString';
         const getPublicGatewayParams = {
-          id: id,
+          id,
         };
 
         const getPublicGatewayResult = vpcService.getPublicGateway(getPublicGatewayParams);
@@ -20573,8 +20848,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-public-gateway';
         const updatePublicGatewayParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updatePublicGatewayResult = vpcService.updatePublicGateway(updatePublicGatewayParams);
@@ -20664,10 +20939,10 @@ describe('VpcV1', () => {
         const resourceGroupId = 'testString';
         const sort = 'name';
         const listFloatingIpsParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          sort: sort,
+          start,
+          limit,
+          resourceGroupId,
+          sort,
         };
 
         const listFloatingIpsResult = vpcService.listFloatingIps(listFloatingIpsParams);
@@ -20807,7 +21082,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createFloatingIp
         const floatingIpPrototype = floatingIpPrototypeModel;
         const createFloatingIpParams = {
-          floatingIpPrototype: floatingIpPrototype,
+          floatingIpPrototype,
         };
 
         const createFloatingIpResult = vpcService.createFloatingIp(createFloatingIpParams);
@@ -20893,7 +21168,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteFloatingIp
         const id = 'testString';
         const deleteFloatingIpParams = {
-          id: id,
+          id,
         };
 
         const deleteFloatingIpResult = vpcService.deleteFloatingIp(deleteFloatingIpParams);
@@ -20979,7 +21254,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getFloatingIp
         const id = 'testString';
         const getFloatingIpParams = {
-          id: id,
+          id,
         };
 
         const getFloatingIpResult = vpcService.getFloatingIp(getFloatingIpParams);
@@ -21074,9 +21349,9 @@ describe('VpcV1', () => {
         const name = 'my-floating-ip';
         const target = floatingIpTargetPatchModel;
         const updateFloatingIpParams = {
-          id: id,
-          name: name,
-          target: target,
+          id,
+          name,
+          target,
         };
 
         const updateFloatingIpResult = vpcService.updateFloatingIp(updateFloatingIpParams);
@@ -21166,9 +21441,9 @@ describe('VpcV1', () => {
         const limit = 1;
         const resourceGroupId = 'testString';
         const listNetworkAclsParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
+          start,
+          limit,
+          resourceGroupId,
         };
 
         const listNetworkAclsResult = vpcService.listNetworkAcls(listNetworkAclsParams);
@@ -21320,7 +21595,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createNetworkAcl
         const networkAclPrototype = networkAclPrototypeModel;
         const createNetworkAclParams = {
-          networkAclPrototype: networkAclPrototype,
+          networkAclPrototype,
         };
 
         const createNetworkAclResult = vpcService.createNetworkAcl(createNetworkAclParams);
@@ -21386,7 +21661,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteNetworkAcl
         const id = 'testString';
         const deleteNetworkAclParams = {
-          id: id,
+          id,
         };
 
         const deleteNetworkAclResult = vpcService.deleteNetworkAcl(deleteNetworkAclParams);
@@ -21472,7 +21747,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getNetworkAcl
         const id = 'testString';
         const getNetworkAclParams = {
-          id: id,
+          id,
         };
 
         const getNetworkAclResult = vpcService.getNetworkAcl(getNetworkAclParams);
@@ -21559,8 +21834,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-network-acl';
         const updateNetworkAclParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updateNetworkAclResult = vpcService.updateNetworkAcl(updateNetworkAclParams);
@@ -21650,10 +21925,10 @@ describe('VpcV1', () => {
         const limit = 1;
         const direction = 'inbound';
         const listNetworkAclRulesParams = {
-          networkAclId: networkAclId,
-          start: start,
-          limit: limit,
-          direction: direction,
+          networkAclId,
+          start,
+          limit,
+          direction,
         };
 
         const listNetworkAclRulesResult = vpcService.listNetworkAclRules(listNetworkAclRulesParams);
@@ -21817,8 +22092,8 @@ describe('VpcV1', () => {
         const networkAclId = 'testString';
         const networkAclRulePrototype = networkAclRulePrototypeModel;
         const createNetworkAclRuleParams = {
-          networkAclId: networkAclId,
-          networkAclRulePrototype: networkAclRulePrototype,
+          networkAclId,
+          networkAclRulePrototype,
         };
 
         const createNetworkAclRuleResult = vpcService.createNetworkAclRule(
@@ -21910,8 +22185,8 @@ describe('VpcV1', () => {
         const networkAclId = 'testString';
         const id = 'testString';
         const deleteNetworkAclRuleParams = {
-          networkAclId: networkAclId,
-          id: id,
+          networkAclId,
+          id,
         };
 
         const deleteNetworkAclRuleResult = vpcService.deleteNetworkAclRule(
@@ -22007,8 +22282,8 @@ describe('VpcV1', () => {
         const networkAclId = 'testString';
         const id = 'testString';
         const getNetworkAclRuleParams = {
-          networkAclId: networkAclId,
-          id: id,
+          networkAclId,
+          id,
         };
 
         const getNetworkAclRuleResult = vpcService.getNetworkAclRule(getNetworkAclRuleParams);
@@ -22118,21 +22393,21 @@ describe('VpcV1', () => {
         const sourcePortMin = 49152;
         const type = 8;
         const updateNetworkAclRuleParams = {
-          networkAclId: networkAclId,
-          id: id,
-          action: action,
-          before: before,
-          code: code,
-          destination: destination,
-          destinationPortMax: destinationPortMax,
-          destinationPortMin: destinationPortMin,
-          direction: direction,
-          name: name,
-          protocol: protocol,
-          source: source,
-          sourcePortMax: sourcePortMax,
-          sourcePortMin: sourcePortMin,
-          type: type,
+          networkAclId,
+          id,
+          action,
+          before,
+          code,
+          destination,
+          destinationPortMax,
+          destinationPortMin,
+          direction,
+          name,
+          protocol,
+          source,
+          sourcePortMax,
+          sourcePortMin,
+          type,
         };
 
         const updateNetworkAclRuleResult = vpcService.updateNetworkAclRule(
@@ -22241,12 +22516,12 @@ describe('VpcV1', () => {
         const vpcCrn = 'testString';
         const vpcName = 'testString';
         const listSecurityGroupsParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          vpcId: vpcId,
-          vpcCrn: vpcCrn,
-          vpcName: vpcName,
+          start,
+          limit,
+          resourceGroupId,
+          vpcId,
+          vpcCrn,
+          vpcName,
         };
 
         const listSecurityGroupsResult = vpcService.listSecurityGroups(listSecurityGroupsParams);
@@ -22390,8 +22665,8 @@ describe('VpcV1', () => {
       const securityGroupRulePrototypeModel = {
         direction: 'inbound',
         ip_version: 'ipv4',
-        remote: securityGroupRuleRemotePrototypeModel,
         protocol: 'all',
+        remote: securityGroupRuleRemotePrototypeModel,
       };
 
       function __createSecurityGroupTest() {
@@ -22401,10 +22676,10 @@ describe('VpcV1', () => {
         const resourceGroup = resourceGroupIdentityModel;
         const rules = [securityGroupRulePrototypeModel];
         const createSecurityGroupParams = {
-          vpc: vpc,
-          name: name,
-          resourceGroup: resourceGroup,
-          rules: rules,
+          vpc,
+          name,
+          resourceGroup,
+          rules,
         };
 
         const createSecurityGroupResult = vpcService.createSecurityGroup(createSecurityGroupParams);
@@ -22493,7 +22768,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteSecurityGroup
         const id = 'testString';
         const deleteSecurityGroupParams = {
-          id: id,
+          id,
         };
 
         const deleteSecurityGroupResult = vpcService.deleteSecurityGroup(deleteSecurityGroupParams);
@@ -22579,7 +22854,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getSecurityGroup
         const id = 'testString';
         const getSecurityGroupParams = {
-          id: id,
+          id,
         };
 
         const getSecurityGroupResult = vpcService.getSecurityGroup(getSecurityGroupParams);
@@ -22666,8 +22941,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-security-group';
         const updateSecurityGroupParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updateSecurityGroupResult = vpcService.updateSecurityGroup(updateSecurityGroupParams);
@@ -22754,7 +23029,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listSecurityGroupRules
         const securityGroupId = 'testString';
         const listSecurityGroupRulesParams = {
-          securityGroupId: securityGroupId,
+          securityGroupId,
         };
 
         const listSecurityGroupRulesResult = vpcService.listSecurityGroupRules(
@@ -22849,8 +23124,8 @@ describe('VpcV1', () => {
       const securityGroupRulePrototypeModel = {
         direction: 'inbound',
         ip_version: 'ipv4',
-        remote: securityGroupRuleRemotePrototypeModel,
         protocol: 'all',
+        remote: securityGroupRuleRemotePrototypeModel,
       };
 
       function __createSecurityGroupRuleTest() {
@@ -22858,8 +23133,8 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const securityGroupRulePrototype = securityGroupRulePrototypeModel;
         const createSecurityGroupRuleParams = {
-          securityGroupId: securityGroupId,
-          securityGroupRulePrototype: securityGroupRulePrototype,
+          securityGroupId,
+          securityGroupRulePrototype,
         };
 
         const createSecurityGroupRuleResult = vpcService.createSecurityGroupRule(
@@ -22951,8 +23226,8 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const id = 'testString';
         const deleteSecurityGroupRuleParams = {
-          securityGroupId: securityGroupId,
-          id: id,
+          securityGroupId,
+          id,
         };
 
         const deleteSecurityGroupRuleResult = vpcService.deleteSecurityGroupRule(
@@ -23048,8 +23323,8 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const id = 'testString';
         const getSecurityGroupRuleParams = {
-          securityGroupId: securityGroupId,
-          id: id,
+          securityGroupId,
+          id,
         };
 
         const getSecurityGroupRuleResult = vpcService.getSecurityGroupRule(
@@ -23159,15 +23434,15 @@ describe('VpcV1', () => {
         const remote = securityGroupRuleRemotePatchModel;
         const type = 8;
         const updateSecurityGroupRuleParams = {
-          securityGroupId: securityGroupId,
-          id: id,
-          code: code,
-          direction: direction,
-          ipVersion: ipVersion,
-          portMax: portMax,
-          portMin: portMin,
-          remote: remote,
-          type: type,
+          securityGroupId,
+          id,
+          code,
+          direction,
+          ipVersion,
+          portMax,
+          portMin,
+          remote,
+          type,
         };
 
         const updateSecurityGroupRuleResult = vpcService.updateSecurityGroupRule(
@@ -23271,9 +23546,9 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listSecurityGroupTargetsParams = {
-          securityGroupId: securityGroupId,
-          start: start,
-          limit: limit,
+          securityGroupId,
+          start,
+          limit,
         };
 
         const listSecurityGroupTargetsResult = vpcService.listSecurityGroupTargets(
@@ -23418,8 +23693,8 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const id = 'testString';
         const deleteSecurityGroupTargetBindingParams = {
-          securityGroupId: securityGroupId,
-          id: id,
+          securityGroupId,
+          id,
         };
 
         const deleteSecurityGroupTargetBindingResult = vpcService.deleteSecurityGroupTargetBinding(
@@ -23515,8 +23790,8 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const id = 'testString';
         const getSecurityGroupTargetParams = {
-          securityGroupId: securityGroupId,
-          id: id,
+          securityGroupId,
+          id,
         };
 
         const getSecurityGroupTargetResult = vpcService.getSecurityGroupTarget(
@@ -23612,8 +23887,8 @@ describe('VpcV1', () => {
         const securityGroupId = 'testString';
         const id = 'testString';
         const createSecurityGroupTargetBindingParams = {
-          securityGroupId: securityGroupId,
-          id: id,
+          securityGroupId,
+          id,
         };
 
         const createSecurityGroupTargetBindingResult = vpcService.createSecurityGroupTargetBinding(
@@ -23709,8 +23984,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listIkePoliciesParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listIkePoliciesResult = vpcService.listIkePolicies(listIkePoliciesParams);
@@ -23838,13 +24113,13 @@ describe('VpcV1', () => {
         const name = 'my-ike-policy';
         const resourceGroup = resourceGroupIdentityModel;
         const createIkePolicyParams = {
-          authenticationAlgorithm: authenticationAlgorithm,
-          dhGroup: dhGroup,
-          encryptionAlgorithm: encryptionAlgorithm,
-          ikeVersion: ikeVersion,
-          keyLifetime: keyLifetime,
-          name: name,
-          resourceGroup: resourceGroup,
+          authenticationAlgorithm,
+          dhGroup,
+          encryptionAlgorithm,
+          ikeVersion,
+          keyLifetime,
+          name,
+          resourceGroup,
         };
 
         const createIkePolicyResult = vpcService.createIkePolicy(createIkePolicyParams);
@@ -23942,7 +24217,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteIkePolicy
         const id = 'testString';
         const deleteIkePolicyParams = {
-          id: id,
+          id,
         };
 
         const deleteIkePolicyResult = vpcService.deleteIkePolicy(deleteIkePolicyParams);
@@ -24028,7 +24303,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getIkePolicy
         const id = 'testString';
         const getIkePolicyParams = {
-          id: id,
+          id,
         };
 
         const getIkePolicyResult = vpcService.getIkePolicy(getIkePolicyParams);
@@ -24120,13 +24395,13 @@ describe('VpcV1', () => {
         const keyLifetime = 28800;
         const name = 'my-ike-policy';
         const updateIkePolicyParams = {
-          id: id,
-          authenticationAlgorithm: authenticationAlgorithm,
-          dhGroup: dhGroup,
-          encryptionAlgorithm: encryptionAlgorithm,
-          ikeVersion: ikeVersion,
-          keyLifetime: keyLifetime,
-          name: name,
+          id,
+          authenticationAlgorithm,
+          dhGroup,
+          encryptionAlgorithm,
+          ikeVersion,
+          keyLifetime,
+          name,
         };
 
         const updateIkePolicyResult = vpcService.updateIkePolicy(updateIkePolicyParams);
@@ -24218,7 +24493,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listIkePolicyConnections
         const id = 'testString';
         const listIkePolicyConnectionsParams = {
-          id: id,
+          id,
         };
 
         const listIkePolicyConnectionsResult = vpcService.listIkePolicyConnections(
@@ -24307,8 +24582,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listIpsecPoliciesParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listIpsecPoliciesResult = vpcService.listIpsecPolicies(listIpsecPoliciesParams);
@@ -24435,12 +24710,12 @@ describe('VpcV1', () => {
         const name = 'my-ipsec-policy';
         const resourceGroup = resourceGroupIdentityModel;
         const createIpsecPolicyParams = {
-          authenticationAlgorithm: authenticationAlgorithm,
-          encryptionAlgorithm: encryptionAlgorithm,
-          pfs: pfs,
-          keyLifetime: keyLifetime,
-          name: name,
-          resourceGroup: resourceGroup,
+          authenticationAlgorithm,
+          encryptionAlgorithm,
+          pfs,
+          keyLifetime,
+          name,
+          resourceGroup,
         };
 
         const createIpsecPolicyResult = vpcService.createIpsecPolicy(createIpsecPolicyParams);
@@ -24535,7 +24810,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteIpsecPolicy
         const id = 'testString';
         const deleteIpsecPolicyParams = {
-          id: id,
+          id,
         };
 
         const deleteIpsecPolicyResult = vpcService.deleteIpsecPolicy(deleteIpsecPolicyParams);
@@ -24621,7 +24896,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getIpsecPolicy
         const id = 'testString';
         const getIpsecPolicyParams = {
-          id: id,
+          id,
         };
 
         const getIpsecPolicyResult = vpcService.getIpsecPolicy(getIpsecPolicyParams);
@@ -24712,12 +24987,12 @@ describe('VpcV1', () => {
         const name = 'my-ipsec-policy';
         const pfs = 'disabled';
         const updateIpsecPolicyParams = {
-          id: id,
-          authenticationAlgorithm: authenticationAlgorithm,
-          encryptionAlgorithm: encryptionAlgorithm,
-          keyLifetime: keyLifetime,
-          name: name,
-          pfs: pfs,
+          id,
+          authenticationAlgorithm,
+          encryptionAlgorithm,
+          keyLifetime,
+          name,
+          pfs,
         };
 
         const updateIpsecPolicyResult = vpcService.updateIpsecPolicy(updateIpsecPolicyParams);
@@ -24808,7 +25083,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listIpsecPolicyConnections
         const id = 'testString';
         const listIpsecPolicyConnectionsParams = {
-          id: id,
+          id,
         };
 
         const listIpsecPolicyConnectionsResult = vpcService.listIpsecPolicyConnections(
@@ -24900,11 +25175,11 @@ describe('VpcV1', () => {
         const sort = 'name';
         const mode = 'route';
         const listVpnGatewaysParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          sort: sort,
-          mode: mode,
+          start,
+          limit,
+          resourceGroupId,
+          sort,
+          mode,
         };
 
         const listVpnGatewaysResult = vpcService.listVpnGateways(listVpnGatewaysParams);
@@ -25048,7 +25323,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createVpnGateway
         const vpnGatewayPrototype = vpnGatewayPrototypeModel;
         const createVpnGatewayParams = {
-          vpnGatewayPrototype: vpnGatewayPrototype,
+          vpnGatewayPrototype,
         };
 
         const createVpnGatewayResult = vpcService.createVpnGateway(createVpnGatewayParams);
@@ -25134,7 +25409,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteVpnGateway
         const id = 'testString';
         const deleteVpnGatewayParams = {
-          id: id,
+          id,
         };
 
         const deleteVpnGatewayResult = vpcService.deleteVpnGateway(deleteVpnGatewayParams);
@@ -25220,7 +25495,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpnGateway
         const id = 'testString';
         const getVpnGatewayParams = {
-          id: id,
+          id,
         };
 
         const getVpnGatewayResult = vpcService.getVpnGateway(getVpnGatewayParams);
@@ -25307,8 +25582,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-vpn-gateway';
         const updateVpnGatewayParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updateVpnGatewayResult = vpcService.updateVpnGateway(updateVpnGatewayParams);
@@ -25396,8 +25671,8 @@ describe('VpcV1', () => {
         const vpnGatewayId = 'testString';
         const status = 'testString';
         const listVpnGatewayConnectionsParams = {
-          vpnGatewayId: vpnGatewayId,
-          status: status,
+          vpnGatewayId,
+          status,
         };
 
         const listVpnGatewayConnectionsResult = vpcService.listVpnGatewayConnections(
@@ -25518,8 +25793,8 @@ describe('VpcV1', () => {
         const vpnGatewayId = 'testString';
         const vpnGatewayConnectionPrototype = vpnGatewayConnectionPrototypeModel;
         const createVpnGatewayConnectionParams = {
-          vpnGatewayId: vpnGatewayId,
-          vpnGatewayConnectionPrototype: vpnGatewayConnectionPrototype,
+          vpnGatewayId,
+          vpnGatewayConnectionPrototype,
         };
 
         const createVpnGatewayConnectionResult = vpcService.createVpnGatewayConnection(
@@ -25611,8 +25886,8 @@ describe('VpcV1', () => {
         const vpnGatewayId = 'testString';
         const id = 'testString';
         const deleteVpnGatewayConnectionParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
+          vpnGatewayId,
+          id,
         };
 
         const deleteVpnGatewayConnectionResult = vpcService.deleteVpnGatewayConnection(
@@ -25708,8 +25983,8 @@ describe('VpcV1', () => {
         const vpnGatewayId = 'testString';
         const id = 'testString';
         const getVpnGatewayConnectionParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
+          vpnGatewayId,
+          id,
         };
 
         const getVpnGatewayConnectionResult = vpcService.getVpnGatewayConnection(
@@ -25837,9 +26112,9 @@ describe('VpcV1', () => {
         const id = 'testString';
         const vpnGatewayConnectionPatch = vpnGatewayConnectionPatchModel;
         const updateVpnGatewayConnectionParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
-          vpnGatewayConnectionPatch: vpnGatewayConnectionPatch,
+          vpnGatewayId,
+          id,
+          vpnGatewayConnectionPatch,
         };
 
         const updateVpnGatewayConnectionResult = vpcService.updateVpnGatewayConnection(
@@ -25938,8 +26213,8 @@ describe('VpcV1', () => {
         const vpnGatewayId = 'testString';
         const id = 'testString';
         const listVpnGatewayConnectionLocalCidrsParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
+          vpnGatewayId,
+          id,
         };
 
         const listVpnGatewayConnectionLocalCidrsResult =
@@ -26036,10 +26311,10 @@ describe('VpcV1', () => {
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
         const removeVpnGatewayConnectionLocalCidrParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
-          cidrPrefix: cidrPrefix,
-          prefixLength: prefixLength,
+          vpnGatewayId,
+          id,
+          cidrPrefix,
+          prefixLength,
         };
 
         const removeVpnGatewayConnectionLocalCidrResult =
@@ -26142,10 +26417,10 @@ describe('VpcV1', () => {
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
         const checkVpnGatewayConnectionLocalCidrParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
-          cidrPrefix: cidrPrefix,
-          prefixLength: prefixLength,
+          vpnGatewayId,
+          id,
+          cidrPrefix,
+          prefixLength,
         };
 
         const checkVpnGatewayConnectionLocalCidrResult =
@@ -26248,10 +26523,10 @@ describe('VpcV1', () => {
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
         const addVpnGatewayConnectionLocalCidrParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
-          cidrPrefix: cidrPrefix,
-          prefixLength: prefixLength,
+          vpnGatewayId,
+          id,
+          cidrPrefix,
+          prefixLength,
         };
 
         const addVpnGatewayConnectionLocalCidrResult = vpcService.addVpnGatewayConnectionLocalCidr(
@@ -26353,8 +26628,8 @@ describe('VpcV1', () => {
         const vpnGatewayId = 'testString';
         const id = 'testString';
         const listVpnGatewayConnectionPeerCidrsParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
+          vpnGatewayId,
+          id,
         };
 
         const listVpnGatewayConnectionPeerCidrsResult =
@@ -26451,10 +26726,10 @@ describe('VpcV1', () => {
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
         const removeVpnGatewayConnectionPeerCidrParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
-          cidrPrefix: cidrPrefix,
-          prefixLength: prefixLength,
+          vpnGatewayId,
+          id,
+          cidrPrefix,
+          prefixLength,
         };
 
         const removeVpnGatewayConnectionPeerCidrResult =
@@ -26557,10 +26832,10 @@ describe('VpcV1', () => {
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
         const checkVpnGatewayConnectionPeerCidrParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
-          cidrPrefix: cidrPrefix,
-          prefixLength: prefixLength,
+          vpnGatewayId,
+          id,
+          cidrPrefix,
+          prefixLength,
         };
 
         const checkVpnGatewayConnectionPeerCidrResult =
@@ -26663,10 +26938,10 @@ describe('VpcV1', () => {
         const cidrPrefix = 'testString';
         const prefixLength = 'testString';
         const addVpnGatewayConnectionPeerCidrParams = {
-          vpnGatewayId: vpnGatewayId,
-          id: id,
-          cidrPrefix: cidrPrefix,
-          prefixLength: prefixLength,
+          vpnGatewayId,
+          id,
+          cidrPrefix,
+          prefixLength,
         };
 
         const addVpnGatewayConnectionPeerCidrResult = vpcService.addVpnGatewayConnectionPeerCidr(
@@ -26771,11 +27046,11 @@ describe('VpcV1', () => {
         const resourceGroupId = 'testString';
         const sort = 'name';
         const listVpnServersParams = {
-          name: name,
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          sort: sort,
+          name,
+          start,
+          limit,
+          resourceGroupId,
+          sort,
         };
 
         const listVpnServersResult = vpcService.listVpnServers(listVpnServersParams);
@@ -26948,18 +27223,18 @@ describe('VpcV1', () => {
         const resourceGroup = resourceGroupIdentityModel;
         const securityGroups = [securityGroupIdentityModel];
         const createVpnServerParams = {
-          certificate: certificate,
-          clientAuthentication: clientAuthentication,
-          clientIpPool: clientIpPool,
-          subnets: subnets,
-          clientDnsServerIps: clientDnsServerIps,
-          clientIdleTimeout: clientIdleTimeout,
-          enableSplitTunneling: enableSplitTunneling,
-          name: name,
-          port: port,
-          protocol: protocol,
-          resourceGroup: resourceGroup,
-          securityGroups: securityGroups,
+          certificate,
+          clientAuthentication,
+          clientIpPool,
+          subnets,
+          clientDnsServerIps,
+          clientIdleTimeout,
+          enableSplitTunneling,
+          name,
+          port,
+          protocol,
+          resourceGroup,
+          securityGroups,
         };
 
         const createVpnServerResult = vpcService.createVpnServer(createVpnServerParams);
@@ -27063,8 +27338,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteVpnServerParams = {
-          id: id,
-          ifMatch: ifMatch,
+          id,
+          ifMatch,
         };
 
         const deleteVpnServerResult = vpcService.deleteVpnServer(deleteVpnServerParams);
@@ -27151,7 +27426,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpnServer
         const id = 'testString';
         const getVpnServerParams = {
-          id: id,
+          id,
         };
 
         const getVpnServerResult = vpcService.getVpnServer(getVpnServerParams);
@@ -27276,18 +27551,18 @@ describe('VpcV1', () => {
         const subnets = [subnetIdentityModel];
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateVpnServerParams = {
-          id: id,
-          certificate: certificate,
-          clientAuthentication: clientAuthentication,
-          clientDnsServerIps: clientDnsServerIps,
-          clientIdleTimeout: clientIdleTimeout,
-          clientIpPool: clientIpPool,
-          enableSplitTunneling: enableSplitTunneling,
-          name: name,
-          port: port,
-          protocol: protocol,
-          subnets: subnets,
-          ifMatch: ifMatch,
+          id,
+          certificate,
+          clientAuthentication,
+          clientDnsServerIps,
+          clientIdleTimeout,
+          clientIpPool,
+          enableSplitTunneling,
+          name,
+          port,
+          protocol,
+          subnets,
+          ifMatch,
         };
 
         const updateVpnServerResult = vpcService.updateVpnServer(updateVpnServerParams);
@@ -27384,7 +27659,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getVpnServerClientConfiguration
         const id = 'testString';
         const getVpnServerClientConfigurationParams = {
-          id: id,
+          id,
         };
 
         const getVpnServerClientConfigurationResult = vpcService.getVpnServerClientConfiguration(
@@ -27475,10 +27750,10 @@ describe('VpcV1', () => {
         const limit = 1;
         const sort = 'created_at';
         const listVpnServerClientsParams = {
-          vpnServerId: vpnServerId,
-          start: start,
-          limit: limit,
-          sort: sort,
+          vpnServerId,
+          start,
+          limit,
+          sort,
         };
 
         const listVpnServerClientsResult = vpcService.listVpnServerClients(
@@ -27622,8 +27897,8 @@ describe('VpcV1', () => {
         const vpnServerId = 'testString';
         const id = 'testString';
         const deleteVpnServerClientParams = {
-          vpnServerId: vpnServerId,
-          id: id,
+          vpnServerId,
+          id,
         };
 
         const deleteVpnServerClientResult = vpcService.deleteVpnServerClient(
@@ -27719,8 +27994,8 @@ describe('VpcV1', () => {
         const vpnServerId = 'testString';
         const id = 'testString';
         const getVpnServerClientParams = {
-          vpnServerId: vpnServerId,
-          id: id,
+          vpnServerId,
+          id,
         };
 
         const getVpnServerClientResult = vpcService.getVpnServerClient(getVpnServerClientParams);
@@ -27810,8 +28085,8 @@ describe('VpcV1', () => {
         const vpnServerId = 'testString';
         const id = 'testString';
         const disconnectVpnClientParams = {
-          vpnServerId: vpnServerId,
-          id: id,
+          vpnServerId,
+          id,
         };
 
         const disconnectVpnClientResult = vpcService.disconnectVpnClient(disconnectVpnClientParams);
@@ -27907,10 +28182,10 @@ describe('VpcV1', () => {
         const limit = 1;
         const sort = 'name';
         const listVpnServerRoutesParams = {
-          vpnServerId: vpnServerId,
-          start: start,
-          limit: limit,
-          sort: sort,
+          vpnServerId,
+          start,
+          limit,
+          sort,
         };
 
         const listVpnServerRoutesResult = vpcService.listVpnServerRoutes(listVpnServerRoutesParams);
@@ -28054,10 +28329,10 @@ describe('VpcV1', () => {
         const action = 'deliver';
         const name = 'my-vpn-route-2';
         const createVpnServerRouteParams = {
-          vpnServerId: vpnServerId,
-          destination: destination,
-          action: action,
-          name: name,
+          vpnServerId,
+          destination,
+          action,
+          name,
         };
 
         const createVpnServerRouteResult = vpcService.createVpnServerRoute(
@@ -28151,8 +28426,8 @@ describe('VpcV1', () => {
         const vpnServerId = 'testString';
         const id = 'testString';
         const deleteVpnServerRouteParams = {
-          vpnServerId: vpnServerId,
-          id: id,
+          vpnServerId,
+          id,
         };
 
         const deleteVpnServerRouteResult = vpcService.deleteVpnServerRoute(
@@ -28244,8 +28519,8 @@ describe('VpcV1', () => {
         const vpnServerId = 'testString';
         const id = 'testString';
         const getVpnServerRouteParams = {
-          vpnServerId: vpnServerId,
-          id: id,
+          vpnServerId,
+          id,
         };
 
         const getVpnServerRouteResult = vpcService.getVpnServerRoute(getVpnServerRouteParams);
@@ -28336,9 +28611,9 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-vpn-route-2';
         const updateVpnServerRouteParams = {
-          vpnServerId: vpnServerId,
-          id: id,
-          name: name,
+          vpnServerId,
+          id,
+          name,
         };
 
         const updateVpnServerRouteResult = vpcService.updateVpnServerRoute(
@@ -28431,8 +28706,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listLoadBalancerProfilesParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listLoadBalancerProfilesResult = vpcService.listLoadBalancerProfiles(
@@ -28549,7 +28824,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getLoadBalancerProfile
         const name = 'testString';
         const getLoadBalancerProfileParams = {
-          name: name,
+          name,
         };
 
         const getLoadBalancerProfileResult = vpcService.getLoadBalancerProfile(
@@ -28638,8 +28913,8 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 1;
         const listLoadBalancersParams = {
-          start: start,
-          limit: limit,
+          start,
+          limit,
         };
 
         const listLoadBalancersResult = vpcService.listLoadBalancers(listLoadBalancersParams);
@@ -28703,9 +28978,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/load_balancers';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"load_balancers":[{"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::load-balancer:dd754295-e9e0-4c9d-bf6c-58fbc59e5727","hostname":"my-load-balancer-123456-us-south-1.lb.bluemix.net","href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727","id":"dd754295-e9e0-4c9d-bf6c-58fbc59e5727","is_public":true,"listeners":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/listeners/70294e14-4e61-11e8-bcf4-0242ac110004","id":"70294e14-4e61-11e8-bcf4-0242ac110004"}],"logging":{"datapath":{"active":true}},"name":"my-load-balancer","operating_status":"offline","pools":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/pools/70294e14-4e61-11e8-bcf4-0242ac110004","id":"70294e14-4e61-11e8-bcf4-0242ac110004","name":"my-load-balancer-pool"}],"private_ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"profile":{"family":"network","href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancer/profiles/network-fixed","name":"network-fixed"},"provisioning_status":"active","public_ips":[{"address":"192.168.3.4"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"load_balancer","route_mode":true,"security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"security_groups_supported":false,"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}],"udp_supported":true}]}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"load_balancers":[{"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::load-balancer:dd754295-e9e0-4c9d-bf6c-58fbc59e5727","hostname":"6b88d615-us-south.lb.appdomain.cloud","href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727","id":"dd754295-e9e0-4c9d-bf6c-58fbc59e5727","is_public":true,"listeners":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/listeners/70294e14-4e61-11e8-bcf4-0242ac110004","id":"70294e14-4e61-11e8-bcf4-0242ac110004"}],"logging":{"datapath":{"active":true}},"name":"my-load-balancer","operating_status":"offline","pools":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/pools/70294e14-4e61-11e8-bcf4-0242ac110004","id":"70294e14-4e61-11e8-bcf4-0242ac110004","name":"my-load-balancer-pool"}],"private_ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"profile":{"family":"network","href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancer/profiles/network-fixed","name":"network-fixed"},"provisioning_status":"active","public_ips":[{"address":"192.168.3.4"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"load_balancer","route_mode":true,"security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"security_groups_supported":false,"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}],"udp_supported":true}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"load_balancers":[{"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::load-balancer:dd754295-e9e0-4c9d-bf6c-58fbc59e5727","hostname":"my-load-balancer-123456-us-south-1.lb.bluemix.net","href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727","id":"dd754295-e9e0-4c9d-bf6c-58fbc59e5727","is_public":true,"listeners":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/listeners/70294e14-4e61-11e8-bcf4-0242ac110004","id":"70294e14-4e61-11e8-bcf4-0242ac110004"}],"logging":{"datapath":{"active":true}},"name":"my-load-balancer","operating_status":"offline","pools":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/pools/70294e14-4e61-11e8-bcf4-0242ac110004","id":"70294e14-4e61-11e8-bcf4-0242ac110004","name":"my-load-balancer-pool"}],"private_ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"profile":{"family":"network","href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancer/profiles/network-fixed","name":"network-fixed"},"provisioning_status":"active","public_ips":[{"address":"192.168.3.4"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"load_balancer","route_mode":true,"security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"security_groups_supported":false,"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}],"udp_supported":true}]}';
+        '{"total_count":2,"limit":1,"load_balancers":[{"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::load-balancer:dd754295-e9e0-4c9d-bf6c-58fbc59e5727","hostname":"6b88d615-us-south.lb.appdomain.cloud","href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727","id":"dd754295-e9e0-4c9d-bf6c-58fbc59e5727","is_public":true,"listeners":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/listeners/70294e14-4e61-11e8-bcf4-0242ac110004","id":"70294e14-4e61-11e8-bcf4-0242ac110004"}],"logging":{"datapath":{"active":true}},"name":"my-load-balancer","operating_status":"offline","pools":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancers/dd754295-e9e0-4c9d-bf6c-58fbc59e5727/pools/70294e14-4e61-11e8-bcf4-0242ac110004","id":"70294e14-4e61-11e8-bcf4-0242ac110004","name":"my-load-balancer-pool"}],"private_ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"profile":{"family":"network","href":"https://us-south.iaas.cloud.ibm.com/v1/load_balancer/profiles/network-fixed","name":"network-fixed"},"provisioning_status":"active","public_ips":[{"address":"192.168.3.4"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"load_balancer","route_mode":true,"security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"security_groups_supported":false,"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}],"udp_supported":true}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -28869,16 +29144,16 @@ describe('VpcV1', () => {
         const routeMode = true;
         const securityGroups = [securityGroupIdentityModel];
         const createLoadBalancerParams = {
-          isPublic: isPublic,
-          subnets: subnets,
-          listeners: listeners,
-          logging: logging,
-          name: name,
-          pools: pools,
-          profile: profile,
-          resourceGroup: resourceGroup,
-          routeMode: routeMode,
-          securityGroups: securityGroups,
+          isPublic,
+          subnets,
+          listeners,
+          logging,
+          name,
+          pools,
+          profile,
+          resourceGroup,
+          routeMode,
+          securityGroups,
         };
 
         const createLoadBalancerResult = vpcService.createLoadBalancer(createLoadBalancerParams);
@@ -28976,8 +29251,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteLoadBalancerParams = {
-          id: id,
-          ifMatch: ifMatch,
+          id,
+          ifMatch,
         };
 
         const deleteLoadBalancerResult = vpcService.deleteLoadBalancer(deleteLoadBalancerParams);
@@ -29064,7 +29339,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getLoadBalancer
         const id = 'testString';
         const getLoadBalancerParams = {
-          id: id,
+          id,
         };
 
         const getLoadBalancerResult = vpcService.getLoadBalancer(getLoadBalancerParams);
@@ -29171,11 +29446,11 @@ describe('VpcV1', () => {
         const subnets = [subnetIdentityModel];
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateLoadBalancerParams = {
-          id: id,
-          logging: logging,
-          name: name,
-          subnets: subnets,
-          ifMatch: ifMatch,
+          id,
+          logging,
+          name,
+          subnets,
+          ifMatch,
         };
 
         const updateLoadBalancerResult = vpcService.updateLoadBalancer(updateLoadBalancerParams);
@@ -29265,7 +29540,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getLoadBalancerStatistics
         const id = 'testString';
         const getLoadBalancerStatisticsParams = {
-          id: id,
+          id,
         };
 
         const getLoadBalancerStatisticsResult = vpcService.getLoadBalancerStatistics(
@@ -29353,7 +29628,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listLoadBalancerListeners
         const loadBalancerId = 'testString';
         const listLoadBalancerListenersParams = {
-          loadBalancerId: loadBalancerId,
+          loadBalancerId,
         };
 
         const listLoadBalancerListenersResult = vpcService.listLoadBalancerListeners(
@@ -29501,17 +29776,17 @@ describe('VpcV1', () => {
         const portMax = 499;
         const portMin = 443;
         const createLoadBalancerListenerParams = {
-          loadBalancerId: loadBalancerId,
-          protocol: protocol,
-          acceptProxyProtocol: acceptProxyProtocol,
-          certificateInstance: certificateInstance,
-          connectionLimit: connectionLimit,
-          defaultPool: defaultPool,
-          httpsRedirect: httpsRedirect,
-          policies: policies,
-          port: port,
-          portMax: portMax,
-          portMin: portMin,
+          loadBalancerId,
+          protocol,
+          acceptProxyProtocol,
+          certificateInstance,
+          connectionLimit,
+          defaultPool,
+          httpsRedirect,
+          policies,
+          port,
+          portMax,
+          portMin,
         };
 
         const createLoadBalancerListenerResult = vpcService.createLoadBalancerListener(
@@ -29616,8 +29891,8 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const id = 'testString';
         const deleteLoadBalancerListenerParams = {
-          loadBalancerId: loadBalancerId,
-          id: id,
+          loadBalancerId,
+          id,
         };
 
         const deleteLoadBalancerListenerResult = vpcService.deleteLoadBalancerListener(
@@ -29713,8 +29988,8 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const id = 'testString';
         const getLoadBalancerListenerParams = {
-          loadBalancerId: loadBalancerId,
-          id: id,
+          loadBalancerId,
+          id,
         };
 
         const getLoadBalancerListenerResult = vpcService.getLoadBalancerListener(
@@ -29843,17 +30118,17 @@ describe('VpcV1', () => {
         const portMin = 443;
         const protocol = 'http';
         const updateLoadBalancerListenerParams = {
-          loadBalancerId: loadBalancerId,
-          id: id,
-          acceptProxyProtocol: acceptProxyProtocol,
-          certificateInstance: certificateInstance,
-          connectionLimit: connectionLimit,
-          defaultPool: defaultPool,
-          httpsRedirect: httpsRedirect,
-          port: port,
-          portMax: portMax,
-          portMin: portMin,
-          protocol: protocol,
+          loadBalancerId,
+          id,
+          acceptProxyProtocol,
+          certificateInstance,
+          connectionLimit,
+          defaultPool,
+          httpsRedirect,
+          port,
+          portMax,
+          portMin,
+          protocol,
         };
 
         const updateLoadBalancerListenerResult = vpcService.updateLoadBalancerListener(
@@ -29958,8 +30233,8 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const listenerId = 'testString';
         const listLoadBalancerListenerPoliciesParams = {
-          loadBalancerId: loadBalancerId,
-          listenerId: listenerId,
+          loadBalancerId,
+          listenerId,
         };
 
         const listLoadBalancerListenerPoliciesResult = vpcService.listLoadBalancerListenerPolicies(
@@ -30075,13 +30350,13 @@ describe('VpcV1', () => {
         const rules = [loadBalancerListenerPolicyRulePrototypeModel];
         const target = loadBalancerListenerPolicyTargetPrototypeModel;
         const createLoadBalancerListenerPolicyParams = {
-          loadBalancerId: loadBalancerId,
-          listenerId: listenerId,
-          action: action,
-          priority: priority,
-          name: name,
-          rules: rules,
-          target: target,
+          loadBalancerId,
+          listenerId,
+          action,
+          priority,
+          name,
+          rules,
+          target,
         };
 
         const createLoadBalancerListenerPolicyResult = vpcService.createLoadBalancerListenerPolicy(
@@ -30187,9 +30462,9 @@ describe('VpcV1', () => {
         const listenerId = 'testString';
         const id = 'testString';
         const deleteLoadBalancerListenerPolicyParams = {
-          loadBalancerId: loadBalancerId,
-          listenerId: listenerId,
-          id: id,
+          loadBalancerId,
+          listenerId,
+          id,
         };
 
         const deleteLoadBalancerListenerPolicyResult = vpcService.deleteLoadBalancerListenerPolicy(
@@ -30289,9 +30564,9 @@ describe('VpcV1', () => {
         const listenerId = 'testString';
         const id = 'testString';
         const getLoadBalancerListenerPolicyParams = {
-          loadBalancerId: loadBalancerId,
-          listenerId: listenerId,
-          id: id,
+          loadBalancerId,
+          listenerId,
+          id,
         };
 
         const getLoadBalancerListenerPolicyResult = vpcService.getLoadBalancerListenerPolicy(
@@ -30401,12 +30676,12 @@ describe('VpcV1', () => {
         const priority = 5;
         const target = loadBalancerListenerPolicyTargetPatchModel;
         const updateLoadBalancerListenerPolicyParams = {
-          loadBalancerId: loadBalancerId,
-          listenerId: listenerId,
-          id: id,
-          name: name,
-          priority: priority,
-          target: target,
+          loadBalancerId,
+          listenerId,
+          id,
+          name,
+          priority,
+          target,
         };
 
         const updateLoadBalancerListenerPolicyResult = vpcService.updateLoadBalancerListenerPolicy(
@@ -30509,9 +30784,9 @@ describe('VpcV1', () => {
         const listenerId = 'testString';
         const policyId = 'testString';
         const listLoadBalancerListenerPolicyRulesParams = {
-          loadBalancerId: loadBalancerId,
-          listenerId: listenerId,
-          policyId: policyId,
+          loadBalancerId,
+          listenerId,
+          policyId,
         };
 
         const listLoadBalancerListenerPolicyRulesResult =
@@ -30614,13 +30889,13 @@ describe('VpcV1', () => {
         const value = 'testString';
         const field = 'MY-APP-HEADER';
         const createLoadBalancerListenerPolicyRuleParams = {
-          loadBalancerId: loadBalancerId,
-          listenerId: listenerId,
-          policyId: policyId,
-          condition: condition,
-          type: type,
-          value: value,
-          field: field,
+          loadBalancerId,
+          listenerId,
+          policyId,
+          condition,
+          type,
+          value,
+          field,
         };
 
         const createLoadBalancerListenerPolicyRuleResult =
@@ -30732,10 +31007,10 @@ describe('VpcV1', () => {
         const policyId = 'testString';
         const id = 'testString';
         const deleteLoadBalancerListenerPolicyRuleParams = {
-          loadBalancerId: loadBalancerId,
-          listenerId: listenerId,
-          policyId: policyId,
-          id: id,
+          loadBalancerId,
+          listenerId,
+          policyId,
+          id,
         };
 
         const deleteLoadBalancerListenerPolicyRuleResult =
@@ -30840,10 +31115,10 @@ describe('VpcV1', () => {
         const policyId = 'testString';
         const id = 'testString';
         const getLoadBalancerListenerPolicyRuleParams = {
-          loadBalancerId: loadBalancerId,
-          listenerId: listenerId,
-          policyId: policyId,
-          id: id,
+          loadBalancerId,
+          listenerId,
+          policyId,
+          id,
         };
 
         const getLoadBalancerListenerPolicyRuleResult =
@@ -30950,14 +31225,14 @@ describe('VpcV1', () => {
         const type = 'body';
         const value = 'testString';
         const updateLoadBalancerListenerPolicyRuleParams = {
-          loadBalancerId: loadBalancerId,
-          listenerId: listenerId,
-          policyId: policyId,
-          id: id,
-          condition: condition,
-          field: field,
-          type: type,
-          value: value,
+          loadBalancerId,
+          listenerId,
+          policyId,
+          id,
+          condition,
+          field,
+          type,
+          value,
         };
 
         const updateLoadBalancerListenerPolicyRuleResult =
@@ -31063,7 +31338,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation listLoadBalancerPools
         const loadBalancerId = 'testString';
         const listLoadBalancerPoolsParams = {
-          loadBalancerId: loadBalancerId,
+          loadBalancerId,
         };
 
         const listLoadBalancerPoolsResult = vpcService.listLoadBalancerPools(
@@ -31188,14 +31463,14 @@ describe('VpcV1', () => {
         const proxyProtocol = 'disabled';
         const sessionPersistence = loadBalancerPoolSessionPersistencePrototypeModel;
         const createLoadBalancerPoolParams = {
-          loadBalancerId: loadBalancerId,
-          algorithm: algorithm,
-          healthMonitor: healthMonitor,
-          protocol: protocol,
-          members: members,
-          name: name,
-          proxyProtocol: proxyProtocol,
-          sessionPersistence: sessionPersistence,
+          loadBalancerId,
+          algorithm,
+          healthMonitor,
+          protocol,
+          members,
+          name,
+          proxyProtocol,
+          sessionPersistence,
         };
 
         const createLoadBalancerPoolResult = vpcService.createLoadBalancerPool(
@@ -31297,8 +31572,8 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const id = 'testString';
         const deleteLoadBalancerPoolParams = {
-          loadBalancerId: loadBalancerId,
-          id: id,
+          loadBalancerId,
+          id,
         };
 
         const deleteLoadBalancerPoolResult = vpcService.deleteLoadBalancerPool(
@@ -31394,8 +31669,8 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const id = 'testString';
         const getLoadBalancerPoolParams = {
-          loadBalancerId: loadBalancerId,
-          id: id,
+          loadBalancerId,
+          id,
         };
 
         const getLoadBalancerPoolResult = vpcService.getLoadBalancerPool(getLoadBalancerPoolParams);
@@ -31513,14 +31788,14 @@ describe('VpcV1', () => {
         const proxyProtocol = 'disabled';
         const sessionPersistence = loadBalancerPoolSessionPersistencePatchModel;
         const updateLoadBalancerPoolParams = {
-          loadBalancerId: loadBalancerId,
-          id: id,
-          algorithm: algorithm,
-          healthMonitor: healthMonitor,
-          name: name,
-          protocol: protocol,
-          proxyProtocol: proxyProtocol,
-          sessionPersistence: sessionPersistence,
+          loadBalancerId,
+          id,
+          algorithm,
+          healthMonitor,
+          name,
+          protocol,
+          proxyProtocol,
+          sessionPersistence,
         };
 
         const updateLoadBalancerPoolResult = vpcService.updateLoadBalancerPool(
@@ -31622,8 +31897,8 @@ describe('VpcV1', () => {
         const loadBalancerId = 'testString';
         const poolId = 'testString';
         const listLoadBalancerPoolMembersParams = {
-          loadBalancerId: loadBalancerId,
-          poolId: poolId,
+          loadBalancerId,
+          poolId,
         };
 
         const listLoadBalancerPoolMembersResult = vpcService.listLoadBalancerPoolMembers(
@@ -31729,11 +32004,11 @@ describe('VpcV1', () => {
         const target = loadBalancerPoolMemberTargetPrototypeModel;
         const weight = 50;
         const createLoadBalancerPoolMemberParams = {
-          loadBalancerId: loadBalancerId,
-          poolId: poolId,
-          port: port,
-          target: target,
-          weight: weight,
+          loadBalancerId,
+          poolId,
+          port,
+          target,
+          weight,
         };
 
         const createLoadBalancerPoolMemberResult = vpcService.createLoadBalancerPoolMember(
@@ -31851,9 +32126,9 @@ describe('VpcV1', () => {
         const poolId = 'testString';
         const members = [loadBalancerPoolMemberPrototypeModel];
         const replaceLoadBalancerPoolMembersParams = {
-          loadBalancerId: loadBalancerId,
-          poolId: poolId,
-          members: members,
+          loadBalancerId,
+          poolId,
+          members,
         };
 
         const replaceLoadBalancerPoolMembersResult = vpcService.replaceLoadBalancerPoolMembers(
@@ -31953,9 +32228,9 @@ describe('VpcV1', () => {
         const poolId = 'testString';
         const id = 'testString';
         const deleteLoadBalancerPoolMemberParams = {
-          loadBalancerId: loadBalancerId,
-          poolId: poolId,
-          id: id,
+          loadBalancerId,
+          poolId,
+          id,
         };
 
         const deleteLoadBalancerPoolMemberResult = vpcService.deleteLoadBalancerPoolMember(
@@ -32055,9 +32330,9 @@ describe('VpcV1', () => {
         const poolId = 'testString';
         const id = 'testString';
         const getLoadBalancerPoolMemberParams = {
-          loadBalancerId: loadBalancerId,
-          poolId: poolId,
-          id: id,
+          loadBalancerId,
+          poolId,
+          id,
         };
 
         const getLoadBalancerPoolMemberResult = vpcService.getLoadBalancerPoolMember(
@@ -32167,12 +32442,12 @@ describe('VpcV1', () => {
         const target = loadBalancerPoolMemberTargetPrototypeModel;
         const weight = 50;
         const updateLoadBalancerPoolMemberParams = {
-          loadBalancerId: loadBalancerId,
-          poolId: poolId,
-          id: id,
-          port: port,
-          target: target,
-          weight: weight,
+          loadBalancerId,
+          poolId,
+          id,
+          port,
+          target,
+          weight,
         };
 
         const updateLoadBalancerPoolMemberResult = vpcService.updateLoadBalancerPoolMember(
@@ -32276,10 +32551,10 @@ describe('VpcV1', () => {
         const limit = 1;
         const resourceGroupId = 'testString';
         const listEndpointGatewaysParams = {
-          name: name,
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
+          name,
+          start,
+          limit,
+          resourceGroupId,
         };
 
         const listEndpointGatewaysResult = vpcService.listEndpointGateways(
@@ -32435,12 +32710,12 @@ describe('VpcV1', () => {
         const resourceGroup = resourceGroupIdentityModel;
         const securityGroups = [securityGroupIdentityModel];
         const createEndpointGatewayParams = {
-          target: target,
-          vpc: vpc,
-          ips: ips,
-          name: name,
-          resourceGroup: resourceGroup,
-          securityGroups: securityGroups,
+          target,
+          vpc,
+          ips,
+          name,
+          resourceGroup,
+          securityGroups,
         };
 
         const createEndpointGatewayResult = vpcService.createEndpointGateway(
@@ -32538,10 +32813,10 @@ describe('VpcV1', () => {
         const limit = 1;
         const sort = 'name';
         const listEndpointGatewayIpsParams = {
-          endpointGatewayId: endpointGatewayId,
-          start: start,
-          limit: limit,
-          sort: sort,
+          endpointGatewayId,
+          start,
+          limit,
+          sort,
         };
 
         const listEndpointGatewayIpsResult = vpcService.listEndpointGatewayIps(
@@ -32689,8 +32964,8 @@ describe('VpcV1', () => {
         const endpointGatewayId = 'testString';
         const id = 'testString';
         const removeEndpointGatewayIpParams = {
-          endpointGatewayId: endpointGatewayId,
-          id: id,
+          endpointGatewayId,
+          id,
         };
 
         const removeEndpointGatewayIpResult = vpcService.removeEndpointGatewayIp(
@@ -32786,8 +33061,8 @@ describe('VpcV1', () => {
         const endpointGatewayId = 'testString';
         const id = 'testString';
         const getEndpointGatewayIpParams = {
-          endpointGatewayId: endpointGatewayId,
-          id: id,
+          endpointGatewayId,
+          id,
         };
 
         const getEndpointGatewayIpResult = vpcService.getEndpointGatewayIp(
@@ -32883,8 +33158,8 @@ describe('VpcV1', () => {
         const endpointGatewayId = 'testString';
         const id = 'testString';
         const addEndpointGatewayIpParams = {
-          endpointGatewayId: endpointGatewayId,
-          id: id,
+          endpointGatewayId,
+          id,
         };
 
         const addEndpointGatewayIpResult = vpcService.addEndpointGatewayIp(
@@ -32979,7 +33254,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteEndpointGateway
         const id = 'testString';
         const deleteEndpointGatewayParams = {
-          id: id,
+          id,
         };
 
         const deleteEndpointGatewayResult = vpcService.deleteEndpointGateway(
@@ -33067,7 +33342,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getEndpointGateway
         const id = 'testString';
         const getEndpointGatewayParams = {
-          id: id,
+          id,
         };
 
         const getEndpointGatewayResult = vpcService.getEndpointGateway(getEndpointGatewayParams);
@@ -33154,8 +33429,8 @@ describe('VpcV1', () => {
         const id = 'testString';
         const name = 'my-endpoint-gateway';
         const updateEndpointGatewayParams = {
-          id: id,
-          name: name,
+          id,
+          name,
         };
 
         const updateEndpointGatewayResult = vpcService.updateEndpointGateway(
@@ -33252,15 +33527,15 @@ describe('VpcV1', () => {
         const targetId = 'testString';
         const targetResourceType = 'instance';
         const listFlowLogCollectorsParams = {
-          start: start,
-          limit: limit,
-          resourceGroupId: resourceGroupId,
-          name: name,
-          vpcId: vpcId,
-          vpcCrn: vpcCrn,
-          vpcName: vpcName,
-          targetId: targetId,
-          targetResourceType: targetResourceType,
+          start,
+          limit,
+          resourceGroupId,
+          name,
+          vpcId,
+          vpcCrn,
+          vpcName,
+          targetId,
+          targetResourceType,
         };
 
         const listFlowLogCollectorsResult = vpcService.listFlowLogCollectors(
@@ -33419,11 +33694,11 @@ describe('VpcV1', () => {
         const name = 'my-flow-log-collector';
         const resourceGroup = resourceGroupIdentityModel;
         const createFlowLogCollectorParams = {
-          storageBucket: storageBucket,
-          target: target,
-          active: active,
-          name: name,
-          resourceGroup: resourceGroup,
+          storageBucket,
+          target,
+          active,
+          name,
+          resourceGroup,
         };
 
         const createFlowLogCollectorResult = vpcService.createFlowLogCollector(
@@ -33517,7 +33792,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation deleteFlowLogCollector
         const id = 'testString';
         const deleteFlowLogCollectorParams = {
-          id: id,
+          id,
         };
 
         const deleteFlowLogCollectorResult = vpcService.deleteFlowLogCollector(
@@ -33605,7 +33880,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation getFlowLogCollector
         const id = 'testString';
         const getFlowLogCollectorParams = {
-          id: id,
+          id,
         };
 
         const getFlowLogCollectorResult = vpcService.getFlowLogCollector(getFlowLogCollectorParams);
@@ -33693,9 +33968,9 @@ describe('VpcV1', () => {
         const active = true;
         const name = 'my-flow-log-collector';
         const updateFlowLogCollectorParams = {
-          id: id,
-          active: active,
-          name: name,
+          id,
+          active,
+          name,
         };
 
         const updateFlowLogCollectorResult = vpcService.updateFlowLogCollector(
