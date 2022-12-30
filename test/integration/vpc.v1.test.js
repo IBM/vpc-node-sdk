@@ -1226,6 +1226,43 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  // mock server doesn't support
+  test('listBackupPolicyJobs()', (done) => {
+    const params = {
+      backupPolicyId: dict.createdBackupPolicy,
+    };
+
+    vpcService
+      .listBackupPolicyJobs(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        dict.createdBackupPolicyJob = res.result.jobs[0].id;
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+
+  // mock server doesn't support
+  test('getBackupPolicyJob()', (done) => {
+    const params = {
+      backupPolicyId: dict.createdBackupPolicy,
+      id: dict.createdBackupPolicyJob,
+    };
+
+    vpcService
+      .getBackupPolicyJob(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('updateBackupPolicyPlan()', (done) => {
     const params = {
       backupPolicyId: dict.createdBackupPolicy,
@@ -2854,9 +2891,9 @@ describe('VpcV1_integration', () => {
   });
   test('createIkePolicy()', (done) => {
     const params = {
-      authenticationAlgorithm: 'md5',
-      dhGroup: 2,
-      encryptionAlgorithm: 'triple_des',
+      authenticationAlgorithm: 'sha256',
+      dhGroup: 14,
+      encryptionAlgorithm: 'aes128',
       ikeVersion: 1,
       name: generateName('my-ike-policy'),
       keyLifetime: 28800,
@@ -2893,9 +2930,9 @@ describe('VpcV1_integration', () => {
   test('updateIkePolicy()', (done) => {
     const params = {
       id: dict.createdIkePolicy,
-      authenticationAlgorithm: 'md5',
-      dhGroup: 2,
-      encryptionAlgorithm: 'triple_des',
+      authenticationAlgorithm: 'sha256',
+      dhGroup: 15,
+      encryptionAlgorithm: 'aes128',
       ikeVersion: 1,
       keyLifetime: 28800,
     };
@@ -2945,8 +2982,8 @@ describe('VpcV1_integration', () => {
   });
   test('createIpsecPolicy()', (done) => {
     const params = {
-      authenticationAlgorithm: 'md5',
-      encryptionAlgorithm: 'triple_des',
+      authenticationAlgorithm: 'sha256',
+      encryptionAlgorithm: 'aes128',
       pfs: 'disabled',
       name: generateName('my-ipsec-policy'),
       keyLifetime: 3600,
@@ -2983,8 +3020,8 @@ describe('VpcV1_integration', () => {
   test('updateIpsecPolicy()', (done) => {
     const params = {
       id: dict.createdIpsec,
-      authenticationAlgorithm: 'md5',
-      encryptionAlgorithm: 'triple_des',
+      authenticationAlgorithm: 'sha256',
+      encryptionAlgorithm: 'aes128',
       keyLifetime: 3600,
       pfs: 'disabled',
     };
