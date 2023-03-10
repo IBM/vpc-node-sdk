@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022.
+ * (C) Copyright IBM Corp. 2023.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,25 +15,24 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.62.2-e5d4c32b-20221214-193750
+ * IBM OpenAPI SDK Code Generator Version: 3.63.0-5dae26c1-20230111-193039
  */
 
 /* eslint-disable max-classes-per-file */
 /* eslint-disable no-await-in-loop */
-/* tslint:disable:max-classes-per-file */
 
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
-import { getQueryParam } from 'ibm-cloud-sdk-core';
-import { getNewLogger, SDKLogger } from 'ibm-cloud-sdk-core';
 import {
   Authenticator,
   BaseService,
   getAuthenticatorFromEnvironment,
-  UserOptions,
   validateParams,
+  UserOptions,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
+import { getQueryParam } from 'ibm-cloud-sdk-core';
+import { getNewLogger, SDKLogger } from 'ibm-cloud-sdk-core';
 
 /**
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
@@ -109,7 +108,7 @@ class VpcV1 extends BaseService {
     } else {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
-    this.version = options.version || `2022-12-21`;
+    this.version = options.version || `2022-09-13`;
     this.generation = options.generation;
   }
 
@@ -261,9 +260,9 @@ class VpcV1 extends BaseService {
    * Delete a VPC.
    *
    * This request deletes a VPC. This operation cannot be reversed. For this request to succeed, the VPC must not
-   * contain any instances, subnets, or public gateways. All security groups and network ACLs associated with the VPC
-   * are automatically deleted. All flow log collectors with `auto_delete` set to `true` targeting the VPC or any
-   * resource in the VPC are automatically deleted.
+   * contain any instances, subnets, public gateways, or endpoint gateways. All security groups and network ACLs
+   * associated with the VPC are automatically deleted. All flow log collectors with `auto_delete` set to `true`
+   * targeting the VPC or any resource in the VPC are automatically deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The VPC identifier.
@@ -1640,7 +1639,8 @@ class VpcV1 extends BaseService {
    * that originates from
    * [Direct Link](https://cloud.ibm.com/docs/dl/) to this VPC. Updating to `true` selects this routing table, provided
    * no other routing table in the VPC already has this property set to `true`, and no subnets are attached to this
-   * routing table. Updating to `false` deselects this routing table.
+   * routing table. Updating to
+   * `false` deselects this routing table.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
    * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
@@ -4625,6 +4625,7 @@ class VpcV1 extends BaseService {
    *   instance is placed on a dedicated host, the requested profile `family` must be
    *   the same as the dedicated host `family`.
    * - Have the same `vcpu.architecture`.
+   * - Support the number of network interfaces currently attached to the instance.
    * @param {number} [params.totalVolumeBandwidth] - The amount of bandwidth (in megabits per second) allocated
    * exclusively to instance storage volumes. An increase in this value will result in a corresponding decrease to
    * `total_network_bandwidth`.
@@ -9122,6 +9123,7 @@ class VpcV1 extends BaseService {
    * @param {boolean} [params.active] - Indicates whether the plan is active.
    * @param {string[]} [params.attachUserTags] - User tags to attach to each backup (snapshot) created by this plan. If
    * unspecified, no user tags will be attached.
+   * @param {BackupPolicyPlanClonePolicyPrototype} [params.clonePolicy] -
    * @param {boolean} [params.copyUserTags] - Indicates whether to copy the source's user tags to the created backups
    * (snapshots).
    * @param {BackupPolicyPlanDeletionTriggerPrototype} [params.deletionTrigger] -
@@ -9135,7 +9137,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
     const _params = { ...params };
     const _requiredParams = ['backupPolicyId', 'cronSpec'];
-    const _validParams = ['backupPolicyId', 'cronSpec', 'active', 'attachUserTags', 'copyUserTags', 'deletionTrigger', 'name', 'headers'];
+    const _validParams = ['backupPolicyId', 'cronSpec', 'active', 'attachUserTags', 'clonePolicy', 'copyUserTags', 'deletionTrigger', 'name', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9145,6 +9147,7 @@ class VpcV1 extends BaseService {
       'cron_spec': _params.cronSpec,
       'active': _params.active,
       'attach_user_tags': _params.attachUserTags,
+      'clone_policy': _params.clonePolicy,
       'copy_user_tags': _params.copyUserTags,
       'deletion_trigger': _params.deletionTrigger,
       'name': _params.name,
@@ -9329,6 +9332,7 @@ class VpcV1 extends BaseService {
    * @param {boolean} [params.active] - Indicates whether the plan is active.
    * @param {string[]} [params.attachUserTags] - The user tags to attach to backups (snapshots) created by this plan.
    * Updating this value does not change the user tags for backups that have already been created by this plan.
+   * @param {BackupPolicyPlanClonePolicyPatch} [params.clonePolicy] -
    * @param {boolean} [params.copyUserTags] - Indicates whether to copy the source's user tags to the created backups
    * (snapshots).
    * @param {string} [params.cronSpec] - The cron specification for the backup schedule. The backup policy jobs
@@ -9349,7 +9353,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
     const _params = { ...params };
     const _requiredParams = ['backupPolicyId', 'id'];
-    const _validParams = ['backupPolicyId', 'id', 'active', 'attachUserTags', 'copyUserTags', 'cronSpec', 'deletionTrigger', 'name', 'ifMatch', 'headers'];
+    const _validParams = ['backupPolicyId', 'id', 'active', 'attachUserTags', 'clonePolicy', 'copyUserTags', 'cronSpec', 'deletionTrigger', 'name', 'ifMatch', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9358,6 +9362,7 @@ class VpcV1 extends BaseService {
     const body = {
       'active': _params.active,
       'attach_user_tags': _params.attachUserTags,
+      'clone_policy': _params.clonePolicy,
       'copy_user_tags': _params.copyUserTags,
       'cron_spec': _params.cronSpec,
       'deletion_trigger': _params.deletionTrigger,
@@ -10126,6 +10131,8 @@ class VpcV1 extends BaseService {
    * [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
    * to use for this bare metal server.
    * @param {ZoneIdentity} params.zone - The zone this bare metal server will reside in.
+   * @param {boolean} [params.enableSecureBoot] - Indicates whether secure boot is enabled. If enabled, the image must
+   * support secure boot or the server will fail to boot.
    * @param {string} [params.name] - The name for this bare metal server. The name must not be used by another bare
    * metal server in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    *
@@ -10135,6 +10142,7 @@ class VpcV1 extends BaseService {
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * @param {BareMetalServerTrustedPlatformModulePrototype} [params.trustedPlatformModule] -
    * @param {VPCIdentity} [params.vpc] - The VPC this bare metal server will reside in.
    *
    * If specified, it must match the VPC for the subnets of the server's network
@@ -10147,7 +10155,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServer>> {
     const _params = { ...params };
     const _requiredParams = ['initialization', 'primaryNetworkInterface', 'profile', 'zone'];
-    const _validParams = ['initialization', 'primaryNetworkInterface', 'profile', 'zone', 'name', 'networkInterfaces', 'resourceGroup', 'vpc', 'headers'];
+    const _validParams = ['initialization', 'primaryNetworkInterface', 'profile', 'zone', 'enableSecureBoot', 'name', 'networkInterfaces', 'resourceGroup', 'trustedPlatformModule', 'vpc', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10158,9 +10166,11 @@ class VpcV1 extends BaseService {
       'primary_network_interface': _params.primaryNetworkInterface,
       'profile': _params.profile,
       'zone': _params.zone,
+      'enable_secure_boot': _params.enableSecureBoot,
       'name': _params.name,
       'network_interfaces': _params.networkInterfaces,
       'resource_group': _params.resourceGroup,
+      'trusted_platform_module': _params.trustedPlatformModule,
       'vpc': _params.vpc,
     };
 
@@ -11296,8 +11306,14 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The bare metal server identifier.
+   * @param {boolean} [params.enableSecureBoot] - Indicates whether secure boot is enabled. If enabled, the image must
+   * support secure boot or the bare metal server will fail to boot.
+   *
+   * For `enable_secure_boot` to be changed, the bare metal server `status` must be
+   * `stopped`.
    * @param {string} [params.name] - The name for this bare metal server. The name must not be used by another bare
    * metal server in the region. Changing the name will not affect the system hostname.
+   * @param {BareMetalServerTrustedPlatformModulePatch} [params.trustedPlatformModule] -
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServer>>}
    */
@@ -11306,14 +11322,16 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServer>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'enableSecureBoot', 'name', 'trustedPlatformModule', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'enable_secure_boot': _params.enableSecureBoot,
       'name': _params.name,
+      'trusted_platform_module': _params.trustedPlatformModule,
     };
 
     const query = {
@@ -11724,6 +11742,18 @@ class VpcV1 extends BaseService {
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
    * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {string} [params.name] - Filters the collection to resources with the exact specified name.
+   * @param {string} [params.attachmentState] - Filters the collection to volumes with the specified attachment state.
+   * @param {string} [params.encryption] - Filters the collection to resources with the specified encryption type.
+   * @param {string} [params.operatingSystemFamily] - Filters the collection to resources with the exact specified
+   * operating system family.
+   *
+   * This parameter also supports the values `null` and `not:null` which filter the collection to resources which have
+   * no operating system or any operating system, respectively.
+   * @param {string} [params.operatingSystemArchitecture] - Filters the collection to resources with the exact specified
+   * operating system architecture.
+   *
+   * This parameter also supports the values `null` and `not:null` which filter the collection to resources which have
+   * no operating system or any operating system, respectively.
    * @param {string} [params.zoneName] - Filters the collection to resources in the zone with the exact specified name.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeCollection>>}
@@ -11733,7 +11763,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'name', 'zoneName', 'headers'];
+    const _validParams = ['start', 'limit', 'name', 'attachmentState', 'encryption', 'operatingSystemFamily', 'operatingSystemArchitecture', 'zoneName', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11745,6 +11775,10 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'name': _params.name,
+      'attachment_state': _params.attachmentState,
+      'encryption': _params.encryption,
+      'operating_system.family': _params.operatingSystemFamily,
+      'operating_system.architecture': _params.operatingSystemArchitecture,
       'zone.name': _params.zoneName,
     };
 
@@ -11964,9 +11998,9 @@ class VpcV1 extends BaseService {
    * Additionally, if the volume is attached as a boot volume, the maximum value is 250 gigabytes.
    *
    * The minimum and maximum capacity limits for creating or updating volumes may expand in the future.
-   * @param {number} [params.iops] - The maximum I/O operations per second (IOPS) to use for the volume. Applicable only
-   * to volumes using a profile `family` of `custom`. The volume must be attached as a data volume to a running virtual
-   * server instance.
+   * @param {number} [params.iops] - The maximum I/O operations per second (IOPS) to use for this volume. Applicable
+   * only to volumes using a profile `family` of `custom`. The volume must be attached as a data volume to a running
+   * virtual server instance.
    * @param {string} [params.name] - The name for this volume. The name must not be used by another volume in the
    * region.
    * @param {VolumeProfileIdentity} [params.profile] - The profile to use for this volume. The requested profile must be
@@ -12130,6 +12164,7 @@ class VpcV1 extends BaseService {
    * in ascending order.
    * @param {string} [params.backupPolicyPlanId] - Filters the collection to backup policy jobs with the backup plan
    * with the specified identifier.
+   * @param {string} [params.clonesZoneName] - Filters the collection to resources with a clone in the specified zone.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SnapshotCollection>>}
    */
@@ -12138,7 +12173,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'tag', 'resourceGroupId', 'name', 'sourceVolumeId', 'sourceVolumeCrn', 'sourceImageId', 'sourceImageCrn', 'sort', 'backupPolicyPlanId', 'headers'];
+    const _validParams = ['start', 'limit', 'tag', 'resourceGroupId', 'name', 'sourceVolumeId', 'sourceVolumeCrn', 'sourceImageId', 'sourceImageCrn', 'sort', 'backupPolicyPlanId', 'clonesZoneName', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12158,6 +12193,7 @@ class VpcV1 extends BaseService {
       'source_image.crn': _params.sourceImageCrn,
       'sort': _params.sort,
       'backup_policy_plan.id': _params.backupPolicyPlanId,
+      'clones[].zone.name': _params.clonesZoneName,
     };
 
     const sdkHeaders = getSdkHeaders(
@@ -12425,6 +12461,245 @@ class VpcV1 extends BaseService {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
             'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List all clones for a snapshot.
+   *
+   * This request lists all clones for a snapshot. Use a clone to quickly restore a snapshot within the clone's zone.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The snapshot identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotCloneCollection>>}
+   */
+  public listSnapshotClones(
+    params: VpcV1.ListSnapshotClonesParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotCloneCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listSnapshotClones'
+    );
+
+    const parameters = {
+      options: {
+        url: '/snapshots/{id}/clones',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a snapshot clone.
+   *
+   * This request deletes a snapshot clone. This operation cannot be reversed, but an equivalent clone may be recreated
+   * from the snapshot.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The snapshot identifier.
+   * @param {string} params.zoneName - The zone name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deleteSnapshotClone(
+    params: VpcV1.DeleteSnapshotCloneParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['id', 'zoneName'];
+    const _validParams = ['id', 'zoneName', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+      'zone_name': _params.zoneName,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteSnapshotClone'
+    );
+
+    const parameters = {
+      options: {
+        url: '/snapshots/{id}/clones/{zone_name}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a snapshot clone.
+   *
+   * This request retrieves a single clone specified by the snapshot identifier and zone name in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The snapshot identifier.
+   * @param {string} params.zoneName - The zone name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotClone>>}
+   */
+  public getSnapshotClone(
+    params: VpcV1.GetSnapshotCloneParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotClone>> {
+    const _params = { ...params };
+    const _requiredParams = ['id', 'zoneName'];
+    const _validParams = ['id', 'zoneName', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+      'zone_name': _params.zoneName,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getSnapshotClone'
+    );
+
+    const parameters = {
+      options: {
+        url: '/snapshots/{id}/clones/{zone_name}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a clone for a snapshot.
+   *
+   * This request creates a new clone for a snapshot in the specified zone. A request body is not required, and if
+   * provided, is ignored. If the snapshot already has a clone in the zone, it is returned.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The snapshot identifier.
+   * @param {string} params.zoneName - The zone name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotClone>>}
+   */
+  public createSnapshotClone(
+    params: VpcV1.CreateSnapshotCloneParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotClone>> {
+    const _params = { ...params };
+    const _requiredParams = ['id', 'zoneName'];
+    const _validParams = ['id', 'zoneName', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+      'zone_name': _params.zoneName,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createSnapshotClone'
+    );
+
+    const parameters = {
+      options: {
+        url: '/snapshots/{id}/clones/{zone_name}',
+        method: 'PUT',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
           },
           _params.headers
         ),
@@ -13866,7 +14141,9 @@ class VpcV1 extends BaseService {
    * @param {NetworkACLRuleBeforePatch} [params.before] - The rule to move this rule immediately before.
    *
    * Specify `null` to move this rule after all existing rules.
-   * @param {number} [params.code] - The ICMP traffic code to match.
+   * @param {number} [params.code] - The ICMP traffic code to match. If set, `type` must also be set.
+   *
+   * Specify `null` to remove an existing ICMP traffic code.
    * @param {string} [params.destination] - The destination IP address or CIDR block to match. The CIDR block
    * `0.0.0.0/0` matches all destination addresses.
    * @param {number} [params.destinationPortMax] - The inclusive upper bound of TCP/UDP destination port range.
@@ -13880,6 +14157,8 @@ class VpcV1 extends BaseService {
    * @param {number} [params.sourcePortMax] - The inclusive upper bound of TCP/UDP source port range.
    * @param {number} [params.sourcePortMin] - The inclusive lower bound of TCP/UDP source port range.
    * @param {number} [params.type] - The ICMP traffic type to match.
+   *
+   * Specify `null` to remove an existing ICMP traffic type value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACLRule>>}
    */
@@ -18037,10 +18316,12 @@ class VpcV1 extends BaseService {
    * in.
    *
    * Load balancers in the `network` family allow only one subnet to be specified.
+   * @param {LoadBalancerLoggingDatapathPrototype} [params.datapath] - The datapath logging configuration for this load
+   * balancer.
    * @param {LoadBalancerListenerPrototypeLoadBalancerContext[]} [params.listeners] - The listeners of this load
    * balancer.
-   * @param {LoadBalancerLogging} [params.logging] - The logging configuration to use for this load balancer. See [VPC
-   * Datapath
+   * @param {LoadBalancerLoggingPrototype} [params.logging] - The logging configuration to use for this load balancer.
+   * See [VPC Datapath
    * Logging](https://cloud.ibm.com/docs/vpc?topic=vpc-datapath-logging) on the logging
    * format, fields and permitted values.
    *
@@ -18069,7 +18350,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
     const _params = { ...params };
     const _requiredParams = ['isPublic', 'subnets'];
-    const _validParams = ['isPublic', 'subnets', 'listeners', 'logging', 'name', 'pools', 'profile', 'resourceGroup', 'routeMode', 'securityGroups', 'headers'];
+    const _validParams = ['isPublic', 'subnets', 'datapath', 'listeners', 'logging', 'name', 'pools', 'profile', 'resourceGroup', 'routeMode', 'securityGroups', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18078,6 +18359,7 @@ class VpcV1 extends BaseService {
     const body = {
       'is_public': _params.isPublic,
       'subnets': _params.subnets,
+      'datapath': _params.datapath,
       'listeners': _params.listeners,
       'logging': _params.logging,
       'name': _params.name,
@@ -18250,7 +18532,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The load balancer identifier.
-   * @param {LoadBalancerLogging} [params.logging] - The logging configuration to use for this load balancer.
+   * @param {LoadBalancerLoggingPatch} [params.logging] - The logging configuration to use for this load balancer.
    *
    * To activate logging, the load balancer profile must support the specified logging type.
    * @param {string} [params.name] - The name for this load balancer. The name must not be used by another load balancer
@@ -21642,7 +21924,8 @@ namespace VpcV1 {
     /** Indicates whether this routing table is used to route traffic that originates from
      *  [Direct Link](https://cloud.ibm.com/docs/dl/) to this VPC. Updating to `true` selects this routing table,
      *  provided no other routing table in the VPC already has this property set to `true`, and no subnets are attached
-     *  to this routing table. Updating to `false` deselects this routing table.
+     *  to this routing table. Updating to
+     *  `false` deselects this routing table.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
@@ -22245,6 +22528,7 @@ namespace VpcV1 {
      *    instance is placed on a dedicated host, the requested profile `family` must be
      *    the same as the dedicated host `family`.
      *  - Have the same `vcpu.architecture`.
+     *  - Support the number of network interfaces currently attached to the instance.
      */
     profile?: InstancePatchProfile;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
@@ -23163,6 +23447,7 @@ namespace VpcV1 {
      *  attached.
      */
     attachUserTags?: string[];
+    clonePolicy?: BackupPolicyPlanClonePolicyPrototype;
     /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
     copyUserTags?: boolean;
     deletionTrigger?: BackupPolicyPlanDeletionTriggerPrototype;
@@ -23207,6 +23492,7 @@ namespace VpcV1 {
      *  user tags for backups that have already been created by this plan.
      */
     attachUserTags?: string[];
+    clonePolicy?: BackupPolicyPlanClonePolicyPatch;
     /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
     copyUserTags?: boolean;
     /** The cron specification for the backup schedule. The backup policy jobs
@@ -23376,6 +23662,10 @@ namespace VpcV1 {
     profile: BareMetalServerProfileIdentity;
     /** The zone this bare metal server will reside in. */
     zone: ZoneIdentity;
+    /** Indicates whether secure boot is enabled. If enabled, the image must support secure boot or the server will
+     *  fail to boot.
+     */
+    enableSecureBoot?: boolean;
     /** The name for this bare metal server. The name must not be used by another bare metal server in the region.
      *  If unspecified, the name will be a hyphenated list of randomly-selected words.
      *
@@ -23388,6 +23678,7 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
      */
     resourceGroup?: ResourceGroupIdentity;
+    trustedPlatformModule?: BareMetalServerTrustedPlatformModulePrototype;
     /** The VPC this bare metal server will reside in.
      *
      *  If specified, it must match the VPC for the subnets of the server's network
@@ -23601,10 +23892,18 @@ namespace VpcV1 {
   export interface UpdateBareMetalServerParams {
     /** The bare metal server identifier. */
     id: string;
+    /** Indicates whether secure boot is enabled. If enabled, the image must support secure boot or the bare metal
+     *  server will fail to boot.
+     *
+     *  For `enable_secure_boot` to be changed, the bare metal server `status` must be
+     *  `stopped`.
+     */
+    enableSecureBoot?: boolean;
     /** The name for this bare metal server. The name must not be used by another bare metal server in the region.
      *  Changing the name will not affect the system hostname.
      */
     name?: string;
+    trustedPlatformModule?: BareMetalServerTrustedPlatformModulePatch;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -23674,9 +23973,40 @@ namespace VpcV1 {
     limit?: number;
     /** Filters the collection to resources with the exact specified name. */
     name?: string;
+    /** Filters the collection to volumes with the specified attachment state. */
+    attachmentState?: ListVolumesConstants.AttachmentState | string;
+    /** Filters the collection to resources with the specified encryption type. */
+    encryption?: ListVolumesConstants.Encryption | string;
+    /** Filters the collection to resources with the exact specified operating system family.
+     *
+     *  This parameter also supports the values `null` and `not:null` which filter the collection to resources which
+     *  have no operating system or any operating system, respectively.
+     */
+    operatingSystemFamily?: string;
+    /** Filters the collection to resources with the exact specified operating system architecture.
+     *
+     *  This parameter also supports the values `null` and `not:null` which filter the collection to resources which
+     *  have no operating system or any operating system, respectively.
+     */
+    operatingSystemArchitecture?: string;
     /** Filters the collection to resources in the zone with the exact specified name. */
     zoneName?: string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listVolumes` operation. */
+  export namespace ListVolumesConstants {
+    /** Filters the collection to volumes with the specified attachment state. */
+    export enum AttachmentState {
+      ATTACHED = 'attached',
+      UNATTACHED = 'unattached',
+      UNUSABLE = 'unusable',
+    }
+    /** Filters the collection to resources with the specified encryption type. */
+    export enum Encryption {
+      PROVIDER_MANAGED = 'provider_managed',
+      USER_MANAGED = 'user_managed',
+    }
   }
 
   /** Parameters for the `createVolume` operation. */
@@ -23715,7 +24045,7 @@ namespace VpcV1 {
      *  The minimum and maximum capacity limits for creating or updating volumes may expand in the future.
      */
     capacity?: number;
-    /** The maximum I/O operations per second (IOPS) to use for the volume. Applicable only to volumes using a
+    /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
      *  profile `family` of `custom`. The volume must be attached as a data volume to a running virtual server instance.
      */
     iops?: number;
@@ -23779,6 +24109,8 @@ namespace VpcV1 {
     sort?: ListSnapshotsConstants.Sort | string;
     /** Filters the collection to backup policy jobs with the backup plan with the specified identifier. */
     backupPolicyPlanId?: string;
+    /** Filters the collection to resources with a clone in the specified zone. */
+    clonesZoneName?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -23828,6 +24160,40 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listSnapshotClones` operation. */
+  export interface ListSnapshotClonesParams {
+    /** The snapshot identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteSnapshotClone` operation. */
+  export interface DeleteSnapshotCloneParams {
+    /** The snapshot identifier. */
+    id: string;
+    /** The zone name. */
+    zoneName: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getSnapshotClone` operation. */
+  export interface GetSnapshotCloneParams {
+    /** The snapshot identifier. */
+    id: string;
+    /** The zone name. */
+    zoneName: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createSnapshotClone` operation. */
+  export interface CreateSnapshotCloneParams {
+    /** The snapshot identifier. */
+    id: string;
+    /** The zone name. */
+    zoneName: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -24074,7 +24440,10 @@ namespace VpcV1 {
      *  Specify `null` to move this rule after all existing rules.
      */
     before?: NetworkACLRuleBeforePatch;
-    /** The ICMP traffic code to match. */
+    /** The ICMP traffic code to match. If set, `type` must also be set.
+     *
+     *  Specify `null` to remove an existing ICMP traffic code.
+     */
     code?: number;
     /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all destination
      *  addresses.
@@ -24096,7 +24465,10 @@ namespace VpcV1 {
     sourcePortMax?: number;
     /** The inclusive lower bound of TCP/UDP source port range. */
     sourcePortMin?: number;
-    /** The ICMP traffic type to match. */
+    /** The ICMP traffic type to match.
+     *
+     *  Specify `null` to remove an existing ICMP traffic type value.
+     */
     type?: number;
     headers?: OutgoingHttpHeaders;
   }
@@ -25173,6 +25545,8 @@ namespace VpcV1 {
      *  Load balancers in the `network` family allow only one subnet to be specified.
      */
     subnets: SubnetIdentity[];
+    /** The datapath logging configuration for this load balancer. */
+    datapath?: LoadBalancerLoggingDatapathPrototype;
     /** The listeners of this load balancer. */
     listeners?: LoadBalancerListenerPrototypeLoadBalancerContext[];
     /** The logging configuration to use for this load balancer. See [VPC Datapath
@@ -25181,7 +25555,7 @@ namespace VpcV1 {
      *
      *  To activate logging, the load balancer profile must support the specified logging type.
      */
-    logging?: LoadBalancerLogging;
+    logging?: LoadBalancerLoggingPrototype;
     /** The name for this load balancer. The name must not be used by another load balancer in the VPC.  If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
@@ -25236,7 +25610,7 @@ namespace VpcV1 {
      *
      *  To activate logging, the load balancer profile must support the specified logging type.
      */
-    logging?: LoadBalancerLogging;
+    logging?: LoadBalancerLoggingPatch;
     /** The name for this load balancer. The name must not be used by another load balancer in the VPC. */
     name?: string;
     /** The subnets to provision this load balancer in. The load balancer's availability will depend on the
@@ -26362,6 +26736,7 @@ namespace VpcV1 {
     active: boolean;
     /** The user tags to attach to backups (snapshots) created by this plan. */
     attach_user_tags: string[];
+    clone_policy: BackupPolicyPlanClonePolicy;
     /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
     copy_user_tags: boolean;
     /** The date and time that the backup policy plan was created. */
@@ -26384,6 +26759,32 @@ namespace VpcV1 {
     name: string;
     /** The resource type. */
     resource_type: string;
+  }
+
+  /** BackupPolicyPlanClonePolicy. */
+  export interface BackupPolicyPlanClonePolicy {
+    /** The maximum number of recent snapshots (per source) that will keep clones. */
+    max_snapshots: number;
+    /** The zone this backup policy plan will create snapshot clones in. */
+    zones: ZoneReference[];
+  }
+
+  /** BackupPolicyPlanClonePolicyPatch. */
+  export interface BackupPolicyPlanClonePolicyPatch {
+    /** The maximum number of recent snapshots (per source) that will keep clones. */
+    max_snapshots?: number;
+    /** The zones this backup policy plan will create snapshot clones in. Updating this value does not change the
+     *  clones for snapshots that have already been created by this plan.
+     */
+    zones?: ZoneIdentity[];
+  }
+
+  /** BackupPolicyPlanClonePolicyPrototype. */
+  export interface BackupPolicyPlanClonePolicyPrototype {
+    /** The maximum number of recent snapshots (per source) that will keep clones. */
+    max_snapshots?: number;
+    /** The zone this backup policy plan will create snapshot clones in. */
+    zones: ZoneIdentity[];
   }
 
   /** BackupPolicyPlanCollection. */
@@ -26424,6 +26825,7 @@ namespace VpcV1 {
      *  attached.
      */
     attach_user_tags?: string[];
+    clone_policy?: BackupPolicyPlanClonePolicyPrototype;
     /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
     copy_user_tags?: boolean;
     /** The cron specification for the backup schedule. The backup policy jobs
@@ -27010,11 +27412,32 @@ namespace VpcV1 {
     /** Indicates whether the trusted platform module is enabled. */
     enabled: boolean;
     /** The trusted platform module (TPM) mode:
+     *  - `disabled`: No TPM functionality
      *  - `tpm_2`: TPM 2.0
      *
      *  The enumerated values for this property are expected to expand in the future. When processing this property,
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
+     */
+    mode: string;
+    /** The supported trusted platform module modes. */
+    supported_modes: string[];
+  }
+
+  /** BareMetalServerTrustedPlatformModulePatch. */
+  export interface BareMetalServerTrustedPlatformModulePatch {
+    /** The trusted platform module mode to use. The specified value must be listed in the bare metal server's
+     *  `supported_modes`.
+     *
+     *  For the trusted platform module mode to be changed, the bare metal server `status` must be `stopped`.
+     */
+    mode?: string;
+  }
+
+  /** BareMetalServerTrustedPlatformModulePrototype. */
+  export interface BareMetalServerTrustedPlatformModulePrototype {
+    /** The trusted platform module mode to use. The specified value must be listed in the bare metal server
+     *  profile's `supported_trusted_platform_module_modes`.
      */
     mode?: string;
   }
@@ -27933,7 +28356,6 @@ namespace VpcV1 {
   }
 
   /** IPsecPolicy. */
-  // tslint:disable-next-line: interface-name
   export interface IPsecPolicy {
     /** The authentication algorithm
      *
@@ -27980,7 +28402,6 @@ namespace VpcV1 {
   }
 
   /** IPsecPolicyCollection. */
-  // tslint:disable-next-line: interface-name
   export interface IPsecPolicyCollection {
     /** A link to the first page of resources. */
     first: IPsecPolicyCollectionFirst;
@@ -27995,21 +28416,18 @@ namespace VpcV1 {
   }
 
   /** A link to the first page of resources. */
-  // tslint:disable-next-line: interface-name
   export interface IPsecPolicyCollectionFirst {
     /** The URL for a page of resources. */
     href: string;
   }
 
   /** A link to the next page of resources. This property is present for all pages except the last page. */
-  // tslint:disable-next-line: interface-name
   export interface IPsecPolicyCollectionNext {
     /** The URL for a page of resources. */
     href: string;
   }
 
   /** IPsecPolicyReference. */
-  // tslint:disable-next-line: interface-name
   export interface IPsecPolicyReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -28026,7 +28444,6 @@ namespace VpcV1 {
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  // tslint:disable-next-line: interface-name
   export interface IPsecPolicyReferenceDeleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
@@ -28358,24 +28775,16 @@ namespace VpcV1 {
   export interface InstanceAvailabilityPolicyPatch {
     /** The action to perform if the compute host experiences a failure.
      *  - `restart`: Automatically restart the virtual server instance after host failure
-     *  - `stop`: Leave the virtual server instance stopped after host failure
-     *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on
-     *  which the unexpected property value was encountered.
+     *  - `stop`: Leave the virtual server instance stopped after host failure.
      */
     host_failure?: string;
   }
 
-  /** InstanceAvailabilityPrototype. */
-  export interface InstanceAvailabilityPrototype {
+  /** InstanceAvailabilityPolicyPrototype. */
+  export interface InstanceAvailabilityPolicyPrototype {
     /** The action to perform if the compute host experiences a failure.
      *  - `restart`: Automatically restart the virtual server instance after host failure
-     *  - `stop`: Leave the virtual server instance stopped after host failure
-     *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on
-     *  which the unexpected property value was encountered.
+     *  - `stop`: Leave the virtual server instance stopped after host failure.
      */
     host_failure?: string;
   }
@@ -28967,21 +29376,51 @@ namespace VpcV1 {
   export interface InstanceMetadataService {
     /** Indicates whether the metadata service endpoint is available to the virtual server instance. */
     enabled: boolean;
+    /** The communication protocol to use for the metadata service endpoint. Applies only when the metadata service
+     *  is enabled.
+     *  - `http`: HTTP protocol (unencrypted)
+     *  - `https`: HTTP Secure protocol.
+     */
+    protocol: string;
+    /** The hop limit (IP time to live) for IP response packets from the metadata service. Applies only when the
+     *  metadata service is enabled.
+     */
+    response_hop_limit: number;
   }
 
   /** The metadata service configuration. */
   export interface InstanceMetadataServicePatch {
     /** Indicates whether the metadata service endpoint will be available to the virtual server instance. */
     enabled?: boolean;
+    /** The communication protocol to use for the metadata service endpoint. Applies only when the metadata service
+     *  is enabled.
+     *  - `http`: HTTP protocol (unencrypted)
+     *  - `https`: HTTP Secure protocol.
+     */
+    protocol?: string;
+    /** The hop limit (IP time to live) for IP response packets from the metadata service. Applies only when the
+     *  metadata service is enabled.
+     */
+    response_hop_limit?: number;
   }
 
   /** The metadata service configuration. */
   export interface InstanceMetadataServicePrototype {
     /** Indicates whether the metadata service endpoint will be available to the virtual server instance. */
     enabled?: boolean;
+    /** The communication protocol to use for the metadata service endpoint. Applies only when the metadata service
+     *  is enabled.
+     *  - `http`: HTTP protocol (unencrypted)
+     *  - `https`: HTTP Secure protocol.
+     */
+    protocol?: string;
+    /** The hop limit (IP time to live) for IP response packets from the metadata service. Applies only when the
+     *  metadata service is enabled.
+     */
+    response_hop_limit?: number;
   }
 
-  /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. - Have the same `vcpu.architecture`. */
+  /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. - Have the same `vcpu.architecture`. - Support the number of network interfaces currently attached to the instance. */
   export interface InstancePatchProfile {
   }
 
@@ -29135,7 +29574,7 @@ namespace VpcV1 {
   /** InstancePrototype. */
   export interface InstancePrototype {
     /** The availability policy to use for this virtual server instance. */
-    availability_policy?: InstanceAvailabilityPrototype;
+    availability_policy?: InstanceAvailabilityPolicyPrototype;
     /** The default trusted profile configuration to use for this virtual server instance
      *
      *  This property's value is used when provisioning the virtual server instance, but not
@@ -29237,7 +29676,7 @@ namespace VpcV1 {
   /** InstanceTemplate. */
   export interface InstanceTemplate {
     /** The availability policy to use for this virtual server instance. */
-    availability_policy?: InstanceAvailabilityPrototype;
+    availability_policy?: InstanceAvailabilityPolicyPrototype;
     /** The date and time that the instance template was created. */
     created_at: string;
     /** The CRN for this instance template. */
@@ -29337,7 +29776,7 @@ namespace VpcV1 {
   /** InstanceTemplatePrototype. */
   export interface InstanceTemplatePrototype {
     /** The availability policy to use for this virtual server instance. */
-    availability_policy?: InstanceAvailabilityPrototype;
+    availability_policy?: InstanceAvailabilityPolicyPrototype;
     /** The default trusted profile configuration to use for this virtual server instance
      *
      *  This property's value is used when provisioning the virtual server instance, but not
@@ -30018,13 +30457,37 @@ namespace VpcV1 {
   /** LoadBalancerLogging. */
   export interface LoadBalancerLogging {
     /** The datapath logging configuration for this load balancer. */
-    datapath?: LoadBalancerLoggingDatapath;
+    datapath: LoadBalancerLoggingDatapath;
   }
 
   /** The datapath logging configuration for this load balancer. */
   export interface LoadBalancerLoggingDatapath {
     /** Indicates whether datapath logging is active for this load balancer. */
     active: boolean;
+  }
+
+  /** The datapath logging configuration for this load balancer. */
+  export interface LoadBalancerLoggingDatapathPatch {
+    /** Indicates whether datapath logging will be active for this load balancer. */
+    active?: boolean;
+  }
+
+  /** The datapath logging configuration for this load balancer. */
+  export interface LoadBalancerLoggingDatapathPrototype {
+    /** Indicates whether datapath logging will be active for this load balancer. */
+    active?: boolean;
+  }
+
+  /** LoadBalancerLoggingPatch. */
+  export interface LoadBalancerLoggingPatch {
+    /** The datapath logging configuration for this load balancer. */
+    datapath?: LoadBalancerLoggingDatapathPatch;
+  }
+
+  /** LoadBalancerLoggingPrototype. */
+  export interface LoadBalancerLoggingPrototype {
+    /** The datapath logging configuration for this load balancer. */
+    datapath?: LoadBalancerLoggingDatapathPrototype;
   }
 
   /** LoadBalancerPool. */
@@ -30655,6 +31118,8 @@ namespace VpcV1 {
     destination: string;
     /** The direction of traffic to match. */
     direction: string;
+    /** The IP version for this rule. */
+    ip_version?: string;
     /** The name for this network ACL rule. The name must not be used by another rule for the network ACL. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
@@ -30675,6 +31140,8 @@ namespace VpcV1 {
     destination: string;
     /** The direction of traffic to match. */
     direction: string;
+    /** The IP version for this rule. */
+    ip_version?: string;
     /** The name for this network ACL rule. The name must not be used by another rule for the network ACL. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
@@ -30880,14 +31347,6 @@ namespace VpcV1 {
 
   /** Identifies an operating system by a unique property. */
   export interface OperatingSystemIdentity {
-  }
-
-  /** OperatingSystemReference. */
-  export interface OperatingSystemReference {
-    /** The URL for this operating system. */
-    href: string;
-    /** The globally unique name for this operating system. */
-    name: string;
   }
 
   /** PlacementGroup. */
@@ -31675,6 +32134,8 @@ namespace VpcV1 {
      *  snapshots created before 1 January 2022.
      */
     captured_at?: string;
+    /** Clones for this snapshot. */
+    clones: SnapshotClone[];
     /** The date and time that this snapshot was created. */
     created_at: string;
     /** The CRN of this snapshot. */
@@ -31723,6 +32184,28 @@ namespace VpcV1 {
     user_tags: string[];
   }
 
+  /** SnapshotClone. */
+  export interface SnapshotClone {
+    /** Indicates whether this snapshot clone is available for use. */
+    available: boolean;
+    /** The date and time that this snapshot clone was created. */
+    created_at: string;
+    /** The zone this snapshot clone resides in. */
+    zone: ZoneReference;
+  }
+
+  /** SnapshotCloneCollection. */
+  export interface SnapshotCloneCollection {
+    /** Collection of snapshot clones. */
+    clones: SnapshotClone[];
+  }
+
+  /** SnapshotClonePrototype. */
+  export interface SnapshotClonePrototype {
+    /** The zone this snapshot clone will reside in. Must be in the same region as the snapshot. */
+    zone: ZoneIdentity;
+  }
+
   /** SnapshotCollection. */
   export interface SnapshotCollection {
     /** A link to the first page of resources. */
@@ -31755,6 +32238,8 @@ namespace VpcV1 {
 
   /** SnapshotPrototype. */
   export interface SnapshotPrototype {
+    /** Clones to create for this snapshot. */
+    clones?: SnapshotClonePrototype[];
     /** The name for this snapshot. The name must not be used by another snapshot in the region. If unspecified, the
      *  name will be a hyphenated list of randomly-selected words.
      */
@@ -32553,6 +33038,12 @@ namespace VpcV1 {
   export interface Volume {
     /** Indicates whether a running virtual server instance has an attachment to this volume. */
     active: boolean;
+    /** The attachment state of the volume
+     *  - `unattached`: Not attached to any virtual server instances
+     *  - `attached`: Attached to a virtual server instance (even if the instance is stopped)
+     *  - `unusable`: Not able to be attached to any virtual server instances.
+     */
+    attachment_state: string;
     /** The maximum bandwidth (in megabits per second) for the volume. */
     bandwidth: number;
     /** Indicates whether this volume is performing an operation that must be serialized. This must be `false` to
@@ -32595,16 +33086,14 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this volume. */
     id: string;
-    /** The maximum I/O operations per second (IOPS) to use for the volume. Applicable only to volumes using a
-     *  profile `family` of `custom`.
-     */
+    /** The maximum I/O operations per second (IOPS) for this volume. */
     iops: number;
     /** The name for this volume. The name is unique across all volumes in the region. */
     name: string;
     /** The operating system associated with this volume. If absent, this volume was not
      *  created from an image, or the image did not include an operating system.
      */
-    operating_system?: OperatingSystemReference;
+    operating_system?: OperatingSystem;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) for this volume. */
     profile: VolumeProfileReference;
     /** The resource group for this volume. */
@@ -32716,6 +33205,18 @@ namespace VpcV1 {
     name?: string;
     /** A prototype object for a new volume from a snapshot. */
     volume: VolumePrototypeInstanceBySourceSnapshotContext;
+  }
+
+  /** VolumeAttachmentPrototypeInstanceByVolumeContext. */
+  export interface VolumeAttachmentPrototypeInstanceByVolumeContext {
+    /** Indicates whether deleting the instance will also delete the attached volume. */
+    delete_volume_on_instance_delete?: boolean;
+    /** The name for this volume attachment. The name must not be used by another volume attachment on the instance.
+     *  If unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** An existing volume to attach. */
+    volume: VolumeIdentity;
   }
 
   /** An existing volume to attach to the instance, or a prototype object for a new volume. */
@@ -32876,7 +33377,7 @@ namespace VpcV1 {
 
   /** VolumePrototype. */
   export interface VolumePrototype {
-    /** The maximum I/O operations per second (IOPS) to use for the volume. Applicable only to volumes using a
+    /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
      *  profile `family` of `custom`.
      */
     iops?: number;
@@ -32909,7 +33410,7 @@ namespace VpcV1 {
      *  If unspecified, the `encryption` type for the volume will be `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The maximum I/O operations per second (IOPS) to use for the volume. Applicable only to volumes using a
+    /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
      *  profile `family` of `custom`.
      */
     iops?: number;
@@ -32936,7 +33437,7 @@ namespace VpcV1 {
      *  If unspecified, the `encryption` type for the volume will be `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The maximum I/O operations per second (IOPS) to use for the volume. Applicable only to volumes using a
+    /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
      *  profile `family` of `custom`.
      */
     iops?: number;
@@ -34446,6 +34947,16 @@ namespace VpcV1 {
     zone?: ZoneIdentity;
   }
 
+  /** InstancePrototypeInstanceByVolume. */
+  export interface InstancePrototypeInstanceByVolume extends InstancePrototype {
+    /** The boot volume attachment for the virtual server instance. */
+    boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
+    /** Primary network interface. */
+    primary_network_interface: NetworkInterfacePrototype;
+    /** The zone this virtual server instance will reside in. */
+    zone: ZoneIdentity;
+  }
+
   /** InstanceTemplateIdentityByCRN. */
   export interface InstanceTemplateIdentityByCRN extends InstanceTemplateIdentity {
     /** The CRN for this instance template. */
@@ -35842,7 +36353,7 @@ namespace VpcV1 {
 
   /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext. */
   export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext extends VolumeAttachmentPrototypeVolume {
-    /** The maximum I/O operations per second (IOPS) to use for the volume. Applicable only to volumes using a
+    /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
      *  profile `family` of `custom`.
      */
     iops?: number;

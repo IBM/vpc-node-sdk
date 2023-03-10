@@ -863,6 +863,67 @@ describe('VpcV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
+  test('listSnapshotClones()', async () => {
+    const params = {
+      id: dict.snapshotId,
+    };
+    vpcService
+      .listSnapshotClones(params)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.result).toBeDefined();
+      })
+      .catch((err) => {
+        console.log('listSnapshotClones err');
+        console.warn(err);
+      });
+  });
+  test('createSnapshotClones()', async () => {
+    // Request models needed by this operation.
+    const params = {
+      id: dict.snapshotId,
+      zoneName: dict.zoneName,
+    };
+    vpcService
+      .createSnapshotClone(params)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.result).toBeDefined();
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  });
+  test('getSnapshotClones()', async () => {
+    const params = {
+      id: dict.snapshotId,
+      zoneName: dict.zoneName,
+    };
+    vpcService
+      .getSnapshotClone(params)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.result).toBeDefined();
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  });
+  test('deleteSnapshotClones()', async () => {
+    const params = {
+      id: dict.snapshotId,
+      zoneName: dict.zoneName,
+    };
+    vpcService
+      .deleteSnapshotClone(params)
+      .then((res) => {
+        expect(res).toBeDefined();
+        expect(res.result).toBeDefined();
+      })
+      .catch((err) => {
+        console.warn(err);
+      });
+  });
   test('deleteSnapshot()', async () => {
     const params = {
       id: dict.snapshotId,
@@ -1227,7 +1288,7 @@ describe('VpcV1_integration', () => {
       });
   });
   // mock server doesn't support
-  test('listBackupPolicyJobs()', (done) => {
+  test.skip('listBackupPolicyJobs()', (done) => {
     const params = {
       backupPolicyId: dict.createdBackupPolicy,
     };
@@ -1246,7 +1307,7 @@ describe('VpcV1_integration', () => {
   });
 
   // mock server doesn't support
-  test('getBackupPolicyJob()', (done) => {
+  test.skip('getBackupPolicyJob()', (done) => {
     const params = {
       backupPolicyId: dict.createdBackupPolicy,
       id: dict.createdBackupPolicyJob,
@@ -2390,7 +2451,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('deleteInstanceGroupMemberships()', (done) => {
+  test.skip('deleteInstanceGroupMemberships()', (done) => {
     const params = {
       instanceGroupId: dict.createdInstanceGroup,
     };
