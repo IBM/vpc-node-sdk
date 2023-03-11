@@ -1,3 +1,10 @@
+# [0.13.0](https://github.com/IBM/vpc-node-sdk/compare/v0.12.0...v0.13.0) (2023-03-11)
+
+
+### Features
+
+* **2023-02-14:** Update SDK to use API generated on 2023-02-14 Signed-off-by: Sunitha Gudisagar <Sunitha.Gudisagar@ibm.com> ([#31](https://github.com/IBM/vpc-node-sdk/issues/31)) ([631100e](https://github.com/IBM/vpc-node-sdk/commit/631100ebf4fb61f289f029527ae14aa1f4c382b9))
+
 # [0.12.0](https://github.com/IBM/vpc-node-sdk/compare/v0.11.0...v0.12.0) (2022-12-30)
 
 
