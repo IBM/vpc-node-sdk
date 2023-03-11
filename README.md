@@ -78,7 +78,7 @@ Find more open source projects on the [IBM GitHub Page](http://ibm.github.io/)
 ## Contributing
 See [CONTRIBUTING](https://github.com/IBM/vpc-node-sdk/blob/master/CONTRIBUTING.md).
 
-## License
+## License 
 
 This project is released under the Apache 2.0 license.
 The license's full text can be found in
