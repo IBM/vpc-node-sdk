@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.63.0-5dae26c1-20230111-193039
+ * IBM OpenAPI SDK Code Generator Version: 3.68.2-ac7def68-20230310-195410
  */
 
 /* eslint-disable max-classes-per-file */
@@ -79,13 +79,13 @@ class VpcV1 extends BaseService {
     return service;
   }
 
+  /** The infrastructure generation. For the API behavior documented here, specify `2`. */
+  generation?: number;
+
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
    *  `2022-09-13` and today's date (UTC).
    */
   version: string;
-
-  /** The infrastructure generation. For the API behavior documented here, specify `2`. */
-  generation?: number;
 
   /**
    * Construct a VpcV1 object.
@@ -108,7 +108,7 @@ class VpcV1 extends BaseService {
     } else {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
-    this.version = options.version || `2022-09-13`;
+    this.version = options.version|| `2023-03-28`;
     this.generation = options.generation;
   }
 
@@ -562,8 +562,7 @@ class VpcV1 extends BaseService {
    * Retrieve a VPC's default security group.
    *
    * This request retrieves the default security group for the VPC specified by the identifier in the URL. Resources
-   * that optionally allow a security group to be specified upon creation will be attached to this security group if a
-   * security group is not specified.
+   * created in this VPC that allow a security group to be optionally specified will use this security group by default.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The VPC identifier.
@@ -1034,8 +1033,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
    * @param {string} params.destination - The destination of the route. At most two routes per `zone` in a table can
-   * have the same destination, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP
-   * address.
+   * have the same `destination` and `priority`, and only if both routes have an `action` of `deliver` and the
+   * `next_hop` is an IP address.
    * @param {ZoneIdentity} params.zone - The zone to apply the route to. (Traffic from subnets in this zone will be
    * subject to this route.).
    * @param {string} [params.action] - The action to perform with a packet matching the route:
@@ -1049,6 +1048,14 @@ class VpcV1 extends BaseService {
    * @param {RoutePrototypeNextHop} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
    * delivered to. For other `action`
    * values, it must be omitted or specified as `0.0.0.0`.
+   * @param {number} [params.priority] - The priority of this route. Smaller values have higher priority.
+   *
+   * If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+   * priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+   * distributed between them.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and
+   * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    * @deprecated this method is deprecated and may be removed in a future release
@@ -1059,7 +1066,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: createVpcRoute');
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'destination', 'zone'];
-    const _validParams = ['vpcId', 'destination', 'zone', 'action', 'name', 'nextHop', 'headers'];
+    const _validParams = ['vpcId', 'destination', 'zone', 'action', 'name', 'nextHop', 'priority', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1071,6 +1078,7 @@ class VpcV1 extends BaseService {
       'action': _params.action,
       'name': _params.name,
       'next_hop': _params.nextHop,
+      'priority': _params.priority,
     };
 
     const query = {
@@ -1246,6 +1254,20 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The route identifier.
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed.
+   * @param {RouteNextHopPatch} [params.nextHop] - The next hop that packets will be delivered to, if `action` is
+   * `deliver`. For other `action`
+   * values, specify `0.0.0.0` or remove it by specifying `null`.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and `priority`, and
+   * only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+   * @param {number} [params.priority] - The priority of this route. Smaller values have higher priority.
+   *
+   * If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+   * priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+   * distributed between them.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and
+   * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    * @deprecated this method is deprecated and may be removed in a future release
@@ -1256,7 +1278,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: updateVpcRoute');
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'name', 'headers'];
+    const _validParams = ['vpcId', 'id', 'name', 'nextHop', 'priority', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1264,6 +1286,8 @@ class VpcV1 extends BaseService {
 
     const body = {
       'name': _params.name,
+      'next_hop': _params.nextHop,
+      'priority': _params.priority,
     };
 
     const query = {
@@ -1751,8 +1775,9 @@ class VpcV1 extends BaseService {
    *
    * This request lists all routes in a VPC routing table. If subnets are associated with this routing table, delivery
    * of packets sent on a subnet is performed according to the action of the most specific matching route in the table
-   * (provided the subnet and route are in the same zone). If multiple equally-specific routes exist, traffic will be
-   * distributed across them. If no routes match, delivery will be controlled by the system's built-in routes.
+   * (provided the subnet and route are in the same zone). If multiple equally-specific routes exist, the route with the
+   * highest priority will be used. If two matching routes have the same destination and priority, traffic will be
+   * distributed between them. If no routes match, delivery will be controlled by the system's built-in routes.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
@@ -1823,8 +1848,8 @@ class VpcV1 extends BaseService {
    * @param {string} params.vpcId - The VPC identifier.
    * @param {string} params.routingTableId - The routing table identifier.
    * @param {string} params.destination - The destination of the route. At most two routes per `zone` in a table can
-   * have the same destination, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP
-   * address.
+   * have the same `destination` and `priority`, and only if both routes have an `action` of `deliver` and the
+   * `next_hop` is an IP address.
    * @param {ZoneIdentity} params.zone - The zone to apply the route to. (Traffic from subnets in this zone will be
    * subject to this route.).
    * @param {string} [params.action] - The action to perform with a packet matching the route:
@@ -1838,6 +1863,14 @@ class VpcV1 extends BaseService {
    * @param {RoutePrototypeNextHop} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
    * delivered to. For other `action`
    * values, it must be omitted or specified as `0.0.0.0`.
+   * @param {number} [params.priority] - The priority of this route. Smaller values have higher priority.
+   *
+   * If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+   * priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+   * distributed between them.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and
+   * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
@@ -1846,7 +1879,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Route>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'routingTableId', 'destination', 'zone'];
-    const _validParams = ['vpcId', 'routingTableId', 'destination', 'zone', 'action', 'name', 'nextHop', 'headers'];
+    const _validParams = ['vpcId', 'routingTableId', 'destination', 'zone', 'action', 'name', 'nextHop', 'priority', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1858,6 +1891,7 @@ class VpcV1 extends BaseService {
       'action': _params.action,
       'name': _params.name,
       'next_hop': _params.nextHop,
+      'priority': _params.priority,
     };
 
     const query = {
@@ -2037,6 +2071,20 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The VPC routing table route identifier.
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed.
+   * @param {RouteNextHopPatch} [params.nextHop] - The next hop that packets will be delivered to, if `action` is
+   * `deliver`. For other `action`
+   * values, specify `0.0.0.0` or remove it by specifying `null`.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and `priority`, and
+   * only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+   * @param {number} [params.priority] - The priority of this route. Smaller values have higher priority.
+   *
+   * If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+   * priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+   * distributed between them.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and
+   * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
@@ -2045,7 +2093,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Route>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'routingTableId', 'id'];
-    const _validParams = ['vpcId', 'routingTableId', 'id', 'name', 'headers'];
+    const _validParams = ['vpcId', 'routingTableId', 'id', 'name', 'nextHop', 'priority', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2053,6 +2101,8 @@ class VpcV1 extends BaseService {
 
     const body = {
       'name': _params.name,
+      'next_hop': _params.nextHop,
+      'priority': _params.priority,
     };
 
     const query = {
@@ -5543,8 +5593,8 @@ class VpcV1 extends BaseService {
   /**
    * Retrieve associated floating IP.
    *
-   * This request a retrieves a specified floating IP address if it is associated with the network interface and
-   * instance specified in the URL.
+   * This request retrieves a specified floating IP address if it is associated with the network interface and instance
+   * specified in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The instance identifier.
@@ -5734,7 +5784,7 @@ class VpcV1 extends BaseService {
   /**
    * Retrieve bound reserved IP.
    *
-   * This request a retrieves the specified reserved IP address if it is bound to the network interface and instance
+   * This request retrieves the specified reserved IP address if it is bound to the network interface and instance
    * specified in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -10735,16 +10785,14 @@ class VpcV1 extends BaseService {
    * @param {number[]} [params.allowedVlans] - Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI
    * type) interface.
    * @param {boolean} [params.enableInfrastructureNat] - If `true`:
-   *   - The VPC infrastructure performs any needed NAT operations.
-   *   - A single floating IP can be assigned to the network interface.
+   * - The VPC infrastructure performs any needed NAT operations.
+   * - `floating_ips` must not have more than one floating IP.
    *
    * If `false`:
-   *   - Packets are passed unchanged to/from the network interface,
-   *     allowing the workload to perform any needed NAT operations.
-   *   - Multiple floating IPs can be assigned to the network interface.
-   *   - `allow_ip_spoofing` must be set to `false`.
-   *
-   * This must be `true` when `interface_type` is `hipersocket`.
+   * - Packets are passed unchanged to/from the network interface,
+   *   allowing the workload to perform any needed NAT operations.
+   * - `allow_ip_spoofing` must be `false`.
+   * - `interface_type` must not be `hipersocket`.
    * @param {string} [params.name] - The name for this network interface. The name must not be used by another network
    * interface on the bare metal server.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -10932,7 +10980,7 @@ class VpcV1 extends BaseService {
   /**
    * Retrieve associated floating IP.
    *
-   * This request a retrieves a specified floating IP address if it is associated with the network interface and bare
+   * This request retrieves a specified floating IP address if it is associated with the network interface and bare
    * metal server specified in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -11121,7 +11169,7 @@ class VpcV1 extends BaseService {
   /**
    * Retrieve bound reserved IP.
    *
-   * This request a retrieves the specified reserved IP address if it is bound to the network interface and bare metal
+   * This request retrieves the specified reserved IP address if it is bound to the network interface and bare metal
    * server specified in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -18318,6 +18366,7 @@ class VpcV1 extends BaseService {
    * Load balancers in the `network` family allow only one subnet to be specified.
    * @param {LoadBalancerLoggingDatapathPrototype} [params.datapath] - The datapath logging configuration for this load
    * balancer.
+   * @param {LoadBalancerDNSPrototype} [params.dns] -
    * @param {LoadBalancerListenerPrototypeLoadBalancerContext[]} [params.listeners] - The listeners of this load
    * balancer.
    * @param {LoadBalancerLoggingPrototype} [params.logging] - The logging configuration to use for this load balancer.
@@ -18350,7 +18399,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
     const _params = { ...params };
     const _requiredParams = ['isPublic', 'subnets'];
-    const _validParams = ['isPublic', 'subnets', 'datapath', 'listeners', 'logging', 'name', 'pools', 'profile', 'resourceGroup', 'routeMode', 'securityGroups', 'headers'];
+    const _validParams = ['isPublic', 'subnets', 'datapath', 'dns', 'listeners', 'logging', 'name', 'pools', 'profile', 'resourceGroup', 'routeMode', 'securityGroups', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18360,6 +18409,7 @@ class VpcV1 extends BaseService {
       'is_public': _params.isPublic,
       'subnets': _params.subnets,
       'datapath': _params.datapath,
+      'dns': _params.dns,
       'listeners': _params.listeners,
       'logging': _params.logging,
       'name': _params.name,
@@ -18532,6 +18582,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The load balancer identifier.
+   * @param {LoadBalancerDNSPatch} [params.dns] -
    * @param {LoadBalancerLoggingPatch} [params.logging] - The logging configuration to use for this load balancer.
    *
    * To activate logging, the load balancer profile must support the specified logging type.
@@ -18554,13 +18605,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'logging', 'name', 'subnets', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'dns', 'logging', 'name', 'subnets', 'ifMatch', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'dns': _params.dns,
       'logging': _params.logging,
       'name': _params.name,
       'subnets': _params.subnets,
@@ -18764,6 +18816,8 @@ class VpcV1 extends BaseService {
    * @param {LoadBalancerListenerHTTPSRedirectPrototype} [params.httpsRedirect] - The target listener that requests will
    * be redirected to. This listener must have a
    * `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+   * @param {number} [params.idleConnectionTimeout] - The idle connection timeout of the listener in seconds. Supported
+   * for load balancers in the `application` family.
    * @param {LoadBalancerListenerPolicyPrototype[]} [params.policies] - The policy prototype objects for this listener.
    * The load balancer must be in the
    * `application` family.
@@ -18797,7 +18851,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'protocol'];
-    const _validParams = ['loadBalancerId', 'protocol', 'acceptProxyProtocol', 'certificateInstance', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'policies', 'port', 'portMax', 'portMin', 'headers'];
+    const _validParams = ['loadBalancerId', 'protocol', 'acceptProxyProtocol', 'certificateInstance', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'idleConnectionTimeout', 'policies', 'port', 'portMax', 'portMin', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18810,6 +18864,7 @@ class VpcV1 extends BaseService {
       'connection_limit': _params.connectionLimit,
       'default_pool': _params.defaultPool,
       'https_redirect': _params.httpsRedirect,
+      'idle_connection_timeout': _params.idleConnectionTimeout,
       'policies': _params.policies,
       'port': _params.port,
       'port_max': _params.portMax,
@@ -19008,6 +19063,8 @@ class VpcV1 extends BaseService {
    * `protocol` of `http`, and the target listener must have a `protocol` of `https`.
    *
    * Specify `null` to remove any existing https redirect.
+   * @param {number} [params.idleConnectionTimeout] - The idle connection timeout of the listener in seconds. Supported
+   * for load balancers in the `application` family.
    * @param {number} [params.port] - The listener port number, or the inclusive lower bound of the port range. Each
    * listener in the load balancer must have a unique `port` and `protocol` combination.
    *
@@ -19050,7 +19107,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'id'];
-    const _validParams = ['loadBalancerId', 'id', 'acceptProxyProtocol', 'certificateInstance', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'port', 'portMax', 'portMin', 'protocol', 'headers'];
+    const _validParams = ['loadBalancerId', 'id', 'acceptProxyProtocol', 'certificateInstance', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'idleConnectionTimeout', 'port', 'portMax', 'portMin', 'protocol', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19062,6 +19119,7 @@ class VpcV1 extends BaseService {
       'connection_limit': _params.connectionLimit,
       'default_pool': _params.defaultPool,
       'https_redirect': _params.httpsRedirect,
+      'idle_connection_timeout': _params.idleConnectionTimeout,
       'port': _params.port,
       'port_max': _params.portMax,
       'port_min': _params.portMin,
@@ -20864,7 +20922,7 @@ class VpcV1 extends BaseService {
   /**
    * Retrieve a reserved IP bound to an endpoint gateway.
    *
-   * This request a retrieves the specified reserved IP address if it is bound to the endpoint gateway specified in the
+   * This request retrieves the specified reserved IP address if it is bound to the endpoint gateway specified in the
    * URL.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -21521,12 +21579,12 @@ class VpcV1 extends BaseService {
 namespace VpcV1 {
   /** Options for the `VpcV1` constructor. */
   export interface Options extends UserOptions {
+    /** The infrastructure generation. For the API behavior documented here, specify `2`. */
+    generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
      *  `2022-09-13` and today's date (UTC).
      */
     version: string;
-    /** The infrastructure generation. For the API behavior documented here, specify `2`. */
-    generation?: number;
   }
 
   /** An operation response. */
@@ -21736,8 +21794,8 @@ namespace VpcV1 {
   export interface CreateVpcRouteParams {
     /** The VPC identifier. */
     vpcId: string;
-    /** The destination of the route. At most two routes per `zone` in a table can have the same destination, and
-     *  only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+    /** The destination of the route. At most two routes per `zone` in a table can have the same `destination` and
+     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     destination: string;
     /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
@@ -21758,6 +21816,16 @@ namespace VpcV1 {
      *  values, it must be omitted or specified as `0.0.0.0`.
      */
     nextHop?: RoutePrototypeNextHop;
+    /** The priority of this route. Smaller values have higher priority.
+     *
+     *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+     *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+     *  distributed between them.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and
+     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+     */
+    priority?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -21800,6 +21868,23 @@ namespace VpcV1 {
      *  with `ibm-` are reserved for system-provided routes, and are not allowed.
      */
     name?: string;
+    /** The next hop that packets will be delivered to, if `action` is `deliver`. For other `action`
+     *  values, specify `0.0.0.0` or remove it by specifying `null`.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and `priority`, and
+     *  only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+     */
+    nextHop?: RouteNextHopPatch;
+    /** The priority of this route. Smaller values have higher priority.
+     *
+     *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+     *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+     *  distributed between them.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and
+     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+     */
+    priority?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -21998,8 +22083,8 @@ namespace VpcV1 {
     vpcId: string;
     /** The routing table identifier. */
     routingTableId: string;
-    /** The destination of the route. At most two routes per `zone` in a table can have the same destination, and
-     *  only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+    /** The destination of the route. At most two routes per `zone` in a table can have the same `destination` and
+     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     destination: string;
     /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
@@ -22020,6 +22105,16 @@ namespace VpcV1 {
      *  values, it must be omitted or specified as `0.0.0.0`.
      */
     nextHop?: RoutePrototypeNextHop;
+    /** The priority of this route. Smaller values have higher priority.
+     *
+     *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+     *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+     *  distributed between them.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and
+     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+     */
+    priority?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -22068,6 +22163,23 @@ namespace VpcV1 {
      *  with `ibm-` are reserved for system-provided routes, and are not allowed.
      */
     name?: string;
+    /** The next hop that packets will be delivered to, if `action` is `deliver`. For other `action`
+     *  values, specify `0.0.0.0` or remove it by specifying `null`.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and `priority`, and
+     *  only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+     */
+    nextHop?: RouteNextHopPatch;
+    /** The priority of this route. Smaller values have higher priority.
+     *
+     *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+     *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+     *  distributed between them.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and
+     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+     */
+    priority?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -23793,16 +23905,14 @@ namespace VpcV1 {
     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. */
     allowedVlans?: number[];
     /** If `true`:
-     *    - The VPC infrastructure performs any needed NAT operations.
-     *    - A single floating IP can be assigned to the network interface.
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
      *
      *  If `false`:
-     *    - Packets are passed unchanged to/from the network interface,
-     *      allowing the workload to perform any needed NAT operations.
-     *    - Multiple floating IPs can be assigned to the network interface.
-     *    - `allow_ip_spoofing` must be set to `false`.
-     *
-     *  This must be `true` when `interface_type` is `hipersocket`.
+     *  - Packets are passed unchanged to/from the network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     *  - `allow_ip_spoofing` must be `false`.
+     *  - `interface_type` must not be `hipersocket`.
      */
     enableInfrastructureNat?: boolean;
     /** The name for this network interface. The name must not be used by another network interface on the bare
@@ -25547,6 +25657,7 @@ namespace VpcV1 {
     subnets: SubnetIdentity[];
     /** The datapath logging configuration for this load balancer. */
     datapath?: LoadBalancerLoggingDatapathPrototype;
+    dns?: LoadBalancerDNSPrototype;
     /** The listeners of this load balancer. */
     listeners?: LoadBalancerListenerPrototypeLoadBalancerContext[];
     /** The logging configuration to use for this load balancer. See [VPC Datapath
@@ -25606,6 +25717,7 @@ namespace VpcV1 {
   export interface UpdateLoadBalancerParams {
     /** The load balancer identifier. */
     id: string;
+    dns?: LoadBalancerDNSPatch;
     /** The logging configuration to use for this load balancer.
      *
      *  To activate logging, the load balancer profile must support the specified logging type.
@@ -25687,6 +25799,10 @@ namespace VpcV1 {
      *  `protocol` of `http`, and the target listener must have a `protocol` of `https`.
      */
     httpsRedirect?: LoadBalancerListenerHTTPSRedirectPrototype;
+    /** The idle connection timeout of the listener in seconds. Supported for load balancers in the `application`
+     *  family.
+     */
+    idleConnectionTimeout?: number;
     /** The policy prototype objects for this listener. The load balancer must be in the `application` family. */
     policies?: LoadBalancerListenerPolicyPrototype[];
     /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
@@ -25781,6 +25897,10 @@ namespace VpcV1 {
      *  Specify `null` to remove any existing https redirect.
      */
     httpsRedirect?: LoadBalancerListenerHTTPSRedirectPatch;
+    /** The idle connection timeout of the listener in seconds. Supported for load balancers in the `application`
+     *  family.
+     */
+    idleConnectionTimeout?: number;
     /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
      *  must have a unique `port` and `protocol` combination.
      *
@@ -27059,20 +27179,18 @@ namespace VpcV1 {
     /** The date and time that the network interface was created. */
     created_at: string;
     /** If `true`:
-     *    - The VPC infrastructure performs any needed NAT operations.
-     *    - A single floating IP can be assigned to the network interface.
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
      *
      *  If `false`:
-     *    - Packets are passed unchanged to/from the network interface,
-     *      allowing the workload to perform any needed NAT operations.
-     *    - Multiple floating IPs can be assigned to the network interface.
-     *    - `allow_ip_spoofing` must be set to `false`.
-     *
-     *  This must be `true` when `interface_type` is `hipersocket`.
+     *  - Packets are passed unchanged to/from the network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     *  - `allow_ip_spoofing` must be `false`.
+     *  - `interface_type` must not be `hipersocket`.
      */
     enable_infrastructure_nat: boolean;
     /** The floating IPs associated with this network interface. */
-    floating_ips?: FloatingIPReference[];
+    floating_ips: FloatingIPReference[];
     /** The URL for this network interface. */
     href: string;
     /** The unique identifier for this network interface. */
@@ -27148,16 +27266,14 @@ namespace VpcV1 {
      */
     allow_ip_spoofing?: boolean;
     /** If `true`:
-     *    - The VPC infrastructure performs any needed NAT operations.
-     *    - A single floating IP can be assigned to the network interface.
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
      *
      *  If `false`:
-     *    - Packets are passed unchanged to/from the network interface,
-     *      allowing the workload to perform any needed NAT operations.
-     *    - Multiple floating IPs can be assigned to the network interface.
-     *    - `allow_ip_spoofing` must be set to `false`.
-     *
-     *  This must be `true` when `interface_type` is `hipersocket`.
+     *  - Packets are passed unchanged to/from the network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     *  - `allow_ip_spoofing` must be `false`.
+     *  - `interface_type` must not be `hipersocket`.
      */
     enable_infrastructure_nat?: boolean;
     /** The network interface type:
@@ -27207,16 +27323,14 @@ namespace VpcV1 {
     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. */
     allowed_vlans?: number[];
     /** If `true`:
-     *    - The VPC infrastructure performs any needed NAT operations.
-     *    - A single floating IP can be assigned to the network interface.
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
      *
      *  If `false`:
-     *    - Packets are passed unchanged to/from the network interface,
-     *      allowing the workload to perform any needed NAT operations.
-     *    - Multiple floating IPs can be assigned to the network interface.
-     *    - `allow_ip_spoofing` must be set to `false`.
-     *
-     *  This must be `true` when `interface_type` is `hipersocket`.
+     *  - Packets are passed unchanged to/from the network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     *  - `allow_ip_spoofing` must be `false`.
+     *  - `interface_type` must not be `hipersocket`.
      */
     enable_infrastructure_nat?: boolean;
     /** The network interface type:
@@ -27468,6 +27582,25 @@ namespace VpcV1 {
     crn: string;
   }
 
+  /** Identifies a DNS instance by a unique property. */
+  export interface DNSInstanceIdentity {
+  }
+
+  /** DNSInstanceReference. */
+  export interface DNSInstanceReference {
+    /** The CRN for this DNS instance. */
+    crn: string;
+  }
+
+  /** Identifies a DNS zone by a unique property. */
+  export interface DNSZoneIdentity {
+  }
+
+  /** DNSZoneReference. */
+  export interface DNSZoneReference {
+    id: string;
+  }
+
   /** DedicatedHost. */
   export interface DedicatedHost {
     /** The amount of memory in gibibytes that is currently available for instances. */
@@ -27701,6 +27834,7 @@ namespace VpcV1 {
     supported_instance_profiles: InstanceProfileReference[];
     vcpu_architecture: DedicatedHostProfileVCPUArchitecture;
     vcpu_count: DedicatedHostProfileVCPU;
+    vcpu_manufacturer: DedicatedHostProfileVCPUManufacturer;
   }
 
   /** DedicatedHostProfileCollection. */
@@ -27805,6 +27939,14 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: string;
     /** The VCPU architecture for a dedicated host with this profile. */
+    value: string;
+  }
+
+  /** DedicatedHostProfileVCPUManufacturer. */
+  export interface DedicatedHostProfileVCPUManufacturer {
+    /** The type for this profile field. */
+    type: string;
+    /** The VCPU manufacturer for a dedicated host with this profile. */
     value: string;
   }
 
@@ -28680,7 +28822,7 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected reason code was encountered.
      */
-    lifecycle_reasons: LifecycleReason[];
+    lifecycle_reasons: InstanceLifecycleReason[];
     /** The lifecycle state of the virtual server instance. */
     lifecycle_state: string;
     /** The amount of memory, truncated to whole gibibytes. */
@@ -29372,6 +29514,16 @@ namespace VpcV1 {
     encryption_key: KeyIdentityByFingerprint;
   }
 
+  /** InstanceLifecycleReason. */
+  export interface InstanceLifecycleReason {
+    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    code: string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+
   /** The metadata service configuration. */
   export interface InstanceMetadataService {
     /** Indicates whether the metadata service endpoint is available to the virtual server instance. */
@@ -29452,11 +29604,13 @@ namespace VpcV1 {
     memory: InstanceProfileMemory;
     /** The globally unique name for this virtual server instance profile. */
     name: string;
+    network_interface_count: InstanceProfileNetworkInterfaceCount;
     os_architecture: InstanceProfileOSArchitecture;
     port_speed: InstanceProfilePortSpeed;
     total_volume_bandwidth: InstanceProfileVolumeBandwidth;
     vcpu_architecture: InstanceProfileVCPUArchitecture;
     vcpu_count: InstanceProfileVCPU;
+    vcpu_manufacturer: InstanceProfileVCPUManufacturer;
   }
 
   /** InstanceProfileBandwidth. */
@@ -29531,6 +29685,10 @@ namespace VpcV1 {
   export interface InstanceProfileMemory {
   }
 
+  /** InstanceProfileNetworkInterfaceCount. */
+  export interface InstanceProfileNetworkInterfaceCount {
+  }
+
   /** InstanceProfileOSArchitecture. */
   export interface InstanceProfileOSArchitecture {
     /** The default OS architecture for an instance with this profile. */
@@ -29564,6 +29722,16 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: string;
     /** The VCPU architecture for an instance with this profile. */
+    value: string;
+  }
+
+  /** InstanceProfileVCPUManufacturer. */
+  export interface InstanceProfileVCPUManufacturer {
+    /** The default VCPU manufacturer for an instance with this profile. */
+    default?: string;
+    /** The type for this profile field. */
+    type: string;
+    /** The VCPU manufacturer for an instance with this profile. */
     value: string;
   }
 
@@ -29867,6 +30035,8 @@ namespace VpcV1 {
     architecture: string;
     /** The number of VCPUs assigned. */
     count: number;
+    /** The VCPU manufacturer. */
+    manufacturer: string;
   }
 
   /** Key. */
@@ -29965,22 +30135,18 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** LifecycleReason. */
-  export interface LifecycleReason {
-    /** A snake case string succinctly identifying the reason for this lifecycle state. */
-    code: string;
-    /** An explanation of the reason for this lifecycle state. */
-    message: string;
-    /** Link to documentation about the reason for this lifecycle state. */
-    more_info?: string;
-  }
-
   /** LoadBalancer. */
   export interface LoadBalancer {
     /** The date and time that this load balancer was created. */
     created_at: string;
     /** The load balancer's CRN. */
     crn: string;
+    /** The DNS configuration for this load balancer.
+     *
+     *  If absent, DNS `A` records for this load balancer's `hostname` property will be added to
+     *  the public DNS zone `lb.appdomain.cloud`.
+     */
+    dns?: LoadBalancerDNS;
     /** Fully qualified domain name assigned to this load balancer. */
     hostname: string;
     /** The load balancer's canonical URL. */
@@ -30078,6 +30244,44 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** The DNS configuration for this load balancer. If absent, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone `lb.appdomain.cloud`. */
+  export interface LoadBalancerDNS {
+    /** The DNS instance associated with this load balancer. */
+    instance: DNSInstanceReference;
+    /** The DNS zone associated with this load balancer. */
+    zone: DNSZoneReference;
+  }
+
+  /** LoadBalancerDNSPatch. */
+  export interface LoadBalancerDNSPatch {
+    /** The DNS instance to associate with this load balancer.
+     *
+     *  The specified instance may be in a different region or account, subject to IAM
+     *  policies.
+     */
+    instance?: DNSInstanceIdentity;
+    /** The DNS zone to associate with this load balancer.
+     *
+     *  The specified zone may be in a different region or account, subject to IAM policies.
+     */
+    zone?: DNSZoneIdentity;
+  }
+
+  /** LoadBalancerDNSPrototype. */
+  export interface LoadBalancerDNSPrototype {
+    /** The DNS instance to associate with this load balancer.
+     *
+     *  The specified instance may be in a different region or account, subject to IAM
+     *  policies.
+     */
+    instance: DNSInstanceIdentity;
+    /** The DNS zone to associate with this load balancer.
+     *
+     *  The specified zone may be in a different region or account, subject to IAM policies.
+     */
+    zone: DNSZoneIdentity;
+  }
+
   /** Identifies a load balancer by a unique property. */
   export interface LoadBalancerIdentity {
   }
@@ -30109,6 +30313,10 @@ namespace VpcV1 {
     https_redirect?: LoadBalancerListenerHTTPSRedirect;
     /** The unique identifier for this load balancer listener. */
     id: string;
+    /** The idle connection timeout of the listener in seconds. This property will be present for load balancers in
+     *  the `application` family.
+     */
+    idle_connection_timeout?: number;
     /** The policies for this listener. */
     policies?: LoadBalancerListenerPolicyReference[];
     /** The listener port number, or the inclusive lower bound of the port range. */
@@ -30394,6 +30602,10 @@ namespace VpcV1 {
      *  `protocol` of `http`, and the target listener must have a `protocol` of `https`.
      */
     https_redirect?: LoadBalancerListenerHTTPSRedirectPrototype;
+    /** The idle connection timeout of the listener in seconds. Supported for load balancers in the `application`
+     *  family.
+     */
+    idle_connection_timeout?: number;
     /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
      *  must have a unique `port` and `protocol` combination.
      *
@@ -31181,7 +31393,7 @@ namespace VpcV1 {
     /** The date and time that the network interface was created. */
     created_at: string;
     /** The floating IPs associated with this network interface. */
-    floating_ips?: FloatingIPReference[];
+    floating_ips: FloatingIPReference[];
     /** The URL for this network interface. */
     href: string;
     /** The unique identifier for this network interface. */
@@ -31750,6 +31962,13 @@ namespace VpcV1 {
      *  the unexpected property value was encountered.
      */
     origin?: string;
+    /** The priority of this route. Smaller values have higher priority.
+     *
+     *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+     *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+     *  distributed between them.
+     */
+    priority: number;
     /** The zone the route applies to. (Traffic from subnets in this zone will be subject to this route.). */
     zone: ZoneReference;
   }
@@ -31788,6 +32007,10 @@ namespace VpcV1 {
   export interface RouteNextHop {
   }
 
+  /** The next hop that packets will be delivered to, if `action` is `deliver`. For other `action` values, specify `0.0.0.0` or remove it by specifying `null`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address. */
+  export interface RouteNextHopPatch {
+  }
+
   /** RoutePrototype. */
   export interface RoutePrototype {
     /** The action to perform with a packet matching the route:
@@ -31797,8 +32020,8 @@ namespace VpcV1 {
      *  - `drop`: drop the packet.
      */
     action?: string;
-    /** The destination of the route. At most two routes per `zone` in a table can have the same destination, and
-     *  only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+    /** The destination of the route. At most two routes per `zone` in a table can have the same `destination` and
+     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     destination: string;
     /** The name for this route. The name must not be used by another route in the routing table. Names starting
@@ -31810,6 +32033,16 @@ namespace VpcV1 {
      *  values, it must be omitted or specified as `0.0.0.0`.
      */
     next_hop?: RoutePrototypeNextHop;
+    /** The priority of this route. Smaller values have higher priority.
+     *
+     *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+     *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+     *  distributed between them.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and
+     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+     */
+    priority?: number;
     /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
     zone: ZoneIdentity;
   }
@@ -32426,6 +32659,8 @@ namespace VpcV1 {
     architecture: string;
     /** The number of VCPUs assigned. */
     count: number;
+    /** The VCPU manufacturer. */
+    manufacturer: string;
   }
 
   /** VPC. */
@@ -32447,7 +32682,10 @@ namespace VpcV1 {
     default_network_acl: NetworkACLReference;
     /** The default routing table to use for subnets created in this VPC. */
     default_routing_table: RoutingTableReference;
-    /** The default security group to use for network interfaces created in this VPC. */
+    /** The default security group for this VPC. Resources created in this VPC that allow
+     *  a security group to be optionally specified will use this security group by
+     *  default.
+     */
     default_security_group: SecurityGroupReference;
     /** The URL for this VPC. */
     href: string;
@@ -33156,7 +33394,7 @@ namespace VpcV1 {
      *
      *  This property will be absent if the volume has not yet been provisioned.
      */
-    volume?: VolumeReference;
+    volume?: VolumeReferenceVolumeAttachmentContext;
   }
 
   /** VolumeAttachmentCollection. */
@@ -33244,7 +33482,7 @@ namespace VpcV1 {
      *
      *  This property will be absent if the volume has not yet been provisioned.
      */
-    volume?: VolumeReference;
+    volume?: VolumeReferenceVolumeAttachmentContext;
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -33471,6 +33709,28 @@ namespace VpcV1 {
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
   export interface VolumeReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** VolumeReferenceVolumeAttachmentContext. */
+  export interface VolumeReferenceVolumeAttachmentContext {
+    /** The CRN for this volume. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: VolumeReferenceVolumeAttachmentContextDeleted;
+    /** The URL for this volume. */
+    href: string;
+    /** The unique identifier for this volume. */
+    id: string;
+    /** The name for this volume. The name is unique across all volumes in the region. */
+    name: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface VolumeReferenceVolumeAttachmentContextDeleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
   }
@@ -33898,6 +34158,17 @@ namespace VpcV1 {
   export interface CertificateInstanceIdentityByCRN extends CertificateInstanceIdentity {
     /** The CRN for this certificate instance. */
     crn: string;
+  }
+
+  /** DNSInstanceIdentityByCRN. */
+  export interface DNSInstanceIdentityByCRN extends DNSInstanceIdentity {
+    /** The CRN for this DNS instance. */
+    crn: string;
+  }
+
+  /** DNSZoneIdentityById. */
+  export interface DNSZoneIdentityById extends DNSZoneIdentity {
+    id: string;
   }
 
   /** DedicatedHostGroupIdentityByCRN. */
@@ -34786,6 +35057,22 @@ namespace VpcV1 {
     min: number;
     /** The increment step value for this profile field. */
     step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The number of network interfaces supported on an instance with this profile is dependent on its configuration. */
+  export interface InstanceProfileNetworkInterfaceCountDependent extends InstanceProfileNetworkInterfaceCount {
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The number of network interfaces supported on an instance with this profile. */
+  export interface InstanceProfileNetworkInterfaceCountRange extends InstanceProfileNetworkInterfaceCount {
+    /** The maximum value for this profile field. */
+    max?: number;
+    /** The minimum value for this profile field. */
+    min?: number;
     /** The type for this profile field. */
     type: string;
   }
@@ -35754,6 +36041,21 @@ namespace VpcV1 {
      *  the error, or bypass the resource on which the unexpected IP address format was encountered.
      */
     address: string;
+  }
+
+  /** The IP address of the next hop to which to route packets. */
+  export interface RouteNextHopPatchRouteNextHopIP extends RouteNextHopPatch {
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     */
+    address: string;
+  }
+
+  /** Identifies a VPN gateway connection by a unique property. */
+  export interface RouteNextHopPatchVPNGatewayConnectionIdentity extends RouteNextHopPatch {
   }
 
   /** RouteNextHopVPNGatewayConnectionReference. */
@@ -36750,6 +37052,18 @@ namespace VpcV1 {
   /** ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityById. */
   export interface ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityById extends ReservedIPTargetPrototypeEndpointGatewayIdentity {
     /** The unique identifier for this endpoint gateway. */
+    id: string;
+  }
+
+  /** RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
+  export interface RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref extends RouteNextHopPatchVPNGatewayConnectionIdentity {
+    /** The VPN connection's canonical URL. */
+    href: string;
+  }
+
+  /** RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById. */
+  export interface RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById extends RouteNextHopPatchVPNGatewayConnectionIdentity {
+    /** The unique identifier for this VPN gateway connection. */
     id: string;
   }
 
