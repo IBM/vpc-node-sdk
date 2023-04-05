@@ -22,6 +22,7 @@
     "test": "npm run build && npm run lint && jest test/",
     "test-unit": "npm run build && jest test/unit/",
     "test-integration": "npm run build && jest test/integration",
+    "test-example": "npm run build && jest examples/ ",
     "test-travis": "jest --runInBand --testNamePattern='^((?!@slow).)*$' test/",
     "test-unit-travis": "jest --runInBand test/unit/",
     "test-integration-travis": "jest --runInBand --no-colors --testNamePattern='^((?!@slow).)*$' --json test/integration > test-output.log",
@@ -34,11 +35,11 @@
   "dependencies": {
     "@types/node": "^14.0.0",
     "extend": "^3.0.2",
-    "ibm-cloud-sdk-core": "4.0.3"
+    "ibm-cloud-sdk-core": "4.0.5"
   },
   "devDependencies": {
-    "@semantic-release/changelog": "^3.0.4",
-    "@semantic-release/git": "^7.0.12",
+    "@semantic-release/changelog": "6.0.1",
+    "@semantic-release/git": "10.0.1",
     "axios": "1.2.1",
     "dotenv": "^8.2.0",
     "eslint": "^7.26.0",
