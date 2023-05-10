@@ -1195,6 +1195,124 @@ describe('VpcV1', () => {
 
   });
 
+  test('listImageExportJobs request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+    // begin-list_image_export_jobs
+    const params = {
+      imageId: data.imageId,
+    };
+    const response = await vpcService.listImageExportJobs(params);
+    // end-list_image_export_jobs
+    expect(response.result).not.toBeNull();
+  });
+  test('createImageExportJob request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-create_image_export_job
+    const storageBucket = {
+      name: 'bucket-27200-lwx4cfvcue',
+    };
+
+    const params1 = {
+      storageBucket: storageBucket,
+      imageId: data.imageId,
+      name:'my-image-export-job',
+    };
+    const response1 = await vpcService.createImageExportJob(params1);
+    data.imageExportJobId = response1.result.id;
+
+    // end-create_image_export_job
+    expect(response1.result).not.toBeNull();
+  });
+  test('getImageExportJob request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-get_image_export_job
+
+    const params = {
+      imageId: data.imageId,
+      id: data.imageExportJobId,
+    };
+
+    const response = await vpcService.getImageExportJob(params);
+
+    // end-get_image_export_job
+    expect(response.result).not.toBeNull();
+
+  });
+  test('updateImageExportJob request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-update_image_export_job
+
+    const params = {
+      imageId: data.imageId,
+      id: data.imageExportJobId,
+      name:'my-image-export-job-updated',
+    };
+
+    const response = await vpcService.updateImageExportJob(params);
+
+    // end-update_image_export_job
+    expect(response.result).not.toBeNull();
+
+  });
+  test('deleteImageExportJob request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_image_export_job
+
+    const params = {
+      imageId: data.imageId,
+      id: data.imageExportJobId,
+    };
+
+    const response = await vpcService.deleteImageExportJob(params);
+
+    // end-delete_image_export_job
+    expect(response.result).not.toBeNull();
+
+  });
   test('listOperatingSystems request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
@@ -5588,7 +5706,7 @@ describe('VpcV1', () => {
     const params = {
       id: data.vpnServerId,
     };
-
+    
     let res;
     try {
       res = await vpcService.getVpnServerClientConfiguration(params);

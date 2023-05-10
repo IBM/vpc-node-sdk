@@ -624,7 +624,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test.skip('createImage()', (done) => {
+  test('createImage()', (done) => {
     const resourceGroupIdentityModel = {
       id: 'fee82deba12e4c0fb69c3b09d1f12345',
     };
@@ -651,6 +651,7 @@ describe('VpcV1_integration', () => {
     vpcService
       .createImage(params)
       .then((res) => {
+        dict.imageIdExportImage = res.result.id;
         expect(res.result).not.toBeNull();
         done();
       })
@@ -675,7 +676,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test.skip('updateImage()', (done) => {
+  test('updateImage()', (done) => {
     const listParams = {
       limit: 1,
       visibility: 'private',
@@ -693,12 +694,98 @@ describe('VpcV1_integration', () => {
         done(err);
       });
     const params = {
-      id: dict.privateImage,
+      id: dict.imageId,
       name: generateName('my-image'),
     };
 
     vpcService
       .updateImage(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('listImageExportJobs()', (done) => {
+    const params = {
+      imageId: dict.imageIdExportImage,
+    };
+    vpcService
+      .listImageExportJobs(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createImageExportJob()', (done) => {
+    const storageBucket = {
+      name: 'bucket-27200-lwx4cfvcue',
+    };
+    const params1 = {
+      storageBucket: storageBucket,
+      imageId: dict.imageIdExportImage,
+      name: 'my-image-export-job',
+    };
+
+    vpcService
+      .createImageExportJob(params1)
+      .then((res) => {
+        dict.imageExportJobId = res.result.id;
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getImageExportJob()', (done) => {
+    const params = {
+      imageId: dict.imageIdExportImage,
+      id: dict.imageExportJobId,
+    };
+    vpcService
+      .getImageExportJob(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateImageExportJob()', (done) => {
+    const params = {
+      imageId: dict.imageIdExportImage,
+      id: dict.imageExportJobId,
+      name: 'my-image-export-job-updated',
+    };
+    vpcService
+      .updateImageExportJob(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteImageExportJob()', (done) => {
+    const params = {
+      imageId: dict.imageIdExportImage,
+      id: dict.imageExportJobId,
+    };
+    vpcService
+      .deleteImageExportJob(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();

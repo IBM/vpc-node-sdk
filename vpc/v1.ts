@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.68.2-ac7def68-20230310-195410
+ * IBM OpenAPI SDK Code Generator Version: 3.69.0-370d6400-20230329-174648
  */
 
 /* eslint-disable max-classes-per-file */
@@ -108,7 +108,7 @@ class VpcV1 extends BaseService {
     } else {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
-    this.version = options.version|| `2023-03-28`;
+    this.version = options.version|| `2023-05-04`;
     this.generation = options.generation;
   }
 
@@ -1046,16 +1046,16 @@ class VpcV1 extends BaseService {
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed. If unspecified, the
    * name will be a hyphenated list of randomly-selected words.
    * @param {RoutePrototypeNextHop} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
-   * delivered to. For other `action`
-   * values, it must be omitted or specified as `0.0.0.0`.
+   * delivered to. For other
+   * `action` values, it must be omitted or specified as `0.0.0.0`.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and `priority`,
+   * and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
    * @param {number} [params.priority] - The priority of this route. Smaller values have higher priority.
    *
    * If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
    * priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
    * distributed between them.
-   *
-   * At most two routes per `zone` in a table can have the same `destination` and
-   * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    * @deprecated this method is deprecated and may be removed in a future release
@@ -1254,20 +1254,17 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The route identifier.
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed.
-   * @param {RouteNextHopPatch} [params.nextHop] - The next hop that packets will be delivered to, if `action` is
-   * `deliver`. For other `action`
-   * values, specify `0.0.0.0` or remove it by specifying `null`.
+   * @param {RouteNextHopPatch} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be delivered
+   * to. For other
+   * `action` values, specify `0.0.0.0` or remove it by specifying `null`.
    *
-   * At most two routes per `zone` in a table can have the same `destination` and `priority`, and
-   * only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+   * At most two routes per `zone` in a table can have the same `destination` and `priority`,
+   * and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
    * @param {number} [params.priority] - The priority of this route. Smaller values have higher priority.
    *
    * If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
    * priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
    * distributed between them.
-   *
-   * At most two routes per `zone` in a table can have the same `destination` and
-   * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    * @deprecated this method is deprecated and may be removed in a future release
@@ -1861,16 +1858,16 @@ class VpcV1 extends BaseService {
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed. If unspecified, the
    * name will be a hyphenated list of randomly-selected words.
    * @param {RoutePrototypeNextHop} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
-   * delivered to. For other `action`
-   * values, it must be omitted or specified as `0.0.0.0`.
+   * delivered to. For other
+   * `action` values, it must be omitted or specified as `0.0.0.0`.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and `priority`,
+   * and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
    * @param {number} [params.priority] - The priority of this route. Smaller values have higher priority.
    *
    * If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
    * priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
    * distributed between them.
-   *
-   * At most two routes per `zone` in a table can have the same `destination` and
-   * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
@@ -2071,20 +2068,17 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The VPC routing table route identifier.
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed.
-   * @param {RouteNextHopPatch} [params.nextHop] - The next hop that packets will be delivered to, if `action` is
-   * `deliver`. For other `action`
-   * values, specify `0.0.0.0` or remove it by specifying `null`.
+   * @param {RouteNextHopPatch} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be delivered
+   * to. For other
+   * `action` values, specify `0.0.0.0` or remove it by specifying `null`.
    *
-   * At most two routes per `zone` in a table can have the same `destination` and `priority`, and
-   * only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+   * At most two routes per `zone` in a table can have the same `destination` and `priority`,
+   * and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
    * @param {number} [params.priority] - The priority of this route. Smaller values have higher priority.
    *
    * If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
    * priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
    * distributed between them.
-   *
-   * At most two routes per `zone` in a table can have the same `destination` and
-   * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Route>>}
    */
@@ -3369,8 +3363,8 @@ class VpcV1 extends BaseService {
   /**
    * Delete an image.
    *
-   * This request deletes an image. This operation cannot be reversed. A system-provided image is not allowed to be
-   * deleted. Additionally, an image cannot be deleted if it:
+   * This request deletes an image. Any active image export jobs will be completed first. This operation cannot be
+   * reversed. A system-provided image is not allowed to be deleted. Additionally, an image cannot be deleted if it:
    * - has a `status` of `deleting`
    * - has a `status` of `pending` with a `status_reasons` code of `image_request_in_progress`
    * - has `catalog_offering.managed` set to `true`.
@@ -3532,6 +3526,344 @@ class VpcV1 extends BaseService {
     const parameters = {
       options: {
         url: '/images/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List all image export jobs.
+   *
+   * This request lists all export jobs for an image. Each job tracks the exporting of the image to another location,
+   * such as a bucket within cloud object storage.
+   *
+   * The jobs will be sorted by their `created_at` property values, with newest jobs first. Jobs with identical
+   * `created_at` property values will in turn be sorted by ascending
+   * `name` property values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.imageId - The image identifier.
+   * @param {string} [params.name] - Filters the collection to resources with the exact specified name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ImageExportJobUnpaginatedCollection>>}
+   */
+  public listImageExportJobs(
+    params: VpcV1.ListImageExportJobsParams
+  ): Promise<VpcV1.Response<VpcV1.ImageExportJobUnpaginatedCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['imageId'];
+    const _validParams = ['imageId', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'name': _params.name,
+    };
+
+    const path = {
+      'image_id': _params.imageId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listImageExportJobs'
+    );
+
+    const parameters = {
+      options: {
+        url: '/images/{image_id}/export_jobs',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create an image export job.
+   *
+   * This request creates and queues a new export job for the image specified in the URL using the image export job
+   * prototype object. The image must be owned by the account and be in the `available`, `deprecated`, or `unusable`
+   * state. The prototype object is structured in the same way as a retrieved image export job, and contains the
+   * information necessary to create and queue the new image export job.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.imageId - The image identifier.
+   * @param {CloudObjectStorageBucketIdentity} params.storageBucket - The Cloud Object Storage bucket to export the
+   * image to. The bucket must exist and an IAM
+   * service authorization must grant `Image Service for VPC` of
+   * `VPC Infrastructure Services` writer access to the bucket.
+   * @param {string} [params.format] - The format to use for the exported image. If the image is encrypted, only `qcow2`
+   * is supported.
+   * @param {string} [params.name] - The name for this image export job. The name must not be used by another export job
+   * for the image. If unspecified, the name will be a hyphenated list of randomly-selected words prefixed with the
+   * first 16 characters of the parent image name.
+   *
+   * The exported image object name in Cloud Object Storage (`storage_object.name` in the response) will be based on
+   * this name. The object name will be unique within the bucket.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ImageExportJob>>}
+   */
+  public createImageExportJob(
+    params: VpcV1.CreateImageExportJobParams
+  ): Promise<VpcV1.Response<VpcV1.ImageExportJob>> {
+    const _params = { ...params };
+    const _requiredParams = ['imageId', 'storageBucket'];
+    const _validParams = ['imageId', 'storageBucket', 'format', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'storage_bucket': _params.storageBucket,
+      'format': _params.format,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'image_id': _params.imageId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createImageExportJob'
+    );
+
+    const parameters = {
+      options: {
+        url: '/images/{image_id}/export_jobs',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete an image export job.
+   *
+   * This request deletes an image export job. This operation cannot be reversed. If the job has not completed, the job
+   * will be canceled, and the incomplete exported image object deleted. If the job has completed, the exported image
+   * object will not be deleted.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.imageId - The image identifier.
+   * @param {string} params.id - The image export job identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deleteImageExportJob(
+    params: VpcV1.DeleteImageExportJobParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['imageId', 'id'];
+    const _validParams = ['imageId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'image_id': _params.imageId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteImageExportJob'
+    );
+
+    const parameters = {
+      options: {
+        url: '/images/{image_id}/export_jobs/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve an image export job.
+   *
+   * This request retrieves a single image export job specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.imageId - The image identifier.
+   * @param {string} params.id - The image export job identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ImageExportJob>>}
+   */
+  public getImageExportJob(
+    params: VpcV1.GetImageExportJobParams
+  ): Promise<VpcV1.Response<VpcV1.ImageExportJob>> {
+    const _params = { ...params };
+    const _requiredParams = ['imageId', 'id'];
+    const _validParams = ['imageId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'image_id': _params.imageId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getImageExportJob'
+    );
+
+    const parameters = {
+      options: {
+        url: '/images/{image_id}/export_jobs/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update an image export job.
+   *
+   * This request updates an image export job with the information in a provided image export job patch. The image
+   * export job patch object is structured in the same way as a retrieved image export job and contains only the
+   * information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.imageId - The image identifier.
+   * @param {string} params.id - The image export job identifier.
+   * @param {string} [params.name] - The name for this image export job. The name must not be used by another export job
+   * for the image. Changing the name will not affect the exported image name,
+   * `storage_object.name`, or `storage_href` values.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ImageExportJob>>}
+   */
+  public updateImageExportJob(
+    params: VpcV1.UpdateImageExportJobParams
+  ): Promise<VpcV1.Response<VpcV1.ImageExportJob>> {
+    const _params = { ...params };
+    const _requiredParams = ['imageId', 'id'];
+    const _validParams = ['imageId', 'id', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'image_id': _params.imageId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateImageExportJob'
+    );
+
+    const parameters = {
+      options: {
+        url: '/images/{image_id}/export_jobs/{id}',
         method: 'PATCH',
         body,
         qs: query,
@@ -4539,7 +4871,7 @@ class VpcV1 extends BaseService {
    * `true` targeting the instance and/or the instance's network interfaces are automatically deleted.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The instance identifier.
+   * @param {string} params.id - The virtual server instance identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
@@ -4596,7 +4928,7 @@ class VpcV1 extends BaseService {
    * This request retrieves a single instance specified by the identifier in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The instance identifier.
+   * @param {string} params.id - The virtual server instance identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Instance>>}
    */
@@ -4655,7 +4987,7 @@ class VpcV1 extends BaseService {
    * structured in the same way as a retrieved instance and contains only the information to be updated.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The instance identifier.
+   * @param {string} params.id - The virtual server instance identifier.
    * @param {InstanceAvailabilityPolicyPatch} [params.availabilityPolicy] - The availability policy for this virtual
    * server instance.
    * @param {InstanceMetadataServicePatch} [params.metadataService] - The metadata service configuration.
@@ -4807,7 +5139,7 @@ class VpcV1 extends BaseService {
    * completed.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.type - The type of action.
    * @param {boolean} [params.force] - If set to true, the action will be forced immediately, and all queued actions
    * deleted. Ignored for the start action.
@@ -4878,7 +5210,7 @@ class VpcV1 extends BaseService {
    * given instance at a time.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.consoleType - The instance console type for which this token may be used.
    * @param {boolean} [params.force] - Indicates whether to disconnect an existing serial console session as the serial
    * console cannot be shared.  This has no effect on VNC consoles.
@@ -4948,7 +5280,7 @@ class VpcV1 extends BaseService {
    * `created_at` property values, with the newest disk first.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceDiskCollection>>}
    */
@@ -5006,7 +5338,7 @@ class VpcV1 extends BaseService {
    * This request retrieves a single instance disk specified by the identifier in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The instance disk identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceDisk>>}
@@ -5066,7 +5398,7 @@ class VpcV1 extends BaseService {
    * This request updates the instance disk with the information in a provided patch.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The instance disk identifier.
    * @param {string} [params.name] - The name for this instance disk. The name must not be used by another disk on the
    * instance.
@@ -5137,7 +5469,7 @@ class VpcV1 extends BaseService {
    * attach to the same subnet.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterfaceUnpaginatedCollection>>}
    */
@@ -5198,7 +5530,7 @@ class VpcV1 extends BaseService {
    * network interface. Addresses on the network interface must be within the specified subnet's CIDR blocks.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {SubnetIdentity} params.subnet - The associated subnet.
    * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this interface. If
    * false, source IP spoofing is prevented on this interface. If true, source IP spoofing is allowed on this interface.
@@ -5283,7 +5615,7 @@ class VpcV1 extends BaseService {
    * the network interface are automatically deleted. The primary network interface is not allowed to be deleted.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
@@ -5342,7 +5674,7 @@ class VpcV1 extends BaseService {
    * This request retrieves a single network interface specified by the identifier in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
@@ -5404,7 +5736,7 @@ class VpcV1 extends BaseService {
    * only the information to be updated.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The network interface identifier.
    * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this interface. If
    * false, source IP spoofing is prevented on this interface. If true, source IP spoofing is allowed on this interface.
@@ -5475,7 +5807,7 @@ class VpcV1 extends BaseService {
    * This request lists all floating IPs associated with a network interface.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.networkInterfaceId - The network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIPUnpaginatedCollection>>}
@@ -5535,7 +5867,7 @@ class VpcV1 extends BaseService {
    * This request disassociates the specified floating IP from the specified network interface.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.networkInterfaceId - The network interface identifier.
    * @param {string} params.id - The floating IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -5597,7 +5929,7 @@ class VpcV1 extends BaseService {
    * specified in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.networkInterfaceId - The network interface identifier.
    * @param {string} params.id - The floating IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -5661,7 +5993,7 @@ class VpcV1 extends BaseService {
    * as a public gateway. A request body is not required, and if provided, is ignored.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.networkInterfaceId - The network interface identifier.
    * @param {string} params.id - The floating IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -5723,7 +6055,7 @@ class VpcV1 extends BaseService {
    * This request lists all reserved IPs bound to a network interface.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.networkInterfaceId - The network interface identifier.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
    * @param {number} [params.limit] - The number of resources to return on a page.
@@ -5788,7 +6120,7 @@ class VpcV1 extends BaseService {
    * specified in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.networkInterfaceId - The network interface identifier.
    * @param {string} params.id - The reserved IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -5852,7 +6184,7 @@ class VpcV1 extends BaseService {
    * one volume.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeAttachmentCollection>>}
    */
@@ -5913,7 +6245,7 @@ class VpcV1 extends BaseService {
    * attachment.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {VolumeAttachmentPrototypeVolume} params.volume - An existing volume to attach to the instance, or a
    * prototype object for a new volume.
    * @param {boolean} [params.deleteVolumeOnInstanceDelete] - Indicates whether deleting the instance will also delete
@@ -5986,7 +6318,7 @@ class VpcV1 extends BaseService {
    * subsequently be created for the volume.  For this request to succeed, the volume must not be busy.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The volume attachment identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
@@ -6045,7 +6377,7 @@ class VpcV1 extends BaseService {
    * This request retrieves a single volume attachment specified by the identifier in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The volume attachment identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeAttachment>>}
@@ -6107,7 +6439,7 @@ class VpcV1 extends BaseService {
    * only the information to be updated.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.instanceId - The instance identifier.
+   * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The volume attachment identifier.
    * @param {boolean} [params.deleteVolumeOnInstanceDelete] - Indicates whether deleting the instance will also delete
    * the attached volume.
@@ -6458,11 +6790,11 @@ class VpcV1 extends BaseService {
    * Required if `load_balancer_pool` is specified.
    *
    * At present, only load balancers in the `application` family are supported.
-   * @param {LoadBalancerPoolIdentity} [params.loadBalancerPool] - If specified, the load balancer pool this instance
-   * group will manage. A pool member
-   * will be created for each instance created by this group.
+   * @param {LoadBalancerPoolIdentity} [params.loadBalancerPool] - If set, the load balancer pool this instance group
+   * will manage. A pool member will
+   * be created for each instance created by this group.
    *
-   * If specified, `load_balancer` and `application_port` must also be specified.
+   * If set, `load_balancer` and `application_port` must also be set.
    * @param {number} [params.membershipCount] - The number of instances in the instance group.
    * @param {string} [params.name] - The name for this instance group. The name must not be used by another instance
    * group in the region.
@@ -7947,10 +8279,10 @@ class VpcV1 extends BaseService {
    *
    * This request creates a new dedicated host group.
    *
-   * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params._class] - The dedicated host profile class for hosts in this group.
-   * @param {string} [params.family] - The dedicated host profile family for hosts in this group.
-   * @param {ZoneIdentity} [params.zone] - The zone this dedicated host group will reside in.
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params._class - The dedicated host profile class for hosts in this group.
+   * @param {string} params.family - The dedicated host profile family for hosts in this group.
+   * @param {ZoneIdentity} params.zone - The zone this dedicated host group will reside in.
    * @param {string} [params.name] - The name for this dedicated host group. The name must not be used by another
    * dedicated host group in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
@@ -7960,10 +8292,10 @@ class VpcV1 extends BaseService {
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>>}
    */
   public createDedicatedHostGroup(
-    params?: VpcV1.CreateDedicatedHostGroupParams
+    params: VpcV1.CreateDedicatedHostGroupParams
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
     const _params = { ...params };
-    const _requiredParams = [];
+    const _requiredParams = ['_class', 'family', 'zone'];
     const _validParams = ['_class', 'family', 'zone', 'name', 'resourceGroup', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
@@ -8880,8 +9212,8 @@ class VpcV1 extends BaseService {
    * in the same way as a retrieved backup policy, and contains the information necessary to create the new backup
    * policy.
    *
-   * @param {Object} [params] - The parameters to send to the service.
-   * @param {string[]} [params.matchUserTags] - The user tags this backup policy applies to. Resources that have both a
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string[]} params.matchUserTags - The user tags this backup policy applies to. Resources that have both a
    * matching user tag and a matching type will be subject to the backup policy.
    * @param {string[]} [params.matchResourceTypes] - A resource type this backup policy applies to. Resources that have
    * both a matching type and a matching user tag will be subject to the backup policy.
@@ -8896,10 +9228,10 @@ class VpcV1 extends BaseService {
    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
    */
   public createBackupPolicy(
-    params?: VpcV1.CreateBackupPolicyParams
+    params: VpcV1.CreateBackupPolicyParams
   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
     const _params = { ...params };
-    const _requiredParams = [];
+    const _requiredParams = ['matchUserTags'];
     const _validParams = ['matchUserTags', 'matchResourceTypes', 'name', 'plans', 'resourceGroup', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
@@ -10175,8 +10507,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {BareMetalServerInitializationPrototype} params.initialization -
-   * @param {BareMetalServerPrimaryNetworkInterfacePrototype} params.primaryNetworkInterface - Primary network interface
-   * for the bare metal server.
+   * @param {BareMetalServerPrimaryNetworkInterfacePrototype} params.primaryNetworkInterface - The primary network
+   * interface to create for the bare metal server.
    * @param {BareMetalServerProfileIdentity} params.profile - The
    * [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
    * to use for this bare metal server.
@@ -10980,8 +11312,8 @@ class VpcV1 extends BaseService {
   /**
    * Retrieve associated floating IP.
    *
-   * This request retrieves a specified floating IP address if it is associated with the network interface and bare
-   * metal server specified in the URL.
+   * This request retrieves a specified floating IP if it is associated with the network interface and bare metal server
+   * specified in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
@@ -12053,8 +12385,8 @@ class VpcV1 extends BaseService {
    * region.
    * @param {VolumeProfileIdentity} [params.profile] - The profile to use for this volume. The requested profile must be
    * in the same
-   * `family` as the current profile. The volume must be attached as a data volume to a
-   * running virtual server instance, and must have a `capacity` within the range
+   * `family` as the current profile. The volume must be attached as a data volume to
+   * a running virtual server instance, and must have a `capacity` within the range
    * supported by the specified profile.
    * @param {string[]} [params.userTags] - The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags)
    * associated with this volume.
@@ -13564,9 +13896,15 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The floating IP identifier.
    * @param {string} [params.name] - The name for this floating IP. The name must not be used by another floating IP in
    * the region.
-   * @param {FloatingIPTargetPatch} [params.target] - The network interface to bind the floating IP to, replacing any
+   * @param {FloatingIPTargetPatch} [params.target] - The target resource to bind this floating IP to, replacing any
    * existing binding.
    * The floating IP must not be required by another resource, such as a public gateway.
+   *
+   * The target resource must not already have a floating IP bound to it if the target
+   * resource is:
+   *
+   * - an instance network interface
+   * - a bare metal server network interface with `enable_infrastructure_nat` set to `true`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
    */
@@ -13696,16 +14034,16 @@ class VpcV1 extends BaseService {
    * structured in the same way as a retrieved network ACL, and contains the information necessary to create the new
    * network ACL.
    *
-   * @param {Object} [params] - The parameters to send to the service.
-   * @param {NetworkACLPrototype} [params.networkAclPrototype] - The network ACL prototype object.
+   * @param {Object} params - The parameters to send to the service.
+   * @param {NetworkACLPrototype} params.networkAclPrototype - The network ACL prototype object.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkACL>>}
    */
   public createNetworkAcl(
-    params?: VpcV1.CreateNetworkAclParams
+    params: VpcV1.CreateNetworkAclParams
   ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
     const _params = { ...params };
-    const _requiredParams = [];
+    const _requiredParams = ['networkAclPrototype'];
     const _validParams = ['networkAclPrototype', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
@@ -15020,11 +15358,11 @@ class VpcV1 extends BaseService {
    * This request removes a target from a security group. For this request to succeed, the target must be attached to at
    * least one other security group.  The specified target identifier can be:
    *
-   * - An instance network interface identifier
    * - A bare metal server network interface identifier
    * - A VPN server identifier
    * - An application load balancer identifier
    * - An endpoint gateway identifier
+   * - An instance network interface identifier
    *
    * Security groups are stateful, so any changes to a target's security groups are applied to new connections. Existing
    * connections are not affected.
@@ -15149,11 +15487,11 @@ class VpcV1 extends BaseService {
    *
    * This request adds a resource to an existing security group. The specified target identifier can be:
    *
-   * - An instance network interface identifier
    * - A bare metal server network interface identifier
    * - A VPN server identifier
    * - An application load balancer identifier
    * - An endpoint gateway identifier
+   * - An instance network interface identifier
    *
    * When a target is added to a security group, the security group rules are applied to the target. A request body is
    * not required, and if provided, is ignored.
@@ -18366,7 +18704,11 @@ class VpcV1 extends BaseService {
    * Load balancers in the `network` family allow only one subnet to be specified.
    * @param {LoadBalancerLoggingDatapathPrototype} [params.datapath] - The datapath logging configuration for this load
    * balancer.
-   * @param {LoadBalancerDNSPrototype} [params.dns] -
+   * @param {LoadBalancerDNSPrototype} [params.dns] - The DNS configuration for this load balancer.
+   *
+   * If unspecified, DNS `A` records for this load balancer's `hostname` property will be added
+   * to the public DNS zone `lb.appdomain.cloud`. Otherwise, those DNS `A` records will be
+   * added to the specified `zone`.
    * @param {LoadBalancerListenerPrototypeLoadBalancerContext[]} [params.listeners] - The listeners of this load
    * balancer.
    * @param {LoadBalancerLoggingPrototype} [params.logging] - The logging configuration to use for this load balancer.
@@ -18582,7 +18924,11 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The load balancer identifier.
-   * @param {LoadBalancerDNSPatch} [params.dns] -
+   * @param {LoadBalancerDNSPatch} [params.dns] - The DNS configuration for this load balancer.
+   *
+   * Specify `null` to remove the existing DNS configuration, which will remove all DNS `A`
+   * records for this load balancer that had been added to `zone`, and add equivalent `A`
+   * records to the public DNS zone `lb.appdomain.cloud`.
    * @param {LoadBalancerLoggingPatch} [params.logging] - The logging configuration to use for this load balancer.
    *
    * To activate logging, the load balancer profile must support the specified logging type.
@@ -21323,7 +21669,7 @@ class VpcV1 extends BaseService {
    * target that are themselves the target of a more specific flow log collector.
    * @param {boolean} [params.active] - Indicates whether this collector will be active upon creation.
    * @param {string} [params.name] - The name for this flow log collector. The name must not be used by another flow log
-   * collector in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * collector in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
@@ -21512,7 +21858,7 @@ class VpcV1 extends BaseService {
    * @param {boolean} [params.active] - Indicates whether this collector is active. Updating to false deactivates the
    * collector and updating to true activates the collector.
    * @param {string} [params.name] - The name for this flow log collector. The name must not be used by another flow log
-   * collector in the region.
+   * collector in the VPC.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FlowLogCollector>>}
    */
@@ -21812,8 +22158,11 @@ namespace VpcV1 {
      *  hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action`
-     *  values, it must be omitted or specified as `0.0.0.0`.
+    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other
+     *  `action` values, it must be omitted or specified as `0.0.0.0`.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and `priority`,
+     *  and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
      */
     nextHop?: RoutePrototypeNextHop;
     /** The priority of this route. Smaller values have higher priority.
@@ -21821,9 +22170,6 @@ namespace VpcV1 {
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
      *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
      *  distributed between them.
-     *
-     *  At most two routes per `zone` in a table can have the same `destination` and
-     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     priority?: number;
     headers?: OutgoingHttpHeaders;
@@ -21868,11 +22214,11 @@ namespace VpcV1 {
      *  with `ibm-` are reserved for system-provided routes, and are not allowed.
      */
     name?: string;
-    /** The next hop that packets will be delivered to, if `action` is `deliver`. For other `action`
-     *  values, specify `0.0.0.0` or remove it by specifying `null`.
+    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other
+     *  `action` values, specify `0.0.0.0` or remove it by specifying `null`.
      *
-     *  At most two routes per `zone` in a table can have the same `destination` and `priority`, and
-     *  only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+     *  At most two routes per `zone` in a table can have the same `destination` and `priority`,
+     *  and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
      */
     nextHop?: RouteNextHopPatch;
     /** The priority of this route. Smaller values have higher priority.
@@ -21880,9 +22226,6 @@ namespace VpcV1 {
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
      *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
      *  distributed between them.
-     *
-     *  At most two routes per `zone` in a table can have the same `destination` and
-     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     priority?: number;
     headers?: OutgoingHttpHeaders;
@@ -22101,8 +22444,11 @@ namespace VpcV1 {
      *  hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action`
-     *  values, it must be omitted or specified as `0.0.0.0`.
+    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other
+     *  `action` values, it must be omitted or specified as `0.0.0.0`.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and `priority`,
+     *  and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
      */
     nextHop?: RoutePrototypeNextHop;
     /** The priority of this route. Smaller values have higher priority.
@@ -22110,9 +22456,6 @@ namespace VpcV1 {
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
      *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
      *  distributed between them.
-     *
-     *  At most two routes per `zone` in a table can have the same `destination` and
-     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     priority?: number;
     headers?: OutgoingHttpHeaders;
@@ -22163,11 +22506,11 @@ namespace VpcV1 {
      *  with `ibm-` are reserved for system-provided routes, and are not allowed.
      */
     name?: string;
-    /** The next hop that packets will be delivered to, if `action` is `deliver`. For other `action`
-     *  values, specify `0.0.0.0` or remove it by specifying `null`.
+    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other
+     *  `action` values, specify `0.0.0.0` or remove it by specifying `null`.
      *
-     *  At most two routes per `zone` in a table can have the same `destination` and `priority`, and
-     *  only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
+     *  At most two routes per `zone` in a table can have the same `destination` and `priority`,
+     *  and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
      */
     nextHop?: RouteNextHopPatch;
     /** The priority of this route. Smaller values have higher priority.
@@ -22175,9 +22518,6 @@ namespace VpcV1 {
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
      *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
      *  distributed between them.
-     *
-     *  At most two routes per `zone` in a table can have the same `destination` and
-     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     priority?: number;
     headers?: OutgoingHttpHeaders;
@@ -22439,6 +22779,78 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listImageExportJobs` operation. */
+  export interface ListImageExportJobsParams {
+    /** The image identifier. */
+    imageId: string;
+    /** Filters the collection to resources with the exact specified name. */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createImageExportJob` operation. */
+  export interface CreateImageExportJobParams {
+    /** The image identifier. */
+    imageId: string;
+    /** The Cloud Object Storage bucket to export the image to. The bucket must exist and an IAM
+     *  service authorization must grant `Image Service for VPC` of
+     *  `VPC Infrastructure Services` writer access to the bucket.
+     */
+    storageBucket: CloudObjectStorageBucketIdentity;
+    /** The format to use for the exported image. If the image is encrypted, only `qcow2` is supported. */
+    format?: CreateImageExportJobConstants.Format | string;
+    /** The name for this image export job. The name must not be used by another export job for the image. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words prefixed with the first 16 characters
+     *  of the parent image name.
+     *
+     *  The exported image object name in Cloud Object Storage (`storage_object.name` in the response) will be based on
+     *  this name. The object name will be unique within the bucket.
+     */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createImageExportJob` operation. */
+  export namespace CreateImageExportJobConstants {
+    /** The format to use for the exported image. If the image is encrypted, only `qcow2` is supported. */
+    export enum Format {
+      QCOW2 = 'qcow2',
+      VHD = 'vhd',
+    }
+  }
+
+  /** Parameters for the `deleteImageExportJob` operation. */
+  export interface DeleteImageExportJobParams {
+    /** The image identifier. */
+    imageId: string;
+    /** The image export job identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getImageExportJob` operation. */
+  export interface GetImageExportJobParams {
+    /** The image identifier. */
+    imageId: string;
+    /** The image export job identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateImageExportJob` operation. */
+  export interface UpdateImageExportJobParams {
+    /** The image identifier. */
+    imageId: string;
+    /** The image export job identifier. */
+    id: string;
+    /** The name for this image export job. The name must not be used by another export job for the image. Changing
+     *  the name will not affect the exported image name,
+     *  `storage_object.name`, or `storage_href` values.
+     */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `listOperatingSystems` operation. */
   export interface ListOperatingSystemsParams {
     /** A server-provided token determining what resource to start the page on. */
@@ -22602,21 +23014,21 @@ namespace VpcV1 {
 
   /** Parameters for the `deleteInstance` operation. */
   export interface DeleteInstanceParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstance` operation. */
   export interface GetInstanceParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstance` operation. */
   export interface UpdateInstanceParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     id: string;
     /** The availability policy for this virtual server instance. */
     availabilityPolicy?: InstanceAvailabilityPolicyPatch;
@@ -22660,7 +23072,7 @@ namespace VpcV1 {
 
   /** Parameters for the `createInstanceAction` operation. */
   export interface CreateInstanceActionParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The type of action. */
     type: CreateInstanceActionConstants.Type | string;
@@ -22683,7 +23095,7 @@ namespace VpcV1 {
 
   /** Parameters for the `createInstanceConsoleAccessToken` operation. */
   export interface CreateInstanceConsoleAccessTokenParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance console type for which this token may be used. */
     consoleType: CreateInstanceConsoleAccessTokenConstants.ConsoleType | string;
@@ -22705,14 +23117,14 @@ namespace VpcV1 {
 
   /** Parameters for the `listInstanceDisks` operation. */
   export interface ListInstanceDisksParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceDisk` operation. */
   export interface GetInstanceDiskParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance disk identifier. */
     id: string;
@@ -22721,7 +23133,7 @@ namespace VpcV1 {
 
   /** Parameters for the `updateInstanceDisk` operation. */
   export interface UpdateInstanceDiskParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance disk identifier. */
     id: string;
@@ -22732,14 +23144,14 @@ namespace VpcV1 {
 
   /** Parameters for the `listInstanceNetworkInterfaces` operation. */
   export interface ListInstanceNetworkInterfacesParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceNetworkInterface` operation. */
   export interface CreateInstanceNetworkInterfaceParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The associated subnet. */
     subnet: SubnetIdentity;
@@ -22768,7 +23180,7 @@ namespace VpcV1 {
 
   /** Parameters for the `deleteInstanceNetworkInterface` operation. */
   export interface DeleteInstanceNetworkInterfaceParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The network interface identifier. */
     id: string;
@@ -22777,7 +23189,7 @@ namespace VpcV1 {
 
   /** Parameters for the `getInstanceNetworkInterface` operation. */
   export interface GetInstanceNetworkInterfaceParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The network interface identifier. */
     id: string;
@@ -22786,7 +23198,7 @@ namespace VpcV1 {
 
   /** Parameters for the `updateInstanceNetworkInterface` operation. */
   export interface UpdateInstanceNetworkInterfaceParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The network interface identifier. */
     id: string;
@@ -22803,7 +23215,7 @@ namespace VpcV1 {
 
   /** Parameters for the `listInstanceNetworkInterfaceFloatingIps` operation. */
   export interface ListInstanceNetworkInterfaceFloatingIpsParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The network interface identifier. */
     networkInterfaceId: string;
@@ -22812,7 +23224,7 @@ namespace VpcV1 {
 
   /** Parameters for the `removeInstanceNetworkInterfaceFloatingIp` operation. */
   export interface RemoveInstanceNetworkInterfaceFloatingIpParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The network interface identifier. */
     networkInterfaceId: string;
@@ -22823,7 +23235,7 @@ namespace VpcV1 {
 
   /** Parameters for the `getInstanceNetworkInterfaceFloatingIp` operation. */
   export interface GetInstanceNetworkInterfaceFloatingIpParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The network interface identifier. */
     networkInterfaceId: string;
@@ -22834,7 +23246,7 @@ namespace VpcV1 {
 
   /** Parameters for the `addInstanceNetworkInterfaceFloatingIp` operation. */
   export interface AddInstanceNetworkInterfaceFloatingIpParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The network interface identifier. */
     networkInterfaceId: string;
@@ -22845,7 +23257,7 @@ namespace VpcV1 {
 
   /** Parameters for the `listInstanceNetworkInterfaceIps` operation. */
   export interface ListInstanceNetworkInterfaceIpsParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The network interface identifier. */
     networkInterfaceId: string;
@@ -22858,7 +23270,7 @@ namespace VpcV1 {
 
   /** Parameters for the `getInstanceNetworkInterfaceIp` operation. */
   export interface GetInstanceNetworkInterfaceIpParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The network interface identifier. */
     networkInterfaceId: string;
@@ -22869,14 +23281,14 @@ namespace VpcV1 {
 
   /** Parameters for the `listInstanceVolumeAttachments` operation. */
   export interface ListInstanceVolumeAttachmentsParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceVolumeAttachment` operation. */
   export interface CreateInstanceVolumeAttachmentParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** An existing volume to attach to the instance, or a prototype object for a new volume. */
     volume: VolumeAttachmentPrototypeVolume;
@@ -22891,7 +23303,7 @@ namespace VpcV1 {
 
   /** Parameters for the `deleteInstanceVolumeAttachment` operation. */
   export interface DeleteInstanceVolumeAttachmentParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The volume attachment identifier. */
     id: string;
@@ -22900,7 +23312,7 @@ namespace VpcV1 {
 
   /** Parameters for the `getInstanceVolumeAttachment` operation. */
   export interface GetInstanceVolumeAttachmentParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The volume attachment identifier. */
     id: string;
@@ -22909,7 +23321,7 @@ namespace VpcV1 {
 
   /** Parameters for the `updateInstanceVolumeAttachment` operation. */
   export interface UpdateInstanceVolumeAttachmentParams {
-    /** The instance identifier. */
+    /** The virtual server instance identifier. */
     instanceId: string;
     /** The volume attachment identifier. */
     id: string;
@@ -23004,10 +23416,10 @@ namespace VpcV1 {
      *  At present, only load balancers in the `application` family are supported.
      */
     loadBalancer?: LoadBalancerIdentity;
-    /** If specified, the load balancer pool this instance group will manage. A pool member
-     *  will be created for each instance created by this group.
+    /** If set, the load balancer pool this instance group will manage. A pool member will
+     *  be created for each instance created by this group.
      *
-     *  If specified, `load_balancer` and `application_port` must also be specified.
+     *  If set, `load_balancer` and `application_port` must also be set.
      */
     loadBalancerPool?: LoadBalancerPoolIdentity;
     /** The number of instances in the instance group. */
@@ -23299,11 +23711,11 @@ namespace VpcV1 {
   /** Parameters for the `createDedicatedHostGroup` operation. */
   export interface CreateDedicatedHostGroupParams {
     /** The dedicated host profile class for hosts in this group. */
-    _class?: string;
+    _class: string;
     /** The dedicated host profile family for hosts in this group. */
-    family?: CreateDedicatedHostGroupConstants.Family | string;
+    family: CreateDedicatedHostGroupConstants.Family | string;
     /** The zone this dedicated host group will reside in. */
-    zone?: ZoneIdentity;
+    zone: ZoneIdentity;
     /** The name for this dedicated host group. The name must not be used by another dedicated host group in the
      *  region. If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
@@ -23462,7 +23874,7 @@ namespace VpcV1 {
     /** The user tags this backup policy applies to. Resources that have both a matching user tag and a matching
      *  type will be subject to the backup policy.
      */
-    matchUserTags?: string[];
+    matchUserTags: string[];
     /** A resource type this backup policy applies to. Resources that have both a matching type and a matching user
      *  tag will be subject to the backup policy.
      */
@@ -23766,7 +24178,7 @@ namespace VpcV1 {
   /** Parameters for the `createBareMetalServer` operation. */
   export interface CreateBareMetalServerParams {
     initialization: BareMetalServerInitializationPrototype;
-    /** Primary network interface for the bare metal server. */
+    /** The primary network interface to create for the bare metal server. */
     primaryNetworkInterface: BareMetalServerPrimaryNetworkInterfacePrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
      *  to use for this bare metal server.
@@ -24162,8 +24574,8 @@ namespace VpcV1 {
     /** The name for this volume. The name must not be used by another volume in the region. */
     name?: string;
     /** The profile to use for this volume. The requested profile must be in the same
-     *  `family` as the current profile. The volume must be attached as a data volume to a
-     *  running virtual server instance, and must have a `capacity` within the range
+     *  `family` as the current profile. The volume must be attached as a data volume to
+     *  a running virtual server instance, and must have a `capacity` within the range
      *  supported by the specified profile.
      */
     profile?: VolumeProfileIdentity;
@@ -24440,8 +24852,14 @@ namespace VpcV1 {
     id: string;
     /** The name for this floating IP. The name must not be used by another floating IP in the region. */
     name?: string;
-    /** The network interface to bind the floating IP to, replacing any existing binding.
+    /** The target resource to bind this floating IP to, replacing any existing binding.
      *  The floating IP must not be required by another resource, such as a public gateway.
+     *
+     *  The target resource must not already have a floating IP bound to it if the target
+     *  resource is:
+     *
+     *  - an instance network interface
+     *  - a bare metal server network interface with `enable_infrastructure_nat` set to `true`.
      */
     target?: FloatingIPTargetPatch;
     headers?: OutgoingHttpHeaders;
@@ -24461,7 +24879,7 @@ namespace VpcV1 {
   /** Parameters for the `createNetworkAcl` operation. */
   export interface CreateNetworkAclParams {
     /** The network ACL prototype object. */
-    networkAclPrototype?: NetworkACLPrototype;
+    networkAclPrototype: NetworkACLPrototype;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -25657,6 +26075,12 @@ namespace VpcV1 {
     subnets: SubnetIdentity[];
     /** The datapath logging configuration for this load balancer. */
     datapath?: LoadBalancerLoggingDatapathPrototype;
+    /** The DNS configuration for this load balancer.
+     *
+     *  If unspecified, DNS `A` records for this load balancer's `hostname` property will be added
+     *  to the public DNS zone `lb.appdomain.cloud`. Otherwise, those DNS `A` records will be
+     *  added to the specified `zone`.
+     */
     dns?: LoadBalancerDNSPrototype;
     /** The listeners of this load balancer. */
     listeners?: LoadBalancerListenerPrototypeLoadBalancerContext[];
@@ -25717,6 +26141,12 @@ namespace VpcV1 {
   export interface UpdateLoadBalancerParams {
     /** The load balancer identifier. */
     id: string;
+    /** The DNS configuration for this load balancer.
+     *
+     *  Specify `null` to remove the existing DNS configuration, which will remove all DNS `A`
+     *  records for this load balancer that had been added to `zone`, and add equivalent `A`
+     *  records to the public DNS zone `lb.appdomain.cloud`.
+     */
     dns?: LoadBalancerDNSPatch;
     /** The logging configuration to use for this load balancer.
      *
@@ -26591,8 +27021,8 @@ namespace VpcV1 {
     target: FlowLogCollectorTargetPrototype;
     /** Indicates whether this collector will be active upon creation. */
     active?: boolean;
-    /** The name for this flow log collector. The name must not be used by another flow log collector in the region.
-     *  If unspecified, the name will be a hyphenated list of randomly-selected words.
+    /** The name for this flow log collector. The name must not be used by another flow log collector in the VPC. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
@@ -26624,7 +27054,7 @@ namespace VpcV1 {
      *  activates the collector.
      */
     active?: boolean;
-    /** The name for this flow log collector. The name must not be used by another flow log collector in the region. */
+    /** The name for this flow log collector. The name must not be used by another flow log collector in the VPC. */
     name?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -27006,6 +27436,15 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this bare metal server. */
     id: string;
+    /** The reasons for the current `lifecycle_state` (if any).
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    lifecycle_reasons: BareMetalServerLifecycleReason[];
+    /** The lifecycle state of the bare metal server. */
+    lifecycle_state: string;
     /** The amount of memory, truncated to whole gibibytes. */
     memory: number;
     /** The name for this bare metal server. The name is unique across all bare metal servers in the region. */
@@ -27168,6 +27607,16 @@ namespace VpcV1 {
 
   /** BareMetalServerInitializationUserAccount. */
   export interface BareMetalServerInitializationUserAccount {
+  }
+
+  /** BareMetalServerLifecycleReason. */
+  export interface BareMetalServerLifecycleReason {
+    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    code: string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
   }
 
   /** BareMetalServerNetworkInterface. */
@@ -27368,6 +27817,8 @@ namespace VpcV1 {
   /** BareMetalServerProfile. */
   export interface BareMetalServerProfile {
     bandwidth: BareMetalServerProfileBandwidth;
+    /** The console type configuration for a bare metal server with this profile. */
+    console_types: BareMetalServerProfileConsoleTypes;
     cpu_architecture: BareMetalServerProfileCPUArchitecture;
     cpu_core_count: BareMetalServerProfileCPUCoreCount;
     cpu_socket_count: BareMetalServerProfileCPUSocketCount;
@@ -27380,6 +27831,7 @@ namespace VpcV1 {
     memory: BareMetalServerProfileMemory;
     /** The name for this bare metal server profile. */
     name: string;
+    network_interface_count: BareMetalServerProfileNetworkInterfaceCount;
     os_architecture: BareMetalServerProfileOSArchitecture;
     /** The resource type. */
     resource_type: string;
@@ -27435,6 +27887,14 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** The console type configuration for a bare metal server with this profile. */
+  export interface BareMetalServerProfileConsoleTypes {
+    /** The type for this profile field. */
+    type: string;
+    /** The console types for a bare metal server with this profile. */
+    values: string[];
+  }
+
   /** Disks provided by this profile. */
   export interface BareMetalServerProfileDisk {
     quantity: BareMetalServerProfileDiskQuantity;
@@ -27475,6 +27935,10 @@ namespace VpcV1 {
 
   /** BareMetalServerProfileMemory. */
   export interface BareMetalServerProfileMemory {
+  }
+
+  /** BareMetalServerProfileNetworkInterfaceCount. */
+  export interface BareMetalServerProfileNetworkInterfaceCount {
   }
 
   /** BareMetalServerProfileOSArchitecture. */
@@ -27580,6 +28044,24 @@ namespace VpcV1 {
   export interface CertificateInstanceReference {
     /** The CRN for this certificate instance. */
     crn: string;
+  }
+
+  /** Identifies a Cloud Object Storage bucket by a unique property. */
+  export interface CloudObjectStorageBucketIdentity {
+  }
+
+  /** CloudObjectStorageBucketReference. */
+  export interface CloudObjectStorageBucketReference {
+    /** The CRN of this Cloud Object Storage bucket. */
+    crn: string;
+    /** The globally unique name of this Cloud Object Storage bucket. */
+    name: string;
+  }
+
+  /** CloudObjectStorageObjectReference. */
+  export interface CloudObjectStorageObjectReference {
+    /** The name of this Cloud Object Storage object. Names are unique within a Cloud Object Storage bucket. */
+    name: string;
   }
 
   /** Identifies a DNS instance by a unique property. */
@@ -28237,10 +28719,6 @@ namespace VpcV1 {
     zone: ZoneReference;
   }
 
-  /** The network interface this floating IP is to be bound to. */
-  export interface FloatingIPByTargetNetworkInterfaceIdentity {
-  }
-
   /** FloatingIPCollection. */
   export interface FloatingIPCollection {
     /** A link to the first page of resources. */
@@ -28307,8 +28785,12 @@ namespace VpcV1 {
   export interface FloatingIPTarget {
   }
 
-  /** The network interface to bind the floating IP to, replacing any existing binding. The floating IP must not be required by another resource, such as a public gateway. */
+  /** The target resource to bind this floating IP to, replacing any existing binding. The floating IP must not be required by another resource, such as a public gateway. The target resource must not already have a floating IP bound to it if the target resource is: - an instance network interface - a bare metal server network interface with `enable_infrastructure_nat` set to `true`. */
   export interface FloatingIPTargetPatch {
+  }
+
+  /** The target resource to bind this floating IP to. The target resource must not already have a floating IP bound to it if the target resource is: - an instance network interface - a bare metal server network interface with `enable_infrastructure_nat` set to `true`. */
+  export interface FloatingIPTargetPrototype {
   }
 
   /** FloatingIPUnpaginatedCollection. */
@@ -28335,7 +28817,7 @@ namespace VpcV1 {
     id: string;
     /** The lifecycle state of the flow log collector. */
     lifecycle_state: string;
-    /** The name for this flow log collector. The name is unique across all flow log collectors in the region. */
+    /** The name for this flow log collector. The name is unique across all flow log collectors in the VPC. */
     name: string;
     /** The resource group for this flow log collector. */
     resource_group: ResourceGroupReference;
@@ -28703,6 +29185,89 @@ namespace VpcV1 {
   export interface ImageCollectionNext {
     /** The URL for a page of resources. */
     href: string;
+  }
+
+  /** ImageExportJob. */
+  export interface ImageExportJob {
+    /** The date and time that the image export job was completed.
+     *
+     *  If absent, the export job has not yet completed.
+     */
+    completed_at?: string;
+    /** The date and time that the image export job was created. */
+    created_at: string;
+    /** A base64-encoded, encrypted representation of the key that was used to encrypt the data for the exported
+     *  image. This key can be unwrapped with the image's `encryption_key` root key using either Key Protect or Hyper
+     *  Protect Crypto Services.
+     *
+     *  If absent, the export job is for an unencrypted image.
+     */
+    encrypted_data_key?: string;
+    /** The format of the exported image. */
+    format: string;
+    /** The URL for this image export job. */
+    href: string;
+    /** The unique identifier for this image export job. */
+    id: string;
+    /** The name for this image export job. The name must not be used by another export job for the image. Changing
+     *  the name will not affect the exported image name,
+     *  `storage_object.name`, or `storage_href` values.
+     */
+    name: string;
+    /** The type of resource referenced. */
+    resource_type: string;
+    /** The date and time that the image export job started running.
+     *
+     *  If absent, the export job has not yet started.
+     */
+    started_at?: string;
+    /** The status of this image export job:
+     *  - `deleting`: Export job is being deleted
+     *  - `failed`: Export job could not be completed successfully
+     *  - `queued`: Export job is queued
+     *  - `running`: Export job is in progress
+     *  - `succeeded`: Export job was completed successfully
+     *
+     *  The exported image object is automatically deleted for `failed` jobs.
+     */
+    status: string;
+    /** The reasons for the current status (if any).
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    status_reasons: ImageExportJobStatusReason[];
+    /** The Cloud Object Storage bucket of the exported image object. */
+    storage_bucket: CloudObjectStorageBucketReference;
+    /** The Cloud Object Storage location of the exported image object. The object at this location will not exist
+     *  until the job completes successfully. The exported image object is not managed by the IBM VPC service, and may
+     *  be removed or replaced with a different object by any user or service with IAM authorization to the storage
+     *  bucket.
+     */
+    storage_href: string;
+    /** The Cloud Object Storage object for the exported image. This object will not exist until
+     *  the job completes successfully. The exported image object is not managed by the IBM VPC
+     *  service, and may be removed or replaced with a different object by any user or service
+     *  with IAM authorization to the storage bucket.
+     */
+    storage_object: CloudObjectStorageObjectReference;
+  }
+
+  /** ImageExportJobStatusReason. */
+  export interface ImageExportJobStatusReason {
+    /** A snake case string succinctly identifying the status reason. */
+    code: string;
+    /** An explanation of the status reason. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
+  }
+
+  /** ImageExportJobUnpaginatedCollection. */
+  export interface ImageExportJobUnpaginatedCollection {
+    /** Collection of image export jobs. */
+    export_jobs: ImageExportJob[];
   }
 
   /** ImageFile. */
@@ -29773,8 +30338,6 @@ namespace VpcV1 {
      *  The system hostname will be based on this name.
      */
     name?: string;
-    /** The additional network interfaces to create for the virtual server instance. */
-    network_interfaces?: NetworkInterfacePrototype[];
     /** The placement restrictions to use for the virtual server instance. */
     placement_target?: InstancePlacementTargetPrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
@@ -29879,8 +30442,6 @@ namespace VpcV1 {
     metadata_service?: InstanceMetadataServicePrototype;
     /** The name for this instance template. The name is unique across all instance templates in the region. */
     name: string;
-    /** The additional network interfaces to create for the virtual server instance. */
-    network_interfaces?: NetworkInterfacePrototype[];
     /** The placement restrictions to use for the virtual server instance. */
     placement_target?: InstancePlacementTargetPrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
@@ -29973,8 +30534,6 @@ namespace VpcV1 {
      *  If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The additional network interfaces to create for the virtual server instance. */
-    network_interfaces?: NetworkInterfacePrototype[];
     /** The placement restrictions to use for the virtual server instance. */
     placement_target?: InstancePlacementTargetPrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
@@ -30252,7 +30811,7 @@ namespace VpcV1 {
     zone: DNSZoneReference;
   }
 
-  /** LoadBalancerDNSPatch. */
+  /** The DNS configuration for this load balancer. Specify `null` to remove the existing DNS configuration, which will remove all DNS `A` records for this load balancer that had been added to `zone`, and add equivalent `A` records to the public DNS zone `lb.appdomain.cloud`. */
   export interface LoadBalancerDNSPatch {
     /** The DNS instance to associate with this load balancer.
      *
@@ -30267,7 +30826,7 @@ namespace VpcV1 {
     zone?: DNSZoneIdentity;
   }
 
-  /** LoadBalancerDNSPrototype. */
+  /** The DNS configuration for this load balancer. If unspecified, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone `lb.appdomain.cloud`. Otherwise, those DNS `A` records will be added to the specified `zone`. */
   export interface LoadBalancerDNSPrototype {
     /** The DNS instance to associate with this load balancer.
      *
@@ -32007,7 +32566,7 @@ namespace VpcV1 {
   export interface RouteNextHop {
   }
 
-  /** The next hop that packets will be delivered to, if `action` is `deliver`. For other `action` values, specify `0.0.0.0` or remove it by specifying `null`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address. */
+  /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action` values, specify `0.0.0.0` or remove it by specifying `null`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route has an `action` of `deliver` and `next_hop` is an IP address. */
   export interface RouteNextHopPatch {
   }
 
@@ -32029,8 +32588,11 @@ namespace VpcV1 {
      *  hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action`
-     *  values, it must be omitted or specified as `0.0.0.0`.
+    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other
+     *  `action` values, it must be omitted or specified as `0.0.0.0`.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and `priority`,
+     *  and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
      */
     next_hop?: RoutePrototypeNextHop;
     /** The priority of this route. Smaller values have higher priority.
@@ -32038,16 +32600,13 @@ namespace VpcV1 {
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
      *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
      *  distributed between them.
-     *
-     *  At most two routes per `zone` in a table can have the same `destination` and
-     *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     priority?: number;
     /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
     zone: ZoneIdentity;
   }
 
-  /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action` values, it must be omitted or specified as `0.0.0.0`. */
+  /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action` values, it must be omitted or specified as `0.0.0.0`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route has an `action` of `deliver` and `next_hop` is an IP address. */
   export interface RoutePrototypeNextHop {
   }
 
@@ -34140,6 +34699,22 @@ namespace VpcV1 {
     type: string;
   }
 
+  /** The number of network interfaces supported on a bare metal server with this profile is dependent on its configuration. */
+  export interface BareMetalServerProfileNetworkInterfaceCountDependent extends BareMetalServerProfileNetworkInterfaceCount {
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The number of network interfaces supported on a bare metal server with this profile. */
+  export interface BareMetalServerProfileNetworkInterfaceCountRange extends BareMetalServerProfileNetworkInterfaceCount {
+    /** The maximum value for this profile field. */
+    max?: number;
+    /** The minimum value for this profile field. */
+    min?: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
   /** CatalogOfferingIdentityCatalogOfferingByCRN. */
   export interface CatalogOfferingIdentityCatalogOfferingByCRN extends CatalogOfferingIdentity {
     /** The CRN for this [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering. */
@@ -34158,6 +34733,18 @@ namespace VpcV1 {
   export interface CertificateInstanceIdentityByCRN extends CertificateInstanceIdentity {
     /** The CRN for this certificate instance. */
     crn: string;
+  }
+
+  /** CloudObjectStorageBucketIdentityByCRN. */
+  export interface CloudObjectStorageBucketIdentityByCRN extends CloudObjectStorageBucketIdentity {
+    /** The CRN of this Cloud Object Storage bucket. */
+    crn: string;
+  }
+
+  /** CloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName. */
+  export interface CloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName extends CloudObjectStorageBucketIdentity {
+    /** The globally unique name of this Cloud Object Storage bucket. */
+    name: string;
   }
 
   /** DNSInstanceIdentityByCRN. */
@@ -34387,22 +34974,17 @@ namespace VpcV1 {
     resource_type: string;
   }
 
-  /** FloatingIPByTargetNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
-  export interface FloatingIPByTargetNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FloatingIPByTargetNetworkInterfaceIdentity {
-    /** The URL for this network interface. */
-    href: string;
-  }
-
-  /** FloatingIPByTargetNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
-  export interface FloatingIPByTargetNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FloatingIPByTargetNetworkInterfaceIdentity {
-    /** The unique identifier for this network interface. */
-    id: string;
-  }
-
   /** FloatingIPPrototypeFloatingIPByTarget. */
   export interface FloatingIPPrototypeFloatingIPByTarget extends FloatingIPPrototype {
-    /** The network interface this floating IP is to be bound to. */
-    target: FloatingIPByTargetNetworkInterfaceIdentity;
+    /** The target resource to bind this floating IP to.
+     *
+     *  The target resource must not already have a floating IP bound to it if the target
+     *  resource is:
+     *
+     *  - an instance network interface
+     *  - a bare metal server network interface with `enable_infrastructure_nat` set to `true`.
+     */
+    target: FloatingIPTargetPrototype;
   }
 
   /** FloatingIPPrototypeFloatingIPByZone. */
@@ -34411,16 +34993,12 @@ namespace VpcV1 {
     zone: ZoneIdentity;
   }
 
-  /** FloatingIPTargetPatchNetworkInterfaceIdentityByHref. */
-  export interface FloatingIPTargetPatchNetworkInterfaceIdentityByHref extends FloatingIPTargetPatch {
-    /** The URL for this network interface. */
-    href: string;
+  /** Identifies a network interface by a unique property. */
+  export interface FloatingIPTargetPatchNetworkInterfaceIdentity extends FloatingIPTargetPatch {
   }
 
-  /** FloatingIPTargetPatchNetworkInterfaceIdentityById. */
-  export interface FloatingIPTargetPatchNetworkInterfaceIdentityById extends FloatingIPTargetPatch {
-    /** The unique identifier for this network interface. */
-    id: string;
+  /** Identifies a network interface by a unique property. */
+  export interface FloatingIPTargetPrototypeNetworkInterfaceIdentity extends FloatingIPTargetPrototype {
   }
 
   /** FloatingIPTargetNetworkInterfaceReference. */
@@ -35169,7 +35747,7 @@ namespace VpcV1 {
 
   /** InstancePrototypeInstanceByCatalogOffering. */
   export interface InstancePrototypeInstanceByCatalogOffering extends InstancePrototype {
-    /** The boot volume attachment for the virtual server instance. */
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering
      *  or offering version to use when provisioning this virtual server instance.
@@ -35181,7 +35759,9 @@ namespace VpcV1 {
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
-    /** Primary network interface. */
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -35189,11 +35769,13 @@ namespace VpcV1 {
 
   /** InstancePrototypeInstanceByImage. */
   export interface InstancePrototypeInstanceByImage extends InstancePrototype {
-    /** The boot volume attachment for the virtual server instance. */
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
-    /** Primary network interface. */
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -35201,9 +35783,11 @@ namespace VpcV1 {
 
   /** InstancePrototypeInstanceBySourceSnapshot. */
   export interface InstancePrototypeInstanceBySourceSnapshot extends InstancePrototype {
-    /** The boot volume attachment for the virtual server instance. */
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
-    /** Primary network interface. */
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -35211,7 +35795,7 @@ namespace VpcV1 {
 
   /** InstancePrototypeInstanceBySourceTemplate. */
   export interface InstancePrototypeInstanceBySourceTemplate extends InstancePrototype {
-    /** The boot volume attachment for the virtual server instance. */
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
      *  offering version to use when provisioning this virtual server instance.
@@ -35226,7 +35810,9 @@ namespace VpcV1 {
     catalog_offering?: InstanceCatalogOfferingPrototype;
     /** The image to use when provisioning the virtual server instance. */
     image?: ImageIdentity;
-    /** Primary network interface. */
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
     primary_network_interface?: NetworkInterfacePrototype;
     /** The template to create this virtual server instance from. */
     source_template: InstanceTemplateIdentity;
@@ -35238,7 +35824,9 @@ namespace VpcV1 {
   export interface InstancePrototypeInstanceByVolume extends InstancePrototype {
     /** The boot volume attachment for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
-    /** Primary network interface. */
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -35262,9 +35850,9 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** InstanceTemplatePrototypeInstanceByCatalogOffering. */
-  export interface InstanceTemplatePrototypeInstanceByCatalogOffering extends InstanceTemplatePrototype {
-    /** The boot volume attachment for the virtual server instance. */
+  /** InstanceTemplatePrototypeInstanceByCatalogOfferingInstanceTemplateContext. */
+  export interface InstanceTemplatePrototypeInstanceByCatalogOfferingInstanceTemplateContext extends InstanceTemplatePrototype {
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering
      *  or offering version to use when provisioning this virtual server instance.
@@ -35276,37 +35864,43 @@ namespace VpcV1 {
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
-    /** Primary network interface. */
-    primary_network_interface: NetworkInterfacePrototype;
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
+    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
-  /** InstanceTemplatePrototypeInstanceByImage. */
-  export interface InstanceTemplatePrototypeInstanceByImage extends InstanceTemplatePrototype {
-    /** The boot volume attachment for the virtual server instance. */
+  /** InstanceTemplatePrototypeInstanceByImageInstanceTemplateContext. */
+  export interface InstanceTemplatePrototypeInstanceByImageInstanceTemplateContext extends InstanceTemplatePrototype {
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
-    /** Primary network interface. */
-    primary_network_interface: NetworkInterfacePrototype;
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
+    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
-  /** InstanceTemplatePrototypeInstanceBySourceSnapshot. */
-  export interface InstanceTemplatePrototypeInstanceBySourceSnapshot extends InstanceTemplatePrototype {
-    /** The boot volume attachment for the virtual server instance. */
+  /** InstanceTemplatePrototypeInstanceBySourceSnapshotInstanceTemplateContext. */
+  export interface InstanceTemplatePrototypeInstanceBySourceSnapshotInstanceTemplateContext extends InstanceTemplatePrototype {
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
-    /** Primary network interface. */
-    primary_network_interface: NetworkInterfacePrototype;
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
+    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
   /** InstanceTemplatePrototypeInstanceBySourceTemplate. */
   export interface InstanceTemplatePrototypeInstanceBySourceTemplate extends InstanceTemplatePrototype {
-    /** The boot volume attachment for the virtual server instance. */
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
      *  offering version to use when provisioning this virtual server instance.
@@ -35321,7 +35915,9 @@ namespace VpcV1 {
     catalog_offering?: InstanceCatalogOfferingPrototype;
     /** The image to use when provisioning the virtual server instance. */
     image?: ImageIdentity;
-    /** Primary network interface. */
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
     primary_network_interface?: NetworkInterfacePrototype;
     /** The template to create this virtual server instance from. */
     source_template: InstanceTemplateIdentity;
@@ -35329,9 +35925,9 @@ namespace VpcV1 {
     zone?: ZoneIdentity;
   }
 
-  /** InstanceTemplateInstanceByCatalogOffering. */
-  export interface InstanceTemplateInstanceByCatalogOffering extends InstanceTemplate {
-    /** The boot volume attachment for the virtual server instance. */
+  /** InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext. */
+  export interface InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext extends InstanceTemplate {
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering
      *  or offering version to use when provisioning this virtual server instance.
@@ -35343,30 +35939,36 @@ namespace VpcV1 {
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
-    /** Primary network interface. */
-    primary_network_interface: NetworkInterfacePrototype;
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
+    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
-  /** InstanceTemplateInstanceByImage. */
-  export interface InstanceTemplateInstanceByImage extends InstanceTemplate {
-    /** The boot volume attachment for the virtual server instance. */
+  /** InstanceTemplateInstanceByImageInstanceTemplateContext. */
+  export interface InstanceTemplateInstanceByImageInstanceTemplateContext extends InstanceTemplate {
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
-    /** Primary network interface. */
-    primary_network_interface: NetworkInterfacePrototype;
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
+    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
-  /** InstanceTemplateInstanceBySourceSnapshot. */
-  export interface InstanceTemplateInstanceBySourceSnapshot extends InstanceTemplate {
-    /** The boot volume attachment for the virtual server instance. */
+  /** InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext. */
+  export interface InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext extends InstanceTemplate {
+    /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
-    /** Primary network interface. */
-    primary_network_interface: NetworkInterfacePrototype;
+    /** The additional network interfaces to create for the virtual server instance. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network interface to create for the virtual server instance. */
+    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
@@ -36043,15 +36645,8 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** The IP address of the next hop to which to route packets. */
+  /** RouteNextHopPatchRouteNextHopIP. */
   export interface RouteNextHopPatchRouteNextHopIP extends RouteNextHopPatch {
-    /** The IP address.
-     *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
-     */
-    address: string;
   }
 
   /** Identifies a VPN gateway connection by a unique property. */
@@ -36074,15 +36669,8 @@ namespace VpcV1 {
     resource_type: string;
   }
 
-  /** The IP address of the next hop to which to route packets. */
+  /** RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP. */
   export interface RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP extends RoutePrototypeNextHop {
-    /** The IP address.
-     *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
-     */
-    address: string;
   }
 
   /** Identifies a VPN gateway connection by a unique property. */
@@ -36767,6 +37355,30 @@ namespace VpcV1 {
     name: string;
   }
 
+  /** FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
+  export interface FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FloatingIPTargetPatchNetworkInterfaceIdentity {
+    /** The URL for this network interface. */
+    href: string;
+  }
+
+  /** FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
+  export interface FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FloatingIPTargetPatchNetworkInterfaceIdentity {
+    /** The unique identifier for this network interface. */
+    id: string;
+  }
+
+  /** FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
+  export interface FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FloatingIPTargetPrototypeNetworkInterfaceIdentity {
+    /** The URL for this network interface. */
+    href: string;
+  }
+
+  /** FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
+  export interface FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FloatingIPTargetPrototypeNetworkInterfaceIdentity {
+    /** The unique identifier for this network interface. */
+    id: string;
+  }
+
   /** FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityByCRN. */
   export interface FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityByCRN extends FlowLogCollectorTargetPrototypeInstanceIdentity {
     /** The CRN for this virtual server instance. */
@@ -36785,14 +37397,14 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
-  export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity {
+  /** FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
+  export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity {
     /** The URL for this network interface. */
     href: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
-  export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity {
+  /** FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
+  export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity {
     /** The unique identifier for this network interface. */
     id: string;
   }
@@ -37055,6 +37667,32 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** RouteNextHopPatchRouteNextHopIPRouteNextHopIPSentinelIP. */
+  export interface RouteNextHopPatchRouteNextHopIPRouteNextHopIPSentinelIP extends RouteNextHopPatchRouteNextHopIP {
+    /** The sentinel IP address (`0.0.0.0`).
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     */
+    address: string;
+  }
+
+  /** RouteNextHopPatchRouteNextHopIPRouteNextHopIPUnicastIP. */
+  export interface RouteNextHopPatchRouteNextHopIPRouteNextHopIPUnicastIP extends RouteNextHopPatchRouteNextHopIP {
+    /** A unicast IP address, which must not be any of the following values:
+     *
+     *  - `0.0.0.0` (the sentinel IP address)
+     *  - `224.0.0.0` to `239.255.255.255` (multicast IP addresses)
+     *  - `255.255.255.255` (the broadcast IP address)
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     */
+    address: string;
+  }
+
   /** RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
   export interface RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref extends RouteNextHopPatchVPNGatewayConnectionIdentity {
     /** The VPN connection's canonical URL. */
@@ -37065,6 +37703,32 @@ namespace VpcV1 {
   export interface RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById extends RouteNextHopPatchVPNGatewayConnectionIdentity {
     /** The unique identifier for this VPN gateway connection. */
     id: string;
+  }
+
+  /** RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIPRouteNextHopPrototypeRouteNextHopIPRouteNextHopIPSentinelIP. */
+  export interface RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIPRouteNextHopPrototypeRouteNextHopIPRouteNextHopIPSentinelIP extends RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP {
+    /** The sentinel IP address (`0.0.0.0`).
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     */
+    address: string;
+  }
+
+  /** RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIPRouteNextHopPrototypeRouteNextHopIPRouteNextHopIPUnicastIP. */
+  export interface RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIPRouteNextHopPrototypeRouteNextHopIPRouteNextHopIPUnicastIP extends RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP {
+    /** A unicast IP address, which must not be any of the following values:
+     *
+     *  - `0.0.0.0` (the sentinel IP address)
+     *  - `224.0.0.0` to `239.255.255.255` (multicast IP addresses)
+     *  - `255.255.255.255` (the broadcast IP address)
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     */
+    address: string;
   }
 
   /** RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentityRouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
