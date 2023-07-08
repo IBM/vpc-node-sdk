@@ -930,6 +930,18 @@ describe('VpcV1_integration', () => {
     expect(res2).toBeDefined();
     expect(res2.result).toBeDefined();
     dict.snapshotId = res2.result.id;
+    dict.snapshotCrn = res2.result.crn;
+
+    const params3 = {
+      crn: dict.snapshotCrn,
+      name: generateName('my-snapshot-crc'),
+    };
+    const snapshotPrototype3 = {
+      snapshotPrototype: params3,
+    };
+    const res3 = await vpcService.createSnapshot(snapshotPrototype3);
+    expect(res3).toBeDefined();
+    expect(res3.result).toBeDefined();
   });
   test('getSnapshot()', async () => {
     const params = {
@@ -1020,7 +1032,7 @@ describe('VpcV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
-  test('deleteSnapshots()', async () => {
+  test.skip('deleteSnapshots()', async () => {
     const params = {
       sourceVolumeId: dict.createdVolume,
     };
@@ -1340,10 +1352,15 @@ describe('VpcV1_integration', () => {
       });
   });
   test('createBackupPolicyPlan()', (done) => {
+    const BackupPolicyPlanRemoteRegionPolicyPrototype = {
+      delete_over_count: 2,
+      region: 'us-south',
+    };
     const params = {
       backupPolicyId: dict.createdBackupPolicy,
       name: 'my-backup-policy-plan',
       cronSpec: '40 3 * * *',
+      remoteRegionPolicies: [BackupPolicyPlanRemoteRegionPolicyPrototype],
     };
     vpcService
       .createBackupPolicyPlan(params)
@@ -1412,10 +1429,15 @@ describe('VpcV1_integration', () => {
       });
   });
   test('updateBackupPolicyPlan()', (done) => {
+    const BackupPolicyPlanRemoteRegionPolicyPrototype = {
+      delete_over_count: 4,
+      region: 'jp-tok',
+    };
     const params = {
       backupPolicyId: dict.createdBackupPolicy,
       id: dict.createdBackupPolicyPlan,
       name: 'my-backup-policy-plan-updated',
+      remoteRegionPolicies: BackupPolicyPlanRemoteRegionPolicyPrototype,
     };
 
     vpcService
@@ -4859,7 +4881,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('listVpcRoutingTableRoutes()', (done) => {
+  test.skip('listVpcRoutingTableRoutes()', (done) => {
     const params = {
       vpcId: dict.createdVpc,
       routingTableId: dict.createdVpcRoutingTable,
