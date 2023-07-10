@@ -35,7 +35,7 @@ const {
 
 const vpcServiceOptions = {
   authenticator: new NoAuthAuthenticator(),
-  url: 'https://au-syd.iaas.cloud.ibm.com/v1',
+  url: 'https://us-south.iaas.cloud.ibm.com/v1',
   version: 'testString',
 };
 
