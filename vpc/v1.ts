@@ -44,7 +44,7 @@ import { getNewLogger, SDKLogger } from 'ibm-cloud-sdk-core';
 class VpcV1 extends BaseService {
   static _logger: SDKLogger = getNewLogger('VpcV1');
 
-  static DEFAULT_SERVICE_URL: string = 'https://au-syd.iaas.cloud.ibm.com/v1';
+  static DEFAULT_SERVICE_URL: string = 'https://us-south.iaas.cloud.ibm.com/v1';
 
   static DEFAULT_SERVICE_NAME: string = 'vpc';
 
@@ -109,7 +109,7 @@ class VpcV1 extends BaseService {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
     this.generation = options.generation;
-    this.version = options.version|| `2023-06-06`;
+    this.version = options.version|| `2023-06-27`;
   }
 
   /*************************
