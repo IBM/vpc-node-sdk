@@ -1,3 +1,10 @@
+## [0.16.1](https://github.com/IBM/vpc-node-sdk/compare/v0.16.0...v0.16.1) (2023-07-10)
+
+
+### Bug Fixes
+
+* **url:** updated SDK url and version ([#36](https://github.com/IBM/vpc-node-sdk/issues/36)) ([04c65a1](https://github.com/IBM/vpc-node-sdk/commit/04c65a10d74dafead2144d51743b1f70dfb9e615))
+
 # [0.16.0](https://github.com/IBM/vpc-node-sdk/compare/v0.15.0...v0.16.0) (2023-07-10)
 
 
