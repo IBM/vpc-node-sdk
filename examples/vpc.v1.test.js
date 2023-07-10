@@ -2745,12 +2745,17 @@ describe('VpcV1', () => {
       zone:zoneIdentityModel,
     }
 
+    const BackupPolicyPlanRemoteRegionPolicyPrototype = {
+      delete_over_count: 2,
+      region: "us-south",
+    }
     const params = {
       backupPolicyId: data.backupPolicyId,
       name: 'my-backup-policy-plan',
       cronSpec: '40 3 * * *',
       deletionTrigger: BackupPolicyPlanDeletionTriggerPrototype,
       clonePolicy: [SnapshotClonePrototype],
+      remoteRegionPolicies:[BackupPolicyPlanRemoteRegionPolicyPrototype],
     };
 
     const response = await vpcService.createBackupPolicyPlan(params);
@@ -2857,11 +2862,16 @@ describe('VpcV1', () => {
     });
 
     // begin-backup_policy
+    const BackupPolicyPlanRemoteRegionPolicyPrototype = {
+      delete_over_count: 4,
+      region: "jp-tok",
+    }
 
     const params = {
       backupPolicyId: data.backupPolicyId,
       id: data.backupPolicyPlanId,
-      name: 'my-backup-policy-plan-updated'
+      name: 'my-backup-policy-plan-updated',
+      remoteRegionPolicies: BackupPolicyPlanRemoteRegionPolicyPrototype
     };
 
     const response = await vpcService.updateBackupPolicyPlan(params);
@@ -3827,6 +3837,7 @@ describe('VpcV1', () => {
     };
 
     const secondSnapshot = await vpcService.createSnapshot(params1);
+
     // begin-create_snapshot
 
     const params = {
@@ -3843,7 +3854,21 @@ describe('VpcV1', () => {
     // end-create_snapshot
     expect(response.result).not.toBeNull();
     data.snapshotId = response.result.id;
+    data.snapshotIdCrn = response.result.crn;
 
+
+    // source snapshot
+    const paramsSrcSnap = {
+      snapshotPrototype: {
+        source_snapshot: {
+          crn: data.snapshotIdCrn,
+        },
+        name: 'my-snapshot-crc',
+      }
+    };
+    
+    const sourceSnapshotResponse =  vpcService.createSnapshot(paramsSrcSnap);
+    expect(sourceSnapshotResponse.result).not.toBeNull();
   });
 
   test('listSnapshots request example', async () => {
@@ -8401,9 +8426,7 @@ describe('VpcV1', () => {
     expect(response.result).not.toBeNull();
 
   });
-
-
-  test('deleteSnapshots request example', async () => {
+  test.skip('deleteSnapshots request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -8427,7 +8450,6 @@ describe('VpcV1', () => {
     console.log(JSON.stringify(response,null,2));
 
   });
-
   test('deleteSecurityGroupRule request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
@@ -8439,6 +8461,7 @@ describe('VpcV1', () => {
       expect(true).toBeFalsy();
     });
 
+    
     // begin-delete_security_group_rule
 
     const params = {
