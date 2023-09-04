@@ -14,7 +14,7 @@
     "eslint:fix": "eslint . --fix",
     "eslint:check": "eslint . --cache",
     "lint": "npm run eslint:check",
-    "lint-fix": "npm run eslint:fix",
+    "lint-fix": "npm run eslint:fix && npm run tslint:fix",
     "build": "tsc && cp package.json dist/",
     "prepublishOnly": "npm run build",
     "postversion": "tsc-publish --no-checks --dry-run",
@@ -35,7 +35,7 @@
   "dependencies": {
     "@types/node": "^14.0.0",
     "extend": "^3.0.2",
-    "ibm-cloud-sdk-core": "4.0.5"
+    "ibm-cloud-sdk-core": "^4.1.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "6.0.1",
@@ -48,6 +48,7 @@
     "eslint-plugin-node": "^9.0.0",
     "eslint-plugin-prettier": "^3.0.1",
     "installed-check": "^2.2.0",
+    "uuid": "^9.0.0",
     "jest": "^29.3.1",
     "nock": "^13.2.4",
     "prettier": "^2.3.0",

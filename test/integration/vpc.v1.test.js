@@ -709,6 +709,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  // "no cos bucket" and "no private image"
   test('listImageExportJobs()', (done) => {
     const params = {
       imageId: dict.imageIdExportImage,
@@ -919,6 +920,8 @@ describe('VpcV1_integration', () => {
     const res = await vpcService.createSnapshot(snapshotPrototype);
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
+    dict.snapshotId = res.result.id;
+    dict.snapshotCrn = res.result.crn;
     const params2 = {
       source_volume: volumeIdentityModel,
       name: generateName('snap2'),
@@ -929,8 +932,6 @@ describe('VpcV1_integration', () => {
     const res2 = await vpcService.createSnapshot(snapshotPrototype2);
     expect(res2).toBeDefined();
     expect(res2.result).toBeDefined();
-    dict.snapshotId = res2.result.id;
-    dict.snapshotCrn = res2.result.crn;
 
     const params3 = {
       crn: dict.snapshotCrn,
@@ -1041,6 +1042,269 @@ describe('VpcV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.result).toBeDefined();
   });
+
+  // shares
+
+  test('listShareProfiles()', async () => {
+    const params = {
+      limit: 50,
+    };
+
+    const res = await vpcService.listShareProfiles(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listShareProfiles() via ShareProfilesPager', async () => {
+    const params = {
+      limit: 10,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new VpcV1.ShareProfilesPager(vpcService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new VpcV1.ShareProfilesPager(vpcService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    dict.shareProfileName = allResults[0].name;
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('getShareProfile()', async () => {
+    const params = {
+      name: dict.shareProfileName,
+    };
+
+    const res = await vpcService.getShareProfile(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listShares()', async () => {
+    const params = {
+      limit: 50,
+    };
+
+    const res = await vpcService.listShares(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listShares() via SharesPager', async () => {
+    const params = {
+      limit: 10,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new VpcV1.SharesPager(vpcService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new VpcV1.SharesPager(vpcService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('createShare()', async () => {
+    // Request models needed by this operation.
+    // ShareProfileIdentityByName
+    const shareProfileIdentityModel = {
+      name: dict.shareProfileName,
+    };
+
+    // ZoneIdentityByName
+    const zoneIdentityModel = {
+      name: 'us-east-1',
+    };
+
+    // SharePrototypeShareBySize
+    const sharePrototypeModel = {
+      name: 'my-share',
+      profile: shareProfileIdentityModel,
+      zone: zoneIdentityModel,
+      size: 200,
+    };
+
+    const params = {
+      sharePrototype: sharePrototypeModel,
+    };
+
+    const res = await vpcService.createShare(params);
+    dict.shareId = res.result.id;
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getShare()', async () => {
+    const params = {
+      id: 'testString',
+    };
+
+    const res = await vpcService.getShare(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateShare()', async () => {
+    // Request models needed by this operation.
+
+    // ShareProfileIdentityByName
+    const params = {
+      name: 'my-share-updated',
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    const res = await vpcService.updateShare(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('failoverShare()', async () => {
+    const params = {
+      shareId: dict.shareId,
+    };
+
+    const res = await vpcService.failoverShare(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listShareMountTargets()', async () => {
+    const params = {
+      shareId: dict.shareId,
+      limit: 50,
+    };
+
+    const res = await vpcService.listShareMountTargets(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listShareMountTargets() via ShareMountTargetsPager', async () => {
+    const params = {
+      shareId: dict.shareId,
+      limit: 10,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new VpcV1.ShareMountTargetsPager(vpcService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new VpcV1.ShareMountTargetsPager(vpcService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('createShareMountTarget()', async () => {
+    // Request models needed by this operation.
+
+    // VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext
+    const virtualNetworkInterfacePrimaryIpPrototypeModel = {
+      address: '10.0.0.5',
+      auto_delete: false,
+      name: 'my-share-reserved-ip',
+    };
+
+    // SubnetIdentityById
+    const subnetIdentityModel = {
+      id: dict.createdSubnet,
+    };
+
+    // ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfacePrototypeShareMountTargetContext
+    const shareMountTargetVirtualNetworkInterfacePrototypeModel = {
+      name: 'my-virtual-network-interface',
+      primary_ip: virtualNetworkInterfacePrimaryIpPrototypeModel,
+      subnet: subnetIdentityModel,
+    };
+
+    // ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup
+    const shareMountTargetPrototypeModel = {
+      name: 'my-share-mount-target',
+      virtual_network_interface: shareMountTargetVirtualNetworkInterfacePrototypeModel,
+    };
+
+    const params = {
+      shareId: dict.shareId,
+      shareMountTargetPrototype: shareMountTargetPrototypeModel,
+    };
+
+    const res = await vpcService.createShareMountTarget(params);
+    dict.shareMountTargetId = res.result.id;
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getShareMountTarget()', async () => {
+    const params = {
+      shareId: dict.shareId,
+      id: dict.shareMountTargetId,
+    };
+
+    const res = await vpcService.getShareMountTarget(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateShareMountTarget()', async () => {
+    const params = {
+      shareId: dict.shareId,
+      id: dict.shareMountTargetId,
+      name: 'my-share-mount-target-updated',
+    };
+
+    const res = await vpcService.updateShareMountTarget(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getShareSource()', async () => {
+    const params = {
+      shareId: dict.shareId,
+    };
+
+    const res = await vpcService.getShareSource(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   // Instance Profiles
   test('listInstanceProfiles()', (done) => {
     vpcService
@@ -3756,6 +4020,10 @@ describe('VpcV1_integration', () => {
       .listVpnServerRoutes(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
+        console.log('res.result.total_count');
+        console.log(res.result.total_count);
+        console.log('res.result');
+        console.log(res.result.clients);
         done();
       })
       .catch((err) => {
@@ -3764,6 +4032,8 @@ describe('VpcV1_integration', () => {
       });
   });
   test('createVpnServerRoute()', (done) => {
+    console.log(' createVpnServerRoute dict.createdVPNServer');
+    console.log(dict.createdVPNServer);
     const params = {
       vpnServerId: dict.createdVPNServer,
       destination: '172.16.0.0/16',
@@ -3863,6 +4133,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+
   // Load Balancer
   test('listLoadBalancerProfiles()', (done) => {
     const params = {
@@ -5136,13 +5407,13 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('deleteDedicatedHostGroup()', (done) => {
+  test('deleteDedicatedHost()', (done) => {
     const params = {
-      id: dict.createdDHGroup,
+      id: dict.createdDH,
     };
 
     vpcService
-      .deleteDedicatedHostGroup(params)
+      .deleteDedicatedHost(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();
@@ -5152,13 +5423,13 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('deleteDedicatedHost()', (done) => {
+  test('deleteDedicatedHostGroup()', (done) => {
     const params = {
-      id: dict.createdDH,
+      id: dict.createdDHGroup,
     };
 
     vpcService
-      .deleteDedicatedHost(params)
+      .deleteDedicatedHostGroup(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();
@@ -5527,6 +5798,38 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('deleteShareSource()', async () => {
+    const params = {
+      shareId: dict.shareId,
+    };
+
+    const res = await vpcService.deleteShareSource(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+  test('deleteShareMountTarget()', async () => {
+    const params = {
+      shareId: dict.shareId,
+      id: dict.shareMountTargetId,
+    };
+
+    const res = await vpcService.deleteShareMountTarget(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+  test('deleteShare()', async () => {
+    const params = {
+      id: dict.shareId,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    const res = await vpcService.deleteShare(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
   test('unsetSubnetPublicGateway()', (done) => {
     const params = {
       id: dict.createdSubnet,
@@ -5623,7 +5926,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test.skip('deleteImage()', (done) => {
+  test('deleteImage()', (done) => {
     const params = {
       id: dict.privateImage,
     };

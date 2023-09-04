@@ -20,6 +20,8 @@ import os = require('os');
 const pkg = require('../package.json');
 
 export type SdkHeaders = {
+  'X-Correlation-Id': string;
+  'X-Request-Id': string;
   'User-Agent': string;
 }
 
@@ -46,8 +48,13 @@ export function getSdkHeaders(serviceName: string, serviceVersion: string, opera
   const osName = os.platform();
   const osVersion = os.release();
   const nodeVersion = process.version;
+  const uuid = require('uuid');
+  const x_correlation_id = uuid.v4();
+  const x_request_id = uuid.v4();
 
   const headers = {
+    'X-Correlation-Id': `${x_correlation_id}`,
+    'X-Request-Id': `${x_request_id}`,
     'User-Agent': `${sdkName}/${sdkVersion} (lang=node.js; os.name=${osName} os.version=${osVersion} node.version=${nodeVersion})`,
   }
 

@@ -24,6 +24,8 @@ describe('Tests of Common Library', () => {
       const headers = getSdkHeaders('service1', 'v1', 'operation1');
       expect(headers).not.toEqual(null);
       expect(headers['User-Agent']).toMatch(/^vpc-node-sdk\/.*/);
+      expect(headers['X-Correlation-Id']).not.toBeNull();
+      expect(headers['X-Request-Id']).not.toBeNull();
     });
   });
 });
