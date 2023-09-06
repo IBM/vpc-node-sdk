@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.70.0-7df966bf-20230419-195904
+ * IBM OpenAPI SDK Code Generator Version: 3.76.0-ad3e6f96-20230724-172814
  */
 
 /* eslint-disable max-classes-per-file */
@@ -83,7 +83,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2022-09-13` and `2023-07-04`.
+   *  `2022-09-13` and `2023-08-24`.
    */
   version: string;
 
@@ -92,7 +92,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} options - Options for the service.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2022-09-13` and `2023-07-04`.
+   * specify any date between `2022-09-13` and `2023-08-24`.
    * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -109,7 +109,13 @@ class VpcV1 extends BaseService {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
     this.generation = options.generation;
-    this.version = options.version|| `2023-06-27`;
+    this.version = options.version|| `2023-08-08`;
+
+    const _requiredParams = ['version'];
+    const _validationErrors = validateParams(options, _requiredParams, null);
+    if (_validationErrors) {
+      throw _validationErrors;
+    }
   }
 
   /*************************
@@ -1035,9 +1041,11 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
-   * @param {string} params.destination - The destination of the route. At most two routes per `zone` in a table can
-   * have the same `destination` and `priority`, and only if both routes have an `action` of `deliver` and the
-   * `next_hop` is an IP address.
+   * @param {string} params.destination - The destination CIDR of the route. The host identifier in the CIDR must be
+   * zero.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and
+   * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
    * @param {ZoneIdentity} params.zone - The zone to apply the route to. (Traffic from subnets in this zone will be
    * subject to this route.).
    * @param {string} [params.action] - The action to perform with a packet matching the route:
@@ -1418,9 +1426,9 @@ class VpcV1 extends BaseService {
    * have a routing table with this property set to `true`.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
-   * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
-   * address or a VPN gateway connection, the packet will be dropped.
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    *
    * If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
    * enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -1433,23 +1441,23 @@ class VpcV1 extends BaseService {
    * - Traffic destined for IP addresses associated with public gateways will not be
    *   subject to routes in this routing table.
    * - Routes with an action of deliver are treated as drop unless the `next_hop` is an
-   *   IP address bound to a network interface on a subnet in the route's `zone`.
-   *   Therefore, if an incoming packet matches a route with a `next_hop` of an
-   *   internet-bound IP address or a VPN gateway connection, the packet will be dropped.
+   *   IP address in a subnet in the route's `zone`. Therefore, if an incoming packet
+   *   matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   *   connection, the packet will be dropped.
    * @param {boolean} [params.routeTransitGatewayIngress] - If set to `true`, this routing table will be used to route
    * traffic that originates from [Transit Gateway](https://cloud.ibm.com/docs/transit-gateway) to this VPC. The VPC
    * must not already have a routing table with this property set to `true`.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
-   * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
-   * address or a VPN gateway connection, the packet will be dropped.
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    * @param {boolean} [params.routeVpcZoneIngress] - If set to `true`, this routing table will be used to route traffic
    * that originates from subnets in other zones in this VPC. The VPC must not already have a routing table with this
    * property set to `true`.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
    * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
    * connection, the packet will be dropped.
    * @param {RoutePrototype[]} [params.routes] - The prototype objects for routes to create for this routing table. If
@@ -1667,9 +1675,9 @@ class VpcV1 extends BaseService {
    * `false` deselects this routing table.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
-   * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
-   * address or a VPN gateway connection, the packet will be dropped.
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    * @param {boolean} [params.routeInternetIngress] - Indicates whether this routing table is used to route traffic that
    * originates from the internet.  Updating to `true` selects this routing table, provided no other routing table in
    * the VPC already has this property set to `true`.  Updating to `false` deselects this routing table.
@@ -1678,9 +1686,9 @@ class VpcV1 extends BaseService {
    * -  Traffic destined for IP addresses associated with public gateways will not be subject
    *    to routes in this routing table.
    * -  Routes with an `action` of `deliver` are treated as `drop` unless the `next_hop` is an
-   *    IP address bound to a network interface on a subnet in the route's `zone`. Therefore,
-   *    if an incoming packet matches a route with a `next_hop` of an internet-bound IP
-   *    address or a VPN gateway connection, the packet will be dropped.
+   *    IP address in a subnet in the route's `zone`. Therefore, if an incoming packet matches
+   *    a route with a `next_hop` of an internet-bound IP address or a VPN gateway connection,
+   *    the packet will be dropped.
    * @param {boolean} [params.routeTransitGatewayIngress] - Indicates whether this routing table is used to route
    * traffic that originates from
    * [Transit Gateway](https://cloud.ibm.com/docs/transit-gateway) to this VPC. Updating to
@@ -1688,9 +1696,9 @@ class VpcV1 extends BaseService {
    * `true`, and no subnets are attached to this routing table. Updating to `false` deselects this routing table.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
-   * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
-   * address or a VPN gateway connection, the packet will be dropped.
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    *
    * If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
    * enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -1701,9 +1709,9 @@ class VpcV1 extends BaseService {
    * table. Updating to `false` deselects this routing table.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet in
-   * the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP
-   * address or a VPN gateway connection, the packet will be dropped.
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * connection, the packet will be dropped.
    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
    * resource's current ETag value. Required if the request body includes an array.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -1847,9 +1855,11 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
    * @param {string} params.routingTableId - The routing table identifier.
-   * @param {string} params.destination - The destination of the route. At most two routes per `zone` in a table can
-   * have the same `destination` and `priority`, and only if both routes have an `action` of `deliver` and the
-   * `next_hop` is an IP address.
+   * @param {string} params.destination - The destination CIDR of the route. The host identifier in the CIDR must be
+   * zero.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and
+   * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
    * @param {ZoneIdentity} params.zone - The zone to apply the route to. (Traffic from subnets in this zone will be
    * subject to this route.).
    * @param {string} [params.action] - The action to perform with a packet matching the route:
@@ -2274,9 +2284,10 @@ class VpcV1 extends BaseService {
    * Delete a subnet.
    *
    * This request deletes a subnet. This operation cannot be reversed. For this request to succeed, the subnet must not
-   * be referenced by any network interfaces, VPN gateways, or load balancers. A delete operation automatically detaches
-   * the subnet from any network ACLs, public gateways, or endpoint gateways. All flow log collectors with `auto_delete`
-   * set to `true` targeting the subnet or any resource in the subnet are automatically deleted.
+   * be referenced by any bare metal server network interfaces, instance network interfaces, VPN gateways, or load
+   * balancers. A delete operation automatically detaches the subnet from any network ACLs, public gateways, or endpoint
+   * gateways. All flow log collectors with `auto_delete` set to `true` targeting the subnet or any resource in the
+   * subnet are automatically deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The subnet identifier.
@@ -3042,8 +3053,9 @@ class VpcV1 extends BaseService {
    *
    * This request releases a reserved IP. This operation cannot be reversed.
    *
-   * For this request to succeed, the reserved IP must not be required by another resource, such as a network interface
-   * for which it is the primary IP. A provider-owned reserved IP is not allowed to be deleted.
+   * For this request to succeed, the reserved IP must not be required by another resource, such as a bare metal server
+   * network interface or instance network interface for which it is the primary IP. A provider-owned reserved IP is not
+   * allowed to be deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.subnetId - The subnet identifier.
@@ -3243,9 +3255,6 @@ class VpcV1 extends BaseService {
    * This request lists all images available in the region. An image provides source data for a volume. Images are
    * either system-provided, or created from another source, such as importing from Cloud Object Storage.
    *
-   * The images will be sorted by their `created_at` property values, with the newest first. Images with identical
-   * `created_at` values will be secondarily sorted by ascending `id` property values.
-   *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
    * @param {number} [params.limit] - The number of resources to return on a page.
@@ -3253,6 +3262,8 @@ class VpcV1 extends BaseService {
    * matching the specified identifier.
    * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
    * specified name.
+   * @param {string[]} [params.status] - Filters the collection to images with a `status` property matching one of the
+   * specified comma-separated values.
    * @param {string} [params.visibility] - Filters the collection to images with a `visibility` property matching the
    * specified value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -3263,7 +3274,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ImageCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'visibility', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'status', 'visibility', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3276,6 +3287,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
       'name': _params.name,
+      'status': _params.status,
       'visibility': _params.visibility,
     };
 
@@ -3493,8 +3505,37 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The image identifier.
+   * @param {string} [params.deprecationAt] - The deprecation date and time to set for this image.
+   *
+   * This cannot be set if the image has a `status` of `failed` or `deleting`, or if
+   * `catalog_offering.managed` is `true`.
+   *
+   * The date and time must not be in the past, and must be earlier than `obsolescence_at`
+   * (if `obsolescence_at` is set). Additionally, if the image status is currently
+   * `deprecated`, the value cannot be changed (but may be removed).
+   *
+   * Specify `null` to remove an existing deprecation date and time. If the image status is currently `deprecated`, it
+   * will become `available`.
+   *
+   * If the deprecation date and time is reached while the image has a status of `pending`, the image's status will
+   * transition to `deprecated` upon its successful creation (or
+   * `obsolete` if the obsolescence date and time was also reached).
    * @param {string} [params.name] - The name for this image. The name must not be used by another image in the region.
    * Names starting with `ibm-` are reserved for system-provided images, and are not allowed.
+   * @param {string} [params.obsolescenceAt] - The obsolescence date and time to set for this image.
+   *
+   * This cannot be set if the image has a `status` of `failed` or `deleting`, or if
+   * `catalog_offering.managed` is `true`.
+   *
+   * The date and time must not be in the past, and must be later than `deprecation_at` (if
+   * `deprecation_at` is set). Additionally, if the image status is currently `obsolete`, the value cannot be changed
+   * (but may be removed).
+   *
+   * Specify `null` to remove an existing obsolescence date and time. If the image status is currently `obsolete`, it
+   * will become `deprecated` if `deprecation_at` is in the past. Otherwise, it will become `available`.
+   *
+   * If the obsolescence date and time is reached while the image has a status of `pending`, the image's status will
+   * transition to `obsolete` upon its successful creation.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Image>>}
    */
@@ -3503,14 +3544,16 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Image>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'deprecationAt', 'name', 'obsolescenceAt', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'deprecation_at': _params.deprecationAt,
       'name': _params.name,
+      'obsolescence_at': _params.obsolescenceAt,
     };
 
     const query = {
@@ -3543,6 +3586,140 @@ class VpcV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Deprecate an image.
+   *
+   * This request deprecates an image, resulting in its `status` becoming `deprecated` and
+   * `deprecation_at` being set to the current date and time.
+   *
+   * The image must:
+   * - have a `status` of `available`
+   * - have `catalog_offering.managed` set to `false`
+   * - not have `deprecation_at` set
+   *
+   * The image must not have `deprecation_at` set, must have `catalog_offering.managed` set to
+   * `false`, and must have a `status` of `available`.
+   *
+   * A system-provided image is not allowed to be deprecated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The image identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deprecateImage(
+    params: VpcV1.DeprecateImageParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deprecateImage'
+    );
+
+    const parameters = {
+      options: {
+        url: '/images/{id}/deprecate',
+        method: 'POST',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Obsolete an image.
+   *
+   * This request obsoletes an image, resulting in its `status` becoming `obsolete` and
+   * `obsolescence_at` being set to the current date and time.
+   *
+   * The image must:
+   * - have a `status` of `available` or `deprecated`
+   * - have `catalog_offering.managed` set to `false`
+   * - not have `deprecation_at` set in the future
+   * - not have `obsolescence_at` set
+   *
+   * A system-provided image is not allowed to be obsoleted.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The image identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public obsoleteImage(
+    params: VpcV1.ObsoleteImageParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'obsoleteImage'
+    );
+
+    const parameters = {
+      options: {
+        url: '/images/{id}/obsolete',
+        method: 'POST',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
           },
           _params.headers
         ),
@@ -3622,9 +3799,9 @@ class VpcV1 extends BaseService {
    * Create an image export job.
    *
    * This request creates and queues a new export job for the image specified in the URL using the image export job
-   * prototype object. The image must be owned by the account and be in the `available`, `deprecated`, or `unusable`
-   * state. The prototype object is structured in the same way as a retrieved image export job, and contains the
-   * information necessary to create and queue the new image export job.
+   * prototype object. The image must be owned by the account and be in the `available`, `deprecated`, `obsolete`, or
+   * `unusable` state. The prototype object is structured in the same way as a retrieved image export job, and contains
+   * the information necessary to create and queue the new image export job.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.imageId - The image identifier.
@@ -4879,9 +5056,9 @@ class VpcV1 extends BaseService {
   /**
    * Delete an instance.
    *
-   * This request deletes an instance. This operation cannot be reversed. Any floating IPs associated with the
-   * instance's network interfaces are implicitly disassociated. All flow log collectors with `auto_delete` set to
-   * `true` targeting the instance and/or the instance's network interfaces are automatically deleted.
+   * This request deletes an instance. This operation cannot be reversed. Any floating IPs associated with instance
+   * network interfaces are implicitly disassociated. All flow log collectors with `auto_delete` set to `true` targeting
+   * the instance and/or the instance network interfaces are automatically deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The virtual server instance identifier.
@@ -5020,7 +5197,7 @@ class VpcV1 extends BaseService {
    *   instance is placed on a dedicated host, the requested profile `family` must be
    *   the same as the dedicated host `family`.
    * - Have the same `vcpu.architecture`.
-   * - Support the number of network interfaces currently attached to the instance.
+   * - Support the number of network interfaces the instance currently has.
    * @param {number} [params.totalVolumeBandwidth] - The amount of bandwidth (in megabits per second) allocated
    * exclusively to instance storage volumes. An increase in this value will result in a corresponding decrease to
    * `total_network_bandwidth`.
@@ -5476,10 +5653,10 @@ class VpcV1 extends BaseService {
   /**
    * List all network interfaces on an instance.
    *
-   * This request lists all network interfaces on an instance. A network interface is an abstract representation of a
-   * network interface card and connects an instance to a subnet. While each network interface can attach to only one
-   * subnet, multiple network interfaces can be created to attach to multiple subnets. Multiple interfaces may also
-   * attach to the same subnet.
+   * This request lists all network interfaces on an instance. An instance network interface is an abstract
+   * representation of a network device and attaches an instance to a single subnet. Each network interface on an
+   * instance can attach to any subnet in the zone, including subnets that are already attached to the instance.
+   * Multiple network interfaces on the instance may also attach to the same subnet.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
@@ -5537,28 +5714,28 @@ class VpcV1 extends BaseService {
   /**
    * Create a network interface on an instance.
    *
-   * This request creates a new network interface from a network interface prototype object. The prototype object is
-   * structured in the same way as a retrieved network interface, and contains the information necessary to create the
-   * new network interface. Any subnet in the instance's VPC may be specified, even if it is already attached to another
-   * network interface. Addresses on the network interface must be within the specified subnet's CIDR blocks.
+   * This request creates a new instance network interface from an instance network interface prototype object. The
+   * prototype object is structured in the same way as a retrieved instance network interface, and contains the
+   * information necessary to create the new instance network interface. Any subnet in the instance's VPC may be
+   * specified. Addresses on the instance network interface must be within the specified subnet's CIDR blocks.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {SubnetIdentity} params.subnet - The associated subnet.
-   * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this interface. If
-   * false, source IP spoofing is prevented on this interface. If true, source IP spoofing is allowed on this interface.
-   * @param {string} [params.name] - The name for network interface. The name must not be used by another network
-   * interface on the virtual server instance. If unspecified, the name will be a hyphenated list of randomly-selected
-   * words.
-   * @param {NetworkInterfaceIPPrototype} [params.primaryIp] - The primary IP address to bind to the network interface.
-   * This can be specified using
-   * an existing reserved IP, or a prototype object for a new reserved IP.
+   * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this instance
+   * interface.
+   * @param {string} [params.name] - The name for the instance network interface. The name must not be used by another
+   * network interface on the virtual server instance. If unspecified, the name will be a hyphenated list of
+   * randomly-selected words.
+   * @param {NetworkInterfaceIPPrototype} [params.primaryIp] - The primary IP address to bind to the instance network
+   * interface. This can be
+   * specified using an existing reserved IP, or a prototype object for a new reserved IP.
    *
    * If an existing reserved IP or a prototype object with an address is specified, it must
-   * be available on the network interface's subnet. Otherwise, an available address on the
-   * subnet will be automatically selected and reserved.
-   * @param {SecurityGroupIdentity[]} [params.securityGroups] - The security groups to use for this network interface.
-   * If unspecified, the VPC's default security group is used.
+   * be available on the instance network interface's subnet. Otherwise, an
+   * available address on the subnet will be automatically selected and reserved.
+   * @param {SecurityGroupIdentity[]} [params.securityGroups] - The security groups to use for this instance network
+   * interface. If unspecified, the VPC's default security group is used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
    */
@@ -5621,15 +5798,16 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Delete a network interface.
+   * Delete an instance network interface.
    *
-   * This request deletes a network interface. This operation cannot be reversed. Any floating IPs associated with the
-   * network interface are implicitly disassociated. All flow log collectors with `auto_delete` set to `true` targeting
-   * the network interface are automatically deleted. The primary network interface is not allowed to be deleted.
+   * This request deletes an instance network interface. This operation cannot be reversed. Any floating IPs associated
+   * with the instance network interface are implicitly disassociated. All flow log collectors with `auto_delete` set to
+   * `true` targeting the instance network interface are automatically deleted. The primary instance network interface
+   * is not allowed to be deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
-   * @param {string} params.id - The network interface identifier.
+   * @param {string} params.id - The instance network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
@@ -5682,13 +5860,13 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Retrieve a network interface.
+   * Retrieve an instance network interface.
    *
-   * This request retrieves a single network interface specified by the identifier in the URL.
+   * This request retrieves a single instance network interface specified by the identifier in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
-   * @param {string} params.id - The network interface identifier.
+   * @param {string} params.id - The instance network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
    */
@@ -5742,19 +5920,19 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Update a network interface.
+   * Update an instance network interface.
    *
-   * This request updates a network interface with the information provided in a network interface patch object. The
-   * network interface patch object is structured in the same way as a retrieved network interface and needs to contain
-   * only the information to be updated.
+   * This request updates an instance network interface with the information provided in an instance network interface
+   * patch object. The instance network interface patch object is structured in the same way as a retrieved instance
+   * network interface and needs to contain only the information to be updated.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
-   * @param {string} params.id - The network interface identifier.
-   * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this interface. If
-   * false, source IP spoofing is prevented on this interface. If true, source IP spoofing is allowed on this interface.
-   * @param {string} [params.name] - The name for network interface. The name must not be used by another network
-   * interface on the virtual server instance.
+   * @param {string} params.id - The instance network interface identifier.
+   * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this instance
+   * interface.
+   * @param {string} [params.name] - The name for the instance network interface. The name must not be used by another
+   * network interface on the virtual server instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.NetworkInterface>>}
    */
@@ -5815,13 +5993,13 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all floating IPs associated with a network interface.
+   * List all floating IPs associated with an instance network interface.
    *
-   * This request lists all floating IPs associated with a network interface.
+   * This request lists all floating IPs associated with an instance network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The instance network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIPUnpaginatedCollection>>}
    */
@@ -5875,13 +6053,13 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Disassociate a floating IP from a network interface.
+   * Disassociate a floating IP from an instance network interface.
    *
-   * This request disassociates the specified floating IP from the specified network interface.
+   * This request disassociates the specified floating IP from the specified instance network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The instance network interface identifier.
    * @param {string} params.id - The floating IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
@@ -5938,12 +6116,12 @@ class VpcV1 extends BaseService {
   /**
    * Retrieve associated floating IP.
    *
-   * This request retrieves a specified floating IP address if it is associated with the network interface and instance
-   * specified in the URL.
+   * This request retrieves a specified floating IP address if it is associated with the instance network interface and
+   * instance specified in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The instance network interface identifier.
    * @param {string} params.id - The floating IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
@@ -5999,15 +6177,15 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Associate a floating IP with a network interface.
+   * Associate a floating IP with an instance network interface.
    *
-   * This request associates the specified floating IP with the specified network interface, replacing any existing
-   * association. For this request to succeed, the existing floating IP must not be required by another resource, such
-   * as a public gateway. A request body is not required, and if provided, is ignored.
+   * This request associates the specified floating IP with the specified instance network interface, replacing any
+   * existing association. For this request to succeed, the existing floating IP must not be required by another
+   * resource, such as a public gateway. A request body is not required, and if provided, is ignored.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The instance network interface identifier.
    * @param {string} params.id - The floating IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
@@ -6063,21 +6241,21 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all reserved IPs bound to a network interface.
+   * List all reserved IPs bound to an instance network interface.
    *
-   * This request lists all reserved IPs bound to a network interface.
+   * This request lists all reserved IPs bound to an instance network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The instance network interface identifier.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
    * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionNetworkInterfaceContext>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionInstanceNetworkInterfaceContext>>}
    */
   public listInstanceNetworkInterfaceIps(
     params: VpcV1.ListInstanceNetworkInterfaceIpsParams
-  ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionNetworkInterfaceContext>> {
+  ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionInstanceNetworkInterfaceContext>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'networkInterfaceId'];
     const _validParams = ['instanceId', 'networkInterfaceId', 'start', 'limit', 'headers'];
@@ -6134,7 +6312,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The instance network interface identifier.
    * @param {string} params.id - The reserved IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
@@ -9237,10 +9415,10 @@ class VpcV1 extends BaseService {
    * policy.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string[]} params.matchUserTags - The user tags this backup policy applies to. Resources that have both a
+   * @param {string[]} params.matchUserTags - The user tags this backup policy will apply to. Resources that have both a
    * matching user tag and a matching type will be subject to the backup policy.
-   * @param {string[]} [params.matchResourceTypes] - A resource type this backup policy applies to. Resources that have
-   * both a matching type and a matching user tag will be subject to the backup policy.
+   * @param {string[]} [params.matchResourceTypes] - The resource types this backup policy will apply to. Resources that
+   * have both a matching type and a matching user tag will be subject to the backup policy.
    * @param {string} [params.name] - The name for this backup policy. The name must not be used by another backup policy
    * in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {BackupPolicyPlanPrototype[]} [params.plans] - The prototype objects for backup plans to be created for this
@@ -9955,7 +10133,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The backup policy identifier.
-   * @param {string[]} [params.matchUserTags] - The user tags this backup policy applies to (replacing any existing
+   * @param {string[]} [params.matchUserTags] - The user tags this backup policy will apply to (replacing any existing
    * tags). Resources that have both a matching user tag and a matching type will be subject to the backup policy.
    * @param {string} [params.name] - The name for this backup policy. The name must not be used by another backup policy
    * in the region.
@@ -10543,8 +10721,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {BareMetalServerInitializationPrototype} params.initialization -
-   * @param {BareMetalServerPrimaryNetworkInterfacePrototype} params.primaryNetworkInterface - The primary network
-   * interface to create for the bare metal server.
+   * @param {BareMetalServerPrimaryNetworkInterfacePrototype} params.primaryNetworkInterface - The primary bare metal
+   * server network interface to create.
    * @param {BareMetalServerProfileIdentity} params.profile - The
    * [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
    * to use for this bare metal server.
@@ -10555,16 +10733,16 @@ class VpcV1 extends BaseService {
    * metal server in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    *
    * The system hostname will be based on this name.
-   * @param {BareMetalServerNetworkInterfacePrototype[]} [params.networkInterfaces] - The additional network interfaces
-   * to create for the bare metal server.
+   * @param {BareMetalServerNetworkInterfacePrototype[]} [params.networkInterfaces] - The additional bare metal server
+   * network interfaces to create.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
    * @param {BareMetalServerTrustedPlatformModulePrototype} [params.trustedPlatformModule] -
    * @param {VPCIdentity} [params.vpc] - The VPC this bare metal server will reside in.
    *
-   * If specified, it must match the VPC for the subnets of the server's network
-   * interfaces.
+   * If specified, it must match the VPC for the subnets that the network interfaces of
+   * the bare metal server are attached to.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServer>>}
    */
@@ -10890,10 +11068,10 @@ class VpcV1 extends BaseService {
   /**
    * List all network interfaces on a bare metal server.
    *
-   * This request lists all network interfaces on a bare metal server. A network interface is an abstract representation
-   * of a network interface card and connects a bare metal server to a subnet. While each network interface can attach
-   * to only one subnet, multiple network interfaces can be created to attach to multiple subnets. Multiple interfaces
-   * may also attach to the same subnet.
+   * This request lists all network interfaces on a bare metal server. A bare metal server network interface is an
+   * abstract representation of a network device and attaches a bare metal server to a single subnet. Each network
+   * interface on a bare metal server can attach to any subnet in the zone, including subnets that are already attached
+   * to the bare metal server.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
@@ -10955,15 +11133,16 @@ class VpcV1 extends BaseService {
   /**
    * Create a network interface on a bare metal server.
    *
-   * This request creates a new network interface from a network interface prototype object. The prototype object is
-   * structured in the same way as a retrieved network interface, and contains the information necessary to create the
-   * new network interface. Any subnet in the bare metal server's VPC may be specified, even if it is already attached
-   * to another network interface. Addresses on the network interface must be within the specified subnet's CIDR blocks.
+   * This request creates a new bare metal server network interface from a bare metal server network interface prototype
+   * object. The prototype object is structured in the same way as a retrieved bare metal server network interface, and
+   * contains the information necessary to create the new bare metal server network interface. Any subnet in the bare
+   * metal server's VPC may be specified, even if it is already attached to another bare metal server network interface.
+   * Addresses on the bare metal server network interface must be within the specified subnet's CIDR blocks.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-   * @param {BareMetalServerNetworkInterfacePrototype} params.bareMetalServerNetworkInterfacePrototype - The network
-   * interface prototype object.
+   * @param {BareMetalServerNetworkInterfacePrototype} params.bareMetalServerNetworkInterfacePrototype - The bare metal
+   * server network interface prototype object.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkInterface>>}
    */
@@ -11019,14 +11198,15 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Delete a network interface.
+   * Delete a bare metal server network interface.
    *
-   * This request deletes a network interface. This operation cannot be reversed. Any floating IPs associated with the
-   * network interface are implicitly disassociated.  The primary network interface is not allowed to be deleted.
+   * This request deletes a bare metal server network interface. This operation cannot be reversed. Any floating IPs
+   * associated with the bare metal server network interface are implicitly disassociated.  The primary bare metal
+   * server network interface is not allowed to be deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-   * @param {string} params.id - The network interface identifier.
+   * @param {string} params.id - The bare metal server network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
@@ -11079,13 +11259,13 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Retrieve a network interface.
+   * Retrieve a bare metal server network interface.
    *
-   * This request retrieves a single network interface specified by the identifier in the URL.
+   * This request retrieves a single bare metal server network interface specified by the identifier in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-   * @param {string} params.id - The network interface identifier.
+   * @param {string} params.id - The bare metal server network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkInterface>>}
    */
@@ -11139,17 +11319,17 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Update a network interface.
+   * Update a bare metal server network interface.
    *
-   * This request updates a network interface with the information provided in a network interface patch object. The
-   * network interface patch object is structured in the same way as a retrieved network interface and needs to contain
-   * only the information to be updated.
+   * This request updates a bare metal server network interface with the information provided in a bare metal server
+   * network interface patch object. The bare metal server network interface patch object is structured in the same way
+   * as a retrieved bare metal server network interface and needs to contain only the information to be updated.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-   * @param {string} params.id - The network interface identifier.
-   * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this interface. If
-   * false, source IP spoofing is prevented on this interface. If true, source IP spoofing is allowed on this interface.
+   * @param {string} params.id - The bare metal server network interface identifier.
+   * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this bare metal
+   * server network interface.
    * @param {number[]} [params.allowedVlans] - Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI
    * type) interface.
    * @param {boolean} [params.enableInfrastructureNat] - If `true`:
@@ -11157,12 +11337,12 @@ class VpcV1 extends BaseService {
    * - `floating_ips` must not have more than one floating IP.
    *
    * If `false`:
-   * - Packets are passed unchanged to/from the network interface,
+   * - Packets are passed unchanged to/from the bare metal server network interface,
    *   allowing the workload to perform any needed NAT operations.
    * - `allow_ip_spoofing` must be `false`.
    * - `interface_type` must not be `hipersocket`.
-   * @param {string} [params.name] - The name for this network interface. The name must not be used by another network
-   * interface on the bare metal server.
+   * @param {string} [params.name] - The name for this bare metal server network interface. The name must not be used by
+   * another network interface on the bare metal server.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkInterface>>}
    */
@@ -11225,13 +11405,13 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all floating IPs associated with a network interface.
+   * List all floating IPs associated with a bare metal server network interface.
    *
-   * This request lists all floating IPs associated with a network interface.
+   * This request lists all floating IPs associated with a bare metal server network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The bare metal server network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIPUnpaginatedCollection>>}
    */
@@ -11285,13 +11465,13 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Disassociate a floating IP from a network interface.
+   * Disassociate a floating IP from a bare metal server network interface.
    *
-   * This request disassociates the specified floating IP from the specified network interface.
+   * This request disassociates the specified floating IP from the specified bare metal server network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The bare metal server network interface identifier.
    * @param {string} params.id - The floating IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
@@ -11348,12 +11528,12 @@ class VpcV1 extends BaseService {
   /**
    * Retrieve associated floating IP.
    *
-   * This request retrieves a specified floating IP if it is associated with the network interface and bare metal server
+   * This request retrieves a specified floating IP if it is associated with the bare metal server network interface
    * specified in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The bare metal server network interface identifier.
    * @param {string} params.id - The floating IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
@@ -11409,9 +11589,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Associate a floating IP with a network interface.
+   * Associate a floating IP with a bare metal server network interface.
    *
-   * This request associates the specified floating IP with the specified network interface. If
+   * This request associates the specified floating IP with the specified bare metal server network interface. If
    * `enable_infrastructure_nat` is `false`, this adds the IP to any existing associations. If
    * `enable_infrastructure_nat` is `true`, this replaces any existing association.  For this request to succeed, the
    * existing floating IP must not be required by another resource, such as a public gateway. A request body is not
@@ -11419,7 +11599,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The bare metal server network interface identifier.
    * @param {string} params.id - The floating IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
@@ -11475,19 +11655,19 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all reserved IPs bound to a network interface.
+   * List all reserved IPs bound to a bare metal server network interface.
    *
-   * This request lists all reserved IPs bound to a network interface.
+   * This request lists all reserved IPs bound to a bare metal server network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The bare metal server network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionNetworkInterfaceContext>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionBareMetalServerNetworkInterfaceContext>>}
    */
   public listBareMetalServerNetworkInterfaceIps(
     params: VpcV1.ListBareMetalServerNetworkInterfaceIpsParams
-  ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionNetworkInterfaceContext>> {
+  ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionBareMetalServerNetworkInterfaceContext>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId'];
     const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'headers'];
@@ -11537,12 +11717,12 @@ class VpcV1 extends BaseService {
   /**
    * Retrieve bound reserved IP.
    *
-   * This request retrieves the specified reserved IP address if it is bound to the network interface and bare metal
+   * This request retrieves the specified reserved IP address if it is bound to the network interface for the bare metal
    * server specified in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
-   * @param {string} params.networkInterfaceId - The network interface identifier.
+   * @param {string} params.networkInterfaceId - The bare metal server network interface identifier.
    * @param {string} params.id - The reserved IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
@@ -11601,7 +11781,7 @@ class VpcV1 extends BaseService {
    * Delete a bare metal server.
    *
    * This request deletes a bare metal server. This operation cannot be reversed. Any floating IPs associated with the
-   * bare metal server's network interfaces are implicitly disassociated.
+   * bare metal server network interfaces are implicitly disassociated.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The bare metal server identifier.
@@ -12849,7 +13029,8 @@ class VpcV1 extends BaseService {
   /**
    * Update a snapshot.
    *
-   * This request updates a snapshot's name.
+   * This request updates a snapshot with the information in a provided snapshot patch. The snapshot consistency group
+   * patch object is structured in the same way as a retrieved snapshot and contains only the information to be updated.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The snapshot identifier.
@@ -13157,6 +13338,1011 @@ class VpcV1 extends BaseService {
     return this.createRequest(parameters);
   }
   /*************************
+   * shares
+   ************************/
+
+  /**
+   * List all file share profiles.
+   *
+   * This request lists all [file share profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles)
+   * available in the region. A file share profile specifies the performance characteristics and pricing model for a
+   * file share.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareProfileCollection>>}
+   */
+  public listShareProfiles(
+    params?: VpcV1.ListShareProfilesParams
+  ): Promise<VpcV1.Response<VpcV1.ShareProfileCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['start', 'limit', 'sort', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'sort': _params.sort,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listShareProfiles'
+    );
+
+    const parameters = {
+      options: {
+        url: '/share/profiles',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a file share profile.
+   *
+   * This request retrieves a single file share profile specified by the name in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.name - The file share profile name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareProfile>>}
+   */
+  public getShareProfile(
+    params: VpcV1.GetShareProfileParams
+  ): Promise<VpcV1.Response<VpcV1.ShareProfile>> {
+    const _params = { ...params };
+    const _requiredParams = ['name'];
+    const _validParams = ['name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'name': _params.name,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getShareProfile'
+    );
+
+    const parameters = {
+      options: {
+        url: '/share/profiles/{name}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List all file shares.
+   *
+   * This request lists all file shares in the region.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
+   * matching the specified identifier.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {string} [params.replicationRole] - Filters the collection to file shares with a `replication_role` property
+   * matching the specified value.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareCollection>>}
+   */
+  public listShares(
+    params?: VpcV1.ListSharesParams
+  ): Promise<VpcV1.Response<VpcV1.ShareCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'replicationRole', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'name': _params.name,
+      'sort': _params.sort,
+      'replication_role': _params.replicationRole,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listShares'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a file share.
+   *
+   * This request provisions new file shares from a share prototype object. The new file shares can be a standalone
+   * share, a replica share, or both a source and replica share.
+   *
+   * The prototype object is structured in the same way as a retrieved share, and contains the information necessary to
+   * provision the new file shares.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {SharePrototype} params.sharePrototype - The file share prototype object.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Share>>}
+   */
+  public createShare(
+    params: VpcV1.CreateShareParams
+  ): Promise<VpcV1.Response<VpcV1.Share>> {
+    const _params = { ...params };
+    const _requiredParams = ['sharePrototype'];
+    const _validParams = ['sharePrototype', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = _params.sharePrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createShare'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a file share.
+   *
+   * This request deletes a share. This operation cannot be reversed. A share cannot be deleted if it:
+   * - has share mount targets
+   * - has a `lifecycle_state` of `updating`
+   * - has a replication operation in progress
+   *
+   * If the request is accepted, the share `lifecycle_state` will be set to `deleting`. Once deletion processing
+   * completes, it will no longer be retrievable.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The file share identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Share>>}
+   */
+  public deleteShare(
+    params: VpcV1.DeleteShareParams
+  ): Promise<VpcV1.Response<VpcV1.Share>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteShare'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a file share.
+   *
+   * This request retrieves a single file share specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The file share identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Share>>}
+   */
+  public getShare(
+    params: VpcV1.GetShareParams
+  ): Promise<VpcV1.Response<VpcV1.Share>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getShare'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a file share.
+   *
+   * This request updates a share with the information in a provided share patch. The share patch object is structured
+   * in the same way as a retrieved share and contains only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The file share identifier.
+   * @param {string} [params.accessControlMode] - The access control mode for the share:
+   *
+   * - `security_group`: The security groups on the virtual network interface for a
+   *   mount target control access to the mount target.
+   * - `vpc`: All clients in the VPC for a mount target have access to the mount target.
+   *
+   * For this property to be changed, the share must have no mount targets and
+   * `replication_role` must be `none`.
+   * @param {number} [params.iops] - The maximum input/output operations per second (IOPS) for the file share. The value
+   * must be in the range supported by the share's size.
+   *
+   * For this property to be changed, the share `lifecycle_state` must be `stable`.
+   * @param {string} [params.name] - The name for this share. The name must not be used by another share in the region.
+   * @param {ShareProfileIdentity} [params.profile] - The profile to use for this file share.
+   *
+   * The requested profile must be in the same `family`.
+   * @param {string} [params.replicationCronSpec] - The cron specification for the file share replication schedule.
+   *
+   * Replication of a share can be scheduled to occur at most once per hour.
+   *
+   * For this property to be changed, the share `replication_role` must be `replica`.
+   * @param {number} [params.size] - The size of the file share rounded up to the next gigabyte. The value must not be
+   * less than the share's current size, and must not exceed the maximum supported by the share's profile and IOPS.
+   *
+   * For this property to be changed, the share `lifecycle_state` must be `stable`.
+   * @param {string[]} [params.userTags] - Tags for this resource.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Share>>}
+   */
+  public updateShare(
+    params: VpcV1.UpdateShareParams
+  ): Promise<VpcV1.Response<VpcV1.Share>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'accessControlMode', 'iops', 'name', 'profile', 'replicationCronSpec', 'size', 'userTags', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'access_control_mode': _params.accessControlMode,
+      'iops': _params.iops,
+      'name': _params.name,
+      'profile': _params.profile,
+      'replication_cron_spec': _params.replicationCronSpec,
+      'size': _params.size,
+      'user_tags': _params.userTags,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateShare'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Failover to replica file share.
+   *
+   * This request triggers a failover to the replica file share specified by the identifier in the URL. The failover
+   * cannot be started if a source share or the replica share has a `lifecycle_state` of `updating`, or has a
+   * replication operation in progress.
+   *
+   * If `fallback_policy` is specified as `split`, and the request is accepted but the failover operation cannot be
+   * performed, a split will be triggered.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} [params.fallbackPolicy] - The action to take if the failover request is accepted but cannot be
+   * performed or times out:
+   * - `fail`: Fail the operation, resulting in the replication relationship being unchanged.
+   * - `split`: Split the replica from its source, resulting in two individual read-write
+   *     file shares. Because the final sync was not completed, the replica may be
+   *     out-of-date. This is useful in disaster recovery scenarios where the source is known
+   *     to be unreachable.
+   * @param {number} [params.timeout] - The failover timeout in seconds.
+   *
+   * If the timeout is reached, the `fallback_policy` will be triggered.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public failoverShare(
+    params: VpcV1.FailoverShareParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId'];
+    const _validParams = ['shareId', 'fallbackPolicy', 'timeout', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'fallback_policy': _params.fallbackPolicy,
+      'timeout': _params.timeout,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'failoverShare'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/failover',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List all mount targets for a file share.
+   *
+   * This request retrieves all share mount targets for a file share. A share mount target is a network endpoint at
+   * which a file share may be mounted. The file share can be mounted by clients in the same VPC and zone after creating
+   * share mount targets.
+   *
+   * The share mount targets will be sorted by their `created_at` property values, with newest targets first.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareMountTargetCollection>>}
+   */
+  public listShareMountTargets(
+    params: VpcV1.ListShareMountTargetsParams
+  ): Promise<VpcV1.Response<VpcV1.ShareMountTargetCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId'];
+    const _validParams = ['shareId', 'name', 'start', 'limit', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'name': _params.name,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listShareMountTargets'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/mount_targets',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a mount target for a file share.
+   *
+   * This request creates a new share mount target from a share mount target prototype object.
+   *
+   * The prototype object is structured in the same way as a retrieved share mount target, and contains the information
+   * necessary to provision the new file share mount target.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {ShareMountTargetPrototype} params.shareMountTargetPrototype - The share mount target prototype object.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareMountTarget>>}
+   */
+  public createShareMountTarget(
+    params: VpcV1.CreateShareMountTargetParams
+  ): Promise<VpcV1.Response<VpcV1.ShareMountTarget>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId', 'shareMountTargetPrototype'];
+    const _validParams = ['shareId', 'shareMountTargetPrototype', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = _params.shareMountTargetPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'createShareMountTarget'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/mount_targets',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a share mount target.
+   *
+   * This request deletes a share mount target. This operation cannot be reversed.
+   *
+   * If the request is accepted, the share mount target `lifecycle_state` will be set to
+   * `deleting`. Once deletion processing completes, it will no longer be retrievable.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} params.id - The share mount target identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareMountTarget>>}
+   */
+  public deleteShareMountTarget(
+    params: VpcV1.DeleteShareMountTargetParams
+  ): Promise<VpcV1.Response<VpcV1.ShareMountTarget>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId', 'id'];
+    const _validParams = ['shareId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteShareMountTarget'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/mount_targets/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a share mount target.
+   *
+   * This request retrieves a single share mount target specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} params.id - The share mount target identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareMountTarget>>}
+   */
+  public getShareMountTarget(
+    params: VpcV1.GetShareMountTargetParams
+  ): Promise<VpcV1.Response<VpcV1.ShareMountTarget>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId', 'id'];
+    const _validParams = ['shareId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getShareMountTarget'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/mount_targets/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a share mount target.
+   *
+   * This request updates a share mount target with the information provided in a share mount target patch object. The
+   * share mount target patch object is structured in the same way as a retrieved share mount target and needs to
+   * contain only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} params.id - The share mount target identifier.
+   * @param {string} [params.name] - The name for this share mount target. The name must not be used by another mount
+   * target for the file share.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareMountTarget>>}
+   */
+  public updateShareMountTarget(
+    params: VpcV1.UpdateShareMountTargetParams
+  ): Promise<VpcV1.Response<VpcV1.ShareMountTarget>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId', 'id'];
+    const _validParams = ['shareId', 'id', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateShareMountTarget'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/mount_targets/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Split the source file share from a replica share.
+   *
+   * This request removes the replication relationship between a source share and the replica share specified by the
+   * identifier in the URL. The replication relationship cannot be removed if a source share or the replica share has a
+   * `lifecycle_state` of `updating`, or has a replication operation in progress.
+   *
+   * This operation cannot be reversed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deleteShareSource(
+    params: VpcV1.DeleteShareSourceParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId'];
+    const _validParams = ['shareId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'deleteShareSource'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/source',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve the source file share for a replica file share.
+   *
+   * This request retrieves the source file share associated with the replica file share specified by the identifier in
+   * the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Share>>}
+   */
+  public getShareSource(
+    params: VpcV1.GetShareSourceParams
+  ): Promise<VpcV1.Response<VpcV1.Share>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId'];
+    const _validParams = ['shareId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getShareSource'
+    );
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/source',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
    * geography
    ************************/
 
@@ -13384,6 +14570,199 @@ class VpcV1 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * virtualNetworkInterfaces
+   ************************/
+
+  /**
+   * List all virtual network interfaces.
+   *
+   * This request lists all virtual network interfaces in the region. A virtual network interface is a logical
+   * abstraction of a virtual network interface in a subnet, and may be attached to a target resource.
+   *
+   * The virtual network interfaces will be sorted by their `created_at` property values, with newest virtual network
+   * interfaces first. Virtual network interfaces with identical
+   * `created_at` property values will in turn be sorted by ascending `name` property values.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
+   * matching the specified identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VirtualNetworkInterfaceCollection>>}
+   */
+  public listVirtualNetworkInterfaces(
+    params?: VpcV1.ListVirtualNetworkInterfacesParams
+  ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterfaceCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'listVirtualNetworkInterfaces'
+    );
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a virtual network interface.
+   *
+   * This request retrieves a single virtual network interface specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The virtual network interface identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>>}
+   */
+  public getVirtualNetworkInterface(
+    params: VpcV1.GetVirtualNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'getVirtualNetworkInterface'
+    );
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a virtual network interface.
+   *
+   * This request updates a virtual network interface with the information in a provided virtual network interface
+   * patch. The virtual network interface patch object is structured in the same way as a retrieved virtual network
+   * interface and contains only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The virtual network interface identifier.
+   * @param {string} [params.name] - The name for this virtual network interface. The name is unique across all virtual
+   * network interfaces in the VPC.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>>}
+   */
+  public updateVirtualNetworkInterface(
+    params: VpcV1.UpdateVirtualNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(
+      VpcV1.DEFAULT_SERVICE_NAME,
+      'v1',
+      'updateVirtualNetworkInterface'
+    );
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
@@ -14764,8 +16143,8 @@ class VpcV1 extends BaseService {
    * This request creates a new security group from a security group prototype object. The prototype object is
    * structured in the same way as a retrieved security group, and contains the information necessary to create the new
    * security group. If security group rules are included in the prototype object, those rules will be added to the
-   * security group. Each security group is scoped to one VPC. Only network interfaces on instances in that VPC can be
-   * added to the security group.
+   * security group. Each security group is scoped to one VPC. Only resources in that VPC can be added to the security
+   * group.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {VPCIdentity} params.vpc - The VPC this security group will reside in.
@@ -15289,8 +16668,8 @@ class VpcV1 extends BaseService {
    * `port_max` must also be set, and must not be smaller.
    *
    * Specify `null` to remove an existing lower bound.
-   * @param {SecurityGroupRuleRemotePatch} [params.remote] - The IP addresses or security groups from which this rule
-   * will allow traffic (or to
+   * @param {SecurityGroupRuleRemotePatch} [params.remote] - The remote IP addresses or security groups from which this
+   * rule will allow traffic (or to
    * which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
    * security group. A CIDR block of `0.0.0.0/0` will allow traffic from any source (or to
    * any destination, for outbound rules).
@@ -15431,6 +16810,7 @@ class VpcV1 extends BaseService {
    * least one other security group.  The specified target identifier can be:
    *
    * - A bare metal server network interface identifier
+   * - A virtual network interface identifier
    * - A VPN server identifier
    * - An application load balancer identifier
    * - An endpoint gateway identifier
@@ -15560,6 +16940,7 @@ class VpcV1 extends BaseService {
    * This request adds a resource to an existing security group. The specified target identifier can be:
    *
    * - A bare metal server network interface identifier
+   * - A virtual network interface identifier
    * - A VPN server identifier
    * - An application load balancer identifier
    * - An endpoint gateway identifier
@@ -21631,8 +23012,8 @@ class VpcV1 extends BaseService {
   /**
    * List all flow log collectors.
    *
-   * This request lists all flow log collectors in the region. A flow log collector summarizes data sent over one or
-   * more network interfaces within a VPC, depending on the chosen target.
+   * This request lists all flow log collectors in the region. A flow log collector summarizes data sent over the
+   * instance network interfaces contained within its target.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -21721,8 +23102,8 @@ class VpcV1 extends BaseService {
    * access to the bucket.
    * @param {FlowLogCollectorTargetPrototype} params.target - The target this collector will collect flow logs for. If
    * the target is an instance,
-   * subnet, or VPC, flow logs will not be collected for any network interfaces within the
-   * target that are themselves the target of a more specific flow log collector.
+   * subnet, or VPC, flow logs will not be collected for any instance network interfaces within
+   * the target that are themselves the target of a more specific flow log collector.
    * @param {boolean} [params.active] - Indicates whether this collector will be active upon creation.
    * @param {string} [params.name] - The name for this flow log collector. The name must not be used by another flow log
    * collector in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -21984,7 +23365,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2022-09-13` and `2023-07-04`.
+     *  `2022-09-13` and `2023-08-24`.
      */
     version: string;
   }
@@ -22196,7 +23577,9 @@ namespace VpcV1 {
   export interface CreateVpcRouteParams {
     /** The VPC identifier. */
     vpcId: string;
-    /** The destination of the route. At most two routes per `zone` in a table can have the same `destination` and
+    /** The destination CIDR of the route. The host identifier in the CIDR must be zero.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and
      *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     destination: string;
@@ -22319,9 +23702,9 @@ namespace VpcV1 {
      *  property set to `true`.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      *
      *  If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
      *  enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -22335,9 +23718,9 @@ namespace VpcV1 {
      *  - Traffic destined for IP addresses associated with public gateways will not be
      *    subject to routes in this routing table.
      *  - Routes with an action of deliver are treated as drop unless the `next_hop` is an
-     *    IP address bound to a network interface on a subnet in the route's `zone`.
-     *    Therefore, if an incoming packet matches a route with a `next_hop` of an
-     *    internet-bound IP address or a VPN gateway connection, the packet will be dropped.
+     *    IP address in a subnet in the route's `zone`. Therefore, if an incoming packet
+     *    matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+     *    connection, the packet will be dropped.
      */
     routeInternetIngress?: boolean;
     /** If set to `true`, this routing table will be used to route traffic that originates from [Transit
@@ -22345,16 +23728,16 @@ namespace VpcV1 {
      *  with this property set to `true`.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      */
     routeTransitGatewayIngress?: boolean;
     /** If set to `true`, this routing table will be used to route traffic that originates from subnets in other
      *  zones in this VPC. The VPC must not already have a routing table with this property set to `true`.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address within the VPC's address prefix ranges.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
      *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
      *  gateway connection, the packet will be dropped.
      */
@@ -22412,9 +23795,9 @@ namespace VpcV1 {
      *  `false` deselects this routing table.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      */
     routeDirectLinkIngress?: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from the internet.  Updating
@@ -22425,9 +23808,9 @@ namespace VpcV1 {
      *  -  Traffic destined for IP addresses associated with public gateways will not be subject
      *     to routes in this routing table.
      *  -  Routes with an `action` of `deliver` are treated as `drop` unless the `next_hop` is an
-     *     IP address bound to a network interface on a subnet in the route's `zone`. Therefore,
-     *     if an incoming packet matches a route with a `next_hop` of an internet-bound IP
-     *     address or a VPN gateway connection, the packet will be dropped.
+     *     IP address in a subnet in the route's `zone`. Therefore, if an incoming packet matches
+     *     a route with a `next_hop` of an internet-bound IP address or a VPN gateway connection,
+     *     the packet will be dropped.
      */
     routeInternetIngress?: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from
@@ -22436,9 +23819,9 @@ namespace VpcV1 {
      *  `true`, and no subnets are attached to this routing table. Updating to `false` deselects this routing table.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      *
      *  If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
      *  enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -22451,9 +23834,9 @@ namespace VpcV1 {
      *  this routing table.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      */
     routeVpcZoneIngress?: boolean;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
@@ -22482,7 +23865,9 @@ namespace VpcV1 {
     vpcId: string;
     /** The routing table identifier. */
     routingTableId: string;
-    /** The destination of the route. At most two routes per `zone` in a table can have the same `destination` and
+    /** The destination CIDR of the route. The host identifier in the CIDR must be zero.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and
      *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     destination: string;
@@ -22789,6 +24174,10 @@ namespace VpcV1 {
     resourceGroupId?: string;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
+    /** Filters the collection to images with a `status` property matching one of the specified comma-separated
+     *  values.
+     */
+    status?: ListImagesConstants.Status[] | string[];
     /** Filters the collection to images with a `visibility` property matching the specified value. */
     visibility?: ListImagesConstants.Visibility | string;
     headers?: OutgoingHttpHeaders;
@@ -22796,6 +24185,16 @@ namespace VpcV1 {
 
   /** Constants for the `listImages` operation. */
   export namespace ListImagesConstants {
+    /** Filters the collection to images with a `status` property matching one of the specified comma-separated values. */
+    export enum Status {
+      AVAILABLE = 'available',
+      DELETING = 'deleting',
+      DEPRECATED = 'deprecated',
+      FAILED = 'failed',
+      OBSOLETE = 'obsolete',
+      PENDING = 'pending',
+      UNUSABLE = 'unusable',
+    }
     /** Filters the collection to images with a `visibility` property matching the specified value. */
     export enum Visibility {
       PRIVATE = 'private',
@@ -22828,10 +24227,57 @@ namespace VpcV1 {
   export interface UpdateImageParams {
     /** The image identifier. */
     id: string;
+    /** The deprecation date and time to set for this image.
+     *
+     *  This cannot be set if the image has a `status` of `failed` or `deleting`, or if
+     *  `catalog_offering.managed` is `true`.
+     *
+     *  The date and time must not be in the past, and must be earlier than `obsolescence_at`
+     *  (if `obsolescence_at` is set). Additionally, if the image status is currently
+     *  `deprecated`, the value cannot be changed (but may be removed).
+     *
+     *  Specify `null` to remove an existing deprecation date and time. If the image status is currently `deprecated`,
+     *  it will become `available`.
+     *
+     *  If the deprecation date and time is reached while the image has a status of `pending`, the image's status will
+     *  transition to `deprecated` upon its successful creation (or
+     *  `obsolete` if the obsolescence date and time was also reached).
+     */
+    deprecationAt?: string;
     /** The name for this image. The name must not be used by another image in the region. Names starting with
      *  `ibm-` are reserved for system-provided images, and are not allowed.
      */
     name?: string;
+    /** The obsolescence date and time to set for this image.
+     *
+     *  This cannot be set if the image has a `status` of `failed` or `deleting`, or if
+     *  `catalog_offering.managed` is `true`.
+     *
+     *  The date and time must not be in the past, and must be later than `deprecation_at` (if
+     *  `deprecation_at` is set). Additionally, if the image status is currently `obsolete`, the value cannot be changed
+     *  (but may be removed).
+     *
+     *  Specify `null` to remove an existing obsolescence date and time. If the image status is currently `obsolete`, it
+     *  will become `deprecated` if `deprecation_at` is in the past. Otherwise, it will become `available`.
+     *
+     *  If the obsolescence date and time is reached while the image has a status of `pending`, the image's status will
+     *  transition to `obsolete` upon its successful creation.
+     */
+    obsolescenceAt?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deprecateImage` operation. */
+  export interface DeprecateImageParams {
+    /** The image identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `obsoleteImage` operation. */
+  export interface ObsoleteImageParams {
+    /** The image identifier. */
+    id: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -23118,7 +24564,7 @@ namespace VpcV1 {
      *    instance is placed on a dedicated host, the requested profile `family` must be
      *    the same as the dedicated host `family`.
      *  - Have the same `vcpu.architecture`.
-     *  - Support the number of network interfaces currently attached to the instance.
+     *  - Support the number of network interfaces the instance currently has.
      */
     profile?: InstancePatchProfile;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
@@ -23221,24 +24667,22 @@ namespace VpcV1 {
     instanceId: string;
     /** The associated subnet. */
     subnet: SubnetIdentity;
-    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
-     *  on this interface. If true, source IP spoofing is allowed on this interface.
-     */
+    /** Indicates whether source IP spoofing is allowed on this instance interface. */
     allowIpSpoofing?: boolean;
-    /** The name for network interface. The name must not be used by another network interface on the virtual server
-     *  instance. If unspecified, the name will be a hyphenated list of randomly-selected words.
+    /** The name for the instance network interface. The name must not be used by another network interface on the
+     *  virtual server instance. If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The primary IP address to bind to the network interface. This can be specified using
-     *  an existing reserved IP, or a prototype object for a new reserved IP.
+    /** The primary IP address to bind to the instance network interface. This can be
+     *  specified using an existing reserved IP, or a prototype object for a new reserved IP.
      *
      *  If an existing reserved IP or a prototype object with an address is specified, it must
-     *  be available on the network interface's subnet. Otherwise, an available address on the
-     *  subnet will be automatically selected and reserved.
+     *  be available on the instance network interface's subnet. Otherwise, an
+     *  available address on the subnet will be automatically selected and reserved.
      */
     primaryIp?: NetworkInterfaceIPPrototype;
-    /** The security groups to use for this network interface. If unspecified, the VPC's default security group is
-     *  used.
+    /** The security groups to use for this instance network interface. If unspecified, the VPC's default security
+     *  group is used.
      */
     securityGroups?: SecurityGroupIdentity[];
     headers?: OutgoingHttpHeaders;
@@ -23248,7 +24692,7 @@ namespace VpcV1 {
   export interface DeleteInstanceNetworkInterfaceParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    /** The network interface identifier. */
+    /** The instance network interface identifier. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -23257,7 +24701,7 @@ namespace VpcV1 {
   export interface GetInstanceNetworkInterfaceParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    /** The network interface identifier. */
+    /** The instance network interface identifier. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -23266,14 +24710,12 @@ namespace VpcV1 {
   export interface UpdateInstanceNetworkInterfaceParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    /** The network interface identifier. */
+    /** The instance network interface identifier. */
     id: string;
-    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
-     *  on this interface. If true, source IP spoofing is allowed on this interface.
-     */
+    /** Indicates whether source IP spoofing is allowed on this instance interface. */
     allowIpSpoofing?: boolean;
-    /** The name for network interface. The name must not be used by another network interface on the virtual server
-     *  instance.
+    /** The name for the instance network interface. The name must not be used by another network interface on the
+     *  virtual server instance.
      */
     name?: string;
     headers?: OutgoingHttpHeaders;
@@ -23283,7 +24725,7 @@ namespace VpcV1 {
   export interface ListInstanceNetworkInterfaceFloatingIpsParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    /** The network interface identifier. */
+    /** The instance network interface identifier. */
     networkInterfaceId: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -23292,7 +24734,7 @@ namespace VpcV1 {
   export interface RemoveInstanceNetworkInterfaceFloatingIpParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    /** The network interface identifier. */
+    /** The instance network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
@@ -23303,7 +24745,7 @@ namespace VpcV1 {
   export interface GetInstanceNetworkInterfaceFloatingIpParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    /** The network interface identifier. */
+    /** The instance network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
@@ -23314,7 +24756,7 @@ namespace VpcV1 {
   export interface AddInstanceNetworkInterfaceFloatingIpParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    /** The network interface identifier. */
+    /** The instance network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
@@ -23325,7 +24767,7 @@ namespace VpcV1 {
   export interface ListInstanceNetworkInterfaceIpsParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    /** The network interface identifier. */
+    /** The instance network interface identifier. */
     networkInterfaceId: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
@@ -23338,7 +24780,7 @@ namespace VpcV1 {
   export interface GetInstanceNetworkInterfaceIpParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    /** The network interface identifier. */
+    /** The instance network interface identifier. */
     networkInterfaceId: string;
     /** The reserved IP identifier. */
     id: string;
@@ -23944,12 +25386,12 @@ namespace VpcV1 {
 
   /** Parameters for the `createBackupPolicy` operation. */
   export interface CreateBackupPolicyParams {
-    /** The user tags this backup policy applies to. Resources that have both a matching user tag and a matching
+    /** The user tags this backup policy will apply to. Resources that have both a matching user tag and a matching
      *  type will be subject to the backup policy.
      */
     matchUserTags: string[];
-    /** A resource type this backup policy applies to. Resources that have both a matching type and a matching user
-     *  tag will be subject to the backup policy.
+    /** The resource types this backup policy will apply to. Resources that have both a matching type and a matching
+     *  user tag will be subject to the backup policy.
      */
     matchResourceTypes?: CreateBackupPolicyConstants.MatchResourceTypes | string[];
     /** The name for this backup policy. The name must not be used by another backup policy in the region. If
@@ -24147,7 +25589,7 @@ namespace VpcV1 {
   export interface UpdateBackupPolicyParams {
     /** The backup policy identifier. */
     id: string;
-    /** The user tags this backup policy applies to (replacing any existing tags). Resources that have both a
+    /** The user tags this backup policy will apply to (replacing any existing tags). Resources that have both a
      *  matching user tag and a matching type will be subject to the backup policy.
      */
     matchUserTags?: string[];
@@ -24273,7 +25715,7 @@ namespace VpcV1 {
   /** Parameters for the `createBareMetalServer` operation. */
   export interface CreateBareMetalServerParams {
     initialization: BareMetalServerInitializationPrototype;
-    /** The primary network interface to create for the bare metal server. */
+    /** The primary bare metal server network interface to create. */
     primaryNetworkInterface: BareMetalServerPrimaryNetworkInterfacePrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
      *  to use for this bare metal server.
@@ -24291,7 +25733,7 @@ namespace VpcV1 {
      *  The system hostname will be based on this name.
      */
     name?: string;
-    /** The additional network interfaces to create for the bare metal server. */
+    /** The additional bare metal server network interfaces to create. */
     networkInterfaces?: BareMetalServerNetworkInterfacePrototype[];
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
@@ -24300,8 +25742,8 @@ namespace VpcV1 {
     trustedPlatformModule?: BareMetalServerTrustedPlatformModulePrototype;
     /** The VPC this bare metal server will reside in.
      *
-     *  If specified, it must match the VPC for the subnets of the server's network
-     *  interfaces.
+     *  If specified, it must match the VPC for the subnets that the network interfaces of
+     *  the bare metal server are attached to.
      */
     vpc?: VPCIdentity;
     headers?: OutgoingHttpHeaders;
@@ -24376,7 +25818,7 @@ namespace VpcV1 {
   export interface CreateBareMetalServerNetworkInterfaceParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    /** The network interface prototype object. */
+    /** The bare metal server network interface prototype object. */
     bareMetalServerNetworkInterfacePrototype: BareMetalServerNetworkInterfacePrototype;
     headers?: OutgoingHttpHeaders;
   }
@@ -24385,7 +25827,7 @@ namespace VpcV1 {
   export interface DeleteBareMetalServerNetworkInterfaceParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    /** The network interface identifier. */
+    /** The bare metal server network interface identifier. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -24394,7 +25836,7 @@ namespace VpcV1 {
   export interface GetBareMetalServerNetworkInterfaceParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    /** The network interface identifier. */
+    /** The bare metal server network interface identifier. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -24403,11 +25845,9 @@ namespace VpcV1 {
   export interface UpdateBareMetalServerNetworkInterfaceParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    /** The network interface identifier. */
+    /** The bare metal server network interface identifier. */
     id: string;
-    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
-     *  on this interface. If true, source IP spoofing is allowed on this interface.
-     */
+    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface. */
     allowIpSpoofing?: boolean;
     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. */
     allowedVlans?: number[];
@@ -24416,14 +25856,14 @@ namespace VpcV1 {
      *  - `floating_ips` must not have more than one floating IP.
      *
      *  If `false`:
-     *  - Packets are passed unchanged to/from the network interface,
+     *  - Packets are passed unchanged to/from the bare metal server network interface,
      *    allowing the workload to perform any needed NAT operations.
      *  - `allow_ip_spoofing` must be `false`.
      *  - `interface_type` must not be `hipersocket`.
      */
     enableInfrastructureNat?: boolean;
-    /** The name for this network interface. The name must not be used by another network interface on the bare
-     *  metal server.
+    /** The name for this bare metal server network interface. The name must not be used by another network
+     *  interface on the bare metal server.
      */
     name?: string;
     headers?: OutgoingHttpHeaders;
@@ -24433,7 +25873,7 @@ namespace VpcV1 {
   export interface ListBareMetalServerNetworkInterfaceFloatingIpsParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    /** The network interface identifier. */
+    /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -24442,7 +25882,7 @@ namespace VpcV1 {
   export interface RemoveBareMetalServerNetworkInterfaceFloatingIpParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    /** The network interface identifier. */
+    /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
@@ -24453,7 +25893,7 @@ namespace VpcV1 {
   export interface GetBareMetalServerNetworkInterfaceFloatingIpParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    /** The network interface identifier. */
+    /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
@@ -24464,7 +25904,7 @@ namespace VpcV1 {
   export interface AddBareMetalServerNetworkInterfaceFloatingIpParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    /** The network interface identifier. */
+    /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
@@ -24475,7 +25915,7 @@ namespace VpcV1 {
   export interface ListBareMetalServerNetworkInterfaceIpsParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    /** The network interface identifier. */
+    /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -24484,7 +25924,7 @@ namespace VpcV1 {
   export interface GetBareMetalServerNetworkInterfaceIpParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    /** The network interface identifier. */
+    /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
     /** The reserved IP identifier. */
     id: string;
@@ -24850,6 +26290,250 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listShareProfiles` operation. */
+  export interface ListShareProfilesParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListShareProfilesConstants.Sort | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listShareProfiles` operation. */
+  export namespace ListShareProfilesConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `getShareProfile` operation. */
+  export interface GetShareProfileParams {
+    /** The file share profile name. */
+    name: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listShares` operation. */
+  export interface ListSharesParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
+    resourceGroupId?: string;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListSharesConstants.Sort | string;
+    /** Filters the collection to file shares with a `replication_role` property matching the specified value. */
+    replicationRole?: ListSharesConstants.ReplicationRole | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listShares` operation. */
+  export namespace ListSharesConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+    /** Filters the collection to file shares with a `replication_role` property matching the specified value. */
+    export enum ReplicationRole {
+      NONE = 'none',
+      REPLICA = 'replica',
+      SOURCE = 'source',
+    }
+  }
+
+  /** Parameters for the `createShare` operation. */
+  export interface CreateShareParams {
+    /** The file share prototype object. */
+    sharePrototype: SharePrototype;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteShare` operation. */
+  export interface DeleteShareParams {
+    /** The file share identifier. */
+    id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getShare` operation. */
+  export interface GetShareParams {
+    /** The file share identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateShare` operation. */
+  export interface UpdateShareParams {
+    /** The file share identifier. */
+    id: string;
+    /** The access control mode for the share:
+     *
+     *  - `security_group`: The security groups on the virtual network interface for a
+     *    mount target control access to the mount target.
+     *  - `vpc`: All clients in the VPC for a mount target have access to the mount target.
+     *
+     *  For this property to be changed, the share must have no mount targets and
+     *  `replication_role` must be `none`.
+     */
+    accessControlMode?: UpdateShareConstants.AccessControlMode | string;
+    /** The maximum input/output operations per second (IOPS) for the file share. The value must be in the range
+     *  supported by the share's size.
+     *
+     *  For this property to be changed, the share `lifecycle_state` must be `stable`.
+     */
+    iops?: number;
+    /** The name for this share. The name must not be used by another share in the region. */
+    name?: string;
+    /** The profile to use for this file share.
+     *
+     *  The requested profile must be in the same `family`.
+     */
+    profile?: ShareProfileIdentity;
+    /** The cron specification for the file share replication schedule.
+     *
+     *  Replication of a share can be scheduled to occur at most once per hour.
+     *
+     *  For this property to be changed, the share `replication_role` must be `replica`.
+     */
+    replicationCronSpec?: string;
+    /** The size of the file share rounded up to the next gigabyte. The value must not be less than the share's
+     *  current size, and must not exceed the maximum supported by the share's profile and IOPS.
+     *
+     *  For this property to be changed, the share `lifecycle_state` must be `stable`.
+     */
+    size?: number;
+    /** Tags for this resource. */
+    userTags?: string[];
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `updateShare` operation. */
+  export namespace UpdateShareConstants {
+    /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. For this property to be changed, the share must have no mount targets and `replication_role` must be `none`. */
+    export enum AccessControlMode {
+      SECURITY_GROUP = 'security_group',
+      VPC = 'vpc',
+    }
+  }
+
+  /** Parameters for the `failoverShare` operation. */
+  export interface FailoverShareParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The action to take if the failover request is accepted but cannot be performed or times out:
+     *  - `fail`: Fail the operation, resulting in the replication relationship being unchanged.
+     *  - `split`: Split the replica from its source, resulting in two individual read-write
+     *      file shares. Because the final sync was not completed, the replica may be
+     *      out-of-date. This is useful in disaster recovery scenarios where the source is known
+     *      to be unreachable.
+     */
+    fallbackPolicy?: FailoverShareConstants.FallbackPolicy | string;
+    /** The failover timeout in seconds.
+     *
+     *  If the timeout is reached, the `fallback_policy` will be triggered.
+     */
+    timeout?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `failoverShare` operation. */
+  export namespace FailoverShareConstants {
+    /** The action to take if the failover request is accepted but cannot be performed or times out: - `fail`: Fail the operation, resulting in the replication relationship being unchanged. - `split`: Split the replica from its source, resulting in two individual read-write file shares. Because the final sync was not completed, the replica may be out-of-date. This is useful in disaster recovery scenarios where the source is known to be unreachable. */
+    export enum FallbackPolicy {
+      FAIL = 'fail',
+      SPLIT = 'split',
+    }
+  }
+
+  /** Parameters for the `listShareMountTargets` operation. */
+  export interface ListShareMountTargetsParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createShareMountTarget` operation. */
+  export interface CreateShareMountTargetParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The share mount target prototype object. */
+    shareMountTargetPrototype: ShareMountTargetPrototype;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteShareMountTarget` operation. */
+  export interface DeleteShareMountTargetParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The share mount target identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getShareMountTarget` operation. */
+  export interface GetShareMountTargetParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The share mount target identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateShareMountTarget` operation. */
+  export interface UpdateShareMountTargetParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The share mount target identifier. */
+    id: string;
+    /** The name for this share mount target. The name must not be used by another mount target for the file share. */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteShareSource` operation. */
+  export interface DeleteShareSourceParams {
+    /** The file share identifier. */
+    shareId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getShareSource` operation. */
+  export interface GetShareSourceParams {
+    /** The file share identifier. */
+    shareId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `listRegions` operation. */
   export interface ListRegionsParams {
     headers?: OutgoingHttpHeaders;
@@ -24875,6 +26559,35 @@ namespace VpcV1 {
     regionName: string;
     /** The zone name. */
     name: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listVirtualNetworkInterfaces` operation. */
+  export interface ListVirtualNetworkInterfacesParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
+    resourceGroupId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getVirtualNetworkInterface` operation. */
+  export interface GetVirtualNetworkInterfaceParams {
+    /** The virtual network interface identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateVirtualNetworkInterface` operation. */
+  export interface UpdateVirtualNetworkInterfaceParams {
+    /** The virtual network interface identifier. */
+    id: string;
+    /** The name for this virtual network interface. The name is unique across all virtual network interfaces in the
+     *  VPC.
+     */
+    name?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -25276,7 +26989,7 @@ namespace VpcV1 {
      *  Specify `null` to remove an existing lower bound.
      */
     portMin?: number;
-    /** The IP addresses or security groups from which this rule will allow traffic (or to
+    /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
      *  security group. A CIDR block of `0.0.0.0/0` will allow traffic from any source (or to
      *  any destination, for outbound rules).
@@ -27096,8 +28809,8 @@ namespace VpcV1 {
      */
     storageBucket: LegacyCloudObjectStorageBucketIdentity;
     /** The target this collector will collect flow logs for. If the target is an instance,
-     *  subnet, or VPC, flow logs will not be collected for any network interfaces within the
-     *  target that are themselves the target of a more specific flow log collector.
+     *  subnet, or VPC, flow logs will not be collected for any instance network interfaces within
+     *  the target that are themselves the target of a more specific flow log collector.
      */
     target: FlowLogCollectorTargetPrototype;
     /** Indicates whether this collector will be active upon creation. */
@@ -27218,8 +28931,8 @@ namespace VpcV1 {
     last_job_completed_at?: string;
     /** The lifecycle state of the backup policy. */
     lifecycle_state: string;
-    /** A resource type this backup policy applies to. Resources that have both a matching type and a matching user
-     *  tag will be subject to the backup policy.
+    /** The resource types this backup policy applies to. Resources that have both a matching type and a matching
+     *  user tag will be subject to the backup policy.
      *
      *  The enumerated values for this property will expand in the future. When processing this property, check for and
      *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
@@ -27545,7 +29258,7 @@ namespace VpcV1 {
 
   /** BareMetalServer. */
   export interface BareMetalServer {
-    /** The total bandwidth (in megabits per second) shared across the bare metal server's network interfaces. */
+    /** The total bandwidth (in megabits per second) shared across the bare metal server network interfaces. */
     bandwidth: number;
     /** The possible resource types for this property are expected to expand in the future. */
     boot_target: BareMetalServerBootTarget;
@@ -27578,9 +29291,9 @@ namespace VpcV1 {
     memory: number;
     /** The name for this bare metal server. The name is unique across all bare metal servers in the region. */
     name: string;
-    /** The network interfaces for this bare metal server, including the primary network interface. */
+    /** The bare metal server network interfaces, including the primary interface. */
     network_interfaces: NetworkInterfaceBareMetalServerContextReference[];
-    /** Primary network interface. */
+    /** The primary bare metal server network interface. */
     primary_network_interface: NetworkInterfaceBareMetalServerContextReference;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
      *  for this bare metal server.
@@ -27725,7 +29438,7 @@ namespace VpcV1 {
      *  server as cloud-init vendor data. For cloud-init enabled images, these keys will also be added as SSH authorized
      *  keys for the administrative user.
      *
-     *  For Windows images, at least one key must be specified, and one will be chosen to encrypt the administrator
+     *  For Windows images, at least one key must be specified, and one will be selected to encrypt the administrator
      *  password. Keys are optional for other images, but if no keys are specified, the instance will be inaccessible
      *  unless the specified image provides another means of access.
      */
@@ -27750,31 +29463,29 @@ namespace VpcV1 {
 
   /** BareMetalServerNetworkInterface. */
   export interface BareMetalServerNetworkInterface {
-    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
-     *  on this interface. If true, source IP spoofing is allowed on this interface.
-     */
+    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface. */
     allow_ip_spoofing: boolean;
-    /** The date and time that the network interface was created. */
+    /** The date and time that the bare metal server network interface was created. */
     created_at: string;
     /** If `true`:
      *  - The VPC infrastructure performs any needed NAT operations.
      *  - `floating_ips` must not have more than one floating IP.
      *
      *  If `false`:
-     *  - Packets are passed unchanged to/from the network interface,
+     *  - Packets are passed unchanged to/from the bare metal server network interface,
      *    allowing the workload to perform any needed NAT operations.
      *  - `allow_ip_spoofing` must be `false`.
      *  - `interface_type` must not be `hipersocket`.
      */
     enable_infrastructure_nat: boolean;
-    /** The floating IPs associated with this network interface. */
+    /** The floating IPs associated with this bare metal server network interface. */
     floating_ips: FloatingIPReference[];
-    /** The URL for this network interface. */
+    /** The URL for this bare metal server network interface. */
     href: string;
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this bare metal server network interface. */
     id: string;
-    /** The network interface type:
-     *  - `hipersocket`: a virtual network device that provides high-speed TCP/IP connectivity
+    /** The interface type:
+     *  - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity
      *    within a `s390x` based system
      *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
      *    server is stopped
@@ -27792,18 +29503,20 @@ namespace VpcV1 {
      *  which the unexpected property value was encountered.
      */
     interface_type: string;
-    /** The MAC address of the interface.  If absent, the value is not known. */
+    /** The MAC address of this bare metal server network interface. If the MAC address has not yet been selected,
+     *  the value will be an empty string.
+     */
     mac_address: string;
-    /** The name for this network interface. */
+    /** The name for this bare metal server network interface. */
     name: string;
-    /** The network interface port speed in Mbps. */
+    /** The bare metal server network interface port speed in Mbps. */
     port_speed: number;
     primary_ip: ReservedIPReference;
     /** The resource type. */
     resource_type: string;
-    /** The security groups targeting this network interface. */
+    /** The security groups targeting this bare metal server network interface. */
     security_groups: SecurityGroupReference[];
-    /** The status of the network interface. */
+    /** The status of the bare metal server network interface. */
     status: string;
     /** The associated subnet. */
     subnet: SubnetReference;
@@ -27817,7 +29530,7 @@ namespace VpcV1 {
     first: BareMetalServerNetworkInterfaceCollectionFirst;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
-    /** Collection of network interfaces. */
+    /** Collection of bare metal server network interfaces. */
     network_interfaces: BareMetalServerNetworkInterface[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: BareMetalServerNetworkInterfaceCollectionNext;
@@ -27839,23 +29552,21 @@ namespace VpcV1 {
 
   /** BareMetalServerNetworkInterfacePrototype. */
   export interface BareMetalServerNetworkInterfacePrototype {
-    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
-     *  on this interface. If true, source IP spoofing is allowed on this interface.
-     */
+    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface. */
     allow_ip_spoofing?: boolean;
     /** If `true`:
      *  - The VPC infrastructure performs any needed NAT operations.
      *  - `floating_ips` must not have more than one floating IP.
      *
      *  If `false`:
-     *  - Packets are passed unchanged to/from the network interface,
+     *  - Packets are passed unchanged to/from the bare metal server network interface,
      *    allowing the workload to perform any needed NAT operations.
      *  - `allow_ip_spoofing` must be `false`.
      *  - `interface_type` must not be `hipersocket`.
      */
     enable_infrastructure_nat?: boolean;
-    /** The network interface type:
-     *  - `hipersocket`: a virtual network device that provides high-speed TCP/IP connectivity
+    /** The interface type:
+     *  - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity
      *    within a `s390x` based system
      *    - Not supported on bare metal servers with a `cpu.architecture` of `amd64`
      *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
@@ -27872,31 +29583,42 @@ namespace VpcV1 {
      *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
      */
     interface_type: string;
-    /** The name for this network interface. The name must not be used by another network interface on the bare
-     *  metal server. If unspecified, the name will be a hyphenated list of randomly-selected words.
+    /** The name for this bare metal server network interface. The name must not be used by another network
+     *  interface on the bare metal server. If unspecified, the name will be a hyphenated list of randomly-selected
+     *  words.
      */
     name?: string;
-    /** The primary IP address to bind to the network interface. This can be specified using
-     *  an existing reserved IP, or a prototype object for a new reserved IP.
+    /** The primary IP address to bind to the bare metal server network interface. This can be
+     *  specified using an existing reserved IP, or a prototype object for a new reserved IP.
      *
      *  If an existing reserved IP or a prototype object with an address is specified, it must
-     *  be available on the network interface's subnet. Otherwise, an available address on the
-     *  subnet will be automatically selected and reserved.
+     *  be available on the bare metal server network interface's subnet. Otherwise, an
+     *  available address on the subnet will be automatically selected and reserved.
      */
     primary_ip?: NetworkInterfaceIPPrototype;
-    /** The security groups to use for this network interface. If unspecified, the VPC's default security group is
-     *  used.
+    /** The security groups to use for this bare metal server network interface. If unspecified, the VPC's default
+     *  security group is used.
      */
     security_groups?: SecurityGroupIdentity[];
     /** The associated subnet. */
     subnet: SubnetIdentity;
   }
 
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface BareMetalServerNetworkInterfaceReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface BareMetalServerNetworkInterfaceReferenceTargetContextDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
   /** BareMetalServerPrimaryNetworkInterfacePrototype. */
   export interface BareMetalServerPrimaryNetworkInterfacePrototype {
-    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
-     *  on this interface. If true, source IP spoofing is allowed on this interface.
-     */
+    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface. */
     allow_ip_spoofing?: boolean;
     /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. */
     allowed_vlans?: number[];
@@ -27905,14 +29627,14 @@ namespace VpcV1 {
      *  - `floating_ips` must not have more than one floating IP.
      *
      *  If `false`:
-     *  - Packets are passed unchanged to/from the network interface,
+     *  - Packets are passed unchanged to/from the bare metal server network interface,
      *    allowing the workload to perform any needed NAT operations.
      *  - `allow_ip_spoofing` must be `false`.
      *  - `interface_type` must not be `hipersocket`.
      */
     enable_infrastructure_nat?: boolean;
-    /** The network interface type:
-     *  - `hipersocket`: a virtual network device that provides high-speed TCP/IP connectivity
+    /** The interface type:
+     *  - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity
      *    within a `s390x` based system.
      *    - Not supported on bare metal servers with a `cpu.architecture` of `amd64`
      *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
@@ -27923,20 +29645,21 @@ namespace VpcV1 {
      *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
      */
     interface_type?: string;
-    /** The name for this network interface. The name must not be used by another network interface on the bare
-     *  metal server. If unspecified, the name will be a hyphenated list of randomly-selected words.
+    /** The name for this bare metal server network interface. The name must not be used by another network
+     *  interface on the bare metal server. If unspecified, the name will be a hyphenated list of randomly-selected
+     *  words.
      */
     name?: string;
-    /** The primary IP address to bind to the network interface. This can be specified using
-     *  an existing reserved IP, or a prototype object for a new reserved IP.
+    /** The primary IP address to bind to the bare metal server network interface. This can be
+     *  specified using an existing reserved IP, or a prototype object for a new reserved IP.
      *
      *  If an existing reserved IP or a prototype object with an address is specified, it must
-     *  be available on the network interface's subnet. Otherwise, an available address on the
-     *  subnet will be automatically selected and reserved.
+     *  be available on the bare metal server network interface's subnet. Otherwise, an
+     *  available address on the subnet will be automatically selected and reserved.
      */
     primary_ip?: NetworkInterfaceIPPrototype;
-    /** The security groups to use for this network interface. If unspecified, the VPC's default security group is
-     *  used.
+    /** The security groups to use for this bare metal server network interface. If unspecified, the VPC's default
+     *  security group is used.
      */
     security_groups?: SecurityGroupIdentity[];
     /** The associated subnet. */
@@ -28655,9 +30378,9 @@ namespace VpcV1 {
      *  [Direct Link](https://cloud.ibm.com/docs/dl) to this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      */
     route_direct_link_ingress: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from the internet.
@@ -28666,27 +30389,27 @@ namespace VpcV1 {
      *  - Traffic destined for IP addresses associated with public gateways will not be
      *    subject to routes in this routing table.
      *  - Routes with an action of deliver are treated as drop unless the `next_hop` is an
-     *    IP address bound to a network interface on a subnet in the route's `zone`.
-     *    Therefore, if an incoming packet matches a route with a `next_hop` of an
-     *    internet-bound IP address or a VPN gateway connection, the packet will be dropped.
+     *    IP address in a subnet in the route's `zone`. Therefore, if an incoming packet
+     *    matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+     *    connection, the packet will be dropped.
      */
     route_internet_ingress: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from from [Transit
      *  Gateway](https://cloud.ibm.com/docs/transit-gateway) to this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      */
     route_transit_gateway_ingress: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from subnets in other zones in
      *  this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      */
     route_vpc_zone_ingress: boolean;
     /** The routes for the default routing table for this VPC. The table is created with no routes, but routes may
@@ -28953,16 +30676,16 @@ namespace VpcV1 {
     /** The Cloud Object Storage bucket where the collected flows are logged. */
     storage_bucket: LegacyCloudObjectStorageBucketReference;
     /** The target this collector is collecting flow logs for.
-     *  - If the target is a network interface, flow logs will be collected
-     *    for that network interface.
+     *  - If the target is an instance network interface, flow logs will be collected
+     *    for that instance network interface.
      *  - If the target is a virtual server instance, flow logs will be collected
-     *    for all network interfaces attached to that instance.
+     *    for all network interfaces on that instance.
      *  - If the target is a subnet, flow logs will be collected
-     *    for all network interfaces attached to that subnet.
-     *  - If the target is a VPC, flow logs will be collected for network interfaces
+     *    for all instance network interfaces attached to that subnet.
+     *  - If the target is a VPC, flow logs will be collected for instance network interfaces
      *    attached to all subnets within that VPC.
      *  If the target is an instance, subnet, or VPC, flow logs will not be collected
-     *  for any network interfaces within the target that are themselves the target of
+     *  for any instance network interfaces within the target that are themselves the target of
      *  a more specific flow log collector.
      */
     target: FlowLogCollectorTarget;
@@ -28996,11 +30719,11 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** The target this collector is collecting flow logs for. - If the target is a network interface, flow logs will be collected for that network interface. - If the target is a virtual server instance, flow logs will be collected for all network interfaces attached to that instance. - If the target is a subnet, flow logs will be collected for all network interfaces attached to that subnet. - If the target is a VPC, flow logs will be collected for network interfaces attached to all subnets within that VPC. If the target is an instance, subnet, or VPC, flow logs will not be collected for any network interfaces within the target that are themselves the target of a more specific flow log collector. */
+  /** The target this collector is collecting flow logs for. - If the target is an instance network interface, flow logs will be collected for that instance network interface. - If the target is a virtual server instance, flow logs will be collected for all network interfaces on that instance. - If the target is a subnet, flow logs will be collected for all instance network interfaces attached to that subnet. - If the target is a VPC, flow logs will be collected for instance network interfaces attached to all subnets within that VPC. If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network interfaces within the target that are themselves the target of a more specific flow log collector. */
   export interface FlowLogCollectorTarget {
   }
 
-  /** The target this collector will collect flow logs for. If the target is an instance, subnet, or VPC, flow logs will not be collected for any network interfaces within the target that are themselves the target of a more specific flow log collector. */
+  /** The target this collector will collect flow logs for. If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network interfaces within the target that are themselves the target of a more specific flow log collector. */
   export interface FlowLogCollectorTargetPrototype {
   }
 
@@ -29209,6 +30932,11 @@ namespace VpcV1 {
     created_at: string;
     /** The CRN for this image. */
     crn: string;
+    /** The deprecation date and time (UTC) for this image.
+     *
+     *  If absent, no deprecation date and time has been set.
+     */
+    deprecation_at?: string;
     /** The type of encryption used on the image. */
     encryption: string;
     /** The key that will be used to encrypt volumes created from this image (unless an
@@ -29230,6 +30958,11 @@ namespace VpcV1 {
     minimum_provisioned_size?: number;
     /** The name for this image. The name is unique across all images in the region. */
     name: string;
+    /** The obsolescence date and time (UTC) for this image.
+     *
+     *  If absent, no obsolescence date and time has been set.
+     */
+    obsolescence_at?: string;
     /** The operating system included in this image. */
     operating_system?: OperatingSystem;
     /** The resource group for this image. */
@@ -29245,8 +30978,9 @@ namespace VpcV1 {
      *  - available: image can be used (provisionable)
      *  - deleting: image is being deleted, and can no longer be used to provision new
      *    resources
-     *  - deprecated: image is administratively slated to be deleted
+     *  - deprecated: image is administratively slated to become `obsolete`
      *  - failed: image is corrupt or did not pass validation
+     *  - obsolete: image administratively set to not be used for new resources
      *  - pending: image is being imported and is not yet `available`
      *  - unusable: image cannot be used (see `status_reasons[]` for possible remediation)
      *
@@ -29441,11 +31175,34 @@ namespace VpcV1 {
 
   /** ImagePrototype. */
   export interface ImagePrototype {
+    /** The deprecation date and time to set for this image.
+     *
+     *  The date and time must not be in the past, and must be earlier than `obsolescence_at`
+     *  (if `obsolescence_at` is set).
+     *
+     *  If unspecified, no deprecation date and time will be set.
+     *
+     *  If the deprecation date and time is reached while the image has a status of `pending`, the image's status will
+     *  transition to `deprecated` upon its successful creation (or
+     *  `obsolete` if the obsolescence date and time was also reached).
+     */
+    deprecation_at?: string;
     /** The name for this image. The name must not be used by another image in the region. Names starting with
      *  `ibm-` are reserved for system-provided images, and are not allowed. If unspecified, the name will be a
      *  hyphenated list of randomly-selected words.
      */
     name?: string;
+    /** The obsolescence date and time to set for this image.
+     *
+     *  The date and time must not be in the past, and must be later than `deprecation_at` (if
+     *  `deprecation_at` is set).
+     *
+     *  If unspecified, no obsolescence date and time will be set.
+     *
+     *  If the obsolescence date and time is reached while the image has a status of
+     *  `pending`, the image's status will transition to `obsolete` upon its successful creation.
+     */
+    obsolescence_at?: string;
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
      */
@@ -29506,8 +31263,8 @@ namespace VpcV1 {
   export interface Instance {
     /** The availability policy for this virtual server instance. */
     availability_policy: InstanceAvailabilityPolicy;
-    /** The total bandwidth (in megabits per second) shared across the virtual server instance's network interfaces
-     *  and storage volumes.
+    /** The total bandwidth (in megabits per second) shared across the instance network interfaces and storage
+     *  volumes of virtual server instance.
      */
     bandwidth: number;
     /** Boot volume attachment. */
@@ -29549,11 +31306,11 @@ namespace VpcV1 {
      *  region.
      */
     name: string;
-    /** The network interfaces for this virtual server instance, including the primary network interface. */
+    /** The instance network interfaces, including the primary instance network interface. */
     network_interfaces: NetworkInterfaceInstanceContextReference[];
     /** The placement restrictions for the virtual server instance. */
     placement_target?: InstancePlacementTarget;
-    /** Primary network interface. */
+    /** The primary instance network interface. */
     primary_network_interface: NetworkInterfaceInstanceContextReference;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) for this virtual server instance. */
     profile: InstanceProfileReference;
@@ -30288,7 +32045,7 @@ namespace VpcV1 {
     response_hop_limit?: number;
   }
 
-  /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. - Have the same `vcpu.architecture`. - Support the number of network interfaces currently attached to the instance. */
+  /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. - Have the same `vcpu.architecture`. - Support the number of network interfaces the instance currently has. */
   export interface InstancePatchProfile {
   }
 
@@ -30471,7 +32228,7 @@ namespace VpcV1 {
      *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
      *  added as SSH authorized keys for the administrative user.
      *
-     *  For Windows images, the keys of type `rsa` must be specified, and one will be chosen to encrypt [the
+     *  For Windows images, the keys of type `rsa` must be specified, and one will be selected to encrypt [the
      *  administrator password](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization). Keys are optional for
      *  other images, but if no keys are specified, the instance will be inaccessible unless the specified image
      *  provides another means of access.
@@ -30515,7 +32272,7 @@ namespace VpcV1 {
     volume_attachments?: VolumeAttachmentPrototype[];
     /** The VPC this virtual server instance will reside in.
      *
-     *  If specified, it must match the VPC for the subnets of the instance's network
+     *  If specified, it must match the VPC for the subnets of the instance network
      *  interfaces.
      */
     vpc?: VPCIdentity;
@@ -30579,7 +32336,7 @@ namespace VpcV1 {
      *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
      *  added as SSH authorized keys for the administrative user.
      *
-     *  For Windows images, the keys of type `rsa` must be specified, and one will be chosen to encrypt [the
+     *  For Windows images, the keys of type `rsa` must be specified, and one will be selected to encrypt [the
      *  administrator password](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization). Keys are optional for
      *  other images, but if no keys are specified, the instance will be inaccessible unless the specified image
      *  provides another means of access.
@@ -30617,7 +32374,7 @@ namespace VpcV1 {
     volume_attachments?: VolumeAttachmentPrototype[];
     /** The VPC this virtual server instance will reside in.
      *
-     *  If specified, it must match the VPC for the subnets of the instance's network
+     *  If specified, it must match the VPC for the subnets of the instance network
      *  interfaces.
      */
     vpc?: VPCIdentity;
@@ -30669,7 +32426,7 @@ namespace VpcV1 {
      *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
      *  added as SSH authorized keys for the administrative user.
      *
-     *  For Windows images, the keys of type `rsa` must be specified, and one will be chosen to encrypt [the
+     *  For Windows images, the keys of type `rsa` must be specified, and one will be selected to encrypt [the
      *  administrator password](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization). Keys are optional for
      *  other images, but if no keys are specified, the instance will be inaccessible unless the specified image
      *  provides another means of access.
@@ -30711,7 +32468,7 @@ namespace VpcV1 {
     volume_attachments?: VolumeAttachmentPrototype[];
     /** The VPC this virtual server instance will reside in.
      *
-     *  If specified, it must match the VPC for the subnets of the instance's network
+     *  If specified, it must match the VPC for the subnets of the instance network
      *  interfaces.
      */
     vpc?: VPCIdentity;
@@ -32103,32 +33860,30 @@ namespace VpcV1 {
 
   /** NetworkInterface. */
   export interface NetworkInterface {
-    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
-     *  on this interface. If true, source IP spoofing is allowed on this interface.
-     */
+    /** Indicates whether source IP spoofing is allowed on this instance interface. */
     allow_ip_spoofing: boolean;
-    /** The date and time that the network interface was created. */
+    /** The date and time that the instance network interface was created. */
     created_at: string;
-    /** The floating IPs associated with this network interface. */
+    /** The floating IPs associated with this instance network interface. */
     floating_ips: FloatingIPReference[];
-    /** The URL for this network interface. */
+    /** The URL for this instance network interface. */
     href: string;
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this instance network interface. */
     id: string;
-    /** The name for this network interface. */
+    /** The name for this instance network interface. */
     name: string;
-    /** The network interface port speed in Mbps. */
+    /** The instance network interface port speed in Mbps. */
     port_speed: number;
     primary_ip: ReservedIPReference;
     /** The resource type. */
     resource_type: string;
-    /** The security groups targeting this network interface. */
+    /** The security groups targeting this instance network interface. */
     security_groups: SecurityGroupReference[];
-    /** The status of the network interface. */
+    /** The status of the instance network interface. */
     status: string;
     /** The associated subnet. */
     subnet: SubnetReference;
-    /** The type of this network interface as it relates to an instance. */
+    /** The type of this instance network interface as it relates to an instance. */
     type: string;
   }
 
@@ -32138,11 +33893,11 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceBareMetalServerContextReferenceDeleted;
-    /** The URL for this network interface. */
+    /** The URL for this bare metal server network interface. */
     href: string;
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this bare metal server network interface. */
     id: string;
-    /** The name for this network interface. */
+    /** The name for this bare metal server network interface. */
     name: string;
     primary_ip: ReservedIPReference;
     /** The resource type. */
@@ -32167,11 +33922,11 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceInstanceContextReferenceDeleted;
-    /** The URL for this network interface. */
+    /** The URL for this instance network interface. */
     href: string;
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this instance network interface. */
     id: string;
-    /** The name for this network interface. */
+    /** The name for this instance network interface. */
     name: string;
     primary_ip: ReservedIPReference;
     /** The resource type. */
@@ -32188,24 +33943,22 @@ namespace VpcV1 {
 
   /** NetworkInterfacePrototype. */
   export interface NetworkInterfacePrototype {
-    /** Indicates whether source IP spoofing is allowed on this interface. If false, source IP spoofing is prevented
-     *  on this interface. If true, source IP spoofing is allowed on this interface.
-     */
+    /** Indicates whether source IP spoofing is allowed on this instance interface. */
     allow_ip_spoofing?: boolean;
-    /** The name for network interface. The name must not be used by another network interface on the virtual server
-     *  instance. If unspecified, the name will be a hyphenated list of randomly-selected words.
+    /** The name for the instance network interface. The name must not be used by another network interface on the
+     *  virtual server instance. If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The primary IP address to bind to the network interface. This can be specified using
-     *  an existing reserved IP, or a prototype object for a new reserved IP.
+    /** The primary IP address to bind to the instance network interface. This can be
+     *  specified using an existing reserved IP, or a prototype object for a new reserved IP.
      *
      *  If an existing reserved IP or a prototype object with an address is specified, it must
-     *  be available on the network interface's subnet. Otherwise, an available address on the
-     *  subnet will be automatically selected and reserved.
+     *  be available on the instance network interface's subnet. Otherwise, an
+     *  available address on the subnet will be automatically selected and reserved.
      */
     primary_ip?: NetworkInterfaceIPPrototype;
-    /** The security groups to use for this network interface. If unspecified, the VPC's default security group is
-     *  used.
+    /** The security groups to use for this instance network interface. If unspecified, the VPC's default security
+     *  group is used.
      */
     security_groups?: SecurityGroupIdentity[];
     /** The associated subnet. */
@@ -32226,7 +33979,7 @@ namespace VpcV1 {
 
   /** NetworkInterfaceUnpaginatedCollection. */
   export interface NetworkInterfaceUnpaginatedCollection {
-    /** Collection of network interfaces. */
+    /** Collection of instance network interfaces. */
     network_interfaces: NetworkInterface[];
   }
 
@@ -32523,6 +34276,32 @@ namespace VpcV1 {
     total_count: number;
   }
 
+  /** ReservedIPCollectionBareMetalServerNetworkInterfaceContext. */
+  export interface ReservedIPCollectionBareMetalServerNetworkInterfaceContext {
+    /** A link to the first page of resources. */
+    first: ReservedIPCollectionBareMetalServerNetworkInterfaceContextFirst;
+    /** Collection of reserved IPs bound to a bare metal server network interface. */
+    ips: ReservedIP[];
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: ReservedIPCollectionBareMetalServerNetworkInterfaceContextNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface ReservedIPCollectionBareMetalServerNetworkInterfaceContextFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface ReservedIPCollectionBareMetalServerNetworkInterfaceContextNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
   /** ReservedIPCollectionEndpointGatewayContext. */
   export interface ReservedIPCollectionEndpointGatewayContext {
     /** A link to the first page of resources. */
@@ -32555,28 +34334,28 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** ReservedIPCollectionNetworkInterfaceContext. */
-  export interface ReservedIPCollectionNetworkInterfaceContext {
+  /** ReservedIPCollectionInstanceNetworkInterfaceContext. */
+  export interface ReservedIPCollectionInstanceNetworkInterfaceContext {
     /** A link to the first page of resources. */
-    first: ReservedIPCollectionNetworkInterfaceContextFirst;
-    /** Collection of reserved IPs bound to a network interface. */
+    first: ReservedIPCollectionInstanceNetworkInterfaceContextFirst;
+    /** Collection of reserved IPs bound to an instance network interface. */
     ips: ReservedIP[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ReservedIPCollectionNetworkInterfaceContextNext;
+    next?: ReservedIPCollectionInstanceNetworkInterfaceContextNext;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
   /** A link to the first page of resources. */
-  export interface ReservedIPCollectionNetworkInterfaceContextFirst {
+  export interface ReservedIPCollectionInstanceNetworkInterfaceContextFirst {
     /** The URL for a page of resources. */
     href: string;
   }
 
   /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ReservedIPCollectionNetworkInterfaceContextNext {
+  export interface ReservedIPCollectionInstanceNetworkInterfaceContextNext {
     /** The URL for a page of resources. */
     href: string;
   }
@@ -32662,7 +34441,7 @@ namespace VpcV1 {
      *  and future `origin` values may also have this property set.
      */
     creator?: RouteCreator;
-    /** The destination of the route. */
+    /** The destination CIDR of the route. */
     destination: string;
     /** The URL for this route. */
     href: string;
@@ -32764,7 +34543,7 @@ namespace VpcV1 {
      *  and future `origin` values may also have this property set.
      */
     creator?: RouteCreator;
-    /** The destination of the route. */
+    /** The destination CIDR of the route. */
     destination: string;
     /** The URL for this route. */
     href: string;
@@ -32819,7 +34598,9 @@ namespace VpcV1 {
      *  - `drop`: drop the packet.
      */
     action?: string;
-    /** The destination of the route. At most two routes per `zone` in a table can have the same `destination` and
+    /** The destination CIDR of the route. The host identifier in the CIDR must be zero.
+     *
+     *  At most two routes per `zone` in a table can have the same `destination` and
      *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     destination: string;
@@ -32896,9 +34677,9 @@ namespace VpcV1 {
      *  [Direct Link](https://cloud.ibm.com/docs/dl) to this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      */
     route_direct_link_ingress: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from the internet.
@@ -32907,27 +34688,27 @@ namespace VpcV1 {
      *  - Traffic destined for IP addresses associated with public gateways will not be
      *    subject to routes in this routing table.
      *  - Routes with an action of deliver are treated as drop unless the `next_hop` is an
-     *    IP address bound to a network interface on a subnet in the route's `zone`.
-     *    Therefore, if an incoming packet matches a route with a `next_hop` of an
-     *    internet-bound IP address or a VPN gateway connection, the packet will be dropped.
+     *    IP address in a subnet in the route's `zone`. Therefore, if an incoming packet
+     *    matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+     *    connection, the packet will be dropped.
      */
     route_internet_ingress: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from from [Transit
      *  Gateway](https://cloud.ibm.com/docs/transit-gateway) to this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      */
     route_transit_gateway_ingress: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from subnets in other zones in
      *  this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address bound to a network interface on a subnet
-     *  in the route's `zone`. Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound
-     *  IP address or a VPN gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
+     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
+     *  gateway connection, the packet will be dropped.
      */
     route_vpc_zone_ingress: boolean;
     /** The routes for this routing table. */
@@ -33077,10 +34858,9 @@ namespace VpcV1 {
     ip_version: string;
     /** The protocol to enforce. */
     protocol: string;
-    /** The IP addresses or security groups from which this rule allows traffic (or to which, for
-     *  outbound rules). Can be specified as an IP address, a CIDR block, or a security group. A
-     *  CIDR block of `0.0.0.0/0` allows traffic from any source (or to any destination, for
-     *  outbound rules).
+    /** The remote IP addresses or security groups from which this rule allows traffic (or to
+     *  which, for outbound rules). A CIDR block of `0.0.0.0/0` allows traffic from any source
+     *  (or to any destination, for outbound rules).
      */
     remote: SecurityGroupRuleRemote;
   }
@@ -33102,9 +34882,9 @@ namespace VpcV1 {
     ip_version?: string;
     /** The protocol to enforce. */
     protocol: string;
-    /** The IP addresses or security groups from which this rule will allow traffic (or to which,
-     *  for outbound rules). Can be specified as an IP address, a CIDR block, or a security group
-     *  within the VPC.
+    /** The remote IP addresses or security groups from which this rule will allow traffic (or to
+     *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
+     *  security group within the VPC.
      *
      *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source
      *  (or to any destination, for outbound rules).
@@ -33112,15 +34892,15 @@ namespace VpcV1 {
     remote?: SecurityGroupRuleRemotePrototype;
   }
 
-  /** The IP addresses or security groups from which this rule allows traffic (or to which, for outbound rules). Can be specified as an IP address, a CIDR block, or a security group. A CIDR block of `0.0.0.0/0` allows traffic from any source (or to any destination, for outbound rules). */
+  /** The remote IP addresses or security groups from which this rule allows traffic (or to which, for outbound rules). A CIDR block of `0.0.0.0/0` allows traffic from any source (or to any destination, for outbound rules). */
   export interface SecurityGroupRuleRemote {
   }
 
-  /** The IP addresses or security groups from which this rule will allow traffic (or to which, for outbound rules). Can be specified as an IP address, a CIDR block, or a security group. A CIDR block of `0.0.0.0/0` will allow traffic from any source (or to any destination, for outbound rules). */
+  /** The remote IP addresses or security groups from which this rule will allow traffic (or to which, for outbound rules). Can be specified as an IP address, a CIDR block, or a security group. A CIDR block of `0.0.0.0/0` will allow traffic from any source (or to any destination, for outbound rules). */
   export interface SecurityGroupRuleRemotePatch {
   }
 
-  /** The IP addresses or security groups from which this rule will allow traffic (or to which, for outbound rules). Can be specified as an IP address, a CIDR block, or a security group within the VPC. If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source (or to any destination, for outbound rules). */
+  /** The remote IP addresses or security groups from which this rule will allow traffic (or to which, for outbound rules). Can be specified as an IP address, a CIDR block, or a security group within the VPC. If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source (or to any destination, for outbound rules). */
   export interface SecurityGroupRuleRemotePrototype {
   }
 
@@ -33152,6 +34932,495 @@ namespace VpcV1 {
 
   /** The resource types that can be security group targets are expected to expand in the future. When iterating over security group targets, do not assume that every target resource will be from a known set of resource types. Optionally halt processing and surface an error, or bypass resources of unrecognized types. */
   export interface SecurityGroupTargetReference {
+  }
+
+  /** Share. */
+  export interface Share {
+    /** The access control mode for the share:
+     *
+     *  - `security_group`: The security groups on the virtual network interface for a mount
+     *    target control access to the mount target.
+     *  - `vpc`: All clients in the VPC for a mount target have access to the mount target.
+     *
+     *  The enumerated access control mode values for this property may expand in the future. When processing this
+     *  property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the
+     *  resource on which the unexpected access control mode was encountered.
+     */
+    access_control_mode: string;
+    /** The date and time that the file share is created. */
+    created_at: string;
+    /** The CRN for this file share. */
+    crn: string;
+    /** The type of encryption used for this file share. */
+    encryption: string;
+    /** The key used to encrypt this file share.
+     *
+     *  This property will be present if `encryption_type` is `user_managed`.
+     */
+    encryption_key?: EncryptionKeyReference;
+    /** The URL for this file share. */
+    href: string;
+    /** The unique identifier for this file share. */
+    id: string;
+    /** The maximum input/output operations per second (IOPS) for the file share. In addition, each client accessing
+     *  the share will be restricted to 48,000 IOPS.
+     *
+     *  The maximum IOPS for a share may increase in the future.
+     */
+    iops: number;
+    /** The latest job associated with this file share.
+     *
+     *  This property will be absent if no jobs have been created for this file share.
+     */
+    latest_job?: ShareJob;
+    /** The lifecycle state of the file share. */
+    lifecycle_state: string;
+    /** The mount targets for the file share. */
+    mount_targets: ShareMountTargetReference[];
+    /** The name for this share. The name is unique across all shares in the region. */
+    name: string;
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) for this file share. */
+    profile: ShareProfileReference;
+    /** The replica file share for this source file share.
+     *
+     *  This property will be present when the `replication_role` is `source`.
+     */
+    replica_share?: ShareReference;
+    /** The cron specification for the file share replication schedule.
+     *
+     *  This property will be present when the `replication_role` is `replica`.
+     */
+    replication_cron_spec?: string;
+    /** The replication role of the file share.
+     *
+     *  * `none`: This share is not participating in replication.
+     *  * `replica`: This share is a replication target.
+     *  * `source`: This share is a replication source.
+     */
+    replication_role: string;
+    /** The replication status of the file share.
+     *
+     *  * `active`: This share is actively participating in replication, and the replica's data is up-to-date with the
+     *  replication schedule.
+     *  * `failover_pending`: This share is performing a replication failover.
+     *  * `initializing`: This share is initializing replication.
+     *  * `none`: This share is not participating in replication.
+     *  * `split_pending`: This share is performing a replication split.
+     */
+    replication_status: string;
+    /** The reasons for the current replication status (if any).
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    replication_status_reasons: ShareReplicationStatusReason[];
+    /** The resource group for this file share. */
+    resource_group: ResourceGroupReference;
+    /** The resource type. */
+    resource_type: string;
+    /** The size of the file share rounded up to the next gigabyte.
+     *
+     *  The maximum size for a share may increase in the future.
+     */
+    size: number;
+    /** The source file share for this replica file share.
+     *
+     *  This property will be present when the `replication_role` is `replica`.
+     */
+    source_share?: ShareReference;
+    /** Tags for this resource. */
+    user_tags: string[];
+    /** The zone this file share will reside in. */
+    zone: ZoneReference;
+  }
+
+  /** ShareCollection. */
+  export interface ShareCollection {
+    /** A link to the first page of resources. */
+    first: ShareCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: ShareCollectionNext;
+    /** Collection of file shares. */
+    shares: Share[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface ShareCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface ShareCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** Identifies a file share by a unique property. */
+  export interface ShareIdentity {
+  }
+
+  /** ShareInitialOwner. */
+  export interface ShareInitialOwner {
+    /** The initial group identifier for the file share. */
+    gid?: number;
+    /** The initial user identifier for the file share. */
+    uid?: number;
+  }
+
+  /** ShareJob. */
+  export interface ShareJob {
+    /** The status of the file share job.
+     *
+     *  The enumerated values for this property will expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the file share job on which the
+     *  unexpected property value was encountered.
+     *
+     *  * `cancelled`: This job has been cancelled.
+     *  * `failed`: This job has failed.
+     *  * `queued`: This job is queued.
+     *  * `running`: This job is running.
+     *  * `succeeded`: This job completed successfully.
+     */
+    status: string;
+    /** The reasons for the file share job status (if any).
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    status_reasons: ShareJobStatusReason[];
+    /** The type of the file share job.
+     *
+     *  The enumerated values for this property will expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the file share job on which the
+     *  unexpected property value was encountered.
+     *
+     *  * `replication_failover`: This is a share replication failover job.
+     *  * `replication_init`: This is a share replication is initialization job.
+     *  * `replication_split`: This is a share replication split job.
+     */
+    type: string;
+  }
+
+  /** ShareJobStatusReason. */
+  export interface ShareJobStatusReason {
+    /** A snake case string succinctly identifying the status reason. */
+    code: string;
+    /** An explanation of the status reason. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
+  }
+
+  /** ShareMountTarget. */
+  export interface ShareMountTarget {
+    /** The access control mode for the share:
+     *
+     *  - `security_group`: The security groups on the virtual network interface for a mount
+     *    target control access to the mount target.
+     *  - `vpc`: All clients in the VPC for a mount target have access to the mount target.
+     *
+     *  The enumerated access control mode values for this property may expand in the future. When processing this
+     *  property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the
+     *  resource on which the unexpected access control mode was encountered.
+     */
+    access_control_mode: string;
+    /** The date and time that the share mount target was created. */
+    created_at: string;
+    /** The URL for this share mount target. */
+    href: string;
+    /** The unique identifier for this share mount target. */
+    id: string;
+    /** The lifecycle state of the mount target. */
+    lifecycle_state: string;
+    /** The mount path for the share.  The server component of the mount path may be either an IP address or a fully
+     *  qualified domain name.
+     *
+     *  This property will be absent if the `lifecycle_state` of the mount target is
+     *  'pending', `failed`, or `deleting`.
+     *
+     *  If the share's `access_control_mode` is:
+     *
+     *  - `security_group`: The IP address used in the mount path is the `primary_ip`
+     *    address of the virtual network interface for this share mount target.
+     *  - `vpc`: The fully-qualified domain name used in the mount path is an address that
+     *    resolves to the share mount target.
+     */
+    mount_path?: string;
+    /** The name for this share mount target. The name is unique across all mount targets for the file share. */
+    name: string;
+    /** The primary IP address of the virtual network interface for the share mount target.
+     *
+     *  Absent if `access_control_mode` is `vpc`.
+     */
+    primary_ip?: ReservedIPReference;
+    /** The resource type. */
+    resource_type: string;
+    /** The subnet of the virtual network interface for the share mount target.
+     *
+     *  Absent if `access_control_mode` is `vpc`.
+     */
+    subnet?: SubnetReference;
+    /** The transit encryption mode for this share mount target:
+     *  - `none`: Not encrypted in transit
+     *  - `user_managed`: Encrypted in transit using an instance identity certificate
+     *
+     *  The enumerated values for this property will expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
+     *  unexpected property value was encountered.
+     */
+    transit_encryption: string;
+    /** The virtual network interface for this file share mount target.
+     *
+     *  This property will be present when the `access_control_mode` is `security_group`.
+     */
+    virtual_network_interface?: VirtualNetworkInterfaceReferenceAttachmentContext;
+    /** If `access_control_mode` is:
+     *
+     *  - `security_group`: The VPC for the virtual network interface for this share mount
+     *    target
+     *  - `vpc`: The VPC in which clients can mount the file share using this share
+     *    mount target.
+     */
+    vpc: VPCReference;
+  }
+
+  /** ShareMountTargetCollection. */
+  export interface ShareMountTargetCollection {
+    /** A link to the first page of resources. */
+    first: ShareMountTargetCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** Collection of share mount targets. */
+    mount_targets: ShareMountTarget[];
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: ShareMountTargetCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface ShareMountTargetCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface ShareMountTargetCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** ShareMountTargetPrototype. */
+  export interface ShareMountTargetPrototype {
+    /** The name for this share mount target. The name must not be used by another mount target for the file share. */
+    name?: string;
+    /** The transit encryption mode to use for this share mount target:
+     *  - `none`: Not encrypted in transit.
+     *  - `user_managed`: Encrypted in transit using an instance identity certificate.  The
+     *                    `access_control_mode` for the share must be `security_group`.
+     */
+    transit_encryption?: string;
+  }
+
+  /** ShareMountTargetReference. */
+  export interface ShareMountTargetReference {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: ShareMountTargetReferenceDeleted;
+    /** The URL for this share mount target. */
+    href: string;
+    /** The unique identifier for this share mount target. */
+    id: string;
+    /** The name for this share mount target. The name is unique across all mount targets for the file share. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface ShareMountTargetReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** ShareMountTargetVirtualNetworkInterfacePrototype. */
+  export interface ShareMountTargetVirtualNetworkInterfacePrototype {
+  }
+
+  /** ShareProfile. */
+  export interface ShareProfile {
+    /** The permitted capacity range (in gigabytes) for a share with this profile. */
+    capacity: ShareProfileCapacity;
+    /** The product family this share profile belongs to. */
+    family: string;
+    /** The URL for this share profile. */
+    href: string;
+    /** The permitted IOPS range for a share with this profile. */
+    iops: ShareProfileIOPS;
+    /** The globally unique name for this share profile. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
+  /** ShareProfileCapacity. */
+  export interface ShareProfileCapacity {
+  }
+
+  /** ShareProfileCollection. */
+  export interface ShareProfileCollection {
+    /** A link to the first page of resources. */
+    first: ShareProfileCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: ShareProfileCollectionNext;
+    /** Collection of share profiles. */
+    profiles: ShareProfile[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface ShareProfileCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface ShareProfileCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** ShareProfileIOPS. */
+  export interface ShareProfileIOPS {
+  }
+
+  /** Identifies a share profile by a unique property. */
+  export interface ShareProfileIdentity {
+  }
+
+  /** ShareProfileReference. */
+  export interface ShareProfileReference {
+    /** The URL for this share profile. */
+    href: string;
+    /** The globally unique name for this share profile. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
+  /** SharePrototype. */
+  export interface SharePrototype {
+    /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
+     *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
+     *  size.
+     *
+     *  In addition, each client accessing the share will be restricted to 48,000 IOPS.
+     */
+    iops?: number;
+    /** The mount targets for the file share. Each mount target must be in a unique VPC. */
+    mount_targets?: ShareMountTargetPrototype[];
+    /** The name for this share. The name must not be used by another share in the region. If unspecified, the name
+     *  will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) to use
+     *  for this file share. The profile must support the share's specified IOPS and size.
+     */
+    profile: ShareProfileIdentity;
+    /** Configuration for a replica file share to create and associate with this file share. If
+     *  unspecified, a replica may be subsequently added by creating a new file share with a
+     *  `source_share` referencing this file share.
+     */
+    replica_share?: SharePrototypeShareContext;
+    /** Tags for this resource. */
+    user_tags?: string[];
+    /** The zone this file share will reside in.
+     *  For a replica share, this must be a different zone in the same region as the source share.
+     */
+    zone: ZoneIdentity;
+  }
+
+  /** Configuration for a replica file share to create and associate with this file share. If unspecified, a replica may be subsequently added by creating a new file share with a `source_share` referencing this file share. */
+  export interface SharePrototypeShareContext {
+    /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
+     *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
+     *  size.
+     *
+     *  In addition, each client accessing the share will be restricted to 48,000 IOPS.
+     */
+    iops?: number;
+    /** The mount targets for this replica file share. Each mount target must be in a unique VPC.
+     *
+     *  A replica's mount targets must be mounted read-only.
+     */
+    mount_targets?: ShareMountTargetPrototype[];
+    /** The name for this share. The name must not be used by another share in the region. If unspecified, the name
+     *  will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) to use
+     *  for this file share. The profile must support the share's specified IOPS and size.
+     */
+    profile: ShareProfileIdentity;
+    /** The cron specification for the file share replication schedule.
+     *
+     *  Replication of a share can be scheduled to occur at most once per hour.
+     */
+    replication_cron_spec: string;
+    /** The resource group to use. If unspecified, the resource group from the source share will be used. */
+    resource_group?: ResourceGroupIdentity;
+    /** Tags for this resource. */
+    user_tags?: string[];
+    /** The zone this replica file share will reside in.
+     *
+     *  Must be a different zone in the same region as the source share.
+     */
+    zone: ZoneIdentity;
+  }
+
+  /** ShareReference. */
+  export interface ShareReference {
+    /** The CRN for this file share. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: ShareReferenceDeleted;
+    /** The URL for this file share. */
+    href: string;
+    /** The unique identifier for this file share. */
+    id: string;
+    /** The name for this share. The name is unique across all shares in the region. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface ShareReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** ShareReplicationStatusReason. */
+  export interface ShareReplicationStatusReason {
+    /** A snake case string succinctly identifying the status reason. */
+    code: string;
+    /** An explanation of the status reason. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
   }
 
   /** Snapshot. */
@@ -33705,7 +35974,7 @@ namespace VpcV1 {
     name: string;
     /** The IP address of the peer VPN gateway. */
     peer_address: string;
-    /** The preshared key. */
+    /** The pre-shared key. */
     psk: string;
     /** The resource type. */
     resource_type: string;
@@ -33791,7 +36060,7 @@ namespace VpcV1 {
     name?: string;
     /** The IP address of the peer VPN gateway. */
     peer_address?: string;
-    /** The preshared key. */
+    /** The pre-shared key. */
     psk?: string;
   }
 
@@ -33821,7 +36090,7 @@ namespace VpcV1 {
     name?: string;
     /** The IP address of the peer VPN gateway. */
     peer_address: string;
-    /** The preshared key. */
+    /** The pre-shared key. */
     psk: string;
   }
 
@@ -34131,6 +36400,117 @@ namespace VpcV1 {
   export interface VPNServerRouteCollectionNext {
     /** The URL for a page of resources. */
     href: string;
+  }
+
+  /** VirtualNetworkInterface. */
+  export interface VirtualNetworkInterface {
+    /** Indicates whether this virtual network interface will be automatically deleted when `target` is deleted. */
+    auto_delete: boolean;
+    /** The date and time that the virtual network interface was created. */
+    created_at: string;
+    /** The CRN for this virtual network interface. */
+    crn: string;
+    /** The URL for this virtual network interface. */
+    href: string;
+    /** The unique identifier for this virtual network interface. */
+    id: string;
+    /** The lifecycle state of the virtual network interface. */
+    lifecycle_state: string;
+    /** The name for this virtual network interface. The name is unique across all virtual network interfaces in the
+     *  VPC.
+     */
+    name: string;
+    /** The reserved IP for this virtual network interface. */
+    primary_ip: ReservedIPReference;
+    /** The resource group for this virtual network interface. */
+    resource_group: ResourceGroupReference;
+    /** The resource type. */
+    resource_type: string;
+    /** The security groups for this virtual network interface. */
+    security_groups: SecurityGroupReference[];
+    /** The associated subnet. */
+    subnet: SubnetReference;
+    /** The target of this virtual network interface.
+     *
+     *  If absent, this virtual network interface is not attached to a target.
+     */
+    target?: VirtualNetworkInterfaceTarget;
+    /** The VPC this virtual network interface resides in. */
+    vpc: VPCReference;
+    /** The zone this virtual network interface resides in. */
+    zone: ZoneReference;
+  }
+
+  /** VirtualNetworkInterfaceCollection. */
+  export interface VirtualNetworkInterfaceCollection {
+    /** A link to the first page of resources. */
+    first: VirtualNetworkInterfaceCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: VirtualNetworkInterfaceCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+    /** Collection of virtual network interfaces. */
+    virtual_network_interfaces: VirtualNetworkInterface[];
+  }
+
+  /** A link to the first page of resources. */
+  export interface VirtualNetworkInterfaceCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface VirtualNetworkInterfaceCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** VirtualNetworkInterfacePrimaryIPPrototype. */
+  export interface VirtualNetworkInterfacePrimaryIPPrototype {
+  }
+
+  /** VirtualNetworkInterfaceReferenceAttachmentContext. */
+  export interface VirtualNetworkInterfaceReferenceAttachmentContext {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: VirtualNetworkInterfaceReferenceAttachmentContextDeleted;
+    /** The URL for this virtual network interface. */
+    href: string;
+    /** The unique identifier for this virtual network interface. */
+    id: string;
+    /** The name for this virtual network interface. The name is unique across all virtual network interfaces in the
+     *  VPC.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface VirtualNetworkInterfaceReferenceAttachmentContextDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface VirtualNetworkInterfaceReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface VirtualNetworkInterfaceReferenceReservedIPTargetContextDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** A virtual network interface target. The resource types that can be virtual network interface targets are expected to expand in the future. When iterating over virtual network interface targets, do not assume that every target resource will be from a known set of resource types. Optionally halt processing and surface an error, or bypass resources of unrecognized types. */
+  export interface VirtualNetworkInterfaceTarget {
   }
 
   /** Volume. */
@@ -34791,13 +37171,13 @@ namespace VpcV1 {
     vlan: number;
   }
 
-  /** The total bandwidth shared across the network interfaces of a bare metal server with this profile depends on its configuration. */
+  /** The total bandwidth shared across the bare metal server network interfaces of a bare metal server with this profile depends on its configuration. */
   export interface BareMetalServerProfileBandwidthDependent extends BareMetalServerProfileBandwidth {
     /** The type for this profile field. */
     type: string;
   }
 
-  /** The permitted total bandwidth values (in megabits per second) shared across the network interfaces of a bare metal server with this profile. */
+  /** The permitted total bandwidth values (in megabits per second) shared across the bare metal server network interfaces of a bare metal server with this profile. */
   export interface BareMetalServerProfileBandwidthEnum extends BareMetalServerProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -34807,7 +37187,7 @@ namespace VpcV1 {
     values: number[];
   }
 
-  /** The total bandwidth (in megabits per second) shared across the network interfaces of a bare metal server with this profile. */
+  /** The total bandwidth (in megabits per second) shared across the bare metal server network interfaces of a bare metal server with this profile. */
   export interface BareMetalServerProfileBandwidthFixed extends BareMetalServerProfileBandwidth {
     /** The type for this profile field. */
     type: string;
@@ -34815,7 +37195,7 @@ namespace VpcV1 {
     value: number;
   }
 
-  /** The permitted total bandwidth range (in megabits per second) shared across the network interfaces of a bare metal server with this profile. */
+  /** The permitted total bandwidth range (in megabits per second) shared across the bare metal server network interfaces of a bare metal server with this profile. */
   export interface BareMetalServerProfileBandwidthRange extends BareMetalServerProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -35031,13 +37411,13 @@ namespace VpcV1 {
     type: string;
   }
 
-  /** The number of network interfaces supported on a bare metal server with this profile is dependent on its configuration. */
+  /** The number of bare metal server network interfaces supported on a bare metal server with this profile is dependent on its configuration. */
   export interface BareMetalServerProfileNetworkInterfaceCountDependent extends BareMetalServerProfileNetworkInterfaceCount {
     /** The type for this profile field. */
     type: string;
   }
 
-  /** The number of network interfaces supported on a bare metal server with this profile. */
+  /** The number of bare metal server network interfaces supported on a bare metal server with this profile. */
   export interface BareMetalServerProfileNetworkInterfaceCountRange extends BareMetalServerProfileNetworkInterfaceCount {
     /** The maximum value for this profile field. */
     max?: number;
@@ -35325,12 +37705,29 @@ namespace VpcV1 {
     zone: ZoneIdentity;
   }
 
-  /** Identifies a network interface by a unique property. */
+  /** Identifies an instance network interface by a unique property. */
   export interface FloatingIPTargetPatchNetworkInterfaceIdentity extends FloatingIPTargetPatch {
   }
 
-  /** Identifies a network interface by a unique property. */
+  /** Identifies an instance network interface by a unique property. */
   export interface FloatingIPTargetPrototypeNetworkInterfaceIdentity extends FloatingIPTargetPrototype {
+  }
+
+  /** FloatingIPTargetBareMetalServerNetworkInterfaceReference. */
+  export interface FloatingIPTargetBareMetalServerNetworkInterfaceReference extends FloatingIPTarget {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: BareMetalServerNetworkInterfaceReferenceDeleted;
+    /** The URL for this bare metal server network interface. */
+    href: string;
+    /** The unique identifier for this bare metal server network interface. */
+    id: string;
+    /** The name for this bare metal server network interface. */
+    name: string;
+    primary_ip: ReservedIPReference;
+    /** The resource type. */
+    resource_type: string;
   }
 
   /** FloatingIPTargetNetworkInterfaceReference. */
@@ -35339,11 +37736,11 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceReferenceDeleted;
-    /** The URL for this network interface. */
+    /** The URL for this instance network interface. */
     href: string;
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this instance network interface. */
     id: string;
-    /** The name for this network interface. */
+    /** The name for this instance network interface. */
     name: string;
     primary_ip: ReservedIPReference;
     /** The resource type. */
@@ -35372,7 +37769,7 @@ namespace VpcV1 {
   export interface FlowLogCollectorTargetPrototypeInstanceIdentity extends FlowLogCollectorTargetPrototype {
   }
 
-  /** Identifies a network interface by a unique property. */
+  /** Identifies an instance network interface by a unique property. */
   export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity extends FlowLogCollectorTargetPrototype {
   }
 
@@ -35408,11 +37805,11 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceReferenceTargetContextDeleted;
-    /** The URL for this network interface. */
+    /** The URL for this instance network interface. */
     href: string;
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this instance network interface. */
     id: string;
-    /** The name for this network interface. */
+    /** The name for this instance network interface. */
     name: string;
     /** The resource type. */
     resource_type: string;
@@ -36091,9 +38488,9 @@ namespace VpcV1 {
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
+    /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -36105,9 +38502,9 @@ namespace VpcV1 {
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
+    /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -36117,9 +38514,9 @@ namespace VpcV1 {
   export interface InstancePrototypeInstanceBySourceSnapshot extends InstancePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
+    /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -36142,9 +38539,9 @@ namespace VpcV1 {
     catalog_offering?: InstanceCatalogOfferingPrototype;
     /** The image to use when provisioning the virtual server instance. */
     image?: ImageIdentity;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
+    /** The primary instance network interface to create. */
     primary_network_interface?: NetworkInterfacePrototype;
     /** The template to create this virtual server instance from. */
     source_template: InstanceTemplateIdentity;
@@ -36156,9 +38553,9 @@ namespace VpcV1 {
   export interface InstancePrototypeInstanceByVolume extends InstancePrototype {
     /** The boot volume attachment for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
+    /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -36196,9 +38593,9 @@ namespace VpcV1 {
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
+    /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -36210,9 +38607,9 @@ namespace VpcV1 {
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
+    /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -36222,9 +38619,9 @@ namespace VpcV1 {
   export interface InstanceTemplatePrototypeInstanceTemplateBySourceSnapshot extends InstanceTemplatePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
+    /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
@@ -36247,9 +38644,9 @@ namespace VpcV1 {
     catalog_offering?: InstanceCatalogOfferingPrototype;
     /** The image to use when provisioning the virtual server instance. */
     image?: ImageIdentity;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
+    /** The primary instance network interface to create. */
     primary_network_interface?: NetworkInterfacePrototype;
     /** The template to create this virtual server instance from. */
     source_template: InstanceTemplateIdentity;
@@ -36258,7 +38655,7 @@ namespace VpcV1 {
   }
 
   /** Create an instance by using a catalog offering. */
-  export interface InstanceTemplateInstanceByCatalogOffering extends InstanceTemplate {
+  export interface InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext extends InstanceTemplate {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering
@@ -36271,36 +38668,36 @@ namespace VpcV1 {
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
-    primary_network_interface: NetworkInterfacePrototype;
+    /** The primary instance network interface to create. */
+    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
   /** Create an instance by using an image. */
-  export interface InstanceTemplateInstanceByImage extends InstanceTemplate {
+  export interface InstanceTemplateInstanceByImageInstanceTemplateContext extends InstanceTemplate {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
-    primary_network_interface: NetworkInterfacePrototype;
+    /** The primary instance network interface to create. */
+    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
   /** Create an instance by using a snapshot. */
-  export interface InstanceTemplateInstanceBySourceSnapshot extends InstanceTemplate {
+  export interface InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext extends InstanceTemplate {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
-    /** The additional network interfaces to create for the virtual server instance. */
+    /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary network interface to create for the virtual server instance. */
-    primary_network_interface: NetworkInterfacePrototype;
+    /** The primary instance network interface to create. */
+    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
@@ -36850,6 +39247,22 @@ namespace VpcV1 {
   export interface ReservedIPTargetPrototypeEndpointGatewayIdentity extends ReservedIPTargetPrototype {
   }
 
+  /** ReservedIPTargetBareMetalServerNetworkInterfaceReferenceTargetContext. */
+  export interface ReservedIPTargetBareMetalServerNetworkInterfaceReferenceTargetContext extends ReservedIPTarget {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: BareMetalServerNetworkInterfaceReferenceTargetContextDeleted;
+    /** The URL for this bare metal server network interface. */
+    href: string;
+    /** The unique identifier for this bare metal server network interface. */
+    id: string;
+    /** The name for this bare metal server network interface. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
   /** ReservedIPTargetEndpointGatewayReference. */
   export interface ReservedIPTargetEndpointGatewayReference extends ReservedIPTarget {
     /** The CRN for this endpoint gateway. */
@@ -36904,11 +39317,11 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceReferenceTargetContextDeleted;
-    /** The URL for this network interface. */
+    /** The URL for this instance network interface. */
     href: string;
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this instance network interface. */
     id: string;
-    /** The name for this network interface. */
+    /** The name for this instance network interface. */
     name: string;
     /** The resource type. */
     resource_type: string;
@@ -36945,6 +39358,26 @@ namespace VpcV1 {
     /** The unique identifier for this VPN server. */
     id: string;
     /** The name for this VPN server. The name is unique across all VPN servers in the VPC. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
+  /** ReservedIPTargetVirtualNetworkInterfaceReferenceReservedIPTargetContext. */
+  export interface ReservedIPTargetVirtualNetworkInterfaceReferenceReservedIPTargetContext extends ReservedIPTarget {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: VirtualNetworkInterfaceReferenceReservedIPTargetContextDeleted;
+    /** The URL for this virtual network interface. */
+    href: string;
+    /** The unique identifier for this virtual network interface. */
+    id: string;
+    /** The name for this virtual network interface. The name is unique across all virtual network interfaces in the
+     *  VPC.
+     */
     name: string;
     /** The resource type. */
     resource_type: string;
@@ -37076,9 +39509,9 @@ namespace VpcV1 {
     ip_version?: string;
     /** The protocol to enforce. */
     protocol: string;
-    /** The IP addresses or security groups from which this rule will allow traffic (or to which,
-     *  for outbound rules). Can be specified as an IP address, a CIDR block, or a security group
-     *  within the VPC.
+    /** The remote IP addresses or security groups from which this rule will allow traffic (or to
+     *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
+     *  security group within the VPC.
      *
      *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source
      *  (or to any destination, for outbound rules).
@@ -37102,9 +39535,9 @@ namespace VpcV1 {
     ip_version?: string;
     /** The protocol to enforce. */
     protocol: string;
-    /** The IP addresses or security groups from which this rule will allow traffic (or to which,
-     *  for outbound rules). Can be specified as an IP address, a CIDR block, or a security group
-     *  within the VPC.
+    /** The remote IP addresses or security groups from which this rule will allow traffic (or to
+     *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
+     *  security group within the VPC.
      *
      *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source
      *  (or to any destination, for outbound rules).
@@ -37140,9 +39573,9 @@ namespace VpcV1 {
     port_min?: number;
     /** The protocol to enforce. */
     protocol: string;
-    /** The IP addresses or security groups from which this rule will allow traffic (or to which,
-     *  for outbound rules). Can be specified as an IP address, a CIDR block, or a security group
-     *  within the VPC.
+    /** The remote IP addresses or security groups from which this rule will allow traffic (or to
+     *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
+     *  security group within the VPC.
      *
      *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source
      *  (or to any destination, for outbound rules).
@@ -37263,6 +39696,22 @@ namespace VpcV1 {
     protocol: string;
   }
 
+  /** SecurityGroupTargetReferenceBareMetalServerNetworkInterfaceReferenceTargetContext. */
+  export interface SecurityGroupTargetReferenceBareMetalServerNetworkInterfaceReferenceTargetContext extends SecurityGroupTargetReference {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: BareMetalServerNetworkInterfaceReferenceTargetContextDeleted;
+    /** The URL for this bare metal server network interface. */
+    href: string;
+    /** The unique identifier for this bare metal server network interface. */
+    id: string;
+    /** The name for this bare metal server network interface. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
   /** SecurityGroupTargetReferenceEndpointGatewayReference. */
   export interface SecurityGroupTargetReferenceEndpointGatewayReference extends SecurityGroupTargetReference {
     /** The CRN for this endpoint gateway. */
@@ -37305,11 +39754,11 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceReferenceTargetContextDeleted;
-    /** The URL for this network interface. */
+    /** The URL for this instance network interface. */
     href: string;
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this instance network interface. */
     id: string;
-    /** The name for this network interface. */
+    /** The name for this instance network interface. */
     name: string;
     /** The resource type. */
     resource_type: string;
@@ -37331,6 +39780,239 @@ namespace VpcV1 {
     name: string;
     /** The resource type. */
     resource_type: string;
+  }
+
+  /** SecurityGroupTargetReferenceVirtualNetworkInterfaceReference. */
+  export interface SecurityGroupTargetReferenceVirtualNetworkInterfaceReference extends SecurityGroupTargetReference {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: VirtualNetworkInterfaceReferenceDeleted;
+    /** The URL for this virtual network interface. */
+    href: string;
+    /** The unique identifier for this virtual network interface. */
+    id: string;
+    /** The name for this virtual network interface. The name is unique across all virtual network interfaces in the
+     *  VPC.
+     */
+    name: string;
+    /** The primary IP for this virtual network interface. */
+    primary_ip: ReservedIPReference;
+    /** The resource type. */
+    resource_type: string;
+    /** The associated subnet. */
+    subnet: SubnetReference;
+  }
+
+  /** ShareIdentityByCRN. */
+  export interface ShareIdentityByCRN extends ShareIdentity {
+    /** The CRN for this file share. */
+    crn: string;
+  }
+
+  /** ShareIdentityByHref. */
+  export interface ShareIdentityByHref extends ShareIdentity {
+    /** The URL for this file share. */
+    href: string;
+  }
+
+  /** ShareIdentityById. */
+  export interface ShareIdentityById extends ShareIdentity {
+    /** The unique identifier for this file share. */
+    id: string;
+  }
+
+  /** The virtual network interface for this share mount target.  The virtual network interface's VPC must not be used by a virtual network interface for another mount target for this share. Required if the share's `access_control_mode` is `security_group`. */
+  export interface ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup extends ShareMountTargetPrototype {
+    virtual_network_interface: ShareMountTargetVirtualNetworkInterfacePrototype;
+  }
+
+  /** The VPC in which clients can mount the file share using this mount target.  The VPC must not be used by another mount target for this share. Required if the share's `access_control_mode` is `vpc`. */
+  export interface ShareMountTargetPrototypeShareMountTargetByAccessControlModeVPC extends ShareMountTargetPrototype {
+    /** Identifies a VPC by a unique property. */
+    vpc: VPCIdentity;
+  }
+
+  /** The virtual network interface for this target. */
+  export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfacePrototypeShareMountTargetContext extends ShareMountTargetVirtualNetworkInterfacePrototype {
+    /** The name for this virtual network interface. The name must not be used by another virtual network interface
+     *  in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words. Names beginning with
+     *  `ibm-` are reserved for provider-owned resources, and are not allowed.
+     */
+    name?: string;
+    /** The primary IP address to bind to the virtual network interface. May be either a
+     *  reserved IP identity, or a reserved IP prototype object which will be used to create a
+     *  new reserved IP.
+     *
+     *  If a reserved IP identity is provided, the specified reserved IP must be unbound.
+     *
+     *  If a reserved IP prototype object with an address is provided, the address must be
+     *  available on the virtual network interface's subnet. If no address is specified,
+     *  an available address on the subnet will be automatically selected and reserved.
+     */
+    primary_ip?: VirtualNetworkInterfacePrimaryIPPrototype;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     */
+    resource_group?: ResourceGroupIdentity;
+    /** The security groups to use for this virtual network interface. If unspecified, the default security group of
+     *  the VPC for the subnet is used.
+     */
+    security_groups?: SecurityGroupIdentity[];
+    /** The associated subnet. Required if `primary_ip` does not specify a reserved IP and
+     *  `primary_ip.address` is not specified.
+     */
+    subnet?: SubnetIdentity;
+  }
+
+  /** The permitted total capacity (in gigabytes) of a share with this profile depends on its configuration. */
+  export interface ShareProfileCapacityDependentRange extends ShareProfileCapacity {
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The permitted total capacities (in gigabytes) of a share with this profile. */
+  export interface ShareProfileCapacityEnum extends ShareProfileCapacity {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+
+  /** The permitted total capacity (in gigabytes) of a share with this profile is fixed. */
+  export interface ShareProfileCapacityFixed extends ShareProfileCapacity {
+    /** The type for this profile field. */
+    type: string;
+    /** The value for this profile field. */
+    value: number;
+  }
+
+  /** The permitted total capacity range (in gigabytes) of a share with this profile. */
+  export interface ShareProfileCapacityRange extends ShareProfileCapacity {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The permitted IOPS range of a share with this profile depends on its configuration. */
+  export interface ShareProfileIOPSDependentRange extends ShareProfileIOPS {
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** The permitted IOPS values of a share with this profile. */
+  export interface ShareProfileIOPSEnum extends ShareProfileIOPS {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+
+  /** The permitted IOPS of a share with this profile is fixed. */
+  export interface ShareProfileIOPSFixed extends ShareProfileIOPS {
+    /** The type for this profile field. */
+    type: string;
+    /** The value for this profile field. */
+    value: number;
+  }
+
+  /** The permitted IOPS range of a share with this profile. */
+  export interface ShareProfileIOPSRange extends ShareProfileIOPS {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: string;
+  }
+
+  /** ShareProfileIdentityByHref. */
+  export interface ShareProfileIdentityByHref extends ShareProfileIdentity {
+    /** The URL for this share profile. */
+    href: string;
+  }
+
+  /** ShareProfileIdentityByName. */
+  export interface ShareProfileIdentityByName extends ShareProfileIdentity {
+    /** The globally unique name for this share profile. */
+    name: string;
+  }
+
+  /** Create a file share by size. */
+  export interface SharePrototypeShareBySize extends SharePrototype {
+    /** The access control mode for the share:
+     *
+     *  - `security_group`: The security groups on the virtual network interface for a
+     *    mount target control access to the mount target. Mount targets for this share
+     *    require a virtual network interface.
+     *  - `vpc`: All clients in the VPC for a mount target have access to the mount target.
+     *    Mount targets for this share require a VPC.
+     */
+    access_control_mode?: string;
+    /** The root key to use to wrap the data encryption key for the share.
+     *
+     *  If unspecified, the `encryption` type for the share will be `provider_managed`.
+     *
+     *  The specified key may be in a different account, subject to IAM policies.
+     */
+    encryption_key?: EncryptionKeyIdentity;
+    /** The owner assigned to the file share at creation. Subsequent changes to the owner
+     *  must be performed by a client that has mounted the file share.
+     */
+    initial_owner?: ShareInitialOwner;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     */
+    resource_group?: ResourceGroupIdentity;
+    /** The size of the file share rounded up to the next gigabyte.
+     *
+     *  The maximum size for a share may increase in the future.
+     */
+    size: number;
+  }
+
+  /** Create a replica file share for an existing file share. The values for `access_control_mode`, `encryption_key`, `initial_owner`, and `size` will be inherited from `source_share`. */
+  export interface SharePrototypeShareBySourceShare extends SharePrototype {
+    /** The cron specification for the file share replication schedule.
+     *
+     *  Replication of a share can be scheduled to occur at most once per hour.
+     */
+    replication_cron_spec: string;
+    /** The resource group to use. If unspecified, the resource group from the source share will be used. */
+    resource_group?: ResourceGroupIdentity;
+    /** The source file share for this replica file share. The specified file share must not
+     *  already have a replica, and must not be a replica.
+     */
+    source_share: ShareIdentity;
   }
 
   /** SnapshotIdentityByCRN. */
@@ -37614,6 +40296,44 @@ namespace VpcV1 {
     identity_provider: VPNServerAuthenticationByUsernameIdProvider;
   }
 
+  /** Identifies a reserved IP by a unique property. Required if `subnet` is not specified. The reserved IP must be currently unbound. */
+  export interface VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContext extends VirtualNetworkInterfacePrimaryIPPrototype {
+  }
+
+  /** The prototype for a new reserved IP. Requires `subnet` to be specified. */
+  export interface VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext extends VirtualNetworkInterfacePrimaryIPPrototype {
+    /** The IP address to reserve, which must not already be reserved on the subnet.
+     *
+     *  If unspecified, an available address on the subnet will automatically be selected.
+     */
+    address?: string;
+    /** Indicates whether this reserved IP member will be automatically deleted when either
+     *  `target` is deleted, or the reserved IP is unbound.
+     */
+    auto_delete?: boolean;
+    /** The name for this reserved IP. The name must not be used by another reserved IP in the subnet. Names
+     *  starting with `ibm-` are reserved for provider-owned resources, and are not allowed. If unspecified, the name
+     *  will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+  }
+
+  /** VirtualNetworkInterfaceTargetShareMountTargetReference. */
+  export interface VirtualNetworkInterfaceTargetShareMountTargetReference extends VirtualNetworkInterfaceTarget {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: ShareMountTargetReferenceDeleted;
+    /** The URL for this share mount target. */
+    href: string;
+    /** The unique identifier for this share mount target. */
+    id: string;
+    /** The name for this share mount target. The name is unique across all mount targets for the file share. */
+    name: string;
+    /** The resource type. */
+    resource_type: string;
+  }
+
   /** Identifies a volume by a unique property. */
   export interface VolumeAttachmentPrototypeVolumeVolumeIdentity extends VolumeAttachmentPrototypeVolume {
   }
@@ -37708,14 +40428,14 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** EndpointGatewayReservedIPReservedIPIdentityReservedIPIdentityByHref. */
-  export interface EndpointGatewayReservedIPReservedIPIdentityReservedIPIdentityByHref extends EndpointGatewayReservedIPReservedIPIdentity {
+  /** EndpointGatewayReservedIPReservedIPIdentityByHref. */
+  export interface EndpointGatewayReservedIPReservedIPIdentityByHref extends EndpointGatewayReservedIPReservedIPIdentity {
     /** The URL for this reserved IP. */
     href: string;
   }
 
-  /** EndpointGatewayReservedIPReservedIPIdentityReservedIPIdentityById. */
-  export interface EndpointGatewayReservedIPReservedIPIdentityReservedIPIdentityById extends EndpointGatewayReservedIPReservedIPIdentity {
+  /** EndpointGatewayReservedIPReservedIPIdentityById. */
+  export interface EndpointGatewayReservedIPReservedIPIdentityById extends EndpointGatewayReservedIPReservedIPIdentity {
     /** The unique identifier for this reserved IP. */
     id: string;
   }
@@ -37736,25 +40456,25 @@ namespace VpcV1 {
 
   /** FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
   export interface FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FloatingIPTargetPatchNetworkInterfaceIdentity {
-    /** The URL for this network interface. */
+    /** The URL for this instance network interface. */
     href: string;
   }
 
   /** FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
   export interface FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FloatingIPTargetPatchNetworkInterfaceIdentity {
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this instance network interface. */
     id: string;
   }
 
   /** FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
   export interface FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FloatingIPTargetPrototypeNetworkInterfaceIdentity {
-    /** The URL for this network interface. */
+    /** The URL for this instance network interface. */
     href: string;
   }
 
   /** FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
   export interface FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FloatingIPTargetPrototypeNetworkInterfaceIdentity {
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this instance network interface. */
     id: string;
   }
 
@@ -37778,13 +40498,13 @@ namespace VpcV1 {
 
   /** FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
   export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity {
-    /** The URL for this network interface. */
+    /** The URL for this instance network interface. */
     href: string;
   }
 
   /** FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
   export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity {
-    /** The unique identifier for this network interface. */
+    /** The unique identifier for this instance network interface. */
     id: string;
   }
 
@@ -37992,14 +40712,14 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** NetworkInterfaceIPPrototypeReservedIPIdentityReservedIPIdentityByHref. */
-  export interface NetworkInterfaceIPPrototypeReservedIPIdentityReservedIPIdentityByHref extends NetworkInterfaceIPPrototypeReservedIPIdentity {
+  /** NetworkInterfaceIPPrototypeReservedIPIdentityByHref. */
+  export interface NetworkInterfaceIPPrototypeReservedIPIdentityByHref extends NetworkInterfaceIPPrototypeReservedIPIdentity {
     /** The URL for this reserved IP. */
     href: string;
   }
 
-  /** NetworkInterfaceIPPrototypeReservedIPIdentityReservedIPIdentityById. */
-  export interface NetworkInterfaceIPPrototypeReservedIPIdentityReservedIPIdentityById extends NetworkInterfaceIPPrototypeReservedIPIdentity {
+  /** NetworkInterfaceIPPrototypeReservedIPIdentityById. */
+  export interface NetworkInterfaceIPPrototypeReservedIPIdentityById extends NetworkInterfaceIPPrototypeReservedIPIdentity {
     /** The unique identifier for this reserved IP. */
     id: string;
   }
@@ -38155,6 +40875,18 @@ namespace VpcV1 {
   /** SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityById. */
   export interface SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityById extends SecurityGroupRuleRemotePrototypeSecurityGroupIdentity {
     /** The unique identifier for this security group. */
+    id: string;
+  }
+
+  /** VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContextByHref. */
+  export interface VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContextByHref extends VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContext {
+    /** The URL for this reserved IP. */
+    href: string;
+  }
+
+  /** VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContextById. */
+  export interface VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContextById extends VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContext {
+    /** The unique identifier for this reserved IP. */
     id: string;
   }
 
@@ -40629,6 +43361,338 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.Snapshot[]> {
       const results: Snapshot[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ShareProfilesPager can be used to simplify the use of listShareProfiles().
+   */
+  export class ShareProfilesPager {
+    protected _hasNext: boolean;
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListShareProfilesParams;
+
+    /**
+     * Construct a ShareProfilesPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listShareProfiles()
+     * @param {Object} [params] - The parameters to be passed to listShareProfiles()
+     * @constructor
+     * @returns {ShareProfilesPager}
+     */
+    constructor(
+      client: VpcV1,
+      params?: VpcV1.ListShareProfilesParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listShareProfiles().
+     * @returns {Promise<VpcV1.ShareProfile[]>}
+     */
+    public async getNext(): Promise<VpcV1.ShareProfile[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listShareProfiles(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.profiles;
+    }
+
+    /**
+     * Returns all results by invoking listShareProfiles() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.ShareProfile[]>}
+     */
+    public async getAll(): Promise<VpcV1.ShareProfile[]> {
+      const results: ShareProfile[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * SharesPager can be used to simplify the use of listShares().
+   */
+  export class SharesPager {
+    protected _hasNext: boolean;
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListSharesParams;
+
+    /**
+     * Construct a SharesPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listShares()
+     * @param {Object} [params] - The parameters to be passed to listShares()
+     * @constructor
+     * @returns {SharesPager}
+     */
+    constructor(
+      client: VpcV1,
+      params?: VpcV1.ListSharesParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listShares().
+     * @returns {Promise<VpcV1.Share[]>}
+     */
+    public async getNext(): Promise<VpcV1.Share[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listShares(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.shares;
+    }
+
+    /**
+     * Returns all results by invoking listShares() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.Share[]>}
+     */
+    public async getAll(): Promise<VpcV1.Share[]> {
+      const results: Share[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ShareMountTargetsPager can be used to simplify the use of listShareMountTargets().
+   */
+  export class ShareMountTargetsPager {
+    protected _hasNext: boolean;
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListShareMountTargetsParams;
+
+    /**
+     * Construct a ShareMountTargetsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listShareMountTargets()
+     * @param {Object} params - The parameters to be passed to listShareMountTargets()
+     * @constructor
+     * @returns {ShareMountTargetsPager}
+     */
+    constructor(
+      client: VpcV1,
+      params: VpcV1.ListShareMountTargetsParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listShareMountTargets().
+     * @returns {Promise<VpcV1.ShareMountTarget[]>}
+     */
+    public async getNext(): Promise<VpcV1.ShareMountTarget[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listShareMountTargets(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.mount_targets;
+    }
+
+    /**
+     * Returns all results by invoking listShareMountTargets() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.ShareMountTarget[]>}
+     */
+    public async getAll(): Promise<VpcV1.ShareMountTarget[]> {
+      const results: ShareMountTarget[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * VirtualNetworkInterfacesPager can be used to simplify the use of listVirtualNetworkInterfaces().
+   */
+  export class VirtualNetworkInterfacesPager {
+    protected _hasNext: boolean;
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListVirtualNetworkInterfacesParams;
+
+    /**
+     * Construct a VirtualNetworkInterfacesPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listVirtualNetworkInterfaces()
+     * @param {Object} [params] - The parameters to be passed to listVirtualNetworkInterfaces()
+     * @constructor
+     * @returns {VirtualNetworkInterfacesPager}
+     */
+    constructor(
+      client: VpcV1,
+      params?: VpcV1.ListVirtualNetworkInterfacesParams
+    ) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listVirtualNetworkInterfaces().
+     * @returns {Promise<VpcV1.VirtualNetworkInterface[]>}
+     */
+    public async getNext(): Promise<VpcV1.VirtualNetworkInterface[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listVirtualNetworkInterfaces(this.params);
+      const { result } = response;
+
+      let next = null;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.virtual_network_interfaces;
+    }
+
+    /**
+     * Returns all results by invoking listVirtualNetworkInterfaces() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.VirtualNetworkInterface[]>}
+     */
+    public async getAll(): Promise<VpcV1.VirtualNetworkInterface[]> {
+      const results: VirtualNetworkInterface[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);

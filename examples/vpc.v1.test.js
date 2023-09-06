@@ -4022,6 +4022,412 @@ describe('VpcV1', () => {
     expect(response.result).not.toBeNull();
 
   });
+
+
+  test('listShareProfiles request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listShareProfiles() result:');
+    // begin-list_share_profiles
+
+    const params = {
+      limit: 10,
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.ShareProfilesPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+    
+    // end-list_share_profiles
+    console.log(JSON.stringify(allResults, null, 2));
+    data.shareProfileName = allResults[0].name;
+  });
+
+  test('getShareProfile request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getShareProfile() result:');
+    // begin-get_share_profile
+
+    const params = {
+      name: data.shareProfileName,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getShareProfile(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    
+    // end-get_share_profile
+    console.log(JSON.stringify(res.result, null, 2));
+  });
+
+  test('listShares request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listShares() result:');
+    // begin-list_shares
+
+    const params = {
+      limit: 10,
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.SharesPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_shares
+  });
+
+  test('createShare request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createShare() result:');
+    // begin-create_share
+
+    // Request models needed by this operation.
+
+    // ShareProfileIdentityByName
+    const shareProfileIdentityModel = {
+      name: data.shareProfileName,
+    };
+
+    // ZoneIdentityByName
+    const zoneIdentityModel = {
+      name: 'us-east-1',
+    };
+
+    // SharePrototypeShareBySize
+    const sharePrototypeModel = {
+      profile: shareProfileIdentityModel,
+      zone: zoneIdentityModel,
+      size: 200,
+      name: 'my-share',
+    };
+
+    const params = {
+      sharePrototype: sharePrototypeModel,
+    };
+
+    let res;
+    try {
+      res = await vpcService.createShare(params);
+      data.shareId = res.result.id;
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // share replica
+    const shareIdentity = {
+      id: data.shareId,
+    }
+    const shareReplicaPrototypeModel = {
+      profile: shareProfileIdentityModel,
+      zone: zoneIdentityModel,
+      source_share: shareIdentity,
+      replication_cron_spec: '0 */5 * * *',
+      name: 'my-replica-share',
+    };
+
+    const replicaParams = {
+      sharePrototype: shareReplicaPrototypeModel,
+    };
+
+    let replicaRes;
+    try {
+      replicaRes = await vpcService.createShare(replicaParams);
+      data.shareReplicaId = res.replicaRes.id;
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_share
+  });
+
+  test('getShare request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getShare() result:');
+    // begin-get_share
+
+    const params = {
+      id: data.shareId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getShare(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_share
+  });
+
+  test('updateShare request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateShare() result:');
+    // begin-update_share
+
+    const params = {
+      id: data.shareId,
+      name: 'my-share-updated',
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.updateShare(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_share
+  });
+
+  test('failoverShare request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-failover_share
+
+    const params = {
+      shareId: data.shareReplicaId,
+    };
+
+    try {
+      await vpcService.failoverShare(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-failover_share
+  });
+
+  test('listShareMountTargets request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listShareMountTargets() result:');
+    // begin-list_share_mount_targets
+
+    const params = {
+      shareId: data.shareId,
+      limit: 10,
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.ShareMountTargetsPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_share_mount_targets
+  });
+
+  test('createShareMountTarget request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createShareMountTarget() result:');
+    // begin-create_share_mount_target
+
+    // Request models needed by this operation.
+
+    // ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfacePrototypeShareMountTargetContext
+    const shareMountTargetVirtualNetworkInterfacePrototypeModel = {
+    };
+
+    // ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup
+    const shareMountTargetPrototypeModel = {
+      virtual_network_interface: shareMountTargetVirtualNetworkInterfacePrototypeModel,
+    };
+
+    const params = {
+      shareId: data.shareId,
+      shareMountTargetPrototype: shareMountTargetPrototypeModel,
+    };
+
+    let res;
+    try {
+      res = await vpcService.createShareMountTarget(params);
+      data.shareMountTargetId = res.result.id
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_share_mount_target
+  });
+
+  test('getShareMountTarget request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getShareMountTarget() result:');
+    // begin-get_share_mount_target
+
+    const params = {
+      shareId: data.shareMountTargetId,
+      id: data.shareId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getShareMountTarget(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_share_mount_target
+  });
+
+  test('updateShareMountTarget request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateShareMountTarget() result:');
+    // begin-update_share_mount_target
+
+    const params = {
+      shareId: data.shareId,
+      id: data.shareMountTargetId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.updateShareMountTarget(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_share_mount_target
+  });
+
+  test('getShareSource request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getShareSource() result:');
+    // begin-get_share_source
+
+    const params = {
+      shareId: data.shareId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getShareSource(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_share_source
+  });
+
   test('listRegions request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
@@ -8498,6 +8904,88 @@ describe('VpcV1', () => {
     // end-delete_security_group
     expect(response.result).not.toBeNull();
 
+  });
+
+  test('deleteShare request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteShare() result:');
+    // begin-delete_share
+
+    const params = {
+      id: data.shareId,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.deleteShare(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_share
+  });
+
+  test('deleteShareMountTarget request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteShareMountTarget() result:');
+    // begin-delete_share_mount_target
+
+    const params = {
+      shareId: data.shareId,
+      id: data.shareMountTargetId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.deleteShareMountTarget(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_share_mount_target
+  });
+
+  test('deleteShareSource request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_share_source
+
+    const params = {
+      shareId: data.shareId,
+    };
+
+    try {
+      await vpcService.deleteShareSource(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_share_source
   });
 
   test('deletePublicGateway request example', async () => {
