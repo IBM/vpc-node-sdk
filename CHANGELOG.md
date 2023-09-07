@@ -1,3 +1,10 @@
+## [0.17.1](https://github.com/IBM/vpc-node-sdk/compare/v0.17.0...v0.17.1) (2023-09-07)
+
+
+### Bug Fixes
+
+* **sdk:** resolved SDK errors ([#38](https://github.com/IBM/vpc-node-sdk/issues/38)) ([11be5f6](https://github.com/IBM/vpc-node-sdk/commit/11be5f6bd764bd64864e70f010c40e3a28848a04))
+
 # [0.17.0](https://github.com/IBM/vpc-node-sdk/compare/v0.16.1...v0.17.0) (2023-09-06)
 
 
