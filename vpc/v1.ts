@@ -110,12 +110,6 @@ class VpcV1 extends BaseService {
     }
     this.generation = options.generation;
     this.version = options.version|| `2023-08-08`;
-
-    const _requiredParams = ['version'];
-    const _validationErrors = validateParams(options, _requiredParams, null);
-    if (_validationErrors) {
-      throw _validationErrors;
-    }
   }
 
   /*************************
