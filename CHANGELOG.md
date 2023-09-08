@@ -1,3 +1,10 @@
+## [0.17.2](https://github.com/IBM/vpc-node-sdk/compare/v0.17.1...v0.17.2) (2023-09-08)
+
+
+### Bug Fixes
+
+* **sdk:** moved uuid to dependency from dev ([#39](https://github.com/IBM/vpc-node-sdk/issues/39)) ([d62993d](https://github.com/IBM/vpc-node-sdk/commit/d62993d7bb9fa94242d2886a6a8094b3c09d0149))
+
 ## [0.17.1](https://github.com/IBM/vpc-node-sdk/compare/v0.17.0...v0.17.1) (2023-09-07)
 
 
