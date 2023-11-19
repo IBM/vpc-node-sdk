@@ -62,6 +62,60 @@ npm install ibm-vpc
 For general SDK usage information, see the
 [IBM Cloud SDK Common README](https://github.com/IBM/ibm-cloud-sdk-common/blob/master/README.md)
 
+## Example set up for VPC
+
+```node
+const { IamAuthenticator } = require("ibm-vpc/auth");
+const vpcV1 = require("ibm-vpc/vpc/v1");
+const options = {
+    authenticator: new IamAuthenticator({
+        apikey: process.env.IC_API_KEY, //IBMCLOUD_API_KEY
+    }),
+    serviceUrl: "https://us-south.iaas.cloud.ibm.com/v1",
+};
+const service = vpcV1.newInstance(options);
+// Retrieve the list of regions for your account.
+const response = service.listRegions({});
+response.then(function(result) {
+  result.result.regions.forEach(region => {
+    regionserviceUrl = region.endpoint+"/v1";
+    const regionSpecificOptions = {
+      authenticator: new IamAuthenticator({
+          apikey: process.env.IC_API_KEY,
+      }),
+      serviceUrl: regionserviceUrl,
+  };
+  const regionSpecificService = vpcV1.newInstance(regionSpecificOptions);  
+  const instanceprofilesresponse = regionSpecificService.listInstanceProfiles({});
+  instanceprofilesresponse.then(function(profileCollection) {
+    console.log(profileCollection.result.profiles[0].href)
+  })
+})
+})
+// Retrieve the list of vpcs for your account.
+try {
+  const responses = service.listVpcs();
+  responses.then(function(result) {
+    result.result.vpcs.forEach(vpc => {
+      console.log("vpc-id"+" "+vpc.id);
+    });
+  })
+} catch (err) {
+  console.warn(err);
+}
+// Retrieve the list of subnets for your account.
+try {
+  const responses = service.listSubnets();
+  responses.then(function(result) {
+    result.result.subnets.forEach(subnet => {
+      console.log("subnet-id"+" "+subnet.id);
+    });
+  })
+} catch (err) {
+  console.warn(err);
+}
+```
+
 ## Questions
 If you have difficulties using this SDK or you have a question about the IBM Cloud services,
 ask a question at [Stack Overflow](http://stackoverflow.com/questions/ask?tags=ibm-cloud).
