@@ -121,6 +121,39 @@ describe('VpcV1_integration', () => {
       console.warn(err);
     }
   });
+  // createvpchub
+  test('createHubVpc', async () => {
+    try {
+      // begin-create_vpc
+      const zoneIdentityModel = {
+        name: dict.zone,
+      };
+      const dnsServerPrototype = {
+        address: '192.168.3.4',
+        zone_affinity: zoneIdentityModel,
+      };
+      const vpcDNSResolverPrototype = {
+        manual_servers: [dnsServerPrototype],
+        type: 'manual',
+      };
+      const vpcDnsPrototype = {
+        enable_hub: false,
+        resolver: vpcDNSResolverPrototype,
+      };
+      const params = {
+        name: 'my-vpc-hub',
+        addressPrefixManagement: 'manual',
+        classicAccess: true,
+        dns: vpcDnsPrototype,
+      };
+      res = await vpcService.createVpc(params);
+      // end-create_vpc
+      expect(res.result).not.toBeNull();
+      dict.vpcHubID = res.result.id;
+    } catch (err) {
+      console.warn(err);
+    }
+  });
   test('createSubnet()', (done) => {
     const vpcIdentityModel = {
       id: dict.createdVpc,
@@ -5658,6 +5691,90 @@ describe('VpcV1_integration', () => {
 
     vpcService
       .deleteVpcAddressPrefix(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createVpcDnsResolutionBinding()', (done) => {
+    const vpcIdentityModel = {
+      id: dict.vpcHubID,
+    };
+    const params = {
+      vpcId: dict.createdVpc,
+      name: generateName('my-vpc-dns-resolution-binding'),
+      vpc: vpcIdentityModel,
+    };
+
+    vpcService
+      .createVpcDnsResolutionBinding(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        dict.vpcDnsResolutionId = res.result.id;
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('listVpcDnsResolutionBinding ()', async () => {
+    try {
+      const params = {
+        vpcId: dict.createdVpc,
+        limit: 10,
+      };
+      res = await vpcService.listVpcDnsResolutionBindings(params);
+      expect(res.result).not.toBeNull();
+    } catch (err) {
+      console.warn(err);
+    }
+  });
+  test('getVpcDnsResolutionBinding()', (done) => {
+    const params = {
+      vpcId: dict.createdVpc,
+      id: dict.vpcDnsResolutionId,
+    };
+    vpcService
+      .getVpcDnsResolutionBinding(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateVpcDnsResolutionBinding()', (done) => {
+    const params = {
+      vpcId: dict.createdVpc,
+      id: dict.vpcDnsResolutionId,
+      name: generateName('my-vpc-dns-resolution-binding-updated'),
+    };
+    vpcService
+      .updateVpcDnsResolutionBinding(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('deleteVpcDnsResolutionBinding()', (done) => {
+    const params = {
+      vpcId: dict.createdVpc,
+      id: dict.vpcDnsResolutionId,
+    };
+
+    vpcService
+      .deleteVpcDnsResolutionBinding(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();

@@ -125,6 +125,50 @@ describe('VpcV1', () => {
 
   });
 
+  test('createHubVpcExample request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-create_vpc
+
+    const zoneIdentityModel = {
+      name: data.zone,
+    };
+    const dnsServerPrototype = {
+      address: '192.168.3.4',
+      zone_affinity: zoneIdentityModel,
+    };
+    const vpcDNSResolverPrototype = {
+      manual_servers: [dnsServerPrototype],
+      type: 'manual',
+    };
+    const vpcDnsPrototype = {
+      enable_hub: false,
+      resolver: vpcDNSResolverPrototype,
+    };
+    const params = {
+      name: 'my-vpc-hub',
+      addressPrefixManagement: 'manual',
+      classicAccess: true,
+      dns: vpcDnsPrototype,
+    };
+
+    var response = await vpcService.createVpc(params);
+
+    // end-create_vpc
+
+    expect(response.result).not.toBeNull();
+    data.vpcHubID = response.result.id;
+
+  });
+
   test('getVpc request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
@@ -361,6 +405,121 @@ describe('VpcV1', () => {
     const response = await vpcService.updateVpcAddressPrefix(params);
 
     // end-update_vpc_address_prefix
+    expect(response.result).not.toBeNull();
+
+  });
+
+  test('createVpcDnsResolutionBinding request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-create_vpc_dns_resolution_binding
+
+    const vpcIdentityModel = {
+      id: data.vpcHubID,
+    };
+    const params = {
+      vpcId: data.vpcId,
+      name: 'my-vpc-dns-resolution-binding',
+      vpc: vpcIdentityModel,
+    };
+
+    const response = await vpcService.createVpcDnsResolutionBinding(params);
+
+    // end-create_vpc_dns_resolution_binding
+    data.vpcDnsResolutionId = response.result.id;
+    expect(response.result).not.toBeNull();
+
+  });
+
+  test('listVpcDnsResolutionBinding request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-list_vpc_dns_resolution_binding
+
+    const params = {
+      vpcId: data.vpcId,
+      limit: 10,
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.VpcDnsResolutionBindingsPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+    // end-list_vpc_dns_resolution_binding
+    console.log(JSON.stringify(allResults, null, 2));
+  });
+
+  test('getVpcDnsResolutionBinding request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-get__vpc_dns_resolution_binding
+
+    const params = {
+      vpcId: data.vpcId,
+      id: data.vpcDnsResolutionId,
+    };
+
+    const response = await vpcService.getVpcDnsResolutionBinding(params);
+
+    // end-get_vpc_dns_resolution_binding
+
+    expect(response.result).not.toBeNull();
+
+  });
+
+  test('updateVpcDnsResolutionBinding request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-update_vpc_dns_resolution_binding
+
+    const params = {
+      vpcId: data.vpcId,
+      id: data.vpcDnsResolutionId,
+      name: 'my-vpc-dns-resolution-binding-updated',
+    };
+
+    const response = await vpcService.updateVpcDnsResolutionBinding(params);
+
+    // end-update_vpc_dns_resolution_binding
     expect(response.result).not.toBeNull();
 
   });
@@ -9502,6 +9661,31 @@ describe('VpcV1', () => {
     const response = await vpcService.deleteVpcAddressPrefix(params);
 
     // end-delete_vpc_address_prefix
+    expect(response.result).not.toBeNull();
+
+  });
+
+  test('deleteVpcDnsResolutionBinding request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_vpc_dns_resolution_binding
+
+    const params = {
+      vpcId: data.vpcId,
+      id: data.vpcDnsResolutionId,
+    };
+
+    const response = await vpcService.deleteVpcDnsResolutionBinding(params);
+
+    // end-delete_vpc_dns_resolution_binding
     expect(response.result).not.toBeNull();
 
   });

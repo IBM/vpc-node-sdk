@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.76.0-ad3e6f96-20230724-172814
+ * IBM OpenAPI SDK Code Generator Version: 3.81.0-c73a091c-20231026-215706
  */
 
 /* eslint-disable max-classes-per-file */
@@ -26,13 +26,14 @@ import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
   Authenticator,
   BaseService,
-  getAuthenticatorFromEnvironment,
-  validateParams,
+  SDKLogger,
   UserOptions,
+  getAuthenticatorFromEnvironment,
+  getNewLogger,
+  getQueryParam,
+  validateParams,
 } from 'ibm-cloud-sdk-core';
 import { getSdkHeaders } from '../lib/common';
-import { getQueryParam } from 'ibm-cloud-sdk-core';
-import { getNewLogger, SDKLogger } from 'ibm-cloud-sdk-core';
 
 /**
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
@@ -83,7 +84,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2022-09-13` and `2023-08-24`.
+   *  `2023-10-10` and `2023-11-15`.
    */
   version: string;
 
@@ -92,7 +93,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} options - Options for the service.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2022-09-13` and `2023-08-24`.
+   * specify any date between `2023-10-10` and `2023-11-15`.
    * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -109,7 +110,7 @@ class VpcV1 extends BaseService {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
     this.generation = options.generation;
-    this.version = options.version|| `2023-08-08`;
+    this.version = options.version || '2023-10-24';
   }
 
   /*************************
@@ -153,11 +154,7 @@ class VpcV1 extends BaseService {
       'classic_access': _params.classicAccess,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpcs'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcs');
 
     const parameters = {
       options: {
@@ -197,11 +194,15 @@ class VpcV1 extends BaseService {
    * If true, this VPC's resources will have private network connectivity to the account's Classic Infrastructure
    * resources. Only one VPC, per region, may be connected in this way. This value is set at creation and subsequently
    * immutable.
+   * @param {VPCDNSPrototype} [params.dns] - The DNS configuration for this VPC.
+   *
+   * If unspecified, the system will assign DNS servers capable of resolving hosts and endpoint
+   * gateways within this VPC, and hosts on the internet.
    * @param {string} [params.name] - The name for this VPC. The name must not be used by another VPC in the region. If
    * unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPC>>}
    */
@@ -210,7 +211,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPC>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['addressPrefixManagement', 'classicAccess', 'name', 'resourceGroup', 'headers'];
+    const _validParams = ['addressPrefixManagement', 'classicAccess', 'dns', 'name', 'resourceGroup', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -219,6 +220,7 @@ class VpcV1 extends BaseService {
     const body = {
       'address_prefix_management': _params.addressPrefixManagement,
       'classic_access': _params.classicAccess,
+      'dns': _params.dns,
       'name': _params.name,
       'resource_group': _params.resourceGroup,
     };
@@ -228,11 +230,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createVpc'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpc');
 
     const parameters = {
       options: {
@@ -260,13 +258,20 @@ class VpcV1 extends BaseService {
   /**
    * Delete a VPC.
    *
-   * This request deletes a VPC. This operation cannot be reversed. For this request to succeed, the VPC must not
-   * contain any instances, subnets, public gateways, or endpoint gateways. All security groups and network ACLs
-   * associated with the VPC are automatically deleted. All flow log collectors with `auto_delete` set to `true`
-   * targeting the VPC or any resource in the VPC are automatically deleted.
+   * This request deletes a VPC. This operation cannot be reversed.
+   *
+   * For this request to succeed:
+   * - Instances, subnets, public gateways, and endpoint gateways must not reside in this VPC
+   * - The VPC must not be providing DNS resolution for any other VPCs
+   * - If `dns.enable_hub` is `true`, `dns.resolution_binding_count` must be zero
+   *
+   * All security groups and network ACLs associated with the VPC are automatically deleted. All flow log collectors
+   * with `auto_delete` set to `true` targeting the VPC or any resource in the VPC are automatically deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The VPC identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
@@ -275,7 +280,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -290,11 +295,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVpc'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpc');
 
     const parameters = {
       options: {
@@ -308,6 +309,7 @@ class VpcV1 extends BaseService {
           true,
           sdkHeaders,
           {
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -347,11 +349,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpc'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpc');
 
     const parameters = {
       options: {
@@ -383,7 +381,10 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The VPC identifier.
+   * @param {VPCDNSPatch} [params.dns] - The DNS configuration for this VPC.
    * @param {string} [params.name] - The name for this VPC. The name must not be used by another VPC in the region.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPC>>}
    */
@@ -392,13 +393,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPC>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'dns', 'name', 'ifMatch', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'dns': _params.dns,
       'name': _params.name,
     };
 
@@ -411,11 +413,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVpc'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpc');
 
     const parameters = {
       options: {
@@ -432,6 +430,7 @@ class VpcV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -472,11 +471,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpcDefaultNetworkAcl'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDefaultNetworkAcl');
 
     const parameters = {
       options: {
@@ -532,11 +527,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpcDefaultRoutingTable'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDefaultRoutingTable');
 
     const parameters = {
       options: {
@@ -591,11 +582,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpcDefaultSecurityGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDefaultSecurityGroup');
 
     const parameters = {
       options: {
@@ -653,11 +640,7 @@ class VpcV1 extends BaseService {
       'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpcAddressPrefixes'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcAddressPrefixes');
 
     const parameters = {
       options: {
@@ -734,11 +717,7 @@ class VpcV1 extends BaseService {
       'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createVpcAddressPrefix'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcAddressPrefix');
 
     const parameters = {
       options: {
@@ -797,11 +776,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVpcAddressPrefix'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcAddressPrefix');
 
     const parameters = {
       options: {
@@ -856,11 +831,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpcAddressPrefix'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcAddressPrefix');
 
     const parameters = {
       options: {
@@ -927,15 +898,356 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVpcAddressPrefix'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcAddressPrefix');
 
     const parameters = {
       options: {
         url: '/vpcs/{vpc_id}/address_prefixes/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List all DNS resolution bindings for a VPC.
+   *
+   * This request lists all DNS resolution bindings for a VPC. A DNS resolution binding represents an association with
+   * another VPC for centralizing DNS name resolution.
+   *
+   * If the VPC specified by the identifier in the URL is a DNS hub VPC (has `dns.enable_hub` set to `true`) then there
+   * is one binding for each VPC bound to the hub VPC. The endpoint gateways in the bound VPCs can allow (using
+   * `allow_dns_resolution_binding`) the hub VPC to centralize resolution of their DNS names.
+   *
+   * If the VPC specified by the identifier in the URL is not a DNS hub VPC, then there is at most one binding (to a hub
+   * VPC). The endpoint gateways in the VPC specified by the identifier in the URL can allow (using
+   * `allow_dns_resolution_binding`) its hub VPC to centralize resolution of their DNS names.
+   *
+   * To make use of centralized DNS resolution, a VPC bound to a DNS hub VPC must delegate DNS resolution to its hub VPC
+   * by setting `dns.resolver.type` to `delegate`.
+   *
+   * The bindings will be sorted by their `created_at` property values, with newest bindings first. Bindings with
+   * identical `created_at` property values will in turn be sorted by ascending `name` property values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpcId - The VPC identifier.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.vpcCrn] - Filters the collection to resources with a `vpc.crn` property matching the
+   * specified CRN.
+   * @param {string} [params.vpcName] - Filters the collection to resources with a `vpc.name` property matching the
+   * exact specified name.
+   * @param {string} [params.accountId] - Filters the collection to resources with a `vpc.remote.account.id` property
+   * matching the specified account identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBindingCollection>>}
+   */
+  public listVpcDnsResolutionBindings(
+    params: VpcV1.ListVpcDnsResolutionBindingsParams
+  ): Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBindingCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpcId'];
+    const _validParams = ['vpcId', 'sort', 'start', 'limit', 'name', 'vpcCrn', 'vpcName', 'accountId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'sort': _params.sort,
+      'start': _params.start,
+      'limit': _params.limit,
+      'name': _params.name,
+      'vpc.crn': _params.vpcCrn,
+      'vpc.name': _params.vpcName,
+      'account.id': _params.accountId,
+    };
+
+    const path = {
+      'vpc_id': _params.vpcId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcDnsResolutionBindings');
+
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/dns_resolution_bindings',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a DNS resolution binding.
+   *
+   * This request creates a new DNS resolution binding from a DNS resolution binding prototype object. The prototype
+   * object is structured in the same way as a retrieved DNS resolution binding, and contains the information necessary
+   * to create the new DNS resolution binding.
+   *
+   * For this request to succeed, `dns.enable_hub` must be `false` for the VPC specified by the identifier in the URL,
+   * and the VPC must not already have a DNS resolution binding.
+   *
+   * See [About DNS sharing for VPE gateways](/docs/vpc?topic=vpc-hub-spoke-model) for more information.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpcId - The VPC identifier.
+   * @param {VPCIdentity} params.vpc - Another VPC to bind this VPC to for DNS resolution. The VPC must have
+   * `dns.enable_hub` set to `true`, and may be in a different account (subject to
+   * IAM policies).
+   *
+   * Additionally, the VPC specified in the URL (this VPC) must have `dns.enable_hub`
+   * set to `false` and a `dns.resolution_binding_count` of zero.
+   * @param {string} [params.name] - The name for this DNS resolution binding. The name must not be used by another DNS
+   * resolution binding for the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>>}
+   */
+  public createVpcDnsResolutionBinding(
+    params: VpcV1.CreateVpcDnsResolutionBindingParams
+  ): Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpcId', 'vpc'];
+    const _validParams = ['vpcId', 'vpc', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'vpc': _params.vpc,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpc_id': _params.vpcId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcDnsResolutionBinding');
+
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/dns_resolution_bindings',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a DNS resolution binding.
+   *
+   * This request deletes a DNS resolution binding. This operation cannot be reversed.
+   *
+   * A DNS resolution binding for a VPC with `dns.enable_hub` set to `true` cannot be deleted.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpcId - The VPC identifier.
+   * @param {string} params.id - The DNS resolution binding identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deleteVpcDnsResolutionBinding(
+    params: VpcV1.DeleteVpcDnsResolutionBindingParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpcId', 'id'];
+    const _validParams = ['vpcId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpc_id': _params.vpcId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcDnsResolutionBinding');
+
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/dns_resolution_bindings/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a DNS resolution binding.
+   *
+   * This request retrieves a single DNS resolution binding specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpcId - The VPC identifier.
+   * @param {string} params.id - The DNS resolution binding identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>>}
+   */
+  public getVpcDnsResolutionBinding(
+    params: VpcV1.GetVpcDnsResolutionBindingParams
+  ): Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpcId', 'id'];
+    const _validParams = ['vpcId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpc_id': _params.vpcId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcDnsResolutionBinding');
+
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/dns_resolution_bindings/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a DNS resolution binding.
+   *
+   * This request updates a DNS resolution binding with the information in a provided DNS resolution binding patch. The
+   * DNS resolution binding patch object is structured in the same way as a retrieved DNS resolution binding and
+   * contains only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpcId - The VPC identifier.
+   * @param {string} params.id - The DNS resolution binding identifier.
+   * @param {string} [params.name] - The name for this DNS resolution binding. The name must not be used by another DNS
+   * resolution binding for the VPC.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>>}
+   */
+  public updateVpcDnsResolutionBinding(
+    params: VpcV1.UpdateVpcDnsResolutionBindingParams
+  ): Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpcId', 'id'];
+    const _validParams = ['vpcId', 'id', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpc_id': _params.vpcId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcDnsResolutionBinding');
+
+    const parameters = {
+      options: {
+        url: '/vpcs/{vpc_id}/dns_resolution_bindings/{id}',
         method: 'PATCH',
         body,
         qs: query,
@@ -998,11 +1310,7 @@ class VpcV1 extends BaseService {
       'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpcRoutes'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcRoutes');
 
     const parameters = {
       options: {
@@ -1095,11 +1403,7 @@ class VpcV1 extends BaseService {
       'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createVpcRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcRoute');
 
     const parameters = {
       options: {
@@ -1159,11 +1463,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVpcRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcRoute');
 
     const parameters = {
       options: {
@@ -1220,11 +1520,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpcRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcRoute');
 
     const parameters = {
       options: {
@@ -1302,11 +1598,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVpcRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcRoute');
 
     const parameters = {
       options: {
@@ -1372,11 +1664,7 @@ class VpcV1 extends BaseService {
       'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpcRoutingTables'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcRoutingTables');
 
     const parameters = {
       options: {
@@ -1420,8 +1708,8 @@ class VpcV1 extends BaseService {
    * have a routing table with this property set to `true`.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+   * able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
    * connection, the packet will be dropped.
    *
    * If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
@@ -1434,25 +1722,25 @@ class VpcV1 extends BaseService {
    * Incoming traffic will be routed according to the routing table with two exceptions:
    * - Traffic destined for IP addresses associated with public gateways will not be
    *   subject to routes in this routing table.
-   * - Routes with an action of deliver are treated as drop unless the `next_hop` is an
-   *   IP address in a subnet in the route's `zone`. Therefore, if an incoming packet
-   *   matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * - Routes with an `action` of `deliver` are treated as `drop` unless the `next_hop` is
+   *   an IP address in a subnet in the route's `zone` that is able to accept traffic.
+   *   Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
    *   connection, the packet will be dropped.
    * @param {boolean} [params.routeTransitGatewayIngress] - If set to `true`, this routing table will be used to route
    * traffic that originates from [Transit Gateway](https://cloud.ibm.com/docs/transit-gateway) to this VPC. The VPC
    * must not already have a routing table with this property set to `true`.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+   * able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
    * connection, the packet will be dropped.
    * @param {boolean} [params.routeVpcZoneIngress] - If set to `true`, this routing table will be used to route traffic
    * that originates from subnets in other zones in this VPC. The VPC must not already have a routing table with this
    * property set to `true`.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+   * able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
    * connection, the packet will be dropped.
    * @param {RoutePrototype[]} [params.routes] - The prototype objects for routes to create for this routing table. If
    * unspecified, the routing table will be created with no routes.
@@ -1489,11 +1777,7 @@ class VpcV1 extends BaseService {
       'vpc_id': _params.vpcId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createVpcRoutingTable'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcRoutingTable');
 
     const parameters = {
       options: {
@@ -1554,11 +1838,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVpcRoutingTable'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcRoutingTable');
 
     const parameters = {
       options: {
@@ -1614,11 +1894,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpcRoutingTable'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcRoutingTable');
 
     const parameters = {
       options: {
@@ -1669,8 +1945,8 @@ class VpcV1 extends BaseService {
    * `false` deselects this routing table.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+   * able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
    * connection, the packet will be dropped.
    * @param {boolean} [params.routeInternetIngress] - Indicates whether this routing table is used to route traffic that
    * originates from the internet.  Updating to `true` selects this routing table, provided no other routing table in
@@ -1680,9 +1956,9 @@ class VpcV1 extends BaseService {
    * -  Traffic destined for IP addresses associated with public gateways will not be subject
    *    to routes in this routing table.
    * -  Routes with an `action` of `deliver` are treated as `drop` unless the `next_hop` is an
-   *    IP address in a subnet in the route's `zone`. Therefore, if an incoming packet matches
-   *    a route with a `next_hop` of an internet-bound IP address or a VPN gateway connection,
-   *    the packet will be dropped.
+   *    IP address in a subnet in the route's `zone` that is able to accept traffic.
+   *    Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+   *    connection, the packet will be dropped.
    * @param {boolean} [params.routeTransitGatewayIngress] - Indicates whether this routing table is used to route
    * traffic that originates from
    * [Transit Gateway](https://cloud.ibm.com/docs/transit-gateway) to this VPC. Updating to
@@ -1690,8 +1966,8 @@ class VpcV1 extends BaseService {
    * `true`, and no subnets are attached to this routing table. Updating to `false` deselects this routing table.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+   * able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
    * connection, the packet will be dropped.
    *
    * If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
@@ -1703,8 +1979,8 @@ class VpcV1 extends BaseService {
    * table. Updating to `false` deselects this routing table.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-   * Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+   * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+   * able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
    * connection, the packet will be dropped.
    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
    * resource's current ETag value. Required if the request body includes an array.
@@ -1741,11 +2017,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVpcRoutingTable'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcRoutingTable');
 
     const parameters = {
       options: {
@@ -1812,11 +2084,7 @@ class VpcV1 extends BaseService {
       'routing_table_id': _params.routingTableId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpcRoutingTableRoutes'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpcRoutingTableRoutes');
 
     const parameters = {
       options: {
@@ -1908,11 +2176,7 @@ class VpcV1 extends BaseService {
       'routing_table_id': _params.routingTableId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createVpcRoutingTableRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpcRoutingTableRoute');
 
     const parameters = {
       options: {
@@ -1973,11 +2237,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVpcRoutingTableRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpcRoutingTableRoute');
 
     const parameters = {
       options: {
@@ -2034,11 +2294,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpcRoutingTableRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpcRoutingTableRoute');
 
     const parameters = {
       options: {
@@ -2117,11 +2373,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVpcRoutingTableRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpcRoutingTableRoute');
 
     const parameters = {
       options: {
@@ -2161,6 +2413,14 @@ class VpcV1 extends BaseService {
    * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
    * matching the specified identifier.
+   * @param {string} [params.zoneName] - Filters the collection to resources with a `zone.name` property matching the
+   * exact specified name.
+   * @param {string} [params.vpcId] - Filters the collection to resources with a `vpc.id` property matching the
+   * specified identifier.
+   * @param {string} [params.vpcCrn] - Filters the collection to resources with a `vpc.crn` property matching the
+   * specified CRN.
+   * @param {string} [params.vpcName] - Filters the collection to resources with a `vpc.name` property matching the
+   * exact specified name.
    * @param {string} [params.routingTableId] - Filters the collection to subnets with a `routing_table.id` property
    * matching the specified identifier.
    * @param {string} [params.routingTableName] - Filters the collection to subnets with a `routing_table.name` property
@@ -2173,7 +2433,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SubnetCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'routingTableId', 'routingTableName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'zoneName', 'vpcId', 'vpcCrn', 'vpcName', 'routingTableId', 'routingTableName', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2185,15 +2445,15 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
+      'zone.name': _params.zoneName,
+      'vpc.id': _params.vpcId,
+      'vpc.crn': _params.vpcCrn,
+      'vpc.name': _params.vpcName,
       'routing_table.id': _params.routingTableId,
       'routing_table.name': _params.routingTableName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listSubnets'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSubnets');
 
     const parameters = {
       options: {
@@ -2245,11 +2505,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createSubnet'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSubnet');
 
     const parameters = {
       options: {
@@ -2308,11 +2564,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteSubnet'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSubnet');
 
     const parameters = {
       options: {
@@ -2365,11 +2617,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getSubnet'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnet');
 
     const parameters = {
       options: {
@@ -2439,11 +2687,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateSubnet'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSubnet');
 
     const parameters = {
       options: {
@@ -2499,11 +2743,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getSubnetNetworkAcl'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetNetworkAcl');
 
     const parameters = {
       options: {
@@ -2559,11 +2799,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'replaceSubnetNetworkAcl'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceSubnetNetworkAcl');
 
     const parameters = {
       options: {
@@ -2619,11 +2855,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'unsetSubnetPublicGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'unsetSubnetPublicGateway');
 
     const parameters = {
       options: {
@@ -2676,11 +2908,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getSubnetPublicGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetPublicGateway');
 
     const parameters = {
       options: {
@@ -2737,11 +2965,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'setSubnetPublicGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'setSubnetPublicGateway');
 
     const parameters = {
       options: {
@@ -2797,11 +3021,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getSubnetRoutingTable'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetRoutingTable');
 
     const parameters = {
       options: {
@@ -2860,11 +3080,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'replaceSubnetRoutingTable'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceSubnetRoutingTable');
 
     const parameters = {
       options: {
@@ -2930,11 +3146,7 @@ class VpcV1 extends BaseService {
       'subnet_id': _params.subnetId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listSubnetReservedIps'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSubnetReservedIps');
 
     const parameters = {
       options: {
@@ -3012,11 +3224,7 @@ class VpcV1 extends BaseService {
       'subnet_id': _params.subnetId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createSubnetReservedIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSubnetReservedIp');
 
     const parameters = {
       options: {
@@ -3078,11 +3286,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteSubnetReservedIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSubnetReservedIp');
 
     const parameters = {
       options: {
@@ -3137,11 +3341,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getSubnetReservedIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSubnetReservedIp');
 
     const parameters = {
       options: {
@@ -3210,11 +3410,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateSubnetReservedIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSubnetReservedIp');
 
     const parameters = {
       options: {
@@ -3285,11 +3481,7 @@ class VpcV1 extends BaseService {
       'visibility': _params.visibility,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listImages'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listImages');
 
     const parameters = {
       options: {
@@ -3342,11 +3534,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createImage'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createImage');
 
     const parameters = {
       options: {
@@ -3405,11 +3593,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteImage'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteImage');
 
     const parameters = {
       options: {
@@ -3462,11 +3646,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getImage'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getImage');
 
     const parameters = {
       options: {
@@ -3559,11 +3739,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateImage'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateImage');
 
     const parameters = {
       options: {
@@ -3630,11 +3806,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deprecateImage'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deprecateImage');
 
     const parameters = {
       options: {
@@ -3696,11 +3868,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'obsoleteImage'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'obsoleteImage');
 
     const parameters = {
       options: {
@@ -3761,11 +3929,7 @@ class VpcV1 extends BaseService {
       'image_id': _params.imageId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listImageExportJobs'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listImageExportJobs');
 
     const parameters = {
       options: {
@@ -3840,11 +4004,7 @@ class VpcV1 extends BaseService {
       'image_id': _params.imageId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createImageExportJob'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createImageExportJob');
 
     const parameters = {
       options: {
@@ -3904,11 +4064,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteImageExportJob'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteImageExportJob');
 
     const parameters = {
       options: {
@@ -3963,11 +4119,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getImageExportJob'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getImageExportJob');
 
     const parameters = {
       options: {
@@ -4032,11 +4184,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateImageExportJob'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateImageExportJob');
 
     const parameters = {
       options: {
@@ -4091,11 +4239,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listOperatingSystems'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listOperatingSystems');
 
     const parameters = {
       options: {
@@ -4148,11 +4292,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getOperatingSystem'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getOperatingSystem');
 
     const parameters = {
       options: {
@@ -4209,11 +4349,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listKeys'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listKeys');
 
     const parameters = {
       options: {
@@ -4254,7 +4390,7 @@ class VpcV1 extends BaseService {
    * unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {string} [params.type] - The crypto-system used by this key.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Key>>}
@@ -4282,11 +4418,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createKey'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createKey');
 
     const parameters = {
       options: {
@@ -4341,11 +4473,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteKey'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteKey');
 
     const parameters = {
       options: {
@@ -4398,11 +4526,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getKey'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getKey');
 
     const parameters = {
       options: {
@@ -4461,11 +4585,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateKey'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateKey');
 
     const parameters = {
       options: {
@@ -4520,11 +4640,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceProfiles'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceProfiles');
 
     const parameters = {
       options: {
@@ -4577,11 +4693,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceProfile'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceProfile');
 
     const parameters = {
       options: {
@@ -4630,11 +4742,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceTemplates'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceTemplates');
 
     const parameters = {
       options: {
@@ -4688,11 +4796,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createInstanceTemplate'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceTemplate');
 
     const parameters = {
       options: {
@@ -4747,11 +4851,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstanceTemplate'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceTemplate');
 
     const parameters = {
       options: {
@@ -4804,11 +4904,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceTemplate'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceTemplate');
 
     const parameters = {
       options: {
@@ -4870,11 +4966,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateInstanceTemplate'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceTemplate');
 
     const parameters = {
       options: {
@@ -4962,11 +5054,7 @@ class VpcV1 extends BaseService {
       'placement_group.name': _params.placementGroupName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstances'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstances');
 
     const parameters = {
       options: {
@@ -5018,11 +5106,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createInstance'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstance');
 
     const parameters = {
       options: {
@@ -5079,11 +5163,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstance'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstance');
 
     const parameters = {
       options: {
@@ -5136,11 +5216,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstance'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstance');
 
     const parameters = {
       options: {
@@ -5227,11 +5303,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateInstance'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstance');
 
     const parameters = {
       options: {
@@ -5288,11 +5360,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceInitialization'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceInitialization');
 
     const parameters = {
       options: {
@@ -5355,11 +5423,7 @@ class VpcV1 extends BaseService {
       'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createInstanceAction'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceAction');
 
     const parameters = {
       options: {
@@ -5426,11 +5490,7 @@ class VpcV1 extends BaseService {
       'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createInstanceConsoleAccessToken'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceConsoleAccessToken');
 
     const parameters = {
       options: {
@@ -5488,11 +5548,7 @@ class VpcV1 extends BaseService {
       'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceDisks'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceDisks');
 
     const parameters = {
       options: {
@@ -5548,11 +5604,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceDisk'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceDisk');
 
     const parameters = {
       options: {
@@ -5614,11 +5666,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateInstanceDisk'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceDisk');
 
     const parameters = {
       options: {
@@ -5677,11 +5725,7 @@ class VpcV1 extends BaseService {
       'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceNetworkInterfaces'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceNetworkInterfaces');
 
     const parameters = {
       options: {
@@ -5717,7 +5761,7 @@ class VpcV1 extends BaseService {
    * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {SubnetIdentity} params.subnet - The associated subnet.
    * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this instance
-   * interface.
+   * network interface.
    * @param {string} [params.name] - The name for the instance network interface. The name must not be used by another
    * network interface on the virtual server instance. If unspecified, the name will be a hyphenated list of
    * randomly-selected words.
@@ -5761,11 +5805,7 @@ class VpcV1 extends BaseService {
       'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createInstanceNetworkInterface'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceNetworkInterface');
 
     const parameters = {
       options: {
@@ -5826,11 +5866,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstanceNetworkInterface'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceNetworkInterface');
 
     const parameters = {
       options: {
@@ -5885,11 +5921,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceNetworkInterface'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceNetworkInterface');
 
     const parameters = {
       options: {
@@ -5924,7 +5956,7 @@ class VpcV1 extends BaseService {
    * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The instance network interface identifier.
    * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this instance
-   * interface.
+   * network interface.
    * @param {string} [params.name] - The name for the instance network interface. The name must not be used by another
    * network interface on the virtual server instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -5956,11 +5988,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateInstanceNetworkInterface'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceNetworkInterface');
 
     const parameters = {
       options: {
@@ -6018,11 +6046,7 @@ class VpcV1 extends BaseService {
       'network_interface_id': _params.networkInterfaceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceNetworkInterfaceFloatingIps'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceNetworkInterfaceFloatingIps');
 
     const parameters = {
       options: {
@@ -6080,11 +6104,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'removeInstanceNetworkInterfaceFloatingIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeInstanceNetworkInterfaceFloatingIp');
 
     const parameters = {
       options: {
@@ -6142,11 +6162,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceNetworkInterfaceFloatingIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceNetworkInterfaceFloatingIp');
 
     const parameters = {
       options: {
@@ -6206,11 +6222,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'addInstanceNetworkInterfaceFloatingIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addInstanceNetworkInterfaceFloatingIp');
 
     const parameters = {
       options: {
@@ -6235,9 +6247,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all reserved IPs bound to an instance network interface.
+   * List the primary reserved IP for an instance network interface.
    *
-   * This request lists all reserved IPs bound to an instance network interface.
+   * This request lists the primary reserved IP for an instance network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
@@ -6270,11 +6282,7 @@ class VpcV1 extends BaseService {
       'network_interface_id': _params.networkInterfaceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceNetworkInterfaceIps'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceNetworkInterfaceIps');
 
     const parameters = {
       options: {
@@ -6299,10 +6307,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Retrieve bound reserved IP.
+   * Retrieve the primary reserved IP.
    *
-   * This request retrieves the specified reserved IP address if it is bound to the network interface and instance
-   * specified in the URL.
+   * This request retrieves the primary reserved IP for an instance network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
@@ -6333,11 +6340,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceNetworkInterfaceIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceNetworkInterfaceIp');
 
     const parameters = {
       options: {
@@ -6393,11 +6396,7 @@ class VpcV1 extends BaseService {
       'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceVolumeAttachments'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceVolumeAttachments');
 
     const parameters = {
       options: {
@@ -6466,11 +6465,7 @@ class VpcV1 extends BaseService {
       'instance_id': _params.instanceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createInstanceVolumeAttachment'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceVolumeAttachment');
 
     const parameters = {
       options: {
@@ -6529,11 +6524,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstanceVolumeAttachment'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceVolumeAttachment');
 
     const parameters = {
       options: {
@@ -6588,11 +6579,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceVolumeAttachment'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceVolumeAttachment');
 
     const parameters = {
       options: {
@@ -6659,11 +6646,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateInstanceVolumeAttachment'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceVolumeAttachment');
 
     const parameters = {
       options: {
@@ -6721,11 +6704,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceGroups'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroups');
 
     const parameters = {
       options: {
@@ -6783,7 +6762,7 @@ class VpcV1 extends BaseService {
    * group in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceGroup>>}
    */
@@ -6814,11 +6793,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createInstanceGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroup');
 
     const parameters = {
       options: {
@@ -6874,11 +6849,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstanceGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroup');
 
     const parameters = {
       options: {
@@ -6931,11 +6902,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroup');
 
     const parameters = {
       options: {
@@ -7022,11 +6989,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateInstanceGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroup');
 
     const parameters = {
       options: {
@@ -7082,11 +7045,7 @@ class VpcV1 extends BaseService {
       'instance_group_id': _params.instanceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstanceGroupLoadBalancer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupLoadBalancer');
 
     const parameters = {
       options: {
@@ -7143,11 +7102,7 @@ class VpcV1 extends BaseService {
       'instance_group_id': _params.instanceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceGroupManagers'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagers');
 
     const parameters = {
       options: {
@@ -7204,11 +7159,7 @@ class VpcV1 extends BaseService {
       'instance_group_id': _params.instanceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createInstanceGroupManager'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManager');
 
     const parameters = {
       options: {
@@ -7266,11 +7217,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstanceGroupManager'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManager');
 
     const parameters = {
       options: {
@@ -7325,11 +7272,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceGroupManager'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManager');
 
     const parameters = {
       options: {
@@ -7402,11 +7345,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateInstanceGroupManager'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManager');
 
     const parameters = {
       options: {
@@ -7468,11 +7407,7 @@ class VpcV1 extends BaseService {
       'instance_group_manager_id': _params.instanceGroupManagerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceGroupManagerActions'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagerActions');
 
     const parameters = {
       options: {
@@ -7531,11 +7466,7 @@ class VpcV1 extends BaseService {
       'instance_group_manager_id': _params.instanceGroupManagerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createInstanceGroupManagerAction'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManagerAction');
 
     const parameters = {
       options: {
@@ -7595,11 +7526,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstanceGroupManagerAction'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManagerAction');
 
     const parameters = {
       options: {
@@ -7656,11 +7583,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceGroupManagerAction'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManagerAction');
 
     const parameters = {
       options: {
@@ -7733,11 +7656,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateInstanceGroupManagerAction'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManagerAction');
 
     const parameters = {
       options: {
@@ -7799,11 +7718,7 @@ class VpcV1 extends BaseService {
       'instance_group_manager_id': _params.instanceGroupManagerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceGroupManagerPolicies'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupManagerPolicies');
 
     const parameters = {
       options: {
@@ -7862,11 +7777,7 @@ class VpcV1 extends BaseService {
       'instance_group_manager_id': _params.instanceGroupManagerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createInstanceGroupManagerPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceGroupManagerPolicy');
 
     const parameters = {
       options: {
@@ -7926,11 +7837,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstanceGroupManagerPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupManagerPolicy');
 
     const parameters = {
       options: {
@@ -7987,11 +7894,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceGroupManagerPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupManagerPolicy');
 
     const parameters = {
       options: {
@@ -8059,11 +7962,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateInstanceGroupManagerPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupManagerPolicy');
 
     const parameters = {
       options: {
@@ -8120,11 +8019,7 @@ class VpcV1 extends BaseService {
       'instance_group_id': _params.instanceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstanceGroupMemberships'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupMemberships');
 
     const parameters = {
       options: {
@@ -8181,11 +8076,7 @@ class VpcV1 extends BaseService {
       'instance_group_id': _params.instanceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listInstanceGroupMemberships'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceGroupMemberships');
 
     const parameters = {
       options: {
@@ -8242,11 +8133,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteInstanceGroupMembership'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceGroupMembership');
 
     const parameters = {
       options: {
@@ -8301,11 +8188,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getInstanceGroupMembership'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceGroupMembership');
 
     const parameters = {
       options: {
@@ -8367,11 +8250,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateInstanceGroupMembership'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceGroupMembership');
 
     const parameters = {
       options: {
@@ -8439,11 +8318,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listDedicatedHostGroups'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHostGroups');
 
     const parameters = {
       options: {
@@ -8479,7 +8354,7 @@ class VpcV1 extends BaseService {
    * dedicated host group in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>>}
    */
@@ -8507,11 +8382,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createDedicatedHostGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createDedicatedHostGroup');
 
     const parameters = {
       options: {
@@ -8566,11 +8437,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteDedicatedHostGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteDedicatedHostGroup');
 
     const parameters = {
       options: {
@@ -8623,11 +8490,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getDedicatedHostGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHostGroup');
 
     const parameters = {
       options: {
@@ -8689,11 +8552,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateDedicatedHostGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateDedicatedHostGroup');
 
     const parameters = {
       options: {
@@ -8749,11 +8608,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listDedicatedHostProfiles'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHostProfiles');
 
     const parameters = {
       options: {
@@ -8806,11 +8661,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getDedicatedHostProfile'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHostProfile');
 
     const parameters = {
       options: {
@@ -8875,11 +8726,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listDedicatedHosts'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHosts');
 
     const parameters = {
       options: {
@@ -8929,11 +8776,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createDedicatedHost'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createDedicatedHost');
 
     const parameters = {
       options: {
@@ -8990,11 +8833,7 @@ class VpcV1 extends BaseService {
       'dedicated_host_id': _params.dedicatedHostId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listDedicatedHostDisks'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listDedicatedHostDisks');
 
     const parameters = {
       options: {
@@ -9050,11 +8889,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getDedicatedHostDisk'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHostDisk');
 
     const parameters = {
       options: {
@@ -9116,11 +8951,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateDedicatedHostDisk'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateDedicatedHostDisk');
 
     const parameters = {
       options: {
@@ -9176,11 +9007,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteDedicatedHost'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteDedicatedHost');
 
     const parameters = {
       options: {
@@ -9233,11 +9060,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getDedicatedHost'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getDedicatedHost');
 
     const parameters = {
       options: {
@@ -9302,11 +9125,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateDedicatedHost'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateDedicatedHost');
 
     const parameters = {
       options: {
@@ -9374,11 +9193,7 @@ class VpcV1 extends BaseService {
       'tag': _params.tag,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listBackupPolicies'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBackupPolicies');
 
     const parameters = {
       options: {
@@ -9419,7 +9234,10 @@ class VpcV1 extends BaseService {
    * backup policy.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+   * @param {BackupPolicyScopePrototype} [params.scope] - The scope to use for this backup policy.
+   *
+   * If unspecified, the policy will be scoped to the account.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
    */
@@ -9428,7 +9246,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['matchUserTags'];
-    const _validParams = ['matchUserTags', 'matchResourceTypes', 'name', 'plans', 'resourceGroup', 'headers'];
+    const _validParams = ['matchUserTags', 'matchResourceTypes', 'name', 'plans', 'resourceGroup', 'scope', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9440,6 +9258,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'plans': _params.plans,
       'resource_group': _params.resourceGroup,
+      'scope': _params.scope,
     };
 
     const query = {
@@ -9447,11 +9266,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createBackupPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createBackupPolicy');
 
     const parameters = {
       options: {
@@ -9531,11 +9346,7 @@ class VpcV1 extends BaseService {
       'backup_policy_id': _params.backupPolicyId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listBackupPolicyJobs'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBackupPolicyJobs');
 
     const parameters = {
       options: {
@@ -9591,11 +9402,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getBackupPolicyJob'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBackupPolicyJob');
 
     const parameters = {
       options: {
@@ -9653,11 +9460,7 @@ class VpcV1 extends BaseService {
       'backup_policy_id': _params.backupPolicyId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listBackupPolicyPlans'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBackupPolicyPlans');
 
     const parameters = {
       options: {
@@ -9745,11 +9548,7 @@ class VpcV1 extends BaseService {
       'backup_policy_id': _params.backupPolicyId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createBackupPolicyPlan'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createBackupPolicyPlan');
 
     const parameters = {
       options: {
@@ -9814,11 +9613,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteBackupPolicyPlan'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteBackupPolicyPlan');
 
     const parameters = {
       options: {
@@ -9875,11 +9670,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getBackupPolicyPlan'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBackupPolicyPlan');
 
     const parameters = {
       options: {
@@ -9965,11 +9756,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateBackupPolicyPlan'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateBackupPolicyPlan');
 
     const parameters = {
       options: {
@@ -10031,11 +9818,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteBackupPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteBackupPolicy');
 
     const parameters = {
       options: {
@@ -10090,11 +9873,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getBackupPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBackupPolicy');
 
     const parameters = {
       options: {
@@ -10161,11 +9940,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateBackupPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateBackupPolicy');
 
     const parameters = {
       options: {
@@ -10224,11 +9999,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listPlacementGroups'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listPlacementGroups');
 
     const parameters = {
       options: {
@@ -10268,7 +10039,7 @@ class VpcV1 extends BaseService {
    * group in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.PlacementGroup>>}
    */
@@ -10294,11 +10065,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createPlacementGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createPlacementGroup');
 
     const parameters = {
       options: {
@@ -10354,11 +10121,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deletePlacementGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePlacementGroup');
 
     const parameters = {
       options: {
@@ -10411,11 +10174,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getPlacementGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getPlacementGroup');
 
     const parameters = {
       options: {
@@ -10477,11 +10236,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updatePlacementGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updatePlacementGroup');
 
     const parameters = {
       options: {
@@ -10541,11 +10296,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listBareMetalServerProfiles'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBareMetalServerProfiles');
 
     const parameters = {
       options: {
@@ -10598,11 +10349,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getBareMetalServerProfile'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBareMetalServerProfile');
 
     const parameters = {
       options: {
@@ -10644,12 +10391,6 @@ class VpcV1 extends BaseService {
    * specified CRN.
    * @param {string} [params.vpcName] - Filters the collection to resources with a `vpc.name` property matching the
    * exact specified name.
-   * @param {string} [params.networkInterfacesSubnetId] - Filters the collection to bare metal servers with an item in
-   * the `network_interfaces` property with a `subnet.id` property matching the specified identifier.
-   * @param {string} [params.networkInterfacesSubnetCrn] - Filters the collection to bare metal servers with an item in
-   * the `network_interfaces` property with a `subnet.crn` property matching the specified CRN.
-   * @param {string} [params.networkInterfacesSubnetName] - Filters the collection to bare metal servers with an item in
-   * the `network_interfaces` property with a `subnet.name` property matching the exact specified name.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerCollection>>}
    */
@@ -10658,7 +10399,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'vpcId', 'vpcCrn', 'vpcName', 'networkInterfacesSubnetId', 'networkInterfacesSubnetCrn', 'networkInterfacesSubnetName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10674,16 +10415,9 @@ class VpcV1 extends BaseService {
       'vpc.id': _params.vpcId,
       'vpc.crn': _params.vpcCrn,
       'vpc.name': _params.vpcName,
-      'network_interfaces.subnet.id': _params.networkInterfacesSubnetId,
-      'network_interfaces.subnet.crn': _params.networkInterfacesSubnetCrn,
-      'network_interfaces.subnet.name': _params.networkInterfacesSubnetName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listBareMetalServers'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBareMetalServers');
 
     const parameters = {
       options: {
@@ -10731,7 +10465,7 @@ class VpcV1 extends BaseService {
    * network interfaces to create.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {BareMetalServerTrustedPlatformModulePrototype} [params.trustedPlatformModule] -
    * @param {VPCIdentity} [params.vpc] - The VPC this bare metal server will reside in.
    *
@@ -10769,11 +10503,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createBareMetalServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createBareMetalServer');
 
     const parameters = {
       options: {
@@ -10841,11 +10571,7 @@ class VpcV1 extends BaseService {
       'bare_metal_server_id': _params.bareMetalServerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createBareMetalServerConsoleAccessToken'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createBareMetalServerConsoleAccessToken');
 
     const parameters = {
       options: {
@@ -10903,11 +10629,7 @@ class VpcV1 extends BaseService {
       'bare_metal_server_id': _params.bareMetalServerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listBareMetalServerDisks'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBareMetalServerDisks');
 
     const parameters = {
       options: {
@@ -10963,11 +10685,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getBareMetalServerDisk'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBareMetalServerDisk');
 
     const parameters = {
       options: {
@@ -11029,11 +10747,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateBareMetalServerDisk'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateBareMetalServerDisk');
 
     const parameters = {
       options: {
@@ -11096,11 +10810,7 @@ class VpcV1 extends BaseService {
       'bare_metal_server_id': _params.bareMetalServerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listBareMetalServerNetworkInterfaces'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBareMetalServerNetworkInterfaces');
 
     const parameters = {
       options: {
@@ -11161,11 +10871,7 @@ class VpcV1 extends BaseService {
       'bare_metal_server_id': _params.bareMetalServerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createBareMetalServerNetworkInterface'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createBareMetalServerNetworkInterface');
 
     const parameters = {
       options: {
@@ -11225,11 +10931,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteBareMetalServerNetworkInterface'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteBareMetalServerNetworkInterface');
 
     const parameters = {
       options: {
@@ -11284,11 +10986,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getBareMetalServerNetworkInterface'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBareMetalServerNetworkInterface');
 
     const parameters = {
       options: {
@@ -11324,8 +11022,9 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The bare metal server network interface identifier.
    * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this bare metal
    * server network interface.
-   * @param {number[]} [params.allowedVlans] - Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI
-   * type) interface.
+   * @param {number[]} [params.allowedVlans] - The VLAN IDs to allow for `vlan` interfaces using this PCI interface,
+   * replacing any existing VLAN IDs. The specified values must include IDs for all `vlan` interfaces currently using
+   * this PCI interface.
    * @param {boolean} [params.enableInfrastructureNat] - If `true`:
    * - The VPC infrastructure performs any needed NAT operations.
    * - `floating_ips` must not have more than one floating IP.
@@ -11368,11 +11067,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateBareMetalServerNetworkInterface'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateBareMetalServerNetworkInterface');
 
     const parameters = {
       options: {
@@ -11430,11 +11125,7 @@ class VpcV1 extends BaseService {
       'network_interface_id': _params.networkInterfaceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listBareMetalServerNetworkInterfaceFloatingIps'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBareMetalServerNetworkInterfaceFloatingIps');
 
     const parameters = {
       options: {
@@ -11492,11 +11183,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'removeBareMetalServerNetworkInterfaceFloatingIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeBareMetalServerNetworkInterfaceFloatingIp');
 
     const parameters = {
       options: {
@@ -11554,11 +11241,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getBareMetalServerNetworkInterfaceFloatingIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBareMetalServerNetworkInterfaceFloatingIp');
 
     const parameters = {
       options: {
@@ -11620,11 +11303,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'addBareMetalServerNetworkInterfaceFloatingIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addBareMetalServerNetworkInterfaceFloatingIp');
 
     const parameters = {
       options: {
@@ -11649,9 +11328,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all reserved IPs bound to a bare metal server network interface.
+   * List the primary reserved IP for a bare metal server network interface.
    *
-   * This request lists all reserved IPs bound to a bare metal server network interface.
+   * This request lists the primary reserved IP for a bare metal server network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
@@ -11680,11 +11359,7 @@ class VpcV1 extends BaseService {
       'network_interface_id': _params.networkInterfaceId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listBareMetalServerNetworkInterfaceIps'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBareMetalServerNetworkInterfaceIps');
 
     const parameters = {
       options: {
@@ -11709,10 +11384,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Retrieve bound reserved IP.
+   * Retrieve the primary reserved IP.
    *
-   * This request retrieves the specified reserved IP address if it is bound to the network interface for the bare metal
-   * server specified in the URL.
+   * This request retrieves the primary reserved IP for a bare metal server network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
@@ -11743,11 +11417,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getBareMetalServerNetworkInterfaceIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBareMetalServerNetworkInterfaceIp');
 
     const parameters = {
       options: {
@@ -11802,11 +11472,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteBareMetalServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteBareMetalServer');
 
     const parameters = {
       options: {
@@ -11859,11 +11525,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getBareMetalServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBareMetalServer');
 
     const parameters = {
       options: {
@@ -11933,11 +11595,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateBareMetalServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateBareMetalServer');
 
     const parameters = {
       options: {
@@ -11995,11 +11653,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getBareMetalServerInitialization'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBareMetalServerInitialization');
 
     const parameters = {
       options: {
@@ -12053,11 +11707,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'restartBareMetalServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'restartBareMetalServer');
 
     const parameters = {
       options: {
@@ -12110,11 +11760,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'startBareMetalServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'startBareMetalServer');
 
     const parameters = {
       options: {
@@ -12175,11 +11821,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'stopBareMetalServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'stopBareMetalServer');
 
     const parameters = {
       options: {
@@ -12237,11 +11879,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVolumeProfiles'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumeProfiles');
 
     const parameters = {
       options: {
@@ -12294,11 +11932,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVolumeProfile'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVolumeProfile');
 
     const parameters = {
       options: {
@@ -12376,11 +12010,7 @@ class VpcV1 extends BaseService {
       'zone.name': _params.zoneName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVolumes'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumes');
 
     const parameters = {
       options: {
@@ -12431,11 +12061,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createVolume'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVolume');
 
     const parameters = {
       options: {
@@ -12493,11 +12119,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVolume'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVolume');
 
     const parameters = {
       options: {
@@ -12551,11 +12173,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVolume'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVolume');
 
     const parameters = {
       options: {
@@ -12637,11 +12255,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVolume'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVolume');
 
     const parameters = {
       options: {
@@ -12699,11 +12313,7 @@ class VpcV1 extends BaseService {
       'source_volume.id': _params.sourceVolumeId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteSnapshots'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSnapshots');
 
     const parameters = {
       options: {
@@ -12818,11 +12428,7 @@ class VpcV1 extends BaseService {
       'clones[].zone.name': _params.clonesZoneName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listSnapshots'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSnapshots');
 
     const parameters = {
       options: {
@@ -12873,11 +12479,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createSnapshot'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSnapshot');
 
     const parameters = {
       options: {
@@ -12934,11 +12536,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteSnapshot'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSnapshot');
 
     const parameters = {
       options: {
@@ -12992,11 +12590,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getSnapshot'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSnapshot');
 
     const parameters = {
       options: {
@@ -13062,11 +12656,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateSnapshot'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSnapshot');
 
     const parameters = {
       options: {
@@ -13123,11 +12713,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listSnapshotClones'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSnapshotClones');
 
     const parameters = {
       options: {
@@ -13184,11 +12770,7 @@ class VpcV1 extends BaseService {
       'zone_name': _params.zoneName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteSnapshotClone'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSnapshotClone');
 
     const parameters = {
       options: {
@@ -13243,11 +12825,7 @@ class VpcV1 extends BaseService {
       'zone_name': _params.zoneName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getSnapshotClone'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSnapshotClone');
 
     const parameters = {
       options: {
@@ -13304,11 +12882,7 @@ class VpcV1 extends BaseService {
       'zone_name': _params.zoneName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createSnapshotClone'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSnapshotClone');
 
     const parameters = {
       options: {
@@ -13371,11 +12945,7 @@ class VpcV1 extends BaseService {
       'sort': _params.sort,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listShareProfiles'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listShareProfiles');
 
     const parameters = {
       options: {
@@ -13428,11 +12998,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getShareProfile'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getShareProfile');
 
     const parameters = {
       options: {
@@ -13499,11 +13065,7 @@ class VpcV1 extends BaseService {
       'replication_role': _params.replicationRole,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listShares'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listShares');
 
     const parameters = {
       options: {
@@ -13557,11 +13119,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createShare'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createShare');
 
     const parameters = {
       options: {
@@ -13624,11 +13182,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteShare'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteShare');
 
     const parameters = {
       options: {
@@ -13683,11 +13237,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getShare'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getShare');
 
     const parameters = {
       options: {
@@ -13780,11 +13330,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateShare'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateShare');
 
     const parameters = {
       options: {
@@ -13828,8 +13374,8 @@ class VpcV1 extends BaseService {
    * - `fail`: Fail the operation, resulting in the replication relationship being unchanged.
    * - `split`: Split the replica from its source, resulting in two individual read-write
    *     file shares. Because the final sync was not completed, the replica may be
-   *     out-of-date. This is useful in disaster recovery scenarios where the source is known
-   *     to be unreachable.
+   *     out-of-date. This occurs in disaster recovery scenarios where the source is known to
+   *     be unreachable.
    * @param {number} [params.timeout] - The failover timeout in seconds.
    *
    * If the timeout is reached, the `fallback_policy` will be triggered.
@@ -13861,11 +13407,7 @@ class VpcV1 extends BaseService {
       'share_id': _params.shareId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'failoverShare'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'failoverShare');
 
     const parameters = {
       options: {
@@ -13931,11 +13473,7 @@ class VpcV1 extends BaseService {
       'share_id': _params.shareId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listShareMountTargets'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listShareMountTargets');
 
     const parameters = {
       options: {
@@ -13994,11 +13532,7 @@ class VpcV1 extends BaseService {
       'share_id': _params.shareId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createShareMountTarget'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createShareMountTarget');
 
     const parameters = {
       options: {
@@ -14059,11 +13593,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteShareMountTarget'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteShareMountTarget');
 
     const parameters = {
       options: {
@@ -14119,11 +13649,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getShareMountTarget'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getShareMountTarget');
 
     const parameters = {
       options: {
@@ -14187,11 +13713,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateShareMountTarget'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateShareMountTarget');
 
     const parameters = {
       options: {
@@ -14251,11 +13773,7 @@ class VpcV1 extends BaseService {
       'share_id': _params.shareId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteShareSource'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteShareSource');
 
     const parameters = {
       options: {
@@ -14287,11 +13805,11 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.shareId - The file share identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.Share>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareReference>>}
    */
   public getShareSource(
     params: VpcV1.GetShareSourceParams
-  ): Promise<VpcV1.Response<VpcV1.Share>> {
+  ): Promise<VpcV1.Response<VpcV1.ShareReference>> {
     const _params = { ...params };
     const _requiredParams = ['shareId'];
     const _validParams = ['shareId', 'headers'];
@@ -14309,11 +13827,7 @@ class VpcV1 extends BaseService {
       'share_id': _params.shareId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getShareSource'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getShareSource');
 
     const parameters = {
       options: {
@@ -14369,11 +13883,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listRegions'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listRegions');
 
     const parameters = {
       options: {
@@ -14426,11 +13936,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getRegion'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getRegion');
 
     const parameters = {
       options: {
@@ -14485,11 +13991,7 @@ class VpcV1 extends BaseService {
       'region_name': _params.regionName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listRegionZones'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listRegionZones');
 
     const parameters = {
       options: {
@@ -14545,11 +14047,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getRegionZone'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getRegionZone');
 
     const parameters = {
       options: {
@@ -14613,11 +14111,7 @@ class VpcV1 extends BaseService {
       'resource_group.id': _params.resourceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVirtualNetworkInterfaces'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVirtualNetworkInterfaces');
 
     const parameters = {
       options: {
@@ -14670,11 +14164,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVirtualNetworkInterface'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVirtualNetworkInterface');
 
     const parameters = {
       options: {
@@ -14736,11 +14226,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVirtualNetworkInterface'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVirtualNetworkInterface');
 
     const parameters = {
       options: {
@@ -14803,11 +14289,7 @@ class VpcV1 extends BaseService {
       'resource_group.id': _params.resourceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listPublicGateways'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listPublicGateways');
 
     const parameters = {
       options: {
@@ -14848,7 +14330,7 @@ class VpcV1 extends BaseService {
    * gateway in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.PublicGateway>>}
    */
@@ -14876,11 +14358,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createPublicGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createPublicGateway');
 
     const parameters = {
       options: {
@@ -14937,11 +14415,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deletePublicGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePublicGateway');
 
     const parameters = {
       options: {
@@ -14994,11 +14468,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getPublicGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getPublicGateway');
 
     const parameters = {
       options: {
@@ -15058,11 +14528,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updatePublicGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updatePublicGateway');
 
     const parameters = {
       options: {
@@ -15129,11 +14595,7 @@ class VpcV1 extends BaseService {
       'sort': _params.sort,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listFloatingIps'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listFloatingIps');
 
     const parameters = {
       options: {
@@ -15183,11 +14645,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createFloatingIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createFloatingIp');
 
     const parameters = {
       options: {
@@ -15243,11 +14701,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteFloatingIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteFloatingIp');
 
     const parameters = {
       options: {
@@ -15300,11 +14754,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getFloatingIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getFloatingIp');
 
     const parameters = {
       options: {
@@ -15374,11 +14824,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateFloatingIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateFloatingIp');
 
     const parameters = {
       options: {
@@ -15441,11 +14887,7 @@ class VpcV1 extends BaseService {
       'resource_group.id': _params.resourceGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listNetworkAcls'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listNetworkAcls');
 
     const parameters = {
       options: {
@@ -15497,11 +14939,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createNetworkAcl'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createNetworkAcl');
 
     const parameters = {
       options: {
@@ -15557,11 +14995,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteNetworkAcl'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNetworkAcl');
 
     const parameters = {
       options: {
@@ -15614,11 +15048,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getNetworkAcl'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getNetworkAcl');
 
     const parameters = {
       options: {
@@ -15678,11 +15108,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateNetworkAcl'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateNetworkAcl');
 
     const parameters = {
       options: {
@@ -15746,11 +15172,7 @@ class VpcV1 extends BaseService {
       'network_acl_id': _params.networkAclId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listNetworkAclRules'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listNetworkAclRules');
 
     const parameters = {
       options: {
@@ -15807,11 +15229,7 @@ class VpcV1 extends BaseService {
       'network_acl_id': _params.networkAclId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createNetworkAclRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createNetworkAclRule');
 
     const parameters = {
       options: {
@@ -15869,11 +15287,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteNetworkAclRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteNetworkAclRule');
 
     const parameters = {
       options: {
@@ -15928,11 +15342,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getNetworkAclRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getNetworkAclRule');
 
     const parameters = {
       options: {
@@ -16027,11 +15437,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateNetworkAclRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateNetworkAclRule');
 
     const parameters = {
       options: {
@@ -16104,11 +15510,7 @@ class VpcV1 extends BaseService {
       'vpc.name': _params.vpcName,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listSecurityGroups'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroups');
 
     const parameters = {
       options: {
@@ -16146,7 +15548,7 @@ class VpcV1 extends BaseService {
    * group for the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {SecurityGroupRulePrototype[]} [params.rules] - The prototype objects for rules to be created for this
    * security group. If unspecified, no rules will be created, resulting in all traffic being denied.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -16175,11 +15577,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createSecurityGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroup');
 
     const parameters = {
       options: {
@@ -16236,11 +15634,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteSecurityGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroup');
 
     const parameters = {
       options: {
@@ -16293,11 +15687,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getSecurityGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroup');
 
     const parameters = {
       options: {
@@ -16359,11 +15749,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateSecurityGroup'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSecurityGroup');
 
     const parameters = {
       options: {
@@ -16421,11 +15807,7 @@ class VpcV1 extends BaseService {
       'security_group_id': _params.securityGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listSecurityGroupRules'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroupRules');
 
     const parameters = {
       options: {
@@ -16487,11 +15869,7 @@ class VpcV1 extends BaseService {
       'security_group_id': _params.securityGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createSecurityGroupRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroupRule');
 
     const parameters = {
       options: {
@@ -16550,11 +15928,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteSecurityGroupRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroupRule');
 
     const parameters = {
       options: {
@@ -16609,11 +15983,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getSecurityGroupRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroupRule');
 
     const parameters = {
       options: {
@@ -16704,11 +16074,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateSecurityGroupRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSecurityGroupRule');
 
     const parameters = {
       options: {
@@ -16769,11 +16135,7 @@ class VpcV1 extends BaseService {
       'security_group_id': _params.securityGroupId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listSecurityGroupTargets'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSecurityGroupTargets');
 
     const parameters = {
       options: {
@@ -16806,7 +16168,7 @@ class VpcV1 extends BaseService {
    * - A bare metal server network interface identifier
    * - A virtual network interface identifier
    * - A VPN server identifier
-   * - An application load balancer identifier
+   * - A load balancer identifier
    * - An endpoint gateway identifier
    * - An instance network interface identifier
    *
@@ -16840,11 +16202,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteSecurityGroupTargetBinding'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSecurityGroupTargetBinding');
 
     const parameters = {
       options: {
@@ -16900,11 +16258,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getSecurityGroupTarget'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSecurityGroupTarget');
 
     const parameters = {
       options: {
@@ -16936,7 +16290,7 @@ class VpcV1 extends BaseService {
    * - A bare metal server network interface identifier
    * - A virtual network interface identifier
    * - A VPN server identifier
-   * - An application load balancer identifier
+   * - A load balancer identifier
    * - An endpoint gateway identifier
    * - An instance network interface identifier
    *
@@ -16970,11 +16324,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createSecurityGroupTargetBinding'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSecurityGroupTargetBinding');
 
     const parameters = {
       options: {
@@ -17030,11 +16380,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listIkePolicies'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIkePolicies');
 
     const parameters = {
       options: {
@@ -17072,7 +16418,7 @@ class VpcV1 extends BaseService {
    * the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IKEPolicy>>}
    */
@@ -17102,11 +16448,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createIkePolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createIkePolicy');
 
     const parameters = {
       options: {
@@ -17162,11 +16504,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteIkePolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteIkePolicy');
 
     const parameters = {
       options: {
@@ -17219,11 +16557,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getIkePolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getIkePolicy');
 
     const parameters = {
       options: {
@@ -17293,11 +16627,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateIkePolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateIkePolicy');
 
     const parameters = {
       options: {
@@ -17353,11 +16683,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listIkePolicyConnections'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIkePolicyConnections');
 
     const parameters = {
       options: {
@@ -17410,11 +16736,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listIpsecPolicies'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIpsecPolicies');
 
     const parameters = {
       options: {
@@ -17458,7 +16780,7 @@ class VpcV1 extends BaseService {
    * in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IPsecPolicy>>}
    */
@@ -17487,11 +16809,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createIpsecPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createIpsecPolicy');
 
     const parameters = {
       options: {
@@ -17547,11 +16865,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteIpsecPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteIpsecPolicy');
 
     const parameters = {
       options: {
@@ -17604,11 +16918,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getIpsecPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getIpsecPolicy');
 
     const parameters = {
       options: {
@@ -17683,11 +16993,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateIpsecPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateIpsecPolicy');
 
     const parameters = {
       options: {
@@ -17743,11 +17049,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listIpsecPolicyConnections'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listIpsecPolicyConnections');
 
     const parameters = {
       options: {
@@ -17811,11 +17113,7 @@ class VpcV1 extends BaseService {
       'mode': _params.mode,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpnGateways'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGateways');
 
     const parameters = {
       options: {
@@ -17865,11 +17163,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createVpnGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpnGateway');
 
     const parameters = {
       options: {
@@ -17926,11 +17220,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVpnGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnGateway');
 
     const parameters = {
       options: {
@@ -17983,11 +17273,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpnGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnGateway');
 
     const parameters = {
       options: {
@@ -18047,11 +17333,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVpnGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpnGateway');
 
     const parameters = {
       options: {
@@ -18110,11 +17392,7 @@ class VpcV1 extends BaseService {
       'vpn_gateway_id': _params.vpnGatewayId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpnGatewayConnections'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnections');
 
     const parameters = {
       options: {
@@ -18171,11 +17449,7 @@ class VpcV1 extends BaseService {
       'vpn_gateway_id': _params.vpnGatewayId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createVpnGatewayConnection'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpnGatewayConnection');
 
     const parameters = {
       options: {
@@ -18234,11 +17508,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVpnGatewayConnection'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnGatewayConnection');
 
     const parameters = {
       options: {
@@ -18293,11 +17563,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpnGatewayConnection'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnGatewayConnection');
 
     const parameters = {
       options: {
@@ -18355,11 +17621,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVpnGatewayConnection'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpnGatewayConnection');
 
     const parameters = {
       options: {
@@ -18419,11 +17681,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpnGatewayConnectionLocalCidrs'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionLocalCidrs');
 
     const parameters = {
       options: {
@@ -18485,11 +17743,7 @@ class VpcV1 extends BaseService {
       'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'removeVpnGatewayConnectionLocalCidr'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionLocalCidr');
 
     const parameters = {
       options: {
@@ -18550,11 +17804,7 @@ class VpcV1 extends BaseService {
       'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'checkVpnGatewayConnectionLocalCidr'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionLocalCidr');
 
     const parameters = {
       options: {
@@ -18616,11 +17866,7 @@ class VpcV1 extends BaseService {
       'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'addVpnGatewayConnectionLocalCidr'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionLocalCidr');
 
     const parameters = {
       options: {
@@ -18677,11 +17923,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpnGatewayConnectionPeerCidrs'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionPeerCidrs');
 
     const parameters = {
       options: {
@@ -18743,11 +17985,7 @@ class VpcV1 extends BaseService {
       'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'removeVpnGatewayConnectionPeerCidr'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionPeerCidr');
 
     const parameters = {
       options: {
@@ -18808,11 +18046,7 @@ class VpcV1 extends BaseService {
       'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'checkVpnGatewayConnectionPeerCidr'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionPeerCidr');
 
     const parameters = {
       options: {
@@ -18874,11 +18108,7 @@ class VpcV1 extends BaseService {
       'prefix_length': _params.prefixLength,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'addVpnGatewayConnectionPeerCidr'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionPeerCidr');
 
     const parameters = {
       options: {
@@ -18944,11 +18174,7 @@ class VpcV1 extends BaseService {
       'sort': _params.sort,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpnServers'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnServers');
 
     const parameters = {
       options: {
@@ -19005,7 +18231,7 @@ class VpcV1 extends BaseService {
    * @param {string} [params.protocol] - The transport protocol to use for this VPN server.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {SecurityGroupIdentity[]} [params.securityGroups] - The security groups to use for this VPN server. If
    * unspecified, the VPC's default security group is used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -19042,11 +18268,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createVpnServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpnServer');
 
     const parameters = {
       options: {
@@ -19103,11 +18325,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVpnServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnServer');
 
     const parameters = {
       options: {
@@ -19161,11 +18379,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpnServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnServer');
 
     const parameters = {
       options: {
@@ -19262,11 +18476,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVpnServer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpnServer');
 
     const parameters = {
       options: {
@@ -19324,11 +18534,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpnServerClientConfiguration'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnServerClientConfiguration');
 
     const parameters = {
       options: {
@@ -19391,11 +18597,7 @@ class VpcV1 extends BaseService {
       'vpn_server_id': _params.vpnServerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpnServerClients'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnServerClients');
 
     const parameters = {
       options: {
@@ -19453,11 +18655,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVpnServerClient'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnServerClient');
 
     const parameters = {
       options: {
@@ -19512,11 +18710,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpnServerClient'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnServerClient');
 
     const parameters = {
       options: {
@@ -19574,11 +18768,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'disconnectVpnClient'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'disconnectVpnClient');
 
     const parameters = {
       options: {
@@ -19642,11 +18832,7 @@ class VpcV1 extends BaseService {
       'vpn_server_id': _params.vpnServerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listVpnServerRoutes'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnServerRoutes');
 
     const parameters = {
       options: {
@@ -19722,11 +18908,7 @@ class VpcV1 extends BaseService {
       'vpn_server_id': _params.vpnServerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createVpnServerRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVpnServerRoute');
 
     const parameters = {
       options: {
@@ -19784,11 +18966,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteVpnServerRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVpnServerRoute');
 
     const parameters = {
       options: {
@@ -19843,11 +19021,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getVpnServerRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnServerRoute');
 
     const parameters = {
       options: {
@@ -19910,11 +19084,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateVpnServerRoute'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVpnServerRoute');
 
     const parameters = {
       options: {
@@ -19973,11 +19143,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listLoadBalancerProfiles'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerProfiles');
 
     const parameters = {
       options: {
@@ -20030,11 +19196,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getLoadBalancerProfile'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerProfile');
 
     const parameters = {
       options: {
@@ -20087,11 +19249,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listLoadBalancers'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancers');
 
     const parameters = {
       options: {
@@ -20151,7 +19309,7 @@ class VpcV1 extends BaseService {
    * If unspecified, `application` will be used.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {boolean} [params.routeMode] - Indicates whether route mode is enabled for this load balancer.
    *
    * At present, public load balancers are not supported with route mode enabled.
@@ -20193,11 +19351,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createLoadBalancer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancer');
 
     const parameters = {
       options: {
@@ -20255,11 +19409,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteLoadBalancer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancer');
 
     const parameters = {
       options: {
@@ -20313,11 +19463,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getLoadBalancer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancer');
 
     const parameters = {
       options: {
@@ -20399,11 +19545,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateLoadBalancer'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancer');
 
     const parameters = {
       options: {
@@ -20460,11 +19602,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getLoadBalancerStatistics'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerStatistics');
 
     const parameters = {
       options: {
@@ -20518,11 +19656,7 @@ class VpcV1 extends BaseService {
       'load_balancer_id': _params.loadBalancerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listLoadBalancerListeners'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListeners');
 
     const parameters = {
       options: {
@@ -20652,11 +19786,7 @@ class VpcV1 extends BaseService {
       'load_balancer_id': _params.loadBalancerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createLoadBalancerListener'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListener');
 
     const parameters = {
       options: {
@@ -20715,11 +19845,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteLoadBalancerListener'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListener');
 
     const parameters = {
       options: {
@@ -20774,11 +19900,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getLoadBalancerListener'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListener');
 
     const parameters = {
       options: {
@@ -20908,11 +20030,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateLoadBalancerListener'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListener');
 
     const parameters = {
       options: {
@@ -20970,11 +20088,7 @@ class VpcV1 extends BaseService {
       'listener_id': _params.listenerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listLoadBalancerListenerPolicies'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListenerPolicies');
 
     const parameters = {
       options: {
@@ -21052,11 +20166,7 @@ class VpcV1 extends BaseService {
       'listener_id': _params.listenerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createLoadBalancerListenerPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListenerPolicy');
 
     const parameters = {
       options: {
@@ -21116,11 +20226,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteLoadBalancerListenerPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListenerPolicy');
 
     const parameters = {
       options: {
@@ -21177,11 +20283,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getLoadBalancerListenerPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListenerPolicy');
 
     const parameters = {
       options: {
@@ -21253,11 +20355,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateLoadBalancerListenerPolicy'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListenerPolicy');
 
     const parameters = {
       options: {
@@ -21317,11 +20415,7 @@ class VpcV1 extends BaseService {
       'policy_id': _params.policyId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listLoadBalancerListenerPolicyRules'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerListenerPolicyRules');
 
     const parameters = {
       options: {
@@ -21401,11 +20495,7 @@ class VpcV1 extends BaseService {
       'policy_id': _params.policyId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createLoadBalancerListenerPolicyRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerListenerPolicyRule');
 
     const parameters = {
       options: {
@@ -21467,11 +20557,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteLoadBalancerListenerPolicyRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerListenerPolicyRule');
 
     const parameters = {
       options: {
@@ -21530,11 +20616,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getLoadBalancerListenerPolicyRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerListenerPolicyRule');
 
     const parameters = {
       options: {
@@ -21616,11 +20698,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateLoadBalancerListenerPolicyRule'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerListenerPolicyRule');
 
     const parameters = {
       options: {
@@ -21676,11 +20754,7 @@ class VpcV1 extends BaseService {
       'load_balancer_id': _params.loadBalancerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listLoadBalancerPools'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerPools');
 
     const parameters = {
       options: {
@@ -21762,11 +20836,7 @@ class VpcV1 extends BaseService {
       'load_balancer_id': _params.loadBalancerId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createLoadBalancerPool'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerPool');
 
     const parameters = {
       options: {
@@ -21825,11 +20895,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteLoadBalancerPool'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerPool');
 
     const parameters = {
       options: {
@@ -21884,11 +20950,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getLoadBalancerPool'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerPool');
 
     const parameters = {
       options: {
@@ -21973,11 +21035,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateLoadBalancerPool'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerPool');
 
     const parameters = {
       options: {
@@ -22035,11 +21093,7 @@ class VpcV1 extends BaseService {
       'pool_id': _params.poolId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listLoadBalancerPoolMembers'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listLoadBalancerPoolMembers');
 
     const parameters = {
       options: {
@@ -22116,11 +21170,7 @@ class VpcV1 extends BaseService {
       'pool_id': _params.poolId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createLoadBalancerPoolMember'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createLoadBalancerPoolMember');
 
     const parameters = {
       options: {
@@ -22184,11 +21234,7 @@ class VpcV1 extends BaseService {
       'pool_id': _params.poolId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'replaceLoadBalancerPoolMembers'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceLoadBalancerPoolMembers');
 
     const parameters = {
       options: {
@@ -22248,11 +21294,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteLoadBalancerPoolMember'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteLoadBalancerPoolMember');
 
     const parameters = {
       options: {
@@ -22309,11 +21351,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getLoadBalancerPoolMember'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getLoadBalancerPoolMember');
 
     const parameters = {
       options: {
@@ -22392,11 +21430,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateLoadBalancerPoolMember'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateLoadBalancerPoolMember');
 
     const parameters = {
       options: {
@@ -22438,6 +21472,14 @@ class VpcV1 extends BaseService {
    * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
    * matching the specified identifier.
+   * @param {string} [params.vpcId] - Filters the collection to resources with a `vpc.id` property matching the
+   * specified identifier.
+   * @param {string} [params.vpcCrn] - Filters the collection to resources with a `vpc.crn` property matching the
+   * specified CRN.
+   * @param {string} [params.vpcName] - Filters the collection to resources with a `vpc.name` property matching the
+   * exact specified name.
+   * @param {boolean} [params.allowDnsResolutionBinding] - Filters the collection to endpoint gateways with an
+   * `allow_dns_resolution_binding` property matching the specified value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EndpointGatewayCollection>>}
    */
@@ -22446,7 +21488,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGatewayCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'headers'];
+    const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'vpcId', 'vpcCrn', 'vpcName', 'allowDnsResolutionBinding', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22459,13 +21501,13 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
+      'vpc.id': _params.vpcId,
+      'vpc.crn': _params.vpcCrn,
+      'vpc.name': _params.vpcName,
+      'allow_dns_resolution_binding': _params.allowDnsResolutionBinding,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listEndpointGateways'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listEndpointGateways');
 
     const parameters = {
       options: {
@@ -22499,13 +21541,19 @@ class VpcV1 extends BaseService {
    * already be the target of another
    * endpoint gateway in the VPC.
    * @param {VPCIdentity} params.vpc - The VPC this endpoint gateway will reside in.
+   * @param {boolean} [params.allowDnsResolutionBinding] - Indicates whether to allow DNS resolution for this endpoint
+   * gateway when the VPC this endpoint gateway resides in has a DNS resolution binding to a VPC with `dns.enable_hub`
+   * set to `true`.
+   *
+   * Must be `true` if the VPC this endpoint gateway resides in has `dns.enable_hub` set to
+   * `true`.
    * @param {EndpointGatewayReservedIP[]} [params.ips] - The reserved IPs to bind to this endpoint gateway. At most one
    * reserved IP per zone is allowed.
    * @param {string} [params.name] - The name for this endpoint gateway. The name must not be used by another endpoint
    * gateway in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {SecurityGroupIdentity[]} [params.securityGroups] - The security groups to use for this endpoint gateway. If
    * unspecified, the VPC's default security group is used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -22516,7 +21564,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
     const _params = { ...params };
     const _requiredParams = ['target', 'vpc'];
-    const _validParams = ['target', 'vpc', 'ips', 'name', 'resourceGroup', 'securityGroups', 'headers'];
+    const _validParams = ['target', 'vpc', 'allowDnsResolutionBinding', 'ips', 'name', 'resourceGroup', 'securityGroups', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22525,6 +21573,7 @@ class VpcV1 extends BaseService {
     const body = {
       'target': _params.target,
       'vpc': _params.vpc,
+      'allow_dns_resolution_binding': _params.allowDnsResolutionBinding,
       'ips': _params.ips,
       'name': _params.name,
       'resource_group': _params.resourceGroup,
@@ -22536,11 +21585,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createEndpointGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createEndpointGateway');
 
     const parameters = {
       options: {
@@ -22604,11 +21649,7 @@ class VpcV1 extends BaseService {
       'endpoint_gateway_id': _params.endpointGatewayId,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listEndpointGatewayIps'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listEndpointGatewayIps');
 
     const parameters = {
       options: {
@@ -22665,11 +21706,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'removeEndpointGatewayIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeEndpointGatewayIp');
 
     const parameters = {
       options: {
@@ -22725,11 +21762,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getEndpointGatewayIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getEndpointGatewayIp');
 
     const parameters = {
       options: {
@@ -22788,11 +21821,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'addEndpointGatewayIp'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addEndpointGatewayIp');
 
     const parameters = {
       options: {
@@ -22849,11 +21878,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteEndpointGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteEndpointGateway');
 
     const parameters = {
       options: {
@@ -22906,11 +21931,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getEndpointGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getEndpointGateway');
 
     const parameters = {
       options: {
@@ -22941,6 +21962,12 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The endpoint gateway identifier.
+   * @param {boolean} [params.allowDnsResolutionBinding] - Indicates whether to allow DNS resolution for this endpoint
+   * gateway when the VPC this endpoint gateway resides in has a DNS resolution binding to a VPC with `dns.enable_hub`
+   * set to `true`.
+   *
+   * Must be `true` if the VPC this endpoint gateway resides in has `dns.enable_hub` set to
+   * `true`.
    * @param {string} [params.name] - The name for this endpoint gateway. The name must not be used by another endpoint
    * gateway in the VPC.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -22951,13 +21978,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'allowDnsResolutionBinding', 'name', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'allow_dns_resolution_binding': _params.allowDnsResolutionBinding,
       'name': _params.name,
     };
 
@@ -22970,11 +21998,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateEndpointGateway'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateEndpointGateway');
 
     const parameters = {
       options: {
@@ -23054,11 +22078,7 @@ class VpcV1 extends BaseService {
       'target.resource_type': _params.targetResourceType,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'listFlowLogCollectors'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listFlowLogCollectors');
 
     const parameters = {
       options: {
@@ -23093,7 +22113,8 @@ class VpcV1 extends BaseService {
    * collected flows will be logged.
    * The bucket must exist and an IAM service authorization must grant
    * `IBM Cloud Flow Logs` resources of `VPC Infrastructure Services` writer
-   * access to the bucket.
+   * access to the bucket. For more information, see [Creating a flow log
+   * collector](https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-flow-log-collector).
    * @param {FlowLogCollectorTargetPrototype} params.target - The target this collector will collect flow logs for. If
    * the target is an instance,
    * subnet, or VPC, flow logs will not be collected for any instance network interfaces within
@@ -23103,7 +22124,7 @@ class VpcV1 extends BaseService {
    * collector in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FlowLogCollector>>}
    */
@@ -23131,11 +22152,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'createFlowLogCollector'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createFlowLogCollector');
 
     const parameters = {
       options: {
@@ -23192,11 +22209,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'deleteFlowLogCollector'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteFlowLogCollector');
 
     const parameters = {
       options: {
@@ -23249,11 +22262,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'getFlowLogCollector'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getFlowLogCollector');
 
     const parameters = {
       options: {
@@ -23318,11 +22327,7 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(
-      VpcV1.DEFAULT_SERVICE_NAME,
-      'v1',
-      'updateFlowLogCollector'
-    );
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateFlowLogCollector');
 
     const parameters = {
       options: {
@@ -23359,7 +22364,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2022-09-13` and `2023-08-24`.
+     *  `2023-10-10` and `2023-11-15`.
      */
     version: string;
   }
@@ -23415,12 +22420,18 @@ namespace VpcV1 {
      *  may be connected in this way. This value is set at creation and subsequently immutable.
      */
     classicAccess?: boolean;
+    /** The DNS configuration for this VPC.
+     *
+     *  If unspecified, the system will assign DNS servers capable of resolving hosts and endpoint
+     *  gateways within this VPC, and hosts on the internet.
+     */
+    dns?: VPCDNSPrototype;
     /** The name for this VPC. The name must not be used by another VPC in the region. If unspecified, the name will
      *  be a hyphenated list of randomly-selected words.
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     headers?: OutgoingHttpHeaders;
@@ -23439,6 +22450,10 @@ namespace VpcV1 {
   export interface DeleteVpcParams {
     /** The VPC identifier. */
     id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -23453,8 +22468,14 @@ namespace VpcV1 {
   export interface UpdateVpcParams {
     /** The VPC identifier. */
     id: string;
+    /** The DNS configuration for this VPC. */
+    dns?: VPCDNSPatch;
     /** The name for this VPC. The name must not be used by another VPC in the region. */
     name?: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -23550,6 +22571,92 @@ namespace VpcV1 {
      */
     isDefault?: boolean;
     /** The name for this address prefix. The name must not be used by another address prefix for the VPC. */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listVpcDnsResolutionBindings` operation. */
+  export interface ListVpcDnsResolutionBindingsParams {
+    /** The VPC identifier. */
+    vpcId: string;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListVpcDnsResolutionBindingsConstants.Sort | string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** Filters the collection to resources with a `vpc.crn` property matching the specified CRN. */
+    vpcCrn?: string;
+    /** Filters the collection to resources with a `vpc.name` property matching the exact specified name. */
+    vpcName?: string;
+    /** Filters the collection to resources with a `vpc.remote.account.id` property matching the specified account
+     *  identifier.
+     */
+    accountId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listVpcDnsResolutionBindings` operation. */
+  export namespace ListVpcDnsResolutionBindingsConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `createVpcDnsResolutionBinding` operation. */
+  export interface CreateVpcDnsResolutionBindingParams {
+    /** The VPC identifier. */
+    vpcId: string;
+    /** Another VPC to bind this VPC to for DNS resolution. The VPC must have
+     *  `dns.enable_hub` set to `true`, and may be in a different account (subject to
+     *  IAM policies).
+     *
+     *  Additionally, the VPC specified in the URL (this VPC) must have `dns.enable_hub`
+     *  set to `false` and a `dns.resolution_binding_count` of zero.
+     */
+    vpc: VPCIdentity;
+    /** The name for this DNS resolution binding. The name must not be used by another DNS resolution binding for
+     *  the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteVpcDnsResolutionBinding` operation. */
+  export interface DeleteVpcDnsResolutionBindingParams {
+    /** The VPC identifier. */
+    vpcId: string;
+    /** The DNS resolution binding identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getVpcDnsResolutionBinding` operation. */
+  export interface GetVpcDnsResolutionBindingParams {
+    /** The VPC identifier. */
+    vpcId: string;
+    /** The DNS resolution binding identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateVpcDnsResolutionBinding` operation. */
+  export interface UpdateVpcDnsResolutionBindingParams {
+    /** The VPC identifier. */
+    vpcId: string;
+    /** The DNS resolution binding identifier. */
+    id: string;
+    /** The name for this DNS resolution binding. The name must not be used by another DNS resolution binding for
+     *  the VPC.
+     */
     name?: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -23696,9 +22803,9 @@ namespace VpcV1 {
      *  property set to `true`.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      *
      *  If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
      *  enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -23711,9 +22818,9 @@ namespace VpcV1 {
      *  Incoming traffic will be routed according to the routing table with two exceptions:
      *  - Traffic destined for IP addresses associated with public gateways will not be
      *    subject to routes in this routing table.
-     *  - Routes with an action of deliver are treated as drop unless the `next_hop` is an
-     *    IP address in a subnet in the route's `zone`. Therefore, if an incoming packet
-     *    matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+     *  - Routes with an `action` of `deliver` are treated as `drop` unless the `next_hop` is
+     *    an IP address in a subnet in the route's `zone` that is able to accept traffic.
+     *    Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
      *    connection, the packet will be dropped.
      */
     routeInternetIngress?: boolean;
@@ -23722,18 +22829,18 @@ namespace VpcV1 {
      *  with this property set to `true`.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      */
     routeTransitGatewayIngress?: boolean;
     /** If set to `true`, this routing table will be used to route traffic that originates from subnets in other
      *  zones in this VPC. The VPC must not already have a routing table with this property set to `true`.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      */
     routeVpcZoneIngress?: boolean;
     /** The prototype objects for routes to create for this routing table. If unspecified, the routing table will be
@@ -23789,9 +22896,9 @@ namespace VpcV1 {
      *  `false` deselects this routing table.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      */
     routeDirectLinkIngress?: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from the internet.  Updating
@@ -23802,9 +22909,9 @@ namespace VpcV1 {
      *  -  Traffic destined for IP addresses associated with public gateways will not be subject
      *     to routes in this routing table.
      *  -  Routes with an `action` of `deliver` are treated as `drop` unless the `next_hop` is an
-     *     IP address in a subnet in the route's `zone`. Therefore, if an incoming packet matches
-     *     a route with a `next_hop` of an internet-bound IP address or a VPN gateway connection,
-     *     the packet will be dropped.
+     *     IP address in a subnet in the route's `zone` that is able to accept traffic.
+     *     Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *     connection, the packet will be dropped.
      */
     routeInternetIngress?: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from
@@ -23813,9 +22920,9 @@ namespace VpcV1 {
      *  `true`, and no subnets are attached to this routing table. Updating to `false` deselects this routing table.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      *
      *  If [Classic Access](https://cloud.ibm.com/docs/vpc?topic=vpc-setting-up-access-to-classic-infrastructure) is
      *  enabled for this VPC, and this property is set to `true`, its incoming traffic will also be routed according to
@@ -23828,9 +22935,9 @@ namespace VpcV1 {
      *  this routing table.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      */
     routeVpcZoneIngress?: boolean;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
@@ -23966,6 +23073,14 @@ namespace VpcV1 {
     limit?: number;
     /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
     resourceGroupId?: string;
+    /** Filters the collection to resources with a `zone.name` property matching the exact specified name. */
+    zoneName?: string;
+    /** Filters the collection to resources with a `vpc.id` property matching the specified identifier. */
+    vpcId?: string;
+    /** Filters the collection to resources with a `vpc.crn` property matching the specified CRN. */
+    vpcCrn?: string;
+    /** Filters the collection to resources with a `vpc.name` property matching the exact specified name. */
+    vpcName?: string;
     /** Filters the collection to subnets with a `routing_table.id` property matching the specified identifier. */
     routingTableId?: string;
     /** Filters the collection to subnets with a `routing_table.name` property matching the exact specified name. */
@@ -24387,7 +23502,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     /** The crypto-system used by this key. */
@@ -24661,7 +23776,7 @@ namespace VpcV1 {
     instanceId: string;
     /** The associated subnet. */
     subnet: SubnetIdentity;
-    /** Indicates whether source IP spoofing is allowed on this instance interface. */
+    /** Indicates whether source IP spoofing is allowed on this instance network interface. */
     allowIpSpoofing?: boolean;
     /** The name for the instance network interface. The name must not be used by another network interface on the
      *  virtual server instance. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -24706,7 +23821,7 @@ namespace VpcV1 {
     instanceId: string;
     /** The instance network interface identifier. */
     id: string;
-    /** Indicates whether source IP spoofing is allowed on this instance interface. */
+    /** Indicates whether source IP spoofing is allowed on this instance network interface. */
     allowIpSpoofing?: boolean;
     /** The name for the instance network interface. The name must not be used by another network interface on the
      *  virtual server instance.
@@ -24883,7 +23998,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     headers?: OutgoingHttpHeaders;
@@ -25230,7 +24345,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     headers?: OutgoingHttpHeaders;
@@ -25395,9 +24510,14 @@ namespace VpcV1 {
     /** The prototype objects for backup plans to be created for this backup policy. */
     plans?: BackupPolicyPlanPrototype[];
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
+    /** The scope to use for this backup policy.
+     *
+     *  If unspecified, the policy will be scoped to the account.
+     */
+    scope?: BackupPolicyScopePrototype;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -25621,7 +24741,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     headers?: OutgoingHttpHeaders;
@@ -25691,18 +24811,6 @@ namespace VpcV1 {
     vpcCrn?: string;
     /** Filters the collection to resources with a `vpc.name` property matching the exact specified name. */
     vpcName?: string;
-    /** Filters the collection to bare metal servers with an item in the `network_interfaces` property with a
-     *  `subnet.id` property matching the specified identifier.
-     */
-    networkInterfacesSubnetId?: string;
-    /** Filters the collection to bare metal servers with an item in the `network_interfaces` property with a
-     *  `subnet.crn` property matching the specified CRN.
-     */
-    networkInterfacesSubnetCrn?: string;
-    /** Filters the collection to bare metal servers with an item in the `network_interfaces` property with a
-     *  `subnet.name` property matching the exact specified name.
-     */
-    networkInterfacesSubnetName?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -25730,7 +24838,7 @@ namespace VpcV1 {
     /** The additional bare metal server network interfaces to create. */
     networkInterfaces?: BareMetalServerNetworkInterfacePrototype[];
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     trustedPlatformModule?: BareMetalServerTrustedPlatformModulePrototype;
@@ -25843,7 +24951,9 @@ namespace VpcV1 {
     id: string;
     /** Indicates whether source IP spoofing is allowed on this bare metal server network interface. */
     allowIpSpoofing?: boolean;
-    /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. */
+    /** The VLAN IDs to allow for `vlan` interfaces using this PCI interface, replacing any existing VLAN IDs. The
+     *  specified values must include IDs for all `vlan` interfaces currently using this PCI interface.
+     */
     allowedVlans?: number[];
     /** If `true`:
      *  - The VPC infrastructure performs any needed NAT operations.
@@ -26442,8 +25552,8 @@ namespace VpcV1 {
      *  - `fail`: Fail the operation, resulting in the replication relationship being unchanged.
      *  - `split`: Split the replica from its source, resulting in two individual read-write
      *      file shares. Because the final sync was not completed, the replica may be
-     *      out-of-date. This is useful in disaster recovery scenarios where the source is known
-     *      to be unreachable.
+     *      out-of-date. This occurs in disaster recovery scenarios where the source is known to
+     *      be unreachable.
      */
     fallbackPolicy?: FailoverShareConstants.FallbackPolicy | string;
     /** The failover timeout in seconds.
@@ -26456,7 +25566,7 @@ namespace VpcV1 {
 
   /** Constants for the `failoverShare` operation. */
   export namespace FailoverShareConstants {
-    /** The action to take if the failover request is accepted but cannot be performed or times out: - `fail`: Fail the operation, resulting in the replication relationship being unchanged. - `split`: Split the replica from its source, resulting in two individual read-write file shares. Because the final sync was not completed, the replica may be out-of-date. This is useful in disaster recovery scenarios where the source is known to be unreachable. */
+    /** The action to take if the failover request is accepted but cannot be performed or times out: - `fail`: Fail the operation, resulting in the replication relationship being unchanged. - `split`: Split the replica from its source, resulting in two individual read-write file shares. Because the final sync was not completed, the replica may be out-of-date. This occurs in disaster recovery scenarios where the source is known to be unreachable. */
     export enum FallbackPolicy {
       FAIL = 'fail',
       SPLIT = 'split',
@@ -26608,7 +25718,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     headers?: OutgoingHttpHeaders;
@@ -26886,7 +25996,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     /** The prototype objects for rules to be created for this security group. If unspecified, no rules will be
@@ -27074,7 +26184,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     headers?: OutgoingHttpHeaders;
@@ -27185,7 +26295,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     headers?: OutgoingHttpHeaders;
@@ -27593,7 +26703,7 @@ namespace VpcV1 {
     /** The transport protocol to use for this VPN server. */
     protocol?: CreateVpnServerConstants.Protocol | string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     /** The security groups to use for this VPN server. If unspecified, the VPC's default security group is used. */
@@ -27902,7 +27012,7 @@ namespace VpcV1 {
      */
     profile?: LoadBalancerProfileIdentity;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     /** Indicates whether route mode is enabled for this load balancer.
@@ -28666,6 +27776,16 @@ namespace VpcV1 {
     limit?: number;
     /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
     resourceGroupId?: string;
+    /** Filters the collection to resources with a `vpc.id` property matching the specified identifier. */
+    vpcId?: string;
+    /** Filters the collection to resources with a `vpc.crn` property matching the specified CRN. */
+    vpcCrn?: string;
+    /** Filters the collection to resources with a `vpc.name` property matching the exact specified name. */
+    vpcName?: string;
+    /** Filters the collection to endpoint gateways with an `allow_dns_resolution_binding` property matching the
+     *  specified value.
+     */
+    allowDnsResolutionBinding?: boolean;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -28677,6 +27797,13 @@ namespace VpcV1 {
     target: EndpointGatewayTargetPrototype;
     /** The VPC this endpoint gateway will reside in. */
     vpc: VPCIdentity;
+    /** Indicates whether to allow DNS resolution for this endpoint gateway when the VPC this endpoint gateway
+     *  resides in has a DNS resolution binding to a VPC with `dns.enable_hub` set to `true`.
+     *
+     *  Must be `true` if the VPC this endpoint gateway resides in has `dns.enable_hub` set to
+     *  `true`.
+     */
+    allowDnsResolutionBinding?: boolean;
     /** The reserved IPs to bind to this endpoint gateway. At most one reserved IP per zone is allowed. */
     ips?: EndpointGatewayReservedIP[];
     /** The name for this endpoint gateway. The name must not be used by another endpoint gateway in the VPC. If
@@ -28684,7 +27811,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     /** The security groups to use for this endpoint gateway. If unspecified, the VPC's default security group is
@@ -28766,6 +27893,13 @@ namespace VpcV1 {
   export interface UpdateEndpointGatewayParams {
     /** The endpoint gateway identifier. */
     id: string;
+    /** Indicates whether to allow DNS resolution for this endpoint gateway when the VPC this endpoint gateway
+     *  resides in has a DNS resolution binding to a VPC with `dns.enable_hub` set to `true`.
+     *
+     *  Must be `true` if the VPC this endpoint gateway resides in has `dns.enable_hub` set to
+     *  `true`.
+     */
+    allowDnsResolutionBinding?: boolean;
     /** The name for this endpoint gateway. The name must not be used by another endpoint gateway in the VPC. */
     name?: string;
     headers?: OutgoingHttpHeaders;
@@ -28799,7 +27933,8 @@ namespace VpcV1 {
     /** The Cloud Object Storage bucket where the collected flows will be logged.
      *  The bucket must exist and an IAM service authorization must grant
      *  `IBM Cloud Flow Logs` resources of `VPC Infrastructure Services` writer
-     *  access to the bucket.
+     *  access to the bucket. For more information, see [Creating a flow log
+     *  collector](https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-flow-log-collector).
      */
     storageBucket: LegacyCloudObjectStorageBucketIdentity;
     /** The target this collector will collect flow logs for. If the target is an instance,
@@ -28814,7 +27949,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
     headers?: OutgoingHttpHeaders;
@@ -28856,7 +27991,15 @@ namespace VpcV1 {
     /** The unique identifier for this account. */
     id: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: AccountReference.Constants.ResourceType | string;
+  }
+  export namespace AccountReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        ACCOUNT = 'account',
+      }
+    }
   }
 
   /** AddressPrefix. */
@@ -28914,6 +28057,22 @@ namespace VpcV1 {
     created_at: string;
     /** The CRN for this backup policy. */
     crn: string;
+    /** The reasons for the current `health_state` (if any).
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    health_reasons: BackupPolicyHealthReason[];
+    /** The health of this resource.
+     *  - `ok`: No abnormal behavior detected
+     *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
+     *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
+     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
+     *  also have this state.
+     */
+    health_state: BackupPolicy.Constants.HealthState | string;
     /** The URL for this backup policy. */
     href: string;
     /** The unique identifier for this backup policy. */
@@ -28924,7 +28083,7 @@ namespace VpcV1 {
      */
     last_job_completed_at?: string;
     /** The lifecycle state of the backup policy. */
-    lifecycle_state: string;
+    lifecycle_state: BackupPolicy.Constants.LifecycleState | string;
     /** The resource types this backup policy applies to. Resources that have both a matching type and a matching
      *  user tag will be subject to the backup policy.
      *
@@ -28932,7 +28091,7 @@ namespace VpcV1 {
      *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
      *  unexpected property value was encountered.
      */
-    match_resource_types: string[];
+    match_resource_types: BackupPolicy.Constants.MatchResourceTypes | string[];
     /** The user tags this backup policy applies to. Resources that have both a matching user tag and a matching
      *  type will be subject to the backup policy.
      */
@@ -28944,7 +28103,38 @@ namespace VpcV1 {
     /** The resource group for this backup policy. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BackupPolicy.Constants.ResourceType | string;
+    /** The scope for this backup policy. */
+    scope: BackupPolicyScope;
+  }
+  export namespace BackupPolicy {
+    export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the backup policy. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource types this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the unexpected property value was encountered. */
+      export enum MatchResourceTypes {
+        VOLUME = 'volume',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BACKUP_POLICY = 'backup_policy',
+      }
+    }
   }
 
   /** BackupPolicyCollection. */
@@ -28971,6 +28161,24 @@ namespace VpcV1 {
   export interface BackupPolicyCollectionNext {
     /** The URL for a page of resources. */
     href: string;
+  }
+
+  /** BackupPolicyHealthReason. */
+  export interface BackupPolicyHealthReason {
+    /** A snake case string succinctly identifying the reason for this health state. */
+    code: BackupPolicyHealthReason.Constants.Code | string;
+    /** An explanation of the reason for this health state. */
+    message: string;
+    /** Link to documentation about the reason for this health state. */
+    more_info?: string;
+  }
+  export namespace BackupPolicyHealthReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this health state. */
+      export enum Code {
+        MISSING_SERVICE_AUTHORIZATION_POLICIES = 'missing_service_authorization_policies',
+      }
+    }
   }
 
   /** BackupPolicyJob. */
@@ -29004,9 +28212,9 @@ namespace VpcV1 {
      *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy job on which
      *  the unexpected property value was encountered.
      */
-    job_type: string;
+    job_type: BackupPolicyJob.Constants.JobType | string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BackupPolicyJob.Constants.ResourceType | string;
     /** The source this backup was created from (may be
      *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
      */
@@ -29017,7 +28225,7 @@ namespace VpcV1 {
      *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy job on which
      *  the unexpected property value was encountered.
      */
-    status: string;
+    status: BackupPolicyJob.Constants.Status | string;
     /** The reasons for the current status (if any).
      *
      *  The enumerated reason code values for this property will expand in the future. When processing this property,
@@ -29029,6 +28237,25 @@ namespace VpcV1 {
      *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
      */
     target_snapshots: SnapshotReference[];
+  }
+  export namespace BackupPolicyJob {
+    export namespace Constants {
+      /** The type of backup policy job. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy job on which the unexpected property value was encountered. */
+      export enum JobType {
+        CREATION = 'creation',
+        DELETION = 'deletion',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BACKUP_POLICY_JOB = 'backup_policy_job',
+      }
+      /** The status of the backup policy job. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy job on which the unexpected property value was encountered. */
+      export enum Status {
+        FAILED = 'failed',
+        RUNNING = 'running',
+        SUCCEEDED = 'succeeded',
+      }
+    }
   }
 
   /** BackupPolicyJobCollection. */
@@ -29069,11 +28296,22 @@ namespace VpcV1 {
      *  - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached
      *  - `source_volume_busy`: The source volume has `busy` set (after multiple retries).
      */
-    code: string;
+    code: BackupPolicyJobStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
     /** Link to documentation about this status reason. */
     more_info?: string;
+  }
+  export namespace BackupPolicyJobStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason: - `internal_error`: Internal error (contact IBM support) - `snapshot_pending`: Cannot delete backup (snapshot) in the `pending` lifecycle state - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached - `source_volume_busy`: The source volume has `busy` set (after multiple retries). */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        SNAPSHOT_PENDING = 'snapshot_pending',
+        SNAPSHOT_VOLUME_LIMIT = 'snapshot_volume_limit',
+        SOURCE_VOLUME_BUSY = 'source_volume_busy',
+      }
+    }
   }
 
   /** BackupPolicyPlan. */
@@ -29100,13 +28338,31 @@ namespace VpcV1 {
     /** The unique identifier for this backup policy plan. */
     id: string;
     /** The lifecycle state of this backup policy plan. */
-    lifecycle_state: string;
+    lifecycle_state: BackupPolicyPlan.Constants.LifecycleState | string;
     /** The name for this backup policy plan. The name is unique across all plans in the backup policy. */
     name: string;
     /** The policies for additional backups in remote regions. */
     remote_region_policies: BackupPolicyPlanRemoteRegionPolicy[];
     /** The resource type. */
-    resource_type: string;
+    resource_type: BackupPolicyPlan.Constants.ResourceType | string;
+  }
+  export namespace BackupPolicyPlan {
+    export namespace Constants {
+      /** The lifecycle state of this backup policy plan. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BACKUP_POLICY_PLAN = 'backup_policy_plan',
+      }
+    }
   }
 
   /** BackupPolicyPlanClonePolicy. */
@@ -29209,7 +28465,15 @@ namespace VpcV1 {
      */
     remote?: BackupPolicyPlanRemote;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BackupPolicyPlanReference.Constants.ResourceType | string;
+  }
+  export namespace BackupPolicyPlanReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        BACKUP_POLICY_PLAN = 'backup_policy_plan',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -29250,6 +28514,14 @@ namespace VpcV1 {
     region: RegionIdentity;
   }
 
+  /** The scope for this backup policy. */
+  export interface BackupPolicyScope {
+  }
+
+  /** The scope to use for this backup policy. If unspecified, the policy will be scoped to the account. */
+  export interface BackupPolicyScopePrototype {
+  }
+
   /** BareMetalServer. */
   export interface BareMetalServer {
     /** The total bandwidth (in megabits per second) shared across the bare metal server network interfaces. */
@@ -29280,14 +28552,14 @@ namespace VpcV1 {
      */
     lifecycle_reasons: BareMetalServerLifecycleReason[];
     /** The lifecycle state of the bare metal server. */
-    lifecycle_state: string;
+    lifecycle_state: BareMetalServer.Constants.LifecycleState | string;
     /** The amount of memory, truncated to whole gibibytes. */
     memory: number;
     /** The name for this bare metal server. The name is unique across all bare metal servers in the region. */
     name: string;
-    /** The bare metal server network interfaces, including the primary interface. */
+    /** The network interfaces for this bare metal server, including the primary network interface. */
     network_interfaces: NetworkInterfaceBareMetalServerContextReference[];
-    /** The primary bare metal server network interface. */
+    /** The primary network interface for this bare metal server. */
     primary_network_interface: NetworkInterfaceBareMetalServerContextReference;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
      *  for this bare metal server.
@@ -29296,9 +28568,9 @@ namespace VpcV1 {
     /** The resource group for this bare metal server. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BareMetalServer.Constants.ResourceType | string;
     /** The status of the bare metal server. */
-    status: string;
+    status: BareMetalServer.Constants.Status | string;
     /** The reasons for the current status (if any).
      *
      *  The enumerated reason code values for this property will expand in the future. When processing this property,
@@ -29311,6 +28583,36 @@ namespace VpcV1 {
     vpc: VPCReference;
     /** The zone this bare metal server resides in. */
     zone: ZoneReference;
+  }
+  export namespace BareMetalServer {
+    export namespace Constants {
+      /** The lifecycle state of the bare metal server. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER = 'bare_metal_server',
+      }
+      /** The status of the bare metal server. */
+      export enum Status {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        MAINTENANCE = 'maintenance',
+        PENDING = 'pending',
+        RESTARTING = 'restarting',
+        RUNNING = 'running',
+        STARTING = 'starting',
+        STOPPED = 'stopped',
+        STOPPING = 'stopping',
+      }
+    }
   }
 
   /** The possible resource types for this property are expected to expand in the future. */
@@ -29360,7 +28662,7 @@ namespace VpcV1 {
     /** A URL safe single-use token used to access the console WebSocket. */
     access_token: string;
     /** The bare metal server console type for which this token may be used. */
-    console_type: string;
+    console_type: BareMetalServerConsoleAccessToken.Constants.ConsoleType | string;
     /** The date and time that the access token was created. */
     created_at: string;
     /** The date and time that the access token will expire. */
@@ -29371,6 +28673,15 @@ namespace VpcV1 {
     force: boolean;
     /** The URL to access this bare metal server console. */
     href: string;
+  }
+  export namespace BareMetalServerConsoleAccessToken {
+    export namespace Constants {
+      /** The bare metal server console type for which this token may be used. */
+      export enum ConsoleType {
+        SERIAL = 'serial',
+        VNC = 'vnc',
+      }
+    }
   }
 
   /** BareMetalServerDisk. */
@@ -29391,13 +28702,27 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
      */
-    interface_type: string;
+    interface_type: BareMetalServerDisk.Constants.InterfaceType | string;
     /** The name for this bare metal server disk. The name is unique across all disks on the bare metal server. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BareMetalServerDisk.Constants.ResourceType | string;
     /** The size of the disk in GB (gigabytes). */
     size: number;
+  }
+  export namespace BareMetalServerDisk {
+    export namespace Constants {
+      /** The disk interface used for attaching the disk. - `fcp`: Attached using Fiber Channel Protocol - `sata`: Attached using Serial Advanced Technology Attachment - `nvme`: Attached using Non-Volatile Memory Express The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum InterfaceType {
+        FCP = 'fcp',
+        NVME = 'nvme',
+        SATA = 'sata',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER_DISK = 'bare_metal_server_disk',
+      }
+    }
   }
 
   /** BareMetalServerDiskCollection. */
@@ -29448,11 +28773,19 @@ namespace VpcV1 {
   /** BareMetalServerLifecycleReason. */
   export interface BareMetalServerLifecycleReason {
     /** A snake case string succinctly identifying the reason for this lifecycle state. */
-    code: string;
+    code: BareMetalServerLifecycleReason.Constants.Code | string;
     /** An explanation of the reason for this lifecycle state. */
     message: string;
     /** Link to documentation about the reason for this lifecycle state. */
     more_info?: string;
+  }
+  export namespace BareMetalServerLifecycleReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      export enum Code {
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
   }
 
   /** BareMetalServerNetworkInterface. */
@@ -29485,10 +28818,10 @@ namespace VpcV1 {
      *    server is stopped
      *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
      *      to use the PCI interface
-     *    - Cannot directly use an IEEE 802.1q VLAN tag.
+     *    - Cannot directly use an IEEE 802.1Q tag.
      *  - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its
      *    array of `allowed_vlans`.
-     *    - Must use an IEEE 802.1q tag.
+     *    - Must use an IEEE 802.1Q tag.
      *    - Has its own security groups and does not inherit those of the PCI device through
      *      which traffic flows.
      *
@@ -29496,7 +28829,7 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
      */
-    interface_type: string;
+    interface_type: BareMetalServerNetworkInterface.Constants.InterfaceType | string;
     /** The MAC address of this bare metal server network interface. If the MAC address has not yet been selected,
      *  the value will be an empty string.
      */
@@ -29507,15 +28840,41 @@ namespace VpcV1 {
     port_speed: number;
     primary_ip: ReservedIPReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BareMetalServerNetworkInterface.Constants.ResourceType | string;
     /** The security groups targeting this bare metal server network interface. */
     security_groups: SecurityGroupReference[];
     /** The status of the bare metal server network interface. */
-    status: string;
+    status: BareMetalServerNetworkInterface.Constants.Status | string;
     /** The associated subnet. */
     subnet: SubnetReference;
-    /** The type of this bare metal server network interface. */
-    type: string;
+    /** The bare metal server network interface type. */
+    type: BareMetalServerNetworkInterface.Constants.Type | string;
+  }
+  export namespace BareMetalServerNetworkInterface {
+    export namespace Constants {
+      /** The interface type: - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity within a `s390x` based system - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI interface - Cannot directly use an IEEE 802.1Q tag. - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. - Has its own security groups and does not inherit those of the PCI device through which traffic flows. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum InterfaceType {
+        HIPERSOCKET = 'hipersocket',
+        PCI = 'pci',
+        VLAN = 'vlan',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+      /** The status of the bare metal server network interface. */
+      export enum Status {
+        AVAILABLE = 'available',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+      }
+      /** The bare metal server network interface type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+    }
   }
 
   /** BareMetalServerNetworkInterfaceCollection. */
@@ -29567,16 +28926,16 @@ namespace VpcV1 {
      *    server is stopped
      *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
      *      to use the PCI interface
-     *    - Cannot directly use an IEEE 802.1q VLAN tag.
+     *    - Cannot directly use an IEEE 802.1Q tag.
      *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`
      *  - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its
      *    array of `allowed_vlans`.
-     *    - Must use an IEEE 802.1q tag.
+     *    - Must use an IEEE 802.1Q tag.
      *    - Has its own security groups and does not inherit those of the PCI device through
      *      which traffic flows.
      *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
      */
-    interface_type: string;
+    interface_type: BareMetalServerNetworkInterfacePrototype.Constants.InterfaceType | string;
     /** The name for this bare metal server network interface. The name must not be used by another network
      *  interface on the bare metal server. If unspecified, the name will be a hyphenated list of randomly-selected
      *  words.
@@ -29597,6 +28956,16 @@ namespace VpcV1 {
     /** The associated subnet. */
     subnet: SubnetIdentity;
   }
+  export namespace BareMetalServerNetworkInterfacePrototype {
+    export namespace Constants {
+      /** The interface type: - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity within a `s390x` based system - Not supported on bare metal servers with a `cpu.architecture` of `amd64` - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI interface - Cannot directly use an IEEE 802.1Q tag. - Not supported on bare metal servers with a `cpu.architecture` of `s390x` - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. - Has its own security groups and does not inherit those of the PCI device through which traffic flows. - Not supported on bare metal servers with a `cpu.architecture` of `s390x`. */
+      export enum InterfaceType {
+        HIPERSOCKET = 'hipersocket',
+        PCI = 'pci',
+        VLAN = 'vlan',
+      }
+    }
+  }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
   export interface BareMetalServerNetworkInterfaceReferenceDeleted {
@@ -29614,7 +28983,7 @@ namespace VpcV1 {
   export interface BareMetalServerPrimaryNetworkInterfacePrototype {
     /** Indicates whether source IP spoofing is allowed on this bare metal server network interface. */
     allow_ip_spoofing?: boolean;
-    /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. */
+    /** The VLAN IDs allowed for `vlan` interfaces using this PCI interface. */
     allowed_vlans?: number[];
     /** If `true`:
      *  - The VPC infrastructure performs any needed NAT operations.
@@ -29635,10 +29004,10 @@ namespace VpcV1 {
      *    server is stopped
      *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
      *      to use the PCI interface
-     *    - Cannot directly use an IEEE 802.1q VLAN tag.
+     *    - Cannot directly use an IEEE 802.1Q tag.
      *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
      */
-    interface_type?: string;
+    interface_type?: BareMetalServerPrimaryNetworkInterfacePrototype.Constants.InterfaceType | string;
     /** The name for this bare metal server network interface. The name must not be used by another network
      *  interface on the bare metal server. If unspecified, the name will be a hyphenated list of randomly-selected
      *  words.
@@ -29658,6 +29027,15 @@ namespace VpcV1 {
     security_groups?: SecurityGroupIdentity[];
     /** The associated subnet. */
     subnet: SubnetIdentity;
+  }
+  export namespace BareMetalServerPrimaryNetworkInterfacePrototype {
+    export namespace Constants {
+      /** The interface type: - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity within a `s390x` based system. - Not supported on bare metal servers with a `cpu.architecture` of `amd64` - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI interface - Cannot directly use an IEEE 802.1Q tag. - Not supported on bare metal servers with a `cpu.architecture` of `s390x`. */
+      export enum InterfaceType {
+        HIPERSOCKET = 'hipersocket',
+        PCI = 'pci',
+      }
+    }
   }
 
   /** BareMetalServerProfile. */
@@ -29680,9 +29058,17 @@ namespace VpcV1 {
     network_interface_count: BareMetalServerProfileNetworkInterfaceCount;
     os_architecture: BareMetalServerProfileOSArchitecture;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BareMetalServerProfile.Constants.ResourceType | string;
     /** The supported trusted platform module modes for this bare metal server profile. */
     supported_trusted_platform_module_modes: BareMetalServerProfileSupportedTrustedPlatformModuleModes;
+  }
+  export namespace BareMetalServerProfile {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER_PROFILE = 'bare_metal_server_profile',
+      }
+    }
   }
 
   /** BareMetalServerProfileBandwidth. */
@@ -29694,9 +29080,17 @@ namespace VpcV1 {
     /** The default CPU architecture for a bare metal server with this profile. */
     default?: string;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileCPUArchitecture.Constants.Type | string;
     /** The CPU architecture for a bare metal server with this profile. */
     value: string;
+  }
+  export namespace BareMetalServerProfileCPUArchitecture {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** BareMetalServerProfileCPUCoreCount. */
@@ -29736,9 +29130,22 @@ namespace VpcV1 {
   /** The console type configuration for a bare metal server with this profile. */
   export interface BareMetalServerProfileConsoleTypes {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileConsoleTypes.Constants.Type | string;
     /** The console types for a bare metal server with this profile. */
-    values: string[];
+    values: BareMetalServerProfileConsoleTypes.Constants.Values | string[];
+  }
+  export namespace BareMetalServerProfileConsoleTypes {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The console types for a bare metal server with this profile. */
+      export enum Values {
+        SERIAL = 'serial',
+        VNC = 'vnc',
+      }
+    }
   }
 
   /** Disks provided by this profile. */
@@ -29768,11 +29175,31 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
      */
-    default: string;
+    default: BareMetalServerProfileDiskSupportedInterfaces.Constants.Default | string;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileDiskSupportedInterfaces.Constants.Type | string;
     /** The supported disk interfaces used for attaching the disk. */
-    values: string[];
+    values: BareMetalServerProfileDiskSupportedInterfaces.Constants.Values | string[];
+  }
+  export namespace BareMetalServerProfileDiskSupportedInterfaces {
+    export namespace Constants {
+      /** The disk interface used for attaching the disk. - `fcp`: Attached using Fiber Channel Protocol - `sata`: Attached using Serial Advanced Technology Attachment - `nvme`: Attached using Non-Volatile Memory Express The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum Default {
+        FCP = 'fcp',
+        NVME = 'nvme',
+        SATA = 'sata',
+      }
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The supported disk interfaces used for attaching the disk. */
+      export enum Values {
+        FCP = 'fcp',
+        NVME = 'nvme',
+        SATA = 'sata',
+      }
+    }
   }
 
   /** Identifies a bare metal server profile by a unique property. */
@@ -29792,9 +29219,17 @@ namespace VpcV1 {
     /** The default OS architecture for a bare metal server with this profile. */
     default: string;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileOSArchitecture.Constants.Type | string;
     /** The supported OS architecture(s) for a bare metal server with this profile. */
     values: string[];
+  }
+  export namespace BareMetalServerProfileOSArchitecture {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** BareMetalServerProfileReference. */
@@ -29804,15 +29239,36 @@ namespace VpcV1 {
     /** The name for this bare metal server profile. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BareMetalServerProfileReference.Constants.ResourceType | string;
+  }
+  export namespace BareMetalServerProfileReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER_PROFILE = 'bare_metal_server_profile',
+      }
+    }
   }
 
   /** The supported trusted platform module modes for this bare metal server profile. */
   export interface BareMetalServerProfileSupportedTrustedPlatformModuleModes {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Type | string;
     /** The supported trusted platform module modes. */
-    values: string[];
+    values: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Values | string[];
+  }
+  export namespace BareMetalServerProfileSupportedTrustedPlatformModuleModes {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The supported trusted platform module modes. */
+      export enum Values {
+        DISABLED = 'disabled',
+        TPM_2 = 'tpm_2',
+      }
+    }
   }
 
   /** BareMetalServerStatusReason. */
@@ -29824,11 +29280,23 @@ namespace VpcV1 {
      *  - `cannot_start_ip_address`: An error occurred while allocating an IP address
      *  - `cannot_start_network`: An error occurred while allocating network resources.
      */
-    code: string;
+    code: BareMetalServerStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
     /** Link to documentation about this status reason. */
     more_info?: string;
+  }
+  export namespace BareMetalServerStatusReason {
+    export namespace Constants {
+      /** The status reason code: - `cannot_start`: Failed to start due to an internal error - `cannot_start_capacity`: Insufficient capacity within the selected zone - `cannot_start_compute`: An error occurred while allocating compute resources - `cannot_start_ip_address`: An error occurred while allocating an IP address - `cannot_start_network`: An error occurred while allocating network resources. */
+      export enum Code {
+        CANNOT_START = 'cannot_start',
+        CANNOT_START_CAPACITY = 'cannot_start_capacity',
+        CANNOT_START_COMPUTE = 'cannot_start_compute',
+        CANNOT_START_IP_ADDRESS = 'cannot_start_ip_address',
+        CANNOT_START_NETWORK = 'cannot_start_network',
+      }
+    }
   }
 
   /** BareMetalServerTrustedPlatformModule. */
@@ -29843,9 +29311,23 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
      */
-    mode: string;
+    mode: BareMetalServerTrustedPlatformModule.Constants.Mode | string;
     /** The supported trusted platform module modes. */
-    supported_modes: string[];
+    supported_modes: BareMetalServerTrustedPlatformModule.Constants.SupportedModes | string[];
+  }
+  export namespace BareMetalServerTrustedPlatformModule {
+    export namespace Constants {
+      /** The trusted platform module (TPM) mode: - `disabled`: No TPM functionality - `tpm_2`: TPM 2.0 The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum Mode {
+        DISABLED = 'disabled',
+        TPM_2 = 'tpm_2',
+      }
+      /** The supported trusted platform module modes. */
+      export enum SupportedModes {
+        DISABLED = 'disabled',
+        TPM_2 = 'tpm_2',
+      }
+    }
   }
 
   /** BareMetalServerTrustedPlatformModulePatch. */
@@ -29855,7 +29337,16 @@ namespace VpcV1 {
      *
      *  For the trusted platform module mode to be changed, the bare metal server `status` must be `stopped`.
      */
-    mode?: string;
+    mode?: BareMetalServerTrustedPlatformModulePatch.Constants.Mode | string;
+  }
+  export namespace BareMetalServerTrustedPlatformModulePatch {
+    export namespace Constants {
+      /** The trusted platform module mode to use. The specified value must be listed in the bare metal server's `supported_modes`. For the trusted platform module mode to be changed, the bare metal server `status` must be `stopped`. */
+      export enum Mode {
+        DISABLED = 'disabled',
+        TPM_2 = 'tpm_2',
+      }
+    }
   }
 
   /** BareMetalServerTrustedPlatformModulePrototype. */
@@ -29863,7 +29354,16 @@ namespace VpcV1 {
     /** The trusted platform module mode to use. The specified value must be listed in the bare metal server
      *  profile's `supported_trusted_platform_module_modes`.
      */
-    mode?: string;
+    mode?: BareMetalServerTrustedPlatformModulePrototype.Constants.Mode | string;
+  }
+  export namespace BareMetalServerTrustedPlatformModulePrototype {
+    export namespace Constants {
+      /** The trusted platform module mode to use. The specified value must be listed in the bare metal server profile's `supported_trusted_platform_module_modes`. */
+      export enum Mode {
+        DISABLED = 'disabled',
+        TPM_2 = 'tpm_2',
+      }
+    }
   }
 
   /** Identifies a [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering by a unique property. */
@@ -29920,6 +29420,32 @@ namespace VpcV1 {
     crn: string;
   }
 
+  /** A DNS server. */
+  export interface DNSServer {
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     */
+    address: string;
+    /** If present, DHCP configuration for this zone will have this DNS server listed first. */
+    zone_affinity?: ZoneReference;
+  }
+
+  /** DNSServerPrototype. */
+  export interface DNSServerPrototype {
+    /** The IP address.
+     *
+     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
+     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
+     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     */
+    address: string;
+    /** DHCP configuration for the specified zone will have this DNS server listed first. */
+    zone_affinity?: ZoneIdentity;
+  }
+
   /** Identifies a DNS zone by a unique property. */
   export interface DNSZoneIdentity {
   }
@@ -29952,11 +29478,13 @@ namespace VpcV1 {
     /** The instances that are allocated to this dedicated host. */
     instances: InstanceReference[];
     /** The lifecycle state of the dedicated host. */
-    lifecycle_state: string;
+    lifecycle_state: DedicatedHost.Constants.LifecycleState | string;
     /** The total amount of memory in gibibytes for this host. */
     memory: number;
     /** The name for this dedicated host. The name is unique across all dedicated hosts in the region. */
     name: string;
+    /** The dedicated host NUMA configuration. */
+    numa: DedicatedHostNUMA;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles) for this dedicated host. */
     profile: DedicatedHostProfileReference;
     /** Indicates whether this dedicated host is available for instance creation. */
@@ -29964,7 +29492,7 @@ namespace VpcV1 {
     /** The resource group for this dedicated host. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: DedicatedHost.Constants.ResourceType | string;
     /** The total number of sockets for this host. */
     socket_count: number;
     /** The administrative state of the dedicated host.
@@ -29973,13 +29501,38 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the dedicated host
      *  on which the unexpected property value was encountered.
      */
-    state: string;
+    state: DedicatedHost.Constants.State | string;
     /** The instance profiles usable by instances placed on this dedicated host. */
     supported_instance_profiles: InstanceProfileReference[];
     /** The total VCPU of the dedicated host. */
     vcpu: VCPU;
     /** The zone this dedicated host resides in. */
     zone: ZoneReference;
+  }
+  export namespace DedicatedHost {
+    export namespace Constants {
+      /** The lifecycle state of the dedicated host. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        DEDICATED_HOST = 'dedicated_host',
+      }
+      /** The administrative state of the dedicated host. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the dedicated host on which the unexpected property value was encountered. */
+      export enum State {
+        AVAILABLE = 'available',
+        DEGRADED = 'degraded',
+        MIGRATING = 'migrating',
+        UNAVAILABLE = 'unavailable',
+      }
+    }
   }
 
   /** DedicatedHostCollection. */
@@ -30026,19 +29579,46 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
      */
-    interface_type: string;
+    interface_type: DedicatedHostDisk.Constants.InterfaceType | string;
     /** The lifecycle state of this dedicated host disk. */
-    lifecycle_state?: string;
+    lifecycle_state?: DedicatedHostDisk.Constants.LifecycleState | string;
     /** The name for this dedicated host disk. The name is unique across all disks on the dedicated host. */
     name: string;
     /** Indicates whether this dedicated host disk is available for instance disk creation. */
     provisionable: boolean;
     /** The resource type. */
-    resource_type: string;
+    resource_type: DedicatedHostDisk.Constants.ResourceType | string;
     /** The size of the disk in GB (gigabytes). */
     size: number;
     /** The instance disk interfaces supported for this dedicated host disk. */
-    supported_instance_interface_types: string[];
+    supported_instance_interface_types: DedicatedHostDisk.Constants.SupportedInstanceInterfaceTypes | string[];
+  }
+  export namespace DedicatedHostDisk {
+    export namespace Constants {
+      /** The disk interface used for attaching the disk The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum InterfaceType {
+        NVME = 'nvme',
+      }
+      /** The lifecycle state of this dedicated host disk. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        DEDICATED_HOST_DISK = 'dedicated_host_disk',
+      }
+      /** The instance disk interfaces supported for this dedicated host disk. */
+      export enum SupportedInstanceInterfaceTypes {
+        NVME = 'nvme',
+        VIRTIO_BLK = 'virtio_blk',
+      }
+    }
   }
 
   /** DedicatedHostDiskCollection. */
@@ -30058,7 +29638,7 @@ namespace VpcV1 {
     /** The dedicated hosts that are in this dedicated host group. */
     dedicated_hosts: DedicatedHostReference[];
     /** The dedicated host profile family for hosts in this group. */
-    family: string;
+    family: DedicatedHostGroup.Constants.Family | string;
     /** The URL for this dedicated host group. */
     href: string;
     /** The unique identifier for this dedicated host group. */
@@ -30068,11 +29648,25 @@ namespace VpcV1 {
     /** The resource group for this dedicated host group. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: DedicatedHostGroup.Constants.ResourceType | string;
     /** The instance profiles usable by instances placed on this dedicated host group. */
     supported_instance_profiles: InstanceProfileReference[];
     /** The zone this dedicated host group resides in. */
     zone: ZoneReference;
+  }
+  export namespace DedicatedHostGroup {
+    export namespace Constants {
+      /** The dedicated host profile family for hosts in this group. */
+      export enum Family {
+        BALANCED = 'balanced',
+        COMPUTE = 'compute',
+        MEMORY = 'memory',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        DEDICATED_HOST_GROUP = 'dedicated_host_group',
+      }
+    }
   }
 
   /** DedicatedHostGroupCollection. */
@@ -30130,13 +29724,37 @@ namespace VpcV1 {
     /** The name for this dedicated host group. The name is unique across all dedicated host groups in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: DedicatedHostGroupReference.Constants.ResourceType | string;
+  }
+  export namespace DedicatedHostGroupReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        DEDICATED_HOST_GROUP = 'dedicated_host_group',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
   export interface DedicatedHostGroupReferenceDeleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
+  }
+
+  /** The dedicated host NUMA configuration. */
+  export interface DedicatedHostNUMA {
+    /** The total number of NUMA nodes for this dedicated host. */
+    count: number;
+    /** The NUMA nodes for this dedicated host. */
+    nodes: DedicatedHostNUMANode[];
+  }
+
+  /** The dedicated host NUMA node configuration. */
+  export interface DedicatedHostNUMANode {
+    /** The available VCPU for this NUMA node. */
+    available_vcpu: number;
+    /** The total VCPU capacity for this NUMA node. */
+    vcpu: number;
   }
 
   /** DedicatedHostProfile. */
@@ -30151,18 +29769,48 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
      */
-    family: string;
+    family: DedicatedHostProfile.Constants.Family | string;
     /** The URL for this dedicated host. */
     href: string;
     memory: DedicatedHostProfileMemory;
     /** The globally unique name for this dedicated host profile. */
     name: string;
     socket_count: DedicatedHostProfileSocket;
+    /** The status of the dedicated host profile:
+     *    - `previous`:  This dedicated host profile is an older revision, but remains provisionable
+     *    and usable.
+     *    - `current`:  This profile is the latest revision.
+     *
+     *  Note that revisions are indicated by the generation of a dedicated host profile.  Refer to the [profile naming
+     *  conventions]
+     *  (https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles&interface=ui#profiles-naming-rule) for information on how
+     *  generations are defined within a dedicated host profile.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the profile on
+     *  which the unexpected property value was encountered.
+     */
+    status: DedicatedHostProfile.Constants.Status | string;
     /** The instance profiles usable by instances placed on dedicated hosts with this profile. */
     supported_instance_profiles: InstanceProfileReference[];
     vcpu_architecture: DedicatedHostProfileVCPUArchitecture;
     vcpu_count: DedicatedHostProfileVCPU;
     vcpu_manufacturer: DedicatedHostProfileVCPUManufacturer;
+  }
+  export namespace DedicatedHostProfile {
+    export namespace Constants {
+      /** The product family this dedicated host profile belongs to The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum Family {
+        BALANCED = 'balanced',
+        COMPUTE = 'compute',
+        MEMORY = 'memory',
+      }
+      /** The status of the dedicated host profile: - `previous`:  This dedicated host profile is an older revision, but remains provisionable and usable. - `current`:  This profile is the latest revision. Note that revisions are indicated by the generation of a dedicated host profile.  Refer to the [profile naming conventions] (https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within a dedicated host profile. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the profile on which the unexpected property value was encountered. */
+      export enum Status {
+        CURRENT = 'current',
+        PREVIOUS = 'previous',
+      }
+    }
   }
 
   /** DedicatedHostProfileCollection. */
@@ -30204,38 +29852,79 @@ namespace VpcV1 {
   /** DedicatedHostProfileDiskInterface. */
   export interface DedicatedHostProfileDiskInterface {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileDiskInterface.Constants.Type | string;
     /** The interface of the disk for a dedicated host with this profile
      *
      *  The enumerated values for this property are expected to expand in the future. When processing this property,
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
      */
-    value: string;
+    value: DedicatedHostProfileDiskInterface.Constants.Value | string;
+  }
+  export namespace DedicatedHostProfileDiskInterface {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+      /** The interface of the disk for a dedicated host with this profile The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum Value {
+        NVME = 'nvme',
+      }
+    }
   }
 
   /** The number of disks of this type for a dedicated host with this profile. */
   export interface DedicatedHostProfileDiskQuantity {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileDiskQuantity.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace DedicatedHostProfileDiskQuantity {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The size of the disk in GB (gigabytes). */
   export interface DedicatedHostProfileDiskSize {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileDiskSize.Constants.Type | string;
     /** The size of the disk in GB (gigabytes). */
     value: number;
+  }
+  export namespace DedicatedHostProfileDiskSize {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** DedicatedHostProfileDiskSupportedInterfaces. */
   export interface DedicatedHostProfileDiskSupportedInterfaces {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileDiskSupportedInterfaces.Constants.Type | string;
     /** The instance disk interfaces supported for a dedicated host with this profile. */
-    value: string[];
+    value: DedicatedHostProfileDiskSupportedInterfaces.Constants.Value | string[];
+  }
+  export namespace DedicatedHostProfileDiskSupportedInterfaces {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+      /** The instance disk interfaces supported for a dedicated host with this profile. */
+      export enum Value {
+        NVME = 'nvme',
+        VIRTIO_BLK = 'virtio_blk',
+      }
+    }
   }
 
   /** Identifies a dedicated host profile by a unique property. */
@@ -30265,17 +29954,33 @@ namespace VpcV1 {
   /** DedicatedHostProfileVCPUArchitecture. */
   export interface DedicatedHostProfileVCPUArchitecture {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileVCPUArchitecture.Constants.Type | string;
     /** The VCPU architecture for a dedicated host with this profile. */
     value: string;
+  }
+  export namespace DedicatedHostProfileVCPUArchitecture {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** DedicatedHostProfileVCPUManufacturer. */
   export interface DedicatedHostProfileVCPUManufacturer {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileVCPUManufacturer.Constants.Type | string;
     /** The VCPU manufacturer for a dedicated host with this profile. */
     value: string;
+  }
+  export namespace DedicatedHostProfileVCPUManufacturer {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** DedicatedHostPrototype. */
@@ -30289,7 +29994,7 @@ namespace VpcV1 {
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles) to use for this dedicated host. */
     profile: DedicatedHostProfileIdentity;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
   }
@@ -30309,7 +30014,15 @@ namespace VpcV1 {
     /** The name for this dedicated host. The name is unique across all dedicated hosts in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: DedicatedHostReference.Constants.ResourceType | string;
+  }
+  export namespace DedicatedHostReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        DEDICATED_HOST = 'dedicated_host',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -30361,20 +30074,20 @@ namespace VpcV1 {
     /** Indicates whether this is the default routing table for this VPC. */
     is_default: boolean;
     /** The lifecycle state of the routing table. */
-    lifecycle_state: string;
+    lifecycle_state: DefaultRoutingTable.Constants.LifecycleState | string;
     /** The name of the default routing table created for this VPC. The name will be a hyphenated list of
      *  randomly-selected words at creation, but may be changed.
      */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: DefaultRoutingTable.Constants.ResourceType | string;
     /** Indicates whether this routing table is used to route traffic that originates from
      *  [Direct Link](https://cloud.ibm.com/docs/dl) to this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      */
     route_direct_link_ingress: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from the internet.
@@ -30382,9 +30095,9 @@ namespace VpcV1 {
      *  Incoming traffic will be routed according to the routing table with two exceptions:
      *  - Traffic destined for IP addresses associated with public gateways will not be
      *    subject to routes in this routing table.
-     *  - Routes with an action of deliver are treated as drop unless the `next_hop` is an
-     *    IP address in a subnet in the route's `zone`. Therefore, if an incoming packet
-     *    matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+     *  - Routes with an `action` of `deliver` are treated as `drop` unless the `next_hop` is
+     *    an IP address in a subnet in the route's `zone` that is able to accept traffic.
+     *    Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
      *    connection, the packet will be dropped.
      */
     route_internet_ingress: boolean;
@@ -30392,18 +30105,18 @@ namespace VpcV1 {
      *  Gateway](https://cloud.ibm.com/docs/transit-gateway) to this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      */
     route_transit_gateway_ingress: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from subnets in other zones in
      *  this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      */
     route_vpc_zone_ingress: boolean;
     /** The routes for the default routing table for this VPC. The table is created with no routes, but routes may
@@ -30412,6 +30125,24 @@ namespace VpcV1 {
     routes: RouteReference[];
     /** The subnets to which this routing table is attached. */
     subnets: SubnetReference[];
+  }
+  export namespace DefaultRoutingTable {
+    export namespace Constants {
+      /** The lifecycle state of the routing table. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        ROUTING_TABLE = 'routing_table',
+      }
+    }
   }
 
   /** DefaultSecurityGroup. */
@@ -30456,6 +30187,10 @@ namespace VpcV1 {
 
   /** EndpointGateway. */
   export interface EndpointGateway {
+    /** Indicates whether to allow DNS resolution for this endpoint gateway when the VPC this endpoint gateway
+     *  resides in has a DNS resolution binding to a VPC with `dns.enable_hub` set to `true`.
+     */
+    allow_dns_resolution_binding: boolean;
     /** The date and time that the endpoint gateway was created. */
     created_at: string;
     /** The CRN for this endpoint gateway. */
@@ -30468,7 +30203,7 @@ namespace VpcV1 {
      *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
      *  also have this state.
      */
-    health_state: string;
+    health_state: EndpointGateway.Constants.HealthState | string;
     /** The URL for this endpoint gateway. */
     href: string;
     /** The unique identifier for this endpoint gateway. */
@@ -30476,13 +30211,13 @@ namespace VpcV1 {
     /** The reserved IPs bound to this endpoint gateway. */
     ips: ReservedIPReference[];
     /** The lifecycle state of the endpoint gateway. */
-    lifecycle_state: string;
+    lifecycle_state: EndpointGateway.Constants.LifecycleState | string;
     /** The name for this endpoint gateway. The name is unique across all endpoint gateways in the VPC. */
     name: string;
     /** The resource group for this endpoint gateway. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: EndpointGateway.Constants.ResourceType | string;
     /** The security groups targeting this endpoint gateway. */
     security_groups: SecurityGroupReference[];
     /** Deprecated: The fully qualified domain name for the target service. */
@@ -30493,6 +30228,31 @@ namespace VpcV1 {
     target: EndpointGatewayTarget;
     /** The VPC this endpoint gateway resides in. */
     vpc: VPCReference;
+  }
+  export namespace EndpointGateway {
+    export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the endpoint gateway. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        ENDPOINT_GATEWAY = 'endpoint_gateway',
+      }
+    }
   }
 
   /** EndpointGatewayCollection. */
@@ -30527,6 +30287,44 @@ namespace VpcV1 {
     more_info: string;
   }
 
+  /** EndpointGatewayReferenceRemote. */
+  export interface EndpointGatewayReferenceRemote {
+    /** The CRN for this endpoint gateway. */
+    crn: string;
+    /** The URL for this endpoint gateway. */
+    href: string;
+    /** The unique identifier for this endpoint gateway. */
+    id: string;
+    /** The name for this endpoint gateway. The name is unique across all endpoint gateways in the VPC. */
+    name: string;
+    /** If present, this property indicates that the resource associated with this reference
+     *  is remote and therefore may not be directly retrievable.
+     */
+    remote?: EndpointGatewayRemote;
+    /** The resource type. */
+    resource_type: EndpointGatewayReferenceRemote.Constants.ResourceType | string;
+  }
+  export namespace EndpointGatewayReferenceRemote {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        ENDPOINT_GATEWAY = 'endpoint_gateway',
+      }
+    }
+  }
+
+  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  export interface EndpointGatewayRemote {
+    /** If present, this property indicates that the referenced resource is remote to this
+     *  account, and identifies the owning account.
+     */
+    account?: AccountReference;
+    /** If present, this property indicates that the referenced resource is remote to this
+     *  region, and identifies the native region.
+     */
+    region?: RegionReference;
+  }
+
   /** A reserved IP to bind to the endpoint gateway. This can be specified using an existing reserved IP, or a prototype object for a new reserved IP. The reserved IP will be bound to the endpoint gateway to function as a virtual private endpoint for the service. */
   export interface EndpointGatewayReservedIP {
   }
@@ -30538,7 +30336,16 @@ namespace VpcV1 {
   /** The target to use for this endpoint gateway. Must not already be the target of another endpoint gateway in the VPC. */
   export interface EndpointGatewayTargetPrototype {
     /** The type of target for this endpoint gateway. */
-    resource_type: string;
+    resource_type: EndpointGatewayTargetPrototype.Constants.ResourceType | string;
+  }
+  export namespace EndpointGatewayTargetPrototype {
+    export namespace Constants {
+      /** The type of target for this endpoint gateway. */
+      export enum ResourceType {
+        PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
+        PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
+      }
+    }
   }
 
   /** FloatingIP. */
@@ -30558,11 +30365,22 @@ namespace VpcV1 {
     /** The resource group for this floating IP. */
     resource_group: ResourceGroupReference;
     /** The status of the floating IP. */
-    status: string;
+    status: FloatingIP.Constants.Status | string;
     /** The target of this floating IP. */
     target?: FloatingIPTarget;
     /** The zone this floating IP resides in. */
     zone: ZoneReference;
+  }
+  export namespace FloatingIP {
+    export namespace Constants {
+      /** The status of the floating IP. */
+      export enum Status {
+        AVAILABLE = 'available',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+      }
+    }
   }
 
   /** FloatingIPCollection. */
@@ -30598,7 +30416,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
   }
@@ -30662,12 +30480,15 @@ namespace VpcV1 {
     /** The unique identifier for this flow log collector. */
     id: string;
     /** The lifecycle state of the flow log collector. */
-    lifecycle_state: string;
+    lifecycle_state: FlowLogCollector.Constants.LifecycleState | string;
     /** The name for this flow log collector. The name is unique across all flow log collectors in the VPC. */
     name: string;
     /** The resource group for this flow log collector. */
     resource_group: ResourceGroupReference;
-    /** The Cloud Object Storage bucket where the collected flows are logged. */
+    /** The Cloud Object Storage bucket where the collected flows are logged. For more
+     *  information, see [Viewing flow log
+     *  objects](https://cloud.ibm.com/docs/vpc?topic=vpc-fl-analyze).
+     */
     storage_bucket: LegacyCloudObjectStorageBucketReference;
     /** The target this collector is collecting flow logs for.
      *  - If the target is an instance network interface, flow logs will be collected
@@ -30685,6 +30506,20 @@ namespace VpcV1 {
     target: FlowLogCollectorTarget;
     /** The VPC this flow log collector resides in. */
     vpc: VPCReference;
+  }
+  export namespace FlowLogCollector {
+    export namespace Constants {
+      /** The lifecycle state of the flow log collector. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+    }
   }
 
   /** FlowLogCollectorCollection. */
@@ -30733,7 +30568,7 @@ namespace VpcV1 {
      *
      *  The `md5` and `sha1` algorithms have been deprecated.
      */
-    authentication_algorithm: string;
+    authentication_algorithm: IKEPolicy.Constants.AuthenticationAlgorithm | string;
     /** The VPN gateway connections that use this IKE policy. */
     connections: VPNGatewayConnectionReference[];
     /** The date and time that this IKE policy was created. */
@@ -30747,7 +30582,7 @@ namespace VpcV1 {
      *
      *  The `triple_des` algorithm has been deprecated.
      */
-    encryption_algorithm: string;
+    encryption_algorithm: IKEPolicy.Constants.EncryptionAlgorithm | string;
     /** The IKE policy's canonical URL. */
     href: string;
     /** The unique identifier for this IKE policy. */
@@ -30759,11 +30594,38 @@ namespace VpcV1 {
     /** The name for this IKE policy. The name is unique across all IKE policies in the region. */
     name: string;
     /** The IKE negotiation mode. Only `main` is supported. */
-    negotiation_mode: string;
+    negotiation_mode: IKEPolicy.Constants.NegotiationMode | string;
     /** The resource group for this IKE policy. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: IKEPolicy.Constants.ResourceType | string;
+  }
+  export namespace IKEPolicy {
+    export namespace Constants {
+      /** The authentication algorithm The `md5` and `sha1` algorithms have been deprecated. */
+      export enum AuthenticationAlgorithm {
+        MD5 = 'md5',
+        SHA1 = 'sha1',
+        SHA256 = 'sha256',
+        SHA384 = 'sha384',
+        SHA512 = 'sha512',
+      }
+      /** The encryption algorithm The `triple_des` algorithm has been deprecated. */
+      export enum EncryptionAlgorithm {
+        AES128 = 'aes128',
+        AES192 = 'aes192',
+        AES256 = 'aes256',
+        TRIPLE_DES = 'triple_des',
+      }
+      /** The IKE negotiation mode. Only `main` is supported. */
+      export enum NegotiationMode {
+        MAIN = 'main',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        IKE_POLICY = 'ike_policy',
+      }
+    }
   }
 
   /** IKEPolicyCollection. */
@@ -30805,7 +30667,15 @@ namespace VpcV1 {
     /** The name for this IKE policy. The name is unique across all IKE policies in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: IKEPolicyReference.Constants.ResourceType | string;
+  }
+  export namespace IKEPolicyReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        IKE_POLICY = 'ike_policy',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -30834,13 +30704,13 @@ namespace VpcV1 {
      *  Must be `disabled` if and only if the `encryption_algorithm` is
      *  `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`.
      */
-    authentication_algorithm: string;
+    authentication_algorithm: IPsecPolicy.Constants.AuthenticationAlgorithm | string;
     /** The VPN gateway connections that use this IPsec policy. */
     connections: VPNGatewayConnectionReference[];
     /** The date and time that this IPsec policy was created. */
     created_at: string;
     /** The encapsulation mode used. Only `tunnel` is supported. */
-    encapsulation_mode: string;
+    encapsulation_mode: IPsecPolicy.Constants.EncapsulationMode | string;
     /** The encryption algorithm
      *
      *  The `triple_des` algorithm has been deprecated
@@ -30849,7 +30719,7 @@ namespace VpcV1 {
      *  `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or
      *  `aes256gcm16`.
      */
-    encryption_algorithm: string;
+    encryption_algorithm: IPsecPolicy.Constants.EncryptionAlgorithm | string;
     /** The IPsec policy's canonical URL. */
     href: string;
     /** The unique identifier for this IPsec policy. */
@@ -30862,13 +30732,66 @@ namespace VpcV1 {
      *
      *  Groups `group_2` and `group_5` have been deprecated.
      */
-    pfs: string;
+    pfs: IPsecPolicy.Constants.Pfs | string;
     /** The resource group for this IPsec policy. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: IPsecPolicy.Constants.ResourceType | string;
     /** The transform protocol used. Only `esp` is supported. */
-    transform_protocol: string;
+    transform_protocol: IPsecPolicy.Constants.TransformProtocol | string;
+  }
+  export namespace IPsecPolicy {
+    export namespace Constants {
+      /** The authentication algorithm The `md5` and `sha1` algorithms have been deprecated Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`. */
+      export enum AuthenticationAlgorithm {
+        DISABLED = 'disabled',
+        MD5 = 'md5',
+        SHA1 = 'sha1',
+        SHA256 = 'sha256',
+        SHA384 = 'sha384',
+        SHA512 = 'sha512',
+      }
+      /** The encapsulation mode used. Only `tunnel` is supported. */
+      export enum EncapsulationMode {
+        TUNNEL = 'tunnel',
+      }
+      /** The encryption algorithm The `triple_des` algorithm has been deprecated The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`. */
+      export enum EncryptionAlgorithm {
+        AES128 = 'aes128',
+        AES128GCM16 = 'aes128gcm16',
+        AES192 = 'aes192',
+        AES192GCM16 = 'aes192gcm16',
+        AES256 = 'aes256',
+        AES256GCM16 = 'aes256gcm16',
+        TRIPLE_DES = 'triple_des',
+      }
+      /** Perfect Forward Secrecy Groups `group_2` and `group_5` have been deprecated. */
+      export enum Pfs {
+        DISABLED = 'disabled',
+        GROUP_14 = 'group_14',
+        GROUP_15 = 'group_15',
+        GROUP_16 = 'group_16',
+        GROUP_17 = 'group_17',
+        GROUP_18 = 'group_18',
+        GROUP_19 = 'group_19',
+        GROUP_2 = 'group_2',
+        GROUP_20 = 'group_20',
+        GROUP_21 = 'group_21',
+        GROUP_22 = 'group_22',
+        GROUP_23 = 'group_23',
+        GROUP_24 = 'group_24',
+        GROUP_31 = 'group_31',
+        GROUP_5 = 'group_5',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        IPSEC_POLICY = 'ipsec_policy',
+      }
+      /** The transform protocol used. Only `esp` is supported. */
+      export enum TransformProtocol {
+        ESP = 'esp',
+      }
+    }
   }
 
   /** IPsecPolicyCollection. */
@@ -30910,7 +30833,15 @@ namespace VpcV1 {
     /** The name for this IPsec policy. The name is unique across all IPsec policies in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: IPsecPolicyReference.Constants.ResourceType | string;
+  }
+  export namespace IPsecPolicyReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        IPSEC_POLICY = 'ipsec_policy',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -30932,7 +30863,7 @@ namespace VpcV1 {
      */
     deprecation_at?: string;
     /** The type of encryption used on the image. */
-    encryption: string;
+    encryption: Image.Constants.Encryption | string;
     /** The key that will be used to encrypt volumes created from this image (unless an
      *  alternate `encryption_key` is specified at volume creation).
      *
@@ -30962,7 +30893,7 @@ namespace VpcV1 {
     /** The resource group for this image. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: Image.Constants.ResourceType | string;
     /** The volume used to create this image (this may be
      *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
      *  If absent, this image was not created from a volume.
@@ -30982,7 +30913,7 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the image on which
      *  the unexpected property value was encountered.
      */
-    status: string;
+    status: Image.Constants.Status | string;
     /** The reasons for the current status (if any):
      *  - `encrypted_data_key_invalid`: image cannot be decrypted with the specified
      *    `encryption_key`
@@ -31002,7 +30933,35 @@ namespace VpcV1 {
      */
     status_reasons: ImageStatusReason[];
     /** The visibility of this image. - `private`: Visible only to this account - `public`: Visible to all accounts. */
-    visibility: string;
+    visibility: Image.Constants.Visibility | string;
+  }
+  export namespace Image {
+    export namespace Constants {
+      /** The type of encryption used on the image. */
+      export enum Encryption {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        IMAGE = 'image',
+      }
+      /** The status of this image - available: image can be used (provisionable) - deleting: image is being deleted, and can no longer be used to provision new resources - deprecated: image is administratively slated to become `obsolete` - failed: image is corrupt or did not pass validation - obsolete: image administratively set to not be used for new resources - pending: image is being imported and is not yet `available` - unusable: image cannot be used (see `status_reasons[]` for possible remediation) The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the image on which the unexpected property value was encountered. */
+      export enum Status {
+        AVAILABLE = 'available',
+        DELETING = 'deleting',
+        DEPRECATED = 'deprecated',
+        FAILED = 'failed',
+        OBSOLETE = 'obsolete',
+        PENDING = 'pending',
+        UNUSABLE = 'unusable',
+      }
+      /** The visibility of this image. - `private`: Visible only to this account - `public`: Visible to all accounts. */
+      export enum Visibility {
+        PRIVATE = 'private',
+        PUBLIC = 'public',
+      }
+    }
   }
 
   /** ImageCatalogOffering. */
@@ -31065,7 +31024,7 @@ namespace VpcV1 {
      */
     encrypted_data_key?: string;
     /** The format of the exported image. */
-    format: string;
+    format: ImageExportJob.Constants.Format | string;
     /** The URL for this image export job. */
     href: string;
     /** The unique identifier for this image export job. */
@@ -31076,7 +31035,7 @@ namespace VpcV1 {
      */
     name: string;
     /** The type of resource referenced. */
-    resource_type: string;
+    resource_type: ImageExportJob.Constants.ResourceType | string;
     /** The date and time that the image export job started running.
      *
      *  If absent, the export job has not yet started.
@@ -31091,7 +31050,7 @@ namespace VpcV1 {
      *
      *  The exported image object is automatically deleted for `failed` jobs.
      */
-    status: string;
+    status: ImageExportJob.Constants.Status | string;
     /** The reasons for the current status (if any).
      *
      *  The enumerated reason code values for this property will expand in the future. When processing this property,
@@ -31114,15 +31073,45 @@ namespace VpcV1 {
      */
     storage_object: CloudObjectStorageObjectReference;
   }
+  export namespace ImageExportJob {
+    export namespace Constants {
+      /** The format of the exported image. */
+      export enum Format {
+        QCOW2 = 'qcow2',
+        VHD = 'vhd',
+      }
+      /** The type of resource referenced. */
+      export enum ResourceType {
+        IMAGE_EXPORT_JOB = 'image_export_job',
+      }
+      /** The status of this image export job: - `deleting`: Export job is being deleted - `failed`: Export job could not be completed successfully - `queued`: Export job is queued - `running`: Export job is in progress - `succeeded`: Export job was completed successfully The exported image object is automatically deleted for `failed` jobs. */
+      export enum Status {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        QUEUED = 'queued',
+        RUNNING = 'running',
+        SUCCEEDED = 'succeeded',
+      }
+    }
+  }
 
   /** ImageExportJobStatusReason. */
   export interface ImageExportJobStatusReason {
     /** A snake case string succinctly identifying the status reason. */
-    code: string;
+    code: ImageExportJobStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
     /** Link to documentation about this status reason. */
     more_info?: string;
+  }
+  export namespace ImageExportJobStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason. */
+      export enum Code {
+        CANNOT_ACCESS_STORAGE_BUCKET = 'cannot_access_storage_bucket',
+        INTERNAL_ERROR = 'internal_error',
+      }
+    }
   }
 
   /** ImageExportJobUnpaginatedCollection. */
@@ -31198,7 +31187,7 @@ namespace VpcV1 {
      */
     obsolescence_at?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
   }
@@ -31222,7 +31211,15 @@ namespace VpcV1 {
      */
     remote?: ImageRemote;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ImageReference.Constants.ResourceType | string;
+  }
+  export namespace ImageReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        IMAGE = 'image',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -31246,11 +31243,25 @@ namespace VpcV1 {
   /** ImageStatusReason. */
   export interface ImageStatusReason {
     /** A snake case string succinctly identifying the status reason. */
-    code: string;
+    code: ImageStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
     /** Link to documentation about this status reason. */
     more_info?: string;
+  }
+  export namespace ImageStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason. */
+      export enum Code {
+        ENCRYPTED_DATA_KEY_INVALID = 'encrypted_data_key_invalid',
+        ENCRYPTION_KEY_DELETED = 'encryption_key_deleted',
+        ENCRYPTION_KEY_DISABLED = 'encryption_key_disabled',
+        IMAGE_DATA_CORRUPTED = 'image_data_corrupted',
+        IMAGE_PROVISIONED_SIZE_UNSUPPORTED = 'image_provisioned_size_unsupported',
+        IMAGE_REQUEST_IN_PROGRESS = 'image_request_in_progress',
+        IMAGE_REQUEST_QUEUED = 'image_request_queued',
+      }
+    }
   }
 
   /** Instance. */
@@ -31291,7 +31302,7 @@ namespace VpcV1 {
      */
     lifecycle_reasons: InstanceLifecycleReason[];
     /** The lifecycle state of the virtual server instance. */
-    lifecycle_state: string;
+    lifecycle_state: Instance.Constants.LifecycleState | string;
     /** The amount of memory, truncated to whole gibibytes. */
     memory: number;
     /** The metadata service configuration. */
@@ -31300,18 +31311,23 @@ namespace VpcV1 {
      *  region.
      */
     name: string;
-    /** The instance network interfaces, including the primary instance network interface. */
+    /** The network interfaces for this instance, including the primary network interface. */
     network_interfaces: NetworkInterfaceInstanceContextReference[];
+    /** The number of NUMA nodes this virtual server instance is provisioned on.
+     *
+     *  This property will be absent if the instance's `status` is not `running`.
+     */
+    numa_count?: number;
     /** The placement restrictions for the virtual server instance. */
     placement_target?: InstancePlacementTarget;
-    /** The primary instance network interface. */
+    /** The primary network interface for this virtual server instance. */
     primary_network_interface: NetworkInterfaceInstanceContextReference;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) for this virtual server instance. */
     profile: InstanceProfileReference;
     /** The resource group for this instance. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: Instance.Constants.ResourceType | string;
     /** Indicates whether the state of the virtual server instance permits a start request. */
     startable: boolean;
     /** The status of the virtual server instance.
@@ -31320,7 +31336,7 @@ namespace VpcV1 {
      *  log unknown values. Optionally halt processing and surface the error, or bypass the instance on which the
      *  unexpected property value was encountered.
      */
-    status: string;
+    status: Instance.Constants.Status | string;
     /** The reasons for the current status (if any).
      *
      *  The enumerated reason code values for this property will expand in the future. When processing this property,
@@ -31344,6 +31360,35 @@ namespace VpcV1 {
     /** The zone this virtual server instance resides in. */
     zone: ZoneReference;
   }
+  export namespace Instance {
+    export namespace Constants {
+      /** The lifecycle state of the virtual server instance. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE = 'instance',
+      }
+      /** The status of the virtual server instance. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on which the unexpected property value was encountered. */
+      export enum Status {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        RESTARTING = 'restarting',
+        RUNNING = 'running',
+        STARTING = 'starting',
+        STOPPED = 'stopped',
+        STOPPING = 'stopping',
+      }
+    }
+  }
 
   /** InstanceAction. */
   export interface InstanceAction {
@@ -31362,9 +31407,26 @@ namespace VpcV1 {
     /** Deprecated: The date and time that the action was started. */
     started_at?: string;
     /** Deprecated: The current status of this action. */
-    status: string;
+    status: InstanceAction.Constants.Status | string;
     /** The type of action. */
-    type: string;
+    type: InstanceAction.Constants.Type | string;
+  }
+  export namespace InstanceAction {
+    export namespace Constants {
+      /** The current status of this action. */
+      export enum Status {
+        COMPLETED = 'completed',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        RUNNING = 'running',
+      }
+      /** The type of action. */
+      export enum Type {
+        REBOOT = 'reboot',
+        START = 'start',
+        STOP = 'stop',
+      }
+    }
   }
 
   /** InstanceAvailabilityPolicy. */
@@ -31377,7 +31439,16 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on
      *  which the unexpected property value was encountered.
      */
-    host_failure: string;
+    host_failure: InstanceAvailabilityPolicy.Constants.HostFailure | string;
+  }
+  export namespace InstanceAvailabilityPolicy {
+    export namespace Constants {
+      /** The action to perform if the compute host experiences a failure. - `restart`: Automatically restart the virtual server instance after host failure - `stop`: Leave the virtual server instance stopped after host failure The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on which the unexpected property value was encountered. */
+      export enum HostFailure {
+        RESTART = 'restart',
+        STOP = 'stop',
+      }
+    }
   }
 
   /** InstanceAvailabilityPolicyPatch. */
@@ -31386,7 +31457,16 @@ namespace VpcV1 {
      *  - `restart`: Automatically restart the virtual server instance after host failure
      *  - `stop`: Leave the virtual server instance stopped after host failure.
      */
-    host_failure?: string;
+    host_failure?: InstanceAvailabilityPolicyPatch.Constants.HostFailure | string;
+  }
+  export namespace InstanceAvailabilityPolicyPatch {
+    export namespace Constants {
+      /** The action to perform if the compute host experiences a failure. - `restart`: Automatically restart the virtual server instance after host failure - `stop`: Leave the virtual server instance stopped after host failure. */
+      export enum HostFailure {
+        RESTART = 'restart',
+        STOP = 'stop',
+      }
+    }
   }
 
   /** InstanceAvailabilityPolicyPrototype. */
@@ -31395,7 +31475,16 @@ namespace VpcV1 {
      *  - `restart`: Automatically restart the virtual server instance after host failure
      *  - `stop`: Leave the virtual server instance stopped after host failure.
      */
-    host_failure?: string;
+    host_failure?: InstanceAvailabilityPolicyPrototype.Constants.HostFailure | string;
+  }
+  export namespace InstanceAvailabilityPolicyPrototype {
+    export namespace Constants {
+      /** The action to perform if the compute host experiences a failure. - `restart`: Automatically restart the virtual server instance after host failure - `stop`: Leave the virtual server instance stopped after host failure. */
+      export enum HostFailure {
+        RESTART = 'restart',
+        STOP = 'stop',
+      }
+    }
   }
 
   /** InstanceCatalogOffering. */
@@ -31445,7 +31534,7 @@ namespace VpcV1 {
     /** A URL safe single-use token used to access the console WebSocket. */
     access_token: string;
     /** The instance console type for which this token may be used. */
-    console_type: string;
+    console_type: InstanceConsoleAccessToken.Constants.ConsoleType | string;
     /** The date and time that the access token was created. */
     created_at: string;
     /** The date and time that the access token will expire. */
@@ -31456,6 +31545,15 @@ namespace VpcV1 {
     force: boolean;
     /** The URL to access this instance console. */
     href: string;
+  }
+  export namespace InstanceConsoleAccessToken {
+    export namespace Constants {
+      /** The instance console type for which this token may be used. */
+      export enum ConsoleType {
+        SERIAL = 'serial',
+        VNC = 'vnc',
+      }
+    }
   }
 
   /** InstanceDefaultTrustedProfilePrototype. */
@@ -31483,13 +31581,26 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
      */
-    interface_type: string;
+    interface_type: InstanceDisk.Constants.InterfaceType | string;
     /** The name for this instance disk. The name is unique across all disks on the instance. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: InstanceDisk.Constants.ResourceType | string;
     /** The size of the disk in GB (gigabytes). */
     size: number;
+  }
+  export namespace InstanceDisk {
+    export namespace Constants {
+      /** The disk interface used for attaching the disk. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum InterfaceType {
+        NVME = 'nvme',
+        VIRTIO_BLK = 'virtio_blk',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_DISK = 'instance_disk',
+      }
+    }
   }
 
   /** InstanceDiskCollection. */
@@ -31511,7 +31622,15 @@ namespace VpcV1 {
     /** The name for this instance disk. The name is unique across all disks on the instance. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: InstanceDiskReference.Constants.ResourceType | string;
+  }
+  export namespace InstanceDiskReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_DISK = 'instance_disk',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -31567,13 +31686,24 @@ namespace VpcV1 {
      *               `membership_count`
      *  - `unhealthy`: Group is unable to reach `membership_count` instances.
      */
-    status: string;
+    status: InstanceGroup.Constants.Status | string;
     /** The subnets to use when creating new instances. */
     subnets: SubnetReference[];
     /** The date and time that the instance group was updated. */
     updated_at: string;
     /** The VPC the instance group resides in. */
     vpc: VPCReference;
+  }
+  export namespace InstanceGroup {
+    export namespace Constants {
+      /** The status of the instance group - `deleting`: Group is being deleted - `healthy`: Group has `membership_count` instances - `scaling`: Instances in the group are being created or deleted to reach `membership_count` - `unhealthy`: Group is unable to reach `membership_count` instances. */
+      export enum Status {
+        DELETING = 'deleting',
+        HEALTHY = 'healthy',
+        SCALING = 'scaling',
+        UNHEALTHY = 'unhealthy',
+      }
+    }
   }
 
   /** InstanceGroupCollection. */
@@ -31641,7 +31771,7 @@ namespace VpcV1 {
      */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: InstanceGroupManagerAction.Constants.ResourceType | string;
     /** The status of the instance group action
      *  - `active`: Action is ready to be run
      *  - `completed`: Action was completed successfully
@@ -31649,9 +31779,25 @@ namespace VpcV1 {
      *  - `incompatible`: Action parameters are not compatible with the group or manager
      *  - `omitted`: Action was not applied because this action's manager was disabled.
      */
-    status: string;
+    status: InstanceGroupManagerAction.Constants.Status | string;
     /** The date and time that the instance group manager action was updated. */
     updated_at: string;
+  }
+  export namespace InstanceGroupManagerAction {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_GROUP_MANAGER_ACTION = 'instance_group_manager_action',
+      }
+      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled. */
+      export enum Status {
+        ACTIVE = 'active',
+        COMPLETED = 'completed',
+        FAILED = 'failed',
+        INCOMPATIBLE = 'incompatible',
+        OMITTED = 'omitted',
+      }
+    }
   }
 
   /** InstanceGroupManagerActionGroupPatch. */
@@ -31691,7 +31837,15 @@ namespace VpcV1 {
      */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: InstanceGroupManagerActionReference.Constants.ResourceType | string;
+  }
+  export namespace InstanceGroupManagerActionReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_GROUP_MANAGER_ACTION = 'instance_group_manager_action',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -31898,9 +32052,21 @@ namespace VpcV1 {
      *  - `pending`: Membership is waiting for dependent resources
      *  - `unhealthy`: Membership has unhealthy dependent resources.
      */
-    status: string;
+    status: InstanceGroupMembership.Constants.Status | string;
     /** The date and time that the instance group membership was updated. */
     updated_at: string;
+  }
+  export namespace InstanceGroupMembership {
+    export namespace Constants {
+      /** The status of the instance group membership - `deleting`: Membership is deleting dependent resources - `failed`: Membership was unable to maintain dependent resources - `healthy`: Membership is active and serving in the group - `pending`: Membership is waiting for dependent resources - `unhealthy`: Membership has unhealthy dependent resources. */
+      export enum Status {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        HEALTHY = 'healthy',
+        PENDING = 'pending',
+        UNHEALTHY = 'unhealthy',
+      }
+    }
   }
 
   /** InstanceGroupMembershipCollection. */
@@ -31984,11 +32150,19 @@ namespace VpcV1 {
   /** InstanceLifecycleReason. */
   export interface InstanceLifecycleReason {
     /** A snake case string succinctly identifying the reason for this lifecycle state. */
-    code: string;
+    code: InstanceLifecycleReason.Constants.Code | string;
     /** An explanation of the reason for this lifecycle state. */
     message: string;
     /** Link to documentation about the reason for this lifecycle state. */
     more_info?: string;
+  }
+  export namespace InstanceLifecycleReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      export enum Code {
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
   }
 
   /** The metadata service configuration. */
@@ -32000,11 +32174,20 @@ namespace VpcV1 {
      *  - `http`: HTTP protocol (unencrypted)
      *  - `https`: HTTP Secure protocol.
      */
-    protocol: string;
+    protocol: InstanceMetadataService.Constants.Protocol | string;
     /** The hop limit (IP time to live) for IP response packets from the metadata service. Applies only when the
      *  metadata service is enabled.
      */
     response_hop_limit: number;
+  }
+  export namespace InstanceMetadataService {
+    export namespace Constants {
+      /** The communication protocol to use for the metadata service endpoint. Applies only when the metadata service is enabled. - `http`: HTTP protocol (unencrypted) - `https`: HTTP Secure protocol. */
+      export enum Protocol {
+        HTTP = 'http',
+        HTTPS = 'https',
+      }
+    }
   }
 
   /** The metadata service configuration. */
@@ -32016,11 +32199,20 @@ namespace VpcV1 {
      *  - `http`: HTTP protocol (unencrypted)
      *  - `https`: HTTP Secure protocol.
      */
-    protocol?: string;
+    protocol?: InstanceMetadataServicePatch.Constants.Protocol | string;
     /** The hop limit (IP time to live) for IP response packets from the metadata service. Applies only when the
      *  metadata service is enabled.
      */
     response_hop_limit?: number;
+  }
+  export namespace InstanceMetadataServicePatch {
+    export namespace Constants {
+      /** The communication protocol to use for the metadata service endpoint. Applies only when the metadata service is enabled. - `http`: HTTP protocol (unencrypted) - `https`: HTTP Secure protocol. */
+      export enum Protocol {
+        HTTP = 'http',
+        HTTPS = 'https',
+      }
+    }
   }
 
   /** The metadata service configuration. */
@@ -32032,11 +32224,20 @@ namespace VpcV1 {
      *  - `http`: HTTP protocol (unencrypted)
      *  - `https`: HTTP Secure protocol.
      */
-    protocol?: string;
+    protocol?: InstanceMetadataServicePrototype.Constants.Protocol | string;
     /** The hop limit (IP time to live) for IP response packets from the metadata service. Applies only when the
      *  metadata service is enabled.
      */
     response_hop_limit?: number;
+  }
+  export namespace InstanceMetadataServicePrototype {
+    export namespace Constants {
+      /** The communication protocol to use for the metadata service endpoint. Applies only when the metadata service is enabled. - `http`: HTTP protocol (unencrypted) - `https`: HTTP Secure protocol. */
+      export enum Protocol {
+        HTTP = 'http',
+        HTTPS = 'https',
+      }
+    }
   }
 
   /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. - Have the same `vcpu.architecture`. - Support the number of network interfaces the instance currently has. */
@@ -32072,12 +32273,37 @@ namespace VpcV1 {
     /** The globally unique name for this virtual server instance profile. */
     name: string;
     network_interface_count: InstanceProfileNetworkInterfaceCount;
+    numa_count?: InstanceProfileNUMACount;
     os_architecture: InstanceProfileOSArchitecture;
     port_speed: InstanceProfilePortSpeed;
+    /** The status of the instance profile:
+     *    - `previous`:  This instance profile is an older revision, but remains provisionable and
+     *    usable.
+     *    - `current`:  This profile is the latest revision.
+     *
+     *  Note that revisions are indicated by the generation of an instance profile.  Refer to the
+     *  [profile naming conventions]
+     *  (https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui#profiles-naming-rule) for information on how
+     *  generations are defined within an instance profile.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the profile on
+     *  which the unexpected property value was encountered.
+     */
+    status: InstanceProfile.Constants.Status | string;
     total_volume_bandwidth: InstanceProfileVolumeBandwidth;
     vcpu_architecture: InstanceProfileVCPUArchitecture;
     vcpu_count: InstanceProfileVCPU;
     vcpu_manufacturer: InstanceProfileVCPUManufacturer;
+  }
+  export namespace InstanceProfile {
+    export namespace Constants {
+      /** The status of the instance profile: - `previous`:  This instance profile is an older revision, but remains provisionable and usable. - `current`:  This profile is the latest revision. Note that revisions are indicated by the generation of an instance profile.  Refer to the [profile naming conventions] (https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within an instance profile. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the profile on which the unexpected property value was encountered. */
+      export enum Status {
+        CURRENT = 'current',
+        PREVIOUS = 'previous',
+      }
+    }
   }
 
   /** InstanceProfileBandwidth. */
@@ -32113,11 +32339,29 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
      */
-    default: string;
+    default: InstanceProfileDiskSupportedInterfaces.Constants.Default | string;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileDiskSupportedInterfaces.Constants.Type | string;
     /** The supported disk interfaces used for attaching the disk. */
-    values: string[];
+    values: InstanceProfileDiskSupportedInterfaces.Constants.Values | string[];
+  }
+  export namespace InstanceProfileDiskSupportedInterfaces {
+    export namespace Constants {
+      /** The disk interface used for attaching the disk. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum Default {
+        NVME = 'nvme',
+        VIRTIO_BLK = 'virtio_blk',
+      }
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The supported disk interfaces used for attaching the disk. */
+      export enum Values {
+        NVME = 'nvme',
+        VIRTIO_BLK = 'virtio_blk',
+      }
+    }
   }
 
   /** InstanceProfileGPU. */
@@ -32127,9 +32371,17 @@ namespace VpcV1 {
   /** InstanceProfileGPUManufacturer. */
   export interface InstanceProfileGPUManufacturer {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileGPUManufacturer.Constants.Type | string;
     /** The possible GPU manufacturer(s) for an instance with this profile. */
     values: string[];
+  }
+  export namespace InstanceProfileGPUManufacturer {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** InstanceProfileGPUMemory. */
@@ -32139,9 +32391,17 @@ namespace VpcV1 {
   /** InstanceProfileGPUModel. */
   export interface InstanceProfileGPUModel {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileGPUModel.Constants.Type | string;
     /** The possible GPU model(s) for an instance with this profile. */
     values: string[];
+  }
+  export namespace InstanceProfileGPUModel {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** Identifies an instance profile by a unique property. */
@@ -32150,6 +32410,10 @@ namespace VpcV1 {
 
   /** InstanceProfileMemory. */
   export interface InstanceProfileMemory {
+  }
+
+  /** InstanceProfileNUMACount. */
+  export interface InstanceProfileNUMACount {
   }
 
   /** InstanceProfileNetworkInterfaceCount. */
@@ -32161,9 +32425,17 @@ namespace VpcV1 {
     /** The default OS architecture for an instance with this profile. */
     default: string;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileOSArchitecture.Constants.Type | string;
     /** The supported OS architecture(s) for an instance with this profile. */
     values: string[];
+  }
+  export namespace InstanceProfileOSArchitecture {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** InstanceProfilePortSpeed. */
@@ -32187,9 +32459,17 @@ namespace VpcV1 {
     /** The default VCPU architecture for an instance with this profile. */
     default?: string;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileVCPUArchitecture.Constants.Type | string;
     /** The VCPU architecture for an instance with this profile. */
     value: string;
+  }
+  export namespace InstanceProfileVCPUArchitecture {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** InstanceProfileVCPUManufacturer. */
@@ -32197,9 +32477,17 @@ namespace VpcV1 {
     /** The default VCPU manufacturer for an instance with this profile. */
     default?: string;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileVCPUManufacturer.Constants.Type | string;
     /** The VCPU manufacturer for an instance with this profile. */
     value: string;
+  }
+  export namespace InstanceProfileVCPUManufacturer {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** InstanceProfileVolumeBandwidth. */
@@ -32250,7 +32538,7 @@ namespace VpcV1 {
      */
     profile?: InstanceProfileIdentity;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
@@ -32299,11 +32587,28 @@ namespace VpcV1 {
   /** InstanceStatusReason. */
   export interface InstanceStatusReason {
     /** A snake case string succinctly identifying the status reason. */
-    code: string;
+    code: InstanceStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
     /** Link to documentation about this status reason. */
     more_info?: string;
+  }
+  export namespace InstanceStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason. */
+      export enum Code {
+        CANNOT_START = 'cannot_start',
+        CANNOT_START_CAPACITY = 'cannot_start_capacity',
+        CANNOT_START_COMPUTE = 'cannot_start_compute',
+        CANNOT_START_IP_ADDRESS = 'cannot_start_ip_address',
+        CANNOT_START_NETWORK = 'cannot_start_network',
+        CANNOT_START_PLACEMENT_GROUP = 'cannot_start_placement_group',
+        CANNOT_START_STORAGE = 'cannot_start_storage',
+        ENCRYPTION_KEY_DELETED = 'encryption_key_deleted',
+        STOPPED_BY_HOST_FAILURE = 'stopped_by_host_failure',
+        STOPPED_FOR_IMAGE_CREATION = 'stopped_for_image_creation',
+      }
+    }
   }
 
   /** InstanceTemplate. */
@@ -32446,7 +32751,7 @@ namespace VpcV1 {
      */
     profile?: InstanceProfileIdentity;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
@@ -32527,7 +32832,16 @@ namespace VpcV1 {
     /** The resource group for this key. */
     resource_group: ResourceGroupReference;
     /** The crypto-system used by this key. */
-    type: string;
+    type: Key.Constants.Type | string;
+  }
+  export namespace Key {
+    export namespace Constants {
+      /** The crypto-system used by this key. */
+      export enum Type {
+        ED25519 = 'ed25519',
+        RSA = 'rsa',
+      }
+    }
   }
 
   /** KeyCollection. */
@@ -32625,7 +32939,7 @@ namespace VpcV1 {
     /** The name for this load balancer. The name is unique across all load balancers in the VPC. */
     name: string;
     /** The operating status of this load balancer. */
-    operating_status: string;
+    operating_status: LoadBalancer.Constants.OperatingStatus | string;
     /** The pools of this load balancer. */
     pools: LoadBalancerPoolReference[];
     /** The private IP addresses assigned to this load balancer. */
@@ -32649,7 +32963,7 @@ namespace VpcV1 {
      *    processing and surface the error, or bypass the load balancer on which the
      *    unexpected property value was encountered.
      */
-    provisioning_status: string;
+    provisioning_status: LoadBalancer.Constants.ProvisioningStatus | string;
     /** The public IP addresses assigned to this load balancer.
      *
      *  Applicable only for public load balancers.
@@ -32658,13 +32972,15 @@ namespace VpcV1 {
     /** The resource group for this load balancer. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: LoadBalancer.Constants.ResourceType | string;
     /** Indicates whether route mode is enabled for this load balancer.
      *
      *  At present, public load balancers are not supported with route mode enabled.
      */
     route_mode: boolean;
     /** The security groups targeting this load balancer.
+     *
+     *  If empty, all inbound and outbound traffic is allowed.
      *
      *  Applicable only for load balancers that support security groups.
      */
@@ -32679,6 +32995,29 @@ namespace VpcV1 {
     subnets: SubnetReference[];
     /** Indicates whether this load balancer supports UDP. */
     udp_supported: boolean;
+  }
+  export namespace LoadBalancer {
+    export namespace Constants {
+      /** The operating status of this load balancer. */
+      export enum OperatingStatus {
+        OFFLINE = 'offline',
+        ONLINE = 'online',
+      }
+      /** The provisioning status of this load balancer: - `active`: The load balancer is running. - `create_pending`: The load balancer is being created. - `delete_pending`: The load balancer is being deleted. - `maintenance_pending`: The load balancer is unavailable due to an internal error (contact IBM support). - `migrate_pending`: The load balancer is migrating to the requested configuration. Performance may be degraded. - `update_pending`: The load balancer is being updated to the requested configuration. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the load balancer on which the unexpected property value was encountered. */
+      export enum ProvisioningStatus {
+        ACTIVE = 'active',
+        CREATE_PENDING = 'create_pending',
+        DELETE_PENDING = 'delete_pending',
+        FAILED = 'failed',
+        MAINTENANCE_PENDING = 'maintenance_pending',
+        MIGRATE_PENDING = 'migrate_pending',
+        UPDATE_PENDING = 'update_pending',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        LOAD_BALANCER = 'load_balancer',
+      }
+    }
   }
 
   /** LoadBalancerCollection. */
@@ -32800,14 +33139,33 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the listener on
      *  which the unexpected property value was encountered.
      */
-    protocol: string;
+    protocol: LoadBalancerListener.Constants.Protocol | string;
     /** The provisioning status of this listener
      *
      *  The enumerated values for this property are expected to expand in the future. When processing this property,
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the listener on
      *  which the unexpected property value was encountered.
      */
-    provisioning_status: string;
+    provisioning_status: LoadBalancerListener.Constants.ProvisioningStatus | string;
+  }
+  export namespace LoadBalancerListener {
+    export namespace Constants {
+      /** The listener protocol. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the listener on which the unexpected property value was encountered. */
+      export enum Protocol {
+        HTTP = 'http',
+        HTTPS = 'https',
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+      /** The provisioning status of this listener The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the listener on which the unexpected property value was encountered. */
+      export enum ProvisioningStatus {
+        ACTIVE = 'active',
+        CREATE_PENDING = 'create_pending',
+        DELETE_PENDING = 'delete_pending',
+        FAILED = 'failed',
+        UPDATE_PENDING = 'update_pending',
+      }
+    }
   }
 
   /** LoadBalancerListenerCollection. */
@@ -32857,7 +33215,7 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on
      *  which the unexpected property value was encountered.
      */
-    action: string;
+    action: LoadBalancerListenerPolicy.Constants.Action | string;
     /** The date and time that this policy was created. */
     created_at: string;
     /** The listener policy's canonical URL. */
@@ -32876,7 +33234,7 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on
      *  which the unexpected property value was encountered.
      */
-    provisioning_status: string;
+    provisioning_status: LoadBalancerListenerPolicy.Constants.ProvisioningStatus | string;
     /** The rules for this policy. */
     rules: LoadBalancerListenerPolicyRuleReference[];
     /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference`
@@ -32884,6 +33242,25 @@ namespace VpcV1 {
      *  - If `action` is `https_redirect`, the response is a `LoadBalancerListenerHTTPSRedirect`.
      */
     target?: LoadBalancerListenerPolicyTarget;
+  }
+  export namespace LoadBalancerListenerPolicy {
+    export namespace Constants {
+      /** The policy action. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on which the unexpected property value was encountered. */
+      export enum Action {
+        FORWARD = 'forward',
+        HTTPS_REDIRECT = 'https_redirect',
+        REDIRECT = 'redirect',
+        REJECT = 'reject',
+      }
+      /** The provisioning status of this policy The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on which the unexpected property value was encountered. */
+      export enum ProvisioningStatus {
+        ACTIVE = 'active',
+        CREATE_PENDING = 'create_pending',
+        DELETE_PENDING = 'delete_pending',
+        FAILED = 'failed',
+        UPDATE_PENDING = 'update_pending',
+      }
+    }
   }
 
   /** LoadBalancerListenerPolicyCollection. */
@@ -32900,7 +33277,7 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on
      *  which the unexpected property value was encountered.
      */
-    action: string;
+    action: LoadBalancerListenerPolicyPrototype.Constants.Action | string;
     /** The name for this policy. The name must not be used by another policy for the load balancer listener. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
@@ -32915,6 +33292,17 @@ namespace VpcV1 {
      *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
      */
     target?: LoadBalancerListenerPolicyTargetPrototype;
+  }
+  export namespace LoadBalancerListenerPolicyPrototype {
+    export namespace Constants {
+      /** The policy action. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on which the unexpected property value was encountered. */
+      export enum Action {
+        FORWARD = 'forward',
+        HTTPS_REDIRECT = 'https_redirect',
+        REDIRECT = 'redirect',
+        REJECT = 'reject',
+      }
+    }
   }
 
   /** LoadBalancerListenerPolicyReference. */
@@ -32939,7 +33327,7 @@ namespace VpcV1 {
   /** LoadBalancerListenerPolicyRule. */
   export interface LoadBalancerListenerPolicyRule {
     /** The condition of the rule. */
-    condition: string;
+    condition: LoadBalancerListenerPolicyRule.Constants.Condition | string;
     /** The date and time that this rule was created. */
     created_at: string;
     /** The field. This is applicable to `header`, `query`, and `body` rule types.
@@ -32962,17 +33350,43 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the rule on which
      *  the unexpected property value was encountered.
      */
-    provisioning_status: string;
+    provisioning_status: LoadBalancerListenerPolicyRule.Constants.ProvisioningStatus | string;
     /** The type of the rule.
      *
      *  Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
      */
-    type: string;
+    type: LoadBalancerListenerPolicyRule.Constants.Type | string;
     /** Value to be matched for rule condition.
      *
      *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     value: string;
+  }
+  export namespace LoadBalancerListenerPolicyRule {
+    export namespace Constants {
+      /** The condition of the rule. */
+      export enum Condition {
+        CONTAINS = 'contains',
+        EQUALS = 'equals',
+        MATCHES_REGEX = 'matches_regex',
+      }
+      /** The provisioning status of this rule The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the rule on which the unexpected property value was encountered. */
+      export enum ProvisioningStatus {
+        ACTIVE = 'active',
+        CREATE_PENDING = 'create_pending',
+        DELETE_PENDING = 'delete_pending',
+        FAILED = 'failed',
+        UPDATE_PENDING = 'update_pending',
+      }
+      /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
+      export enum Type {
+        BODY = 'body',
+        HEADER = 'header',
+        HOSTNAME = 'hostname',
+        PATH = 'path',
+        QUERY = 'query',
+      }
+    }
   }
 
   /** LoadBalancerListenerPolicyRuleCollection. */
@@ -32984,7 +33398,7 @@ namespace VpcV1 {
   /** LoadBalancerListenerPolicyRulePrototype. */
   export interface LoadBalancerListenerPolicyRulePrototype {
     /** The condition of the rule. */
-    condition: string;
+    condition: LoadBalancerListenerPolicyRulePrototype.Constants.Condition | string;
     /** The field. This is applicable to `header`, `query`, and `body` rule types.
      *
      *  If the rule type is `header`, this property is required.
@@ -32999,12 +33413,30 @@ namespace VpcV1 {
      *
      *  Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
      */
-    type: string;
+    type: LoadBalancerListenerPolicyRulePrototype.Constants.Type | string;
     /** Value to be matched for rule condition.
      *
      *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     value: string;
+  }
+  export namespace LoadBalancerListenerPolicyRulePrototype {
+    export namespace Constants {
+      /** The condition of the rule. */
+      export enum Condition {
+        CONTAINS = 'contains',
+        EQUALS = 'equals',
+        MATCHES_REGEX = 'matches_regex',
+      }
+      /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
+      export enum Type {
+        BODY = 'body',
+        HEADER = 'header',
+        HOSTNAME = 'hostname',
+        PATH = 'path',
+        QUERY = 'query',
+      }
+    }
   }
 
   /** LoadBalancerListenerPolicyRuleReference. */
@@ -33108,7 +33540,18 @@ namespace VpcV1 {
      *    `https`.
      *  - If `https_redirect` is set, the protocol must be `http`.
      */
-    protocol: string;
+    protocol: LoadBalancerListenerPrototypeLoadBalancerContext.Constants.Protocol | string;
+  }
+  export namespace LoadBalancerListenerPrototypeLoadBalancerContext {
+    export namespace Constants {
+      /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol` combination. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. Additional restrictions: - If `default_pool` is set, the pool's protocol must match, or be compatible with the listener's protocol. At present, the compatible protocols are `http` and `https`. - If `https_redirect` is set, the protocol must be `http`. */
+      export enum Protocol {
+        HTTP = 'http',
+        HTTPS = 'https',
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
   }
 
   /** LoadBalancerListenerReference. */
@@ -33168,7 +33611,7 @@ namespace VpcV1 {
   /** LoadBalancerPool. */
   export interface LoadBalancerPool {
     /** The load balancing algorithm. */
-    algorithm: string;
+    algorithm: LoadBalancerPool.Constants.Algorithm | string;
     /** The date and time that this pool was created. */
     created_at: string;
     /** The health monitor of this pool. */
@@ -33189,14 +33632,14 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which
      *  the unexpected property value was encountered.
      */
-    protocol: string;
+    protocol: LoadBalancerPool.Constants.Protocol | string;
     /** The provisioning status of this pool
      *
      *  The enumerated values for this property are expected to expand in the future. When processing this property,
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which
      *  the unexpected property value was encountered.
      */
-    provisioning_status: string;
+    provisioning_status: LoadBalancerPool.Constants.ProvisioningStatus | string;
     /** The PROXY protocol setting for this pool:
      *  - `v1`: Enabled with version 1 (human-readable header format)
      *  - `v2`: Enabled with version 2 (binary header format)
@@ -33204,7 +33647,7 @@ namespace VpcV1 {
      *
      *  Supported by load balancers in the `application` family (otherwise always `disabled`).
      */
-    proxy_protocol: string;
+    proxy_protocol: LoadBalancerPool.Constants.ProxyProtocol | string;
     /** The session persistence of this pool.
      *
      *  The enumerated values for this property are expected to expand in the future. When
@@ -33213,6 +33656,37 @@ namespace VpcV1 {
      *  property value was encountered.
      */
     session_persistence?: LoadBalancerPoolSessionPersistence;
+  }
+  export namespace LoadBalancerPool {
+    export namespace Constants {
+      /** The load balancing algorithm. */
+      export enum Algorithm {
+        LEAST_CONNECTIONS = 'least_connections',
+        ROUND_ROBIN = 'round_robin',
+        WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
+      }
+      /** The protocol for this load balancer pool. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which the unexpected property value was encountered. */
+      export enum Protocol {
+        HTTP = 'http',
+        HTTPS = 'https',
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+      /** The provisioning status of this pool The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which the unexpected property value was encountered. */
+      export enum ProvisioningStatus {
+        ACTIVE = 'active',
+        CREATE_PENDING = 'create_pending',
+        DELETE_PENDING = 'delete_pending',
+        FAILED = 'failed',
+        UPDATE_PENDING = 'update_pending',
+      }
+      /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled Supported by load balancers in the `application` family (otherwise always `disabled`). */
+      export enum ProxyProtocol {
+        DISABLED = 'disabled',
+        V1 = 'v1',
+        V2 = 'v2',
+      }
+    }
   }
 
   /** LoadBalancerPoolCollection. */
@@ -33240,12 +33714,22 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the health monitor
      *  on which the unexpected property value was encountered.
      */
-    type: string;
+    type: LoadBalancerPoolHealthMonitor.Constants.Type | string;
     /** The health check URL path. Applicable when `type` is `http` or `https`.
      *
      *  Must be in the format of an [origin-form request target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
      */
     url_path?: string;
+  }
+  export namespace LoadBalancerPoolHealthMonitor {
+    export namespace Constants {
+      /** The protocol type to use for health checks. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the health monitor on which the unexpected property value was encountered. */
+      export enum Type {
+        HTTP = 'http',
+        HTTPS = 'https',
+        TCP = 'tcp',
+      }
+    }
   }
 
   /** LoadBalancerPoolHealthMonitorPatch. */
@@ -33264,12 +33748,22 @@ namespace VpcV1 {
     /** The seconds to wait for a response to a health check.  Must be less than `delay`. */
     timeout: number;
     /** The protocol type to use for health checks. */
-    type: string;
+    type: LoadBalancerPoolHealthMonitorPatch.Constants.Type | string;
     /** The health check URL path. Applicable when `type` is `http` or `https`.
      *
      *  Must be in the format of an [origin-form request target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
      */
     url_path?: string;
+  }
+  export namespace LoadBalancerPoolHealthMonitorPatch {
+    export namespace Constants {
+      /** The protocol type to use for health checks. */
+      export enum Type {
+        HTTP = 'http',
+        HTTPS = 'https',
+        TCP = 'tcp',
+      }
+    }
   }
 
   /** LoadBalancerPoolHealthMonitorPrototype. */
@@ -33286,12 +33780,22 @@ namespace VpcV1 {
     /** The seconds to wait for a response to a health check.  Must be less than `delay`. */
     timeout: number;
     /** The protocol type to use for health checks. */
-    type: string;
+    type: LoadBalancerPoolHealthMonitorPrototype.Constants.Type | string;
     /** The health check URL path. Applicable when `type` is `http` or `https`.
      *
      *  Must be in the format of an [origin-form request target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
      */
     url_path?: string;
+  }
+  export namespace LoadBalancerPoolHealthMonitorPrototype {
+    export namespace Constants {
+      /** The protocol type to use for health checks. */
+      export enum Type {
+        HTTP = 'http',
+        HTTPS = 'https',
+        TCP = 'tcp',
+      }
+    }
   }
 
   /** Identifies a load balancer pool by a unique property. */
@@ -33309,7 +33813,7 @@ namespace VpcV1 {
     /** The date and time that this member was created. */
     created_at: string;
     /** Health of the server member in the pool. */
-    health: string;
+    health: LoadBalancerPoolMember.Constants.Health | string;
     /** The member's canonical URL. */
     href: string;
     /** The unique identifier for this load balancer pool member. */
@@ -33328,7 +33832,7 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool member on
      *  which the unexpected property value was encountered.
      */
-    provisioning_status: string;
+    provisioning_status: LoadBalancerPoolMember.Constants.ProvisioningStatus | string;
     /** The pool member target. Load balancers in the `network` family support virtual server
      *  instances. Load balancers in the `application` family support IP addresses. If the load
      *  balancer has route mode enabled, the member must be in a zone the load balancer has a
@@ -33337,6 +33841,24 @@ namespace VpcV1 {
     target: LoadBalancerPoolMemberTarget;
     /** Weight of the server member. Applicable only if the pool algorithm is `weighted_round_robin`. */
     weight?: number;
+  }
+  export namespace LoadBalancerPoolMember {
+    export namespace Constants {
+      /** Health of the server member in the pool. */
+      export enum Health {
+        FAULTED = 'faulted',
+        OK = 'ok',
+        UNKNOWN = 'unknown',
+      }
+      /** The provisioning status of this member The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool member on which the unexpected property value was encountered. */
+      export enum ProvisioningStatus {
+        ACTIVE = 'active',
+        CREATE_PENDING = 'create_pending',
+        DELETE_PENDING = 'delete_pending',
+        FAILED = 'failed',
+        UPDATE_PENDING = 'update_pending',
+      }
+    }
   }
 
   /** LoadBalancerPoolMemberCollection. */
@@ -33396,7 +33918,7 @@ namespace VpcV1 {
   /** LoadBalancerPoolPrototype. */
   export interface LoadBalancerPoolPrototype {
     /** The load balancing algorithm. */
-    algorithm: string;
+    algorithm: LoadBalancerPoolPrototype.Constants.Algorithm | string;
     /** The health monitor of this pool. */
     health_monitor: LoadBalancerPoolHealthMonitorPrototype;
     /** The members for this load balancer pool. For load balancers in the `network` family, the same `port` and
@@ -33411,7 +33933,7 @@ namespace VpcV1 {
      *  `udp` (if `udp_supported` is `true`). Load balancers in the
      *  `application` family support `tcp`, `http`, and `https`.
      */
-    protocol: string;
+    protocol: LoadBalancerPoolPrototype.Constants.Protocol | string;
     /** The PROXY protocol setting for this pool:
      *  - `v1`: Enabled with version 1 (human-readable header format)
      *  - `v2`: Enabled with version 2 (binary header format)
@@ -33419,9 +33941,32 @@ namespace VpcV1 {
      *
      *  Supported by load balancers in the `application` family (otherwise always `disabled`).
      */
-    proxy_protocol?: string;
+    proxy_protocol?: LoadBalancerPoolPrototype.Constants.ProxyProtocol | string;
     /** The session persistence of this pool. */
     session_persistence?: LoadBalancerPoolSessionPersistencePrototype;
+  }
+  export namespace LoadBalancerPoolPrototype {
+    export namespace Constants {
+      /** The load balancing algorithm. */
+      export enum Algorithm {
+        LEAST_CONNECTIONS = 'least_connections',
+        ROUND_ROBIN = 'round_robin',
+        WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
+      }
+      /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http`, and `https`. */
+      export enum Protocol {
+        HTTP = 'http',
+        HTTPS = 'https',
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+      /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled Supported by load balancers in the `application` family (otherwise always `disabled`). */
+      export enum ProxyProtocol {
+        DISABLED = 'disabled',
+        V1 = 'v1',
+        V2 = 'v2',
+      }
+    }
   }
 
   /** LoadBalancerPoolReference. */
@@ -33453,7 +33998,17 @@ namespace VpcV1 {
     /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and
      *  `https` protocols.
      */
-    type: string;
+    type: LoadBalancerPoolSessionPersistence.Constants.Type | string;
+  }
+  export namespace LoadBalancerPoolSessionPersistence {
+    export namespace Constants {
+      /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and `https` protocols. */
+      export enum Type {
+        APP_COOKIE = 'app_cookie',
+        HTTP_COOKIE = 'http_cookie',
+        SOURCE_IP = 'source_ip',
+      }
+    }
   }
 
   /** The session persistence configuration. Specify `null` to remove any existing session persistence configuration. */
@@ -33465,7 +34020,17 @@ namespace VpcV1 {
     /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and
      *  `https` protocols.
      */
-    type?: string;
+    type?: LoadBalancerPoolSessionPersistencePatch.Constants.Type | string;
+  }
+  export namespace LoadBalancerPoolSessionPersistencePatch {
+    export namespace Constants {
+      /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and `https` protocols. */
+      export enum Type {
+        APP_COOKIE = 'app_cookie',
+        HTTP_COOKIE = 'http_cookie',
+        SOURCE_IP = 'source_ip',
+      }
+    }
   }
 
   /** LoadBalancerPoolSessionPersistencePrototype. */
@@ -33477,7 +34042,17 @@ namespace VpcV1 {
     /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and
      *  `https` protocols.
      */
-    type: string;
+    type: LoadBalancerPoolSessionPersistencePrototype.Constants.Type | string;
+  }
+  export namespace LoadBalancerPoolSessionPersistencePrototype {
+    export namespace Constants {
+      /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and `https` protocols. */
+      export enum Type {
+        APP_COOKIE = 'app_cookie',
+        HTTP_COOKIE = 'http_cookie',
+        SOURCE_IP = 'source_ip',
+      }
+    }
   }
 
   /** LoadBalancerPrivateIpsItem. */
@@ -33502,7 +34077,15 @@ namespace VpcV1 {
     /** The name for this reserved IP. The name is unique across all reserved IPs in a subnet. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: LoadBalancerPrivateIpsItem.Constants.ResourceType | string;
+  }
+  export namespace LoadBalancerPrivateIpsItem {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SUBNET_RESERVED_IP = 'subnet_reserved_ip',
+      }
+    }
   }
 
   /** LoadBalancerProfile. */
@@ -33558,9 +34141,17 @@ namespace VpcV1 {
   /** Indicates which logging type(s) are supported for a load balancer with this profile. */
   export interface LoadBalancerProfileLoggingSupported {
     /** The type for this profile field. */
-    type: string;
+    type: LoadBalancerProfileLoggingSupported.Constants.Type | string;
     /** The supported logging type(s) for a load balancer with this profile. */
     value: string[];
+  }
+  export namespace LoadBalancerProfileLoggingSupported {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** LoadBalancerProfileReference. */
@@ -33662,7 +34253,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
     /** The VPC this network ACL will reside in. */
@@ -33694,7 +34285,7 @@ namespace VpcV1 {
   /** NetworkACLRule. */
   export interface NetworkACLRule {
     /** The action to perform for a packet matching the rule. */
-    action: string;
+    action: NetworkACLRule.Constants.Action | string;
     /** The rule that this rule is immediately before. If absent, this is the last rule. */
     before?: NetworkACLRuleReference;
     /** The date and time that the rule was created. */
@@ -33704,19 +34295,44 @@ namespace VpcV1 {
      */
     destination: string;
     /** The direction of traffic to match. */
-    direction: string;
+    direction: NetworkACLRule.Constants.Direction | string;
     /** The URL for this network ACL rule. */
     href: string;
     /** The unique identifier for this network ACL rule. */
     id: string;
     /** The IP version for this rule. */
-    ip_version: string;
+    ip_version: NetworkACLRule.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name is unique across all rules for the network ACL. */
     name: string;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRule.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
+  }
+  export namespace NetworkACLRule {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+        ICMP = 'icmp',
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
   }
 
   /** The rule to move this rule immediately before. Specify `null` to move this rule after all existing rules. */
@@ -33756,7 +34372,7 @@ namespace VpcV1 {
   /** NetworkACLRuleItem. */
   export interface NetworkACLRuleItem {
     /** The action to perform for a packet matching the rule. */
-    action: string;
+    action: NetworkACLRuleItem.Constants.Action | string;
     /** The rule that this rule is immediately before. In a rule collection, this always
      *  refers to the next item in the collection. If absent, this is the last rule.
      */
@@ -33768,25 +34384,50 @@ namespace VpcV1 {
      */
     destination: string;
     /** The direction of traffic to match. */
-    direction: string;
+    direction: NetworkACLRuleItem.Constants.Direction | string;
     /** The URL for this network ACL rule. */
     href: string;
     /** The unique identifier for this network ACL rule. */
     id: string;
     /** The IP version for this rule. */
-    ip_version: string;
+    ip_version: NetworkACLRuleItem.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name is unique across all rules for the network ACL. */
     name: string;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRuleItem.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
+  }
+  export namespace NetworkACLRuleItem {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+        ICMP = 'icmp',
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
   }
 
   /** NetworkACLRulePrototype. */
   export interface NetworkACLRulePrototype {
     /** The action to perform for a packet matching the rule. */
-    action: string;
+    action: NetworkACLRulePrototype.Constants.Action | string;
     /** The rule to insert this rule immediately before.
      *
      *  If unspecified, this rule will be inserted after all existing rules.
@@ -33797,39 +34438,89 @@ namespace VpcV1 {
      */
     destination: string;
     /** The direction of traffic to match. */
-    direction: string;
+    direction: NetworkACLRulePrototype.Constants.Direction | string;
     /** The IP version for this rule. */
-    ip_version?: string;
+    ip_version?: NetworkACLRulePrototype.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name must not be used by another rule for the network ACL. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRulePrototype.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
+  }
+  export namespace NetworkACLRulePrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+        ICMP = 'icmp',
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
   }
 
   /** NetworkACLRulePrototypeNetworkACLContext. */
   export interface NetworkACLRulePrototypeNetworkACLContext {
     /** The action to perform for a packet matching the rule. */
-    action: string;
+    action: NetworkACLRulePrototypeNetworkACLContext.Constants.Action | string;
     /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all destination
      *  addresses.
      */
     destination: string;
     /** The direction of traffic to match. */
-    direction: string;
+    direction: NetworkACLRulePrototypeNetworkACLContext.Constants.Direction | string;
     /** The IP version for this rule. */
-    ip_version?: string;
+    ip_version?: NetworkACLRulePrototypeNetworkACLContext.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name must not be used by another rule for the network ACL. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRulePrototypeNetworkACLContext.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
+  }
+  export namespace NetworkACLRulePrototypeNetworkACLContext {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+        ICMP = 'icmp',
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
   }
 
   /** NetworkACLRuleReference. */
@@ -33854,7 +34545,7 @@ namespace VpcV1 {
 
   /** NetworkInterface. */
   export interface NetworkInterface {
-    /** Indicates whether source IP spoofing is allowed on this instance interface. */
+    /** Indicates whether source IP spoofing is allowed on this instance network interface. */
     allow_ip_spoofing: boolean;
     /** The date and time that the instance network interface was created. */
     created_at: string;
@@ -33870,15 +34561,35 @@ namespace VpcV1 {
     port_speed: number;
     primary_ip: ReservedIPReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: NetworkInterface.Constants.ResourceType | string;
     /** The security groups targeting this instance network interface. */
     security_groups: SecurityGroupReference[];
     /** The status of the instance network interface. */
-    status: string;
+    status: NetworkInterface.Constants.Status | string;
     /** The associated subnet. */
     subnet: SubnetReference;
-    /** The type of this instance network interface as it relates to an instance. */
-    type: string;
+    /** The instance network interface type. */
+    type: NetworkInterface.Constants.Type | string;
+  }
+  export namespace NetworkInterface {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+      /** The status of the instance network interface. */
+      export enum Status {
+        AVAILABLE = 'available',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+      }
+      /** The instance network interface type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+    }
   }
 
   /** NetworkInterfaceBareMetalServerContextReference. */
@@ -33895,9 +34606,17 @@ namespace VpcV1 {
     name: string;
     primary_ip: ReservedIPReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: NetworkInterfaceBareMetalServerContextReference.Constants.ResourceType | string;
     /** The associated subnet. */
     subnet: SubnetReference;
+  }
+  export namespace NetworkInterfaceBareMetalServerContextReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -33924,9 +34643,17 @@ namespace VpcV1 {
     name: string;
     primary_ip: ReservedIPReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: NetworkInterfaceInstanceContextReference.Constants.ResourceType | string;
     /** The associated subnet. */
     subnet: SubnetReference;
+  }
+  export namespace NetworkInterfaceInstanceContextReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -33937,7 +34664,7 @@ namespace VpcV1 {
 
   /** NetworkInterfacePrototype. */
   export interface NetworkInterfacePrototype {
-    /** Indicates whether source IP spoofing is allowed on this instance interface. */
+    /** Indicates whether source IP spoofing is allowed on this instance network interface. */
     allow_ip_spoofing?: boolean;
     /** The name for the instance network interface. The name must not be used by another network interface on the
      *  virtual server instance. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -34038,13 +34765,13 @@ namespace VpcV1 {
     /** The unique identifier for this placement group. */
     id: string;
     /** The lifecycle state of the placement group. */
-    lifecycle_state: string;
+    lifecycle_state: PlacementGroup.Constants.LifecycleState | string;
     /** The name for this placement group. The name is unique across all placement groups in the region. */
     name: string;
     /** The resource group for this placement group. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: PlacementGroup.Constants.ResourceType | string;
     /** The strategy for this placement group
      *  - `host_spread`: place on different compute hosts
      *  - `power_spread`: place on compute hosts that use different power sources
@@ -34053,7 +34780,30 @@ namespace VpcV1 {
      *  log unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the
      *  unexpected strategy was encountered.
      */
-    strategy: string;
+    strategy: PlacementGroup.Constants.Strategy | string;
+  }
+  export namespace PlacementGroup {
+    export namespace Constants {
+      /** The lifecycle state of the placement group. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        PLACEMENT_GROUP = 'placement_group',
+      }
+      /** The strategy for this placement group - `host_spread`: place on different compute hosts - `power_spread`: place on compute hosts that use different power sources The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the unexpected strategy was encountered. */
+      export enum Strategy {
+        HOST_SPREAD = 'host_spread',
+        POWER_SPREAD = 'power_spread',
+      }
+    }
   }
 
   /** PlacementGroupCollection. */
@@ -34105,13 +34855,28 @@ namespace VpcV1 {
     /** The resource group for this public gateway. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: PublicGateway.Constants.ResourceType | string;
     /** The status of this public gateway. */
-    status: string;
+    status: PublicGateway.Constants.Status | string;
     /** The VPC this public gateway resides in. */
     vpc: VPCReference;
     /** The zone this public gateway resides in. */
     zone: ZoneReference;
+  }
+  export namespace PublicGateway {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        PUBLIC_GATEWAY = 'public_gateway',
+      }
+      /** The status of this public gateway. */
+      export enum Status {
+        AVAILABLE = 'available',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+      }
+    }
   }
 
   /** PublicGatewayCollection. */
@@ -34181,7 +34946,15 @@ namespace VpcV1 {
     /** The name for this public gateway. The name is unique across all public gateways in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: PublicGatewayReference.Constants.ResourceType | string;
+  }
+  export namespace PublicGatewayReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        PUBLIC_GATEWAY = 'public_gateway',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -34199,7 +34972,16 @@ namespace VpcV1 {
     /** The globally unique name for this region. */
     name: string;
     /** The availability status of this region. */
-    status: string;
+    status: Region.Constants.Status | string;
+  }
+  export namespace Region {
+    export namespace Constants {
+      /** The availability status of this region. */
+      export enum Status {
+        AVAILABLE = 'available',
+        UNAVAILABLE = 'unavailable',
+      }
+    }
   }
 
   /** RegionCollection. */
@@ -34242,18 +35024,41 @@ namespace VpcV1 {
     /** The unique identifier for this reserved IP. */
     id: string;
     /** The lifecycle state of the reserved IP. */
-    lifecycle_state: string;
+    lifecycle_state: ReservedIP.Constants.LifecycleState | string;
     /** The name for this reserved IP. The name is unique across all reserved IPs in a subnet. */
     name: string;
     /** The owner of the reserved IP. */
-    owner: string;
+    owner: ReservedIP.Constants.Owner | string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ReservedIP.Constants.ResourceType | string;
     /** The target this reserved IP is bound to.
      *
      *  If absent, this reserved IP is provider-owned or unbound.
      */
     target?: ReservedIPTarget;
+  }
+  export namespace ReservedIP {
+    export namespace Constants {
+      /** The lifecycle state of the reserved IP. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The owner of the reserved IP. */
+      export enum Owner {
+        PROVIDER = 'provider',
+        USER = 'user',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SUBNET_RESERVED_IP = 'subnet_reserved_ip',
+      }
+    }
   }
 
   /** ReservedIPCollection. */
@@ -34382,7 +35187,15 @@ namespace VpcV1 {
     /** The name for this reserved IP. The name is unique across all reserved IPs in a subnet. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ReservedIPReference.Constants.ResourceType | string;
+  }
+  export namespace ReservedIPReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SUBNET_RESERVED_IP = 'subnet_reserved_ip',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -34405,7 +35218,7 @@ namespace VpcV1 {
     resource_type?: string;
   }
 
-  /** The resource group to use. If unspecified, the account's [default resource group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used. */
+  /** The resource group to use. If unspecified, the account's [default resource group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used. */
   export interface ResourceGroupIdentity {
   }
 
@@ -34427,7 +35240,7 @@ namespace VpcV1 {
      *  - `deliver`: deliver the packet to the specified `next_hop`
      *  - `drop`: drop the packet.
      */
-    action: string;
+    action: Route.Constants.Action | string;
     /** The date and time that the route was created. */
     created_at: string;
     /** If present, the resource that created the route. Routes with this property present cannot
@@ -34442,7 +35255,7 @@ namespace VpcV1 {
     /** The unique identifier for this route. */
     id: string;
     /** The lifecycle state of the route. */
-    lifecycle_state: string;
+    lifecycle_state: Route.Constants.LifecycleState | string;
     /** The name for this route. The name is unique across all routes in the routing table. */
     name: string;
     /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
@@ -34457,7 +35270,7 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which
      *  the unexpected property value was encountered.
      */
-    origin?: string;
+    origin?: Route.Constants.Origin | string;
     /** The priority of this route. Smaller values have higher priority.
      *
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
@@ -34467,6 +35280,32 @@ namespace VpcV1 {
     priority: number;
     /** The zone the route applies to. (Traffic from subnets in this zone will be subject to this route.). */
     zone: ZoneReference;
+  }
+  export namespace Route {
+    export namespace Constants {
+      /** The action to perform with a packet matching the route: - `delegate`: delegate to system-provided routes - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet. */
+      export enum Action {
+        DELEGATE = 'delegate',
+        DELEGATE_VPC = 'delegate_vpc',
+        DELIVER = 'deliver',
+        DROP = 'drop',
+      }
+      /** The lifecycle state of the route. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The origin of this route: - `service`: route was directly created by a service - `user`: route was directly created by a user The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which the unexpected property value was encountered. */
+      export enum Origin {
+        SERVICE = 'service',
+        USER = 'user',
+      }
+    }
   }
 
   /** RouteCollection. */
@@ -34529,7 +35368,7 @@ namespace VpcV1 {
      *  - `deliver`: deliver the packet to the specified `next_hop`
      *  - `drop`: drop the packet.
      */
-    action: string;
+    action: RouteCollectionVPCContextRoutesItem.Constants.Action | string;
     /** The date and time that the route was created. */
     created_at: string;
     /** If present, the resource that created the route. Routes with this property present cannot
@@ -34544,7 +35383,7 @@ namespace VpcV1 {
     /** The unique identifier for this route. */
     id: string;
     /** The lifecycle state of the route. */
-    lifecycle_state: string;
+    lifecycle_state: RouteCollectionVPCContextRoutesItem.Constants.LifecycleState | string;
     /** The name for this route. The name is unique across all routes in the routing table. */
     name: string;
     /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
@@ -34559,7 +35398,7 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which
      *  the unexpected property value was encountered.
      */
-    origin?: string;
+    origin?: RouteCollectionVPCContextRoutesItem.Constants.Origin | string;
     /** The priority of this route. Smaller values have higher priority.
      *
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
@@ -34569,6 +35408,32 @@ namespace VpcV1 {
     priority: number;
     /** The zone the route applies to. (Traffic from subnets in this zone will be subject to this route.). */
     zone: ZoneReference;
+  }
+  export namespace RouteCollectionVPCContextRoutesItem {
+    export namespace Constants {
+      /** The action to perform with a packet matching the route: - `delegate`: delegate to system-provided routes - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet. */
+      export enum Action {
+        DELEGATE = 'delegate',
+        DELEGATE_VPC = 'delegate_vpc',
+        DELIVER = 'deliver',
+        DROP = 'drop',
+      }
+      /** The lifecycle state of the route. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The origin of this route: - `service`: route was directly created by a service - `user`: route was directly created by a user The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which the unexpected property value was encountered. */
+      export enum Origin {
+        SERVICE = 'service',
+        USER = 'user',
+      }
+    }
   }
 
   /** If present, the resource that created the route. Routes with this property present cannot be directly deleted. All routes with an `origin` of `service` will have this property set, and future `origin` values may also have this property set. */
@@ -34591,7 +35456,7 @@ namespace VpcV1 {
      *  - `deliver`: deliver the packet to the specified `next_hop`
      *  - `drop`: drop the packet.
      */
-    action?: string;
+    action?: RoutePrototype.Constants.Action | string;
     /** The destination CIDR of the route. The host identifier in the CIDR must be zero.
      *
      *  At most two routes per `zone` in a table can have the same `destination` and
@@ -34619,6 +35484,17 @@ namespace VpcV1 {
     priority?: number;
     /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
     zone: ZoneIdentity;
+  }
+  export namespace RoutePrototype {
+    export namespace Constants {
+      /** The action to perform with a packet matching the route: - `delegate`: delegate to system-provided routes - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet. */
+      export enum Action {
+        DELEGATE = 'delegate',
+        DELEGATE_VPC = 'delegate_vpc',
+        DELIVER = 'deliver',
+        DROP = 'drop',
+      }
+    }
   }
 
   /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action` values, it must be omitted or specified as `0.0.0.0`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route has an `action` of `deliver` and `next_hop` is an IP address. */
@@ -34662,18 +35538,18 @@ namespace VpcV1 {
     /** Indicates whether this is the default routing table for this VPC. */
     is_default: boolean;
     /** The lifecycle state of the routing table. */
-    lifecycle_state: string;
+    lifecycle_state: RoutingTable.Constants.LifecycleState | string;
     /** The name for this routing table. The name is unique across all routing tables for the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: RoutingTable.Constants.ResourceType | string;
     /** Indicates whether this routing table is used to route traffic that originates from
      *  [Direct Link](https://cloud.ibm.com/docs/dl) to this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      */
     route_direct_link_ingress: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from the internet.
@@ -34681,9 +35557,9 @@ namespace VpcV1 {
      *  Incoming traffic will be routed according to the routing table with two exceptions:
      *  - Traffic destined for IP addresses associated with public gateways will not be
      *    subject to routes in this routing table.
-     *  - Routes with an action of deliver are treated as drop unless the `next_hop` is an
-     *    IP address in a subnet in the route's `zone`. Therefore, if an incoming packet
-     *    matches a route with a `next_hop` of an internet-bound IP address or a VPN gateway
+     *  - Routes with an `action` of `deliver` are treated as `drop` unless the `next_hop` is
+     *    an IP address in a subnet in the route's `zone` that is able to accept traffic.
+     *    Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
      *    connection, the packet will be dropped.
      */
     route_internet_ingress: boolean;
@@ -34691,24 +35567,42 @@ namespace VpcV1 {
      *  Gateway](https://cloud.ibm.com/docs/transit-gateway) to this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      */
     route_transit_gateway_ingress: boolean;
     /** Indicates whether this routing table is used to route traffic that originates from subnets in other zones in
      *  this VPC.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
-     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone`.
-     *  Therefore, if an incoming packet matches a route with a `next_hop` of an internet-bound IP address or a VPN
-     *  gateway connection, the packet will be dropped.
+     *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
+     *  able to accept traffic. Therefore, if an incoming packet matches a route with a `next_hop` of a VPN gateway
+     *  connection, the packet will be dropped.
      */
     route_vpc_zone_ingress: boolean;
     /** The routes for this routing table. */
     routes: RouteReference[];
     /** The subnets to which this routing table is attached. */
     subnets: SubnetReference[];
+  }
+  export namespace RoutingTable {
+    export namespace Constants {
+      /** The lifecycle state of the routing table. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        ROUTING_TABLE = 'routing_table',
+      }
+    }
   }
 
   /** RoutingTableCollection. */
@@ -34754,7 +35648,15 @@ namespace VpcV1 {
     /** The name for this routing table. The name is unique across all routing tables for the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: RoutingTableReference.Constants.ResourceType | string;
+  }
+  export namespace RoutingTableReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        ROUTING_TABLE = 'routing_table',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -34840,7 +35742,7 @@ namespace VpcV1 {
   /** SecurityGroupRule. */
   export interface SecurityGroupRule {
     /** The direction of traffic to enforce. */
-    direction: string;
+    direction: SecurityGroupRule.Constants.Direction | string;
     /** The URL for this security group rule. */
     href: string;
     /** The unique identifier for this security group rule. */
@@ -34849,14 +35751,34 @@ namespace VpcV1 {
      *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
      *  addresses (network interfaces) in that group matching this IP version.
      */
-    ip_version: string;
+    ip_version: SecurityGroupRule.Constants.IpVersion | string;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: SecurityGroupRule.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule allows traffic (or to
      *  which, for outbound rules). A CIDR block of `0.0.0.0/0` allows traffic from any source
      *  (or to any destination, for outbound rules).
      */
     remote: SecurityGroupRuleRemote;
+  }
+  export namespace SecurityGroupRule {
+    export namespace Constants {
+      /** The direction of traffic to enforce. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+        ICMP = 'icmp',
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
   }
 
   /** Collection of rules in a security group. */
@@ -34868,14 +35790,14 @@ namespace VpcV1 {
   /** SecurityGroupRulePrototype. */
   export interface SecurityGroupRulePrototype {
     /** The direction of traffic to enforce. */
-    direction: string;
+    direction: SecurityGroupRulePrototype.Constants.Direction | string;
     /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
      *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
      *  addresses (network interfaces) in that group matching this IP version.
      */
-    ip_version?: string;
+    ip_version?: SecurityGroupRulePrototype.Constants.IpVersion | string;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: SecurityGroupRulePrototype.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
      *  security group within the VPC.
@@ -34884,6 +35806,26 @@ namespace VpcV1 {
      *  (or to any destination, for outbound rules).
      */
     remote?: SecurityGroupRuleRemotePrototype;
+  }
+  export namespace SecurityGroupRulePrototype {
+    export namespace Constants {
+      /** The direction of traffic to enforce. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+        ICMP = 'icmp',
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
   }
 
   /** The remote IP addresses or security groups from which this rule allows traffic (or to which, for outbound rules). A CIDR block of `0.0.0.0/0` allows traffic from any source (or to any destination, for outbound rules). */
@@ -34940,13 +35882,13 @@ namespace VpcV1 {
      *  property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the
      *  resource on which the unexpected access control mode was encountered.
      */
-    access_control_mode: string;
+    access_control_mode: Share.Constants.AccessControlMode | string;
     /** The date and time that the file share is created. */
     created_at: string;
     /** The CRN for this file share. */
     crn: string;
     /** The type of encryption used for this file share. */
-    encryption: string;
+    encryption: Share.Constants.Encryption | string;
     /** The key used to encrypt this file share.
      *
      *  This property will be present if `encryption_type` is `user_managed`.
@@ -34968,7 +35910,7 @@ namespace VpcV1 {
      */
     latest_job?: ShareJob;
     /** The lifecycle state of the file share. */
-    lifecycle_state: string;
+    lifecycle_state: Share.Constants.LifecycleState | string;
     /** The mount targets for the file share. */
     mount_targets: ShareMountTargetReference[];
     /** The name for this share. The name is unique across all shares in the region. */
@@ -34991,7 +35933,7 @@ namespace VpcV1 {
      *  * `replica`: This share is a replication target.
      *  * `source`: This share is a replication source.
      */
-    replication_role: string;
+    replication_role: Share.Constants.ReplicationRole | string;
     /** The replication status of the file share.
      *
      *  * `active`: This share is actively participating in replication, and the replica's data is up-to-date with the
@@ -35001,7 +35943,7 @@ namespace VpcV1 {
      *  * `none`: This share is not participating in replication.
      *  * `split_pending`: This share is performing a replication split.
      */
-    replication_status: string;
+    replication_status: Share.Constants.ReplicationStatus | string;
     /** The reasons for the current replication status (if any).
      *
      *  The enumerated reason code values for this property will expand in the future. When processing this property,
@@ -35012,7 +35954,7 @@ namespace VpcV1 {
     /** The resource group for this file share. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: Share.Constants.ResourceType | string;
     /** The size of the file share rounded up to the next gigabyte.
      *
      *  The maximum size for a share may increase in the future.
@@ -35027,6 +35969,48 @@ namespace VpcV1 {
     user_tags: string[];
     /** The zone this file share will reside in. */
     zone: ZoneReference;
+  }
+  export namespace Share {
+    export namespace Constants {
+      /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. The enumerated access control mode values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected access control mode was encountered. */
+      export enum AccessControlMode {
+        SECURITY_GROUP = 'security_group',
+        VPC = 'vpc',
+      }
+      /** The type of encryption used for this file share. */
+      export enum Encryption {
+        PROVIDER_MANAGED = 'provider_managed',
+        USER_MANAGED = 'user_managed',
+      }
+      /** The lifecycle state of the file share. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The replication role of the file share. * `none`: This share is not participating in replication. * `replica`: This share is a replication target. * `source`: This share is a replication source. */
+      export enum ReplicationRole {
+        NONE = 'none',
+        REPLICA = 'replica',
+        SOURCE = 'source',
+      }
+      /** The replication status of the file share. * `active`: This share is actively participating in replication, and the replica's data is up-to-date with the replication schedule. * `failover_pending`: This share is performing a replication failover. * `initializing`: This share is initializing replication. * `none`: This share is not participating in replication. * `split_pending`: This share is performing a replication split. */
+      export enum ReplicationStatus {
+        ACTIVE = 'active',
+        FAILOVER_PENDING = 'failover_pending',
+        INITIALIZING = 'initializing',
+        NONE = 'none',
+        SPLIT_PENDING = 'split_pending',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE = 'share',
+      }
+    }
   }
 
   /** ShareCollection. */
@@ -35081,7 +36065,7 @@ namespace VpcV1 {
      *  * `running`: This job is running.
      *  * `succeeded`: This job completed successfully.
      */
-    status: string;
+    status: ShareJob.Constants.Status | string;
     /** The reasons for the file share job status (if any).
      *
      *  The enumerated reason code values for this property will expand in the future. When processing this property,
@@ -35099,17 +36083,45 @@ namespace VpcV1 {
      *  * `replication_init`: This is a share replication is initialization job.
      *  * `replication_split`: This is a share replication split job.
      */
-    type: string;
+    type: ShareJob.Constants.Type | string;
+  }
+  export namespace ShareJob {
+    export namespace Constants {
+      /** The status of the file share job. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the file share job on which the unexpected property value was encountered. * `cancelled`: This job has been cancelled. * `failed`: This job has failed. * `queued`: This job is queued. * `running`: This job is running. * `succeeded`: This job completed successfully. */
+      export enum Status {
+        CANCELLED = 'cancelled',
+        FAILED = 'failed',
+        QUEUED = 'queued',
+        RUNNING = 'running',
+        SUCCEEDED = 'succeeded',
+      }
+      /** The type of the file share job. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the file share job on which the unexpected property value was encountered. * `replication_failover`: This is a share replication failover job. * `replication_init`: This is a share replication is initialization job. * `replication_split`: This is a share replication split job. */
+      export enum Type {
+        REPLICATION_FAILOVER = 'replication_failover',
+        REPLICATION_INIT = 'replication_init',
+        REPLICATION_SPLIT = 'replication_split',
+      }
+    }
   }
 
   /** ShareJobStatusReason. */
   export interface ShareJobStatusReason {
     /** A snake case string succinctly identifying the status reason. */
-    code: string;
+    code: ShareJobStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
     /** Link to documentation about this status reason. */
     more_info?: string;
+  }
+  export namespace ShareJobStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason. */
+      export enum Code {
+        CANNOT_INITIALIZE_REPLICATION = 'cannot_initialize_replication',
+        CANNOT_REACH_REPLICA_SHARE = 'cannot_reach_replica_share',
+        CANNOT_REACH_SOURCE_SHARE = 'cannot_reach_source_share',
+      }
+    }
   }
 
   /** ShareMountTarget. */
@@ -35124,7 +36136,7 @@ namespace VpcV1 {
      *  property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the
      *  resource on which the unexpected access control mode was encountered.
      */
-    access_control_mode: string;
+    access_control_mode: ShareMountTarget.Constants.AccessControlMode | string;
     /** The date and time that the share mount target was created. */
     created_at: string;
     /** The URL for this share mount target. */
@@ -35132,7 +36144,7 @@ namespace VpcV1 {
     /** The unique identifier for this share mount target. */
     id: string;
     /** The lifecycle state of the mount target. */
-    lifecycle_state: string;
+    lifecycle_state: ShareMountTarget.Constants.LifecycleState | string;
     /** The mount path for the share.  The server component of the mount path may be either an IP address or a fully
      *  qualified domain name.
      *
@@ -35155,7 +36167,7 @@ namespace VpcV1 {
      */
     primary_ip?: ReservedIPReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ShareMountTarget.Constants.ResourceType | string;
     /** The subnet of the virtual network interface for the share mount target.
      *
      *  Absent if `access_control_mode` is `vpc`.
@@ -35169,7 +36181,7 @@ namespace VpcV1 {
      *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
      *  unexpected property value was encountered.
      */
-    transit_encryption: string;
+    transit_encryption: ShareMountTarget.Constants.TransitEncryption | string;
     /** The virtual network interface for this file share mount target.
      *
      *  This property will be present when the `access_control_mode` is `security_group`.
@@ -35183,6 +36195,34 @@ namespace VpcV1 {
      *    mount target.
      */
     vpc: VPCReference;
+  }
+  export namespace ShareMountTarget {
+    export namespace Constants {
+      /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. The enumerated access control mode values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected access control mode was encountered. */
+      export enum AccessControlMode {
+        SECURITY_GROUP = 'security_group',
+        VPC = 'vpc',
+      }
+      /** The lifecycle state of the mount target. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE_MOUNT_TARGET = 'share_mount_target',
+      }
+      /** The transit encryption mode for this share mount target: - `none`: Not encrypted in transit - `user_managed`: Encrypted in transit using an instance identity certificate The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum TransitEncryption {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
+    }
   }
 
   /** ShareMountTargetCollection. */
@@ -35220,7 +36260,16 @@ namespace VpcV1 {
      *  - `user_managed`: Encrypted in transit using an instance identity certificate.  The
      *                    `access_control_mode` for the share must be `security_group`.
      */
-    transit_encryption?: string;
+    transit_encryption?: ShareMountTargetPrototype.Constants.TransitEncryption | string;
+  }
+  export namespace ShareMountTargetPrototype {
+    export namespace Constants {
+      /** The transit encryption mode to use for this share mount target: - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate.  The `access_control_mode` for the share must be `security_group`. */
+      export enum TransitEncryption {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
+    }
   }
 
   /** ShareMountTargetReference. */
@@ -35236,7 +36285,15 @@ namespace VpcV1 {
     /** The name for this share mount target. The name is unique across all mount targets for the file share. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ShareMountTargetReference.Constants.ResourceType | string;
+  }
+  export namespace ShareMountTargetReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE_MOUNT_TARGET = 'share_mount_target',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -35254,7 +36311,7 @@ namespace VpcV1 {
     /** The permitted capacity range (in gigabytes) for a share with this profile. */
     capacity: ShareProfileCapacity;
     /** The product family this share profile belongs to. */
-    family: string;
+    family: ShareProfile.Constants.Family | string;
     /** The URL for this share profile. */
     href: string;
     /** The permitted IOPS range for a share with this profile. */
@@ -35262,7 +36319,19 @@ namespace VpcV1 {
     /** The globally unique name for this share profile. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ShareProfile.Constants.ResourceType | string;
+  }
+  export namespace ShareProfile {
+    export namespace Constants {
+      /** The product family this share profile belongs to. */
+      export enum Family {
+        DEFINED_PERFORMANCE = 'defined_performance',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE_PROFILE = 'share_profile',
+      }
+    }
   }
 
   /** ShareProfileCapacity. */
@@ -35310,7 +36379,15 @@ namespace VpcV1 {
     /** The globally unique name for this share profile. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ShareProfileReference.Constants.ResourceType | string;
+  }
+  export namespace ShareProfileReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE_PROFILE = 'share_profile',
+      }
+    }
   }
 
   /** SharePrototype. */
@@ -35340,7 +36417,9 @@ namespace VpcV1 {
     /** Tags for this resource. */
     user_tags?: string[];
     /** The zone this file share will reside in.
-     *  For a replica share, this must be a different zone in the same region as the source share.
+     *
+     *  For a replica share, this must be a different zone in the same region as the
+     *  source share.
      */
     zone: ZoneIdentity;
   }
@@ -35398,7 +36477,15 @@ namespace VpcV1 {
     /** The name for this share. The name is unique across all shares in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ShareReference.Constants.ResourceType | string;
+  }
+  export namespace ShareReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE = 'share',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -35410,11 +36497,21 @@ namespace VpcV1 {
   /** ShareReplicationStatusReason. */
   export interface ShareReplicationStatusReason {
     /** A snake case string succinctly identifying the status reason. */
-    code: string;
+    code: ShareReplicationStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
     /** Link to documentation about this status reason. */
     more_info?: string;
+  }
+  export namespace ShareReplicationStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason. */
+      export enum Code {
+        CANNOT_INITIALIZE_REPLICATION = 'cannot_initialize_replication',
+        CANNOT_REACH_REPLICA_SHARE = 'cannot_reach_replica_share',
+        CANNOT_REACH_SOURCE_SHARE = 'cannot_reach_source_share',
+      }
+    }
   }
 
   /** Snapshot. */
@@ -35440,7 +36537,7 @@ namespace VpcV1 {
     /** Deprecated: Indicates whether this snapshot can be deleted. This value will always be `true`. */
     deletable: boolean;
     /** The type of encryption used on the source volume. */
-    encryption: string;
+    encryption: Snapshot.Constants.Encryption | string;
     /** The root key used to wrap the data encryption key for the source volume.
      *
      *  This property will be present for volumes with an `encryption` type of
@@ -35452,19 +36549,19 @@ namespace VpcV1 {
     /** The unique identifier for this snapshot. */
     id: string;
     /** The lifecycle state of this snapshot. */
-    lifecycle_state: string;
+    lifecycle_state: Snapshot.Constants.LifecycleState | string;
     /** The minimum capacity of a volume created from this snapshot. When a snapshot is created, this will be set to
      *  the capacity of the `source_volume`.
      */
     minimum_capacity: number;
     /** The name for this snapshot. The name is unique across all snapshots in the region. */
     name: string;
-    /** The operating system included in this image. */
+    /** The operating system included in this snapshot. */
     operating_system?: OperatingSystem;
     /** The resource group for this snapshot. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: Snapshot.Constants.ResourceType | string;
     /** The [service tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) prefixed with `is.snapshot:`
      *  associated with this snapshot.
      */
@@ -35481,6 +36578,29 @@ namespace VpcV1 {
     source_volume: VolumeReference;
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this snapshot. */
     user_tags: string[];
+  }
+  export namespace Snapshot {
+    export namespace Constants {
+      /** The type of encryption used on the source volume. */
+      export enum Encryption {
+        PROVIDER_MANAGED = 'provider_managed',
+        USER_MANAGED = 'user_managed',
+      }
+      /** The lifecycle state of this snapshot. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SNAPSHOT = 'snapshot',
+      }
+    }
   }
 
   /** SnapshotClone. */
@@ -35550,7 +36670,15 @@ namespace VpcV1 {
      */
     remote?: SnapshotRemote;
     /** The resource type. */
-    resource_type: string;
+    resource_type: SnapshotCopiesItem.Constants.ResourceType | string;
+  }
+  export namespace SnapshotCopiesItem {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SNAPSHOT = 'snapshot',
+      }
+    }
   }
 
   /** Identifies a snapshot by a unique property. */
@@ -35566,7 +36694,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this snapshot. */
@@ -35592,7 +36720,15 @@ namespace VpcV1 {
      */
     remote?: SnapshotRemote;
     /** The resource type. */
-    resource_type: string;
+    resource_type: SnapshotReference.Constants.ResourceType | string;
+  }
+  export namespace SnapshotReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SNAPSHOT = 'snapshot',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -35630,7 +36766,15 @@ namespace VpcV1 {
      */
     remote?: SnapshotRemote;
     /** The resource type. */
-    resource_type: string;
+    resource_type: SnapshotSourceSnapshot.Constants.ResourceType | string;
+  }
+  export namespace SnapshotSourceSnapshot {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SNAPSHOT = 'snapshot',
+      }
+    }
   }
 
   /** Subnet. */
@@ -35648,7 +36792,7 @@ namespace VpcV1 {
     /** The unique identifier for this subnet. */
     id: string;
     /** The IP version(s) supported by this subnet. */
-    ip_version: string;
+    ip_version: Subnet.Constants.IpVersion | string;
     /** The IPv4 range of the subnet, expressed in CIDR format. */
     ipv4_cidr_block: string;
     /** The name for this subnet. The name is unique across all subnets in the VPC. */
@@ -35660,11 +36804,11 @@ namespace VpcV1 {
     /** The resource group for this subnet. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: Subnet.Constants.ResourceType | string;
     /** The routing table for this subnet. */
     routing_table: RoutingTableReference;
     /** The status of the subnet. */
-    status: string;
+    status: Subnet.Constants.Status | string;
     /** The total number of IPv4 addresses in this subnet.
      *
      *  Note: This is calculated as 2<sup>(32 - prefix length)</sup>. For example, the prefix length `/24` gives:<br>
@@ -35675,6 +36819,25 @@ namespace VpcV1 {
     vpc: VPCReference;
     /** The zone this subnet resides in. */
     zone: ZoneReference;
+  }
+  export namespace Subnet {
+    export namespace Constants {
+      /** The IP version(s) supported by this subnet. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SUBNET = 'subnet',
+      }
+      /** The status of the subnet. */
+      export enum Status {
+        AVAILABLE = 'available',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+      }
+    }
   }
 
   /** SubnetCollection. */
@@ -35710,7 +36873,7 @@ namespace VpcV1 {
   /** SubnetPrototype. */
   export interface SubnetPrototype {
     /** The IP version(s) to support for this subnet. */
-    ip_version?: string;
+    ip_version?: SubnetPrototype.Constants.IpVersion | string;
     /** The name for this subnet. The name must not be used by another subnet in the VPC. If unspecified, the name
      *  will be a hyphenated list of randomly-selected words.
      */
@@ -35722,7 +36885,7 @@ namespace VpcV1 {
      */
     public_gateway?: PublicGatewayIdentity;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
     /** The routing table to use for this subnet. If unspecified, the default routing table
@@ -35733,6 +36896,14 @@ namespace VpcV1 {
     routing_table?: RoutingTableIdentity;
     /** The VPC the subnet will reside in. */
     vpc: VPCIdentity;
+  }
+  export namespace SubnetPrototype {
+    export namespace Constants {
+      /** The IP version(s) to support for this subnet. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+    }
   }
 
   /** The public gateway to use for internet-bound traffic for this subnet. */
@@ -35754,7 +36925,15 @@ namespace VpcV1 {
     /** The name for this subnet. The name is unique across all subnets in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: SubnetReference.Constants.ResourceType | string;
+  }
+  export namespace SubnetReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SUBNET = 'subnet',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -35774,7 +36953,15 @@ namespace VpcV1 {
     /** The unique identifier for this trusted profile. */
     id: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: TrustedProfileReference.Constants.ResourceType | string;
+  }
+  export namespace TrustedProfileReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        TRUSTED_PROFILE = 'trusted_profile',
+      }
+    }
   }
 
   /** The VCPU configuration. */
@@ -35811,6 +36998,24 @@ namespace VpcV1 {
      *  default.
      */
     default_security_group: SecurityGroupReference;
+    /** The DNS configuration for this VPC. */
+    dns: VPCDNS;
+    /** The reasons for the current `health_state` (if any).
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    health_reasons: VPCHealthReason[];
+    /** The health of this resource.
+     *  - `ok`: No abnormal behavior detected
+     *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
+     *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
+     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
+     *  also have this state.
+     */
+    health_state: VPC.Constants.HealthState | string;
     /** The URL for this VPC. */
     href: string;
     /** The unique identifier for this VPC. */
@@ -35820,9 +37025,31 @@ namespace VpcV1 {
     /** The resource group for this VPC. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VPC.Constants.ResourceType | string;
     /** The status of this VPC. */
-    status: string;
+    status: VPC.Constants.Status | string;
+  }
+  export namespace VPC {
+    export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPC = 'vpc',
+      }
+      /** The status of this VPC. */
+      export enum Status {
+        AVAILABLE = 'available',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+      }
+    }
   }
 
   /** VPCCSESourceIP. */
@@ -35859,6 +37086,226 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** The DNS configuration for this VPC. */
+  export interface VPCDNS {
+    /** Indicates whether this VPC is enabled as a DNS name resolution hub. */
+    enable_hub: boolean;
+    /** The number of DNS resolution bindings for this VPC. */
+    resolution_binding_count: number;
+    /** The DNS resolver configuration for the VPC. */
+    resolver: VPCDNSResolver;
+  }
+
+  /** The DNS configuration for this VPC. */
+  export interface VPCDNSPatch {
+    /** Indicates whether this VPC is enabled as a DNS name resolution hub.
+     *
+     *  Updating the value to `true` requires `allow_dns_resolution_binding` to be `true` for all endpoint gateways
+     *  residing in this VPC.
+     *
+     *  Changing the value requires `dns.resolution_binding_count` to be zero.
+     */
+    enable_hub?: boolean;
+    resolver?: VPCDNSResolverPatch;
+  }
+
+  /** The DNS configuration for this VPC. If unspecified, the system will assign DNS servers capable of resolving hosts and endpoint gateways within this VPC, and hosts on the internet. */
+  export interface VPCDNSPrototype {
+    /** Indicates whether this VPC is enabled as a DNS name resolution hub. */
+    enable_hub?: boolean;
+    resolver?: VPCDNSResolverPrototype;
+  }
+
+  /** VPCDNSResolutionBinding. */
+  export interface VPCDNSResolutionBinding {
+    /** The date and time that the DNS resolution binding was created. */
+    created_at: string;
+    /** The endpoint gateways that have `allow_dns_resolution_binding` set to `true` and reside in the VPC that has
+     *  `dns.enable_hub` set to `false`.
+     *
+     *  The endpoint gateways may be remote and therefore may not be directly retrievable.
+     */
+    endpoint_gateways: EndpointGatewayReferenceRemote[];
+    /** The URL for this DNS resolution binding. */
+    href: string;
+    /** The unique identifier for this DNS resolution binding. */
+    id: string;
+    /** The lifecycle state of the DNS resolution binding. */
+    lifecycle_state: VPCDNSResolutionBinding.Constants.LifecycleState | string;
+    /** The name for this DNS resolution binding. The name is unique across all DNS resolution bindings for the VPC. */
+    name: string;
+    /** The resource type. */
+    resource_type: VPCDNSResolutionBinding.Constants.ResourceType | string;
+    /** The VPC bound to for DNS resolution.
+     *
+     *  The VPC may be remote and therefore may not be directly retrievable.
+     */
+    vpc: VPCReferenceRemote;
+  }
+  export namespace VPCDNSResolutionBinding {
+    export namespace Constants {
+      /** The lifecycle state of the DNS resolution binding. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPC_DNS_RESOLUTION_BINDING = 'vpc_dns_resolution_binding',
+      }
+    }
+  }
+
+  /** VPCDNSResolutionBindingCollection. */
+  export interface VPCDNSResolutionBindingCollection {
+    /** Collection of DNS resolution bindings for this VPC. */
+    dns_resolution_bindings: VPCDNSResolutionBinding[];
+    /** A link to the first page of resources. */
+    first: VPCDNSResolutionBindingCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: VPCDNSResolutionBindingCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface VPCDNSResolutionBindingCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface VPCDNSResolutionBindingCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** VPCDNSResolver. */
+  export interface VPCDNSResolver {
+    /** The DNS servers for this VPC. The servers are populated:
+     *
+     *  - by the system when `dns.resolver.type` is `system`
+     *  - using the DNS servers in `dns.resolver.vpc` when `dns.resolver.type` is `delegated`
+     *  - using `dns.resolver.manual_servers` when the `dns.resolver.type` is `manual`.
+     */
+    servers: DNSServer[];
+    /** The type of the DNS resolver used for the VPC.
+     *
+     *  - `delegated`: DNS server addresses are provided by the DNS resolver of the VPC
+     *                 specified in `dns.resolver.vpc`.
+     *  - `manual`: DNS server addresses are specified in `dns.resolver.manual_servers`.
+     *  - `system`: DNS server addresses are provided by the system.
+     */
+    type: VPCDNSResolver.Constants.Type | string;
+  }
+  export namespace VPCDNSResolver {
+    export namespace Constants {
+      /** The type of the DNS resolver used for the VPC. - `delegated`: DNS server addresses are provided by the DNS resolver of the VPC specified in `dns.resolver.vpc`. - `manual`: DNS server addresses are specified in `dns.resolver.manual_servers`. - `system`: DNS server addresses are provided by the system. */
+      export enum Type {
+        DELEGATED = 'delegated',
+        MANUAL = 'manual',
+        SYSTEM = 'system',
+      }
+    }
+  }
+
+  /** VPCDNSResolverPatch. */
+  export interface VPCDNSResolverPatch {
+    /** The DNS servers to use for this VPC, replacing any existing servers. All the DNS servers must either:
+     *
+     *  - have a unique `zone_affinity`, or
+     *  - not have a `zone_affinity`.
+     *
+     *  `dns.resolver.manual_servers` must be set if and only if `dns.resolver.type` is `manual`.
+     */
+    manual_servers?: DNSServerPrototype[];
+    /** The type of the DNS resolver to use.
+     *
+     *  - `delegated`: DNS server addresses will be provided by the resolver for the VPC
+     *                 specified in `dns.resolver.vpc`. Requires `dns.enable_hub` to be
+     *                 `false`.
+     *  - `manual`: DNS server addresses are specified in `dns.resolver.manual_servers`.
+     *  - `system`: DNS server addresses will be provided by the system and depend on the
+     *              configuration.
+     *
+     *  Updating from `manual` requires `dns.resolver.manual_servers` to be specified as
+     *  `null`.
+     *
+     *  Updating to `manual` requires `dns.resolver.manual_servers` to be specified and not empty.
+     *
+     *  Updating from `delegated` requires `dns.resolver.vpc` to be specified as `null`.
+     */
+    type?: VPCDNSResolverPatch.Constants.Type | string;
+    /** The VPC to provide DNS server addresses for this VPC.  The specified VPC must be configured
+     *  with a [DNS Services](https://cloud.ibm.com/docs/dns-svcs) custom resolver and must be in
+     *  one of this VPC's DNS resolution bindings.
+     *
+     *  Specify `null` to remove an existing VPC.
+     *
+     *  This property must be set if and only if `dns.resolver.type` is `delegated`.
+     */
+    vpc?: VPCDNSResolverVPCPatch;
+  }
+  export namespace VPCDNSResolverPatch {
+    export namespace Constants {
+      /** The type of the DNS resolver to use. - `delegated`: DNS server addresses will be provided by the resolver for the VPC specified in `dns.resolver.vpc`. Requires `dns.enable_hub` to be `false`. - `manual`: DNS server addresses are specified in `dns.resolver.manual_servers`. - `system`: DNS server addresses will be provided by the system and depend on the configuration. Updating from `manual` requires `dns.resolver.manual_servers` to be specified as `null`. Updating to `manual` requires `dns.resolver.manual_servers` to be specified and not empty. Updating from `delegated` requires `dns.resolver.vpc` to be specified as `null`. */
+      export enum Type {
+        DELEGATED = 'delegated',
+        MANUAL = 'manual',
+        SYSTEM = 'system',
+      }
+    }
+  }
+
+  /** VPCDNSResolverPrototype. */
+  export interface VPCDNSResolverPrototype {
+    /** The type of the DNS resolver to use.
+     *
+     *  - `manual`: DNS server addresses are specified in `dns.resolver.manual_servers`.
+     *  - `system`: DNS server addresses will be provided by the system and depend on the
+     *              configuration.
+     */
+    type?: VPCDNSResolverPrototype.Constants.Type | string;
+  }
+  export namespace VPCDNSResolverPrototype {
+    export namespace Constants {
+      /** The type of the DNS resolver to use. - `manual`: DNS server addresses are specified in `dns.resolver.manual_servers`. - `system`: DNS server addresses will be provided by the system and depend on the configuration. */
+      export enum Type {
+        MANUAL = 'manual',
+        SYSTEM = 'system',
+      }
+    }
+  }
+
+  /** The VPC to provide DNS server addresses for this VPC.  The specified VPC must be configured with a [DNS Services](https://cloud.ibm.com/docs/dns-svcs) custom resolver and must be in one of this VPC's DNS resolution bindings. Specify `null` to remove an existing VPC. This property must be set if and only if `dns.resolver.type` is `delegated`. */
+  export interface VPCDNSResolverVPCPatch {
+  }
+
+  /** VPCHealthReason. */
+  export interface VPCHealthReason {
+    /** A snake case string succinctly identifying the reason for this health state. */
+    code: VPCHealthReason.Constants.Code | string;
+    /** An explanation of the reason for this health state. */
+    message: string;
+    /** Link to documentation about the reason for this health state. */
+    more_info?: string;
+  }
+  export namespace VPCHealthReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this health state. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+      }
+    }
+  }
+
   /** Identifies a VPC by a unique property. */
   export interface VPCIdentity {
   }
@@ -35878,13 +37325,95 @@ namespace VpcV1 {
     /** The name for this VPC. The name is unique across all VPCs in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VPCReference.Constants.ResourceType | string;
+  }
+  export namespace VPCReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPC = 'vpc',
+      }
+    }
+  }
+
+  /** A VPC whose DNS resolver is delegated to provide DNS servers for this VPC. The VPC may be remote and therefore may not be directly retrievable. */
+  export interface VPCReferenceDNSResolverContext {
+    /** The CRN for this VPC. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: VPCReferenceDNSResolverContextDeleted;
+    /** The URL for this VPC. */
+    href: string;
+    /** The unique identifier for this VPC. */
+    id: string;
+    /** The name for this VPC. The name is unique across all VPCs in the region. */
+    name: string;
+    /** If present, this property indicates that the resource associated with this reference
+     *  is remote and therefore may not be directly retrievable.
+     */
+    remote?: VPCRemote;
+    /** The resource type. */
+    resource_type: VPCReferenceDNSResolverContext.Constants.ResourceType | string;
+  }
+  export namespace VPCReferenceDNSResolverContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPC = 'vpc',
+      }
+    }
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface VPCReferenceDNSResolverContextDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
   export interface VPCReferenceDeleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
+  }
+
+  /** VPCReferenceRemote. */
+  export interface VPCReferenceRemote {
+    /** The CRN for this VPC. */
+    crn: string;
+    /** The URL for this VPC. */
+    href: string;
+    /** The unique identifier for this VPC. */
+    id: string;
+    /** The name for this VPC. The name is unique across all VPCs in the region. */
+    name: string;
+    /** If present, this property indicates that the resource associated with this reference
+     *  is remote and therefore may not be directly retrievable.
+     */
+    remote?: VPCRemote;
+    /** The resource type. */
+    resource_type: VPCReferenceRemote.Constants.ResourceType | string;
+  }
+  export namespace VPCReferenceRemote {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPC = 'vpc',
+      }
+    }
+  }
+
+  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  export interface VPCRemote {
+    /** If present, this property indicates that the referenced resource is remote to this
+     *  account, and identifies the owning account.
+     */
+    account?: AccountReference;
+    /** If present, this property indicates that the referenced resource is remote to this
+     *  region, and identifies the native region.
+     */
+    region?: RegionReference;
   }
 
   /** VPNGateway. */
@@ -35895,10 +37424,41 @@ namespace VpcV1 {
     created_at: string;
     /** The VPN gateway's CRN. */
     crn: string;
+    /** The reasons for the current VPN gateway health_state (if any):
+     *  - `cannot_create_vpc_route`: VPN cannot create route (check for conflict)
+     *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
+     *    subnet)
+     *  - `internal_error`: Internal error (contact IBM support)
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    health_reasons: VPNGatewayHealthReason[];
+    /** The health of this resource.
+     *  - `ok`: No abnormal behavior detected
+     *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
+     *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
+     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
+     *  also have this state.
+     */
+    health_state: VPNGateway.Constants.HealthState | string;
     /** The VPN gateway's canonical URL. */
     href: string;
     /** The unique identifier for this VPN gateway. */
     id: string;
+    /** The reasons for the current VPN gateway lifecycle_state (if any):
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    lifecycle_reasons: VPNGatewayLifecycleReason[];
+    /** The lifecycle state of the VPN gateway. */
+    lifecycle_state: VPNGateway.Constants.LifecycleState | string;
     /** Collection of VPN gateway members. */
     members: VPNGatewayMember[];
     /** The name for this VPN gateway. The name is unique across all VPN gateways in the VPC. */
@@ -35906,12 +37466,35 @@ namespace VpcV1 {
     /** The resource group for this VPN gateway. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
-    /** The status of the VPN gateway. */
-    status: string;
+    resource_type: VPNGateway.Constants.ResourceType | string;
     subnet: SubnetReference;
     /** The VPC this VPN gateway resides in. */
     vpc: VPCReference;
+  }
+  export namespace VPNGateway {
+    export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the VPN gateway. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY = 'vpn_gateway',
+      }
+    }
   }
 
   /** VPNGatewayCollection. */
@@ -35945,7 +37528,7 @@ namespace VpcV1 {
     /** If set to false, the VPN gateway connection is shut down. */
     admin_state_up: boolean;
     /** The authentication mode. Only `psk` is currently supported. */
-    authentication_mode: string;
+    authentication_mode: VPNGatewayConnection.Constants.AuthenticationMode | string;
     /** The date and time that this VPN gateway connection was created. */
     created_at: string;
     /** The Dead Peer Detection settings. */
@@ -35963,7 +37546,7 @@ namespace VpcV1 {
      */
     ipsec_policy?: IPsecPolicyReference;
     /** The mode of the VPN gateway. */
-    mode: string;
+    mode: VPNGatewayConnection.Constants.Mode | string;
     /** The name for this VPN gateway connection. The name is unique across all connections for the VPN gateway. */
     name: string;
     /** The IP address of the peer VPN gateway. */
@@ -35971,9 +37554,52 @@ namespace VpcV1 {
     /** The pre-shared key. */
     psk: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VPNGatewayConnection.Constants.ResourceType | string;
     /** The status of a VPN gateway connection. */
-    status: string;
+    status: VPNGatewayConnection.Constants.Status | string;
+    /** The reasons for the current VPN gateway connection status (if any):
+     *  - `cannot_authenticate_connection`: Failed to authenticate a connection because of
+     *    mismatched IKE ID and PSK (check IKE ID and PSK in peer VPN configuration)
+     *  - `internal_error`: Internal error (contact IBM support)
+     *  - `ike_policy_mismatch`: None of the proposed IKE crypto suites was acceptable (check
+     *     the IKE policies on both sides of the VPN)
+     *  - `ike_v1_id_local_remote_cidr_mismatch`: Invalid IKE ID or mismatched local CIDRs and
+     *    remote CIDRs in IKE V1 (check the IKE ID or the local CIDRs and remote CIDRs in IKE
+     *    V1 configuration)
+     *  - `ike_v2_local_remote_cidr_mismatch`: Mismatched local CIDRs and remote CIDRs in IKE
+     *    V2 (check the local CIDRs and remote CIDRs in IKE V2 configuration)
+     *  - `ipsec_policy_mismatch`: None of the proposed IPsec crypto suites was acceptable
+     *    (check the IPsec policies on both sides of the VPN)
+     *  - `peer_not_responding`: No response from peer (check network ACL configuration, peer
+     *    availability, and on-premise firewall configuration)
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    status_reasons: VPNGatewayConnectionStatusReason[];
+  }
+  export namespace VPNGatewayConnection {
+    export namespace Constants {
+      /** The authentication mode. Only `psk` is currently supported. */
+      export enum AuthenticationMode {
+        PSK = 'psk',
+      }
+      /** The mode of the VPN gateway. */
+      export enum Mode {
+        POLICY = 'policy',
+        ROUTE = 'route',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY_CONNECTION = 'vpn_gateway_connection',
+      }
+      /** The status of a VPN gateway connection. */
+      export enum Status {
+        DOWN = 'down',
+        UP = 'up',
+      }
+    }
   }
 
   /** Collection of VPN gateway connections in a VPN gateway. */
@@ -35985,31 +37611,64 @@ namespace VpcV1 {
   /** The Dead Peer Detection settings. */
   export interface VPNGatewayConnectionDPD {
     /** Dead Peer Detection actions. */
-    action: string;
+    action: VPNGatewayConnectionDPD.Constants.Action | string;
     /** Dead Peer Detection interval in seconds. */
     interval: number;
     /** Dead Peer Detection timeout in seconds. Must be at least the interval. */
     timeout: number;
   }
+  export namespace VPNGatewayConnectionDPD {
+    export namespace Constants {
+      /** Dead Peer Detection actions. */
+      export enum Action {
+        CLEAR = 'clear',
+        HOLD = 'hold',
+        NONE = 'none',
+        RESTART = 'restart',
+      }
+    }
+  }
 
   /** The Dead Peer Detection settings. */
   export interface VPNGatewayConnectionDPDPatch {
     /** Dead Peer Detection actions. */
-    action?: string;
+    action?: VPNGatewayConnectionDPDPatch.Constants.Action | string;
     /** Dead Peer Detection interval in seconds. */
     interval?: number;
     /** Dead Peer Detection timeout in seconds. Must be at least the interval. */
     timeout?: number;
   }
+  export namespace VPNGatewayConnectionDPDPatch {
+    export namespace Constants {
+      /** Dead Peer Detection actions. */
+      export enum Action {
+        CLEAR = 'clear',
+        HOLD = 'hold',
+        NONE = 'none',
+        RESTART = 'restart',
+      }
+    }
+  }
 
   /** The Dead Peer Detection settings. */
   export interface VPNGatewayConnectionDPDPrototype {
     /** Dead Peer Detection actions. */
-    action?: string;
+    action?: VPNGatewayConnectionDPDPrototype.Constants.Action | string;
     /** Dead Peer Detection interval in seconds. */
     interval?: number;
     /** Dead Peer Detection timeout in seconds. Must be at least the interval. */
     timeout?: number;
+  }
+  export namespace VPNGatewayConnectionDPDPrototype {
+    export namespace Constants {
+      /** Dead Peer Detection actions. */
+      export enum Action {
+        CLEAR = 'clear',
+        HOLD = 'hold',
+        NONE = 'none',
+        RESTART = 'restart',
+      }
+    }
   }
 
   /** The IKE policy to use. Specify `null` to remove any existing policy, [resulting in auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1). */
@@ -36101,7 +37760,15 @@ namespace VpcV1 {
     /** The name for this VPN gateway connection. The name is unique across all connections for the VPN gateway. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VPNGatewayConnectionReference.Constants.ResourceType | string;
+  }
+  export namespace VPNGatewayConnectionReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY_CONNECTION = 'vpn_gateway_connection',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -36115,11 +37782,157 @@ namespace VpcV1 {
     /** The IP address of the VPN gateway member in which the tunnel resides. */
     public_ip: IP;
     /** The status of the VPN Tunnel. */
-    status: string;
+    status: VPNGatewayConnectionStaticRouteModeTunnel.Constants.Status | string;
+    /** The reasons for the current VPN gateway connection tunnels status (if any):
+     *  - `cannot_authenticate_connection`: Failed to authenticate a connection because of
+     *    mismatched IKE ID and PSK (check IKE ID and PSK in peer VPN configuration)
+     *  - `internal_error`: Internal error (contact IBM support)
+     *  - `ike_policy_mismatch`: None of the proposed IKE crypto suites was acceptable (check
+     *     the IKE policies on both sides of the VPN)
+     *  - `ike_v1_id_local_remote_cidr_mismatch`: Invalid IKE ID or mismatched local CIDRs and
+     *    remote CIDRs in IKE V1 (check the IKE ID or the local CIDRs and remote CIDRs in IKE
+     *    V1 configuration)
+     *  - `ike_v2_local_remote_cidr_mismatch`: Mismatched local CIDRs and remote CIDRs in IKE
+     *    V2 (check the local CIDRs and remote CIDRs in IKE V2 configuration)
+     *  - `ipsec_policy_mismatch`: None of the proposed IPsec crypto suites was acceptable
+     *    (check the IPsec policies on both sides of the VPN)
+     *  - `peer_not_responding`: No response from peer (check network ACL configuration, peer
+     *    availability, and on-premise firewall configuration)
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    status_reasons: VPNGatewayConnectionTunnelStatusReason[];
+  }
+  export namespace VPNGatewayConnectionStaticRouteModeTunnel {
+    export namespace Constants {
+      /** The status of the VPN Tunnel. */
+      export enum Status {
+        DOWN = 'down',
+        UP = 'up',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionStatusReason. */
+  export interface VPNGatewayConnectionStatusReason {
+    /** A snake case string succinctly identifying the status reason. */
+    code: VPNGatewayConnectionStatusReason.Constants.Code | string;
+    /** An explanation of the reason for this VPN gateway connection's status. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
+  }
+  export namespace VPNGatewayConnectionStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason. */
+      export enum Code {
+        CANNOT_AUTHENTICATE_CONNECTION = 'cannot_authenticate_connection',
+        IKE_POLICY_MISMATCH = 'ike_policy_mismatch',
+        IKE_V1_ID_LOCAL_REMOTE_CIDR_MISMATCH = 'ike_v1_id_local_remote_cidr_mismatch',
+        IKE_V2_LOCAL_REMOTE_CIDR_MISMATCH = 'ike_v2_local_remote_cidr_mismatch',
+        INTERNAL_ERROR = 'internal_error',
+        IPSEC_POLICY_MISMATCH = 'ipsec_policy_mismatch',
+        PEER_NOT_RESPONDING = 'peer_not_responding',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionTunnelStatusReason. */
+  export interface VPNGatewayConnectionTunnelStatusReason {
+    /** A snake case string succinctly identifying the status reason. */
+    code: VPNGatewayConnectionTunnelStatusReason.Constants.Code | string;
+    /** An explanation of the reason for this VPN gateway connection tunnel's status. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
+  }
+  export namespace VPNGatewayConnectionTunnelStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason. */
+      export enum Code {
+        CANNOT_AUTHENTICATE_CONNECTION = 'cannot_authenticate_connection',
+        IKE_POLICY_MISMATCH = 'ike_policy_mismatch',
+        IKE_V1_ID_LOCAL_REMOTE_CIDR_MISMATCH = 'ike_v1_id_local_remote_cidr_mismatch',
+        IKE_V2_LOCAL_REMOTE_CIDR_MISMATCH = 'ike_v2_local_remote_cidr_mismatch',
+        INTERNAL_ERROR = 'internal_error',
+        IPSEC_POLICY_MISMATCH = 'ipsec_policy_mismatch',
+        PEER_NOT_RESPONDING = 'peer_not_responding',
+      }
+    }
+  }
+
+  /** VPNGatewayHealthReason. */
+  export interface VPNGatewayHealthReason {
+    /** A snake case string succinctly identifying the reason for this health state. */
+    code: VPNGatewayHealthReason.Constants.Code | string;
+    /** An explanation of the reason for this health state. */
+    message: string;
+    /** Link to documentation about the reason for this health state. */
+    more_info?: string;
+  }
+  export namespace VPNGatewayHealthReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this health state. */
+      export enum Code {
+        CANNOT_CREATE_VPC_ROUTE = 'cannot_create_vpc_route',
+        CANNOT_RESERVE_IP_ADDRESS = 'cannot_reserve_ip_address',
+        INTERNAL_ERROR = 'internal_error',
+      }
+    }
+  }
+
+  /** VPNGatewayLifecycleReason. */
+  export interface VPNGatewayLifecycleReason {
+    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    code: VPNGatewayLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace VPNGatewayLifecycleReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      export enum Code {
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
   }
 
   /** VPNGatewayMember. */
   export interface VPNGatewayMember {
+    /** The reasons for the current VPN gateway member health_state (if any):
+     *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
+     *    subnet)
+     *  - `internal_error`: Internal error (contact IBM support)
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    health_reasons: VPNGatewayMemberHealthReason[];
+    /** The health of this resource.
+     *  - `ok`: No abnormal behavior detected
+     *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
+     *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
+     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
+     *  also have this state.
+     */
+    health_state: VPNGatewayMember.Constants.HealthState | string;
+    /** The reasons for the current VPN gateway member lifecycle_state (if any):
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    lifecycle_reasons: VPNGatewayMemberLifecycleReason[];
+    /** The lifecycle state of the VPN gateway member. */
+    lifecycle_state: VPNGatewayMember.Constants.LifecycleState | string;
     /** The reserved IP address assigned to the VPN gateway member.
      *
      *  This property will be present only when the VPN gateway status is `available`.
@@ -36128,9 +37941,70 @@ namespace VpcV1 {
     /** The public IP address assigned to the VPN gateway member. */
     public_ip: IP;
     /** The high availability role assigned to the VPN gateway member. */
-    role: string;
-    /** The status of the VPN gateway member. */
-    status: string;
+    role: VPNGatewayMember.Constants.Role | string;
+  }
+  export namespace VPNGatewayMember {
+    export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the VPN gateway member. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The high availability role assigned to the VPN gateway member. */
+      export enum Role {
+        ACTIVE = 'active',
+        STANDBY = 'standby',
+      }
+    }
+  }
+
+  /** VPNGatewayMemberHealthReason. */
+  export interface VPNGatewayMemberHealthReason {
+    /** A snake case string succinctly identifying the reason for this health state. */
+    code: VPNGatewayMemberHealthReason.Constants.Code | string;
+    /** An explanation of the reason for this health state. */
+    message: string;
+    /** Link to documentation about the reason for this health state. */
+    more_info?: string;
+  }
+  export namespace VPNGatewayMemberHealthReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this health state. */
+      export enum Code {
+        CANNOT_RESERVE_IP_ADDRESS = 'cannot_reserve_ip_address',
+        INTERNAL_ERROR = 'internal_error',
+      }
+    }
+  }
+
+  /** VPNGatewayMemberLifecycleReason. */
+  export interface VPNGatewayMemberLifecycleReason {
+    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    code: VPNGatewayMemberLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace VPNGatewayMemberLifecycleReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      export enum Code {
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
   }
 
   /** VPNGatewayPrototype. */
@@ -36140,7 +38014,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
     /** Identifies a subnet by a unique property. */
@@ -36185,6 +38059,23 @@ namespace VpcV1 {
     crn: string;
     /** Indicates whether the split tunneling is enabled on this VPN server. */
     enable_split_tunneling: boolean;
+    /** The reasons for the current VPN server health_state (if any):
+     *  - `cannot_access_client_certificate`: VPN server's client certificate is inaccessible
+     *    (verify certificate exists and that IAM policies grant `VPN server for VPC` access to
+     *    `Secrets Manager`)
+     *  - `cannot_access_server_certificate`: VPN server's server certificate is inaccessible
+     *    (verify certificate exists and that IAM policies grant `VPN server for VPC` access to
+     *    `Secrets Manager`)
+     *  - `cannot_create_vpc_route`: VPN cannot create route (check for conflict)
+     *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
+     *    subnet)
+     *  - `internal_error`: Internal error (contact IBM support)
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    health_reasons: VPNServerHealthReason[];
     /** The health of this resource.
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
@@ -36193,15 +38084,24 @@ namespace VpcV1 {
      *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
      *  also have this state.
      */
-    health_state: string;
+    health_state: VPNServer.Constants.HealthState | string;
     /** Fully qualified domain name assigned to this VPN server. */
     hostname: string;
     /** The URL for this VPN server. */
     href: string;
     /** The unique identifier for this VPN server. */
     id: string;
+    /** The reasons for the current VPN server lifecycle_state (if any):
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    lifecycle_reasons: VPNServerLifecycleReason[];
     /** The lifecycle state of the VPN server. */
-    lifecycle_state: string;
+    lifecycle_state: VPNServer.Constants.LifecycleState | string;
     /** The name for this VPN server. The name is unique across all VPN servers in the VPC. */
     name: string;
     /** The port number used by this VPN server. */
@@ -36209,11 +38109,11 @@ namespace VpcV1 {
     /** The reserved IPs bound to this VPN server. */
     private_ips: ReservedIPReference[];
     /** The transport protocol used by this VPN server. */
-    protocol: string;
+    protocol: VPNServer.Constants.Protocol | string;
     /** The resource group for this VPN server. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VPNServer.Constants.ResourceType | string;
     /** The security groups targeting this VPN server. */
     security_groups: SecurityGroupReference[];
     /** The subnets this VPN server is provisioned in. */
@@ -36221,11 +38121,50 @@ namespace VpcV1 {
     /** The VPC this VPN server resides in. */
     vpc: VPCReference;
   }
+  export namespace VPNServer {
+    export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the VPN server. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The transport protocol used by this VPN server. */
+      export enum Protocol {
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_SERVER = 'vpn_server',
+      }
+    }
+  }
 
   /** An authentication method for this VPN server. */
   export interface VPNServerAuthentication {
     /** The type of authentication. */
-    method: string;
+    method: VPNServerAuthentication.Constants.Method | string;
+  }
+  export namespace VPNServerAuthentication {
+    export namespace Constants {
+      /** The type of authentication. */
+      export enum Method {
+        CERTIFICATE = 'certificate',
+        USERNAME = 'username',
+      }
+    }
   }
 
   /** The type of identity provider to be used by VPN client. */
@@ -36235,7 +38174,16 @@ namespace VpcV1 {
   /** An authentication method for this VPN server. */
   export interface VPNServerAuthenticationPrototype {
     /** The type of authentication. */
-    method: string;
+    method: VPNServerAuthenticationPrototype.Constants.Method | string;
+  }
+  export namespace VPNServerAuthenticationPrototype {
+    export namespace Constants {
+      /** The type of authentication. */
+      export enum Method {
+        CERTIFICATE = 'certificate',
+        USERNAME = 'username',
+      }
+    }
   }
 
   /** VPNServerClient. */
@@ -36264,7 +38212,7 @@ namespace VpcV1 {
     /** The remote port of this VPN client. */
     remote_port: number;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VPNServerClient.Constants.ResourceType | string;
     /** The status of the VPN client:
      *  - `connected`: the VPN client is `connected` to this VPN server.
      *  - `disconnected`: the VPN client is `disconnected` from this VPN server.
@@ -36273,13 +38221,26 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN client on
      *  which the unexpected property value was encountered.
      */
-    status: string;
+    status: VPNServerClient.Constants.Status | string;
     /** The username that this VPN client provided when connecting to the VPN server.
      *
      *  This property will be present only when the `username` client authentication method is enabled on the VPN
      *  server.
      */
     username?: string;
+  }
+  export namespace VPNServerClient {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_SERVER_CLIENT = 'vpn_server_client',
+      }
+      /** The status of the VPN client: - `connected`: the VPN client is `connected` to this VPN server. - `disconnected`: the VPN client is `disconnected` from this VPN server. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN client on which the unexpected property value was encountered. */
+      export enum Status {
+        CONNECTED = 'connected',
+        DISCONNECTED = 'disconnected',
+      }
+    }
   }
 
   /** VPNServerClientCollection. */
@@ -36334,6 +38295,46 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** VPNServerHealthReason. */
+  export interface VPNServerHealthReason {
+    /** A snake case string succinctly identifying the reason for this health state. */
+    code: VPNServerHealthReason.Constants.Code | string;
+    /** An explanation of the reason for this health state. */
+    message: string;
+    /** Link to documentation about the reason for this health state. */
+    more_info?: string;
+  }
+  export namespace VPNServerHealthReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this health state. */
+      export enum Code {
+        CANNOT_ACCESS_CLIENT_CERTIFICATE = 'cannot_access_client_certificate',
+        CANNOT_ACCESS_SERVER_CERTIFICATE = 'cannot_access_server_certificate',
+        CANNOT_CREATE_VPC_ROUTE = 'cannot_create_vpc_route',
+        CANNOT_RESERVE_IP_ADDRESS = 'cannot_reserve_ip_address',
+        INTERNAL_ERROR = 'internal_error',
+      }
+    }
+  }
+
+  /** VPNServerLifecycleReason. */
+  export interface VPNServerLifecycleReason {
+    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    code: VPNServerLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace VPNServerLifecycleReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      export enum Code {
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
+  }
+
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
   export interface VPNServerReferenceDeleted {
     /** Link to documentation about deleted resources. */
@@ -36351,23 +38352,80 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on
      *  which the unexpected property value was encountered.
      */
-    action: string;
+    action: VPNServerRoute.Constants.Action | string;
     /** The date and time that the VPN route was created. */
     created_at: string;
     /** The destination for this VPN route in the VPN server. If an incoming packet does not match any destination,
      *  it will be dropped.
      */
     destination: string;
+    /** The reasons for the current VPN server route health_state (if any):
+     *  - `internal_error`: Internal error (contact IBM support)
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    health_reasons: VPNServerRouteHealthReason[];
+    /** The health of this resource.
+     *  - `ok`: No abnormal behavior detected
+     *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
+     *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
+     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
+     *  also have this state.
+     */
+    health_state: VPNServerRoute.Constants.HealthState | string;
     /** The URL for this VPN route. */
     href: string;
     /** The unique identifier for this VPN route. */
     id: string;
+    /** The reasons for the current VPN server route lifecycle_state (if any):
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    lifecycle_reasons: VPNServerRouteLifecycleReason[];
     /** The lifecycle state of the VPN route. */
-    lifecycle_state: string;
+    lifecycle_state: VPNServerRoute.Constants.LifecycleState | string;
     /** The name for this VPN route. The name is unique across all routes for a VPN server. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VPNServerRoute.Constants.ResourceType | string;
+  }
+  export namespace VPNServerRoute {
+    export namespace Constants {
+      /** The action to perform with a packet matching the VPN route: - `translate`: translate the source IP address to one of the private IP addresses of the VPN server. - `deliver`: deliver the packet into the VPC. - `drop`: drop the packet The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on which the unexpected property value was encountered. */
+      export enum Action {
+        DELIVER = 'deliver',
+        DROP = 'drop',
+        TRANSLATE = 'translate',
+      }
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the VPN route. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_SERVER_ROUTE = 'vpn_server_route',
+      }
+    }
   }
 
   /** VPNServerRouteCollection. */
@@ -36396,6 +38454,42 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** VPNServerRouteHealthReason. */
+  export interface VPNServerRouteHealthReason {
+    /** A snake case string succinctly identifying the reason for this health state. */
+    code: VPNServerRouteHealthReason.Constants.Code | string;
+    /** An explanation of the reason for this health state. */
+    message: string;
+    /** Link to documentation about the reason for this health state. */
+    more_info?: string;
+  }
+  export namespace VPNServerRouteHealthReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this health state. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+      }
+    }
+  }
+
+  /** VPNServerRouteLifecycleReason. */
+  export interface VPNServerRouteLifecycleReason {
+    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    code: VPNServerRouteLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace VPNServerRouteLifecycleReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      export enum Code {
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
+  }
+
   /** VirtualNetworkInterface. */
   export interface VirtualNetworkInterface {
     /** Indicates whether this virtual network interface will be automatically deleted when `target` is deleted. */
@@ -36409,7 +38503,7 @@ namespace VpcV1 {
     /** The unique identifier for this virtual network interface. */
     id: string;
     /** The lifecycle state of the virtual network interface. */
-    lifecycle_state: string;
+    lifecycle_state: VirtualNetworkInterface.Constants.LifecycleState | string;
     /** The name for this virtual network interface. The name is unique across all virtual network interfaces in the
      *  VPC.
      */
@@ -36419,7 +38513,7 @@ namespace VpcV1 {
     /** The resource group for this virtual network interface. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VirtualNetworkInterface.Constants.ResourceType | string;
     /** The security groups for this virtual network interface. */
     security_groups: SecurityGroupReference[];
     /** The associated subnet. */
@@ -36433,6 +38527,24 @@ namespace VpcV1 {
     vpc: VPCReference;
     /** The zone this virtual network interface resides in. */
     zone: ZoneReference;
+  }
+  export namespace VirtualNetworkInterface {
+    export namespace Constants {
+      /** The lifecycle state of the virtual network interface. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VIRTUAL_NETWORK_INTERFACE = 'virtual_network_interface',
+      }
+    }
   }
 
   /** VirtualNetworkInterfaceCollection. */
@@ -36469,10 +38581,6 @@ namespace VpcV1 {
   export interface VirtualNetworkInterfaceReferenceAttachmentContext {
     /** The CRN for this virtual network interface. */
     crn: string;
-    /** If present, this property indicates the referenced resource has been deleted, and provides
-     *  some supplementary information.
-     */
-    deleted?: VirtualNetworkInterfaceReferenceAttachmentContextDeleted;
     /** The URL for this virtual network interface. */
     href: string;
     /** The unique identifier for this virtual network interface. */
@@ -36482,23 +38590,19 @@ namespace VpcV1 {
      */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VirtualNetworkInterfaceReferenceAttachmentContext.Constants.ResourceType | string;
   }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VirtualNetworkInterfaceReferenceAttachmentContextDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
+  export namespace VirtualNetworkInterfaceReferenceAttachmentContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VIRTUAL_NETWORK_INTERFACE = 'virtual_network_interface',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
   export interface VirtualNetworkInterfaceReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VirtualNetworkInterfaceReferenceReservedIPTargetContextDeleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
   }
@@ -36516,7 +38620,7 @@ namespace VpcV1 {
      *  - `attached`: Attached to a virtual server instance (even if the instance is stopped)
      *  - `unusable`: Not able to be attached to any virtual server instances.
      */
-    attachment_state: string;
+    attachment_state: Volume.Constants.AttachmentState | string;
     /** The maximum bandwidth (in megabits per second) for the volume. */
     bandwidth: number;
     /** Indicates whether this volume is performing an operation that must be serialized. This must be `false` to
@@ -36532,7 +38636,7 @@ namespace VpcV1 {
     /** The CRN for this volume. */
     crn: string;
     /** The type of encryption used on the volume. */
-    encryption: string;
+    encryption: Volume.Constants.Encryption | string;
     /** The root key used to wrap the data encryption key for the volume.
      *
      *  This property will be present for volumes with an `encryption` type of
@@ -36554,7 +38658,7 @@ namespace VpcV1 {
      *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
      *  also have this state.
      */
-    health_state: string;
+    health_state: Volume.Constants.HealthState | string;
     /** The URL for this volume. */
     href: string;
     /** The unique identifier for this volume. */
@@ -36572,7 +38676,7 @@ namespace VpcV1 {
     /** The resource group for this volume. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: Volume.Constants.ResourceType | string;
     /** The image from which this volume was created (this may be
      *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
      *  If absent, this volume was not created from an image.
@@ -36586,7 +38690,7 @@ namespace VpcV1 {
      *  log unknown values. Optionally halt processing and surface the error, or bypass the volume on which the
      *  unexpected property value was encountered.
      */
-    status: string;
+    status: Volume.Constants.Status | string;
     /** The reasons for the current status (if any).
      *
      *  The enumerated reason code values for this property will expand in the future. When processing this property,
@@ -36600,6 +38704,41 @@ namespace VpcV1 {
     volume_attachments: VolumeAttachmentReferenceVolumeContext[];
     /** The zone this volume resides in. */
     zone: ZoneReference;
+  }
+  export namespace Volume {
+    export namespace Constants {
+      /** The attachment state of the volume - `unattached`: Not attached to any virtual server instances - `attached`: Attached to a virtual server instance (even if the instance is stopped) - `unusable`: Not able to be attached to any virtual server instances. */
+      export enum AttachmentState {
+        ATTACHED = 'attached',
+        UNATTACHED = 'unattached',
+        UNUSABLE = 'unusable',
+      }
+      /** The type of encryption used on the volume. */
+      export enum Encryption {
+        PROVIDER_MANAGED = 'provider_managed',
+        USER_MANAGED = 'user_managed',
+      }
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VOLUME = 'volume',
+      }
+      /** The status of the volume. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the volume on which the unexpected property value was encountered. */
+      export enum Status {
+        AVAILABLE = 'available',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        PENDING_DELETION = 'pending_deletion',
+        UNUSABLE = 'unusable',
+        UPDATING = 'updating',
+      }
+    }
   }
 
   /** VolumeAttachment. */
@@ -36624,14 +38763,30 @@ namespace VpcV1 {
     /** The name for this volume attachment. The name is unique across all volume attachments on the instance. */
     name: string;
     /** The status of this volume attachment. */
-    status: string;
+    status: VolumeAttachment.Constants.Status | string;
     /** The type of volume attachment. */
-    type: string;
+    type: VolumeAttachment.Constants.Type | string;
     /** The attached volume.
      *
      *  This property will be absent if the volume has not yet been provisioned.
      */
     volume?: VolumeReferenceVolumeAttachmentContext;
+  }
+  export namespace VolumeAttachment {
+    export namespace Constants {
+      /** The status of this volume attachment. */
+      export enum Status {
+        ATTACHED = 'attached',
+        ATTACHING = 'attaching',
+        DELETING = 'deleting',
+        DETACHING = 'detaching',
+      }
+      /** The type of volume attachment. */
+      export enum Type {
+        BOOT = 'boot',
+        DATA = 'data',
+      }
+    }
   }
 
   /** VolumeAttachmentCollection. */
@@ -36750,7 +38905,16 @@ namespace VpcV1 {
     /** The name for this volume attachment. The name is unique across all volume attachments on the instance. */
     name: string;
     /** The type of volume attachment. */
-    type: string;
+    type: VolumeAttachmentReferenceVolumeContext.Constants.Type | string;
+  }
+  export namespace VolumeAttachmentReferenceVolumeContext {
+    export namespace Constants {
+      /** The type of volume attachment. */
+      export enum Type {
+        BOOT = 'boot',
+        DATA = 'data',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -36788,11 +38952,19 @@ namespace VpcV1 {
   /** VolumeHealthReason. */
   export interface VolumeHealthReason {
     /** A snake case string succinctly identifying the reason for this health state. */
-    code: string;
+    code: VolumeHealthReason.Constants.Code | string;
     /** An explanation of the reason for this health state. */
     message: string;
     /** Link to documentation about the reason for this health state. */
     more_info?: string;
+  }
+  export namespace VolumeHealthReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this health state. */
+      export enum Code {
+        INITIALIZING_FROM_SNAPSHOT = 'initializing_from_snapshot',
+      }
+    }
   }
 
   /** Identifies a volume by a unique property. */
@@ -36807,11 +38979,20 @@ namespace VpcV1 {
      *  log unknown values. Optionally halt processing and surface the error, or bypass the volume profile on which the
      *  unexpected property value was encountered.
      */
-    family: string;
+    family: VolumeProfile.Constants.Family | string;
     /** The URL for this volume profile. */
     href: string;
     /** The globally unique name for this volume profile. */
     name: string;
+  }
+  export namespace VolumeProfile {
+    export namespace Constants {
+      /** The product family this volume profile belongs to. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the volume profile on which the unexpected property value was encountered. */
+      export enum Family {
+        CUSTOM = 'custom',
+        TIERED = 'tiered',
+      }
+    }
   }
 
   /** VolumeProfileCollection. */
@@ -36865,7 +39046,7 @@ namespace VpcV1 {
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) to use for this volume. */
     profile: VolumeProfileIdentity;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume. */
@@ -36953,7 +39134,15 @@ namespace VpcV1 {
      */
     remote?: VolumeRemote;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VolumeReference.Constants.ResourceType | string;
+  }
+  export namespace VolumeReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VOLUME = 'volume',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -36977,7 +39166,15 @@ namespace VpcV1 {
     /** The name for this volume. The name is unique across all volumes in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VolumeReferenceVolumeAttachmentContext.Constants.ResourceType | string;
+  }
+  export namespace VolumeReferenceVolumeAttachmentContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VOLUME = 'volume',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -36997,11 +39194,19 @@ namespace VpcV1 {
   /** VolumeStatusReason. */
   export interface VolumeStatusReason {
     /** A snake case string succinctly identifying the status reason. */
-    code: string;
+    code: VolumeStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
     /** Link to documentation about this status reason. */
     more_info?: string;
+  }
+  export namespace VolumeStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason. */
+      export enum Code {
+        ENCRYPTION_KEY_DELETED = 'encryption_key_deleted',
+      }
+    }
   }
 
   /** Zone. */
@@ -37013,7 +39218,17 @@ namespace VpcV1 {
     /** The region this zone resides in. */
     region: RegionReference;
     /** The availability status of this zone. */
-    status: string;
+    status: Zone.Constants.Status | string;
+  }
+  export namespace Zone {
+    export namespace Constants {
+      /** The availability status of this zone. */
+      export enum Status {
+        AVAILABLE = 'available',
+        IMPAIRED = 'impaired',
+        UNAVAILABLE = 'unavailable',
+      }
+    }
   }
 
   /** ZoneCollection. */
@@ -37053,7 +39268,53 @@ namespace VpcV1 {
      */
     remote?: VolumeRemote;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BackupPolicyJobSourceVolumeReference.Constants.ResourceType | string;
+  }
+  export namespace BackupPolicyJobSourceVolumeReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VOLUME = 'volume',
+      }
+    }
+  }
+
+  /** Identifies an enterprise by a unique property. */
+  export interface BackupPolicyScopePrototypeEnterpriseIdentity extends BackupPolicyScopePrototype {
+  }
+
+  /** BackupPolicyScopeAccountReference. */
+  export interface BackupPolicyScopeAccountReference extends BackupPolicyScope {
+    /** The unique identifier for this account. */
+    id: string;
+    /** The resource type. */
+    resource_type: BackupPolicyScopeAccountReference.Constants.ResourceType | string;
+  }
+  export namespace BackupPolicyScopeAccountReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        ACCOUNT = 'account',
+      }
+    }
+  }
+
+  /** BackupPolicyScopeEnterpriseReference. */
+  export interface BackupPolicyScopeEnterpriseReference extends BackupPolicyScope {
+    /** The CRN for this enterprise. */
+    crn: string;
+    /** The unique identifier for this enterprise. */
+    id: string;
+    /** The resource type. */
+    resource_type: BackupPolicyScopeEnterpriseReference.Constants.ResourceType | string;
+  }
+  export namespace BackupPolicyScopeEnterpriseReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        ENTERPRISE = 'enterprise',
+      }
+    }
   }
 
   /** BareMetalServerBootTargetBareMetalServerDiskReference. */
@@ -37069,7 +39330,15 @@ namespace VpcV1 {
     /** The name for this bare metal server disk. The name is unique across all disks on the bare metal server. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BareMetalServerBootTargetBareMetalServerDiskReference.Constants.ResourceType | string;
+  }
+  export namespace BareMetalServerBootTargetBareMetalServerDiskReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER_DISK = 'bare_metal_server_disk',
+      }
+    }
   }
 
   /** BareMetalServerInitializationUserAccountBareMetalServerInitializationHostUserAccount. */
@@ -37079,9 +39348,17 @@ namespace VpcV1 {
     /** The public SSH key used to encrypt the password. */
     encryption_key: KeyReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: BareMetalServerInitializationUserAccountBareMetalServerInitializationHostUserAccount.Constants.ResourceType | string;
     /** The username for the account created at initialization. */
     username: string;
+  }
+  export namespace BareMetalServerInitializationUserAccountBareMetalServerInitializationHostUserAccount {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        HOST_USER_ACCOUNT = 'host_user_account',
+      }
+    }
   }
 
   /** BareMetalServerNetworkInterfaceByHiperSocket. */
@@ -37089,38 +39366,117 @@ namespace VpcV1 {
     /** - `hipersocket`: a virtual network device that provides high-speed TCP/IP connectivity
      *    within a `s390x` based system.
      */
-    interface_type: string;
+    interface_type: BareMetalServerNetworkInterfaceByHiperSocket.Constants.InterfaceType | string;
+  }
+  export namespace BareMetalServerNetworkInterfaceByHiperSocket {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+      /** The status of the bare metal server network interface. */
+      export enum Status {
+        AVAILABLE = 'available',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+      }
+      /** The bare metal server network interface type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+      /** - `hipersocket`: a virtual network device that provides high-speed TCP/IP connectivity within a `s390x` based system. */
+      export enum InterfaceType {
+        HIPERSOCKET = 'hipersocket',
+      }
+    }
   }
 
   /** BareMetalServerNetworkInterfaceByPCI. */
   export interface BareMetalServerNetworkInterfaceByPCI extends BareMetalServerNetworkInterface {
-    /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. */
+    /** The VLAN IDs allowed for `vlan` interfaces using this PCI interface. */
     allowed_vlans: number[];
     /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal
      *    server is stopped
      *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
      *      to use the PCI interface
-     *    - Cannot directly use an IEEE 802.1q VLAN tag.
+     *    - Cannot directly use an IEEE 802.1Q tag.
      */
-    interface_type: string;
+    interface_type: BareMetalServerNetworkInterfaceByPCI.Constants.InterfaceType | string;
+  }
+  export namespace BareMetalServerNetworkInterfaceByPCI {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+      /** The status of the bare metal server network interface. */
+      export enum Status {
+        AVAILABLE = 'available',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+      }
+      /** The bare metal server network interface type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+      /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI interface - Cannot directly use an IEEE 802.1Q tag. */
+      export enum InterfaceType {
+        PCI = 'pci',
+      }
+    }
   }
 
   /** BareMetalServerNetworkInterfaceByVLAN. */
   export interface BareMetalServerNetworkInterfaceByVLAN extends BareMetalServerNetworkInterface {
-    /** Indicates if the interface can float to any other server within the same
-     *  `resource_group`. The interface will float automatically if the network detects a GARP or RARP on another bare
-     *  metal server in the resource group.  Applies only to `vlan` type interfaces.
+    /** Indicates if the data path for the network interface can float to another bare metal server. Can only be
+     *  `true` for network interfaces with an `interface_type` of `vlan`.
+     *
+     *  If `true`, and the network detects traffic for this data path on another bare metal server in the resource
+     *  group, the network interface will be automatically deleted from this bare metal server and a new network
+     *  interface with the same `id`, `name` and `vlan` will be created on the other bare metal server.
+     *
+     *  For the data path to float, the other bare metal server must be in the same
+     *  `resource_group`, and must have a network interface with `interface_type` of `pci` with `allowed_vlans`
+     *  including this network interface's `vlan`.
      */
     allow_interface_to_float: boolean;
     /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array
      *     of `allowed_vlans`.
-     *    - Must use an IEEE 802.1q tag.
+     *    - Must use an IEEE 802.1Q tag.
      *    - Has its own security groups and does not inherit those of the PCI device through
      *      which traffic flows.
      */
-    interface_type: string;
-    /** Indicates the 802.1Q VLAN ID tag that must be used for all traffic on this interface. */
+    interface_type: BareMetalServerNetworkInterfaceByVLAN.Constants.InterfaceType | string;
+    /** The VLAN ID used in the IEEE 802.1Q tag present in all traffic on this interface. */
     vlan: number;
+  }
+  export namespace BareMetalServerNetworkInterfaceByVLAN {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+      /** The status of the bare metal server network interface. */
+      export enum Status {
+        AVAILABLE = 'available',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+      }
+      /** The bare metal server network interface type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+      /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. - Has its own security groups and does not inherit those of the PCI device through which traffic flows. */
+      export enum InterfaceType {
+        VLAN = 'vlan',
+      }
+    }
   }
 
   /** BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByHiperSocketPrototype. */
@@ -37129,46 +39485,85 @@ namespace VpcV1 {
      *    within a `s390x` based system.
      *    - Not supported on bare metal servers with a `cpu.architecture` of `amd64`.
      */
-    interface_type: string;
+    interface_type: BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByHiperSocketPrototype.Constants.InterfaceType | string;
+  }
+  export namespace BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByHiperSocketPrototype {
+    export namespace Constants {
+      /** - `hipersocket`: a virtual network device that provides high-speed TCP/IP connectivity within a `s390x` based system. - Not supported on bare metal servers with a `cpu.architecture` of `amd64`. */
+      export enum InterfaceType {
+        HIPERSOCKET = 'hipersocket',
+      }
+    }
   }
 
   /** BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByPCIPrototype. */
   export interface BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByPCIPrototype extends BareMetalServerNetworkInterfacePrototype {
-    /** Indicates what VLAN IDs (for VLAN type only) can use this physical (PCI type) interface. */
+    /** The VLAN IDs to allow for `vlan` interfaces using this PCI interface. */
     allowed_vlans?: number[];
     /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal
      *    server is stopped
      *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
      *      to use the PCI interface
-     *    - Cannot directly use an IEEE 802.1q VLAN tag.
+     *    - Cannot directly use an IEEE 802.1Q tag.
      *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
      */
-    interface_type: string;
+    interface_type: BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByPCIPrototype.Constants.InterfaceType | string;
+  }
+  export namespace BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByPCIPrototype {
+    export namespace Constants {
+      /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI interface - Cannot directly use an IEEE 802.1Q tag. - Not supported on bare metal servers with a `cpu.architecture` of `s390x`. */
+      export enum InterfaceType {
+        PCI = 'pci',
+      }
+    }
   }
 
   /** BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype. */
   export interface BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype extends BareMetalServerNetworkInterfacePrototype {
-    /** Indicates if the interface can float to any other server within the same
-     *  `resource_group`. The interface will float automatically if the network detects a GARP or RARP on another bare
-     *  metal server in the resource group.  Applies only to `vlan` type interfaces.
+    /** Indicates if the data path for the network interface can float to another bare metal server. Can only be
+     *  `true` for network interfaces with an `interface_type` of `vlan`.
+     *
+     *  If `true`, and the network detects traffic for this data path on another bare metal server in the resource
+     *  group, the network interface will be automatically deleted from this bare metal server and a new network
+     *  interface with the same `id`, `name` and `vlan` will be created on the other bare metal server.
+     *
+     *  For the data path to float, the other bare metal server must be in the same
+     *  `resource_group`, and must have a network interface with `interface_type` of `pci` with `allowed_vlans`
+     *  including this network interface's `vlan`.
      */
     allow_interface_to_float?: boolean;
     /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array
      *     of `allowed_vlans`.
-     *    - Must use an IEEE 802.1q tag.
+     *    - Must use an IEEE 802.1Q tag.
      *    - Has its own security groups and does not inherit those of the PCI device through
      *      which traffic flows.
      *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
      */
-    interface_type: string;
-    /** Indicates the 802.1Q VLAN ID tag that must be used for all traffic on this interface. */
+    interface_type: BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype.Constants.InterfaceType | string;
+    /** The VLAN ID used in the IEEE 802.1Q tag present in all traffic on this interface. */
     vlan: number;
+  }
+  export namespace BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype {
+    export namespace Constants {
+      /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. - Has its own security groups and does not inherit those of the PCI device through which traffic flows. - Not supported on bare metal servers with a `cpu.architecture` of `s390x`. */
+      export enum InterfaceType {
+        VLAN = 'vlan',
+      }
+    }
   }
 
   /** The total bandwidth shared across the bare metal server network interfaces of a bare metal server with this profile depends on its configuration. */
   export interface BareMetalServerProfileBandwidthDependent extends BareMetalServerProfileBandwidth {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileBandwidthDependent.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileBandwidthDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted total bandwidth values (in megabits per second) shared across the bare metal server network interfaces of a bare metal server with this profile. */
@@ -37176,17 +39571,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileBandwidthEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace BareMetalServerProfileBandwidthEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The total bandwidth (in megabits per second) shared across the bare metal server network interfaces of a bare metal server with this profile. */
   export interface BareMetalServerProfileBandwidthFixed extends BareMetalServerProfileBandwidth {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileBandwidthFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace BareMetalServerProfileBandwidthFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted total bandwidth range (in megabits per second) shared across the bare metal server network interfaces of a bare metal server with this profile. */
@@ -37200,13 +39611,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileBandwidthRange.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileBandwidthRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The CPU core count for a bare metal server with this profile depends on its configuration. */
   export interface BareMetalServerProfileCPUCoreCountDependent extends BareMetalServerProfileCPUCoreCount {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileCPUCoreCountDependent.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileCPUCoreCountDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted values for CPU cores for a bare metal server with this profile. */
@@ -37214,17 +39641,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileCPUCoreCountEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace BareMetalServerProfileCPUCoreCountEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The CPU core count for a bare metal server with this profile. */
   export interface BareMetalServerProfileCPUCoreCountFixed extends BareMetalServerProfileCPUCoreCount {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileCPUCoreCountFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace BareMetalServerProfileCPUCoreCountFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted range for the number of CPU cores for a bare metal server with this profile. */
@@ -37238,13 +39681,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileCPUCoreCountRange.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileCPUCoreCountRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The CPU socket count for a bare metal server with this profile depends on its configuration. */
   export interface BareMetalServerProfileCPUSocketCountDependent extends BareMetalServerProfileCPUSocketCount {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileCPUSocketCountDependent.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileCPUSocketCountDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted values for CPU sockets for a bare metal server with this profile. */
@@ -37252,17 +39711,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileCPUSocketCountEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace BareMetalServerProfileCPUSocketCountEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The number of CPU sockets for a bare metal server with this profile. */
   export interface BareMetalServerProfileCPUSocketCountFixed extends BareMetalServerProfileCPUSocketCount {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileCPUSocketCountFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace BareMetalServerProfileCPUSocketCountFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted range for the number of CPU sockets for a bare metal server with this profile. */
@@ -37276,13 +39751,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileCPUSocketCountRange.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileCPUSocketCountRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The number of disks of this configuration for a bare metal server with this profile depends on its bare metal server configuration. */
   export interface BareMetalServerProfileDiskQuantityDependent extends BareMetalServerProfileDiskQuantity {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileDiskQuantityDependent.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileDiskQuantityDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted the number of disks of this configuration for a bare metal server with this profile. */
@@ -37290,17 +39781,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileDiskQuantityEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace BareMetalServerProfileDiskQuantityEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The number of disks of this configuration for a bare metal server with this profile. */
   export interface BareMetalServerProfileDiskQuantityFixed extends BareMetalServerProfileDiskQuantity {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileDiskQuantityFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace BareMetalServerProfileDiskQuantityFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted range for the number of disks of this configuration for a bare metal server with this profile. */
@@ -37314,13 +39821,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileDiskQuantityRange.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileDiskQuantityRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The disk size in GB (gigabytes) of this configuration for a bare metal server with this profile depends on its bare metal server configuration. */
   export interface BareMetalServerProfileDiskSizeDependent extends BareMetalServerProfileDiskSize {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileDiskSizeDependent.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileDiskSizeDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted disk size in GB (gigabytes) of this configuration for a bare metal server with this profile. */
@@ -37328,17 +39851,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileDiskSizeEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace BareMetalServerProfileDiskSizeEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The size of the disk in GB (gigabytes). */
   export interface BareMetalServerProfileDiskSizeFixed extends BareMetalServerProfileDiskSize {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileDiskSizeFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace BareMetalServerProfileDiskSizeFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted range for the disk size of this configuration in GB (gigabytes) for a bare metal server with this profile. */
@@ -37352,7 +39891,15 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileDiskSizeRange.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileDiskSizeRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** BareMetalServerProfileIdentityByHref. */
@@ -37370,7 +39917,15 @@ namespace VpcV1 {
   /** The memory value for a bare metal server with this profile depends on its configuration. */
   export interface BareMetalServerProfileMemoryDependent extends BareMetalServerProfileMemory {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileMemoryDependent.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileMemoryDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted memory values (in gibibytes) for a bare metal server with this profile. */
@@ -37378,17 +39933,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileMemoryEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace BareMetalServerProfileMemoryEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The memory (in gibibytes) for a bare metal server with this profile. */
   export interface BareMetalServerProfileMemoryFixed extends BareMetalServerProfileMemory {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileMemoryFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace BareMetalServerProfileMemoryFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted memory range (in gibibytes) for a bare metal server with this profile. */
@@ -37402,13 +39973,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileMemoryRange.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileMemoryRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The number of bare metal server network interfaces supported on a bare metal server with this profile is dependent on its configuration. */
   export interface BareMetalServerProfileNetworkInterfaceCountDependent extends BareMetalServerProfileNetworkInterfaceCount {
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileNetworkInterfaceCountDependent.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileNetworkInterfaceCountDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The number of bare metal server network interfaces supported on a bare metal server with this profile. */
@@ -37418,7 +40005,15 @@ namespace VpcV1 {
     /** The minimum value for this profile field. */
     min?: number;
     /** The type for this profile field. */
-    type: string;
+    type: BareMetalServerProfileNetworkInterfaceCountRange.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileNetworkInterfaceCountRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** CatalogOfferingIdentityCatalogOfferingByCRN. */
@@ -37497,7 +40092,15 @@ namespace VpcV1 {
   /** The memory value for a dedicated host with this profile depends on its configuration. */
   export interface DedicatedHostProfileMemoryDependent extends DedicatedHostProfileMemory {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileMemoryDependent.Constants.Type | string;
+  }
+  export namespace DedicatedHostProfileMemoryDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted memory values (in gibibytes) for a dedicated host with this profile. */
@@ -37505,17 +40108,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileMemoryEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace DedicatedHostProfileMemoryEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The memory (in gibibytes) for a dedicated host with this profile. */
   export interface DedicatedHostProfileMemoryFixed extends DedicatedHostProfileMemory {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileMemoryFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace DedicatedHostProfileMemoryFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted memory range (in gibibytes) for a dedicated host with this profile. */
@@ -37529,13 +40148,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileMemoryRange.Constants.Type | string;
+  }
+  export namespace DedicatedHostProfileMemoryRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The CPU socket count for a dedicated host with this profile depends on its configuration. */
   export interface DedicatedHostProfileSocketDependent extends DedicatedHostProfileSocket {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileSocketDependent.Constants.Type | string;
+  }
+  export namespace DedicatedHostProfileSocketDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted values for CPU socket count for a dedicated host with this profile. */
@@ -37543,17 +40178,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileSocketEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace DedicatedHostProfileSocketEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The CPU socket count for a dedicated host with this profile. */
   export interface DedicatedHostProfileSocketFixed extends DedicatedHostProfileSocket {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileSocketFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace DedicatedHostProfileSocketFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted range for CPU socket count for a dedicated host with this profile. */
@@ -37567,13 +40218,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileSocketRange.Constants.Type | string;
+  }
+  export namespace DedicatedHostProfileSocketRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The VCPU count for a dedicated host with this profile depends on its configuration. */
   export interface DedicatedHostProfileVCPUDependent extends DedicatedHostProfileVCPU {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileVCPUDependent.Constants.Type | string;
+  }
+  export namespace DedicatedHostProfileVCPUDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted values for VCPU count for a dedicated host with this profile. */
@@ -37581,17 +40248,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileVCPUEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace DedicatedHostProfileVCPUEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The VCPU count for a dedicated host with this profile. */
   export interface DedicatedHostProfileVCPUFixed extends DedicatedHostProfileVCPU {
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileVCPUFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace DedicatedHostProfileVCPUFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted range for VCPU count for a dedicated host with this profile. */
@@ -37605,7 +40288,15 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: DedicatedHostProfileVCPURange.Constants.Type | string;
+  }
+  export namespace DedicatedHostProfileVCPURange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** DedicatedHostPrototypeDedicatedHostByGroup. */
@@ -37657,9 +40348,27 @@ namespace VpcV1 {
   /** EndpointGatewayTargetPrototypeProviderCloudServiceIdentity. */
   export interface EndpointGatewayTargetPrototypeProviderCloudServiceIdentity extends EndpointGatewayTargetPrototype {
   }
+  export namespace EndpointGatewayTargetPrototypeProviderCloudServiceIdentity {
+    export namespace Constants {
+      /** The type of target for this endpoint gateway. */
+      export enum ResourceType {
+        PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
+        PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
+      }
+    }
+  }
 
   /** EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentity. */
   export interface EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentity extends EndpointGatewayTargetPrototype {
+  }
+  export namespace EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentity {
+    export namespace Constants {
+      /** The type of target for this endpoint gateway. */
+      export enum ResourceType {
+        PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
+        PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
+      }
+    }
   }
 
   /** EndpointGatewayTargetProviderCloudServiceReference. */
@@ -37667,7 +40376,15 @@ namespace VpcV1 {
     /** The CRN for this provider cloud service, or the CRN for the user's instance of a provider cloud service. */
     crn: string;
     /** The type of target. */
-    resource_type: string;
+    resource_type: EndpointGatewayTargetProviderCloudServiceReference.Constants.ResourceType | string;
+  }
+  export namespace EndpointGatewayTargetProviderCloudServiceReference {
+    export namespace Constants {
+      /** The type of target. */
+      export enum ResourceType {
+        PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
+      }
+    }
   }
 
   /** The name of this provider infrastructure service. */
@@ -37677,7 +40394,15 @@ namespace VpcV1 {
      */
     name: string;
     /** The type of target. */
-    resource_type: string;
+    resource_type: EndpointGatewayTargetProviderInfrastructureServiceReference.Constants.ResourceType | string;
+  }
+  export namespace EndpointGatewayTargetProviderInfrastructureServiceReference {
+    export namespace Constants {
+      /** The type of target. */
+      export enum ResourceType {
+        PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
+      }
+    }
   }
 
   /** FloatingIPPrototypeFloatingIPByTarget. */
@@ -37699,8 +40424,16 @@ namespace VpcV1 {
     zone: ZoneIdentity;
   }
 
+  /** Identifies a bare metal server network interface by a unique property. */
+  export interface FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentity extends FloatingIPTargetPatch {
+  }
+
   /** Identifies an instance network interface by a unique property. */
   export interface FloatingIPTargetPatchNetworkInterfaceIdentity extends FloatingIPTargetPatch {
+  }
+
+  /** Identifies a bare metal server network interface by a unique property. */
+  export interface FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentity extends FloatingIPTargetPrototype {
   }
 
   /** Identifies an instance network interface by a unique property. */
@@ -37721,7 +40454,15 @@ namespace VpcV1 {
     name: string;
     primary_ip: ReservedIPReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: FloatingIPTargetBareMetalServerNetworkInterfaceReference.Constants.ResourceType | string;
+  }
+  export namespace FloatingIPTargetBareMetalServerNetworkInterfaceReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+    }
   }
 
   /** FloatingIPTargetNetworkInterfaceReference. */
@@ -37738,7 +40479,15 @@ namespace VpcV1 {
     name: string;
     primary_ip: ReservedIPReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: FloatingIPTargetNetworkInterfaceReference.Constants.ResourceType | string;
+  }
+  export namespace FloatingIPTargetNetworkInterfaceReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+    }
   }
 
   /** FloatingIPTargetPublicGatewayReference. */
@@ -37756,7 +40505,15 @@ namespace VpcV1 {
     /** The name for this public gateway. The name is unique across all public gateways in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: FloatingIPTargetPublicGatewayReference.Constants.ResourceType | string;
+  }
+  export namespace FloatingIPTargetPublicGatewayReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        PUBLIC_GATEWAY = 'public_gateway',
+      }
+    }
   }
 
   /** Identifies a virtual server instance by a unique property. */
@@ -37806,7 +40563,15 @@ namespace VpcV1 {
     /** The name for this instance network interface. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: FlowLogCollectorTargetNetworkInterfaceReferenceTargetContext.Constants.ResourceType | string;
+  }
+  export namespace FlowLogCollectorTargetNetworkInterfaceReferenceTargetContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+    }
   }
 
   /** FlowLogCollectorTargetSubnetReference. */
@@ -37824,7 +40589,15 @@ namespace VpcV1 {
     /** The name for this subnet. The name is unique across all subnets in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: FlowLogCollectorTargetSubnetReference.Constants.ResourceType | string;
+  }
+  export namespace FlowLogCollectorTargetSubnetReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SUBNET = 'subnet',
+      }
+    }
   }
 
   /** FlowLogCollectorTargetVPCReference. */
@@ -37842,7 +40615,15 @@ namespace VpcV1 {
     /** The name for this VPC. The name is unique across all VPCs in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: FlowLogCollectorTargetVPCReference.Constants.ResourceType | string;
+  }
+  export namespace FlowLogCollectorTargetVPCReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPC = 'vpc',
+      }
+    }
   }
 
   /** ImageIdentityByCRN. */
@@ -37933,7 +40714,7 @@ namespace VpcV1 {
   /** InstanceGroupManagerActionScheduledAction. */
   export interface InstanceGroupManagerActionScheduledAction extends InstanceGroupManagerAction {
     /** The type of action for the instance group. */
-    action_type: string;
+    action_type: InstanceGroupManagerActionScheduledAction.Constants.ActionType | string;
     /** The cron specification for a recurring scheduled action. Actions can be applied a maximum of one time within
      *  a 5 min period.
      */
@@ -37945,6 +40726,26 @@ namespace VpcV1 {
      */
     next_run_at?: string;
   }
+  export namespace InstanceGroupManagerActionScheduledAction {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_GROUP_MANAGER_ACTION = 'instance_group_manager_action',
+      }
+      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled. */
+      export enum Status {
+        ACTIVE = 'active',
+        COMPLETED = 'completed',
+        FAILED = 'failed',
+        INCOMPATIBLE = 'incompatible',
+        OMITTED = 'omitted',
+      }
+      /** The type of action for the instance group. */
+      export enum ActionType {
+        SCHEDULED = 'scheduled',
+      }
+    }
+  }
 
   /** InstanceGroupManagerAutoScale. */
   export interface InstanceGroupManagerAutoScale extends InstanceGroupManager {
@@ -37953,7 +40754,7 @@ namespace VpcV1 {
     /** The duration of time in seconds to pause further scale actions after scaling has taken place. */
     cooldown: number;
     /** The type of instance group manager. */
-    manager_type: string;
+    manager_type: InstanceGroupManagerAutoScale.Constants.ManagerType | string;
     /** The maximum number of members in a managed instance group. */
     max_membership_count: number;
     /** The minimum number of members in a managed instance group. */
@@ -37961,25 +40762,63 @@ namespace VpcV1 {
     /** The policies of the instance group manager. */
     policies: InstanceGroupManagerPolicyReference[];
   }
+  export namespace InstanceGroupManagerAutoScale {
+    export namespace Constants {
+      /** The type of instance group manager. */
+      export enum ManagerType {
+        AUTOSCALE = 'autoscale',
+      }
+    }
+  }
 
   /** InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype. */
   export interface InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype extends InstanceGroupManagerPolicyPrototype {
     /** The type of metric to be evaluated. */
-    metric_type: string;
+    metric_type: InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype.Constants.MetricType | string;
     /** The metric value to be evaluated. */
     metric_value: number;
     /** The type of policy for the instance group. */
-    policy_type: string;
+    policy_type: InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype.Constants.PolicyType | string;
+  }
+  export namespace InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype {
+    export namespace Constants {
+      /** The type of metric to be evaluated. */
+      export enum MetricType {
+        CPU = 'cpu',
+        MEMORY = 'memory',
+        NETWORK_IN = 'network_in',
+        NETWORK_OUT = 'network_out',
+      }
+      /** The type of policy for the instance group. */
+      export enum PolicyType {
+        TARGET = 'target',
+      }
+    }
   }
 
   /** InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy. */
   export interface InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy extends InstanceGroupManagerPolicy {
     /** The type of metric to be evaluated. */
-    metric_type: string;
+    metric_type: InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy.Constants.MetricType | string;
     /** The metric value to be evaluated. */
     metric_value: number;
     /** The type of policy for the instance group. */
-    policy_type: string;
+    policy_type: InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy.Constants.PolicyType | string;
+  }
+  export namespace InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy {
+    export namespace Constants {
+      /** The type of metric to be evaluated. */
+      export enum MetricType {
+        CPU = 'cpu',
+        MEMORY = 'memory',
+        NETWORK_IN = 'network_in',
+        NETWORK_OUT = 'network_out',
+      }
+      /** The type of policy for the instance group. */
+      export enum PolicyType {
+        TARGET = 'target',
+      }
+    }
   }
 
   /** InstanceGroupManagerPrototypeInstanceGroupManagerAutoScalePrototype. */
@@ -37989,17 +40828,33 @@ namespace VpcV1 {
     /** The duration of time in seconds to pause further scale actions after scaling has taken place. */
     cooldown?: number;
     /** The type of instance group manager. */
-    manager_type: string;
+    manager_type: InstanceGroupManagerPrototypeInstanceGroupManagerAutoScalePrototype.Constants.ManagerType | string;
     /** The maximum number of members in a managed instance group. */
     max_membership_count: number;
     /** The minimum number of members in a managed instance group. */
     min_membership_count?: number;
   }
+  export namespace InstanceGroupManagerPrototypeInstanceGroupManagerAutoScalePrototype {
+    export namespace Constants {
+      /** The type of instance group manager. */
+      export enum ManagerType {
+        AUTOSCALE = 'autoscale',
+      }
+    }
+  }
 
   /** InstanceGroupManagerPrototypeInstanceGroupManagerScheduledPrototype. */
   export interface InstanceGroupManagerPrototypeInstanceGroupManagerScheduledPrototype extends InstanceGroupManagerPrototype {
     /** The type of instance group manager. */
-    manager_type: string;
+    manager_type: InstanceGroupManagerPrototypeInstanceGroupManagerScheduledPrototype.Constants.ManagerType | string;
+  }
+  export namespace InstanceGroupManagerPrototypeInstanceGroupManagerScheduledPrototype {
+    export namespace Constants {
+      /** The type of instance group manager. */
+      export enum ManagerType {
+        SCHEDULED = 'scheduled',
+      }
+    }
   }
 
   /** InstanceGroupManagerScheduled. */
@@ -38007,7 +40862,15 @@ namespace VpcV1 {
     /** The actions of the instance group manager. */
     actions: InstanceGroupManagerActionReference[];
     /** The type of instance group manager. */
-    manager_type: string;
+    manager_type: InstanceGroupManagerScheduled.Constants.ManagerType | string;
+  }
+  export namespace InstanceGroupManagerScheduled {
+    export namespace Constants {
+      /** The type of instance group manager. */
+      export enum ManagerType {
+        SCHEDULED = 'scheduled',
+      }
+    }
   }
 
   /** InstanceGroupManagerScheduledActionManagerAutoScale. */
@@ -38083,7 +40946,15 @@ namespace VpcV1 {
     /** The name for this dedicated host group. The name is unique across all dedicated host groups in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: InstancePlacementTargetDedicatedHostGroupReference.Constants.ResourceType | string;
+  }
+  export namespace InstancePlacementTargetDedicatedHostGroupReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        DEDICATED_HOST_GROUP = 'dedicated_host_group',
+      }
+    }
   }
 
   /** InstancePlacementTargetDedicatedHostReference. */
@@ -38101,7 +40972,15 @@ namespace VpcV1 {
     /** The name for this dedicated host. The name is unique across all dedicated hosts in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: InstancePlacementTargetDedicatedHostReference.Constants.ResourceType | string;
+  }
+  export namespace InstancePlacementTargetDedicatedHostReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        DEDICATED_HOST = 'dedicated_host',
+      }
+    }
   }
 
   /** InstancePlacementTargetPlacementGroupReference. */
@@ -38119,13 +40998,29 @@ namespace VpcV1 {
     /** The name for this placement group. The name is unique across all placement groups in the region. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: InstancePlacementTargetPlacementGroupReference.Constants.ResourceType | string;
+  }
+  export namespace InstancePlacementTargetPlacementGroupReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        PLACEMENT_GROUP = 'placement_group',
+      }
+    }
   }
 
   /** The total bandwidth shared across the network interfaces and storage volumes of an instance with this profile depends on its configuration. */
   export interface InstanceProfileBandwidthDependent extends InstanceProfileBandwidth {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileBandwidthDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileBandwidthDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted total bandwidth values (in megabits per second) shared across the network interfaces and storage volumes of an instance with this profile. */
@@ -38133,17 +41028,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileBandwidthEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace InstanceProfileBandwidthEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The total bandwidth (in megabits per second) shared across the network interfaces and storage volumes of an instance with this profile. */
   export interface InstanceProfileBandwidthFixed extends InstanceProfileBandwidth {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileBandwidthFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace InstanceProfileBandwidthFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted total bandwidth range (in megabits per second) shared across the network interfaces and storage volumes of an instance with this profile. */
@@ -38157,13 +41068,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileBandwidthRange.Constants.Type | string;
+  }
+  export namespace InstanceProfileBandwidthRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The number of disks of this configuration for an instance with this profile depends on its instance configuration. */
   export interface InstanceProfileDiskQuantityDependent extends InstanceProfileDiskQuantity {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileDiskQuantityDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileDiskQuantityDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted the number of disks of this configuration for an instance with this profile. */
@@ -38171,17 +41098,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileDiskQuantityEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace InstanceProfileDiskQuantityEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The number of disks of this configuration for an instance with this profile. */
   export interface InstanceProfileDiskQuantityFixed extends InstanceProfileDiskQuantity {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileDiskQuantityFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace InstanceProfileDiskQuantityFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted range for the number of disks of this configuration for an instance with this profile. */
@@ -38195,13 +41138,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileDiskQuantityRange.Constants.Type | string;
+  }
+  export namespace InstanceProfileDiskQuantityRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The disk size in GB (gigabytes) of this configuration for an instance with this profile depends on its instance configuration. */
   export interface InstanceProfileDiskSizeDependent extends InstanceProfileDiskSize {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileDiskSizeDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileDiskSizeDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted disk size in GB (gigabytes) of this configuration for an instance with this profile. */
@@ -38209,17 +41168,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileDiskSizeEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace InstanceProfileDiskSizeEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The size of the disk in GB (gigabytes). */
   export interface InstanceProfileDiskSizeFixed extends InstanceProfileDiskSize {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileDiskSizeFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace InstanceProfileDiskSizeFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted range for the disk size of this configuration in GB (gigabytes) for an instance with this profile. */
@@ -38233,13 +41208,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileDiskSizeRange.Constants.Type | string;
+  }
+  export namespace InstanceProfileDiskSizeRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The GPU count for an instance with this profile depends on its configuration. */
   export interface InstanceProfileGPUDependent extends InstanceProfileGPU {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileGPUDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileGPUDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted GPU count values for an instance with this profile. */
@@ -38247,23 +41238,47 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileGPUEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace InstanceProfileGPUEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The GPU count for an instance with this profile. */
   export interface InstanceProfileGPUFixed extends InstanceProfileGPU {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileGPUFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace InstanceProfileGPUFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The overall GPU memory value for an instance with this profile depends on its configuration. */
   export interface InstanceProfileGPUMemoryDependent extends InstanceProfileGPUMemory {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileGPUMemoryDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileGPUMemoryDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted overall GPU memory values in GiB (gibibytes) for an instance with this profile. */
@@ -38271,17 +41286,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileGPUMemoryEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace InstanceProfileGPUMemoryEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The overall GPU memory in GiB (gibibytes) for an instance with this profile. */
   export interface InstanceProfileGPUMemoryFixed extends InstanceProfileGPUMemory {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileGPUMemoryFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace InstanceProfileGPUMemoryFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted overall GPU memory range in GiB (gibibytes) for an instance with this profile. */
@@ -38295,7 +41326,15 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileGPUMemoryRange.Constants.Type | string;
+  }
+  export namespace InstanceProfileGPUMemoryRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The permitted GPU count range for an instance with this profile. */
@@ -38309,7 +41348,15 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileGPURange.Constants.Type | string;
+  }
+  export namespace InstanceProfileGPURange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** InstanceProfileIdentityByHref. */
@@ -38327,7 +41374,15 @@ namespace VpcV1 {
   /** The memory value for an instance with this profile depends on its configuration. */
   export interface InstanceProfileMemoryDependent extends InstanceProfileMemory {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileMemoryDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileMemoryDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted memory values (in gibibytes) for an instance with this profile. */
@@ -38335,17 +41390,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileMemoryEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace InstanceProfileMemoryEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The memory (in gibibytes) for an instance with this profile. */
   export interface InstanceProfileMemoryFixed extends InstanceProfileMemory {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileMemoryFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace InstanceProfileMemoryFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted memory range (in gibibytes) for an instance with this profile. */
@@ -38359,13 +41430,59 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileMemoryRange.Constants.Type | string;
+  }
+  export namespace InstanceProfileMemoryRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
+  }
+
+  /** The total number of NUMA nodes for an instance with this profile depends on its configuration and the capacity constraints within the zone. */
+  export interface InstanceProfileNUMACountDependent extends InstanceProfileNUMACount {
+    /** The type for this profile field. */
+    type: InstanceProfileNUMACountDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileNUMACountDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /** The total number of NUMA nodes for an instance with this profile. */
+  export interface InstanceProfileNUMACountFixed extends InstanceProfileNUMACount {
+    /** The type for this profile field. */
+    type: InstanceProfileNUMACountFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: number;
+  }
+  export namespace InstanceProfileNUMACountFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The number of network interfaces supported on an instance with this profile is dependent on its configuration. */
   export interface InstanceProfileNetworkInterfaceCountDependent extends InstanceProfileNetworkInterfaceCount {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileNetworkInterfaceCountDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileNetworkInterfaceCountDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The number of network interfaces supported on an instance with this profile. */
@@ -38375,27 +41492,59 @@ namespace VpcV1 {
     /** The minimum value for this profile field. */
     min?: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileNetworkInterfaceCountRange.Constants.Type | string;
+  }
+  export namespace InstanceProfileNetworkInterfaceCountRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The port speed of each network interface of an instance with this profile depends on its configuration. */
   export interface InstanceProfilePortSpeedDependent extends InstanceProfilePortSpeed {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfilePortSpeedDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfilePortSpeedDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The maximum speed (in megabits per second) of each network interface of an instance with this profile. */
   export interface InstanceProfilePortSpeedFixed extends InstanceProfilePortSpeed {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfilePortSpeedFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace InstanceProfilePortSpeedFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The VCPU count for an instance with this profile depends on its configuration. */
   export interface InstanceProfileVCPUDependent extends InstanceProfileVCPU {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileVCPUDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileVCPUDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted values for VCPU count for an instance with this profile. */
@@ -38403,17 +41552,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileVCPUEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace InstanceProfileVCPUEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The VCPU count for an instance with this profile. */
   export interface InstanceProfileVCPUFixed extends InstanceProfileVCPU {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileVCPUFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace InstanceProfileVCPUFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted range for VCPU count for an instance with this profile. */
@@ -38427,13 +41592,29 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileVCPURange.Constants.Type | string;
+  }
+  export namespace InstanceProfileVCPURange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The storage bandwidth shared across the storage volumes of an instance with this profile depends on its configuration. */
   export interface InstanceProfileVolumeBandwidthDependent extends InstanceProfileVolumeBandwidth {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileVolumeBandwidthDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileVolumeBandwidthDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The permitted storage bandwidth values (in megabits per second) shared across the storage volumes of an instance with this profile. */
@@ -38441,17 +41622,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileVolumeBandwidthEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace InstanceProfileVolumeBandwidthEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The storage bandwidth (in megabits per second) shared across the storage volumes of an instance with this profile. */
   export interface InstanceProfileVolumeBandwidthFixed extends InstanceProfileVolumeBandwidth {
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileVolumeBandwidthFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace InstanceProfileVolumeBandwidthFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted storage bandwidth range (in megabits per second) shared across the storage volumes of an instance with this profile. */
@@ -38465,7 +41662,15 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: InstanceProfileVolumeBandwidthRange.Constants.Type | string;
+  }
+  export namespace InstanceProfileVolumeBandwidthRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** Create an instance by using a catalog offering. */
@@ -38904,57 +42109,121 @@ namespace VpcV1 {
   /** The instance groups support for a load balancer with this profile depends on its configuration. */
   export interface LoadBalancerProfileInstanceGroupsSupportedDependent extends LoadBalancerProfileInstanceGroupsSupported {
     /** The type for this profile field. */
-    type: string;
+    type: LoadBalancerProfileInstanceGroupsSupportedDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileInstanceGroupsSupportedDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The instance groups support for a load balancer with this profile. */
   export interface LoadBalancerProfileInstanceGroupsSupportedFixed extends LoadBalancerProfileInstanceGroupsSupported {
     /** The type for this profile field. */
-    type: string;
+    type: LoadBalancerProfileInstanceGroupsSupportedFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: boolean;
+  }
+  export namespace LoadBalancerProfileInstanceGroupsSupportedFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The route mode support for a load balancer with this profile depends on its configuration. */
   export interface LoadBalancerProfileRouteModeSupportedDependent extends LoadBalancerProfileRouteModeSupported {
     /** The type for this profile field. */
-    type: string;
+    type: LoadBalancerProfileRouteModeSupportedDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileRouteModeSupportedDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The route mode support for a load balancer with this profile. */
   export interface LoadBalancerProfileRouteModeSupportedFixed extends LoadBalancerProfileRouteModeSupported {
     /** The type for this profile field. */
-    type: string;
+    type: LoadBalancerProfileRouteModeSupportedFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: boolean;
+  }
+  export namespace LoadBalancerProfileRouteModeSupportedFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The security group support for a load balancer with this profile depends on its configuration. */
   export interface LoadBalancerProfileSecurityGroupsSupportedDependent extends LoadBalancerProfileSecurityGroupsSupported {
     /** The type for this profile field. */
-    type: string;
+    type: LoadBalancerProfileSecurityGroupsSupportedDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileSecurityGroupsSupportedDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The security group support for a load balancer with this profile. */
   export interface LoadBalancerProfileSecurityGroupsSupportedFixed extends LoadBalancerProfileSecurityGroupsSupported {
     /** The type for this profile field. */
-    type: string;
+    type: LoadBalancerProfileSecurityGroupsSupportedFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: boolean;
+  }
+  export namespace LoadBalancerProfileSecurityGroupsSupportedFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The UDP support for a load balancer with this profile depends on its configuration. */
   export interface LoadBalancerProfileUDPSupportedDependent extends LoadBalancerProfileUDPSupported {
     /** The type for this profile field. */
-    type: string;
+    type: LoadBalancerProfileUDPSupportedDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileUDPSupportedDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
   }
 
   /** The UDP support for a load balancer with this profile. */
   export interface LoadBalancerProfileUDPSupportedFixed extends LoadBalancerProfileUDPSupported {
     /** The type for this profile field. */
-    type: string;
+    type: LoadBalancerProfileUDPSupportedFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: boolean;
+  }
+  export namespace LoadBalancerProfileUDPSupportedFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** NetworkACLIdentityByCRN. */
@@ -39016,7 +42285,29 @@ namespace VpcV1 {
   /** NetworkACLRuleItemNetworkACLRuleProtocolAll. */
   export interface NetworkACLRuleItemNetworkACLRuleProtocolAll extends NetworkACLRuleItem {
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRuleItemNetworkACLRuleProtocolAll.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRuleItemNetworkACLRuleProtocolAll {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+      }
+    }
   }
 
   /** NetworkACLRuleItemNetworkACLRuleProtocolICMP. */
@@ -39027,12 +42318,34 @@ namespace VpcV1 {
      */
     code?: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRuleItemNetworkACLRuleProtocolICMP.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
      *  If absent, all types are matched.
      */
     type?: number;
+  }
+  export namespace NetworkACLRuleItemNetworkACLRuleProtocolICMP {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ICMP = 'icmp',
+      }
+    }
   }
 
   /** NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP. */
@@ -39042,17 +42355,62 @@ namespace VpcV1 {
     /** The inclusive lower bound of TCP/UDP destination port range. */
     destination_port_min: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP.Constants.Protocol | string;
     /** The inclusive upper bound of TCP/UDP source port range. */
     source_port_max: number;
     /** The inclusive lower bound of TCP/UDP source port range. */
     source_port_min: number;
   }
+  export namespace NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
+  }
 
   /** NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype. */
   export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototypeNetworkACLContext {
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+      }
+    }
   }
 
   /** NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype. */
@@ -39063,12 +42421,34 @@ namespace VpcV1 {
      */
     code?: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
      *  If unspecified, all types are matched.
      */
     type?: number;
+  }
+  export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ICMP = 'icmp',
+      }
+    }
   }
 
   /** NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype. */
@@ -39078,17 +42458,62 @@ namespace VpcV1 {
     /** The inclusive lower bound of TCP/UDP destination port range. */
     destination_port_min?: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype.Constants.Protocol | string;
     /** The inclusive upper bound of TCP/UDP source port range. */
     source_port_max?: number;
     /** The inclusive lower bound of TCP/UDP source port range. */
     source_port_min?: number;
   }
+  export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
+  }
 
   /** NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype. */
   export interface NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototype {
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+      }
+    }
   }
 
   /** NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype. */
@@ -39099,12 +42524,34 @@ namespace VpcV1 {
      */
     code?: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
      *  If unspecified, all types are matched.
      */
     type?: number;
+  }
+  export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ICMP = 'icmp',
+      }
+    }
   }
 
   /** NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype. */
@@ -39114,17 +42561,62 @@ namespace VpcV1 {
     /** The inclusive lower bound of TCP/UDP destination port range. */
     destination_port_min?: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype.Constants.Protocol | string;
     /** The inclusive upper bound of TCP/UDP source port range. */
     source_port_max?: number;
     /** The inclusive lower bound of TCP/UDP source port range. */
     source_port_min?: number;
   }
+  export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
+  }
 
   /** NetworkACLRuleNetworkACLRuleProtocolAll. */
   export interface NetworkACLRuleNetworkACLRuleProtocolAll extends NetworkACLRule {
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRuleNetworkACLRuleProtocolAll.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRuleNetworkACLRuleProtocolAll {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+      }
+    }
   }
 
   /** NetworkACLRuleNetworkACLRuleProtocolICMP. */
@@ -39135,12 +42627,34 @@ namespace VpcV1 {
      */
     code?: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRuleNetworkACLRuleProtocolICMP.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
      *  If absent, all types are matched.
      */
     type?: number;
+  }
+  export namespace NetworkACLRuleNetworkACLRuleProtocolICMP {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ICMP = 'icmp',
+      }
+    }
   }
 
   /** NetworkACLRuleNetworkACLRuleProtocolTCPUDP. */
@@ -39150,11 +42664,34 @@ namespace VpcV1 {
     /** The inclusive lower bound of TCP/UDP destination port range. */
     destination_port_min: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: NetworkACLRuleNetworkACLRuleProtocolTCPUDP.Constants.Protocol | string;
     /** The inclusive upper bound of TCP/UDP source port range. */
     source_port_max: number;
     /** The inclusive lower bound of TCP/UDP source port range. */
     source_port_min: number;
+  }
+  export namespace NetworkACLRuleNetworkACLRuleProtocolTCPUDP {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
   }
 
   /** Identifies a reserved IP by a unique property. */
@@ -39202,7 +42739,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
   }
@@ -39254,7 +42791,15 @@ namespace VpcV1 {
     /** The name for this bare metal server network interface. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ReservedIPTargetBareMetalServerNetworkInterfaceReferenceTargetContext.Constants.ResourceType | string;
+  }
+  export namespace ReservedIPTargetBareMetalServerNetworkInterfaceReferenceTargetContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+    }
   }
 
   /** ReservedIPTargetEndpointGatewayReference. */
@@ -39272,7 +42817,15 @@ namespace VpcV1 {
     /** The name for this endpoint gateway. The name is unique across all endpoint gateways in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ReservedIPTargetEndpointGatewayReference.Constants.ResourceType | string;
+  }
+  export namespace ReservedIPTargetEndpointGatewayReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        ENDPOINT_GATEWAY = 'endpoint_gateway',
+      }
+    }
   }
 
   /** Identifying information for a resource that is not native to the VPC API. */
@@ -39284,7 +42837,15 @@ namespace VpcV1 {
      */
     deleted?: GenericResourceReferenceDeleted;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ReservedIPTargetGenericResourceReference.Constants.ResourceType | string;
+  }
+  export namespace ReservedIPTargetGenericResourceReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        CLOUD_RESOURCE = 'cloud_resource',
+      }
+    }
   }
 
   /** ReservedIPTargetLoadBalancerReference. */
@@ -39302,7 +42863,15 @@ namespace VpcV1 {
     /** The name for this load balancer. The name is unique across all load balancers in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ReservedIPTargetLoadBalancerReference.Constants.ResourceType | string;
+  }
+  export namespace ReservedIPTargetLoadBalancerReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        LOAD_BALANCER = 'load_balancer',
+      }
+    }
   }
 
   /** ReservedIPTargetNetworkInterfaceReferenceTargetContext. */
@@ -39318,7 +42887,15 @@ namespace VpcV1 {
     /** The name for this instance network interface. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ReservedIPTargetNetworkInterfaceReferenceTargetContext.Constants.ResourceType | string;
+  }
+  export namespace ReservedIPTargetNetworkInterfaceReferenceTargetContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+    }
   }
 
   /** ReservedIPTargetVPNGatewayReference. */
@@ -39336,7 +42913,15 @@ namespace VpcV1 {
     /** The name for this VPN gateway. The name is unique across all VPN gateways in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ReservedIPTargetVPNGatewayReference.Constants.ResourceType | string;
+  }
+  export namespace ReservedIPTargetVPNGatewayReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY = 'vpn_gateway',
+      }
+    }
   }
 
   /** ReservedIPTargetVPNServerReference. */
@@ -39354,17 +42939,21 @@ namespace VpcV1 {
     /** The name for this VPN server. The name is unique across all VPN servers in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ReservedIPTargetVPNServerReference.Constants.ResourceType | string;
+  }
+  export namespace ReservedIPTargetVPNServerReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_SERVER = 'vpn_server',
+      }
+    }
   }
 
   /** ReservedIPTargetVirtualNetworkInterfaceReferenceReservedIPTargetContext. */
   export interface ReservedIPTargetVirtualNetworkInterfaceReferenceReservedIPTargetContext extends ReservedIPTarget {
     /** The CRN for this virtual network interface. */
     crn: string;
-    /** If present, this property indicates the referenced resource has been deleted, and provides
-     *  some supplementary information.
-     */
-    deleted?: VirtualNetworkInterfaceReferenceReservedIPTargetContextDeleted;
     /** The URL for this virtual network interface. */
     href: string;
     /** The unique identifier for this virtual network interface. */
@@ -39374,7 +42963,15 @@ namespace VpcV1 {
      */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: ReservedIPTargetVirtualNetworkInterfaceReferenceReservedIPTargetContext.Constants.ResourceType | string;
+  }
+  export namespace ReservedIPTargetVirtualNetworkInterfaceReferenceReservedIPTargetContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VIRTUAL_NETWORK_INTERFACE = 'virtual_network_interface',
+      }
+    }
   }
 
   /** ResourceGroupIdentityById. */
@@ -39398,7 +42995,15 @@ namespace VpcV1 {
     /** The name for this VPN gateway. The name is unique across all VPN gateways in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: RouteCreatorVPNGatewayReference.Constants.ResourceType | string;
+  }
+  export namespace RouteCreatorVPNGatewayReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY = 'vpn_gateway',
+      }
+    }
   }
 
   /** RouteCreatorVPNServerReference. */
@@ -39416,7 +43021,15 @@ namespace VpcV1 {
     /** The name for this VPN server. The name is unique across all VPN servers in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: RouteCreatorVPNServerReference.Constants.ResourceType | string;
+  }
+  export namespace RouteCreatorVPNServerReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_SERVER = 'vpn_server',
+      }
+    }
   }
 
   /** RouteNextHopIP. */
@@ -39451,7 +43064,15 @@ namespace VpcV1 {
     /** The name for this VPN gateway connection. The name is unique across all connections for the VPN gateway. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: RouteNextHopVPNGatewayConnectionReference.Constants.ResourceType | string;
+  }
+  export namespace RouteNextHopVPNGatewayConnectionReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY_CONNECTION = 'vpn_gateway_connection',
+      }
+    }
   }
 
   /** RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP. */
@@ -39495,14 +43116,14 @@ namespace VpcV1 {
   /** A rule allowing traffic for all supported protocols. */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll extends SecurityGroupRulePrototype {
     /** The direction of traffic to enforce. */
-    direction: string;
+    direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.Direction | string;
     /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
      *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
      *  addresses (network interfaces) in that group matching this IP version.
      */
-    ip_version?: string;
+    ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.IpVersion | string;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
      *  security group within the VPC.
@@ -39511,6 +43132,23 @@ namespace VpcV1 {
      *  (or to any destination, for outbound rules).
      */
     remote?: SecurityGroupRuleRemotePrototype;
+  }
+  export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll {
+    export namespace Constants {
+      /** The direction of traffic to enforce. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+      }
+    }
   }
 
   /** A rule specifying the ICMP traffic to allow. */
@@ -39521,14 +43159,14 @@ namespace VpcV1 {
      */
     code?: number;
     /** The direction of traffic to enforce. */
-    direction: string;
+    direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.Direction | string;
     /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
      *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
      *  addresses (network interfaces) in that group matching this IP version.
      */
-    ip_version?: string;
+    ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.IpVersion | string;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
      *  security group within the VPC.
@@ -39543,16 +43181,33 @@ namespace VpcV1 {
      */
     type?: number;
   }
+  export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP {
+    export namespace Constants {
+      /** The direction of traffic to enforce. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ICMP = 'icmp',
+      }
+    }
+  }
 
   /** A rule specifying the TCP or UDP traffic to allow. Either both `port_min` and `port_max` will be present, or neither. When neither is present, all destination ports are allowed for the protocol. When both have the same value, that single destination port is allowed. */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP extends SecurityGroupRulePrototype {
     /** The direction of traffic to enforce. */
-    direction: string;
+    direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.Direction | string;
     /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
      *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
      *  addresses (network interfaces) in that group matching this IP version.
      */
-    ip_version?: string;
+    ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.IpVersion | string;
     /** The inclusive upper bound of TCP/UDP destination port range.
      *
      *  If specified, `port_min` must also be specified, and must not be larger. If unspecified,
@@ -39566,7 +43221,7 @@ namespace VpcV1 {
      */
     port_min?: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
      *  security group within the VPC.
@@ -39575,6 +43230,24 @@ namespace VpcV1 {
      *  (or to any destination, for outbound rules).
      */
     remote?: SecurityGroupRuleRemotePrototype;
+  }
+  export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP {
+    export namespace Constants {
+      /** The direction of traffic to enforce. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
   }
 
   /** SecurityGroupRuleRemotePatchCIDR. */
@@ -39667,7 +43340,24 @@ namespace VpcV1 {
   /** A rule allowing traffic for all supported protocols. */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolAll extends SecurityGroupRule {
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: SecurityGroupRuleSecurityGroupRuleProtocolAll.Constants.Protocol | string;
+  }
+  export namespace SecurityGroupRuleSecurityGroupRuleProtocolAll {
+    export namespace Constants {
+      /** The direction of traffic to enforce. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ALL = 'all',
+      }
+    }
   }
 
   /** A rule specifying the ICMP traffic to allow. */
@@ -39675,9 +43365,26 @@ namespace VpcV1 {
     /** The ICMP traffic code to allow. If absent, all codes are allowed. */
     code?: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: SecurityGroupRuleSecurityGroupRuleProtocolICMP.Constants.Protocol | string;
     /** The ICMP traffic type to allow. If absent, all types are allowed. */
     type?: number;
+  }
+  export namespace SecurityGroupRuleSecurityGroupRuleProtocolICMP {
+    export namespace Constants {
+      /** The direction of traffic to enforce. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        ICMP = 'icmp',
+      }
+    }
   }
 
   /** A rule specifying the TCP or UDP traffic to allow. Either both `port_min` and `port_max` will be present, or neither. When neither is present, all destination ports are allowed for the protocol. When both have the same value, that single destination port is allowed. */
@@ -39687,7 +43394,25 @@ namespace VpcV1 {
     /** The inclusive lower bound of TCP/UDP destination port range. */
     port_min?: number;
     /** The protocol to enforce. */
-    protocol: string;
+    protocol: SecurityGroupRuleSecurityGroupRuleProtocolTCPUDP.Constants.Protocol | string;
+  }
+  export namespace SecurityGroupRuleSecurityGroupRuleProtocolTCPUDP {
+    export namespace Constants {
+      /** The direction of traffic to enforce. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The protocol to enforce. */
+      export enum Protocol {
+        TCP = 'tcp',
+        UDP = 'udp',
+      }
+    }
   }
 
   /** SecurityGroupTargetReferenceBareMetalServerNetworkInterfaceReferenceTargetContext. */
@@ -39703,7 +43428,15 @@ namespace VpcV1 {
     /** The name for this bare metal server network interface. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: SecurityGroupTargetReferenceBareMetalServerNetworkInterfaceReferenceTargetContext.Constants.ResourceType | string;
+  }
+  export namespace SecurityGroupTargetReferenceBareMetalServerNetworkInterfaceReferenceTargetContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+    }
   }
 
   /** SecurityGroupTargetReferenceEndpointGatewayReference. */
@@ -39721,7 +43454,15 @@ namespace VpcV1 {
     /** The name for this endpoint gateway. The name is unique across all endpoint gateways in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: SecurityGroupTargetReferenceEndpointGatewayReference.Constants.ResourceType | string;
+  }
+  export namespace SecurityGroupTargetReferenceEndpointGatewayReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        ENDPOINT_GATEWAY = 'endpoint_gateway',
+      }
+    }
   }
 
   /** SecurityGroupTargetReferenceLoadBalancerReference. */
@@ -39739,7 +43480,15 @@ namespace VpcV1 {
     /** The name for this load balancer. The name is unique across all load balancers in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: SecurityGroupTargetReferenceLoadBalancerReference.Constants.ResourceType | string;
+  }
+  export namespace SecurityGroupTargetReferenceLoadBalancerReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        LOAD_BALANCER = 'load_balancer',
+      }
+    }
   }
 
   /** SecurityGroupTargetReferenceNetworkInterfaceReferenceTargetContext. */
@@ -39755,7 +43504,15 @@ namespace VpcV1 {
     /** The name for this instance network interface. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: SecurityGroupTargetReferenceNetworkInterfaceReferenceTargetContext.Constants.ResourceType | string;
+  }
+  export namespace SecurityGroupTargetReferenceNetworkInterfaceReferenceTargetContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        NETWORK_INTERFACE = 'network_interface',
+      }
+    }
   }
 
   /** SecurityGroupTargetReferenceVPNServerReference. */
@@ -39773,7 +43530,15 @@ namespace VpcV1 {
     /** The name for this VPN server. The name is unique across all VPN servers in the VPC. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: SecurityGroupTargetReferenceVPNServerReference.Constants.ResourceType | string;
+  }
+  export namespace SecurityGroupTargetReferenceVPNServerReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_SERVER = 'vpn_server',
+      }
+    }
   }
 
   /** SecurityGroupTargetReferenceVirtualNetworkInterfaceReference. */
@@ -39795,9 +43560,17 @@ namespace VpcV1 {
     /** The primary IP for this virtual network interface. */
     primary_ip: ReservedIPReference;
     /** The resource type. */
-    resource_type: string;
+    resource_type: SecurityGroupTargetReferenceVirtualNetworkInterfaceReference.Constants.ResourceType | string;
     /** The associated subnet. */
     subnet: SubnetReference;
+  }
+  export namespace SecurityGroupTargetReferenceVirtualNetworkInterfaceReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VIRTUAL_NETWORK_INTERFACE = 'virtual_network_interface',
+      }
+    }
   }
 
   /** ShareIdentityByCRN. */
@@ -39818,15 +43591,33 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** The virtual network interface for this share mount target.  The virtual network interface's VPC must not be used by a virtual network interface for another mount target for this share. Required if the share's `access_control_mode` is `security_group`. */
+  /** The virtual network interface for this share mount target. The virtual network interface's VPC must not be used by a virtual network interface for another mount target for this share. Required if the share's `access_control_mode` is `security_group`. */
   export interface ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup extends ShareMountTargetPrototype {
     virtual_network_interface: ShareMountTargetVirtualNetworkInterfacePrototype;
+  }
+  export namespace ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup {
+    export namespace Constants {
+      /** The transit encryption mode to use for this share mount target: - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate.  The `access_control_mode` for the share must be `security_group`. */
+      export enum TransitEncryption {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
+    }
   }
 
   /** The VPC in which clients can mount the file share using this mount target.  The VPC must not be used by another mount target for this share. Required if the share's `access_control_mode` is `vpc`. */
   export interface ShareMountTargetPrototypeShareMountTargetByAccessControlModeVPC extends ShareMountTargetPrototype {
     /** Identifies a VPC by a unique property. */
     vpc: VPCIdentity;
+  }
+  export namespace ShareMountTargetPrototypeShareMountTargetByAccessControlModeVPC {
+    export namespace Constants {
+      /** The transit encryption mode to use for this share mount target: - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate.  The `access_control_mode` for the share must be `security_group`. */
+      export enum TransitEncryption {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
+    }
   }
 
   /** The virtual network interface for this target. */
@@ -39847,17 +43638,15 @@ namespace VpcV1 {
      *  an available address on the subnet will be automatically selected and reserved.
      */
     primary_ip?: VirtualNetworkInterfacePrimaryIPPrototype;
-    /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+    /** The resource group to use for this virtual network interface. If unspecified, the
+     *  share's resource group will be used.
      */
     resource_group?: ResourceGroupIdentity;
     /** The security groups to use for this virtual network interface. If unspecified, the default security group of
      *  the VPC for the subnet is used.
      */
     security_groups?: SecurityGroupIdentity[];
-    /** The associated subnet. Required if `primary_ip` does not specify a reserved IP and
-     *  `primary_ip.address` is not specified.
-     */
+    /** The associated subnet. Required if `primary_ip` does not specify a reserved IP identity. */
     subnet?: SubnetIdentity;
   }
 
@@ -39870,7 +43659,16 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: ShareProfileCapacityDependentRange.Constants.Type | string;
+  }
+  export namespace ShareProfileCapacityDependentRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+        DEPENDENT_RANGE = 'dependent_range',
+      }
+    }
   }
 
   /** The permitted total capacities (in gigabytes) of a share with this profile. */
@@ -39878,17 +43676,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: ShareProfileCapacityEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace ShareProfileCapacityEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The permitted total capacity (in gigabytes) of a share with this profile is fixed. */
   export interface ShareProfileCapacityFixed extends ShareProfileCapacity {
     /** The type for this profile field. */
-    type: string;
+    type: ShareProfileCapacityFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace ShareProfileCapacityFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted total capacity range (in gigabytes) of a share with this profile. */
@@ -39902,7 +43716,15 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: ShareProfileCapacityRange.Constants.Type | string;
+  }
+  export namespace ShareProfileCapacityRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** The permitted IOPS range of a share with this profile depends on its configuration. */
@@ -39914,7 +43736,16 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: ShareProfileIOPSDependentRange.Constants.Type | string;
+  }
+  export namespace ShareProfileIOPSDependentRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+        DEPENDENT_RANGE = 'dependent_range',
+      }
+    }
   }
 
   /** The permitted IOPS values of a share with this profile. */
@@ -39922,17 +43753,33 @@ namespace VpcV1 {
     /** The default value for this profile field. */
     default: number;
     /** The type for this profile field. */
-    type: string;
+    type: ShareProfileIOPSEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
     values: number[];
+  }
+  export namespace ShareProfileIOPSEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
   }
 
   /** The permitted IOPS of a share with this profile is fixed. */
   export interface ShareProfileIOPSFixed extends ShareProfileIOPS {
     /** The type for this profile field. */
-    type: string;
+    type: ShareProfileIOPSFixed.Constants.Type | string;
     /** The value for this profile field. */
     value: number;
+  }
+  export namespace ShareProfileIOPSFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
   }
 
   /** The permitted IOPS range of a share with this profile. */
@@ -39946,7 +43793,15 @@ namespace VpcV1 {
     /** The increment step value for this profile field. */
     step: number;
     /** The type for this profile field. */
-    type: string;
+    type: ShareProfileIOPSRange.Constants.Type | string;
+  }
+  export namespace ShareProfileIOPSRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /** ShareProfileIdentityByHref. */
@@ -39971,7 +43826,7 @@ namespace VpcV1 {
      *  - `vpc`: All clients in the VPC for a mount target have access to the mount target.
      *    Mount targets for this share require a VPC.
      */
-    access_control_mode?: string;
+    access_control_mode?: SharePrototypeShareBySize.Constants.AccessControlMode | string;
     /** The root key to use to wrap the data encryption key for the share.
      *
      *  If unspecified, the `encryption` type for the share will be `provider_managed`.
@@ -39984,7 +43839,7 @@ namespace VpcV1 {
      */
     initial_owner?: ShareInitialOwner;
     /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) is used.
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
     /** The size of the file share rounded up to the next gigabyte.
@@ -39992,6 +43847,15 @@ namespace VpcV1 {
      *  The maximum size for a share may increase in the future.
      */
     size: number;
+  }
+  export namespace SharePrototypeShareBySize {
+    export namespace Constants {
+      /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. Mount targets for this share require a virtual network interface. - `vpc`: All clients in the VPC for a mount target have access to the mount target. Mount targets for this share require a VPC. */
+      export enum AccessControlMode {
+        SECURITY_GROUP = 'security_group',
+        VPC = 'vpc',
+      }
+    }
   }
 
   /** Create a replica file share for an existing file share. The values for `access_control_mode`, `encryption_key`, `initial_owner`, and `size` will be inherited from `source_share`. */
@@ -40082,6 +43946,14 @@ namespace VpcV1 {
     /** The zone this subnet will reside in. */
     zone?: ZoneIdentity;
   }
+  export namespace SubnetPrototypeSubnetByCIDR {
+    export namespace Constants {
+      /** The IP version(s) to support for this subnet. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+    }
+  }
 
   /** SubnetPrototypeSubnetByTotalCount. */
   export interface SubnetPrototypeSubnetByTotalCount extends SubnetPrototype {
@@ -40092,6 +43964,14 @@ namespace VpcV1 {
     total_ipv4_address_count: number;
     /** The zone this subnet will reside in. */
     zone: ZoneIdentity;
+  }
+  export namespace SubnetPrototypeSubnetByTotalCount {
+    export namespace Constants {
+      /** The IP version(s) to support for this subnet. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+    }
   }
 
   /** SubnetPublicGatewayPatchPublicGatewayIdentityByCRN. */
@@ -40121,6 +44001,132 @@ namespace VpcV1 {
   /** TrustedProfileIdentityTrustedProfileById. */
   export interface TrustedProfileIdentityTrustedProfileById extends TrustedProfileIdentity {
     /** The unique identifier for this trusted profile. */
+    id: string;
+  }
+
+  /** Manually specify the DNS server addresses for this VPC. */
+  export interface VPCDNSResolverPrototypeVPCDNSResolverTypeManualPrototype extends VPCDNSResolverPrototype {
+    /** The DNS servers to use for this VPC. All the DNS servers must either:
+     *
+     *  - have a unique `zone_affinity`, or
+     *  - not have a `zone_affinity`.
+     */
+    manual_servers: DNSServerPrototype[];
+    /** The type of the DNS resolver to use. */
+    type: VPCDNSResolverPrototypeVPCDNSResolverTypeManualPrototype.Constants.Type | string;
+  }
+  export namespace VPCDNSResolverPrototypeVPCDNSResolverTypeManualPrototype {
+    export namespace Constants {
+      /** The type of the DNS resolver to use. */
+      export enum Type {
+        MANUAL = 'manual',
+      }
+    }
+  }
+
+  /** The system will provide DNS server addresses for this VPC. The system-provided DNS server addresses depend on whether any endpoint gateways reside in the VPC, and whether a [DNS Services](https://cloud.ibm.com/docs/dns-svcs) instance is configured for the VPC. */
+  export interface VPCDNSResolverPrototypeVPCDNSResolverTypeSystemPrototype extends VPCDNSResolverPrototype {
+    /** The type of the DNS resolver to use. */
+    type?: VPCDNSResolverPrototypeVPCDNSResolverTypeSystemPrototype.Constants.Type | string;
+  }
+  export namespace VPCDNSResolverPrototypeVPCDNSResolverTypeSystemPrototype {
+    export namespace Constants {
+      /** The type of the DNS resolver to use. */
+      export enum Type {
+        SYSTEM = 'system',
+      }
+    }
+  }
+
+  /** The DNS server addresses are delegated to the DNS resolver of another VPC. */
+  export interface VPCDNSResolverTypeDelegated extends VPCDNSResolver {
+    /** The type of the DNS resolver used for the VPC. */
+    type: VPCDNSResolverTypeDelegated.Constants.Type | string;
+    /** The VPC whose DNS resolver provides the DNS server addresses for this VPC.
+     *
+     *  The VPC may be remote and therefore may not be directly retrievable.
+     */
+    vpc: VPCReferenceDNSResolverContext;
+  }
+  export namespace VPCDNSResolverTypeDelegated {
+    export namespace Constants {
+      /** The type of the DNS resolver used for the VPC. */
+      export enum Type {
+        DELEGATED = 'delegated',
+      }
+    }
+  }
+
+  /** The DNS server addresses are manually specified. */
+  export interface VPCDNSResolverTypeManual extends VPCDNSResolver {
+    /** The manually specified DNS servers for this VPC. */
+    manual_servers: DNSServer[];
+    /** The type of the DNS resolver used for the VPC. */
+    type: VPCDNSResolverTypeManual.Constants.Type | string;
+  }
+  export namespace VPCDNSResolverTypeManual {
+    export namespace Constants {
+      /** The type of the DNS resolver used for the VPC. */
+      export enum Type {
+        MANUAL = 'manual',
+      }
+    }
+  }
+
+  /** The DNS server addresses are provided by the system and depend on the configuration. */
+  export interface VPCDNSResolverTypeSystem extends VPCDNSResolver {
+    /** The configuration of the system DNS resolver for this VPC.
+     *
+     *  - `custom_resolver`: A custom DNS resolver is configured for this VPC.
+     *
+     *  - `private_resolver`: A private DNS resolver is configured for this VPC. Applicable when
+     *    the VPC has either or both of the following:
+     *
+     *      - at least one endpoint gateway residing in it
+     *      - a [DNS Services](https://cloud.ibm.com/docs/dns-svcs) private zone configured for it
+     *
+     *  - `default`: The provider default DNS resolvers are configured for this VPC.
+     *
+     *    This system DNS resolver configuration is used when the VPC has:
+     *
+     *    - no custom DNS resolver configured for it, and
+     *    - no endpoint gateways residing in it, and
+     *    - no [DNS Services](https://cloud.ibm.com/docs/dns-svcs) private zone configured for it.
+     */
+    configuration: VPCDNSResolverTypeSystem.Constants.Configuration | string;
+    /** The type of the DNS resolver used for the VPC. */
+    type: VPCDNSResolverTypeSystem.Constants.Type | string;
+  }
+  export namespace VPCDNSResolverTypeSystem {
+    export namespace Constants {
+      /** The configuration of the system DNS resolver for this VPC. - `custom_resolver`: A custom DNS resolver is configured for this VPC. - `private_resolver`: A private DNS resolver is configured for this VPC. Applicable when the VPC has either or both of the following: - at least one endpoint gateway residing in it - a [DNS Services](https://cloud.ibm.com/docs/dns-svcs) private zone configured for it - `default`: The provider default DNS resolvers are configured for this VPC. This system DNS resolver configuration is used when the VPC has: - no custom DNS resolver configured for it, and - no endpoint gateways residing in it, and - no [DNS Services](https://cloud.ibm.com/docs/dns-svcs) private zone configured for it. */
+      export enum Configuration {
+        CUSTOM_RESOLVER = 'custom_resolver',
+        DEFAULT = 'default',
+        PRIVATE_RESOLVER = 'private_resolver',
+      }
+      /** The type of the DNS resolver used for the VPC. */
+      export enum Type {
+        SYSTEM = 'system',
+      }
+    }
+  }
+
+  /** VPCDNSResolverVPCPatchVPCIdentityByCRN. */
+  export interface VPCDNSResolverVPCPatchVPCIdentityByCRN extends VPCDNSResolverVPCPatch {
+    /** The CRN for this VPC. */
+    crn: string;
+  }
+
+  /** VPCDNSResolverVPCPatchVPCIdentityByHref. */
+  export interface VPCDNSResolverVPCPatchVPCIdentityByHref extends VPCDNSResolverVPCPatch {
+    /** The URL for this VPC. */
+    href: string;
+  }
+
+  /** VPCDNSResolverVPCPatchVPCIdentityById. */
+  export interface VPCDNSResolverVPCPatchVPCIdentityById extends VPCDNSResolverVPCPatch {
+    /** The unique identifier for this VPC. */
     id: string;
   }
 
@@ -40193,7 +44199,15 @@ namespace VpcV1 {
   /** VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch. */
   export interface VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch extends VPNGatewayConnectionPatch {
     /** Routing protocols are disabled for this VPN gateway connection. */
-    routing_protocol?: string;
+    routing_protocol?: VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch.Constants.RoutingProtocol | string;
+  }
+  export namespace VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch {
+    export namespace Constants {
+      /** Routing protocols are disabled for this VPN gateway connection. */
+      export enum RoutingProtocol {
+        NONE = 'none',
+      }
+    }
   }
 
   /** VPNGatewayConnectionPolicyMode. */
@@ -40202,6 +44216,28 @@ namespace VpcV1 {
     local_cidrs: string[];
     /** The peer CIDRs for this resource. */
     peer_cidrs: string[];
+  }
+  export namespace VPNGatewayConnectionPolicyMode {
+    export namespace Constants {
+      /** The authentication mode. Only `psk` is currently supported. */
+      export enum AuthenticationMode {
+        PSK = 'psk',
+      }
+      /** The mode of the VPN gateway. */
+      export enum Mode {
+        POLICY = 'policy',
+        ROUTE = 'route',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY_CONNECTION = 'vpn_gateway_connection',
+      }
+      /** The status of a VPN gateway connection. */
+      export enum Status {
+        DOWN = 'down',
+        UP = 'up',
+      }
+    }
   }
 
   /** VPNGatewayConnectionPrototypeVPNGatewayConnectionPolicyModePrototype. */
@@ -40215,39 +44251,147 @@ namespace VpcV1 {
   /** VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype. */
   export interface VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype extends VPNGatewayConnectionPrototype {
     /** Routing protocols are disabled for this VPN gateway connection. */
-    routing_protocol?: string;
+    routing_protocol?: VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype.Constants.RoutingProtocol | string;
+  }
+  export namespace VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype {
+    export namespace Constants {
+      /** Routing protocols are disabled for this VPN gateway connection. */
+      export enum RoutingProtocol {
+        NONE = 'none',
+      }
+    }
   }
 
   /** VPNGatewayConnectionStaticRouteMode. */
   export interface VPNGatewayConnectionStaticRouteMode extends VPNGatewayConnection {
     /** Routing protocols are disabled for this VPN gateway connection. */
-    routing_protocol: string;
+    routing_protocol: VPNGatewayConnectionStaticRouteMode.Constants.RoutingProtocol | string;
     /** The VPN tunnel configuration for this VPN gateway connection (in static route mode). */
     tunnels: VPNGatewayConnectionStaticRouteModeTunnel[];
+  }
+  export namespace VPNGatewayConnectionStaticRouteMode {
+    export namespace Constants {
+      /** The authentication mode. Only `psk` is currently supported. */
+      export enum AuthenticationMode {
+        PSK = 'psk',
+      }
+      /** The mode of the VPN gateway. */
+      export enum Mode {
+        POLICY = 'policy',
+        ROUTE = 'route',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY_CONNECTION = 'vpn_gateway_connection',
+      }
+      /** The status of a VPN gateway connection. */
+      export enum Status {
+        DOWN = 'down',
+        UP = 'up',
+      }
+      /** Routing protocols are disabled for this VPN gateway connection. */
+      export enum RoutingProtocol {
+        NONE = 'none',
+      }
+    }
   }
 
   /** VPNGatewayPolicyMode. */
   export interface VPNGatewayPolicyMode extends VPNGateway {
     /** Policy mode VPN gateway. */
-    mode: string;
+    mode: VPNGatewayPolicyMode.Constants.Mode | string;
+  }
+  export namespace VPNGatewayPolicyMode {
+    export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the VPN gateway. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY = 'vpn_gateway',
+      }
+      /** Policy mode VPN gateway. */
+      export enum Mode {
+        POLICY = 'policy',
+      }
+    }
   }
 
   /** VPNGatewayPrototypeVPNGatewayPolicyModePrototype. */
   export interface VPNGatewayPrototypeVPNGatewayPolicyModePrototype extends VPNGatewayPrototype {
     /** Policy mode VPN gateway. */
-    mode?: string;
+    mode?: VPNGatewayPrototypeVPNGatewayPolicyModePrototype.Constants.Mode | string;
+  }
+  export namespace VPNGatewayPrototypeVPNGatewayPolicyModePrototype {
+    export namespace Constants {
+      /** Policy mode VPN gateway. */
+      export enum Mode {
+        POLICY = 'policy',
+      }
+    }
   }
 
   /** VPNGatewayPrototypeVPNGatewayRouteModePrototype. */
   export interface VPNGatewayPrototypeVPNGatewayRouteModePrototype extends VPNGatewayPrototype {
     /** Route mode VPN gateway. */
-    mode?: string;
+    mode?: VPNGatewayPrototypeVPNGatewayRouteModePrototype.Constants.Mode | string;
+  }
+  export namespace VPNGatewayPrototypeVPNGatewayRouteModePrototype {
+    export namespace Constants {
+      /** Route mode VPN gateway. */
+      export enum Mode {
+        ROUTE = 'route',
+      }
+    }
   }
 
   /** VPNGatewayRouteMode. */
   export interface VPNGatewayRouteMode extends VPNGateway {
     /** Route mode VPN gateway. */
-    mode: string;
+    mode: VPNGatewayRouteMode.Constants.Mode | string;
+  }
+  export namespace VPNGatewayRouteMode {
+    export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the VPN gateway. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY = 'vpn_gateway',
+      }
+      /** Route mode VPN gateway. */
+      export enum Mode {
+        ROUTE = 'route',
+      }
+    }
   }
 
   /** VPNServerAuthenticationByCertificate. */
@@ -40257,11 +44401,29 @@ namespace VpcV1 {
     /** The certificate revocation list contents, encoded in PEM format. */
     crl?: string;
   }
+  export namespace VPNServerAuthenticationByCertificate {
+    export namespace Constants {
+      /** The type of authentication. */
+      export enum Method {
+        CERTIFICATE = 'certificate',
+        USERNAME = 'username',
+      }
+    }
+  }
 
   /** VPNServerAuthenticationByUsername. */
   export interface VPNServerAuthenticationByUsername extends VPNServerAuthentication {
     /** The type of identity provider to be used by VPN client. */
     identity_provider: VPNServerAuthenticationByUsernameIdProvider;
+  }
+  export namespace VPNServerAuthenticationByUsername {
+    export namespace Constants {
+      /** The type of authentication. */
+      export enum Method {
+        CERTIFICATE = 'certificate',
+        USERNAME = 'username',
+      }
+    }
   }
 
   /** VPNServerAuthenticationByUsernameIdProviderByIAM. */
@@ -40273,7 +44435,15 @@ namespace VpcV1 {
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which
      *  the unexpected property value was encountered.
      */
-    provider_type: string;
+    provider_type: VPNServerAuthenticationByUsernameIdProviderByIAM.Constants.ProviderType | string;
+  }
+  export namespace VPNServerAuthenticationByUsernameIdProviderByIAM {
+    export namespace Constants {
+      /** The type of identity provider to be used by the VPN client. - `iam`: IBM identity and access management The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which the unexpected property value was encountered. */
+      export enum ProviderType {
+        IAM = 'iam',
+      }
+    }
   }
 
   /** VPNServerAuthenticationPrototypeVPNServerAuthenticationByCertificatePrototype. */
@@ -40283,11 +44453,29 @@ namespace VpcV1 {
     /** The certificate revocation list contents, encoded in PEM format. */
     crl?: string;
   }
+  export namespace VPNServerAuthenticationPrototypeVPNServerAuthenticationByCertificatePrototype {
+    export namespace Constants {
+      /** The type of authentication. */
+      export enum Method {
+        CERTIFICATE = 'certificate',
+        USERNAME = 'username',
+      }
+    }
+  }
 
   /** VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype. */
   export interface VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype extends VPNServerAuthenticationPrototype {
     /** The type of identity provider to be used by VPN client. */
     identity_provider: VPNServerAuthenticationByUsernameIdProvider;
+  }
+  export namespace VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype {
+    export namespace Constants {
+      /** The type of authentication. */
+      export enum Method {
+        CERTIFICATE = 'certificate',
+        USERNAME = 'username',
+      }
+    }
   }
 
   /** Identifies a reserved IP by a unique property. Required if `subnet` is not specified. The reserved IP must be currently unbound. */
@@ -40325,7 +44513,15 @@ namespace VpcV1 {
     /** The name for this share mount target. The name is unique across all mount targets for the file share. */
     name: string;
     /** The resource type. */
-    resource_type: string;
+    resource_type: VirtualNetworkInterfaceTargetShareMountTargetReference.Constants.ResourceType | string;
+  }
+  export namespace VirtualNetworkInterfaceTargetShareMountTargetReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE_MOUNT_TARGET = 'share_mount_target',
+      }
+    }
   }
 
   /** Identifies a volume by a unique property. */
@@ -40422,6 +44618,12 @@ namespace VpcV1 {
     name: string;
   }
 
+  /** BackupPolicyScopePrototypeEnterpriseIdentityEnterpriseIdentityByCRN. */
+  export interface BackupPolicyScopePrototypeEnterpriseIdentityEnterpriseIdentityByCRN extends BackupPolicyScopePrototypeEnterpriseIdentity {
+    /** The CRN for this enterprise. */
+    crn: string;
+  }
+
   /** EndpointGatewayReservedIPReservedIPIdentityByHref. */
   export interface EndpointGatewayReservedIPReservedIPIdentityByHref extends EndpointGatewayReservedIPReservedIPIdentity {
     /** The URL for this reserved IP. */
@@ -40439,6 +44641,15 @@ namespace VpcV1 {
     /** The CRN for this provider cloud service, or the CRN for the user's instance of a provider cloud service. */
     crn: string;
   }
+  export namespace EndpointGatewayTargetPrototypeProviderCloudServiceIdentityProviderCloudServiceIdentityByCRN {
+    export namespace Constants {
+      /** The type of target for this endpoint gateway. */
+      export enum ResourceType {
+        PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
+        PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
+      }
+    }
+  }
 
   /** The name of this provider infrastructure service. */
   export interface EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentityProviderInfrastructureServiceIdentityByName extends EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentity {
@@ -40446,6 +44657,27 @@ namespace VpcV1 {
      *  - `ibm-ntp-server`: An NTP (Network Time Protocol) server provided by IBM.
      */
     name: string;
+  }
+  export namespace EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentityProviderInfrastructureServiceIdentityByName {
+    export namespace Constants {
+      /** The type of target for this endpoint gateway. */
+      export enum ResourceType {
+        PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
+        PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
+      }
+    }
+  }
+
+  /** FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref. */
+  export interface FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref extends FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentity {
+    /** The URL for this bare metal server network interface. */
+    href: string;
+  }
+
+  /** FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById. */
+  export interface FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById extends FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentity {
+    /** The unique identifier for this bare metal server network interface. */
+    id: string;
   }
 
   /** FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
@@ -40457,6 +44689,18 @@ namespace VpcV1 {
   /** FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
   export interface FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FloatingIPTargetPatchNetworkInterfaceIdentity {
     /** The unique identifier for this instance network interface. */
+    id: string;
+  }
+
+  /** FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref. */
+  export interface FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref extends FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentity {
+    /** The URL for this bare metal server network interface. */
+    href: string;
+  }
+
+  /** FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById. */
+  export interface FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById extends FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentity {
+    /** The unique identifier for this bare metal server network interface. */
     id: string;
   }
 
@@ -40556,10 +44800,50 @@ namespace VpcV1 {
   export interface InstanceGroupManagerActionScheduledActionGroupTarget extends InstanceGroupManagerActionScheduledAction {
     group: InstanceGroupManagerScheduledActionGroup;
   }
+  export namespace InstanceGroupManagerActionScheduledActionGroupTarget {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_GROUP_MANAGER_ACTION = 'instance_group_manager_action',
+      }
+      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled. */
+      export enum Status {
+        ACTIVE = 'active',
+        COMPLETED = 'completed',
+        FAILED = 'failed',
+        INCOMPATIBLE = 'incompatible',
+        OMITTED = 'omitted',
+      }
+      /** The type of action for the instance group. */
+      export enum ActionType {
+        SCHEDULED = 'scheduled',
+      }
+    }
+  }
 
   /** InstanceGroupManagerActionScheduledActionManagerTarget. */
   export interface InstanceGroupManagerActionScheduledActionManagerTarget extends InstanceGroupManagerActionScheduledAction {
     manager: InstanceGroupManagerScheduledActionManager;
+  }
+  export namespace InstanceGroupManagerActionScheduledActionManagerTarget {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_GROUP_MANAGER_ACTION = 'instance_group_manager_action',
+      }
+      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled. */
+      export enum Status {
+        ACTIVE = 'active',
+        COMPLETED = 'completed',
+        FAILED = 'failed',
+        INCOMPATIBLE = 'incompatible',
+        OMITTED = 'omitted',
+      }
+      /** The type of action for the instance group. */
+      export enum ActionType {
+        SCHEDULED = 'scheduled',
+      }
+    }
   }
 
   /** InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeByHref. */
@@ -40961,6 +45245,7 @@ namespace VpcV1 {
    */
   export class VpcsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -40975,10 +45260,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VpcsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListVpcsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListVpcsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41012,7 +45294,7 @@ namespace VpcV1 {
       const response = await this.client.listVpcs(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41044,6 +45326,7 @@ namespace VpcV1 {
    */
   export class VpcAddressPrefixesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41058,10 +45341,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VpcAddressPrefixesPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListVpcAddressPrefixesParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListVpcAddressPrefixesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41095,7 +45375,7 @@ namespace VpcV1 {
       const response = await this.client.listVpcAddressPrefixes(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41123,10 +45403,92 @@ namespace VpcV1 {
   }
 
   /**
+   * VpcDnsResolutionBindingsPager can be used to simplify the use of listVpcDnsResolutionBindings().
+   */
+  export class VpcDnsResolutionBindingsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListVpcDnsResolutionBindingsParams;
+
+    /**
+     * Construct a VpcDnsResolutionBindingsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listVpcDnsResolutionBindings()
+     * @param {Object} params - The parameters to be passed to listVpcDnsResolutionBindings()
+     * @constructor
+     * @returns {VpcDnsResolutionBindingsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListVpcDnsResolutionBindingsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listVpcDnsResolutionBindings().
+     * @returns {Promise<VpcV1.VPCDNSResolutionBinding[]>}
+     */
+    public async getNext(): Promise<VpcV1.VPCDNSResolutionBinding[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listVpcDnsResolutionBindings(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.dns_resolution_bindings;
+    }
+
+    /**
+     * Returns all results by invoking listVpcDnsResolutionBindings() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.VPCDNSResolutionBinding[]>}
+     */
+    public async getAll(): Promise<VpcV1.VPCDNSResolutionBinding[]> {
+      const results: VPCDNSResolutionBinding[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
    * VpcRoutesPager can be used to simplify the use of listVpcRoutes().
    */
   export class VpcRoutesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41141,10 +45503,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VpcRoutesPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListVpcRoutesParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListVpcRoutesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41178,7 +45537,7 @@ namespace VpcV1 {
       const response = await this.client.listVpcRoutes(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41210,6 +45569,7 @@ namespace VpcV1 {
    */
   export class VpcRoutingTablesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41224,10 +45584,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VpcRoutingTablesPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListVpcRoutingTablesParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListVpcRoutingTablesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41261,7 +45618,7 @@ namespace VpcV1 {
       const response = await this.client.listVpcRoutingTables(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41293,6 +45650,7 @@ namespace VpcV1 {
    */
   export class VpcRoutingTableRoutesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41307,10 +45665,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VpcRoutingTableRoutesPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListVpcRoutingTableRoutesParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListVpcRoutingTableRoutesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41344,7 +45699,7 @@ namespace VpcV1 {
       const response = await this.client.listVpcRoutingTableRoutes(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41376,6 +45731,7 @@ namespace VpcV1 {
    */
   export class SubnetsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41390,10 +45746,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {SubnetsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListSubnetsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListSubnetsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41427,7 +45780,7 @@ namespace VpcV1 {
       const response = await this.client.listSubnets(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41459,6 +45812,7 @@ namespace VpcV1 {
    */
   export class SubnetReservedIpsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41473,10 +45827,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {SubnetReservedIpsPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListSubnetReservedIpsParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListSubnetReservedIpsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41510,7 +45861,7 @@ namespace VpcV1 {
       const response = await this.client.listSubnetReservedIps(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41542,6 +45893,7 @@ namespace VpcV1 {
    */
   export class ImagesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41556,10 +45908,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {ImagesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListImagesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListImagesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41593,7 +45942,7 @@ namespace VpcV1 {
       const response = await this.client.listImages(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41625,6 +45974,7 @@ namespace VpcV1 {
    */
   export class OperatingSystemsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41639,10 +45989,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {OperatingSystemsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListOperatingSystemsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListOperatingSystemsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41676,7 +46023,7 @@ namespace VpcV1 {
       const response = await this.client.listOperatingSystems(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41708,6 +46055,7 @@ namespace VpcV1 {
    */
   export class KeysPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41722,10 +46070,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {KeysPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListKeysParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListKeysParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41759,7 +46104,7 @@ namespace VpcV1 {
       const response = await this.client.listKeys(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41791,6 +46136,7 @@ namespace VpcV1 {
    */
   export class InstancesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41805,10 +46151,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {InstancesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListInstancesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListInstancesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41842,7 +46185,7 @@ namespace VpcV1 {
       const response = await this.client.listInstances(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41874,6 +46217,7 @@ namespace VpcV1 {
    */
   export class InstanceNetworkInterfaceIpsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41888,10 +46232,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {InstanceNetworkInterfaceIpsPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListInstanceNetworkInterfaceIpsParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListInstanceNetworkInterfaceIpsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -41925,7 +46266,7 @@ namespace VpcV1 {
       const response = await this.client.listInstanceNetworkInterfaceIps(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -41957,6 +46298,7 @@ namespace VpcV1 {
    */
   export class InstanceGroupsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -41971,10 +46313,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {InstanceGroupsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListInstanceGroupsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListInstanceGroupsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42008,7 +46347,7 @@ namespace VpcV1 {
       const response = await this.client.listInstanceGroups(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42040,6 +46379,7 @@ namespace VpcV1 {
    */
   export class InstanceGroupManagersPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42054,10 +46394,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {InstanceGroupManagersPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListInstanceGroupManagersParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListInstanceGroupManagersParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42091,7 +46428,7 @@ namespace VpcV1 {
       const response = await this.client.listInstanceGroupManagers(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42123,6 +46460,7 @@ namespace VpcV1 {
    */
   export class InstanceGroupManagerActionsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42137,10 +46475,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {InstanceGroupManagerActionsPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListInstanceGroupManagerActionsParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListInstanceGroupManagerActionsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42174,7 +46509,7 @@ namespace VpcV1 {
       const response = await this.client.listInstanceGroupManagerActions(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42206,6 +46541,7 @@ namespace VpcV1 {
    */
   export class InstanceGroupManagerPoliciesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42220,10 +46556,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {InstanceGroupManagerPoliciesPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListInstanceGroupManagerPoliciesParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListInstanceGroupManagerPoliciesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42257,7 +46590,7 @@ namespace VpcV1 {
       const response = await this.client.listInstanceGroupManagerPolicies(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42289,6 +46622,7 @@ namespace VpcV1 {
    */
   export class InstanceGroupMembershipsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42303,10 +46637,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {InstanceGroupMembershipsPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListInstanceGroupMembershipsParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListInstanceGroupMembershipsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42340,7 +46671,7 @@ namespace VpcV1 {
       const response = await this.client.listInstanceGroupMemberships(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42372,6 +46703,7 @@ namespace VpcV1 {
    */
   export class DedicatedHostGroupsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42386,10 +46718,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {DedicatedHostGroupsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListDedicatedHostGroupsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListDedicatedHostGroupsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42423,7 +46752,7 @@ namespace VpcV1 {
       const response = await this.client.listDedicatedHostGroups(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42455,6 +46784,7 @@ namespace VpcV1 {
    */
   export class DedicatedHostProfilesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42469,10 +46799,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {DedicatedHostProfilesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListDedicatedHostProfilesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListDedicatedHostProfilesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42506,7 +46833,7 @@ namespace VpcV1 {
       const response = await this.client.listDedicatedHostProfiles(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42538,6 +46865,7 @@ namespace VpcV1 {
    */
   export class DedicatedHostsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42552,10 +46880,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {DedicatedHostsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListDedicatedHostsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListDedicatedHostsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42589,7 +46914,7 @@ namespace VpcV1 {
       const response = await this.client.listDedicatedHosts(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42621,6 +46946,7 @@ namespace VpcV1 {
    */
   export class BackupPoliciesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42635,10 +46961,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {BackupPoliciesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListBackupPoliciesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListBackupPoliciesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42672,7 +46995,7 @@ namespace VpcV1 {
       const response = await this.client.listBackupPolicies(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42704,6 +47027,7 @@ namespace VpcV1 {
    */
   export class BackupPolicyJobsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42718,10 +47042,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {BackupPolicyJobsPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListBackupPolicyJobsParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListBackupPolicyJobsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42755,7 +47076,7 @@ namespace VpcV1 {
       const response = await this.client.listBackupPolicyJobs(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42787,6 +47108,7 @@ namespace VpcV1 {
    */
   export class PlacementGroupsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42801,10 +47123,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {PlacementGroupsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListPlacementGroupsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListPlacementGroupsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42838,7 +47157,7 @@ namespace VpcV1 {
       const response = await this.client.listPlacementGroups(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42870,6 +47189,7 @@ namespace VpcV1 {
    */
   export class BareMetalServerProfilesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42884,10 +47204,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {BareMetalServerProfilesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListBareMetalServerProfilesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListBareMetalServerProfilesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -42921,7 +47238,7 @@ namespace VpcV1 {
       const response = await this.client.listBareMetalServerProfiles(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -42953,6 +47270,7 @@ namespace VpcV1 {
    */
   export class BareMetalServersPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -42967,10 +47285,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {BareMetalServersPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListBareMetalServersParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListBareMetalServersParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43004,7 +47319,7 @@ namespace VpcV1 {
       const response = await this.client.listBareMetalServers(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43036,6 +47351,7 @@ namespace VpcV1 {
    */
   export class BareMetalServerNetworkInterfacesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43050,10 +47366,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {BareMetalServerNetworkInterfacesPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListBareMetalServerNetworkInterfacesParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListBareMetalServerNetworkInterfacesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43087,7 +47400,7 @@ namespace VpcV1 {
       const response = await this.client.listBareMetalServerNetworkInterfaces(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43119,6 +47432,7 @@ namespace VpcV1 {
    */
   export class VolumeProfilesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43133,10 +47447,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VolumeProfilesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListVolumeProfilesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListVolumeProfilesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43170,7 +47481,7 @@ namespace VpcV1 {
       const response = await this.client.listVolumeProfiles(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43202,6 +47513,7 @@ namespace VpcV1 {
    */
   export class VolumesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43216,10 +47528,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VolumesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListVolumesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListVolumesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43253,7 +47562,7 @@ namespace VpcV1 {
       const response = await this.client.listVolumes(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43285,6 +47594,7 @@ namespace VpcV1 {
    */
   export class SnapshotsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43299,10 +47609,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {SnapshotsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListSnapshotsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListSnapshotsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43336,7 +47643,7 @@ namespace VpcV1 {
       const response = await this.client.listSnapshots(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43368,6 +47675,7 @@ namespace VpcV1 {
    */
   export class ShareProfilesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43382,10 +47690,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {ShareProfilesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListShareProfilesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListShareProfilesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43419,7 +47724,7 @@ namespace VpcV1 {
       const response = await this.client.listShareProfiles(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43451,6 +47756,7 @@ namespace VpcV1 {
    */
   export class SharesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43465,10 +47771,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {SharesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListSharesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListSharesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43502,7 +47805,7 @@ namespace VpcV1 {
       const response = await this.client.listShares(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43534,6 +47837,7 @@ namespace VpcV1 {
    */
   export class ShareMountTargetsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43548,10 +47852,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {ShareMountTargetsPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListShareMountTargetsParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListShareMountTargetsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43585,7 +47886,7 @@ namespace VpcV1 {
       const response = await this.client.listShareMountTargets(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43617,6 +47918,7 @@ namespace VpcV1 {
    */
   export class VirtualNetworkInterfacesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43631,10 +47933,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VirtualNetworkInterfacesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListVirtualNetworkInterfacesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListVirtualNetworkInterfacesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43668,7 +47967,7 @@ namespace VpcV1 {
       const response = await this.client.listVirtualNetworkInterfaces(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43700,6 +47999,7 @@ namespace VpcV1 {
    */
   export class PublicGatewaysPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43714,10 +48014,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {PublicGatewaysPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListPublicGatewaysParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListPublicGatewaysParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43751,7 +48048,7 @@ namespace VpcV1 {
       const response = await this.client.listPublicGateways(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43783,6 +48080,7 @@ namespace VpcV1 {
    */
   export class FloatingIpsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43797,10 +48095,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {FloatingIpsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListFloatingIpsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListFloatingIpsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43834,7 +48129,7 @@ namespace VpcV1 {
       const response = await this.client.listFloatingIps(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43866,6 +48161,7 @@ namespace VpcV1 {
    */
   export class NetworkAclsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43880,10 +48176,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {NetworkAclsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListNetworkAclsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListNetworkAclsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -43917,7 +48210,7 @@ namespace VpcV1 {
       const response = await this.client.listNetworkAcls(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -43949,6 +48242,7 @@ namespace VpcV1 {
    */
   export class NetworkAclRulesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -43963,10 +48257,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {NetworkAclRulesPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListNetworkAclRulesParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListNetworkAclRulesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44000,7 +48291,7 @@ namespace VpcV1 {
       const response = await this.client.listNetworkAclRules(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44032,6 +48323,7 @@ namespace VpcV1 {
    */
   export class SecurityGroupsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44046,10 +48338,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {SecurityGroupsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListSecurityGroupsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListSecurityGroupsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44083,7 +48372,7 @@ namespace VpcV1 {
       const response = await this.client.listSecurityGroups(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44115,6 +48404,7 @@ namespace VpcV1 {
    */
   export class SecurityGroupTargetsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44129,10 +48419,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {SecurityGroupTargetsPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListSecurityGroupTargetsParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListSecurityGroupTargetsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44166,7 +48453,7 @@ namespace VpcV1 {
       const response = await this.client.listSecurityGroupTargets(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44198,6 +48485,7 @@ namespace VpcV1 {
    */
   export class IkePoliciesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44212,10 +48500,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {IkePoliciesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListIkePoliciesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListIkePoliciesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44249,7 +48534,7 @@ namespace VpcV1 {
       const response = await this.client.listIkePolicies(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44281,6 +48566,7 @@ namespace VpcV1 {
    */
   export class IpsecPoliciesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44295,10 +48581,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {IpsecPoliciesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListIpsecPoliciesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListIpsecPoliciesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44332,7 +48615,7 @@ namespace VpcV1 {
       const response = await this.client.listIpsecPolicies(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44364,6 +48647,7 @@ namespace VpcV1 {
    */
   export class VpnGatewaysPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44378,10 +48662,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VpnGatewaysPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListVpnGatewaysParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListVpnGatewaysParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44415,7 +48696,7 @@ namespace VpcV1 {
       const response = await this.client.listVpnGateways(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44447,6 +48728,7 @@ namespace VpcV1 {
    */
   export class VpnServersPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44461,10 +48743,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VpnServersPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListVpnServersParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListVpnServersParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44498,7 +48777,7 @@ namespace VpcV1 {
       const response = await this.client.listVpnServers(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44530,6 +48809,7 @@ namespace VpcV1 {
    */
   export class VpnServerClientsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44544,10 +48824,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VpnServerClientsPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListVpnServerClientsParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListVpnServerClientsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44581,7 +48858,7 @@ namespace VpcV1 {
       const response = await this.client.listVpnServerClients(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44613,6 +48890,7 @@ namespace VpcV1 {
    */
   export class VpnServerRoutesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44627,10 +48905,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {VpnServerRoutesPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListVpnServerRoutesParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListVpnServerRoutesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44664,7 +48939,7 @@ namespace VpcV1 {
       const response = await this.client.listVpnServerRoutes(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44696,6 +48971,7 @@ namespace VpcV1 {
    */
   export class LoadBalancerProfilesPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44710,10 +48986,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {LoadBalancerProfilesPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListLoadBalancerProfilesParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListLoadBalancerProfilesParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44747,7 +49020,7 @@ namespace VpcV1 {
       const response = await this.client.listLoadBalancerProfiles(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44779,6 +49052,7 @@ namespace VpcV1 {
    */
   export class LoadBalancersPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44793,10 +49067,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {LoadBalancersPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListLoadBalancersParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListLoadBalancersParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44830,7 +49101,7 @@ namespace VpcV1 {
       const response = await this.client.listLoadBalancers(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44862,6 +49133,7 @@ namespace VpcV1 {
    */
   export class EndpointGatewaysPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44876,10 +49148,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {EndpointGatewaysPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListEndpointGatewaysParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListEndpointGatewaysParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44913,7 +49182,7 @@ namespace VpcV1 {
       const response = await this.client.listEndpointGateways(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -44945,6 +49214,7 @@ namespace VpcV1 {
    */
   export class EndpointGatewayIpsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -44959,10 +49229,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {EndpointGatewayIpsPager}
      */
-    constructor(
-      client: VpcV1,
-      params: VpcV1.ListEndpointGatewayIpsParams
-    ) {
+    constructor(client: VpcV1, params: VpcV1.ListEndpointGatewayIpsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -44996,7 +49263,7 @@ namespace VpcV1 {
       const response = await this.client.listEndpointGatewayIps(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
@@ -45028,6 +49295,7 @@ namespace VpcV1 {
    */
   export class FlowLogCollectorsPager {
     protected _hasNext: boolean;
+
     protected pageContext: any;
 
     protected client: VpcV1;
@@ -45042,10 +49310,7 @@ namespace VpcV1 {
      * @constructor
      * @returns {FlowLogCollectorsPager}
      */
-    constructor(
-      client: VpcV1,
-      params?: VpcV1.ListFlowLogCollectorsParams
-    ) {
+    constructor(client: VpcV1, params?: VpcV1.ListFlowLogCollectorsParams) {
       if (params && params.start) {
         throw new Error(`the params.start field should not be set`);
       }
@@ -45079,7 +49344,7 @@ namespace VpcV1 {
       const response = await this.client.listFlowLogCollectors(this.params);
       const { result } = response;
 
-      let next = null;
+      let next;
       if (result && result.next) {
         if (result.next.href) {
           next = getQueryParam(result.next.href, 'start');
