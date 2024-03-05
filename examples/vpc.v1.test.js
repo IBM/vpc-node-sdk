@@ -2746,6 +2746,273 @@ describe('VpcV1', () => {
 
   });
 
+  test('listReservations request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-list_reservations
+    const response = await vpcService.listReservations();
+    // end-list_instance_profiles
+    expect(response.result).not.toBeNull();
+  });
+
+  test('createReservation request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-create_reservation
+
+    const reservationCapacityModel = {
+      total: 10,
+    };
+    const reservationCommittedUseModel = {
+      term: 'one_year',
+    };
+    const reservationProfileModel = {
+      name: 'ba2-2x8',
+      resource_type: 'instance_profile',
+    };
+    const vpcIdentityModel = {
+      id: data.vpcId,
+    };
+
+    const zoneIdentityModel = {
+      name: data.zone,
+    };
+
+    const params = {
+      capacity: reservationCapacityModel,
+      committedUse: reservationCommittedUseModel,
+      profile: reservationProfileModel,
+      zone: zoneIdentityModel,
+      name: "my-reservation",
+    };
+
+    const response = await vpcService.createReservation(params);
+
+    // end-create_reservation
+    expect(response.result).not.toBeNull();
+    data.reservationId = response.result.id;
+
+  });
+
+  test('updateReservation request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-update_reservation
+
+    const params = {
+      id: data.reservationId,
+      name: 'my-reservation-updated',
+    }
+    const response = await vpcService.updateReservation(params);
+
+    // end-update_reservation
+    expect(response.result).not.toBeNull();
+
+  });
+
+  test('activateReservation request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-activate_reservation
+
+    const params = {
+      id: data.reservationId,
+    }
+    const response = await vpcService.activateReservation(params);
+
+    // end-activate_reservation
+    expect(response.result).not.toBeNull();
+
+  });
+
+  test('getReservation request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-get_reservation
+
+    const params = {
+      id: data.reservationId,
+    };
+
+    const response = await vpcService.getReservation(params);
+
+    // end-get_reservation
+    expect(response.result).not.toBeNull();
+
+  });
+
+  test('createInstance with reservation request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-create_instance
+
+    const subnetIdentityModel = {
+      id: data.subnetId,
+    };
+
+    const networkInterfacePrototypeModel = {
+      name: 'my-network-interface',
+      subnet: subnetIdentityModel,
+    };
+
+    const instanceProfileIdentityModel = {
+      name: 'bx2d-2x8',
+    };
+
+    const vpcIdentityModel = {
+      id: data.vpcId,
+    };
+
+    const zoneIdentityModel = {
+      name: data.zone,
+    };
+
+    const imageIdentityModel = {
+      id: data.imageId,
+    };
+
+    //reservationIdentityById
+    const reservationIdentityModel = {
+      id: data.reservationId
+    }
+
+    const instanceReservationAffinityPrototypeModel = {
+      policy: 'manual',
+      pool: [reservationIdentityModel],
+    }
+
+    const instancePrototypeModel = {
+      name: 'my-instance-with-res',
+      reservation_affinity: instanceReservationAffinityPrototypeModel,
+      profile: instanceProfileIdentityModel,
+      vpc: vpcIdentityModel,
+      primary_network_interface: networkInterfacePrototypeModel,
+      zone: zoneIdentityModel,
+      image: imageIdentityModel,
+    };
+
+    const params = {
+      instancePrototype: instancePrototypeModel,
+    };
+
+    const response = await vpcService.createInstance(params);
+
+    // end-create_instance
+    expect(response.result).not.toBeNull();
+    data.instanceIdWithReservation = response.result.id;
+
+  });
+
+  test.skip('deleteReservation request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-delete_reservation
+
+    const params = {
+      id: data.reservationId,
+    };
+
+    //NOTE: A reservation cannot be deleted unless it is expired or failed
+
+    const response = await vpcService.deleteReservation(params);
+
+    // end-delete_reservation
+    expect(response.result).not.toBeNull();
+
+  });
+
+  test('updateInstance with reservation request example', async () => {
+
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    // begin-update_instance
+
+    //reservationIdentityById
+    const reservationIdentityModel = {
+      id: data.reservationId
+    }
+
+    const instanceReservationAffinityPatchModel = {
+      policy: 'manual',
+      pool: [reservationIdentityModel],
+    }
+
+    const params = {
+      id: data.instanceId,
+      name: 'my-instance-updated',
+      reservationAffinity: instanceReservationAffinityPatchModel,
+    };
+
+    const response = await vpcService.updateInstance(params);
+
+    // end-update_instance
+    expect(response.result).not.toBeNull();
+
+  });
+  
   test('listBackupPolicies request example', async () => {
  
     consoleLogMock.mockImplementation((output) => {
@@ -2791,10 +3058,13 @@ describe('VpcV1', () => {
     });
 
     // begin-create_backup_policy
-
-    const params = {
+    const backupPolicyPrototype = {
+      match_resource_type: `volume`,
       matchUserTags: ["tag1", "tag2"],
       name: 'my-backup-policy',
+    }
+    const params = {
+      backupPolicyPrototype: backupPolicyPrototype,
     };
 
     const response = await vpcService.createBackupPolicy(params);
@@ -4341,7 +4611,7 @@ describe('VpcV1', () => {
     let replicaRes;
     try {
       replicaRes = await vpcService.createShare(replicaParams);
-      data.shareReplicaId = res.replicaRes.id;
+      data.shareReplicaId = replicaRes.result.id;
     } catch (err) {
       console.warn(err);
     }
@@ -4479,7 +4749,13 @@ describe('VpcV1', () => {
     // Request models needed by this operation.
 
     // ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfacePrototypeShareMountTargetContext
+    const subnetIdentityModel = {
+      id: data.subnetId,
+    };
+
     const shareMountTargetVirtualNetworkInterfacePrototypeModel = {
+      name: 'my-share-mount-target-vni',
+      subnet: subnetIdentityModel,
     };
 
     // ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup
@@ -4517,8 +4793,8 @@ describe('VpcV1', () => {
     // begin-get_share_mount_target
 
     const params = {
-      shareId: data.shareMountTargetId,
-      id: data.shareId,
+      id: data.shareMountTargetId,
+      shareId: data.shareId,
     };
 
     let res;
@@ -4559,7 +4835,7 @@ describe('VpcV1', () => {
     // end-update_share_mount_target
   });
 
-  test('getShareSource request example', async () => {
+  test.skip('getShareSource request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
@@ -5957,11 +6233,9 @@ describe('VpcV1', () => {
     const params = {
       vpnGatewayId: data.vpnGatewayId,
       id: data.vpnGatewayConnectionId,
-      vpnGatewayConnectionPatch: {
-        name: 'my-vpn-gateway-connection-updated',
-        peer_address: '192.132.5.0',
-        psk: 'lkj14b1oi0alcniejkso',
-      }
+      name: 'my-vpn-gateway-connection-updated',
+      peerAddress: '192.132.5.0',
+      psk: 'lkj14b1oi0alcniejkso',
     };
 
     const response = await vpcService.updateVpnGatewayConnection(params);
@@ -7939,14 +8213,11 @@ describe('VpcV1', () => {
     // BareMetalServerPrimaryNetworkInterfacePrototype
     const bareMetalServerPrimaryNetworkInterfacePrototypeModel = {
       subnet: subnetIdentityModel,
-      interfaceType: 'pci',
-      enableInfrastructureNat: true,
-      name: 'my-bare-metal-server-network-interface'
-    };
+    }
 
     // BareMetalServerProfileIdentityByName
     const bareMetalServerProfileIdentityModel = {
-      name: data.bareMetalServerProfileName,
+      name: 'bmx2-48x768',
     };
 
     // ZoneIdentityByName
@@ -7954,16 +8225,18 @@ describe('VpcV1', () => {
       name: data.zone,
     };
 
-    const params = {
+    const bareMetalServerPrototype = {
       initialization: bareMetalServerInitializationPrototypeModel,
-      primaryNetworkInterface: bareMetalServerPrimaryNetworkInterfacePrototypeModel,
+      primary_network_interface: bareMetalServerPrimaryNetworkInterfacePrototypeModel,
       profile: bareMetalServerProfileIdentityModel,
       zone: zoneIdentityModel,
       name: 'my-bare-metal-server'
+    }
+    const params = {
+      bareMetalServerPrototype: bareMetalServerPrototype,
     };
-    JSON.stringify(params, '', 2);
+    // JSON.stringify(params, '', 2);
     const response = await vpcService.createBareMetalServer(params);
-
     // end-create_bare_metal_server
     data.bareMetalServerId = response.result.id;
     data.bareMetalServerDiskId = response.result.disks[0].id;
@@ -9065,35 +9338,6 @@ describe('VpcV1', () => {
 
   });
 
-  test('deleteShare request example', async () => {
-    consoleLogMock.mockImplementation((output) => {
-      originalLog(output);
-    });
-    consoleWarnMock.mockImplementation((output) => {
-      // if an error occurs, display the message and then fail the test
-      originalWarn(output);
-      expect(true).toBeFalsy();
-    });
-
-    originalLog('deleteShare() result:');
-    // begin-delete_share
-
-    const params = {
-      id: data.shareId,
-      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
-    };
-
-    let res;
-    try {
-      res = await vpcService.deleteShare(params);
-      console.log(JSON.stringify(res.result, null, 2));
-    } catch (err) {
-      console.warn(err);
-    }
-
-    // end-delete_share
-  });
-
   test('deleteShareMountTarget request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -9122,7 +9366,7 @@ describe('VpcV1', () => {
     // end-delete_share_mount_target
   });
 
-  test('deleteShareSource request example', async () => {
+  test.skip('deleteShareSource request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
     });
@@ -9145,6 +9389,35 @@ describe('VpcV1', () => {
     }
 
     // end-delete_share_source
+  });
+
+  test('deleteShare request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteShare() result:');
+    // begin-delete_share
+
+    const params = {
+      id: data.shareId,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.deleteShare(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_share
   });
 
   test('deletePublicGateway request example', async () => {

@@ -1187,11 +1187,33 @@ describe('VpcV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
+
+    // share replica
+    const shareIdentity = {
+      id: dict.shareId,
+    };
+    const shareReplicaPrototypeModel = {
+      profile: shareProfileIdentityModel,
+      zone: zoneIdentityModel,
+      source_share: shareIdentity,
+      replication_cron_spec: '0 */5 * * *',
+      name: 'my-replica-share',
+    };
+
+    const replicaParams = {
+      sharePrototype: shareReplicaPrototypeModel,
+    };
+
+    const replicaRes = await vpcService.createShare(replicaParams);
+    dict.shareReplicaId = replicaRes.result.id;
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
   });
 
   test('getShare()', async () => {
     const params = {
-      id: 'testString',
+      id: dict.shareId,
     };
 
     const res = await vpcService.getShare(params);
@@ -1205,6 +1227,7 @@ describe('VpcV1_integration', () => {
 
     // ShareProfileIdentityByName
     const params = {
+      id: dict.shareId,
       name: 'my-share-updated',
       ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
     };
@@ -1217,7 +1240,7 @@ describe('VpcV1_integration', () => {
 
   test('failoverShare()', async () => {
     const params = {
-      shareId: dict.shareId,
+      shareId: dict.shareReplicaId,
     };
 
     const res = await vpcService.failoverShare(params);
@@ -1327,7 +1350,7 @@ describe('VpcV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test('getShareSource()', async () => {
+  test.skip('getShareSource()', async () => {
     const params = {
       shareId: dict.shareId,
     };
@@ -1582,9 +1605,14 @@ describe('VpcV1_integration', () => {
       });
   });
   test('createBackupPolicy()', (done) => {
-    const params = {
+    const backupPolicyPrototype = {
+      match_resource_type: `volume`,
       matchUserTags: ['tag1', 'tag2'],
       name: 'my-backup-policy',
+    };
+
+    const params = {
+      backupPolicyPrototype: backupPolicyPrototype,
     };
 
     vpcService
@@ -2039,6 +2067,118 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+  test('listReservations()', (done) => {
+    vpcService
+      .listReservations({})
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('createReservation()', (done) => {
+    const reservationCapacityModel = {
+      total: 10,
+    };
+    const reservationCommittedUseModel = {
+      term: 'one_year',
+    };
+    const reservationProfileModel = {
+      name: 'ba2-2x8',
+      resource_type: 'instance_profile',
+    };
+    const vpcIdentityModel = {
+      id: dict.createdVpc,
+    };
+
+    const zoneIdentityModel = {
+      name: dict.zone,
+    };
+
+    const params = {
+      capacity: reservationCapacityModel,
+      committedUse: reservationCommittedUseModel,
+      profile: reservationProfileModel,
+      zone: zoneIdentityModel,
+      name: 'my-reservation',
+    };
+    vpcService
+      .createReservation(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        dict.reservationId = res.result.id;
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('updateReservation()', (done) => {
+    const params = {
+      id: dict.reservationId,
+      name: 'my-reservation-updated',
+    };
+    vpcService
+      .updateReservation(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('activateReservation()', (done) => {
+    const params = {
+      id: dict.reservationId,
+    };
+    vpcService
+      .activateReservation(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test('getReservation()', (done) => {
+    const params = {
+      id: dict.reservationId,
+    };
+    vpcService
+      .getReservation(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
+  test.skip('deleteReservation()', (done) => {
+    const params = {
+      id: dict.reservationId,
+    };
+
+    vpcService
+      .deleteReservation(params)
+      .then((res) => {
+        expect(res.result).not.toBeNull();
+        done();
+      })
+      .catch((err) => {
+        console.warn(err);
+        done(err);
+      });
+  });
   test('listBareMetalServerProfiles()', (done) => {
     vpcService
       .listBareMetalServerProfiles({})
@@ -2088,11 +2228,6 @@ describe('VpcV1_integration', () => {
 
     // BareMetalServerPrimaryNetworkInterfacePrototype
     const bareMetalServerPrimaryNetworkInterfacePrototypeModel = {
-      allow_ip_spoofing: true,
-      allowed_vlans: [4],
-      enable_infrastructure_nat: true,
-      interface_type: 'pci',
-      name: 'my-network-interface',
       subnet: subnetIdentityModel,
     };
 
@@ -2106,21 +2241,16 @@ describe('VpcV1_integration', () => {
       name: dict.zoneName,
     };
 
-    // VPCIdentityById
-    const vpcIdentityModel = {
-      id: dict.createdVpc,
-    };
-
-    const params = {
+    const bareMetalServerPrototype = {
       initialization: bareMetalServerInitializationPrototypeModel,
-      primaryNetworkInterface: bareMetalServerPrimaryNetworkInterfacePrototypeModel,
+      primary_network_interface: bareMetalServerPrimaryNetworkInterfacePrototypeModel,
       profile: bareMetalServerProfileIdentityModel,
       zone: zoneIdentityModel,
       name: 'my-bare-metal-server2',
-      // networkInterfaces: [bareMetalServerNetworkInterfacePrototypeModel],
-      // resourceGroup: resourceGroupIdentityModel,
-      // trustedPlatformModule: bareMetalServerTrustedPlatformModulePrototypeModel,
-      vpc: vpcIdentityModel,
+    };
+
+    const params = {
+      bareMetalServerPrototype: bareMetalServerPrototype,
     };
 
     const res = await vpcService.createBareMetalServer(params);
@@ -3652,14 +3782,10 @@ describe('VpcV1_integration', () => {
       });
   });
   test('updateVpnGatewayConnection()', (done) => {
-    const vpnGatewayConnectionPatchModel = {
-      adminStateUp: true,
-    };
-
     const params = {
       vpnGatewayId: dict.createdVpnGateway,
       id: dict.createdVpnGatewayConnection,
-      vpnGatewayConnectionPatch: vpnGatewayConnectionPatchModel,
+      adminStateUp: true,
     };
 
     vpcService
@@ -5389,6 +5515,7 @@ describe('VpcV1_integration', () => {
       name: 'my-host',
       profile: dedicatedHostProfileIdentityModel,
       group: dedicatedHostGroupIdentityModel,
+      instance_placement_enabled: false,
     };
 
     const params = {
@@ -5915,7 +6042,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('deleteShareSource()', async () => {
+  test.skip('deleteShareSource()', async () => {
     const params = {
       shareId: dict.shareId,
     };

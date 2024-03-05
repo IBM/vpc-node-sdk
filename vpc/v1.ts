@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.81.0-c73a091c-20231026-215706
+ * IBM OpenAPI SDK Code Generator Version: 3.84.2-a032c73d-20240125-175315
  */
 
 /* eslint-disable max-classes-per-file */
@@ -59,7 +59,7 @@ class VpcV1 extends BaseService {
    * @param {UserOptions} [options] - The parameters to send to the service.
    * @param {string} [options.serviceName] - The name of the service to configure
    * @param {Authenticator} [options.authenticator] - The Authenticator object used to authenticate requests to the service
-   * @param {string} [options.serviceUrl] - The URL for the service
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @returns {VpcV1}
    */
 
@@ -84,7 +84,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2023-10-10` and `2023-11-15`.
+   *  `2023-12-05` and `2024-02-15`.
    */
   version: string;
 
@@ -93,8 +93,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} options - Options for the service.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2023-10-10` and `2023-11-15`.
-   * @param {string} [options.serviceUrl] - The base url to use when contacting the service. The base url may differ between IBM Cloud regions.
+   * specify any date between `2023-12-05` and `2024-02-15`.
+   * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
    * @constructor
@@ -110,7 +110,7 @@ class VpcV1 extends BaseService {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
     this.generation = options.generation;
-    this.version = options.version || '2023-10-24';
+    this.version = options.version || '2024-02-20';
   }
 
   /*************************
@@ -1095,17 +1095,18 @@ class VpcV1 extends BaseService {
    *
    * This request deletes a DNS resolution binding. This operation cannot be reversed.
    *
-   * A DNS resolution binding for a VPC with `dns.enable_hub` set to `true` cannot be deleted.
+   * For this request to succeed, the VPC specified by the identifier in the URL must not have
+   * `dns.resolver.type` set to `delegated`.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
    * @param {string} params.id - The DNS resolution binding identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>>}
    */
   public deleteVpcDnsResolutionBinding(
     params: VpcV1.DeleteVpcDnsResolutionBindingParams
-  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+  ): Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
     const _validParams = ['vpcId', 'id', 'headers'];
@@ -1138,6 +1139,7 @@ class VpcV1 extends BaseService {
           true,
           sdkHeaders,
           {
+            'Accept': 'application/json',
           },
           _params.headers
         ),
@@ -1348,13 +1350,23 @@ class VpcV1 extends BaseService {
    *
    * At most two routes per `zone` in a table can have the same `destination` and
    * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
-   * @param {ZoneIdentity} params.zone - The zone to apply the route to. (Traffic from subnets in this zone will be
-   * subject to this route.).
+   * @param {ZoneIdentity} params.zone - The zone to apply the route to.
+   *
+   * If subnets are attached to the route's routing table, egress traffic from those
+   * subnets in this zone will be subject to this route. If this route's routing table
+   * has any of `route_direct_link_ingress`, `route_internet_ingress`,
+   * `route_transit_gateway_ingress` or `route_vpc_zone_ingress`  set to`true`, traffic
+   * from those ingress sources arriving in this zone will be subject to this route.
    * @param {string} [params.action] - The action to perform with a packet matching the route:
    * - `delegate`: delegate to system-provided routes
    * - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes
    * - `deliver`: deliver the packet to the specified `next_hop`
    * - `drop`: drop the packet.
+   * @param {boolean} [params.advertise] - Indicates whether this route will be advertised to the ingress sources
+   * specified by the `advertise_routes_to` routing table property.
+   *
+   * All routes in a routing table with the same `destination` and `zone` must have the same
+   * `advertise` value.
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed. If unspecified, the
    * name will be a hyphenated list of randomly-selected words.
@@ -1379,7 +1391,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: createVpcRoute');
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'destination', 'zone'];
-    const _validParams = ['vpcId', 'destination', 'zone', 'action', 'name', 'nextHop', 'priority', 'headers'];
+    const _validParams = ['vpcId', 'destination', 'zone', 'action', 'advertise', 'name', 'nextHop', 'priority', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1389,6 +1401,7 @@ class VpcV1 extends BaseService {
       'destination': _params.destination,
       'zone': _params.zone,
       'action': _params.action,
+      'advertise': _params.advertise,
       'name': _params.name,
       'next_hop': _params.nextHop,
       'priority': _params.priority,
@@ -1553,6 +1566,13 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
    * @param {string} params.id - The route identifier.
+   * @param {boolean} [params.advertise] - Indicates whether this route will be advertised to the ingress sources
+   * specified by the `advertise_routes_to` routing table property.
+   *
+   * Since all routes in a routing table with the same `destination` and `zone` must have the same `advertise` value,
+   * this property can only be changed for routes with a unique
+   * `destination` and `zone` in the routing table. For more information, see [Advertising
+   * routes](https://cloud.ibm.com/docs/vpc?topic=vpc-about-custom-routes#rt-advertising-routes).
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed.
    * @param {RouteNextHopPatch} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be delivered
@@ -1576,13 +1596,14 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: updateVpcRoute');
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'name', 'nextHop', 'priority', 'headers'];
+    const _validParams = ['vpcId', 'id', 'advertise', 'name', 'nextHop', 'priority', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'advertise': _params.advertise,
       'name': _params.name,
       'next_hop': _params.nextHop,
       'priority': _params.priority,
@@ -1701,6 +1722,8 @@ class VpcV1 extends BaseService {
    *
    * At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but filter
    * support is expected to expand in the future.
+   * @param {string[]} [params.advertiseRoutesTo] - The ingress sources to advertise routes to. Routes in the table with
+   * `advertise` enabled will be advertised to these sources.
    * @param {string} [params.name] - The name for this routing table. The name must not be used by another routing table
    * in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {boolean} [params.routeDirectLinkIngress] - If set to `true`, this routing table will be used to route
@@ -1752,7 +1775,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId'];
-    const _validParams = ['vpcId', 'acceptRoutesFrom', 'name', 'routeDirectLinkIngress', 'routeInternetIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'routes', 'headers'];
+    const _validParams = ['vpcId', 'acceptRoutesFrom', 'advertiseRoutesTo', 'name', 'routeDirectLinkIngress', 'routeInternetIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'routes', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1760,6 +1783,7 @@ class VpcV1 extends BaseService {
 
     const body = {
       'accept_routes_from': _params.acceptRoutesFrom,
+      'advertise_routes_to': _params.advertiseRoutesTo,
       'name': _params.name,
       'route_direct_link_ingress': _params.routeDirectLinkIngress,
       'route_internet_ingress': _params.routeInternetIngress,
@@ -1935,6 +1959,8 @@ class VpcV1 extends BaseService {
    *
    * At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but filter
    * support is expected to expand in the future.
+   * @param {string[]} [params.advertiseRoutesTo] - The ingress sources to advertise routes to, replacing any existing
+   * sources to advertise to. Routes in the table with `advertise` enabled will be advertised to these sources.
    * @param {string} [params.name] - The name for this routing table. The name must not be used by another routing table
    * in the VPC.
    * @param {boolean} [params.routeDirectLinkIngress] - Indicates whether this routing table is used to route traffic
@@ -1942,7 +1968,8 @@ class VpcV1 extends BaseService {
    * [Direct Link](https://cloud.ibm.com/docs/dl/) to this VPC. Updating to `true` selects this routing table, provided
    * no other routing table in the VPC already has this property set to `true`, and no subnets are attached to this
    * routing table. Updating to
-   * `false` deselects this routing table.
+   * `false` deselects this routing table, provided `direct_link` is absent from
+   * `advertise_routes_to`.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
    * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
@@ -1963,7 +1990,8 @@ class VpcV1 extends BaseService {
    * traffic that originates from
    * [Transit Gateway](https://cloud.ibm.com/docs/transit-gateway) to this VPC. Updating to
    * `true` selects this routing table, provided no other routing table in the VPC already has this property set to
-   * `true`, and no subnets are attached to this routing table. Updating to `false` deselects this routing table.
+   * `true`, and no subnets are attached to this routing table. Updating to `false` deselects this routing table,
+   * provided `transit_gateway` is absent from `advertise_routes_to`.
    *
    * Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
    * `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
@@ -1992,7 +2020,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'acceptRoutesFrom', 'name', 'routeDirectLinkIngress', 'routeInternetIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'ifMatch', 'headers'];
+    const _validParams = ['vpcId', 'id', 'acceptRoutesFrom', 'advertiseRoutesTo', 'name', 'routeDirectLinkIngress', 'routeInternetIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'ifMatch', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2000,6 +2028,7 @@ class VpcV1 extends BaseService {
 
     const body = {
       'accept_routes_from': _params.acceptRoutesFrom,
+      'advertise_routes_to': _params.advertiseRoutesTo,
       'name': _params.name,
       'route_direct_link_ingress': _params.routeDirectLinkIngress,
       'route_internet_ingress': _params.routeInternetIngress,
@@ -2122,13 +2151,23 @@ class VpcV1 extends BaseService {
    *
    * At most two routes per `zone` in a table can have the same `destination` and
    * `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
-   * @param {ZoneIdentity} params.zone - The zone to apply the route to. (Traffic from subnets in this zone will be
-   * subject to this route.).
+   * @param {ZoneIdentity} params.zone - The zone to apply the route to.
+   *
+   * If subnets are attached to the route's routing table, egress traffic from those
+   * subnets in this zone will be subject to this route. If this route's routing table
+   * has any of `route_direct_link_ingress`, `route_internet_ingress`,
+   * `route_transit_gateway_ingress` or `route_vpc_zone_ingress`  set to`true`, traffic
+   * from those ingress sources arriving in this zone will be subject to this route.
    * @param {string} [params.action] - The action to perform with a packet matching the route:
    * - `delegate`: delegate to system-provided routes
    * - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes
    * - `deliver`: deliver the packet to the specified `next_hop`
    * - `drop`: drop the packet.
+   * @param {boolean} [params.advertise] - Indicates whether this route will be advertised to the ingress sources
+   * specified by the `advertise_routes_to` routing table property.
+   *
+   * All routes in a routing table with the same `destination` and `zone` must have the same
+   * `advertise` value.
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed. If unspecified, the
    * name will be a hyphenated list of randomly-selected words.
@@ -2151,7 +2190,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Route>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'routingTableId', 'destination', 'zone'];
-    const _validParams = ['vpcId', 'routingTableId', 'destination', 'zone', 'action', 'name', 'nextHop', 'priority', 'headers'];
+    const _validParams = ['vpcId', 'routingTableId', 'destination', 'zone', 'action', 'advertise', 'name', 'nextHop', 'priority', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2161,6 +2200,7 @@ class VpcV1 extends BaseService {
       'destination': _params.destination,
       'zone': _params.zone,
       'action': _params.action,
+      'advertise': _params.advertise,
       'name': _params.name,
       'next_hop': _params.nextHop,
       'priority': _params.priority,
@@ -2329,6 +2369,13 @@ class VpcV1 extends BaseService {
    * @param {string} params.vpcId - The VPC identifier.
    * @param {string} params.routingTableId - The routing table identifier.
    * @param {string} params.id - The VPC routing table route identifier.
+   * @param {boolean} [params.advertise] - Indicates whether this route will be advertised to the ingress sources
+   * specified by the `advertise_routes_to` routing table property.
+   *
+   * Since all routes in a routing table with the same `destination` and `zone` must have the same `advertise` value,
+   * this property can only be changed for routes with a unique
+   * `destination` and `zone` in the routing table. For more information, see [Advertising
+   * routes](https://cloud.ibm.com/docs/vpc?topic=vpc-about-custom-routes#rt-advertising-routes).
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed.
    * @param {RouteNextHopPatch} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be delivered
@@ -2350,13 +2397,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Route>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'routingTableId', 'id'];
-    const _validParams = ['vpcId', 'routingTableId', 'id', 'name', 'nextHop', 'priority', 'headers'];
+    const _validParams = ['vpcId', 'routingTableId', 'id', 'advertise', 'name', 'nextHop', 'priority', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'advertise': _params.advertise,
       'name': _params.name,
       'next_hop': _params.nextHop,
       'priority': _params.priority,
@@ -2534,10 +2582,10 @@ class VpcV1 extends BaseService {
    * Delete a subnet.
    *
    * This request deletes a subnet. This operation cannot be reversed. For this request to succeed, the subnet must not
-   * be referenced by any bare metal server network interfaces, instance network interfaces, VPN gateways, or load
-   * balancers. A delete operation automatically detaches the subnet from any network ACLs, public gateways, or endpoint
-   * gateways. All flow log collectors with `auto_delete` set to `true` targeting the subnet or any resource in the
-   * subnet are automatically deleted.
+   * be referenced by any bare metal server network interfaces, instance network interfaces, virtual network interfaces,
+   * VPN gateways, or load balancers. A delete operation automatically detaches the subnet from any network ACLs, public
+   * gateways, or endpoint gateways. All flow log collectors with `auto_delete` set to `true` targeting the subnet or
+   * any resource in the subnet are automatically deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The subnet identifier.
@@ -3051,7 +3099,7 @@ class VpcV1 extends BaseService {
    * This request replaces the existing routing table for a subnet with the routing table specified in the request body.
    *
    * For this request to succeed, the routing table `route_direct_link_ingress`,
-   * `route_transit_gateway_ingress`, and `route_vpc_zone_ingress` properties must be `false`.
+   * `route_internet_ingress`, `route_transit_gateway_ingress`, and `route_vpc_zone_ingress` properties must be `false`.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The subnet identifier.
@@ -3120,6 +3168,14 @@ class VpcV1 extends BaseService {
    * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
    * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
    * in ascending order.
+   * @param {string} [params.targetId] - Filters the collection to resources with a `target.id` property matching the
+   * specified identifier.
+   * @param {string} [params.targetCrn] - Filters the collection to resources with a `target.crn` property matching the
+   * specified CRN.
+   * @param {string} [params.targetName] - Filters the collection to resources with a `target.name` property matching
+   * the exact specified name.
+   * @param {string} [params.targetResourceType] - Filters the collection to resources with a `target.resource_type`
+   * property matching the specified value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollection>>}
    */
@@ -3128,7 +3184,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIPCollection>> {
     const _params = { ...params };
     const _requiredParams = ['subnetId'];
-    const _validParams = ['subnetId', 'start', 'limit', 'sort', 'headers'];
+    const _validParams = ['subnetId', 'start', 'limit', 'sort', 'targetId', 'targetCrn', 'targetName', 'targetResourceType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3140,6 +3196,10 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'sort': _params.sort,
+      'target.id': _params.targetId,
+      'target.crn': _params.targetCrn,
+      'target.name': _params.targetName,
+      'target.resource_type': _params.targetResourceType,
     };
 
     const path = {
@@ -3190,8 +3250,9 @@ class VpcV1 extends BaseService {
    * @param {ReservedIPTargetPrototype} [params.target] - The target to bind this reserved IP to.  The target must be in
    * the same VPC.
    *
-   * At present, only endpoint gateway targets are supported.  The endpoint gateway must
-   * not be already bound to a reserved IP in the subnet's zone.
+   * The following targets are supported:
+   * - An endpoint gateway not already bound to a reserved IP in the subnet's zone.
+   * - A virtual network interface.
    *
    * If unspecified, the reserved IP will be created unbound.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -3256,8 +3317,8 @@ class VpcV1 extends BaseService {
    * This request releases a reserved IP. This operation cannot be reversed.
    *
    * For this request to succeed, the reserved IP must not be required by another resource, such as a bare metal server
-   * network interface or instance network interface for which it is the primary IP. A provider-owned reserved IP is not
-   * allowed to be deleted.
+   * network interface, instance network interface or virtual network interface for which it is the primary IP. A
+   * provider-owned reserved IP is not allowed to be deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.subnetId - The subnet identifier.
@@ -5022,6 +5083,12 @@ class VpcV1 extends BaseService {
    * property matching the specified placement group CRN.
    * @param {string} [params.placementGroupName] - Filters the collection to instances with a `placement_target.name`
    * property matching the exact specified placement group name.
+   * @param {string} [params.reservationId] - Filters the collection to instances with a `reservation.id` property
+   * matching the specified identifier.
+   * @param {string} [params.reservationCrn] - Filters the collection to instances with a `reservation.crn` property
+   * matching the specified CRN.
+   * @param {string} [params.reservationName] - Filters the collection to resources with a `reservation.name` property
+   * matching the exact specified name.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceCollection>>}
    */
@@ -5030,7 +5097,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'vpcId', 'vpcCrn', 'vpcName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'vpcId', 'vpcCrn', 'vpcName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationId', 'reservationCrn', 'reservationName', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5052,6 +5119,9 @@ class VpcV1 extends BaseService {
       'placement_group.id': _params.placementGroupId,
       'placement_group.crn': _params.placementGroupCrn,
       'placement_group.name': _params.placementGroupName,
+      'reservation.id': _params.reservationId,
+      'reservation.crn': _params.reservationCrn,
+      'reservation.name': _params.reservationName,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstances');
@@ -5135,11 +5205,15 @@ class VpcV1 extends BaseService {
    * Delete an instance.
    *
    * This request deletes an instance. This operation cannot be reversed. Any floating IPs associated with instance
-   * network interfaces are implicitly disassociated. All flow log collectors with `auto_delete` set to `true` targeting
-   * the instance and/or the instance network interfaces are automatically deleted.
+   * network interfaces are implicitly disassociated. All virtual network interfaces with `auto_delete` set to `true`
+   * targeting instance network attachments on the instance are automatically deleted. All flow log collectors with
+   * `auto_delete` set to `true` targeting the instance, the instance network attachments, the instance network
+   * interfaces, or the automatically deleted virtual network interfaces are automatically deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The virtual server instance identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
@@ -5148,7 +5222,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5177,6 +5251,7 @@ class VpcV1 extends BaseService {
           true,
           sdkHeaders,
           {
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -5256,6 +5331,8 @@ class VpcV1 extends BaseService {
    * @param {InstancePlacementTargetPatch} [params.placementTarget] - The placement restrictions to use for the virtual
    * server instance. For the placement
    * restrictions to be changed, the instance `status` must be `stopping` or `stopped`.
+   *
+   * If set, `reservation_affinity.policy` must be `disabled`.
    * @param {InstancePatchProfile} [params.profile] - The profile to use for this virtual server instance. For the
    * profile to be changed,
    * the instance `status` must be `stopping` or `stopped`. In addition, the requested
@@ -5267,10 +5344,14 @@ class VpcV1 extends BaseService {
    *   instance is placed on a dedicated host, the requested profile `family` must be
    *   the same as the dedicated host `family`.
    * - Have the same `vcpu.architecture`.
-   * - Support the number of network interfaces the instance currently has.
+   * - Support the number of network attachments or network interfaces the instance
+   *   currently has.
+   * @param {InstanceReservationAffinityPatch} [params.reservationAffinity] -
    * @param {number} [params.totalVolumeBandwidth] - The amount of bandwidth (in megabits per second) allocated
    * exclusively to instance storage volumes. An increase in this value will result in a corresponding decrease to
    * `total_network_bandwidth`.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Instance>>}
    */
@@ -5279,7 +5360,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Instance>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'availabilityPolicy', 'metadataService', 'name', 'placementTarget', 'profile', 'totalVolumeBandwidth', 'headers'];
+    const _validParams = ['id', 'availabilityPolicy', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'totalVolumeBandwidth', 'ifMatch', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5291,6 +5372,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'placement_target': _params.placementTarget,
       'profile': _params.profile,
+      'reservation_affinity': _params.reservationAffinity,
       'total_volume_bandwidth': _params.totalVolumeBandwidth,
     };
 
@@ -5320,6 +5402,7 @@ class VpcV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -5693,12 +5776,327 @@ class VpcV1 extends BaseService {
   }
 
   /**
+   * List all network attachments on an instance.
+   *
+   * This request lists all network attachments on an instance. A network attachment represents a device on the instance
+   * to which a virtual network interface is attached.
+   *
+   * The network attachments will be sorted by their `created_at` property values, with newest network attachments
+   * first. Network attachments with identical `created_at` property values will in turn be sorted by ascending `name`
+   * property values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachmentCollection>>}
+   */
+  public listInstanceNetworkAttachments(
+    params: VpcV1.ListInstanceNetworkAttachmentsParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachmentCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId'];
+    const _validParams = ['instanceId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceNetworkAttachments');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_attachments',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a network attachment on an instance.
+   *
+   * This request creates a new instance network attachment from an instance network attachment prototype object. The
+   * prototype object is structured in the same way as a retrieved instance network attachment, and contains the
+   * information necessary to create the new instance network attachment.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {InstanceNetworkAttachmentPrototypeVirtualNetworkInterface} params.virtualNetworkInterface - A virtual
+   * network interface for the instance network attachment. This can be specified
+   * using an existing virtual network interface, or a prototype object for a new virtual
+   * network interface.
+   *
+   * If an existing virtual network interface is specified, `enable_infrastructure_nat` must be
+   * `true`.
+   * @param {string} [params.name] - The name for this network attachment. Names must be unique within the instance the
+   * network attachment resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachment>>}
+   */
+  public createInstanceNetworkAttachment(
+    params: VpcV1.CreateInstanceNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId', 'virtualNetworkInterface'];
+    const _validParams = ['instanceId', 'virtualNetworkInterface', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'virtual_network_interface': _params.virtualNetworkInterface,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_attachments',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete an instance network attachment.
+   *
+   * This request deletes an instance network attachment. This operation cannot be reversed. Any floating IPs associated
+   * with the instance network attachment are implicitly disassociated. All flow log collectors with `auto_delete` set
+   * to `true` targeting the instance network attachment are automatically deleted. The primary instance network
+   * attachment is not allowed to be deleted.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {string} params.id - The instance network attachment identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deleteInstanceNetworkAttachment(
+    params: VpcV1.DeleteInstanceNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId', 'id'];
+    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_attachments/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve an instance network attachment.
+   *
+   * This request retrieves a single instance network attachment specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {string} params.id - The instance network attachment identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachment>>}
+   */
+  public getInstanceNetworkAttachment(
+    params: VpcV1.GetInstanceNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId', 'id'];
+    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_attachments/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update an instance network attachment.
+   *
+   * This request updates an instance network attachment with the information provided in an instance network interface
+   * patch object. The instance network attachment patch object is structured in the same way as a retrieved instance
+   * network attachment and needs to contain only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {string} params.id - The instance network attachment identifier.
+   * @param {string} [params.name] - The name for this network attachment. The name must not be used by another network
+   * attachment for the instance.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachment>>}
+   */
+  public updateInstanceNetworkAttachment(
+    params: VpcV1.UpdateInstanceNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId', 'id'];
+    const _validParams = ['instanceId', 'id', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/network_attachments/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * List all network interfaces on an instance.
    *
    * This request lists all network interfaces on an instance. An instance network interface is an abstract
    * representation of a network device and attaches an instance to a single subnet. Each network interface on an
    * instance can attach to any subnet in the zone, including subnets that are already attached to the instance.
    * Multiple network interfaces on the instance may also attach to the same subnet.
+   *
+   * If this instance has network attachments, each returned network interface is a [read-only
+   * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+   * network attachment and its attached virtual network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
@@ -5757,11 +6155,21 @@ class VpcV1 extends BaseService {
    * information necessary to create the new instance network interface. Any subnet in the instance's VPC may be
    * specified. Addresses on the instance network interface must be within the specified subnet's CIDR blocks.
    *
+   * If this instance has network attachments, each network interface is a [read-only
+   * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+   * network attachment and its attached virtual network interface, and new network interfaces are not allowed to be
+   * created.
+   *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {SubnetIdentity} params.subnet - The associated subnet.
    * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this instance
    * network interface.
+   *
+   * If this instance has network attachments, this network interface is a
+   * [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+   * corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed on
+   * the attached virtual network interface.
    * @param {string} [params.name] - The name for the instance network interface. The name must not be used by another
    * network interface on the virtual server instance. If unspecified, the name will be a hyphenated list of
    * randomly-selected words.
@@ -5839,6 +6247,10 @@ class VpcV1 extends BaseService {
    * `true` targeting the instance network interface are automatically deleted. The primary instance network interface
    * is not allowed to be deleted.
    *
+   * If this instance has network attachments, this network interface is a [read-only
+   * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+   * network attachment and its attached virtual network interface, and is not allowed to be deleted.
+   *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The instance network interface identifier.
@@ -5893,6 +6305,10 @@ class VpcV1 extends BaseService {
    * Retrieve an instance network interface.
    *
    * This request retrieves a single instance network interface specified by the identifier in the URL.
+   *
+   * If this instance has network attachments, the retrieved network interface is a
+   * [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+   * corresponding network attachment and its attached virtual network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
@@ -5952,11 +6368,20 @@ class VpcV1 extends BaseService {
    * patch object. The instance network interface patch object is structured in the same way as a retrieved instance
    * network interface and needs to contain only the information to be updated.
    *
+   * If this instance has network attachments, this network interface is a [read-only
+   * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+   * network attachment and its attached virtual network interface, and is not allowed to be updated.
+   *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
    * @param {string} params.id - The instance network interface identifier.
    * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this instance
    * network interface.
+   *
+   * If this instance has network attachments, this network interface is a
+   * [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+   * corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed on
+   * the attached virtual network interface.
    * @param {string} [params.name] - The name for the instance network interface. The name must not be used by another
    * network interface on the virtual server instance.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -6190,8 +6615,13 @@ class VpcV1 extends BaseService {
    * Associate a floating IP with an instance network interface.
    *
    * This request associates the specified floating IP with the specified instance network interface, replacing any
-   * existing association. For this request to succeed, the existing floating IP must not be required by another
-   * resource, such as a public gateway. A request body is not required, and if provided, is ignored.
+   * existing association.
+   *
+   * The existing floating IP must:
+   * - not be required by another resource, such as a public gateway
+   * - be in the same `zone` as the instance
+   *
+   * A request body is not required, and if provided, is ignored.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
@@ -8276,6 +8706,387 @@ class VpcV1 extends BaseService {
     return this.createRequest(parameters);
   }
   /*************************
+   * reservations
+   ************************/
+
+  /**
+   * List all reservations.
+   *
+   * This request lists all reservations in the region. A reservation provides reserved capacity for a specified profile
+   * in a specified zone. A reservation can also include a long-term committed use discount.
+   *
+   * The reservations will be sorted by their `created_at` property values, with newest reservations first. Reservations
+   * with identical `created_at` property values will in turn be sorted by ascending `name` property values.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
+   * matching the specified identifier.
+   * @param {string} [params.zoneName] - Filters the collection to resources with a `zone.name` property matching the
+   * exact specified name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ReservationCollection>>}
+   */
+  public listReservations(
+    params?: VpcV1.ListReservationsParams
+  ): Promise<VpcV1.Response<VpcV1.ReservationCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['start', 'limit', 'name', 'resourceGroupId', 'zoneName', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'name': _params.name,
+      'resource_group.id': _params.resourceGroupId,
+      'zone.name': _params.zoneName,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listReservations');
+
+    const parameters = {
+      options: {
+        url: '/reservations',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a reservation.
+   *
+   * This request creates a new reservation from a reservation prototype object. The prototype object is structured in
+   * the same way as a retrieved reservation, and contains the information necessary to create the new reservation.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {ReservationCapacityPrototype} params.capacity - The capacity reservation configuration to use.
+   * @param {ReservationCommittedUsePrototype} params.committedUse - The committed use configuration to use for this
+   * reservation.
+   * @param {ReservationProfilePrototype} params.profile - The
+   * [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
+   * reservation.
+   * @param {ZoneIdentity} params.zone - The zone to use for this reservation.
+   * @param {string} [params.affinityPolicy] - The affinity policy to use for this reservation:
+   * - `restricted`: The reservation must be manually requested.
+   * @param {string} [params.name] - The name for this reservation. The name must not be used by another reservation in
+   * the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
+   * [default resource
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Reservation>>}
+   */
+  public createReservation(
+    params: VpcV1.CreateReservationParams
+  ): Promise<VpcV1.Response<VpcV1.Reservation>> {
+    const _params = { ...params };
+    const _requiredParams = ['capacity', 'committedUse', 'profile', 'zone'];
+    const _validParams = ['capacity', 'committedUse', 'profile', 'zone', 'affinityPolicy', 'name', 'resourceGroup', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'capacity': _params.capacity,
+      'committed_use': _params.committedUse,
+      'profile': _params.profile,
+      'zone': _params.zone,
+      'affinity_policy': _params.affinityPolicy,
+      'name': _params.name,
+      'resource_group': _params.resourceGroup,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createReservation');
+
+    const parameters = {
+      options: {
+        url: '/reservations',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a reservation.
+   *
+   * This request deletes a reservation. This operation cannot be reversed. Reservations with a `status` of `active` are
+   * not allowed to be deleted.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The reservation identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Reservation>>}
+   */
+  public deleteReservation(
+    params: VpcV1.DeleteReservationParams
+  ): Promise<VpcV1.Response<VpcV1.Reservation>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteReservation');
+
+    const parameters = {
+      options: {
+        url: '/reservations/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a reservation.
+   *
+   * This request retrieves a single reservation specified by identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The reservation identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Reservation>>}
+   */
+  public getReservation(
+    params: VpcV1.GetReservationParams
+  ): Promise<VpcV1.Response<VpcV1.Reservation>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getReservation');
+
+    const parameters = {
+      options: {
+        url: '/reservations/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a reservation.
+   *
+   * This request updates a reservation with the information provided in a reservation patch object. The patch object is
+   * structured in the same way as a retrieved reservation and needs to contain only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The reservation identifier.
+   * @param {ReservationCapacityPatch} [params.capacity] - The capacity reservation configuration to use.
+   *
+   * The configuration can only be changed for reservations with a `status` of `inactive`.
+   * @param {ReservationCommittedUsePatch} [params.committedUse] - The committed use configuration to use for this
+   * reservation.
+   * @param {string} [params.name] - The name for this reservation. The name must not be used by another reservation in
+   * the region.
+   * @param {ReservationProfilePatch} [params.profile] - The
+   * [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
+   * reservation.
+   *
+   * The profile can only be changed for a reservation with a `status` of `inactive`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.Reservation>>}
+   */
+  public updateReservation(
+    params: VpcV1.UpdateReservationParams
+  ): Promise<VpcV1.Response<VpcV1.Reservation>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'capacity', 'committedUse', 'name', 'profile', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'capacity': _params.capacity,
+      'committed_use': _params.committedUse,
+      'name': _params.name,
+      'profile': _params.profile,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateReservation');
+
+    const parameters = {
+      options: {
+        url: '/reservations/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Activate a reservation.
+   *
+   * This request activates a reservation. For this request to succeed, the reservation status must be `inactive`.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The reservation identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public activateReservation(
+    params: VpcV1.ActivateReservationParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'activateReservation');
+
+    const parameters = {
+      options: {
+        url: '/reservations/{id}/activate',
+        method: 'POST',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
    * dedicatedHosts
    ************************/
 
@@ -9224,20 +10035,7 @@ class VpcV1 extends BaseService {
    * policy.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string[]} params.matchUserTags - The user tags this backup policy will apply to. Resources that have both a
-   * matching user tag and a matching type will be subject to the backup policy.
-   * @param {string[]} [params.matchResourceTypes] - The resource types this backup policy will apply to. Resources that
-   * have both a matching type and a matching user tag will be subject to the backup policy.
-   * @param {string} [params.name] - The name for this backup policy. The name must not be used by another backup policy
-   * in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
-   * @param {BackupPolicyPlanPrototype[]} [params.plans] - The prototype objects for backup plans to be created for this
-   * backup policy.
-   * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
-   * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
-   * @param {BackupPolicyScopePrototype} [params.scope] - The scope to use for this backup policy.
-   *
-   * If unspecified, the policy will be scoped to the account.
+   * @param {BackupPolicyPrototype} params.backupPolicyPrototype - The backup policy prototype object.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
    */
@@ -9245,22 +10043,14 @@ class VpcV1 extends BaseService {
     params: VpcV1.CreateBackupPolicyParams
   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
     const _params = { ...params };
-    const _requiredParams = ['matchUserTags'];
-    const _validParams = ['matchUserTags', 'matchResourceTypes', 'name', 'plans', 'resourceGroup', 'scope', 'headers'];
+    const _requiredParams = ['backupPolicyPrototype'];
+    const _validParams = ['backupPolicyPrototype', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
-    const body = {
-      'match_user_tags': _params.matchUserTags,
-      'match_resource_types': _params.matchResourceTypes,
-      'name': _params.name,
-      'plans': _params.plans,
-      'resource_group': _params.resourceGroup,
-      'scope': _params.scope,
-    };
-
+    const body = _params.backupPolicyPrototype;
     const query = {
       'version': this.version,
       'generation': this.generation,
@@ -9906,6 +10696,9 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The backup policy identifier.
+   * @param {string[]} [params.includedContent] - The included content for backups created using this policy:
+   * - `boot_volume`: Include the instance's boot volume.
+   * - `data_volumes`: Include the instance's data volumes.
    * @param {string[]} [params.matchUserTags] - The user tags this backup policy will apply to (replacing any existing
    * tags). Resources that have both a matching user tag and a matching type will be subject to the backup policy.
    * @param {string} [params.name] - The name for this backup policy. The name must not be used by another backup policy
@@ -9920,13 +10713,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'matchUserTags', 'name', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'includedContent', 'matchUserTags', 'name', 'ifMatch', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'included_content': _params.includedContent,
       'match_user_tags': _params.matchUserTags,
       'name': _params.name,
     };
@@ -10448,29 +11242,7 @@ class VpcV1 extends BaseService {
    * server. The bare metal server is automatically started.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {BareMetalServerInitializationPrototype} params.initialization -
-   * @param {BareMetalServerPrimaryNetworkInterfacePrototype} params.primaryNetworkInterface - The primary bare metal
-   * server network interface to create.
-   * @param {BareMetalServerProfileIdentity} params.profile - The
-   * [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
-   * to use for this bare metal server.
-   * @param {ZoneIdentity} params.zone - The zone this bare metal server will reside in.
-   * @param {boolean} [params.enableSecureBoot] - Indicates whether secure boot is enabled. If enabled, the image must
-   * support secure boot or the server will fail to boot.
-   * @param {string} [params.name] - The name for this bare metal server. The name must not be used by another bare
-   * metal server in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
-   *
-   * The system hostname will be based on this name.
-   * @param {BareMetalServerNetworkInterfacePrototype[]} [params.networkInterfaces] - The additional bare metal server
-   * network interfaces to create.
-   * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
-   * [default resource
-   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
-   * @param {BareMetalServerTrustedPlatformModulePrototype} [params.trustedPlatformModule] -
-   * @param {VPCIdentity} [params.vpc] - The VPC this bare metal server will reside in.
-   *
-   * If specified, it must match the VPC for the subnets that the network interfaces of
-   * the bare metal server are attached to.
+   * @param {BareMetalServerPrototype} params.bareMetalServerPrototype - The bare metal server prototype object.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServer>>}
    */
@@ -10478,26 +11250,14 @@ class VpcV1 extends BaseService {
     params: VpcV1.CreateBareMetalServerParams
   ): Promise<VpcV1.Response<VpcV1.BareMetalServer>> {
     const _params = { ...params };
-    const _requiredParams = ['initialization', 'primaryNetworkInterface', 'profile', 'zone'];
-    const _validParams = ['initialization', 'primaryNetworkInterface', 'profile', 'zone', 'enableSecureBoot', 'name', 'networkInterfaces', 'resourceGroup', 'trustedPlatformModule', 'vpc', 'headers'];
+    const _requiredParams = ['bareMetalServerPrototype'];
+    const _validParams = ['bareMetalServerPrototype', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
-    const body = {
-      'initialization': _params.initialization,
-      'primary_network_interface': _params.primaryNetworkInterface,
-      'profile': _params.profile,
-      'zone': _params.zone,
-      'enable_secure_boot': _params.enableSecureBoot,
-      'name': _params.name,
-      'network_interfaces': _params.networkInterfaces,
-      'resource_group': _params.resourceGroup,
-      'trusted_platform_module': _params.trustedPlatformModule,
-      'vpc': _params.vpc,
-    };
-
+    const body = _params.bareMetalServerPrototype;
     const query = {
       'version': this.version,
       'generation': this.generation,
@@ -10774,12 +11534,326 @@ class VpcV1 extends BaseService {
   }
 
   /**
+   * List all network attachments on a bare metal server.
+   *
+   * This request lists all network attachments on a bare metal server. A bare metal server network attachment is an
+   * abstract representation of a network device and attaches a bare metal server to a single subnet. Each network
+   * interface on a bare metal server can attach to any subnet in the zone, including subnets that are already attached
+   * to the bare metal server.
+   *
+   * The network attachments will be sorted by their `created_at` property values, with newest network attachments
+   * first. Network attachments with identical `created_at` property values will in turn be sorted by ascending `name`
+   * property values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.bareMetalServerId - The bare metal server identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachmentCollection>>}
+   */
+  public listBareMetalServerNetworkAttachments(
+    params: VpcV1.ListBareMetalServerNetworkAttachmentsParams
+  ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachmentCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['bareMetalServerId'];
+    const _validParams = ['bareMetalServerId', 'start', 'limit', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const path = {
+      'bare_metal_server_id': _params.bareMetalServerId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBareMetalServerNetworkAttachments');
+
+    const parameters = {
+      options: {
+        url: '/bare_metal_servers/{bare_metal_server_id}/network_attachments',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a network attachment on a bare metal server.
+   *
+   * This request creates a new bare metal server network attachment from a bare metal server network attachment
+   * prototype object. The prototype object is structured in the same way as a retrieved bare metal server network
+   * attachment, and contains the information necessary to create the new bare metal server network attachment.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.bareMetalServerId - The bare metal server identifier.
+   * @param {BareMetalServerNetworkAttachmentPrototype} params.bareMetalServerNetworkAttachmentPrototype - The bare
+   * metal server network attachment prototype object.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachment>>}
+   */
+  public createBareMetalServerNetworkAttachment(
+    params: VpcV1.CreateBareMetalServerNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['bareMetalServerId', 'bareMetalServerNetworkAttachmentPrototype'];
+    const _validParams = ['bareMetalServerId', 'bareMetalServerNetworkAttachmentPrototype', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = _params.bareMetalServerNetworkAttachmentPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'bare_metal_server_id': _params.bareMetalServerId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createBareMetalServerNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/bare_metal_servers/{bare_metal_server_id}/network_attachments',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a bare metal server network attachment.
+   *
+   * This request deletes a bare metal server network attachment. This operation cannot be reversed. Any floating IPs
+   * associated with the bare metal server network attachment are implicitly disassociated.
+   *
+   * The bare metal server's primary network attachment cannot be deleted.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.bareMetalServerId - The bare metal server identifier.
+   * @param {string} params.id - The bare metal server network attachment identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deleteBareMetalServerNetworkAttachment(
+    params: VpcV1.DeleteBareMetalServerNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['bareMetalServerId', 'id'];
+    const _validParams = ['bareMetalServerId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'bare_metal_server_id': _params.bareMetalServerId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteBareMetalServerNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/bare_metal_servers/{bare_metal_server_id}/network_attachments/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a bare metal server network attachment.
+   *
+   * This request retrieves a single bare metal server network attachment specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.bareMetalServerId - The bare metal server identifier.
+   * @param {string} params.id - The bare metal server network attachment identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachment>>}
+   */
+  public getBareMetalServerNetworkAttachment(
+    params: VpcV1.GetBareMetalServerNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['bareMetalServerId', 'id'];
+    const _validParams = ['bareMetalServerId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'bare_metal_server_id': _params.bareMetalServerId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBareMetalServerNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/bare_metal_servers/{bare_metal_server_id}/network_attachments/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a bare metal server network attachment.
+   *
+   * This request updates a bare metal server network attachment with the information provided in a bare metal server
+   * network attachment patch object. The bare metal server network attachment patch object is structured in the same
+   * way as a retrieved bare metal server network attachment and contains only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.bareMetalServerId - The bare metal server identifier.
+   * @param {string} params.id - The bare metal server network attachment identifier.
+   * @param {number[]} [params.allowedVlans] - The VLAN IDs to allow for `vlan` attachments using this PCI attachment,
+   * replacing any existing VLAN IDs. The specified values must include IDs for all `vlan` attachments currently using
+   * this PCI attachment.
+   * @param {string} [params.name] - The name for this network attachment. The name must not be used by another network
+   * attachment for the bare metal server.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachment>>}
+   */
+  public updateBareMetalServerNetworkAttachment(
+    params: VpcV1.UpdateBareMetalServerNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['bareMetalServerId', 'id'];
+    const _validParams = ['bareMetalServerId', 'id', 'allowedVlans', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'allowed_vlans': _params.allowedVlans,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'bare_metal_server_id': _params.bareMetalServerId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateBareMetalServerNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/bare_metal_servers/{bare_metal_server_id}/network_attachments/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * List all network interfaces on a bare metal server.
    *
    * This request lists all network interfaces on a bare metal server. A bare metal server network interface is an
    * abstract representation of a network device and attaches a bare metal server to a single subnet. Each network
    * interface on a bare metal server can attach to any subnet in the zone, including subnets that are already attached
    * to the bare metal server.
+   *
+   * If this bare metal server has network attachments, each returned network interface is a [read-only
+   * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+   * network attachment and its attached virtual network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
@@ -10843,6 +11917,11 @@ class VpcV1 extends BaseService {
    * metal server's VPC may be specified, even if it is already attached to another bare metal server network interface.
    * Addresses on the bare metal server network interface must be within the specified subnet's CIDR blocks.
    *
+   * If this bare metal server has network attachments, each network interface is a [read-only
+   * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+   * network attachment and its attached virtual network interface, and new network interfaces are not allowed to be
+   * created.
+   *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
    * @param {BareMetalServerNetworkInterfacePrototype} params.bareMetalServerNetworkInterfacePrototype - The bare metal
@@ -10904,6 +11983,10 @@ class VpcV1 extends BaseService {
    * associated with the bare metal server network interface are implicitly disassociated.  The primary bare metal
    * server network interface is not allowed to be deleted.
    *
+   * If this bare metal server has network attachments, this network interface is a [read-only
+   * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+   * network attachment and its attached virtual network interface, and is not allowed to be deleted.
+   *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
    * @param {string} params.id - The bare metal server network interface identifier.
@@ -10958,6 +12041,10 @@ class VpcV1 extends BaseService {
    * Retrieve a bare metal server network interface.
    *
    * This request retrieves a single bare metal server network interface specified by the identifier in the URL.
+   *
+   * If this bare metal server has network attachments, the retrieved network interface is a [read-only
+   * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+   * network attachment and its attached virtual network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
@@ -11017,11 +12104,20 @@ class VpcV1 extends BaseService {
    * network interface patch object. The bare metal server network interface patch object is structured in the same way
    * as a retrieved bare metal server network interface and needs to contain only the information to be updated.
    *
+   * If this bare metal server has network attachments, this network interface is a [read-only
+   * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+   * network attachment and its attached virtual network interface, and is not allowed to be updated.
+   *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
    * @param {string} params.id - The bare metal server network interface identifier.
    * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this bare metal
    * server network interface.
+   *
+   * If this bare metal server has network attachments, this network interface is a
+   * [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+   * corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed on
+   * the attached virtual network interface.
    * @param {number[]} [params.allowedVlans] - The VLAN IDs to allow for `vlan` interfaces using this PCI interface,
    * replacing any existing VLAN IDs. The specified values must include IDs for all `vlan` interfaces currently using
    * this PCI interface.
@@ -11034,6 +12130,11 @@ class VpcV1 extends BaseService {
    *   allowing the workload to perform any needed NAT operations.
    * - `allow_ip_spoofing` must be `false`.
    * - `interface_type` must not be `hipersocket`.
+   *
+   * If this bare metal server has network attachments, this network interface is a
+   * [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+   * corresponding network attachment and its attached virtual network interface, and infrastructure NAT is managed on
+   * the attached virtual network interface.
    * @param {string} [params.name] - The name for this bare metal server network interface. The name must not be used by
    * another network interface on the bare metal server.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -11270,9 +12371,13 @@ class VpcV1 extends BaseService {
    *
    * This request associates the specified floating IP with the specified bare metal server network interface. If
    * `enable_infrastructure_nat` is `false`, this adds the IP to any existing associations. If
-   * `enable_infrastructure_nat` is `true`, this replaces any existing association.  For this request to succeed, the
-   * existing floating IP must not be required by another resource, such as a public gateway. A request body is not
-   * required, and if provided, is ignored.
+   * `enable_infrastructure_nat` is `true`, this replaces any existing association.
+   *
+   * The existing floating IP must:
+   * - not be required by another resource, such as a public gateway
+   * - be in the same `zone` as the bare metal server
+   *
+   * A request body is not required, and if provided, is ignored.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
@@ -12286,6 +13391,307 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
+   * List all snapshot consistency groups.
+   *
+   * This request lists all snapshot consistency groups in the region. A snapshot consistency group is a collection of
+   * individual snapshots taken at the same time.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
+   * matching the specified identifier.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {string} [params.backupPolicyPlanId] - Filters the collection to backup policy jobs with a
+   * `backup_policy_plan.id` property matching the specified identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroupCollection>>}
+   */
+  public listSnapshotConsistencyGroups(
+    params?: VpcV1.ListSnapshotConsistencyGroupsParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroupCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'backupPolicyPlanId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'name': _params.name,
+      'sort': _params.sort,
+      'backup_policy_plan.id': _params.backupPolicyPlanId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSnapshotConsistencyGroups');
+
+    const parameters = {
+      options: {
+        url: '/snapshot_consistency_groups',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a snapshot consistency group.
+   *
+   * This request creates a new snapshot consistency group from a snapshot consistency group object.  The prototype
+   * object is structured in the same way as a retrieved consistency group, and contains the information necessary to
+   * provision the new snapshot consistency group.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {SnapshotConsistencyGroupPrototype} params.snapshotConsistencyGroupPrototype - The snapshot consistency
+   * group prototype object.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>>}
+   */
+  public createSnapshotConsistencyGroup(
+    params: VpcV1.CreateSnapshotConsistencyGroupParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>> {
+    const _params = { ...params };
+    const _requiredParams = ['snapshotConsistencyGroupPrototype'];
+    const _validParams = ['snapshotConsistencyGroupPrototype', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = _params.snapshotConsistencyGroupPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createSnapshotConsistencyGroup');
+
+    const parameters = {
+      options: {
+        url: '/snapshot_consistency_groups',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a snapshot consistency group.
+   *
+   * This request deletes snapshot consistency group. This operation cannot be reversed. If the
+   * `delete_snapshots_on_delete` property is `true`, all snapshots in the consistency group will also be deleted.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The snapshot consistency group identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>>}
+   */
+  public deleteSnapshotConsistencyGroup(
+    params: VpcV1.DeleteSnapshotConsistencyGroupParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteSnapshotConsistencyGroup');
+
+    const parameters = {
+      options: {
+        url: '/snapshot_consistency_groups/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a snapshot consistency group.
+   *
+   * This request retrieves a single snapshot consistency group specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The snapshot consistency group identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>>}
+   */
+  public getSnapshotConsistencyGroup(
+    params: VpcV1.GetSnapshotConsistencyGroupParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSnapshotConsistencyGroup');
+
+    const parameters = {
+      options: {
+        url: '/snapshot_consistency_groups/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a snapshot consistency group.
+   *
+   * This request updates a snapshot consistency group with the information in a provided snapshot consistency group
+   * patch. The snapshot consistency group patch object is structured in the same way as a retrieved snapshot
+   * consistency group and contains only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The snapshot consistency group identifier.
+   * @param {boolean} [params.deleteSnapshotsOnDelete] - Indicates whether deleting the snapshot consistency group will
+   * also delete the snapshots in the group.
+   * @param {string} [params.name] - The name for this snapshot consistency group. The name must not be used by another
+   * snapshot consistency groups in the region.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>>}
+   */
+  public updateSnapshotConsistencyGroup(
+    params: VpcV1.UpdateSnapshotConsistencyGroupParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'deleteSnapshotsOnDelete', 'name', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'delete_snapshots_on_delete': _params.deleteSnapshotsOnDelete,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSnapshotConsistencyGroup');
+
+    const parameters = {
+      options: {
+        url: '/snapshot_consistency_groups/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * Delete a filtered collection of snapshots.
    *
    * This request deletes all snapshots created from a specific source volume.
@@ -12389,6 +13795,10 @@ class VpcV1 extends BaseService {
    * `source_image.remote.region.name` property matching the exact specified name.
    * @param {string} [params.clonesZoneName] - Filters the collection to snapshots with an item in the `clones` property
    * with a `zone.name` property matching the exact specified name.
+   * @param {string} [params.snapshotConsistencyGroupId] - Filters the collection to resources with a
+   * `snapshot_consistency_group.id` property matching the specified identifier.
+   * @param {string} [params.snapshotConsistencyGroupCrn] - Filters the collection to resources with a
+   * `snapshot_consistency_group.crn` property matching the specified identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SnapshotCollection>>}
    */
@@ -12397,7 +13807,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'tag', 'resourceGroupId', 'name', 'sourceVolumeId', 'sourceVolumeCrn', 'sourceImageId', 'sourceImageCrn', 'sort', 'backupPolicyPlanId', 'copiesId', 'copiesName', 'copiesCrn', 'copiesRemoteRegionName', 'sourceSnapshotId', 'sourceSnapshotRemoteRegionName', 'sourceVolumeRemoteRegionName', 'sourceImageRemoteRegionName', 'clonesZoneName', 'headers'];
+    const _validParams = ['start', 'limit', 'tag', 'resourceGroupId', 'name', 'sourceVolumeId', 'sourceVolumeCrn', 'sourceImageId', 'sourceImageCrn', 'sort', 'backupPolicyPlanId', 'copiesId', 'copiesName', 'copiesCrn', 'copiesRemoteRegionName', 'sourceSnapshotId', 'sourceSnapshotRemoteRegionName', 'sourceVolumeRemoteRegionName', 'sourceImageRemoteRegionName', 'clonesZoneName', 'snapshotConsistencyGroupId', 'snapshotConsistencyGroupCrn', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12426,6 +13836,8 @@ class VpcV1 extends BaseService {
       'source_volume.remote.region.name': _params.sourceVolumeRemoteRegionName,
       'source_image.remote.region.name': _params.sourceImageRemoteRegionName,
       'clones[].zone.name': _params.clonesZoneName,
+      'snapshot_consistency_group.id': _params.snapshotConsistencyGroupId,
+      'snapshot_consistency_group.crn': _params.snapshotConsistencyGroupCrn,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSnapshots');
@@ -14135,6 +15547,171 @@ class VpcV1 extends BaseService {
   }
 
   /**
+   * Create a virtual network interface.
+   *
+   * This request creates a new virtual network interface from a virtual network interface prototype object. The
+   * prototype object is structured in the same way as a retrieved virtual network interface, and contains the
+   * information necessary to create the new virtual network interface.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this interface. If
+   * `false`, source IP spoofing is prevented on this interface. If `true`, source IP spoofing is allowed on this
+   * interface.
+   * @param {boolean} [params.autoDelete] - Indicates whether this virtual network interface will be automatically
+   * deleted when
+   * `target` is deleted. Must be `false` if the virtual network interface is unbound.
+   * @param {boolean} [params.enableInfrastructureNat] - If `true`:
+   * - The VPC infrastructure performs any needed NAT operations.
+   * - `floating_ips` must not have more than one floating IP.
+   *
+   * If `false`:
+   * - Packets are passed unchanged to/from the virtual network interface,
+   *   allowing the workload to perform any needed NAT operations.
+   * - `allow_ip_spoofing` must be `false`.
+   * - Can only be attached to a `target` with a `resource_type` of
+   *   `bare_metal_server_network_attachment`.
+   * @param {VirtualNetworkInterfaceIPPrototype[]} [params.ips] - Additional IP addresses to bind to the virtual network
+   * interface. Each item may be either a reserved IP identity, or a reserved IP prototype object which will be used to
+   * create a new reserved IP. All IP addresses must be in the primary IP's subnet.
+   *
+   * If reserved IP identities are provided, the specified reserved IPs must be unbound.
+   *
+   * If reserved IP prototype objects with addresses are provided, the addresses must be available on the virtual
+   * network interface's subnet. For any prototype objects that do not specify an address, an available address on the
+   * subnet will be automatically selected and reserved.
+   * @param {string} [params.name] - The name for this virtual network interface. The name must not be used by another
+   * virtual network interface in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected
+   * words. Names beginning with `ibm-` are reserved for provider-owned resources, and are not allowed.
+   * @param {VirtualNetworkInterfacePrimaryIPPrototype} [params.primaryIp] - The primary IP address to bind to the
+   * virtual network interface. May be either a
+   * reserved IP identity, or a reserved IP prototype object which will be used to create a
+   * new reserved IP.
+   *
+   * If a reserved IP identity is provided, the specified reserved IP must be unbound.
+   *
+   * If a reserved IP prototype object with an address is provided, the address must be
+   * available on the virtual network interface's subnet. If no address is specified,
+   * an available address on the subnet will be automatically selected and reserved.
+   * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
+   * [default resource
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+   * @param {SecurityGroupIdentity[]} [params.securityGroups] - The security groups to use for this virtual network
+   * interface. If unspecified, the default security group of the VPC for the subnet is used.
+   * @param {SubnetIdentity} [params.subnet] - The associated subnet. Required if `primary_ip` does not specify a
+   * reserved IP
+   * identity.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>>}
+   */
+  public createVirtualNetworkInterface(
+    params?: VpcV1.CreateVirtualNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'ips', 'name', 'primaryIp', 'resourceGroup', 'securityGroups', 'subnet', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'allow_ip_spoofing': _params.allowIpSpoofing,
+      'auto_delete': _params.autoDelete,
+      'enable_infrastructure_nat': _params.enableInfrastructureNat,
+      'ips': _params.ips,
+      'name': _params.name,
+      'primary_ip': _params.primaryIp,
+      'resource_group': _params.resourceGroup,
+      'security_groups': _params.securityGroups,
+      'subnet': _params.subnet,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVirtualNetworkInterface');
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a virtual network interface.
+   *
+   * This request deletes a virtual network interface. This operation cannot be reversed. For this request to succeed,
+   * the virtual network interface must not be required by another resource, such as the primary network attachment for
+   * an instance.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The virtual network interface identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deleteVirtualNetworkInterfaces(
+    params: VpcV1.DeleteVirtualNetworkInterfacesParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVirtualNetworkInterfaces');
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * Retrieve a virtual network interface.
    *
    * This request retrieves a single virtual network interface specified by the identifier in the URL.
@@ -14197,8 +15774,25 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The virtual network interface identifier.
-   * @param {string} [params.name] - The name for this virtual network interface. The name is unique across all virtual
-   * network interfaces in the VPC.
+   * @param {boolean} [params.allowIpSpoofing] - Indicates whether source IP spoofing is allowed on this interface.
+   *
+   * Must be `false` if `target` is a file share mount target.
+   * @param {boolean} [params.autoDelete] - Indicates whether this virtual network interface will be automatically
+   * deleted when
+   * `target` is deleted. Must be `false` if the virtual network interface is unbound.
+   * @param {boolean} [params.enableInfrastructureNat] - If `true`:
+   * - The VPC infrastructure performs any needed NAT operations.
+   * - `floating_ips` must not have more than one floating IP.
+   *
+   * If `false`:
+   * - Packets are passed unchanged to/from the virtual network interface,
+   *   allowing the workload to perform any needed NAT operations.
+   * - `allow_ip_spoofing` must be `false`.
+   * - Can only be attached to a `target` with a `resource_type` of
+   *   `bare_metal_server_network_attachment`.
+   * @param {string} [params.name] - The name for this virtual network interface. The name must not be used by another
+   * virtual network interface in the region. Names beginning with `ibm-` are reserved for provider-owned resources, and
+   * are not allowed.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>>}
    */
@@ -14207,13 +15801,16 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'name', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'allow_ip_spoofing': _params.allowIpSpoofing,
+      'auto_delete': _params.autoDelete,
+      'enable_infrastructure_nat': _params.enableInfrastructureNat,
       'name': _params.name,
     };
 
@@ -14243,6 +15840,489 @@ class VpcV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List all floating IPs associated with a virtual network interface.
+   *
+   * This request lists all floating IPs associated with a virtual network interface.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value
+   * `-name` sorts the collection by the `name` property in descending order, and the value `name` sorts it by the
+   * `name` property in ascending order.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.FloatingIPCollectionVirtualNetworkInterfaceContext>>}
+   */
+  public listNetworkInterfaceFloatingIps(
+    params: VpcV1.ListNetworkInterfaceFloatingIpsParams
+  ): Promise<VpcV1.Response<VpcV1.FloatingIPCollectionVirtualNetworkInterfaceContext>> {
+    const _params = { ...params };
+    const _requiredParams = ['virtualNetworkInterfaceId'];
+    const _validParams = ['virtualNetworkInterfaceId', 'start', 'limit', 'sort', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'sort': _params.sort,
+    };
+
+    const path = {
+      'virtual_network_interface_id': _params.virtualNetworkInterfaceId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listNetworkInterfaceFloatingIps');
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{virtual_network_interface_id}/floating_ips',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Disassociate a floating IP from a virtual network interface.
+   *
+   * This request disassociates the specified floating IP from the specified virtual network interface.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
+   * @param {string} params.id - The floating IP identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public removeNetworkInterfaceFloatingIp(
+    params: VpcV1.RemoveNetworkInterfaceFloatingIpParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'virtual_network_interface_id': _params.virtualNetworkInterfaceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeNetworkInterfaceFloatingIp');
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{virtual_network_interface_id}/floating_ips/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve associated floating IP.
+   *
+   * This request retrieves a specified floating IP if it is associated with the virtual network interface specified in
+   * the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
+   * @param {string} params.id - The floating IP identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.FloatingIPReference>>}
+   */
+  public getNetworkInterfaceFloatingIp(
+    params: VpcV1.GetNetworkInterfaceFloatingIpParams
+  ): Promise<VpcV1.Response<VpcV1.FloatingIPReference>> {
+    const _params = { ...params };
+    const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'virtual_network_interface_id': _params.virtualNetworkInterfaceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getNetworkInterfaceFloatingIp');
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{virtual_network_interface_id}/floating_ips/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Add an association between a floating IP and a virtual network interface.
+   *
+   * This request adds an association between the specified floating IP and the specified virtual network interface.
+   *
+   * If the virtual network interface has `enable_infrastructure_nat` set to `true`, no more than one floating IP can be
+   * associated, and network address translation is performed between the floating IP address and the virtual network
+   * interface's `primary_ip` address.
+   *
+   * If the virtual network interface has `enable_infrastructure_nat` set to `false`, packets are passed unchanged
+   * to/from the virtual network interface.
+   *
+   * The floating IP must:
+   * - be in the same `zone` as the virtual network interface
+   * - not currently be associated with another resource
+   *
+   * The virtual network interface's `target` must not currently be a file share mount target.
+   *
+   * A request body is not required, and if provided, is ignored.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
+   * @param {string} params.id - The floating IP identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.FloatingIPReference>>}
+   */
+  public addNetworkInterfaceFloatingIp(
+    params: VpcV1.AddNetworkInterfaceFloatingIpParams
+  ): Promise<VpcV1.Response<VpcV1.FloatingIPReference>> {
+    const _params = { ...params };
+    const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'virtual_network_interface_id': _params.virtualNetworkInterfaceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addNetworkInterfaceFloatingIp');
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{virtual_network_interface_id}/floating_ips/{id}',
+        method: 'PUT',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List all reserved IPs bound to a virtual network interface.
+   *
+   * This request lists all reserved IPs bound to a virtual network interface.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value
+   * `-name` sorts the collection by the `name` property in descending order, and the value `name` sorts it by the
+   * `name` property in ascending order.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionVirtualNetworkInterfaceContext>>}
+   */
+  public listVirtualNetworkInterfaceIps(
+    params: VpcV1.ListVirtualNetworkInterfaceIpsParams
+  ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionVirtualNetworkInterfaceContext>> {
+    const _params = { ...params };
+    const _requiredParams = ['virtualNetworkInterfaceId'];
+    const _validParams = ['virtualNetworkInterfaceId', 'start', 'limit', 'sort', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'sort': _params.sort,
+    };
+
+    const path = {
+      'virtual_network_interface_id': _params.virtualNetworkInterfaceId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVirtualNetworkInterfaceIps');
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{virtual_network_interface_id}/ips',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Unbind a reserved IP from a virtual network interface.
+   *
+   * This request unbinds the specified reserved IP from the specified virtual network interface. If the reserved IP has
+   * `auto_delete` set to `true`, the reserved IP will be deleted.
+   *
+   * The reserved IP for the `primary_ip` cannot be unbound.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
+   * @param {string} params.id - The reserved IP identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public removeVirtualNetworkInterfaceIp(
+    params: VpcV1.RemoveVirtualNetworkInterfaceIpParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'virtual_network_interface_id': _params.virtualNetworkInterfaceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVirtualNetworkInterfaceIp');
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{virtual_network_interface_id}/ips/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve bound reserved IP.
+   *
+   * This request retrieves the specified reserved IP address if it is bound to the virtual network interface specified
+   * in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
+   * @param {string} params.id - The reserved IP identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPReference>>}
+   */
+  public getVirtualNetworkInterfaceIp(
+    params: VpcV1.GetVirtualNetworkInterfaceIpParams
+  ): Promise<VpcV1.Response<VpcV1.ReservedIPReference>> {
+    const _params = { ...params };
+    const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'virtual_network_interface_id': _params.virtualNetworkInterfaceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVirtualNetworkInterfaceIp');
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{virtual_network_interface_id}/ips/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Bind a reserved IP to a virtual network interface.
+   *
+   * This request binds the specified reserved IP to the specified virtual network interface.
+   *
+   * The reserved IP must currently be unbound and in the primary IP's subnet. The virtual network interface's `target`
+   * must not currently be a file share mount target.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
+   * @param {string} params.id - The reserved IP identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPReference>>}
+   */
+  public addVirtualNetworkInterfaceIp(
+    params: VpcV1.AddVirtualNetworkInterfaceIpParams
+  ): Promise<VpcV1.Response<VpcV1.ReservedIPReference>> {
+    const _params = { ...params };
+    const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'virtual_network_interface_id': _params.virtualNetworkInterfaceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVirtualNetworkInterfaceIp');
+
+    const parameters = {
+      options: {
+        url: '/virtual_network_interfaces/{virtual_network_interface_id}/ips/{id}',
+        method: 'PUT',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
           },
           _params.headers
         ),
@@ -14572,6 +16652,14 @@ class VpcV1 extends BaseService {
    * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
    * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
    * in ascending order.
+   * @param {string} [params.targetId] - Filters the collection to resources with a `target.id` property matching the
+   * specified identifier.
+   * @param {string} [params.targetCrn] - Filters the collection to resources with a `target.crn` property matching the
+   * specified CRN.
+   * @param {string} [params.targetName] - Filters the collection to resources with a `target.name` property matching
+   * the exact specified name.
+   * @param {string} [params.targetResourceType] - Filters the collection to resources with a `target.resource_type`
+   * property matching the specified value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIPCollection>>}
    */
@@ -14580,7 +16668,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIPCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'sort', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'sort', 'targetId', 'targetCrn', 'targetName', 'targetResourceType', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14593,6 +16681,10 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
       'sort': _params.sort,
+      'target.id': _params.targetId,
+      'target.crn': _params.targetCrn,
+      'target.name': _params.targetName,
+      'target.resource_type': _params.targetResourceType,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listFloatingIps');
@@ -14795,7 +16887,10 @@ class VpcV1 extends BaseService {
    * resource is:
    *
    * - an instance network interface
-   * - a bare metal server network interface with `enable_infrastructure_nat` set to `true`.
+   * - a bare metal server network interface with `enable_infrastructure_nat` set to `true`
+   * - a virtual network interface with `enable_infrastructure_nat` set to `true`
+   *
+   * Specify `null` to remove an existing binding.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.FloatingIP>>}
    */
@@ -17595,7 +19690,19 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
    * @param {string} params.id - The VPN gateway connection identifier.
-   * @param {VPNGatewayConnectionPatch} params.vpnGatewayConnectionPatch - The VPN gateway connection patch.
+   * @param {boolean} [params.adminStateUp] - If set to false, the VPN gateway connection is shut down.
+   * @param {VPNGatewayConnectionDPDPatch} [params.deadPeerDetection] - The Dead Peer Detection settings.
+   * @param {VPNGatewayConnectionIKEPolicyPatch} [params.ikePolicy] - The IKE policy to use. Specify `null` to remove
+   * any existing policy, [resulting in
+   * auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1).
+   * @param {VPNGatewayConnectionIPsecPolicyPatch} [params.ipsecPolicy] - The IPsec policy to use. Specify `null` to
+   * remove any existing policy, [resulting in
+   * auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ipsec-auto-negotiation-phase-2).
+   * @param {string} [params.name] - The name for this VPN gateway connection. The name must not be used by another
+   * connection for the VPN gateway.
+   * @param {string} [params.peerAddress] - The IP address of the peer VPN gateway.
+   * @param {string} [params.psk] - The pre-shared key.
+   * @param {string} [params.routingProtocol] - Routing protocols are disabled for this VPN gateway connection.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>>}
    */
@@ -17603,14 +19710,24 @@ class VpcV1 extends BaseService {
     params: VpcV1.UpdateVpnGatewayConnectionParams
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
     const _params = { ...params };
-    const _requiredParams = ['vpnGatewayId', 'id', 'vpnGatewayConnectionPatch'];
-    const _validParams = ['vpnGatewayId', 'id', 'vpnGatewayConnectionPatch', 'headers'];
+    const _requiredParams = ['vpnGatewayId', 'id'];
+    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'ikePolicy', 'ipsecPolicy', 'name', 'peerAddress', 'psk', 'routingProtocol', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
-    const body = _params.vpnGatewayConnectionPatch;
+    const body = {
+      'admin_state_up': _params.adminStateUp,
+      'dead_peer_detection': _params.deadPeerDetection,
+      'ike_policy': _params.ikePolicy,
+      'ipsec_policy': _params.ipsecPolicy,
+      'name': _params.name,
+      'peer_address': _params.peerAddress,
+      'psk': _params.psk,
+      'routing_protocol': _params.routingProtocol,
+    };
+
     const query = {
       'version': this.version,
       'generation': this.generation,
@@ -19286,8 +21403,6 @@ class VpcV1 extends BaseService {
    * in.
    *
    * Load balancers in the `network` family allow only one subnet to be specified.
-   * @param {LoadBalancerLoggingDatapathPrototype} [params.datapath] - The datapath logging configuration for this load
-   * balancer.
    * @param {LoadBalancerDNSPrototype} [params.dns] - The DNS configuration for this load balancer.
    *
    * If unspecified, DNS `A` records for this load balancer's `hostname` property will be added
@@ -19298,7 +21413,7 @@ class VpcV1 extends BaseService {
    * @param {LoadBalancerLoggingPrototype} [params.logging] - The logging configuration to use for this load balancer.
    * See [VPC Datapath
    * Logging](https://cloud.ibm.com/docs/vpc?topic=vpc-datapath-logging) on the logging
-   * format, fields and permitted values.
+   * format, fields and permitted values. If unspecified, `datapath.active` will be `false`.
    *
    * To activate logging, the load balancer profile must support the specified logging type.
    * @param {string} [params.name] - The name for this load balancer. The name must not be used by another load balancer
@@ -19325,7 +21440,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
     const _params = { ...params };
     const _requiredParams = ['isPublic', 'subnets'];
-    const _validParams = ['isPublic', 'subnets', 'datapath', 'dns', 'listeners', 'logging', 'name', 'pools', 'profile', 'resourceGroup', 'routeMode', 'securityGroups', 'headers'];
+    const _validParams = ['isPublic', 'subnets', 'dns', 'listeners', 'logging', 'name', 'pools', 'profile', 'resourceGroup', 'routeMode', 'securityGroups', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19334,7 +21449,6 @@ class VpcV1 extends BaseService {
     const body = {
       'is_public': _params.isPublic,
       'subnets': _params.subnets,
-      'datapath': _params.datapath,
       'dns': _params.dns,
       'listeners': _params.listeners,
       'logging': _params.logging,
@@ -19380,7 +21494,7 @@ class VpcV1 extends BaseService {
    * Delete a load balancer.
    *
    * This request deletes a load balancer. This operation cannot be reversed. A load balancer cannot be deleted if its
-   * `provisioning_status` is `delete_pending`.
+   * `provisioning_status` is `delete_pending` or it is referenced by a resource.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The load balancer identifier.
@@ -21791,7 +23905,7 @@ class VpcV1 extends BaseService {
    *
    * This request binds the specified reserved IP to the specified endpoint gateway. The reserved IP:
    *
-   * - must currently be unbound
+   * - must currently be unbound, or not required by its target
    * - must not be in the same zone as any other reserved IP bound to the endpoint gateway.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -22031,7 +24145,7 @@ class VpcV1 extends BaseService {
    * List all flow log collectors.
    *
    * This request lists all flow log collectors in the region. A flow log collector summarizes data sent over the
-   * instance network interfaces contained within its target.
+   * instance network interfaces and instance network attachments contained within its target.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -22115,10 +24229,14 @@ class VpcV1 extends BaseService {
    * `IBM Cloud Flow Logs` resources of `VPC Infrastructure Services` writer
    * access to the bucket. For more information, see [Creating a flow log
    * collector](https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-flow-log-collector).
-   * @param {FlowLogCollectorTargetPrototype} params.target - The target this collector will collect flow logs for. If
-   * the target is an instance,
-   * subnet, or VPC, flow logs will not be collected for any instance network interfaces within
-   * the target that are themselves the target of a more specific flow log collector.
+   * @param {FlowLogCollectorTargetPrototype} params.target - The target this collector will collect flow logs for.
+   *
+   * If the target is an instance, subnet, or VPC, flow logs will not be collected for any
+   * instance network attachments, virtual network interfaces or instance network interfaces
+   * within the target that are themselves the target of a more specific flow log collector.
+   *
+   * The target must not be a virtual network interface that is attached to a bare metal server
+   * network attachment or to a file share mount target.
    * @param {boolean} [params.active] - Indicates whether this collector will be active upon creation.
    * @param {string} [params.name] - The name for this flow log collector. The name must not be used by another flow log
    * collector in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -22364,7 +24482,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2023-10-10` and `2023-11-15`.
+     *  `2023-12-05` and `2024-02-15`.
      */
     version: string;
   }
@@ -22684,7 +24802,14 @@ namespace VpcV1 {
      *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     destination: string;
-    /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
+    /** The zone to apply the route to.
+     *
+     *  If subnets are attached to the route's routing table, egress traffic from those
+     *  subnets in this zone will be subject to this route. If this route's routing table
+     *  has any of `route_direct_link_ingress`, `route_internet_ingress`,
+     *  `route_transit_gateway_ingress` or `route_vpc_zone_ingress`  set to`true`, traffic
+     *  from those ingress sources arriving in this zone will be subject to this route.
+     */
     zone: ZoneIdentity;
     /** The action to perform with a packet matching the route:
      *  - `delegate`: delegate to system-provided routes
@@ -22693,6 +24818,13 @@ namespace VpcV1 {
      *  - `drop`: drop the packet.
      */
     action?: CreateVpcRouteConstants.Action | string;
+    /** Indicates whether this route will be advertised to the ingress sources specified by the
+     *  `advertise_routes_to` routing table property.
+     *
+     *  All routes in a routing table with the same `destination` and `zone` must have the same
+     *  `advertise` value.
+     */
+    advertise?: boolean;
     /** The name for this route. The name must not be used by another route in the routing table. Names starting
      *  with `ibm-` are reserved for system-provided routes, and are not allowed. If unspecified, the name will be a
      *  hyphenated list of randomly-selected words.
@@ -22750,6 +24882,15 @@ namespace VpcV1 {
     vpcId: string;
     /** The route identifier. */
     id: string;
+    /** Indicates whether this route will be advertised to the ingress sources specified by the
+     *  `advertise_routes_to` routing table property.
+     *
+     *  Since all routes in a routing table with the same `destination` and `zone` must have the same `advertise` value,
+     *  this property can only be changed for routes with a unique
+     *  `destination` and `zone` in the routing table. For more information, see [Advertising
+     *  routes](https://cloud.ibm.com/docs/vpc?topic=vpc-about-custom-routes#rt-advertising-routes).
+     */
+    advertise?: boolean;
     /** The name for this route. The name must not be used by another route in the routing table. Names starting
      *  with `ibm-` are reserved for system-provided routes, and are not allowed.
      */
@@ -22794,6 +24935,10 @@ namespace VpcV1 {
      *  filter support is expected to expand in the future.
      */
     acceptRoutesFrom?: ResourceFilter[];
+    /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised
+     *  to these sources.
+     */
+    advertiseRoutesTo?: CreateVpcRoutingTableConstants.AdvertiseRoutesTo[] | string[];
     /** The name for this routing table. The name must not be used by another routing table in the VPC. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
@@ -22850,6 +24995,15 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Constants for the `createVpcRoutingTable` operation. */
+  export namespace CreateVpcRoutingTableConstants {
+    /** An ingress source that routes can be advertised to: - `direct_link` (requires `route_direct_link_ingress` be set to `true`) - `transit_gateway` (requires `route_transit_gateway_ingress` be set to `true`). */
+    export enum AdvertiseRoutesTo {
+      DIRECT_LINK = 'direct_link',
+      TRANSIT_GATEWAY = 'transit_gateway',
+    }
+  }
+
   /** Parameters for the `deleteVpcRoutingTable` operation. */
   export interface DeleteVpcRoutingTableParams {
     /** The VPC identifier. */
@@ -22887,13 +25041,18 @@ namespace VpcV1 {
      *  filter support is expected to expand in the future.
      */
     acceptRoutesFrom?: ResourceFilter[];
+    /** The ingress sources to advertise routes to, replacing any existing sources to advertise to. Routes in the
+     *  table with `advertise` enabled will be advertised to these sources.
+     */
+    advertiseRoutesTo?: UpdateVpcRoutingTableConstants.AdvertiseRoutesTo[] | string[];
     /** The name for this routing table. The name must not be used by another routing table in the VPC. */
     name?: string;
     /** Indicates whether this routing table is used to route traffic that originates from
      *  [Direct Link](https://cloud.ibm.com/docs/dl/) to this VPC. Updating to `true` selects this routing table,
      *  provided no other routing table in the VPC already has this property set to `true`, and no subnets are attached
      *  to this routing table. Updating to
-     *  `false` deselects this routing table.
+     *  `false` deselects this routing table, provided `direct_link` is absent from
+     *  `advertise_routes_to`.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
@@ -22917,7 +25076,8 @@ namespace VpcV1 {
     /** Indicates whether this routing table is used to route traffic that originates from
      *  [Transit Gateway](https://cloud.ibm.com/docs/transit-gateway) to this VPC. Updating to
      *  `true` selects this routing table, provided no other routing table in the VPC already has this property set to
-     *  `true`, and no subnets are attached to this routing table. Updating to `false` deselects this routing table.
+     *  `true`, and no subnets are attached to this routing table. Updating to `false` deselects this routing table,
+     *  provided `transit_gateway` is absent from `advertise_routes_to`.
      *
      *  Incoming traffic will be routed according to the routing table with one exception: routes with an `action` of
      *  `deliver` are treated as `drop` unless the `next_hop` is an IP address in a subnet in the route's `zone` that is
@@ -22947,6 +25107,15 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Constants for the `updateVpcRoutingTable` operation. */
+  export namespace UpdateVpcRoutingTableConstants {
+    /** An ingress source that routes can be advertised to: - `direct_link` (requires `route_direct_link_ingress` be set to `true`) - `transit_gateway` (requires `route_transit_gateway_ingress` be set to `true`). */
+    export enum AdvertiseRoutesTo {
+      DIRECT_LINK = 'direct_link',
+      TRANSIT_GATEWAY = 'transit_gateway',
+    }
+  }
+
   /** Parameters for the `listVpcRoutingTableRoutes` operation. */
   export interface ListVpcRoutingTableRoutesParams {
     /** The VPC identifier. */
@@ -22972,7 +25141,14 @@ namespace VpcV1 {
      *  `priority`, and only if both routes have an `action` of `deliver` and the `next_hop` is an IP address.
      */
     destination: string;
-    /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
+    /** The zone to apply the route to.
+     *
+     *  If subnets are attached to the route's routing table, egress traffic from those
+     *  subnets in this zone will be subject to this route. If this route's routing table
+     *  has any of `route_direct_link_ingress`, `route_internet_ingress`,
+     *  `route_transit_gateway_ingress` or `route_vpc_zone_ingress`  set to`true`, traffic
+     *  from those ingress sources arriving in this zone will be subject to this route.
+     */
     zone: ZoneIdentity;
     /** The action to perform with a packet matching the route:
      *  - `delegate`: delegate to system-provided routes
@@ -22981,6 +25157,13 @@ namespace VpcV1 {
      *  - `drop`: drop the packet.
      */
     action?: CreateVpcRoutingTableRouteConstants.Action | string;
+    /** Indicates whether this route will be advertised to the ingress sources specified by the
+     *  `advertise_routes_to` routing table property.
+     *
+     *  All routes in a routing table with the same `destination` and `zone` must have the same
+     *  `advertise` value.
+     */
+    advertise?: boolean;
     /** The name for this route. The name must not be used by another route in the routing table. Names starting
      *  with `ibm-` are reserved for system-provided routes, and are not allowed. If unspecified, the name will be a
      *  hyphenated list of randomly-selected words.
@@ -23044,6 +25227,15 @@ namespace VpcV1 {
     routingTableId: string;
     /** The VPC routing table route identifier. */
     id: string;
+    /** Indicates whether this route will be advertised to the ingress sources specified by the
+     *  `advertise_routes_to` routing table property.
+     *
+     *  Since all routes in a routing table with the same `destination` and `zone` must have the same `advertise` value,
+     *  this property can only be changed for routes with a unique
+     *  `destination` and `zone` in the routing table. For more information, see [Advertising
+     *  routes](https://cloud.ibm.com/docs/vpc?topic=vpc-about-custom-routes#rt-advertising-routes).
+     */
+    advertise?: boolean;
     /** The name for this route. The name must not be used by another route in the routing table. Names starting
      *  with `ibm-` are reserved for system-provided routes, and are not allowed.
      */
@@ -23196,6 +25388,14 @@ namespace VpcV1 {
      *  order.
      */
     sort?: ListSubnetReservedIpsConstants.Sort | string;
+    /** Filters the collection to resources with a `target.id` property matching the specified identifier. */
+    targetId?: string;
+    /** Filters the collection to resources with a `target.crn` property matching the specified CRN. */
+    targetCrn?: string;
+    /** Filters the collection to resources with a `target.name` property matching the exact specified name. */
+    targetName?: string;
+    /** Filters the collection to resources with a `target.resource_type` property matching the specified value. */
+    targetResourceType?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -23229,8 +25429,9 @@ namespace VpcV1 {
     name?: string;
     /** The target to bind this reserved IP to.  The target must be in the same VPC.
      *
-     *  At present, only endpoint gateway targets are supported.  The endpoint gateway must
-     *  not be already bound to a reserved IP in the subnet's zone.
+     *  The following targets are supported:
+     *  - An endpoint gateway not already bound to a reserved IP in the subnet's zone.
+     *  - A virtual network interface.
      *
      *  If unspecified, the reserved IP will be created unbound.
      */
@@ -23623,6 +25824,12 @@ namespace VpcV1 {
      *  placement group name.
      */
     placementGroupName?: string;
+    /** Filters the collection to instances with a `reservation.id` property matching the specified identifier. */
+    reservationId?: string;
+    /** Filters the collection to instances with a `reservation.crn` property matching the specified CRN. */
+    reservationCrn?: string;
+    /** Filters the collection to resources with a `reservation.name` property matching the exact specified name. */
+    reservationName?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -23637,6 +25844,10 @@ namespace VpcV1 {
   export interface DeleteInstanceParams {
     /** The virtual server instance identifier. */
     id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -23661,6 +25872,8 @@ namespace VpcV1 {
     name?: string;
     /** The placement restrictions to use for the virtual server instance. For the placement
      *  restrictions to be changed, the instance `status` must be `stopping` or `stopped`.
+     *
+     *  If set, `reservation_affinity.policy` must be `disabled`.
      */
     placementTarget?: InstancePlacementTargetPatch;
     /** The profile to use for this virtual server instance. For the profile to be changed,
@@ -23673,14 +25886,20 @@ namespace VpcV1 {
      *    instance is placed on a dedicated host, the requested profile `family` must be
      *    the same as the dedicated host `family`.
      *  - Have the same `vcpu.architecture`.
-     *  - Support the number of network interfaces the instance currently has.
+     *  - Support the number of network attachments or network interfaces the instance
+     *    currently has.
      */
     profile?: InstancePatchProfile;
+    reservationAffinity?: InstanceReservationAffinityPatch;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
      *  increase in this value will result in a corresponding decrease to
      *  `total_network_bandwidth`.
      */
     totalVolumeBandwidth?: number;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -23763,6 +25982,63 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listInstanceNetworkAttachments` operation. */
+  export interface ListInstanceNetworkAttachmentsParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createInstanceNetworkAttachment` operation. */
+  export interface CreateInstanceNetworkAttachmentParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** A virtual network interface for the instance network attachment. This can be specified
+     *  using an existing virtual network interface, or a prototype object for a new virtual
+     *  network interface.
+     *
+     *  If an existing virtual network interface is specified, `enable_infrastructure_nat` must be
+     *  `true`.
+     */
+    virtualNetworkInterface: InstanceNetworkAttachmentPrototypeVirtualNetworkInterface;
+    /** The name for this network attachment. Names must be unique within the instance the network attachment
+     *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteInstanceNetworkAttachment` operation. */
+  export interface DeleteInstanceNetworkAttachmentParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** The instance network attachment identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getInstanceNetworkAttachment` operation. */
+  export interface GetInstanceNetworkAttachmentParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** The instance network attachment identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateInstanceNetworkAttachment` operation. */
+  export interface UpdateInstanceNetworkAttachmentParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** The instance network attachment identifier. */
+    id: string;
+    /** The name for this network attachment. The name must not be used by another network attachment for the
+     *  instance.
+     */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `listInstanceNetworkInterfaces` operation. */
   export interface ListInstanceNetworkInterfacesParams {
     /** The virtual server instance identifier. */
@@ -23776,7 +26052,13 @@ namespace VpcV1 {
     instanceId: string;
     /** The associated subnet. */
     subnet: SubnetIdentity;
-    /** Indicates whether source IP spoofing is allowed on this instance network interface. */
+    /** Indicates whether source IP spoofing is allowed on this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed
+     *  on the attached virtual network interface.
+     */
     allowIpSpoofing?: boolean;
     /** The name for the instance network interface. The name must not be used by another network interface on the
      *  virtual server instance. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -23821,7 +26103,13 @@ namespace VpcV1 {
     instanceId: string;
     /** The instance network interface identifier. */
     id: string;
-    /** Indicates whether source IP spoofing is allowed on this instance network interface. */
+    /** Indicates whether source IP spoofing is allowed on this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed
+     *  on the attached virtual network interface.
+     */
     allowIpSpoofing?: boolean;
     /** The name for the instance network interface. The name must not be used by another network interface on the
      *  virtual server instance.
@@ -24317,6 +26605,95 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listReservations` operation. */
+  export interface ListReservationsParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
+    resourceGroupId?: string;
+    /** Filters the collection to resources with a `zone.name` property matching the exact specified name. */
+    zoneName?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createReservation` operation. */
+  export interface CreateReservationParams {
+    /** The capacity reservation configuration to use. */
+    capacity: ReservationCapacityPrototype;
+    /** The committed use configuration to use for this reservation. */
+    committedUse: ReservationCommittedUsePrototype;
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation. */
+    profile: ReservationProfilePrototype;
+    /** The zone to use for this reservation. */
+    zone: ZoneIdentity;
+    /** The affinity policy to use for this reservation: - `restricted`: The reservation must be manually requested. */
+    affinityPolicy?: CreateReservationConstants.AffinityPolicy | string;
+    /** The name for this reservation. The name must not be used by another reservation in the region. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+     */
+    resourceGroup?: ResourceGroupIdentity;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createReservation` operation. */
+  export namespace CreateReservationConstants {
+    /** The affinity policy to use for this reservation: - `restricted`: The reservation must be manually requested. */
+    export enum AffinityPolicy {
+      RESTRICTED = 'restricted',
+    }
+  }
+
+  /** Parameters for the `deleteReservation` operation. */
+  export interface DeleteReservationParams {
+    /** The reservation identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getReservation` operation. */
+  export interface GetReservationParams {
+    /** The reservation identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateReservation` operation. */
+  export interface UpdateReservationParams {
+    /** The reservation identifier. */
+    id: string;
+    /** The capacity reservation configuration to use.
+     *
+     *  The configuration can only be changed for reservations with a `status` of `inactive`.
+     */
+    capacity?: ReservationCapacityPatch;
+    /** The committed use configuration to use for this reservation. */
+    committedUse?: ReservationCommittedUsePatch;
+    /** The name for this reservation. The name must not be used by another reservation in the region. */
+    name?: string;
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
+     *  reservation.
+     *
+     *  The profile can only be changed for a reservation with a `status` of `inactive`.
+     */
+    profile?: ReservationProfilePatch;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `activateReservation` operation. */
+  export interface ActivateReservationParams {
+    /** The reservation identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `listDedicatedHostGroups` operation. */
   export interface ListDedicatedHostGroupsParams {
     /** A server-provided token determining what resource to start the page on. */
@@ -24495,38 +26872,9 @@ namespace VpcV1 {
 
   /** Parameters for the `createBackupPolicy` operation. */
   export interface CreateBackupPolicyParams {
-    /** The user tags this backup policy will apply to. Resources that have both a matching user tag and a matching
-     *  type will be subject to the backup policy.
-     */
-    matchUserTags: string[];
-    /** The resource types this backup policy will apply to. Resources that have both a matching type and a matching
-     *  user tag will be subject to the backup policy.
-     */
-    matchResourceTypes?: CreateBackupPolicyConstants.MatchResourceTypes | string[];
-    /** The name for this backup policy. The name must not be used by another backup policy in the region. If
-     *  unspecified, the name will be a hyphenated list of randomly-selected words.
-     */
-    name?: string;
-    /** The prototype objects for backup plans to be created for this backup policy. */
-    plans?: BackupPolicyPlanPrototype[];
-    /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
-     */
-    resourceGroup?: ResourceGroupIdentity;
-    /** The scope to use for this backup policy.
-     *
-     *  If unspecified, the policy will be scoped to the account.
-     */
-    scope?: BackupPolicyScopePrototype;
+    /** The backup policy prototype object. */
+    backupPolicyPrototype: BackupPolicyPrototype;
     headers?: OutgoingHttpHeaders;
-  }
-
-  /** Constants for the `createBackupPolicy` operation. */
-  export namespace CreateBackupPolicyConstants {
-    /** The resource type. */
-    export enum MatchResourceTypes {
-      VOLUME = 'volume',
-    }
   }
 
   /** Parameters for the `listBackupPolicyJobs` operation. */
@@ -24703,6 +27051,11 @@ namespace VpcV1 {
   export interface UpdateBackupPolicyParams {
     /** The backup policy identifier. */
     id: string;
+    /** The included content for backups created using this policy:
+     *  - `boot_volume`: Include the instance's boot volume.
+     *  - `data_volumes`: Include the instance's data volumes.
+     */
+    includedContent?: UpdateBackupPolicyConstants.IncludedContent[] | string[];
     /** The user tags this backup policy will apply to (replacing any existing tags). Resources that have both a
      *  matching user tag and a matching type will be subject to the backup policy.
      */
@@ -24714,6 +27067,15 @@ namespace VpcV1 {
      */
     ifMatch?: string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `updateBackupPolicy` operation. */
+  export namespace UpdateBackupPolicyConstants {
+    /** An item to include. */
+    export enum IncludedContent {
+      BOOT_VOLUME = 'boot_volume',
+      DATA_VOLUMES = 'data_volumes',
+    }
   }
 
   /** Parameters for the `listPlacementGroups` operation. */
@@ -24816,38 +27178,8 @@ namespace VpcV1 {
 
   /** Parameters for the `createBareMetalServer` operation. */
   export interface CreateBareMetalServerParams {
-    initialization: BareMetalServerInitializationPrototype;
-    /** The primary bare metal server network interface to create. */
-    primaryNetworkInterface: BareMetalServerPrimaryNetworkInterfacePrototype;
-    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
-     *  to use for this bare metal server.
-     */
-    profile: BareMetalServerProfileIdentity;
-    /** The zone this bare metal server will reside in. */
-    zone: ZoneIdentity;
-    /** Indicates whether secure boot is enabled. If enabled, the image must support secure boot or the server will
-     *  fail to boot.
-     */
-    enableSecureBoot?: boolean;
-    /** The name for this bare metal server. The name must not be used by another bare metal server in the region.
-     *  If unspecified, the name will be a hyphenated list of randomly-selected words.
-     *
-     *  The system hostname will be based on this name.
-     */
-    name?: string;
-    /** The additional bare metal server network interfaces to create. */
-    networkInterfaces?: BareMetalServerNetworkInterfacePrototype[];
-    /** The resource group to use. If unspecified, the account's [default resource
-     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
-     */
-    resourceGroup?: ResourceGroupIdentity;
-    trustedPlatformModule?: BareMetalServerTrustedPlatformModulePrototype;
-    /** The VPC this bare metal server will reside in.
-     *
-     *  If specified, it must match the VPC for the subnets that the network interfaces of
-     *  the bare metal server are attached to.
-     */
-    vpc?: VPCIdentity;
+    /** The bare metal server prototype object. */
+    bareMetalServerPrototype: BareMetalServerPrototype;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -24905,6 +27237,61 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listBareMetalServerNetworkAttachments` operation. */
+  export interface ListBareMetalServerNetworkAttachmentsParams {
+    /** The bare metal server identifier. */
+    bareMetalServerId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createBareMetalServerNetworkAttachment` operation. */
+  export interface CreateBareMetalServerNetworkAttachmentParams {
+    /** The bare metal server identifier. */
+    bareMetalServerId: string;
+    /** The bare metal server network attachment prototype object. */
+    bareMetalServerNetworkAttachmentPrototype: BareMetalServerNetworkAttachmentPrototype;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteBareMetalServerNetworkAttachment` operation. */
+  export interface DeleteBareMetalServerNetworkAttachmentParams {
+    /** The bare metal server identifier. */
+    bareMetalServerId: string;
+    /** The bare metal server network attachment identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getBareMetalServerNetworkAttachment` operation. */
+  export interface GetBareMetalServerNetworkAttachmentParams {
+    /** The bare metal server identifier. */
+    bareMetalServerId: string;
+    /** The bare metal server network attachment identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateBareMetalServerNetworkAttachment` operation. */
+  export interface UpdateBareMetalServerNetworkAttachmentParams {
+    /** The bare metal server identifier. */
+    bareMetalServerId: string;
+    /** The bare metal server network attachment identifier. */
+    id: string;
+    /** The VLAN IDs to allow for `vlan` attachments using this PCI attachment, replacing any existing VLAN IDs. The
+     *  specified values must include IDs for all `vlan` attachments currently using this PCI attachment.
+     */
+    allowedVlans?: number[];
+    /** The name for this network attachment. The name must not be used by another network attachment for the bare
+     *  metal server.
+     */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `listBareMetalServerNetworkInterfaces` operation. */
   export interface ListBareMetalServerNetworkInterfacesParams {
     /** The bare metal server identifier. */
@@ -24949,7 +27336,13 @@ namespace VpcV1 {
     bareMetalServerId: string;
     /** The bare metal server network interface identifier. */
     id: string;
-    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface. */
+    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed
+     *  on the attached virtual network interface.
+     */
     allowIpSpoofing?: boolean;
     /** The VLAN IDs to allow for `vlan` interfaces using this PCI interface, replacing any existing VLAN IDs. The
      *  specified values must include IDs for all `vlan` interfaces currently using this PCI interface.
@@ -24964,6 +27357,11 @@ namespace VpcV1 {
      *    allowing the workload to perform any needed NAT operations.
      *  - `allow_ip_spoofing` must be `false`.
      *  - `interface_type` must not be `hipersocket`.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and infrastructure NAT is managed
+     *  on the attached virtual network interface.
      */
     enableInfrastructureNat?: boolean;
     /** The name for this bare metal server network interface. The name must not be used by another network
@@ -25229,6 +27627,76 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listSnapshotConsistencyGroups` operation. */
+  export interface ListSnapshotConsistencyGroupsParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
+    resourceGroupId?: string;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListSnapshotConsistencyGroupsConstants.Sort | string;
+    /** Filters the collection to backup policy jobs with a `backup_policy_plan.id` property matching the specified
+     *  identifier.
+     */
+    backupPolicyPlanId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listSnapshotConsistencyGroups` operation. */
+  export namespace ListSnapshotConsistencyGroupsConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `createSnapshotConsistencyGroup` operation. */
+  export interface CreateSnapshotConsistencyGroupParams {
+    /** The snapshot consistency group prototype object. */
+    snapshotConsistencyGroupPrototype: SnapshotConsistencyGroupPrototype;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteSnapshotConsistencyGroup` operation. */
+  export interface DeleteSnapshotConsistencyGroupParams {
+    /** The snapshot consistency group identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getSnapshotConsistencyGroup` operation. */
+  export interface GetSnapshotConsistencyGroupParams {
+    /** The snapshot consistency group identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateSnapshotConsistencyGroup` operation. */
+  export interface UpdateSnapshotConsistencyGroupParams {
+    /** The snapshot consistency group identifier. */
+    id: string;
+    /** Indicates whether deleting the snapshot consistency group will also delete the snapshots in the group. */
+    deleteSnapshotsOnDelete?: boolean;
+    /** The name for this snapshot consistency group. The name must not be used by another snapshot consistency
+     *  groups in the region.
+     */
+    name?: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `deleteSnapshots` operation. */
   export interface DeleteSnapshotsParams {
     /** Filters the collection to resources with a `source_volume.id` property matching the specified identifier. */
@@ -25308,6 +27776,14 @@ namespace VpcV1 {
      *  matching the exact specified name.
      */
     clonesZoneName?: string;
+    /** Filters the collection to resources with a `snapshot_consistency_group.id` property matching the specified
+     *  identifier.
+     */
+    snapshotConsistencyGroupId?: string;
+    /** Filters the collection to resources with a `snapshot_consistency_group.crn` property matching the specified
+     *  identifier.
+     */
+    snapshotConsistencyGroupCrn?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -25677,6 +28153,75 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `createVirtualNetworkInterface` operation. */
+  export interface CreateVirtualNetworkInterfaceParams {
+    /** Indicates whether source IP spoofing is allowed on this interface. If `false`, source IP spoofing is
+     *  prevented on this interface. If `true`, source IP spoofing is allowed on this interface.
+     */
+    allowIpSpoofing?: boolean;
+    /** Indicates whether this virtual network interface will be automatically deleted when
+     *  `target` is deleted. Must be `false` if the virtual network interface is unbound.
+     */
+    autoDelete?: boolean;
+    /** If `true`:
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
+     *
+     *  If `false`:
+     *  - Packets are passed unchanged to/from the virtual network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     *  - `allow_ip_spoofing` must be `false`.
+     *  - Can only be attached to a `target` with a `resource_type` of
+     *    `bare_metal_server_network_attachment`.
+     */
+    enableInfrastructureNat?: boolean;
+    /** Additional IP addresses to bind to the virtual network interface. Each item may be either a reserved IP
+     *  identity, or a reserved IP prototype object which will be used to create a new reserved IP. All IP addresses
+     *  must be in the primary IP's subnet.
+     *
+     *  If reserved IP identities are provided, the specified reserved IPs must be unbound.
+     *
+     *  If reserved IP prototype objects with addresses are provided, the addresses must be available on the virtual
+     *  network interface's subnet. For any prototype objects that do not specify an address, an available address on
+     *  the subnet will be automatically selected and reserved.
+     */
+    ips?: VirtualNetworkInterfaceIPPrototype[];
+    /** The name for this virtual network interface. The name must not be used by another virtual network interface
+     *  in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words. Names beginning with
+     *  `ibm-` are reserved for provider-owned resources, and are not allowed.
+     */
+    name?: string;
+    /** The primary IP address to bind to the virtual network interface. May be either a
+     *  reserved IP identity, or a reserved IP prototype object which will be used to create a
+     *  new reserved IP.
+     *
+     *  If a reserved IP identity is provided, the specified reserved IP must be unbound.
+     *
+     *  If a reserved IP prototype object with an address is provided, the address must be
+     *  available on the virtual network interface's subnet. If no address is specified,
+     *  an available address on the subnet will be automatically selected and reserved.
+     */
+    primaryIp?: VirtualNetworkInterfacePrimaryIPPrototype;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+     */
+    resourceGroup?: ResourceGroupIdentity;
+    /** The security groups to use for this virtual network interface. If unspecified, the default security group of
+     *  the VPC for the subnet is used.
+     */
+    securityGroups?: SecurityGroupIdentity[];
+    /** The associated subnet. Required if `primary_ip` does not specify a reserved IP identity. */
+    subnet?: SubnetIdentity;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteVirtualNetworkInterfaces` operation. */
+  export interface DeleteVirtualNetworkInterfacesParams {
+    /** The virtual network interface identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `getVirtualNetworkInterface` operation. */
   export interface GetVirtualNetworkInterfaceParams {
     /** The virtual network interface identifier. */
@@ -25688,10 +28233,137 @@ namespace VpcV1 {
   export interface UpdateVirtualNetworkInterfaceParams {
     /** The virtual network interface identifier. */
     id: string;
-    /** The name for this virtual network interface. The name is unique across all virtual network interfaces in the
-     *  VPC.
+    /** Indicates whether source IP spoofing is allowed on this interface.
+     *
+     *  Must be `false` if `target` is a file share mount target.
+     */
+    allowIpSpoofing?: boolean;
+    /** Indicates whether this virtual network interface will be automatically deleted when
+     *  `target` is deleted. Must be `false` if the virtual network interface is unbound.
+     */
+    autoDelete?: boolean;
+    /** If `true`:
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
+     *
+     *  If `false`:
+     *  - Packets are passed unchanged to/from the virtual network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     *  - `allow_ip_spoofing` must be `false`.
+     *  - Can only be attached to a `target` with a `resource_type` of
+     *    `bare_metal_server_network_attachment`.
+     */
+    enableInfrastructureNat?: boolean;
+    /** The name for this virtual network interface. The name must not be used by another virtual network interface
+     *  in the region. Names beginning with `ibm-` are reserved for provider-owned resources, and are not allowed.
      */
     name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listNetworkInterfaceFloatingIps` operation. */
+  export interface ListNetworkInterfaceFloatingIpsParams {
+    /** The virtual network interface identifier. */
+    virtualNetworkInterfaceId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value
+     *  `-name` sorts the collection by the `name` property in descending order, and the value `name` sorts it by the
+     *  `name` property in ascending order.
+     */
+    sort?: ListNetworkInterfaceFloatingIpsConstants.Sort | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listNetworkInterfaceFloatingIps` operation. */
+  export namespace ListNetworkInterfaceFloatingIpsConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-name` sorts the collection by the `name` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      ADDRESS = 'address',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `removeNetworkInterfaceFloatingIp` operation. */
+  export interface RemoveNetworkInterfaceFloatingIpParams {
+    /** The virtual network interface identifier. */
+    virtualNetworkInterfaceId: string;
+    /** The floating IP identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getNetworkInterfaceFloatingIp` operation. */
+  export interface GetNetworkInterfaceFloatingIpParams {
+    /** The virtual network interface identifier. */
+    virtualNetworkInterfaceId: string;
+    /** The floating IP identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `addNetworkInterfaceFloatingIp` operation. */
+  export interface AddNetworkInterfaceFloatingIpParams {
+    /** The virtual network interface identifier. */
+    virtualNetworkInterfaceId: string;
+    /** The floating IP identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listVirtualNetworkInterfaceIps` operation. */
+  export interface ListVirtualNetworkInterfaceIpsParams {
+    /** The virtual network interface identifier. */
+    virtualNetworkInterfaceId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value
+     *  `-name` sorts the collection by the `name` property in descending order, and the value `name` sorts it by the
+     *  `name` property in ascending order.
+     */
+    sort?: ListVirtualNetworkInterfaceIpsConstants.Sort | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listVirtualNetworkInterfaceIps` operation. */
+  export namespace ListVirtualNetworkInterfaceIpsConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-name` sorts the collection by the `name` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      ADDRESS = 'address',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `removeVirtualNetworkInterfaceIp` operation. */
+  export interface RemoveVirtualNetworkInterfaceIpParams {
+    /** The virtual network interface identifier. */
+    virtualNetworkInterfaceId: string;
+    /** The reserved IP identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getVirtualNetworkInterfaceIp` operation. */
+  export interface GetVirtualNetworkInterfaceIpParams {
+    /** The virtual network interface identifier. */
+    virtualNetworkInterfaceId: string;
+    /** The reserved IP identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `addVirtualNetworkInterfaceIp` operation. */
+  export interface AddVirtualNetworkInterfaceIpParams {
+    /** The virtual network interface identifier. */
+    virtualNetworkInterfaceId: string;
+    /** The reserved IP identifier. */
+    id: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -25761,6 +28433,14 @@ namespace VpcV1 {
      *  order.
      */
     sort?: ListFloatingIpsConstants.Sort | string;
+    /** Filters the collection to resources with a `target.id` property matching the specified identifier. */
+    targetId?: string;
+    /** Filters the collection to resources with a `target.crn` property matching the specified CRN. */
+    targetCrn?: string;
+    /** Filters the collection to resources with a `target.name` property matching the exact specified name. */
+    targetName?: string;
+    /** Filters the collection to resources with a `target.resource_type` property matching the specified value. */
+    targetResourceType?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -25807,7 +28487,10 @@ namespace VpcV1 {
      *  resource is:
      *
      *  - an instance network interface
-     *  - a bare metal server network interface with `enable_infrastructure_nat` set to `true`.
+     *  - a bare metal server network interface with `enable_infrastructure_nat` set to `true`
+     *  - a virtual network interface with `enable_infrastructure_nat` set to `true`
+     *
+     *  Specify `null` to remove an existing binding.
      */
     target?: FloatingIPTargetPatch;
     headers?: OutgoingHttpHeaders;
@@ -26534,9 +29217,37 @@ namespace VpcV1 {
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    /** The VPN gateway connection patch. */
-    vpnGatewayConnectionPatch: VPNGatewayConnectionPatch;
+    /** If set to false, the VPN gateway connection is shut down. */
+    adminStateUp?: boolean;
+    /** The Dead Peer Detection settings. */
+    deadPeerDetection?: VPNGatewayConnectionDPDPatch;
+    /** The IKE policy to use. Specify `null` to remove any existing policy, [resulting in
+     *  auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1).
+     */
+    ikePolicy?: VPNGatewayConnectionIKEPolicyPatch;
+    /** The IPsec policy to use. Specify `null` to remove any existing policy, [resulting in
+     *  auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ipsec-auto-negotiation-phase-2).
+     */
+    ipsecPolicy?: VPNGatewayConnectionIPsecPolicyPatch;
+    /** The name for this VPN gateway connection. The name must not be used by another connection for the VPN
+     *  gateway.
+     */
+    name?: string;
+    /** The IP address of the peer VPN gateway. */
+    peerAddress?: string;
+    /** The pre-shared key. */
+    psk?: string;
+    /** Routing protocols are disabled for this VPN gateway connection. */
+    routingProtocol?: UpdateVpnGatewayConnectionConstants.RoutingProtocol | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `updateVpnGatewayConnection` operation. */
+  export namespace UpdateVpnGatewayConnectionConstants {
+    /** Routing protocols are disabled for this VPN gateway connection. */
+    export enum RoutingProtocol {
+      NONE = 'none',
+    }
   }
 
   /** Parameters for the `listVpnGatewayConnectionLocalCidrs` operation. */
@@ -26982,8 +29693,6 @@ namespace VpcV1 {
      *  Load balancers in the `network` family allow only one subnet to be specified.
      */
     subnets: SubnetIdentity[];
-    /** The datapath logging configuration for this load balancer. */
-    datapath?: LoadBalancerLoggingDatapathPrototype;
     /** The DNS configuration for this load balancer.
      *
      *  If unspecified, DNS `A` records for this load balancer's `hostname` property will be added
@@ -26995,7 +29704,7 @@ namespace VpcV1 {
     listeners?: LoadBalancerListenerPrototypeLoadBalancerContext[];
     /** The logging configuration to use for this load balancer. See [VPC Datapath
      *  Logging](https://cloud.ibm.com/docs/vpc?topic=vpc-datapath-logging) on the logging
-     *  format, fields and permitted values.
+     *  format, fields and permitted values. If unspecified, `datapath.active` will be `false`.
      *
      *  To activate logging, the load balancer profile must support the specified logging type.
      */
@@ -27937,9 +30646,14 @@ namespace VpcV1 {
      *  collector](https://cloud.ibm.com/docs/vpc?topic=vpc-ordering-flow-log-collector).
      */
     storageBucket: LegacyCloudObjectStorageBucketIdentity;
-    /** The target this collector will collect flow logs for. If the target is an instance,
-     *  subnet, or VPC, flow logs will not be collected for any instance network interfaces within
-     *  the target that are themselves the target of a more specific flow log collector.
+    /** The target this collector will collect flow logs for.
+     *
+     *  If the target is an instance, subnet, or VPC, flow logs will not be collected for any
+     *  instance network attachments, virtual network interfaces or instance network interfaces
+     *  within the target that are themselves the target of a more specific flow log collector.
+     *
+     *  The target must not be a virtual network interface that is attached to a bare metal server
+     *  network attachment or to a file share mount target.
      */
     target: FlowLogCollectorTargetPrototype;
     /** Indicates whether this collector will be active upon creation. */
@@ -28084,14 +30798,14 @@ namespace VpcV1 {
     last_job_completed_at?: string;
     /** The lifecycle state of the backup policy. */
     lifecycle_state: BackupPolicy.Constants.LifecycleState | string;
-    /** The resource types this backup policy applies to. Resources that have both a matching type and a matching
+    /** The resource type this backup policy applies to. Resources that have both a matching type and a matching
      *  user tag will be subject to the backup policy.
      *
-     *  The enumerated values for this property will expand in the future. When processing this property, check for and
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
      *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
      *  unexpected property value was encountered.
      */
-    match_resource_types: BackupPolicy.Constants.MatchResourceTypes | string[];
+    match_resource_type: BackupPolicy.Constants.MatchResourceType | string;
     /** The user tags this backup policy applies to. Resources that have both a matching user tag and a matching
      *  type will be subject to the backup policy.
      */
@@ -28126,8 +30840,9 @@ namespace VpcV1 {
         UPDATING = 'updating',
         WAITING = 'waiting',
       }
-      /** The resource types this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the unexpected property value was encountered. */
-      export enum MatchResourceTypes {
+      /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the unexpected property value was encountered. */
+      export enum MatchResourceType {
+        INSTANCE = 'instance',
         VOLUME = 'volume',
       }
       /** The resource type. */
@@ -28514,6 +31229,42 @@ namespace VpcV1 {
     region: RegionIdentity;
   }
 
+  /** BackupPolicyPrototype. */
+  export interface BackupPolicyPrototype {
+    /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching
+     *  user tag will be subject to the backup policy.
+     */
+    match_resource_type: BackupPolicyPrototype.Constants.MatchResourceType | string;
+    /** The user tags this backup policy will apply to. Resources that have both a matching user tag and a matching
+     *  type will be subject to the backup policy.
+     */
+    match_user_tags: string[];
+    /** The name for this backup policy. The name must not be used by another backup policy in the region. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The prototype objects for backup plans to be created for this backup policy. */
+    plans?: BackupPolicyPlanPrototype[];
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+     */
+    resource_group?: ResourceGroupIdentity;
+    /** The scope to use for this backup policy.
+     *
+     *  If unspecified, the policy will be scoped to the account.
+     */
+    scope?: BackupPolicyScopePrototype;
+  }
+  export namespace BackupPolicyPrototype {
+    export namespace Constants {
+      /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. */
+      export enum MatchResourceType {
+        INSTANCE = 'instance',
+        VOLUME = 'volume',
+      }
+    }
+  }
+
   /** The scope for this backup policy. */
   export interface BackupPolicyScope {
   }
@@ -28524,7 +31275,9 @@ namespace VpcV1 {
 
   /** BareMetalServer. */
   export interface BareMetalServer {
-    /** The total bandwidth (in megabits per second) shared across the bare metal server network interfaces. */
+    /** The total bandwidth (in megabits per second) shared across the bare metal server network attachments or bare
+     *  metal server network interfaces.
+     */
     bandwidth: number;
     /** The possible resource types for this property are expected to expand in the future. */
     boot_target: BareMetalServerBootTarget;
@@ -28557,9 +31310,24 @@ namespace VpcV1 {
     memory: number;
     /** The name for this bare metal server. The name is unique across all bare metal servers in the region. */
     name: string;
-    /** The network interfaces for this bare metal server, including the primary network interface. */
+    /** The network attachments for this bare metal server, including the primary network attachment. */
+    network_attachments?: BareMetalServerNetworkAttachmentReference[];
+    /** The network interfaces for this bare metal server, including the primary network interface.
+     *
+     *  If this bare metal server has network attachments, each network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface.
+     */
     network_interfaces: NetworkInterfaceBareMetalServerContextReference[];
-    /** The primary network interface for this bare metal server. */
+    /** The primary network attachment for this bare metal server. */
+    primary_network_attachment?: BareMetalServerNetworkAttachmentReference;
+    /** The primary network interface for this bare metal server.
+     *
+     *  If this bare metal server has network attachments, this primary network interface is
+     *  a [read-only
+     *  representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients)
+     *  of the primary network attachment and its attached virtual network interface.
+     */
     primary_network_interface: NetworkInterfaceBareMetalServerContextReference;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
      *  for this bare metal server.
@@ -28788,11 +31556,198 @@ namespace VpcV1 {
     }
   }
 
+  /** BareMetalServerNetworkAttachment. */
+  export interface BareMetalServerNetworkAttachment {
+    /** The date and time that the bare metal server network attachment was created. */
+    created_at: string;
+    /** The URL for this bare metal server network attachment. */
+    href: string;
+    /** The unique identifier for this bare metal server network attachment. */
+    id: string;
+    /** The network attachment's interface type:
+     *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
+     *    server is stopped
+     *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
+     *      to use the PCI attachment
+     *    - Cannot directly use an IEEE 802.1Q tag.
+     *  - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its
+     *    array of `allowed_vlans`.
+     *    - Must use an IEEE 802.1Q tag.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected property value was encountered.
+     */
+    interface_type: BareMetalServerNetworkAttachment.Constants.InterfaceType | string;
+    /** The lifecycle state of the bare metal server network attachment. */
+    lifecycle_state: BareMetalServerNetworkAttachment.Constants.LifecycleState | string;
+    /** The name for this bare metal server network attachment. The name is unique across all network attachments
+     *  for the bare metal server.
+     */
+    name: string;
+    /** The port speed for this bare metal server network attachment in Mbps. */
+    port_speed: number;
+    /** The primary IP address of the virtual network interface for the bare metal server network attachment. */
+    primary_ip: ReservedIPReference;
+    /** The resource type. */
+    resource_type: BareMetalServerNetworkAttachment.Constants.ResourceType | string;
+    /** The subnet of the virtual network interface for the bare metal server network attachment. */
+    subnet: SubnetReference;
+    /** The bare metal server network attachment type. */
+    type: BareMetalServerNetworkAttachment.Constants.Type | string;
+    /** The virtual network interface for this bare metal server network attachment. */
+    virtual_network_interface: VirtualNetworkInterfaceReferenceAttachmentContext;
+  }
+  export namespace BareMetalServerNetworkAttachment {
+    export namespace Constants {
+      /** The network attachment's interface type: - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI attachment - Cannot directly use an IEEE 802.1Q tag. - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum InterfaceType {
+        PCI = 'pci',
+        VLAN = 'vlan',
+      }
+      /** The lifecycle state of the bare metal server network attachment. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER_NETWORK_ATTACHMENT = 'bare_metal_server_network_attachment',
+      }
+      /** The bare metal server network attachment type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+    }
+  }
+
+  /** BareMetalServerNetworkAttachmentCollection. */
+  export interface BareMetalServerNetworkAttachmentCollection {
+    /** A link to the first page of resources. */
+    first: BareMetalServerNetworkAttachmentCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** Collection of bare metal server network attachments. */
+    network_attachments: BareMetalServerNetworkAttachment[];
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: BareMetalServerNetworkAttachmentCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface BareMetalServerNetworkAttachmentCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface BareMetalServerNetworkAttachmentCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** BareMetalServerNetworkAttachmentPrototype. */
+  export interface BareMetalServerNetworkAttachmentPrototype {
+    /** The network attachment's interface type:
+     *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
+     *    server is stopped
+     *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
+     *      to use the PCI attachment
+     *    - Cannot directly use an IEEE 802.1Q tag.
+     *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`
+     *  - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its
+     *    array of `allowed_vlans`.
+     *    - Must use an IEEE 802.1Q tag.
+     *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
+     */
+    interface_type: BareMetalServerNetworkAttachmentPrototype.Constants.InterfaceType | string;
+    /** The name for this bare metal server network attachment. Names must be unique within the bare metal server
+     *  the network attachment resides in. If unspecified, the name will be a hyphenated list of randomly-selected
+     *  words.
+     */
+    name?: string;
+    /** A virtual network interface for the bare metal server network attachment. This can be
+     *  specified using an existing virtual network interface, or a prototype object for a new
+     *  virtual network interface.
+     *
+     *  If an existing virtual network interface is specified, it must not be the target of a flow
+     *  log collector.
+     */
+    virtual_network_interface: BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterface;
+  }
+  export namespace BareMetalServerNetworkAttachmentPrototype {
+    export namespace Constants {
+      /** The network attachment's interface type: - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI attachment - Cannot directly use an IEEE 802.1Q tag. - Not supported on bare metal servers with a `cpu.architecture` of `s390x` - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. - Not supported on bare metal servers with a `cpu.architecture` of `s390x`. */
+      export enum InterfaceType {
+        PCI = 'pci',
+        VLAN = 'vlan',
+      }
+    }
+  }
+
+  /** A virtual network interface for the bare metal server network attachment. This can be specified using an existing virtual network interface, or a prototype object for a new virtual network interface. If an existing virtual network interface is specified, it must not be the target of a flow log collector. */
+  export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterface {
+  }
+
+  /** BareMetalServerNetworkAttachmentReference. */
+  export interface BareMetalServerNetworkAttachmentReference {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: BareMetalServerNetworkAttachmentReferenceDeleted;
+    /** The URL for this bare metal server network attachment. */
+    href: string;
+    /** The unique identifier for this bare metal server network attachment. */
+    id: string;
+    /** The name for this bare metal server network attachment. The name is unique across all network attachments
+     *  for the bare metal server.
+     */
+    name: string;
+    /** The primary IP address of the virtual network interface for the bare metal server network attachment. */
+    primary_ip: ReservedIPReference;
+    /** The resource type. */
+    resource_type: BareMetalServerNetworkAttachmentReference.Constants.ResourceType | string;
+    /** The subnet of the virtual network interface for the bare metal server network attachment. */
+    subnet: SubnetReference;
+  }
+  export namespace BareMetalServerNetworkAttachmentReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER_NETWORK_ATTACHMENT = 'bare_metal_server_network_attachment',
+      }
+    }
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface BareMetalServerNetworkAttachmentReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
   /** BareMetalServerNetworkInterface. */
   export interface BareMetalServerNetworkInterface {
-    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface. */
+    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed
+     *  on the attached virtual network interface.
+     */
     allow_ip_spoofing: boolean;
-    /** The date and time that the bare metal server network interface was created. */
+    /** The date and time that the bare metal server network interface was created.
+     *
+     *  If this bare metal server has network attachments, this network interface was created as a [read-only
+     *  representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) when its corresponding
+     *  network attachment was created.
+     */
     created_at: string;
     /** If `true`:
      *  - The VPC infrastructure performs any needed NAT operations.
@@ -28803,13 +31758,35 @@ namespace VpcV1 {
      *    allowing the workload to perform any needed NAT operations.
      *  - `allow_ip_spoofing` must be `false`.
      *  - `interface_type` must not be `hipersocket`.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and infrastructure NAT is managed
+     *  on the attached virtual network interface.
      */
     enable_infrastructure_nat: boolean;
-    /** The floating IPs associated with this bare metal server network interface. */
+    /** The floating IPs associated with this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the floating IPs are associated
+     *  with the attached virtual network interface.
+     */
     floating_ips: FloatingIPReference[];
-    /** The URL for this bare metal server network interface. */
+    /** The URL for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this bare metal server network interface. */
+    /** The unique identifier for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
     /** The interface type:
      *  - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity
@@ -28825,6 +31802,11 @@ namespace VpcV1 {
      *    - Has its own security groups and does not inherit those of the PCI device through
      *      which traffic flows.
      *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the interface type is that of
+     *  the corresponding network attachment.
+     *
      *  The enumerated values for this property are expected to expand in the future. When processing this property,
      *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
      *  which the unexpected property value was encountered.
@@ -28832,27 +31814,61 @@ namespace VpcV1 {
     interface_type: BareMetalServerNetworkInterface.Constants.InterfaceType | string;
     /** The MAC address of this bare metal server network interface. If the MAC address has not yet been selected,
      *  the value will be an empty string.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the MAC address is that of the
+     *  attached virtual network interface.
      */
     mac_address: string;
-    /** The name for this bare metal server network interface. */
+    /** The name for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the name matches its
+     *  corresponding network attachment.
+     */
     name: string;
-    /** The bare metal server network interface port speed in Mbps. */
+    /** The bare metal server network interface port speed in Mbps.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the port speed is that of its
+     *  corresponding network attachment.
+     */
     port_speed: number;
     primary_ip: ReservedIPReference;
     /** The resource type. */
     resource_type: BareMetalServerNetworkInterface.Constants.ResourceType | string;
-    /** The security groups targeting this bare metal server network interface. */
+    /** The security groups targeting this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the security groups are
+     *  associated with the attached virtual network interface.
+     */
     security_groups: SecurityGroupReference[];
-    /** The status of the bare metal server network interface. */
+    /** The status of the bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a read-only representation of its
+     *  corresponding network attachment and its attached virtual network interface, and the status is [computed from
+     *  them](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients).
+     */
     status: BareMetalServerNetworkInterface.Constants.Status | string;
     /** The associated subnet. */
     subnet: SubnetReference;
-    /** The bare metal server network interface type. */
+    /** The bare metal server network interface type.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the type is that of its
+     *  corresponding network attachment.
+     */
     type: BareMetalServerNetworkInterface.Constants.Type | string;
   }
   export namespace BareMetalServerNetworkInterface {
     export namespace Constants {
-      /** The interface type: - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity within a `s390x` based system - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI interface - Cannot directly use an IEEE 802.1Q tag. - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. - Has its own security groups and does not inherit those of the PCI device through which traffic flows. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The interface type: - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity within a `s390x` based system - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI interface - Cannot directly use an IEEE 802.1Q tag. - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. - Has its own security groups and does not inherit those of the PCI device through which traffic flows. If this bare metal server has network attachments, this network interface is a [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding network attachment and its attached virtual network interface, and the interface type is that of the corresponding network attachment. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
       export enum InterfaceType {
         HIPERSOCKET = 'hipersocket',
         PCI = 'pci',
@@ -28862,14 +31878,14 @@ namespace VpcV1 {
       export enum ResourceType {
         NETWORK_INTERFACE = 'network_interface',
       }
-      /** The status of the bare metal server network interface. */
+      /** The status of the bare metal server network interface. If this bare metal server has network attachments, this network interface is a read-only representation of its corresponding network attachment and its attached virtual network interface, and the status is [computed from them](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients). */
       export enum Status {
         AVAILABLE = 'available',
         DELETING = 'deleting',
         FAILED = 'failed',
         PENDING = 'pending',
       }
-      /** The bare metal server network interface type. */
+      /** The bare metal server network interface type. If this bare metal server has network attachments, this network interface is a [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding network attachment and its attached virtual network interface, and the type is that of its corresponding network attachment. */
       export enum Type {
         PRIMARY = 'primary',
         SECONDARY = 'secondary',
@@ -28905,7 +31921,13 @@ namespace VpcV1 {
 
   /** BareMetalServerNetworkInterfacePrototype. */
   export interface BareMetalServerNetworkInterfacePrototype {
-    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface. */
+    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed
+     *  on the attached virtual network interface.
+     */
     allow_ip_spoofing?: boolean;
     /** If `true`:
      *  - The VPC infrastructure performs any needed NAT operations.
@@ -28916,6 +31938,11 @@ namespace VpcV1 {
      *    allowing the workload to perform any needed NAT operations.
      *  - `allow_ip_spoofing` must be `false`.
      *  - `interface_type` must not be `hipersocket`.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and infrastructure NAT is managed
+     *  on the attached virtual network interface.
      */
     enable_infrastructure_nat?: boolean;
     /** The interface type:
@@ -28979,11 +32006,57 @@ namespace VpcV1 {
     more_info: string;
   }
 
+  /** BareMetalServerPrimaryNetworkAttachmentPrototype. */
+  export interface BareMetalServerPrimaryNetworkAttachmentPrototype {
+    /** The network attachment's interface type:
+     *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
+     *    server is stopped
+     *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
+     *      to use the PCI attachment
+     *    - Cannot directly use an IEEE 802.1Q tag.
+     *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
+     */
+    interface_type?: BareMetalServerPrimaryNetworkAttachmentPrototype.Constants.InterfaceType | string;
+    /** The name for this bare metal server network attachment. Names must be unique within the bare metal server
+     *  the network attachment resides in. If unspecified, the name will be a hyphenated list of randomly-selected
+     *  words.
+     */
+    name?: string;
+    /** A virtual network interface for the bare metal server network attachment. This can be
+     *  specified using an existing virtual network interface, or a prototype object for a new
+     *  virtual network interface.
+     *
+     *  If an existing virtual network interface is specified, it must not be the target of a flow
+     *  log collector.
+     */
+    virtual_network_interface: BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterface;
+  }
+  export namespace BareMetalServerPrimaryNetworkAttachmentPrototype {
+    export namespace Constants {
+      /** The network attachment's interface type: - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI attachment - Cannot directly use an IEEE 802.1Q tag. - Not supported on bare metal servers with a `cpu.architecture` of `s390x`. */
+      export enum InterfaceType {
+        PCI = 'pci',
+      }
+    }
+  }
+
   /** BareMetalServerPrimaryNetworkInterfacePrototype. */
   export interface BareMetalServerPrimaryNetworkInterfacePrototype {
-    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface. */
+    /** Indicates whether source IP spoofing is allowed on this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed
+     *  on the attached virtual network interface.
+     */
     allow_ip_spoofing?: boolean;
-    /** The VLAN IDs allowed for `vlan` interfaces using this PCI interface. */
+    /** The VLAN IDs allowed for `vlan` interfaces using this PCI interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the VLAN IDs match the
+     *  `allow_vlans` of the corresponding network attachment.
+     */
     allowed_vlans?: number[];
     /** If `true`:
      *  - The VPC infrastructure performs any needed NAT operations.
@@ -28994,6 +32067,11 @@ namespace VpcV1 {
      *    allowing the workload to perform any needed NAT operations.
      *  - `allow_ip_spoofing` must be `false`.
      *  - `interface_type` must not be `hipersocket`.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and infrastructure NAT is managed
+     *  on the attached virtual network interface.
      */
     enable_infrastructure_nat?: boolean;
     /** The interface type:
@@ -29055,12 +32133,15 @@ namespace VpcV1 {
     memory: BareMetalServerProfileMemory;
     /** The name for this bare metal server profile. */
     name: string;
+    network_attachment_count: BareMetalServerProfileNetworkAttachmentCount;
     network_interface_count: BareMetalServerProfileNetworkInterfaceCount;
     os_architecture: BareMetalServerProfileOSArchitecture;
     /** The resource type. */
     resource_type: BareMetalServerProfile.Constants.ResourceType | string;
     /** The supported trusted platform module modes for this bare metal server profile. */
     supported_trusted_platform_module_modes: BareMetalServerProfileSupportedTrustedPlatformModuleModes;
+    /** Indicates whether this profile supports virtual network interfaces. */
+    virtual_network_interfaces_supported: BareMetalServerProfileVirtualNetworkInterfacesSupported;
   }
   export namespace BareMetalServerProfile {
     export namespace Constants {
@@ -29132,7 +32213,7 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: BareMetalServerProfileConsoleTypes.Constants.Type | string;
     /** The console types for a bare metal server with this profile. */
-    values: BareMetalServerProfileConsoleTypes.Constants.Values | string[];
+    values: BareMetalServerProfileConsoleTypes.Constants.Values[] | string[];
   }
   export namespace BareMetalServerProfileConsoleTypes {
     export namespace Constants {
@@ -29179,7 +32260,7 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: BareMetalServerProfileDiskSupportedInterfaces.Constants.Type | string;
     /** The supported disk interfaces used for attaching the disk. */
-    values: BareMetalServerProfileDiskSupportedInterfaces.Constants.Values | string[];
+    values: BareMetalServerProfileDiskSupportedInterfaces.Constants.Values[] | string[];
   }
   export namespace BareMetalServerProfileDiskSupportedInterfaces {
     export namespace Constants {
@@ -29208,6 +32289,10 @@ namespace VpcV1 {
 
   /** BareMetalServerProfileMemory. */
   export interface BareMetalServerProfileMemory {
+  }
+
+  /** BareMetalServerProfileNetworkAttachmentCount. */
+  export interface BareMetalServerProfileNetworkAttachmentCount {
   }
 
   /** BareMetalServerProfileNetworkInterfaceCount. */
@@ -29255,7 +32340,7 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Type | string;
     /** The supported trusted platform module modes. */
-    values: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Values | string[];
+    values: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Values[] | string[];
   }
   export namespace BareMetalServerProfileSupportedTrustedPlatformModuleModes {
     export namespace Constants {
@@ -29269,6 +32354,54 @@ namespace VpcV1 {
         TPM_2 = 'tpm_2',
       }
     }
+  }
+
+  /** Indicates whether this profile supports virtual network interfaces. */
+  export interface BareMetalServerProfileVirtualNetworkInterfacesSupported {
+    /** The type for this profile field. */
+    type: BareMetalServerProfileVirtualNetworkInterfacesSupported.Constants.Type | string;
+    /** The value for this profile field. */
+    value: boolean;
+  }
+  export namespace BareMetalServerProfileVirtualNetworkInterfacesSupported {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
+  /** BareMetalServerPrototype. */
+  export interface BareMetalServerPrototype {
+    /** Indicates whether secure boot is enabled. If enabled, the image must support secure boot or the server will
+     *  fail to boot.
+     */
+    enable_secure_boot?: boolean;
+    initialization: BareMetalServerInitializationPrototype;
+    /** The name for this bare metal server. The name must not be used by another bare metal server in the region.
+     *  If unspecified, the name will be a hyphenated list of randomly-selected words.
+     *
+     *  The system hostname will be based on this name.
+     */
+    name?: string;
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
+     *  to use for this bare metal server.
+     */
+    profile: BareMetalServerProfileIdentity;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+     */
+    resource_group?: ResourceGroupIdentity;
+    trusted_platform_module?: BareMetalServerTrustedPlatformModulePrototype;
+    /** The VPC this bare metal server will reside in.
+     *
+     *  If specified, it must match the VPC for the subnets that the network attachments or
+     *  network interfaces of the bare metal server are attached to.
+     */
+    vpc?: VPCIdentity;
+    /** The zone this bare metal server will reside in. */
+    zone: ZoneIdentity;
   }
 
   /** BareMetalServerStatusReason. */
@@ -29313,7 +32446,7 @@ namespace VpcV1 {
      */
     mode: BareMetalServerTrustedPlatformModule.Constants.Mode | string;
     /** The supported trusted platform module modes. */
-    supported_modes: BareMetalServerTrustedPlatformModule.Constants.SupportedModes | string[];
+    supported_modes: BareMetalServerTrustedPlatformModule.Constants.SupportedModes[] | string[];
   }
   export namespace BareMetalServerTrustedPlatformModule {
     export namespace Constants {
@@ -29591,7 +32724,7 @@ namespace VpcV1 {
     /** The size of the disk in GB (gigabytes). */
     size: number;
     /** The instance disk interfaces supported for this dedicated host disk. */
-    supported_instance_interface_types: DedicatedHostDisk.Constants.SupportedInstanceInterfaceTypes | string[];
+    supported_instance_interface_types: DedicatedHostDisk.Constants.SupportedInstanceInterfaceTypes[] | string[];
   }
   export namespace DedicatedHostDisk {
     export namespace Constants {
@@ -29911,7 +33044,7 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: DedicatedHostProfileDiskSupportedInterfaces.Constants.Type | string;
     /** The instance disk interfaces supported for a dedicated host with this profile. */
-    value: DedicatedHostProfileDiskSupportedInterfaces.Constants.Value | string[];
+    value: DedicatedHostProfileDiskSupportedInterfaces.Constants.Value[] | string[];
   }
   export namespace DedicatedHostProfileDiskSupportedInterfaces {
     export namespace Constants {
@@ -30065,6 +33198,14 @@ namespace VpcV1 {
      *  filter support is expected to expand in the future.
      */
     accept_routes_from: ResourceFilter[];
+    /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised
+     *  to these sources.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected property value was encountered.
+     */
+    advertise_routes_to: DefaultRoutingTable.Constants.AdvertiseRoutesTo[] | string[];
     /** The date and time that this routing table was created. */
     created_at: string;
     /** The URL for this routing table. */
@@ -30128,6 +33269,11 @@ namespace VpcV1 {
   }
   export namespace DefaultRoutingTable {
     export namespace Constants {
+      /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised to these sources. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum AdvertiseRoutesTo {
+        DIRECT_LINK = 'direct_link',
+        TRANSIT_GATEWAY = 'transit_gateway',
+      }
       /** The lifecycle state of the routing table. */
       export enum LifecycleState {
         DELETING = 'deleting',
@@ -30210,6 +33356,10 @@ namespace VpcV1 {
     id: string;
     /** The reserved IPs bound to this endpoint gateway. */
     ips: ReservedIPReference[];
+    /** The reasons for the current `lifecycle_state` (if any):
+     *  - `dns_resolution_binding_pending`: the DNS resolution binding is being set up.
+     */
+    lifecycle_reasons: EndpointGatewayLifecycleReason[];
     /** The lifecycle state of the endpoint gateway. */
     lifecycle_state: EndpointGateway.Constants.LifecycleState | string;
     /** The name for this endpoint gateway. The name is unique across all endpoint gateways in the VPC. */
@@ -30279,6 +33429,25 @@ namespace VpcV1 {
   export interface EndpointGatewayCollectionNext {
     /** The URL for a page of resources. */
     href: string;
+  }
+
+  /** EndpointGatewayLifecycleReason. */
+  export interface EndpointGatewayLifecycleReason {
+    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    code: EndpointGatewayLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace EndpointGatewayLifecycleReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      export enum Code {
+        DNS_RESOLUTION_BINDING_PENDING = 'dns_resolution_binding_pending',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -30409,6 +33578,32 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** FloatingIPCollectionVirtualNetworkInterfaceContext. */
+  export interface FloatingIPCollectionVirtualNetworkInterfaceContext {
+    /** A link to the first page of resources. */
+    first: FloatingIPCollectionVirtualNetworkInterfaceContextFirst;
+    /** Collection of floating IPs bound to the virtual network interface specified by the identifier in the URL. */
+    floating_ips: FloatingIPReference[];
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: FloatingIPCollectionVirtualNetworkInterfaceContextNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface FloatingIPCollectionVirtualNetworkInterfaceContextFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface FloatingIPCollectionVirtualNetworkInterfaceContextNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
   /** FloatingIPPrototype. */
   export interface FloatingIPPrototype {
     /** The name for this floating IP. The name must not be used by another floating IP in the region. If
@@ -30449,11 +33644,11 @@ namespace VpcV1 {
   export interface FloatingIPTarget {
   }
 
-  /** The target resource to bind this floating IP to, replacing any existing binding. The floating IP must not be required by another resource, such as a public gateway. The target resource must not already have a floating IP bound to it if the target resource is: - an instance network interface - a bare metal server network interface with `enable_infrastructure_nat` set to `true`. */
+  /** The target resource to bind this floating IP to, replacing any existing binding. The floating IP must not be required by another resource, such as a public gateway. The target resource must not already have a floating IP bound to it if the target resource is: - an instance network interface - a bare metal server network interface with `enable_infrastructure_nat` set to `true` - a virtual network interface with `enable_infrastructure_nat` set to `true` Specify `null` to remove an existing binding. */
   export interface FloatingIPTargetPatch {
   }
 
-  /** The target resource to bind this floating IP to. The target resource must not already have a floating IP bound to it if the target resource is: - an instance network interface - a bare metal server network interface with `enable_infrastructure_nat` set to `true`. */
+  /** The target resource to bind this floating IP to. The target resource must not already have a floating IP bound to it if the target resource is: - an instance network interface - a bare metal server network interface with `enable_infrastructure_nat` set to `true` - a virtual network interface with `enable_infrastructure_nat` set to `true`. */
   export interface FloatingIPTargetPrototype {
   }
 
@@ -30491,17 +33686,23 @@ namespace VpcV1 {
      */
     storage_bucket: LegacyCloudObjectStorageBucketReference;
     /** The target this collector is collecting flow logs for.
+     *  - If the target is an instance network attachment, flow logs will be collected
+     *    for that instance network attachment.
      *  - If the target is an instance network interface, flow logs will be collected
      *    for that instance network interface.
+     *  - If the target is a virtual network interface, flow logs will be collected for the
+     *    the virtual network interface's `target` resource if the resource is:
+     *    - an instance network attachment
      *  - If the target is a virtual server instance, flow logs will be collected
-     *    for all network interfaces on that instance.
+     *    for all network attachments or network interfaces on that instance.
      *  - If the target is a subnet, flow logs will be collected
-     *    for all instance network interfaces attached to that subnet.
-     *  - If the target is a VPC, flow logs will be collected for instance network interfaces
-     *    attached to all subnets within that VPC.
+     *    for all instance network interfaces and virtual network interfaces
+     *    attached to that subnet.
+     *  - If the target is a VPC, flow logs will be collected for all instance network
+     *    interfaces and virtual network interfaces  attached to all subnets within that VPC.
      *  If the target is an instance, subnet, or VPC, flow logs will not be collected
-     *  for any instance network interfaces within the target that are themselves the target of
-     *  a more specific flow log collector.
+     *  for any instance network attachments or instance network interfaces within the target
+     *  that are themselves the target of a more specific flow log collector.
      */
     target: FlowLogCollectorTarget;
     /** The VPC this flow log collector resides in. */
@@ -30548,11 +33749,11 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** The target this collector is collecting flow logs for. - If the target is an instance network interface, flow logs will be collected for that instance network interface. - If the target is a virtual server instance, flow logs will be collected for all network interfaces on that instance. - If the target is a subnet, flow logs will be collected for all instance network interfaces attached to that subnet. - If the target is a VPC, flow logs will be collected for instance network interfaces attached to all subnets within that VPC. If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network interfaces within the target that are themselves the target of a more specific flow log collector. */
+  /** The target this collector is collecting flow logs for. - If the target is an instance network attachment, flow logs will be collected for that instance network attachment. - If the target is an instance network interface, flow logs will be collected for that instance network interface. - If the target is a virtual network interface, flow logs will be collected for the the virtual network interface's `target` resource if the resource is: - an instance network attachment - If the target is a virtual server instance, flow logs will be collected for all network attachments or network interfaces on that instance. - If the target is a subnet, flow logs will be collected for all instance network interfaces and virtual network interfaces attached to that subnet. - If the target is a VPC, flow logs will be collected for all instance network interfaces and virtual network interfaces  attached to all subnets within that VPC. If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network attachments or instance network interfaces within the target that are themselves the target of a more specific flow log collector. */
   export interface FlowLogCollectorTarget {
   }
 
-  /** The target this collector will collect flow logs for. If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network interfaces within the target that are themselves the target of a more specific flow log collector. */
+  /** The target this collector will collect flow logs for. If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network attachments, virtual network interfaces or instance network interfaces within the target that are themselves the target of a more specific flow log collector. The target must not be a virtual network interface that is attached to a bare metal server network attachment or to a file share mount target. */
   export interface FlowLogCollectorTargetPrototype {
   }
 
@@ -31268,8 +34469,8 @@ namespace VpcV1 {
   export interface Instance {
     /** The availability policy for this virtual server instance. */
     availability_policy: InstanceAvailabilityPolicy;
-    /** The total bandwidth (in megabits per second) shared across the instance network interfaces and storage
-     *  volumes of virtual server instance.
+    /** The total bandwidth (in megabits per second) shared across the instance network attachments or instance
+     *  network interfaces and storage volumes of the virtual server instance.
      */
     bandwidth: number;
     /** Boot volume attachment. */
@@ -31288,6 +34489,27 @@ namespace VpcV1 {
     disks: InstanceDisk[];
     /** The virtual server instance GPU configuration. */
     gpu?: InstanceGPU;
+    /** The reasons for the current instance `health_state` (if any):
+     *  - `reservation_capacity_unavailable`: The reservation affinity pool has no
+     *    available capacity.
+     *  - `reservation_deleted`: The reservation affinity pool has a deleted reservation.
+     *  - `reservation_expired`: The reservation affinity pool has an expired reservation.
+     *  - `reservation_failed`: The reservation affinity pool has a failed reservation.
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    health_reasons: InstanceHealthReason[];
+    /** The health of this resource.
+     *  - `ok`: No abnormal behavior detected
+     *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
+     *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
+     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
+     *  also have this state.
+     */
+    health_state: Instance.Constants.HealthState | string;
     /** The URL for this virtual server instance. */
     href: string;
     /** The unique identifier for this virtual server instance. */
@@ -31311,7 +34533,14 @@ namespace VpcV1 {
      *  region.
      */
     name: string;
-    /** The network interfaces for this instance, including the primary network interface. */
+    /** The network attachments for this virtual server instance, including the primary network attachment. */
+    network_attachments: InstanceNetworkAttachmentReference[];
+    /** The network interfaces for this instance, including the primary network interface.
+     *
+     *  If this instance has network attachments, each network interface is a [read-only
+     *  representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+     *  network attachment and its attached virtual network interface.
+     */
     network_interfaces: NetworkInterfaceInstanceContextReference[];
     /** The number of NUMA nodes this virtual server instance is provisioned on.
      *
@@ -31320,10 +34549,24 @@ namespace VpcV1 {
     numa_count?: number;
     /** The placement restrictions for the virtual server instance. */
     placement_target?: InstancePlacementTarget;
-    /** The primary network interface for this virtual server instance. */
+    /** The primary network attachment for this virtual server instance. */
+    primary_network_attachment?: InstanceNetworkAttachmentReference;
+    /** The primary network interface for this virtual server instance.
+     *
+     *  If this instance has network attachments, this primary network interface is a
+     *  [read-only
+     *  representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients)
+     *  of the primary network attachment and its attached virtual network interface.
+     */
     primary_network_interface: NetworkInterfaceInstanceContextReference;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) for this virtual server instance. */
     profile: InstanceProfileReference;
+    /** The reservation used by this virtual server instance.
+     *
+     *  If absent, no reservation is in use.
+     */
+    reservation?: ReservationReference;
+    reservation_affinity: InstanceReservationAffinity;
     /** The resource group for this instance. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
@@ -31344,7 +34587,9 @@ namespace VpcV1 {
      *  which the unexpected reason code was encountered.
      */
     status_reasons: InstanceStatusReason[];
-    /** The amount of bandwidth (in megabits per second) allocated exclusively to instance network interfaces. */
+    /** The amount of bandwidth (in megabits per second) allocated exclusively to instance network attachments or
+     *  instance network interfaces.
+     */
     total_network_bandwidth: number;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
      *  increase in this value will result in a corresponding decrease to
@@ -31362,6 +34607,13 @@ namespace VpcV1 {
   }
   export namespace Instance {
     export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
       /** The lifecycle state of the virtual server instance. */
       export enum LifecycleState {
         DELETING = 'deleting',
@@ -32117,6 +35369,27 @@ namespace VpcV1 {
     more_info: string;
   }
 
+  /** InstanceHealthReason. */
+  export interface InstanceHealthReason {
+    /** A snake case string succinctly identifying the reason for this health state. */
+    code: InstanceHealthReason.Constants.Code | string;
+    /** An explanation of the reason for this health state. */
+    message: string;
+    /** Link to documentation about the reason for this health state. */
+    more_info?: string;
+  }
+  export namespace InstanceHealthReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the reason for this health state. */
+      export enum Code {
+        RESERVATION_CAPACITY_UNAVAILABLE = 'reservation_capacity_unavailable',
+        RESERVATION_DELETED = 'reservation_deleted',
+        RESERVATION_EXPIRED = 'reservation_expired',
+        RESERVATION_FAILED = 'reservation_failed',
+      }
+    }
+  }
+
   /** InstanceInitialization. */
   export interface InstanceInitialization {
     /** The default trusted profile configuration specified at virtual server instance
@@ -32240,7 +35513,120 @@ namespace VpcV1 {
     }
   }
 
-  /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. - Have the same `vcpu.architecture`. - Support the number of network interfaces the instance currently has. */
+  /** InstanceNetworkAttachment. */
+  export interface InstanceNetworkAttachment {
+    /** The date and time that the instance network attachment was created. */
+    created_at: string;
+    /** The URL for this instance network attachment. */
+    href: string;
+    /** The unique identifier for this instance network attachment. */
+    id: string;
+    /** The lifecycle state of the instance network attachment. */
+    lifecycle_state: InstanceNetworkAttachment.Constants.LifecycleState | string;
+    /** The name for this instance network attachment. The name is unique across all network attachments for the
+     *  instance.
+     */
+    name: string;
+    /** The port speed for this instance network attachment in Mbps. */
+    port_speed: number;
+    /** The primary IP address of the virtual network interface for the instance network attachment. */
+    primary_ip: ReservedIPReference;
+    /** The resource type. */
+    resource_type: InstanceNetworkAttachment.Constants.ResourceType | string;
+    /** The subnet of the virtual network interface for the instance network attachment. */
+    subnet: SubnetReference;
+    /** The instance network attachment type. */
+    type: InstanceNetworkAttachment.Constants.Type | string;
+    /** The virtual network interface for this instance network attachment. */
+    virtual_network_interface: VirtualNetworkInterfaceReferenceAttachmentContext;
+  }
+  export namespace InstanceNetworkAttachment {
+    export namespace Constants {
+      /** The lifecycle state of the instance network attachment. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_NETWORK_ATTACHMENT = 'instance_network_attachment',
+      }
+      /** The instance network attachment type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+    }
+  }
+
+  /** InstanceNetworkAttachmentCollection. */
+  export interface InstanceNetworkAttachmentCollection {
+    /** Collection of instance network attachments. */
+    network_attachments: InstanceNetworkAttachment[];
+  }
+
+  /** InstanceNetworkAttachmentPrototype. */
+  export interface InstanceNetworkAttachmentPrototype {
+    /** The name for this network attachment. Names must be unique within the instance the network attachment
+     *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** A virtual network interface for the instance network attachment. This can be specified
+     *  using an existing virtual network interface, or a prototype object for a new virtual
+     *  network interface.
+     *
+     *  If an existing virtual network interface is specified, `enable_infrastructure_nat` must be
+     *  `true`.
+     */
+    virtual_network_interface: InstanceNetworkAttachmentPrototypeVirtualNetworkInterface;
+  }
+
+  /** A virtual network interface for the instance network attachment. This can be specified using an existing virtual network interface, or a prototype object for a new virtual network interface. If an existing virtual network interface is specified, `enable_infrastructure_nat` must be `true`. */
+  export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterface {
+  }
+
+  /** InstanceNetworkAttachmentReference. */
+  export interface InstanceNetworkAttachmentReference {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: InstanceNetworkAttachmentReferenceDeleted;
+    /** The URL for this instance network attachment. */
+    href: string;
+    /** The unique identifier for this instance network attachment. */
+    id: string;
+    /** The name for this instance network attachment. The name is unique across all network attachments for the
+     *  instance.
+     */
+    name: string;
+    /** The primary IP address of the virtual network interface for the instance network attachment. */
+    primary_ip: ReservedIPReference;
+    /** The resource type. */
+    resource_type: InstanceNetworkAttachmentReference.Constants.ResourceType | string;
+    /** The subnet of the virtual network interface for the instance network attachment. */
+    subnet: SubnetReference;
+  }
+  export namespace InstanceNetworkAttachmentReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_NETWORK_ATTACHMENT = 'instance_network_attachment',
+      }
+    }
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface InstanceNetworkAttachmentReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. - Have the same `vcpu.architecture`. - Support the number of network attachments or network interfaces the instance currently has. */
   export interface InstancePatchProfile {
   }
 
@@ -32272,10 +35658,14 @@ namespace VpcV1 {
     memory: InstanceProfileMemory;
     /** The globally unique name for this virtual server instance profile. */
     name: string;
+    network_attachment_count: InstanceProfileNetworkAttachmentCount;
     network_interface_count: InstanceProfileNetworkInterfaceCount;
     numa_count?: InstanceProfileNUMACount;
     os_architecture: InstanceProfileOSArchitecture;
     port_speed: InstanceProfilePortSpeed;
+    reservation_terms: InstanceProfileReservationTerms;
+    /** The resource type. */
+    resource_type: InstanceProfile.Constants.ResourceType | string;
     /** The status of the instance profile:
      *    - `previous`:  This instance profile is an older revision, but remains provisionable and
      *    usable.
@@ -32298,6 +35688,10 @@ namespace VpcV1 {
   }
   export namespace InstanceProfile {
     export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_PROFILE = 'instance_profile',
+      }
       /** The status of the instance profile: - `previous`:  This instance profile is an older revision, but remains provisionable and usable. - `current`:  This profile is the latest revision. Note that revisions are indicated by the generation of an instance profile.  Refer to the [profile naming conventions] (https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within an instance profile. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the profile on which the unexpected property value was encountered. */
       export enum Status {
         CURRENT = 'current',
@@ -32343,7 +35737,7 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: InstanceProfileDiskSupportedInterfaces.Constants.Type | string;
     /** The supported disk interfaces used for attaching the disk. */
-    values: InstanceProfileDiskSupportedInterfaces.Constants.Values | string[];
+    values: InstanceProfileDiskSupportedInterfaces.Constants.Values[] | string[];
   }
   export namespace InstanceProfileDiskSupportedInterfaces {
     export namespace Constants {
@@ -32416,6 +35810,10 @@ namespace VpcV1 {
   export interface InstanceProfileNUMACount {
   }
 
+  /** InstanceProfileNetworkAttachmentCount. */
+  export interface InstanceProfileNetworkAttachmentCount {
+  }
+
   /** InstanceProfileNetworkInterfaceCount. */
   export interface InstanceProfileNetworkInterfaceCount {
   }
@@ -32448,6 +35846,37 @@ namespace VpcV1 {
     href: string;
     /** The globally unique name for this virtual server instance profile. */
     name: string;
+    /** The resource type. */
+    resource_type: InstanceProfileReference.Constants.ResourceType | string;
+  }
+  export namespace InstanceProfileReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_PROFILE = 'instance_profile',
+      }
+    }
+  }
+
+  /** InstanceProfileReservationTerms. */
+  export interface InstanceProfileReservationTerms {
+    /** The type for this profile field. */
+    type: InstanceProfileReservationTerms.Constants.Type | string;
+    /** The supported committed use terms for a reservation using this profile. */
+    values: InstanceProfileReservationTerms.Constants.Values[] | string[];
+  }
+  export namespace InstanceProfileReservationTerms {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The supported committed use terms for a reservation using this profile. */
+      export enum Values {
+        ONE_YEAR = 'one_year',
+        THREE_YEAR = 'three_year',
+      }
+    }
   }
 
   /** InstanceProfileVCPU. */
@@ -32528,7 +35957,10 @@ namespace VpcV1 {
      *  The system hostname will be based on this name.
      */
     name?: string;
-    /** The placement restrictions to use for the virtual server instance. */
+    /** The placement restrictions to use for the virtual server instance.
+     *
+     *  If specified, `reservation_affinity.policy` must be `disabled`.
+     */
     placement_target?: InstancePlacementTargetPrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
      *  virtual server instance.
@@ -32537,6 +35969,7 @@ namespace VpcV1 {
      *  in the future.
      */
     profile?: InstanceProfileIdentity;
+    reservation_affinity?: InstanceReservationAffinityPrototype;
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
@@ -32555,7 +35988,7 @@ namespace VpcV1 {
     /** The VPC this virtual server instance will reside in.
      *
      *  If specified, it must match the VPC for the subnets of the instance network
-     *  interfaces.
+     *  attachments or instance network interfaces.
      */
     vpc?: VPCIdentity;
   }
@@ -32584,6 +36017,85 @@ namespace VpcV1 {
     more_info: string;
   }
 
+  /** InstanceReservationAffinity. */
+  export interface InstanceReservationAffinity {
+    /** The reservation affinity policy to use for this virtual server instance:
+     *  - `disabled`: Reservations will not be used
+     *  - `manual`: Reservations in `pool` are available for use.
+     */
+    policy: InstanceReservationAffinity.Constants.Policy | string;
+    /** The pool of reservations available for use by this virtual server instance. */
+    pool: ReservationReference[];
+  }
+  export namespace InstanceReservationAffinity {
+    export namespace Constants {
+      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` are available for use. */
+      export enum Policy {
+        DISABLED = 'disabled',
+        MANUAL = 'manual',
+      }
+    }
+  }
+
+  /** InstanceReservationAffinityPatch. */
+  export interface InstanceReservationAffinityPatch {
+    /** The reservation affinity policy for this virtual server instance.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected property value was encountered.
+     */
+    policy?: InstanceReservationAffinityPatch.Constants.Policy | string;
+    /** The pool of reservations available for use by this virtual server instance, replacing the existing pool of
+     *  reservations.
+     *
+     *  Specified reservations must have a `status` of `active`, and have the same `profile` and
+     *  `zone` as this virtual server instance.
+     *
+     *  If `policy` is `manual`, a pool must be specified with at least one reservation. If
+     *  `policy` is `disabled` and a pool is specified, it must be empty.
+     */
+    pool?: ReservationIdentity[];
+  }
+  export namespace InstanceReservationAffinityPatch {
+    export namespace Constants {
+      /** The reservation affinity policy for this virtual server instance. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum Policy {
+        DISABLED = 'disabled',
+        MANUAL = 'manual',
+      }
+    }
+  }
+
+  /** InstanceReservationAffinityPrototype. */
+  export interface InstanceReservationAffinityPrototype {
+    /** The reservation affinity policy to use for this virtual server instance:
+     *  - `disabled`: Reservations will not be used
+     *  - `manual`: Reservations in `pool` will be available for use
+     *
+     *  The policy will default to `manual` if `pool` is not empty, and `disabled` otherwise.
+     */
+    policy?: InstanceReservationAffinityPrototype.Constants.Policy | string;
+    /** The pool of reservations available for use by this virtual server instance.
+     *
+     *  Specified reservations must have a `status` of `active`, and have the same `profile` and
+     *  `zone` as this virtual server instance.
+     *
+     *  If `policy` is `manual`, a pool must be specified with at least one reservation. If
+     *  `policy` is `disabled` and a pool is specified, it must be empty.
+     */
+    pool?: ReservationIdentity[];
+  }
+  export namespace InstanceReservationAffinityPrototype {
+    export namespace Constants {
+      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` will be available for use The policy will default to `manual` if `pool` is not empty, and `disabled` otherwise. */
+      export enum Policy {
+        DISABLED = 'disabled',
+        MANUAL = 'manual',
+      }
+    }
+  }
+
   /** InstanceStatusReason. */
   export interface InstanceStatusReason {
     /** A snake case string succinctly identifying the status reason. */
@@ -32603,6 +36115,8 @@ namespace VpcV1 {
         CANNOT_START_IP_ADDRESS = 'cannot_start_ip_address',
         CANNOT_START_NETWORK = 'cannot_start_network',
         CANNOT_START_PLACEMENT_GROUP = 'cannot_start_placement_group',
+        CANNOT_START_RESERVATION_CAPACITY = 'cannot_start_reservation_capacity',
+        CANNOT_START_RESERVATION_EXPIRED = 'cannot_start_reservation_expired',
         CANNOT_START_STORAGE = 'cannot_start_storage',
         ENCRYPTION_KEY_DELETED = 'encryption_key_deleted',
         STOPPED_BY_HOST_FAILURE = 'stopped_by_host_failure',
@@ -32649,7 +36163,10 @@ namespace VpcV1 {
     metadata_service?: InstanceMetadataServicePrototype;
     /** The name for this instance template. The name is unique across all instance templates in the region. */
     name: string;
-    /** The placement restrictions to use for the virtual server instance. */
+    /** The placement restrictions to use for the virtual server instance.
+     *
+     *  If specified, `reservation_affinity.policy` must be `disabled`.
+     */
     placement_target?: InstancePlacementTargetPrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
      *  virtual server instance.
@@ -32658,6 +36175,7 @@ namespace VpcV1 {
      *  in the future.
      */
     profile?: InstanceProfileIdentity;
+    reservation_affinity?: InstanceReservationAffinityPrototype;
     /** The resource group for this instance template. */
     resource_group: ResourceGroupReference;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
@@ -32674,7 +36192,7 @@ namespace VpcV1 {
     /** The VPC this virtual server instance will reside in.
      *
      *  If specified, it must match the VPC for the subnets of the instance network
-     *  interfaces.
+     *  attachments or instance network interfaces.
      */
     vpc?: VPCIdentity;
   }
@@ -32741,7 +36259,10 @@ namespace VpcV1 {
      *  If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The placement restrictions to use for the virtual server instance. */
+    /** The placement restrictions to use for the virtual server instance.
+     *
+     *  If specified, `reservation_affinity.policy` must be `disabled`.
+     */
     placement_target?: InstancePlacementTargetPrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
      *  virtual server instance.
@@ -32750,6 +36271,7 @@ namespace VpcV1 {
      *  in the future.
      */
     profile?: InstanceProfileIdentity;
+    reservation_affinity?: InstanceReservationAffinityPrototype;
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
@@ -32768,7 +36290,7 @@ namespace VpcV1 {
     /** The VPC this virtual server instance will reside in.
      *
      *  If specified, it must match the VPC for the subnets of the instance network
-     *  interfaces.
+     *  attachments or instance network interfaces.
      */
     vpc?: VPCIdentity;
   }
@@ -33104,7 +36626,7 @@ namespace VpcV1 {
      */
     certificate_instance?: CertificateInstanceReference;
     /** The connection limit of the listener. */
-    connection_limit?: number;
+    connection_limit: number;
     /** The date and time that this listener was created. */
     created_at: string;
     /** The default pool for this listener. If absent, this listener has no default pool. */
@@ -33315,7 +36837,10 @@ namespace VpcV1 {
     href: string;
     /** The policy's unique identifier. */
     id: string;
-    name: any;
+    /** The name for this load balancer listener policy. The name is unique across all policies for the load
+     *  balancer listener.
+     */
+    name: string;
   }
 
   /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
@@ -34545,30 +38070,87 @@ namespace VpcV1 {
 
   /** NetworkInterface. */
   export interface NetworkInterface {
-    /** Indicates whether source IP spoofing is allowed on this instance network interface. */
+    /** Indicates whether source IP spoofing is allowed on this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed
+     *  on the attached virtual network interface.
+     */
     allow_ip_spoofing: boolean;
-    /** The date and time that the instance network interface was created. */
+    /** The date and time that the instance network interface was created.
+     *
+     *  If this instance has network attachments, this network interface was created as a [read-only
+     *  representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) when its corresponding
+     *  network attachment was created.
+     */
     created_at: string;
-    /** The floating IPs associated with this instance network interface. */
+    /** The floating IPs associated with this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the floating IPs are associated
+     *  with the attached virtual network interface.
+     */
     floating_ips: FloatingIPReference[];
-    /** The URL for this instance network interface. */
+    /** The URL for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this instance network interface. */
+    /** The unique identifier for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
-    /** The name for this instance network interface. */
+    /** The name for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the name matches its
+     *  corresponding network attachment.
+     */
     name: string;
-    /** The instance network interface port speed in Mbps. */
+    /** The instance network interface port speed in Mbps.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the port speed is that of its
+     *  corresponding network attachment.
+     */
     port_speed: number;
     primary_ip: ReservedIPReference;
     /** The resource type. */
     resource_type: NetworkInterface.Constants.ResourceType | string;
-    /** The security groups targeting this instance network interface. */
+    /** The security groups targeting this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the security groups are
+     *  associated with the attached virtual network interface.
+     */
     security_groups: SecurityGroupReference[];
-    /** The status of the instance network interface. */
+    /** The status of the instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a read-only representation of its
+     *  corresponding network attachment and its attached virtual network interface, and the status is [computed from
+     *  them](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients).
+     */
     status: NetworkInterface.Constants.Status | string;
     /** The associated subnet. */
     subnet: SubnetReference;
-    /** The instance network interface type. */
+    /** The instance network interface type.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the type is that of its
+     *  corresponding network attachment.
+     */
     type: NetworkInterface.Constants.Type | string;
   }
   export namespace NetworkInterface {
@@ -34577,14 +38159,14 @@ namespace VpcV1 {
       export enum ResourceType {
         NETWORK_INTERFACE = 'network_interface',
       }
-      /** The status of the instance network interface. */
+      /** The status of the instance network interface. If this instance has network attachments, this network interface is a read-only representation of its corresponding network attachment and its attached virtual network interface, and the status is [computed from them](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients). */
       export enum Status {
         AVAILABLE = 'available',
         DELETING = 'deleting',
         FAILED = 'failed',
         PENDING = 'pending',
       }
-      /** The instance network interface type. */
+      /** The instance network interface type. If this instance has network attachments, this network interface is a [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding network attachment and its attached virtual network interface, and the type is that of its corresponding network attachment. */
       export enum Type {
         PRIMARY = 'primary',
         SECONDARY = 'secondary',
@@ -34598,9 +38180,20 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceBareMetalServerContextReferenceDeleted;
-    /** The URL for this bare metal server network interface. */
+    /** The URL for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this bare metal server network interface. */
+    /** The unique identifier for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
     /** The name for this bare metal server network interface. */
     name: string;
@@ -34635,9 +38228,20 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceInstanceContextReferenceDeleted;
-    /** The URL for this instance network interface. */
+    /** The URL for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this instance network interface. */
+    /** The unique identifier for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
     /** The name for this instance network interface. */
     name: string;
@@ -34664,7 +38268,13 @@ namespace VpcV1 {
 
   /** NetworkInterfacePrototype. */
   export interface NetworkInterfacePrototype {
-    /** Indicates whether source IP spoofing is allowed on this instance network interface. */
+    /** Indicates whether source IP spoofing is allowed on this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and source IP spoofing is managed
+     *  on the attached virtual network interface.
+     */
     allow_ip_spoofing?: boolean;
     /** The name for the instance network interface. The name must not be used by another network interface on the
      *  virtual server instance. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -35002,6 +38612,368 @@ namespace VpcV1 {
     name: string;
   }
 
+  /** Reservation. */
+  export interface Reservation {
+    /** The affinity policy to use for this reservation:
+     *  - `restricted`: The reservation must be manually requested
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
+     *  unexpected property value was encountered.
+     */
+    affinity_policy: Reservation.Constants.AffinityPolicy | string;
+    /** The capacity configuration for this reservation
+     *
+     *  If absent, this reservation has no assigned capacity.
+     */
+    capacity?: ReservationCapacity;
+    /** The committed use configuration for this reservation.
+     *
+     *  If absent, this reservation has no commitment for use.
+     */
+    committed_use?: ReservationCommittedUse;
+    /** The date and time that the reservation was created. */
+    created_at: string;
+    /** The CRN for this reservation. */
+    crn: string;
+    /** The URL for this reservation. */
+    href: string;
+    /** The unique identifier for this reservation. */
+    id: string;
+    /** The lifecycle state of this reservation. */
+    lifecycle_state: Reservation.Constants.LifecycleState | string;
+    /** The name for this reservation. The name is unique across all reservations in the region. */
+    name: string;
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) for this reservation. */
+    profile: ReservationProfile;
+    /** The resource group for this reservation. */
+    resource_group: ResourceGroupReference;
+    /** The resource type. */
+    resource_type: Reservation.Constants.ResourceType | string;
+    /** The status of the reservation.
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
+     *  unexpected property value was encountered.
+     */
+    status: Reservation.Constants.Status | string;
+    /** The reasons for the current status (if any).
+     *
+     *  The enumerated reason code values for this property will expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected reason code was encountered.
+     */
+    status_reasons: ReservationStatusReason[];
+    /** The zone for this reservation. */
+    zone: ZoneReference;
+  }
+  export namespace Reservation {
+    export namespace Constants {
+      /** The affinity policy to use for this reservation: - `restricted`: The reservation must be manually requested The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum AffinityPolicy {
+        RESTRICTED = 'restricted',
+      }
+      /** The lifecycle state of this reservation. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        RESERVATION = 'reservation',
+      }
+      /** The status of the reservation. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum Status {
+        ACTIVATING = 'activating',
+        ACTIVE = 'active',
+        DEACTIVATING = 'deactivating',
+        EXPIRED = 'expired',
+        FAILED = 'failed',
+        INACTIVE = 'inactive',
+      }
+    }
+  }
+
+  /** The capacity configuration for this reservation If absent, this reservation has no assigned capacity. */
+  export interface ReservationCapacity {
+    /** The amount allocated to this capacity reservation. */
+    allocated: number;
+    /** The amount of this capacity reservation available for new attachments. */
+    available: number;
+    /** The status of the capacity reservation:
+     *  - `allocating`: The capacity reservation is being allocated for use
+     *  - `allocated`: The total capacity of the reservation has been allocated for use
+     *  - `degraded`: The capacity reservation has been allocated for use, but some of the
+     *    capacity is not available.
+     *    See https://cloud.ibm.com/docs/vpc?topic=vpc-capacity-status for more information.
+     *  - `unallocated`: The capacity reservation is not allocated for use
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
+     *  unexpected property value was encountered.
+     */
+    status: ReservationCapacity.Constants.Status | string;
+    /** The total amount of this capacity reservation. */
+    total: number;
+    /** The amount of this capacity reservation used by existing attachments. */
+    used: number;
+  }
+  export namespace ReservationCapacity {
+    export namespace Constants {
+      /** The status of the capacity reservation: - `allocating`: The capacity reservation is being allocated for use - `allocated`: The total capacity of the reservation has been allocated for use - `degraded`: The capacity reservation has been allocated for use, but some of the capacity is not available. See https://cloud.ibm.com/docs/vpc?topic=vpc-capacity-status for more information. - `unallocated`: The capacity reservation is not allocated for use The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum Status {
+        ALLOCATED = 'allocated',
+        ALLOCATING = 'allocating',
+        DEGRADED = 'degraded',
+        UNALLOCATED = 'unallocated',
+      }
+    }
+  }
+
+  /** The capacity reservation configuration to use. The configuration can only be changed for reservations with a `status` of `inactive`. */
+  export interface ReservationCapacityPatch {
+    /** The total amount to use for this capacity reservation. */
+    total?: number;
+  }
+
+  /** The capacity reservation configuration to use. */
+  export interface ReservationCapacityPrototype {
+    /** The total amount to use for this capacity reservation. */
+    total: number;
+  }
+
+  /** ReservationCollection. */
+  export interface ReservationCollection {
+    /** A link to the first page of resources. */
+    first: ReservationCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: ReservationCollectionNext;
+    /** Collection of reservations. */
+    reservations: Reservation[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface ReservationCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface ReservationCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** The committed use reservation configuration. */
+  export interface ReservationCommittedUse {
+    /** The expiration date and time for this committed use reservation. */
+    expiration_at: string;
+    /** The policy to apply when the committed use term expires:
+     *  - `release`: Release any available capacity and let the reservation expire.
+     *  - `renew`: Renew for another term, provided the term remains listed in the
+     *    `reservation_terms` for the profile. Otherwise, let the reservation expire.
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
+     *  unexpected property value was encountered.
+     */
+    expiration_policy: ReservationCommittedUse.Constants.ExpirationPolicy | string;
+    /** The term for this committed use reservation:
+     *  - `one_year`: 1 year
+     *  - `three_year`: 3 years
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
+     *  unexpected property value was encountered.
+     */
+    term: string;
+  }
+  export namespace ReservationCommittedUse {
+    export namespace Constants {
+      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum ExpirationPolicy {
+        RELEASE = 'release',
+        RENEW = 'renew',
+      }
+    }
+  }
+
+  /** ReservationCommittedUsePatch. */
+  export interface ReservationCommittedUsePatch {
+    /** The policy to apply when the committed use term expires:
+     *  - `release`: Release any available capacity and let the reservation expire.
+     *  - `renew`: Renew for another term, provided the term remains listed in the
+     *    `reservation_terms` for the profile. Otherwise, let the reservation expire.
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
+     *  unexpected property value was encountered.
+     */
+    expiration_policy?: ReservationCommittedUsePatch.Constants.ExpirationPolicy | string;
+    /** The term for this committed use reservation:
+     *  - `one_year`: 1 year
+     *  - `three_year`: 3 years
+     *
+     *  The specified value must be listed in the `reservation_terms` in the profile for this reservation. The term can
+     *  only be changed for a reservation with a `status` of
+     *  `inactive`.
+     */
+    term?: string;
+  }
+  export namespace ReservationCommittedUsePatch {
+    export namespace Constants {
+      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum ExpirationPolicy {
+        RELEASE = 'release',
+        RENEW = 'renew',
+      }
+    }
+  }
+
+  /** ReservationCommittedUsePrototype. */
+  export interface ReservationCommittedUsePrototype {
+    /** The policy to apply when the committed use term expires:
+     *  - `release`: Release any available capacity and let the reservation expire.
+     *  - `renew`: Renew for another term, provided the term remains listed in the
+     *    `reservation_terms` for the profile. Otherwise, let the reservation expire.
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
+     *  unexpected property value was encountered.
+     */
+    expiration_policy?: ReservationCommittedUsePrototype.Constants.ExpirationPolicy | string;
+    /** The term for this committed use reservation:
+     *  - `one_year`: 1 year
+     *  - `three_year`: 3 years
+     *
+     *  The specified value must be listed in the `reservation_terms` in the profile for this reservation.
+     */
+    term: string;
+  }
+  export namespace ReservationCommittedUsePrototype {
+    export namespace Constants {
+      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum ExpirationPolicy {
+        RELEASE = 'release',
+        RENEW = 'renew',
+      }
+    }
+  }
+
+  /** Identifies a reservation by a unique property. */
+  export interface ReservationIdentity {
+  }
+
+  /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) for this reservation. */
+  export interface ReservationProfile {
+    /** The URL for this virtual server instance profile. */
+    href: string;
+    /** The globally unique name for this virtual server instance profile. */
+    name: string;
+    /** The resource type. */
+    resource_type: ReservationProfile.Constants.ResourceType | string;
+  }
+  export namespace ReservationProfile {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_PROFILE = 'instance_profile',
+      }
+    }
+  }
+
+  /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation. The profile can only be changed for a reservation with a `status` of `inactive`. */
+  export interface ReservationProfilePatch {
+    /** The globally unique name of the profile. */
+    name?: string;
+    /** The resource type of the profile. */
+    resource_type?: ReservationProfilePatch.Constants.ResourceType | string;
+  }
+  export namespace ReservationProfilePatch {
+    export namespace Constants {
+      /** The resource type of the profile. */
+      export enum ResourceType {
+        INSTANCE_PROFILE = 'instance_profile',
+      }
+    }
+  }
+
+  /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation. */
+  export interface ReservationProfilePrototype {
+    /** The globally unique name of the profile. */
+    name: string;
+    /** The resource type of the profile. */
+    resource_type: ReservationProfilePrototype.Constants.ResourceType | string;
+  }
+  export namespace ReservationProfilePrototype {
+    export namespace Constants {
+      /** The resource type of the profile. */
+      export enum ResourceType {
+        INSTANCE_PROFILE = 'instance_profile',
+      }
+    }
+  }
+
+  /** ReservationReference. */
+  export interface ReservationReference {
+    /** The CRN for this reservation. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: ReservationReferenceDeleted;
+    /** The URL for this reservation. */
+    href: string;
+    /** The unique identifier for this reservation. */
+    id: string;
+    /** The name for this reservation. The name is unique across all reservations in the region. */
+    name: string;
+    /** The resource type. */
+    resource_type: ReservationReference.Constants.ResourceType | string;
+  }
+  export namespace ReservationReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        RESERVATION = 'reservation',
+      }
+    }
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface ReservationReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** ReservationStatusReason. */
+  export interface ReservationStatusReason {
+    /** A snake case string succinctly identifying the status reason. */
+    code: ReservationStatusReason.Constants.Code | string;
+    /** An explanation of the status reason. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
+  }
+  export namespace ReservationStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason. */
+      export enum Code {
+        CANNOT_ACTIVATE_NO_CAPACITY_AVAILABLE = 'cannot_activate_no_capacity_available',
+        CANNOT_RENEW_UNSUPPORTED_PROFILE_TERM = 'cannot_renew_unsupported_profile_term',
+      }
+    }
+  }
+
   /** ReservedIP. */
   export interface ReservedIP {
     /** The IP address.
@@ -35165,6 +39137,32 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** ReservedIPCollectionVirtualNetworkInterfaceContext. */
+  export interface ReservedIPCollectionVirtualNetworkInterfaceContext {
+    /** A link to the first page of resources. */
+    first: ReservedIPCollectionVirtualNetworkInterfaceContextFirst;
+    /** Collection of reserved IPs bound to the virtual network interface specified by the identifier in the URL. */
+    ips: ReservedIPReference[];
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: ReservedIPCollectionVirtualNetworkInterfaceContextNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface ReservedIPCollectionVirtualNetworkInterfaceContextFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface ReservedIPCollectionVirtualNetworkInterfaceContextNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
   /** ReservedIPReference. */
   export interface ReservedIPReference {
     /** The IP address.
@@ -35208,7 +39206,7 @@ namespace VpcV1 {
   export interface ReservedIPTarget {
   }
 
-  /** The target to bind this reserved IP to.  The target must be in the same VPC. At present, only endpoint gateway targets are supported.  The endpoint gateway must not be already bound to a reserved IP in the subnet's zone. If unspecified, the reserved IP will be created unbound. */
+  /** The target to bind this reserved IP to.  The target must be in the same VPC. The following targets are supported: - An endpoint gateway not already bound to a reserved IP in the subnet's zone. - A virtual network interface. If unspecified, the reserved IP will be created unbound. */
   export interface ReservedIPTargetPrototype {
   }
 
@@ -35241,6 +39239,10 @@ namespace VpcV1 {
      *  - `drop`: drop the packet.
      */
     action: Route.Constants.Action | string;
+    /** Indicates whether this route will be advertised to the ingress sources specified by the
+     *  `advertise_routes_to` routing table property.
+     */
+    advertise: boolean;
     /** The date and time that the route was created. */
     created_at: string;
     /** If present, the resource that created the route. Routes with this property present cannot
@@ -35278,7 +39280,14 @@ namespace VpcV1 {
      *  distributed between them.
      */
     priority: number;
-    /** The zone the route applies to. (Traffic from subnets in this zone will be subject to this route.). */
+    /** The zone the route applies to.
+     *
+     *  If subnets are attached to the route's routing table, egress traffic from those
+     *  subnets in this zone will be subject to this route. If this route's routing table
+     *  has any of `route_direct_link_ingress`, `route_internet_ingress`,
+     *  `route_transit_gateway_ingress` or `route_vpc_zone_ingress`  set to`true`, traffic
+     *  from those ingress sources arriving in this zone will be subject to this route.
+     */
     zone: ZoneReference;
   }
   export namespace Route {
@@ -35369,6 +39378,10 @@ namespace VpcV1 {
      *  - `drop`: drop the packet.
      */
     action: RouteCollectionVPCContextRoutesItem.Constants.Action | string;
+    /** Indicates whether this route will be advertised to the ingress sources specified by the
+     *  `advertise_routes_to` routing table property.
+     */
+    advertise: boolean;
     /** The date and time that the route was created. */
     created_at: string;
     /** If present, the resource that created the route. Routes with this property present cannot
@@ -35406,7 +39419,14 @@ namespace VpcV1 {
      *  distributed between them.
      */
     priority: number;
-    /** The zone the route applies to. (Traffic from subnets in this zone will be subject to this route.). */
+    /** The zone the route applies to.
+     *
+     *  If subnets are attached to the route's routing table, egress traffic from those
+     *  subnets in this zone will be subject to this route. If this route's routing table
+     *  has any of `route_direct_link_ingress`, `route_internet_ingress`,
+     *  `route_transit_gateway_ingress` or `route_vpc_zone_ingress`  set to`true`, traffic
+     *  from those ingress sources arriving in this zone will be subject to this route.
+     */
     zone: ZoneReference;
   }
   export namespace RouteCollectionVPCContextRoutesItem {
@@ -35457,6 +39477,13 @@ namespace VpcV1 {
      *  - `drop`: drop the packet.
      */
     action?: RoutePrototype.Constants.Action | string;
+    /** Indicates whether this route will be advertised to the ingress sources specified by the
+     *  `advertise_routes_to` routing table property.
+     *
+     *  All routes in a routing table with the same `destination` and `zone` must have the same
+     *  `advertise` value.
+     */
+    advertise?: boolean;
     /** The destination CIDR of the route. The host identifier in the CIDR must be zero.
      *
      *  At most two routes per `zone` in a table can have the same `destination` and
@@ -35482,7 +39509,14 @@ namespace VpcV1 {
      *  distributed between them.
      */
     priority?: number;
-    /** The zone to apply the route to. (Traffic from subnets in this zone will be subject to this route.). */
+    /** The zone to apply the route to.
+     *
+     *  If subnets are attached to the route's routing table, egress traffic from those
+     *  subnets in this zone will be subject to this route. If this route's routing table
+     *  has any of `route_direct_link_ingress`, `route_internet_ingress`,
+     *  `route_transit_gateway_ingress` or `route_vpc_zone_ingress`  set to`true`, traffic
+     *  from those ingress sources arriving in this zone will be subject to this route.
+     */
     zone: ZoneIdentity;
   }
   export namespace RoutePrototype {
@@ -35529,6 +39563,14 @@ namespace VpcV1 {
      *  filter support is expected to expand in the future.
      */
     accept_routes_from: ResourceFilter[];
+    /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised
+     *  to these sources.
+     *
+     *  The enumerated values for this property are expected to expand in the future. When processing this property,
+     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
+     *  which the unexpected property value was encountered.
+     */
+    advertise_routes_to: RoutingTable.Constants.AdvertiseRoutesTo[] | string[];
     /** The date and time that this routing table was created. */
     created_at: string;
     /** The URL for this routing table. */
@@ -35588,6 +39630,11 @@ namespace VpcV1 {
   }
   export namespace RoutingTable {
     export namespace Constants {
+      /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised to these sources. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      export enum AdvertiseRoutesTo {
+        DIRECT_LINK = 'direct_link',
+        TRANSIT_GATEWAY = 'transit_gateway',
+      }
       /** The lifecycle state of the routing table. */
       export enum LifecycleState {
         DELETING = 'deleting',
@@ -35909,6 +39956,12 @@ namespace VpcV1 {
      *  This property will be absent if no jobs have been created for this file share.
      */
     latest_job?: ShareJob;
+    /** Information about the latest synchronization for this file share.
+     *
+     *  This property will be present when the `replication_role` is `replica` and at least
+     *  one replication sync has been completed.
+     */
+    latest_sync?: ShareLatestSync;
     /** The lifecycle state of the file share. */
     lifecycle_state: Share.Constants.LifecycleState | string;
     /** The mount targets for the file share. */
@@ -35937,6 +39990,8 @@ namespace VpcV1 {
     /** The replication status of the file share.
      *
      *  * `active`: This share is actively participating in replication, and the replica's data is up-to-date with the
+     *  replication schedule.
+     *  * `degraded`: This is share is participating in replication, but the replica's data has fallen behind the
      *  replication schedule.
      *  * `failover_pending`: This share is performing a replication failover.
      *  * `initializing`: This share is initializing replication.
@@ -35998,9 +40053,10 @@ namespace VpcV1 {
         REPLICA = 'replica',
         SOURCE = 'source',
       }
-      /** The replication status of the file share. * `active`: This share is actively participating in replication, and the replica's data is up-to-date with the replication schedule. * `failover_pending`: This share is performing a replication failover. * `initializing`: This share is initializing replication. * `none`: This share is not participating in replication. * `split_pending`: This share is performing a replication split. */
+      /** The replication status of the file share. * `active`: This share is actively participating in replication, and the replica's data is up-to-date with the replication schedule. * `degraded`: This is share is participating in replication, but the replica's data has fallen behind the replication schedule. * `failover_pending`: This share is performing a replication failover. * `initializing`: This share is initializing replication. * `none`: This share is not participating in replication. * `split_pending`: This share is performing a replication split. */
       export enum ReplicationStatus {
         ACTIVE = 'active',
+        DEGRADED = 'degraded',
         FAILOVER_PENDING = 'failover_pending',
         INITIALIZING = 'initializing',
         NONE = 'none',
@@ -36122,6 +40178,16 @@ namespace VpcV1 {
         CANNOT_REACH_SOURCE_SHARE = 'cannot_reach_source_share',
       }
     }
+  }
+
+  /** Information about the latest synchronization for this file share. This property will be present when the `replication_role` is `replica` and at least one replication sync has been completed. */
+  export interface ShareLatestSync {
+    /** The completed date and time of last synchronization between the replica share and its source. */
+    completed_at: string;
+    /** The data transferred (in bytes) in the last synchronization between the replica and its source. */
+    data_transferred: number;
+    /** The start date and time of last synchronization between the replica share and its source. */
+    started_at: string;
   }
 
   /** ShareMountTarget. */
@@ -36476,6 +40542,10 @@ namespace VpcV1 {
     id: string;
     /** The name for this share. The name is unique across all shares in the region. */
     name: string;
+    /** If present, this property indicates that the resource associated with this reference
+     *  is remote and therefore may not be directly retrievable.
+     */
+    remote?: ShareRemote;
     /** The resource type. */
     resource_type: ShareReference.Constants.ResourceType | string;
   }
@@ -36492,6 +40562,14 @@ namespace VpcV1 {
   export interface ShareReferenceDeleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
+  }
+
+  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  export interface ShareRemote {
+    /** If present, this property indicates that the referenced resource is remote to this
+     *  region, and identifies the native region.
+     */
+    region?: RegionReference;
   }
 
   /** ShareReplicationStatusReason. */
@@ -36568,6 +40646,8 @@ namespace VpcV1 {
     service_tags: string[];
     /** The size of this snapshot rounded up to the next gigabyte. */
     size: number;
+    /** If present, the snapshot consistency group which created this snapshot. */
+    snapshot_consistency_group?: SnapshotConsistencyGroupReference;
     /** If present, the image from which the data on this snapshot was most directly provisioned. */
     source_image?: ImageReference;
     /** If present, the source snapshot this snapshot was created from. */
@@ -36651,6 +40731,165 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** SnapshotConsistencyGroup. */
+  export interface SnapshotConsistencyGroup {
+    /** If present, the backup policy plan which created this snapshot consistency group. */
+    backup_policy_plan?: BackupPolicyPlanReference;
+    /** The date and time that this snapshot consistency group was created. */
+    created_at: string;
+    /** The CRN of this snapshot consistency group. */
+    crn: string;
+    /** Indicates whether deleting the snapshot consistency group will also delete the snapshots in the group. */
+    delete_snapshots_on_delete: boolean;
+    /** The URL for this snapshot consistency group. */
+    href: string;
+    /** The unique identifier for this snapshot consistency group. */
+    id: string;
+    /** The lifecycle state of this snapshot consistency group. */
+    lifecycle_state: SnapshotConsistencyGroup.Constants.LifecycleState | string;
+    /** The name for this snapshot consistency group. The name is unique across all snapshot consistency groups in
+     *  the region.
+     */
+    name: string;
+    /** The resource group for this snapshot consistency group. */
+    resource_group: ResourceGroupReference;
+    /** The resource type. */
+    resource_type: SnapshotConsistencyGroup.Constants.ResourceType | string;
+    /** The [service tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this snapshot
+     *  consistency group. Each tag is prefixed with
+     *  [is.instance:](https://cloud.ibm.com/docs/vpc?topic=vpc-snapshots-vpc-faqs).
+     */
+    service_tags: string[];
+    /** The member snapshots that are data-consistent with respect to captured time. (may be
+     *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
+     */
+    snapshots: SnapshotConsistencyGroupSnapshotsItem[];
+  }
+  export namespace SnapshotConsistencyGroup {
+    export namespace Constants {
+      /** The lifecycle state of this snapshot consistency group. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SNAPSHOT_CONSISTENCY_GROUP = 'snapshot_consistency_group',
+      }
+    }
+  }
+
+  /** SnapshotConsistencyGroupCollection. */
+  export interface SnapshotConsistencyGroupCollection {
+    /** A link to the first page of resources. */
+    first: SnapshotConsistencyGroupCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: SnapshotConsistencyGroupCollectionNext;
+    /** Collection of snapshot consistency groups. */
+    snapshot_consistency_groups: SnapshotConsistencyGroup[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface SnapshotConsistencyGroupCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface SnapshotConsistencyGroupCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** SnapshotConsistencyGroupPrototype. */
+  export interface SnapshotConsistencyGroupPrototype {
+    /** Indicates whether deleting the snapshot consistency group will also delete the snapshots in the group. */
+    delete_snapshots_on_delete?: boolean;
+    /** The name for this snapshot consistency group. The name must be unique across all snapshot consistency groups
+     *  in the region.
+     *
+     *  If unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+     */
+    resource_group?: ResourceGroupIdentity;
+  }
+
+  /** SnapshotConsistencyGroupReference. */
+  export interface SnapshotConsistencyGroupReference {
+    /** The CRN of this snapshot consistency group. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: SnapshotConsistencyGroupReferenceDeleted;
+    /** The URL for this snapshot consistency group. */
+    href: string;
+    /** The unique identifier for this snapshot consistency group. */
+    id: string;
+    /** The name for this snapshot consistency group. The name is unique across all snapshot consistency groups in
+     *  the region.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: SnapshotConsistencyGroupReference.Constants.ResourceType | string;
+  }
+  export namespace SnapshotConsistencyGroupReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SNAPSHOT_CONSISTENCY_GROUP = 'snapshot_consistency_group',
+      }
+    }
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface SnapshotConsistencyGroupReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
+  }
+
+  /** SnapshotConsistencyGroupSnapshotsItem. */
+  export interface SnapshotConsistencyGroupSnapshotsItem {
+    /** The CRN of this snapshot. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: SnapshotReferenceDeleted;
+    /** The URL for this snapshot. */
+    href: string;
+    /** The unique identifier for this snapshot. */
+    id: string;
+    /** The name for this snapshot. The name is unique across all snapshots in the region. */
+    name: string;
+    /** If present, this property indicates that the resource associated with this reference
+     *  is remote and therefore may not be directly retrievable.
+     */
+    remote?: SnapshotRemote;
+    /** The resource type. */
+    resource_type: SnapshotConsistencyGroupSnapshotsItem.Constants.ResourceType | string;
+  }
+  export namespace SnapshotConsistencyGroupSnapshotsItem {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SNAPSHOT = 'snapshot',
+      }
+    }
+  }
+
   /** SnapshotCopiesItem. */
   export interface SnapshotCopiesItem {
     /** The CRN for the copied snapshot. */
@@ -36697,6 +40936,18 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
+    /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this snapshot. */
+    user_tags?: string[];
+  }
+
+  /** SnapshotPrototypeSnapshotConsistencyGroupContext. */
+  export interface SnapshotPrototypeSnapshotConsistencyGroupContext {
+    /** The name for this snapshot. The name must not be used by another snapshot in the region. If unspecified, the
+     *  name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The volume to create this snapshot from. */
+    source_volume: VolumeIdentity;
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this snapshot. */
     user_tags?: string[];
   }
@@ -37223,6 +41474,14 @@ namespace VpcV1 {
      *  - have a unique `zone_affinity`, or
      *  - not have a `zone_affinity`.
      *
+     *  If `zone_affinity` is specified, exactly one DNS server must be specified for each zone in the region. The DHCP
+     *  [Domain Name Server Option](https://datatracker.ietf.org/doc/html/rfc2132#section-3.8) for a zone will list this
+     *  DNS server first, followed by unique DNS servers from other zones if available.
+     *
+     *  If `zone_affinity` is not specified, the DHCP [Domain Name Server
+     *  Option](https://datatracker.ietf.org/doc/html/rfc2132#section-3.8) for each zone will list all the manual DNS
+     *  servers in the order specified.
+     *
      *  `dns.resolver.manual_servers` must be set if and only if `dns.resolver.type` is `manual`.
      */
     manual_servers?: DNSServerPrototype[];
@@ -37301,6 +41560,7 @@ namespace VpcV1 {
     export namespace Constants {
       /** A snake case string succinctly identifying the reason for this health state. */
       export enum Code {
+        DNS_RESOLUTION_BINDING_FAILED = 'dns_resolution_binding_failed',
         INTERNAL_ERROR = 'internal_error',
       }
     }
@@ -37693,30 +41953,6 @@ namespace VpcV1 {
     local_cidrs?: string[];
   }
 
-  /** VPNGatewayConnectionPatch. */
-  export interface VPNGatewayConnectionPatch {
-    /** If set to false, the VPN gateway connection is shut down. */
-    admin_state_up?: boolean;
-    /** The Dead Peer Detection settings. */
-    dead_peer_detection?: VPNGatewayConnectionDPDPatch;
-    /** The IKE policy to use. Specify `null` to remove any existing policy, [resulting in
-     *  auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1).
-     */
-    ike_policy?: VPNGatewayConnectionIKEPolicyPatch;
-    /** The IPsec policy to use. Specify `null` to remove any existing policy, [resulting in
-     *  auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ipsec-auto-negotiation-phase-2).
-     */
-    ipsec_policy?: VPNGatewayConnectionIPsecPolicyPatch;
-    /** The name for this VPN gateway connection. The name must not be used by another connection for the VPN
-     *  gateway.
-     */
-    name?: string;
-    /** The IP address of the peer VPN gateway. */
-    peer_address?: string;
-    /** The pre-shared key. */
-    psk?: string;
-  }
-
   /** VPNGatewayConnectionPeerCIDRs. */
   export interface VPNGatewayConnectionPeerCIDRs {
     /** The peer CIDRs for this resource. */
@@ -38061,11 +42297,11 @@ namespace VpcV1 {
     enable_split_tunneling: boolean;
     /** The reasons for the current VPN server health_state (if any):
      *  - `cannot_access_client_certificate`: VPN server's client certificate is inaccessible
-     *    (verify certificate exists and that IAM policies grant `VPN server for VPC` access to
-     *    `Secrets Manager`)
+     *    (verify certificate exists and that IAM policies grant `VPN server for VPC` access
+     *    to `Secrets Manager`)
      *  - `cannot_access_server_certificate`: VPN server's server certificate is inaccessible
-     *    (verify certificate exists and that IAM policies grant `VPN server for VPC` access to
-     *    `Secrets Manager`)
+     *    (verify certificate exists and that IAM policies grant `VPN server for VPC` access
+     *    to `Secrets Manager`)
      *  - `cannot_create_vpc_route`: VPN cannot create route (check for conflict)
      *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
      *    subnet)
@@ -38492,18 +42728,41 @@ namespace VpcV1 {
 
   /** VirtualNetworkInterface. */
   export interface VirtualNetworkInterface {
+    /** Indicates whether source IP spoofing is allowed on this interface. If `false`, source IP spoofing is
+     *  prevented on this interface. If `true`, source IP spoofing is allowed on this interface.
+     */
+    allow_ip_spoofing: boolean;
     /** Indicates whether this virtual network interface will be automatically deleted when `target` is deleted. */
     auto_delete: boolean;
     /** The date and time that the virtual network interface was created. */
     created_at: string;
     /** The CRN for this virtual network interface. */
     crn: string;
+    /** If `true`:
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
+     *
+     *  If `false`:
+     *  - Packets are passed unchanged to/from the virtual network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     *  - `allow_ip_spoofing` must be `false`.
+     *  - Can only be attached to a `target` with a `resource_type` of
+     *    `bare_metal_server_network_attachment`.
+     */
+    enable_infrastructure_nat: boolean;
     /** The URL for this virtual network interface. */
     href: string;
     /** The unique identifier for this virtual network interface. */
     id: string;
+    /** The reserved IPs bound to this virtual network interface.
+     *
+     *  May be empty when `lifecycle_state` is `pending`.
+     */
+    ips: ReservedIPReference[];
     /** The lifecycle state of the virtual network interface. */
     lifecycle_state: VirtualNetworkInterface.Constants.LifecycleState | string;
+    /** The MAC address of the virtual network interface. May be absent if `lifecycle_state` is `pending`. */
+    mac_address?: string;
     /** The name for this virtual network interface. The name is unique across all virtual network interfaces in the
      *  VPC.
      */
@@ -38571,6 +42830,10 @@ namespace VpcV1 {
   export interface VirtualNetworkInterfaceCollectionNext {
     /** The URL for a page of resources. */
     href: string;
+  }
+
+  /** VirtualNetworkInterfaceIPPrototype. */
+  export interface VirtualNetworkInterfaceIPPrototype {
   }
 
   /** VirtualNetworkInterfacePrimaryIPPrototype. */
@@ -39249,6 +43512,24 @@ namespace VpcV1 {
     name: string;
   }
 
+  /** BackupPolicyJobSourceInstanceReference. */
+  export interface BackupPolicyJobSourceInstanceReference extends BackupPolicyJobSource {
+    /** The CRN for this virtual server instance. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: InstanceReferenceDeleted;
+    /** The URL for this virtual server instance. */
+    href: string;
+    /** The unique identifier for this virtual server instance. */
+    id: string;
+    /** The name for this virtual server instance. The name is unique across all virtual server instances in the
+     *  region.
+     */
+    name: string;
+  }
+
   /** BackupPolicyJobSourceVolumeReference. */
   export interface BackupPolicyJobSourceVolumeReference extends BackupPolicyJobSource {
     /** The CRN for this volume. */
@@ -39274,6 +43555,144 @@ namespace VpcV1 {
     export namespace Constants {
       /** The resource type. */
       export enum ResourceType {
+        VOLUME = 'volume',
+      }
+    }
+  }
+
+  /** BackupPolicyMatchResourceTypeInstance. */
+  export interface BackupPolicyMatchResourceTypeInstance extends BackupPolicy {
+    /** The included content for backups created using this policy:
+     *  - `boot_volume`: Include the instance's boot volume.
+     *  - `data_volumes`: Include the instance's data volumes.
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
+     *  unexpected property value was encountered.
+     */
+    included_content: BackupPolicyMatchResourceTypeInstance.Constants.IncludedContent[] | string[];
+    /** The resource type this backup policy applies to. Resources that have both a matching type and a matching
+     *  user tag will be subject to the backup policy.
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
+     *  unexpected property value was encountered.
+     */
+    match_resource_type: BackupPolicyMatchResourceTypeInstance.Constants.MatchResourceType | string;
+  }
+  export namespace BackupPolicyMatchResourceTypeInstance {
+    export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the backup policy. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BACKUP_POLICY = 'backup_policy',
+      }
+      /** The included content for backups created using this policy: - `boot_volume`: Include the instance's boot volume. - `data_volumes`: Include the instance's data volumes. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the unexpected property value was encountered. */
+      export enum IncludedContent {
+        BOOT_VOLUME = 'boot_volume',
+        DATA_VOLUMES = 'data_volumes',
+      }
+      /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the unexpected property value was encountered. */
+      export enum MatchResourceType {
+        INSTANCE = 'instance',
+      }
+    }
+  }
+
+  /** BackupPolicyMatchResourceTypeVolume. */
+  export interface BackupPolicyMatchResourceTypeVolume extends BackupPolicy {
+    /** The resource type this backup policy applies to. Resources that have both a matching type and a matching
+     *  user tag will be subject to the backup policy.
+     *
+     *  The enumerated values for this property may expand in the future. When processing this property, check for and
+     *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
+     *  unexpected property value was encountered.
+     */
+    match_resource_type: BackupPolicyMatchResourceTypeVolume.Constants.MatchResourceType | string;
+  }
+  export namespace BackupPolicyMatchResourceTypeVolume {
+    export namespace Constants {
+      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the backup policy. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BACKUP_POLICY = 'backup_policy',
+      }
+      /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the unexpected property value was encountered. */
+      export enum MatchResourceType {
+        VOLUME = 'volume',
+      }
+    }
+  }
+
+  /** BackupPolicyPrototypeBackupPolicyMatchResourceTypeInstancePrototype. */
+  export interface BackupPolicyPrototypeBackupPolicyMatchResourceTypeInstancePrototype extends BackupPolicyPrototype {
+    /** The included content for backups created using this policy:
+     *  - `boot_volume`: Include the instance's boot volume.
+     *  - `data_volumes`: Include the instance's data volumes.
+     */
+    included_content?: BackupPolicyPrototypeBackupPolicyMatchResourceTypeInstancePrototype.Constants.IncludedContent[] | string[];
+    /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching
+     *  user tag will be subject to the backup policy.
+     */
+    match_resource_type: BackupPolicyPrototypeBackupPolicyMatchResourceTypeInstancePrototype.Constants.MatchResourceType | string;
+  }
+  export namespace BackupPolicyPrototypeBackupPolicyMatchResourceTypeInstancePrototype {
+    export namespace Constants {
+      /** The included content for backups created using this policy: - `boot_volume`: Include the instance's boot volume. - `data_volumes`: Include the instance's data volumes. */
+      export enum IncludedContent {
+        BOOT_VOLUME = 'boot_volume',
+        DATA_VOLUMES = 'data_volumes',
+      }
+      /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. */
+      export enum MatchResourceType {
+        INSTANCE = 'instance',
+      }
+    }
+  }
+
+  /** BackupPolicyPrototypeBackupPolicyMatchResourceTypeVolumePrototype. */
+  export interface BackupPolicyPrototypeBackupPolicyMatchResourceTypeVolumePrototype extends BackupPolicyPrototype {
+    /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching
+     *  user tag will be subject to the backup policy.
+     */
+    match_resource_type: BackupPolicyPrototypeBackupPolicyMatchResourceTypeVolumePrototype.Constants.MatchResourceType | string;
+  }
+  export namespace BackupPolicyPrototypeBackupPolicyMatchResourceTypeVolumePrototype {
+    export namespace Constants {
+      /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. */
+      export enum MatchResourceType {
         VOLUME = 'volume',
       }
     }
@@ -39361,6 +43780,214 @@ namespace VpcV1 {
     }
   }
 
+  /** BareMetalServerNetworkAttachmentByPCI. */
+  export interface BareMetalServerNetworkAttachmentByPCI extends BareMetalServerNetworkAttachment {
+    /** The VLAN IDs allowed for `vlan` attachments using this PCI attachment. */
+    allowed_vlans: number[];
+    /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal
+     *    server is stopped
+     *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
+     *      to use the PCI attachment
+     *    - Cannot directly use an IEEE 802.1Q tag.
+     */
+    interface_type: BareMetalServerNetworkAttachmentByPCI.Constants.InterfaceType | string;
+  }
+  export namespace BareMetalServerNetworkAttachmentByPCI {
+    export namespace Constants {
+      /** The lifecycle state of the bare metal server network attachment. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER_NETWORK_ATTACHMENT = 'bare_metal_server_network_attachment',
+      }
+      /** The bare metal server network attachment type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+      /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI attachment - Cannot directly use an IEEE 802.1Q tag. */
+      export enum InterfaceType {
+        PCI = 'pci',
+      }
+    }
+  }
+
+  /** BareMetalServerNetworkAttachmentByVLAN. */
+  export interface BareMetalServerNetworkAttachmentByVLAN extends BareMetalServerNetworkAttachment {
+    /** Indicates if the data path for the network attachment can float to another bare metal server. Can only be
+     *  `true` for network attachments with an `interface_type` of `vlan`.
+     *
+     *  If `true`, and the network detects traffic for this data path on another bare metal server in the resource
+     *  group, the network attachment will be automatically deleted from this bare metal server and a new network
+     *  attachment with the same `id`, `name` and `vlan` will be created on the other bare metal server.  The virtual
+     *  network interface for this network attachment will be automatically be attached to the new network attachment.
+     *
+     *  For the data path to float, the other bare metal server must be in the same
+     *  `resource_group`, and must have a network attachment with `interface_type` of `pci` with `allowed_vlans`
+     *  including this network attachment's `vlan`.
+     */
+    allow_to_float: boolean;
+    /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array
+     *     of `allowed_vlans`.
+     *    - Must use an IEEE 802.1Q tag.
+     */
+    interface_type: BareMetalServerNetworkAttachmentByVLAN.Constants.InterfaceType | string;
+    /** The IEEE 802.1Q VLAN ID that must be used for all traffic on this attachment. */
+    vlan: number;
+  }
+  export namespace BareMetalServerNetworkAttachmentByVLAN {
+    export namespace Constants {
+      /** The lifecycle state of the bare metal server network attachment. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER_NETWORK_ATTACHMENT = 'bare_metal_server_network_attachment',
+      }
+      /** The bare metal server network attachment type. */
+      export enum Type {
+        PRIMARY = 'primary',
+        SECONDARY = 'secondary',
+      }
+      /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. */
+      export enum InterfaceType {
+        VLAN = 'vlan',
+      }
+    }
+  }
+
+  /** Identifies a virtual network interface by a unique property. */
+  export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity extends BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterface {
+  }
+
+  /** The virtual network interface for this target. */
+  export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeBareMetalServerNetworkAttachmentContext extends BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterface {
+    /** Indicates whether source IP spoofing is allowed on this interface. If `false`, source IP spoofing is
+     *  prevented on this interface. If `true`, source IP spoofing is allowed on this interface.
+     */
+    allow_ip_spoofing?: boolean;
+    /** Indicates whether this virtual network interface will be automatically deleted when `target` is deleted. */
+    auto_delete?: boolean;
+    /** If `true`:
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
+     *
+     *  If `false`:
+     *  - Packets are passed unchanged to/from the virtual network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     *  - `allow_ip_spoofing` must be `false`.
+     *  - Can only be attached to a `target` with a `resource_type` of
+     *    `bare_metal_server_network_attachment`.
+     */
+    enable_infrastructure_nat?: boolean;
+    /** Additional IP addresses to bind to the virtual network interface. Each item may be either a reserved IP
+     *  identity, or a reserved IP prototype object which will be used to create a new reserved IP. All IP addresses
+     *  must be in the primary IP's subnet.
+     *
+     *  If reserved IP identities are provided, the specified reserved IPs must be unbound.
+     *
+     *  If reserved IP prototype objects with addresses are provided, the addresses must be available on the virtual
+     *  network interface's subnet. For any prototype objects that do not specify an address, an available address on
+     *  the subnet will be automatically selected and reserved.
+     */
+    ips?: VirtualNetworkInterfaceIPPrototype[];
+    /** The name for this virtual network interface. The name must not be used by another virtual network interface
+     *  in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words. Names beginning with
+     *  `ibm-` are reserved for provider-owned resources, and are not allowed.
+     */
+    name?: string;
+    /** The primary IP address to bind to the virtual network interface. May be either a
+     *  reserved IP identity, or a reserved IP prototype object which will be used to create a
+     *  new reserved IP.
+     *
+     *  If a reserved IP identity is provided, the specified reserved IP must be unbound.
+     *
+     *  If a reserved IP prototype object with an address is provided, the address must be
+     *  available on the virtual network interface's subnet. If no address is specified,
+     *  an available address on the subnet will be automatically selected and reserved.
+     */
+    primary_ip?: VirtualNetworkInterfacePrimaryIPPrototype;
+    /** The resource group to use for this virtual network interface. If unspecified, the
+     *  bare metal server's resource group will be used.
+     */
+    resource_group?: ResourceGroupIdentity;
+    /** The security groups to use for this virtual network interface. If unspecified, the default security group of
+     *  the VPC for the subnet is used.
+     */
+    security_groups?: SecurityGroupIdentity[];
+    /** The associated subnet. Required if `primary_ip` does not specify a reserved IP identity. */
+    subnet?: SubnetIdentity;
+  }
+
+  /** BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByPCIPrototype. */
+  export interface BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByPCIPrototype extends BareMetalServerNetworkAttachmentPrototype {
+    /** The VLAN IDs to allow for `vlan` attachments using this PCI attachment. */
+    allowed_vlans?: number[];
+    /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal
+     *    server is stopped
+     *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
+     *      to use the PCI attachment
+     *    - Cannot directly use an IEEE 802.1Q tag.
+     *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
+     */
+    interface_type: BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByPCIPrototype.Constants.InterfaceType | string;
+  }
+  export namespace BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByPCIPrototype {
+    export namespace Constants {
+      /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI attachment - Cannot directly use an IEEE 802.1Q tag. - Not supported on bare metal servers with a `cpu.architecture` of `s390x`. */
+      export enum InterfaceType {
+        PCI = 'pci',
+      }
+    }
+  }
+
+  /** BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByVLANPrototype. */
+  export interface BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByVLANPrototype extends BareMetalServerNetworkAttachmentPrototype {
+    /** Indicates if the data path for the network attachment can float to another bare metal server. Can only be
+     *  `true` for network attachments with an `interface_type` of `vlan`.
+     *
+     *  If `true`, and the network detects traffic for this data path on another bare metal server in the resource
+     *  group, the network attachment will be automatically deleted from this bare metal server and a new network
+     *  attachment with the same `id`, `name` and `vlan` will be created on the other bare metal server.  The virtual
+     *  network interface for this network attachment will be automatically be attached to the new network attachment.
+     *
+     *  For the data path to float, the other bare metal server must be in the same
+     *  `resource_group`, and must have a network attachment with `interface_type` of `pci` with `allowed_vlans`
+     *  including this network attachment's `vlan`.
+     */
+    allow_to_float?: boolean;
+    /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array
+     *     of `allowed_vlans`.
+     *    - Must use an IEEE 802.1Q tag.
+     */
+    interface_type: BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByVLANPrototype.Constants.InterfaceType | string;
+    /** The IEEE 802.1Q VLAN ID that must be used for all traffic on this attachment. */
+    vlan: number;
+  }
+  export namespace BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByVLANPrototype {
+    export namespace Constants {
+      /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. */
+      export enum InterfaceType {
+        VLAN = 'vlan',
+      }
+    }
+  }
+
   /** BareMetalServerNetworkInterfaceByHiperSocket. */
   export interface BareMetalServerNetworkInterfaceByHiperSocket extends BareMetalServerNetworkInterface {
     /** - `hipersocket`: a virtual network device that provides high-speed TCP/IP connectivity
@@ -39374,14 +44001,14 @@ namespace VpcV1 {
       export enum ResourceType {
         NETWORK_INTERFACE = 'network_interface',
       }
-      /** The status of the bare metal server network interface. */
+      /** The status of the bare metal server network interface. If this bare metal server has network attachments, this network interface is a read-only representation of its corresponding network attachment and its attached virtual network interface, and the status is [computed from them](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients). */
       export enum Status {
         AVAILABLE = 'available',
         DELETING = 'deleting',
         FAILED = 'failed',
         PENDING = 'pending',
       }
-      /** The bare metal server network interface type. */
+      /** The bare metal server network interface type. If this bare metal server has network attachments, this network interface is a [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding network attachment and its attached virtual network interface, and the type is that of its corresponding network attachment. */
       export enum Type {
         PRIMARY = 'primary',
         SECONDARY = 'secondary',
@@ -39395,7 +44022,13 @@ namespace VpcV1 {
 
   /** BareMetalServerNetworkInterfaceByPCI. */
   export interface BareMetalServerNetworkInterfaceByPCI extends BareMetalServerNetworkInterface {
-    /** The VLAN IDs allowed for `vlan` interfaces using this PCI interface. */
+    /** The VLAN IDs allowed for `vlan` interfaces using this PCI interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the VLAN IDs match the
+     *  `allow_vlans` of the corresponding network attachment.
+     */
     allowed_vlans: number[];
     /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal
      *    server is stopped
@@ -39411,14 +44044,14 @@ namespace VpcV1 {
       export enum ResourceType {
         NETWORK_INTERFACE = 'network_interface',
       }
-      /** The status of the bare metal server network interface. */
+      /** The status of the bare metal server network interface. If this bare metal server has network attachments, this network interface is a read-only representation of its corresponding network attachment and its attached virtual network interface, and the status is [computed from them](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients). */
       export enum Status {
         AVAILABLE = 'available',
         DELETING = 'deleting',
         FAILED = 'failed',
         PENDING = 'pending',
       }
-      /** The bare metal server network interface type. */
+      /** The bare metal server network interface type. If this bare metal server has network attachments, this network interface is a [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding network attachment and its attached virtual network interface, and the type is that of its corresponding network attachment. */
       export enum Type {
         PRIMARY = 'primary',
         SECONDARY = 'secondary',
@@ -39442,6 +44075,11 @@ namespace VpcV1 {
      *  For the data path to float, the other bare metal server must be in the same
      *  `resource_group`, and must have a network interface with `interface_type` of `pci` with `allowed_vlans`
      *  including this network interface's `vlan`.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the value of this property
+     *  matches that of the `allow_to_float` property of the corresponding network attachment.
      */
     allow_interface_to_float: boolean;
     /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array
@@ -39451,7 +44089,13 @@ namespace VpcV1 {
      *      which traffic flows.
      */
     interface_type: BareMetalServerNetworkInterfaceByVLAN.Constants.InterfaceType | string;
-    /** The VLAN ID used in the IEEE 802.1Q tag present in all traffic on this interface. */
+    /** The VLAN ID used in the IEEE 802.1Q tag present in all traffic on this interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the VLAN ID matches the `vlan`
+     *  of the corresponding network attachment.
+     */
     vlan: number;
   }
   export namespace BareMetalServerNetworkInterfaceByVLAN {
@@ -39460,14 +44104,14 @@ namespace VpcV1 {
       export enum ResourceType {
         NETWORK_INTERFACE = 'network_interface',
       }
-      /** The status of the bare metal server network interface. */
+      /** The status of the bare metal server network interface. If this bare metal server has network attachments, this network interface is a read-only representation of its corresponding network attachment and its attached virtual network interface, and the status is [computed from them](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients). */
       export enum Status {
         AVAILABLE = 'available',
         DELETING = 'deleting',
         FAILED = 'failed',
         PENDING = 'pending',
       }
-      /** The bare metal server network interface type. */
+      /** The bare metal server network interface type. If this bare metal server has network attachments, this network interface is a [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding network attachment and its attached virtual network interface, and the type is that of its corresponding network attachment. */
       export enum Type {
         PRIMARY = 'primary',
         SECONDARY = 'secondary',
@@ -39530,6 +44174,11 @@ namespace VpcV1 {
      *  For the data path to float, the other bare metal server must be in the same
      *  `resource_group`, and must have a network interface with `interface_type` of `pci` with `allowed_vlans`
      *  including this network interface's `vlan`.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the value of this property
+     *  matches that of the `allow_to_float` property of the corresponding network attachment.
      */
     allow_interface_to_float?: boolean;
     /** - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array
@@ -39540,7 +44189,13 @@ namespace VpcV1 {
      *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
      */
     interface_type: BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype.Constants.InterfaceType | string;
-    /** The VLAN ID used in the IEEE 802.1Q tag present in all traffic on this interface. */
+    /** The VLAN ID used in the IEEE 802.1Q tag present in all traffic on this interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the VLAN ID matches the `vlan`
+     *  of the corresponding network attachment.
+     */
     vlan: number;
   }
   export namespace BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype {
@@ -39552,7 +44207,29 @@ namespace VpcV1 {
     }
   }
 
-  /** The total bandwidth shared across the bare metal server network interfaces of a bare metal server with this profile depends on its configuration. */
+  /** BareMetalServerPrimaryNetworkAttachmentPrototypeBareMetalServerPrimaryNetworkAttachmentByPCIPrototype. */
+  export interface BareMetalServerPrimaryNetworkAttachmentPrototypeBareMetalServerPrimaryNetworkAttachmentByPCIPrototype extends BareMetalServerPrimaryNetworkAttachmentPrototype {
+    /** The VLAN IDs to allow for `vlan` attachments using this PCI attachment. */
+    allowed_vlans?: number[];
+    /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal
+     *    server is stopped
+     *    - Has an `allowed_vlans` property which controls the VLANs that will be permitted
+     *      to use the PCI attachment
+     *    - Cannot directly use an IEEE 802.1Q tag.
+     *    - Not supported on bare metal servers with a `cpu.architecture` of `s390x`.
+     */
+    interface_type?: BareMetalServerPrimaryNetworkAttachmentPrototypeBareMetalServerPrimaryNetworkAttachmentByPCIPrototype.Constants.InterfaceType | string;
+  }
+  export namespace BareMetalServerPrimaryNetworkAttachmentPrototypeBareMetalServerPrimaryNetworkAttachmentByPCIPrototype {
+    export namespace Constants {
+      /** - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI attachment - Cannot directly use an IEEE 802.1Q tag. - Not supported on bare metal servers with a `cpu.architecture` of `s390x`. */
+      export enum InterfaceType {
+        PCI = 'pci',
+      }
+    }
+  }
+
+  /** The total bandwidth shared across the bare metal server network attachments or bare metal server network interfaces of a bare metal server with this profile depends on its configuration. */
   export interface BareMetalServerProfileBandwidthDependent extends BareMetalServerProfileBandwidth {
     /** The type for this profile field. */
     type: BareMetalServerProfileBandwidthDependent.Constants.Type | string;
@@ -39566,7 +44243,7 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total bandwidth values (in megabits per second) shared across the bare metal server network interfaces of a bare metal server with this profile. */
+  /** The permitted total bandwidth values (in megabits per second) shared across the bare metal server network attachments or bare metal server network interfaces of a bare metal server with this profile. */
   export interface BareMetalServerProfileBandwidthEnum extends BareMetalServerProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -39584,7 +44261,7 @@ namespace VpcV1 {
     }
   }
 
-  /** The total bandwidth (in megabits per second) shared across the bare metal server network interfaces of a bare metal server with this profile. */
+  /** The total bandwidth (in megabits per second) shared across the bare metal server network attachments or bare metal server network interfaces of a bare metal server with this profile. */
   export interface BareMetalServerProfileBandwidthFixed extends BareMetalServerProfileBandwidth {
     /** The type for this profile field. */
     type: BareMetalServerProfileBandwidthFixed.Constants.Type | string;
@@ -39600,7 +44277,7 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total bandwidth range (in megabits per second) shared across the bare metal server network interfaces of a bare metal server with this profile. */
+  /** The permitted total bandwidth range (in megabits per second) shared across the network attachments or network interfaces of a bare metal server with this profile. */
   export interface BareMetalServerProfileBandwidthRange extends BareMetalServerProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -39984,6 +44661,38 @@ namespace VpcV1 {
     }
   }
 
+  /** The number of network attachments supported on a bare metal server with this profile is dependent on its configuration. */
+  export interface BareMetalServerProfileNetworkAttachmentCountDependent extends BareMetalServerProfileNetworkAttachmentCount {
+    /** The type for this profile field. */
+    type: BareMetalServerProfileNetworkAttachmentCountDependent.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileNetworkAttachmentCountDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /** The number of network attachments supported on a bare metal server with this profile. */
+  export interface BareMetalServerProfileNetworkAttachmentCountRange extends BareMetalServerProfileNetworkAttachmentCount {
+    /** The maximum value for this profile field. */
+    max?: number;
+    /** The minimum value for this profile field. */
+    min?: number;
+    /** The type for this profile field. */
+    type: BareMetalServerProfileNetworkAttachmentCountRange.Constants.Type | string;
+  }
+  export namespace BareMetalServerProfileNetworkAttachmentCountRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
+  }
+
   /** The number of bare metal server network interfaces supported on a bare metal server with this profile is dependent on its configuration. */
   export interface BareMetalServerProfileNetworkInterfaceCountDependent extends BareMetalServerProfileNetworkInterfaceCount {
     /** The type for this profile field. */
@@ -40014,6 +44723,22 @@ namespace VpcV1 {
         RANGE = 'range',
       }
     }
+  }
+
+  /** BareMetalServerPrototypeBareMetalServerByNetworkAttachment. */
+  export interface BareMetalServerPrototypeBareMetalServerByNetworkAttachment extends BareMetalServerPrototype {
+    /** The additional network attachments to create for the bare metal server. */
+    network_attachments?: BareMetalServerNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the bare metal server. */
+    primary_network_attachment: BareMetalServerPrimaryNetworkAttachmentPrototype;
+  }
+
+  /** BareMetalServerPrototypeBareMetalServerByNetworkInterface. */
+  export interface BareMetalServerPrototypeBareMetalServerByNetworkInterface extends BareMetalServerPrototype {
+    /** The additional bare metal server network interfaces to create. */
+    network_interfaces?: BareMetalServerNetworkInterfacePrototype[];
+    /** The primary bare metal server network interface to create. */
+    primary_network_interface: BareMetalServerPrimaryNetworkInterfacePrototype;
   }
 
   /** CatalogOfferingIdentityCatalogOfferingByCRN. */
@@ -40413,7 +45138,8 @@ namespace VpcV1 {
      *  resource is:
      *
      *  - an instance network interface
-     *  - a bare metal server network interface with `enable_infrastructure_nat` set to `true`.
+     *  - a bare metal server network interface with `enable_infrastructure_nat` set to `true`
+     *  - a virtual network interface with `enable_infrastructure_nat` set to `true`.
      */
     target: FloatingIPTargetPrototype;
   }
@@ -40432,6 +45158,10 @@ namespace VpcV1 {
   export interface FloatingIPTargetPatchNetworkInterfaceIdentity extends FloatingIPTargetPatch {
   }
 
+  /** Identifies a virtual network interface by a unique property. */
+  export interface FloatingIPTargetPatchVirtualNetworkInterfaceIdentity extends FloatingIPTargetPatch {
+  }
+
   /** Identifies a bare metal server network interface by a unique property. */
   export interface FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentity extends FloatingIPTargetPrototype {
   }
@@ -40440,15 +45170,30 @@ namespace VpcV1 {
   export interface FloatingIPTargetPrototypeNetworkInterfaceIdentity extends FloatingIPTargetPrototype {
   }
 
+  /** Identifies a virtual network interface by a unique property. */
+  export interface FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentity extends FloatingIPTargetPrototype {
+  }
+
   /** FloatingIPTargetBareMetalServerNetworkInterfaceReference. */
   export interface FloatingIPTargetBareMetalServerNetworkInterfaceReference extends FloatingIPTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
     deleted?: BareMetalServerNetworkInterfaceReferenceDeleted;
-    /** The URL for this bare metal server network interface. */
+    /** The URL for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this bare metal server network interface. */
+    /** The unique identifier for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
     /** The name for this bare metal server network interface. */
     name: string;
@@ -40471,9 +45216,20 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceReferenceDeleted;
-    /** The URL for this instance network interface. */
+    /** The URL for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this instance network interface. */
+    /** The unique identifier for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
     /** The name for this instance network interface. */
     name: string;
@@ -40516,8 +45272,44 @@ namespace VpcV1 {
     }
   }
 
+  /** FloatingIPTargetVirtualNetworkInterfaceReference. */
+  export interface FloatingIPTargetVirtualNetworkInterfaceReference extends FloatingIPTarget {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: VirtualNetworkInterfaceReferenceDeleted;
+    /** The URL for this virtual network interface. */
+    href: string;
+    /** The unique identifier for this virtual network interface. */
+    id: string;
+    /** The name for this virtual network interface. The name is unique across all virtual network interfaces in the
+     *  VPC.
+     */
+    name: string;
+    /** The primary IP for this virtual network interface. */
+    primary_ip: ReservedIPReference;
+    /** The resource type. */
+    resource_type: FloatingIPTargetVirtualNetworkInterfaceReference.Constants.ResourceType | string;
+    /** The associated subnet. */
+    subnet: SubnetReference;
+  }
+  export namespace FloatingIPTargetVirtualNetworkInterfaceReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VIRTUAL_NETWORK_INTERFACE = 'virtual_network_interface',
+      }
+    }
+  }
+
   /** Identifies a virtual server instance by a unique property. */
   export interface FlowLogCollectorTargetPrototypeInstanceIdentity extends FlowLogCollectorTargetPrototype {
+  }
+
+  /** Identifies an instance network attachment by a unique property. */
+  export interface FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentity extends FlowLogCollectorTargetPrototype {
   }
 
   /** Identifies an instance network interface by a unique property. */
@@ -40530,6 +45322,40 @@ namespace VpcV1 {
 
   /** Identifies a VPC by a unique property. */
   export interface FlowLogCollectorTargetPrototypeVPCIdentity extends FlowLogCollectorTargetPrototype {
+  }
+
+  /** Identifies a virtual network interface by a unique property. */
+  export interface FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentity extends FlowLogCollectorTargetPrototype {
+  }
+
+  /** FlowLogCollectorTargetInstanceNetworkAttachmentReference. */
+  export interface FlowLogCollectorTargetInstanceNetworkAttachmentReference extends FlowLogCollectorTarget {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: InstanceNetworkAttachmentReferenceDeleted;
+    /** The URL for this instance network attachment. */
+    href: string;
+    /** The unique identifier for this instance network attachment. */
+    id: string;
+    /** The name for this instance network attachment. The name is unique across all network attachments for the
+     *  instance.
+     */
+    name: string;
+    /** The primary IP address of the virtual network interface for the instance network attachment. */
+    primary_ip: ReservedIPReference;
+    /** The resource type. */
+    resource_type: FlowLogCollectorTargetInstanceNetworkAttachmentReference.Constants.ResourceType | string;
+    /** The subnet of the virtual network interface for the instance network attachment. */
+    subnet: SubnetReference;
+  }
+  export namespace FlowLogCollectorTargetInstanceNetworkAttachmentReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_NETWORK_ATTACHMENT = 'instance_network_attachment',
+      }
+    }
   }
 
   /** FlowLogCollectorTargetInstanceReference. */
@@ -40556,9 +45382,20 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceReferenceTargetContextDeleted;
-    /** The URL for this instance network interface. */
+    /** The URL for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this instance network interface. */
+    /** The unique identifier for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
     /** The name for this instance network interface. */
     name: string;
@@ -40622,6 +45459,30 @@ namespace VpcV1 {
       /** The resource type. */
       export enum ResourceType {
         VPC = 'vpc',
+      }
+    }
+  }
+
+  /** FlowLogCollectorTargetVirtualNetworkInterfaceReferenceAttachmentContext. */
+  export interface FlowLogCollectorTargetVirtualNetworkInterfaceReferenceAttachmentContext extends FlowLogCollectorTarget {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+    /** The URL for this virtual network interface. */
+    href: string;
+    /** The unique identifier for this virtual network interface. */
+    id: string;
+    /** The name for this virtual network interface. The name is unique across all virtual network interfaces in the
+     *  VPC.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: FlowLogCollectorTargetVirtualNetworkInterfaceReferenceAttachmentContext.Constants.ResourceType | string;
+  }
+  export namespace FlowLogCollectorTargetVirtualNetworkInterfaceReferenceAttachmentContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VIRTUAL_NETWORK_INTERFACE = 'virtual_network_interface',
       }
     }
   }
@@ -40899,6 +45760,69 @@ namespace VpcV1 {
     min_membership_count?: number;
   }
 
+  /** Identifies a virtual network interface by a unique property. */
+  export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity extends InstanceNetworkAttachmentPrototypeVirtualNetworkInterface {
+  }
+
+  /** The virtual network interface for this target. */
+  export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeInstanceNetworkAttachmentContext extends InstanceNetworkAttachmentPrototypeVirtualNetworkInterface {
+    /** Indicates whether source IP spoofing is allowed on this interface. If `false`, source IP spoofing is
+     *  prevented on this interface. If `true`, source IP spoofing is allowed on this interface.
+     */
+    allow_ip_spoofing?: boolean;
+    /** Indicates whether this virtual network interface will be automatically deleted when `target` is deleted. */
+    auto_delete?: boolean;
+    /** If `true`:
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
+     *
+     *  If `false`:
+     *  - Packets are passed unchanged to/from the virtual network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     *  - `allow_ip_spoofing` must be `false`.
+     *  - Can only be attached to a `target` with a `resource_type` of
+     *    `bare_metal_server_network_attachment`.
+     */
+    enable_infrastructure_nat?: boolean;
+    /** Additional IP addresses to bind to the virtual network interface. Each item may be either a reserved IP
+     *  identity, or a reserved IP prototype object which will be used to create a new reserved IP. All IP addresses
+     *  must be in the primary IP's subnet.
+     *
+     *  If reserved IP identities are provided, the specified reserved IPs must be unbound.
+     *
+     *  If reserved IP prototype objects with addresses are provided, the addresses must be available on the virtual
+     *  network interface's subnet. For any prototype objects that do not specify an address, an available address on
+     *  the subnet will be automatically selected and reserved.
+     */
+    ips?: VirtualNetworkInterfaceIPPrototype[];
+    /** The name for this virtual network interface. The name must not be used by another virtual network interface
+     *  in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words. Names beginning with
+     *  `ibm-` are reserved for provider-owned resources, and are not allowed.
+     */
+    name?: string;
+    /** The primary IP address to bind to the virtual network interface. May be either a
+     *  reserved IP identity, or a reserved IP prototype object which will be used to create a
+     *  new reserved IP.
+     *
+     *  If a reserved IP identity is provided, the specified reserved IP must be unbound.
+     *
+     *  If a reserved IP prototype object with an address is provided, the address must be
+     *  available on the virtual network interface's subnet. If no address is specified,
+     *  an available address on the subnet will be automatically selected and reserved.
+     */
+    primary_ip?: VirtualNetworkInterfacePrimaryIPPrototype;
+    /** The resource group to use for this virtual network interface. If unspecified, the
+     *  virtual server instance's resource group will be used.
+     */
+    resource_group?: ResourceGroupIdentity;
+    /** The security groups to use for this virtual network interface. If unspecified, the default security group of
+     *  the VPC for the subnet is used.
+     */
+    security_groups?: SecurityGroupIdentity[];
+    /** The associated subnet. Required if `primary_ip` does not specify a reserved IP identity. */
+    subnet?: SubnetIdentity;
+  }
+
   /** InstancePatchProfileInstanceProfileIdentityByHref. */
   export interface InstancePatchProfileInstanceProfileIdentityByHref extends InstancePatchProfile {
     /** The URL for this virtual server instance profile. */
@@ -41009,7 +45933,7 @@ namespace VpcV1 {
     }
   }
 
-  /** The total bandwidth shared across the network interfaces and storage volumes of an instance with this profile depends on its configuration. */
+  /** The total bandwidth shared across the network attachments or network interfaces and storage volumes of an instance with this profile depends on its configuration. */
   export interface InstanceProfileBandwidthDependent extends InstanceProfileBandwidth {
     /** The type for this profile field. */
     type: InstanceProfileBandwidthDependent.Constants.Type | string;
@@ -41023,7 +45947,7 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total bandwidth values (in megabits per second) shared across the network interfaces and storage volumes of an instance with this profile. */
+  /** The permitted total bandwidth values (in megabits per second) shared across the network attachments or network interfaces and storage volumes of an instance with this profile. */
   export interface InstanceProfileBandwidthEnum extends InstanceProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -41041,7 +45965,7 @@ namespace VpcV1 {
     }
   }
 
-  /** The total bandwidth (in megabits per second) shared across the network interfaces and storage volumes of an instance with this profile. */
+  /** The total bandwidth (in megabits per second) shared across the network attachments or network interfaces and storage volumes of an instance with this profile. */
   export interface InstanceProfileBandwidthFixed extends InstanceProfileBandwidth {
     /** The type for this profile field. */
     type: InstanceProfileBandwidthFixed.Constants.Type | string;
@@ -41057,7 +45981,7 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total bandwidth range (in megabits per second) shared across the network interfaces and storage volumes of an instance with this profile. */
+  /** The permitted total bandwidth range (in megabits per second) shared across the network attachments or network interfaces and storage volumes of an instance with this profile. */
   export interface InstanceProfileBandwidthRange extends InstanceProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -41471,6 +46395,38 @@ namespace VpcV1 {
     }
   }
 
+  /** The number of network attachments supported on an instance with this profile is dependent on its configuration. */
+  export interface InstanceProfileNetworkAttachmentCountDependent extends InstanceProfileNetworkAttachmentCount {
+    /** The type for this profile field. */
+    type: InstanceProfileNetworkAttachmentCountDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileNetworkAttachmentCountDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /** The number of network attachments supported on an instance with this profile. */
+  export interface InstanceProfileNetworkAttachmentCountRange extends InstanceProfileNetworkAttachmentCount {
+    /** The maximum value for this profile field. */
+    max?: number;
+    /** The minimum value for this profile field. */
+    min?: number;
+    /** The type for this profile field. */
+    type: InstanceProfileNetworkAttachmentCountRange.Constants.Type | string;
+  }
+  export namespace InstanceProfileNetworkAttachmentCountRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
+  }
+
   /** The number of network interfaces supported on an instance with this profile is dependent on its configuration. */
   export interface InstanceProfileNetworkInterfaceCountDependent extends InstanceProfileNetworkInterfaceCount {
     /** The type for this profile field. */
@@ -41687,10 +46643,6 @@ namespace VpcV1 {
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
-    /** The additional instance network interfaces to create. */
-    network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary instance network interface to create. */
-    primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
@@ -41701,10 +46653,6 @@ namespace VpcV1 {
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
-    /** The additional instance network interfaces to create. */
-    network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary instance network interface to create. */
-    primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
@@ -41713,15 +46661,11 @@ namespace VpcV1 {
   export interface InstancePrototypeInstanceBySourceSnapshot extends InstancePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
-    /** The additional instance network interfaces to create. */
-    network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary instance network interface to create. */
-    primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
-  /** Create an instance by using an instance template. The `primary_network_interface` and `network_interfaces` properties may only be specified if `primary_network_interface` is specified in the source template. */
+  /** Create an instance by using an instance template. The `primary_network_attachment` and `network_attachments` properties may only be specified if `primary_network_attachment` is specified in the source template. The `primary_network_interface` and `network_interfaces` properties may only be specified if `primary_network_interface` is specified in the source template. */
   export interface InstancePrototypeInstanceBySourceTemplate extends InstancePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -41738,8 +46682,12 @@ namespace VpcV1 {
     catalog_offering?: InstanceCatalogOfferingPrototype;
     /** The image to use when provisioning the virtual server instance. */
     image?: ImageIdentity;
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment?: InstanceNetworkAttachmentPrototype;
     /** The primary instance network interface to create. */
     primary_network_interface?: NetworkInterfacePrototype;
     /** The template to create this virtual server instance from. */
@@ -41752,10 +46700,6 @@ namespace VpcV1 {
   export interface InstancePrototypeInstanceByVolume extends InstancePrototype {
     /** The boot volume attachment for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
-    /** The additional instance network interfaces to create. */
-    network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary instance network interface to create. */
-    primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
@@ -41792,10 +46736,6 @@ namespace VpcV1 {
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
-    /** The additional instance network interfaces to create. */
-    network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary instance network interface to create. */
-    primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
@@ -41806,10 +46746,6 @@ namespace VpcV1 {
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
-    /** The additional instance network interfaces to create. */
-    network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary instance network interface to create. */
-    primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
@@ -41818,15 +46754,11 @@ namespace VpcV1 {
   export interface InstanceTemplatePrototypeInstanceTemplateBySourceSnapshot extends InstanceTemplatePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
-    /** The additional instance network interfaces to create. */
-    network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary instance network interface to create. */
-    primary_network_interface: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
 
-  /** Create an instance template from an existing instance template. */
+  /** Create an instance template from an existing source instance template. The `primary_network_attachment` and `network_attachments` properties may only be specified if `primary_network_attachment` is specified in the source template. The `primary_network_interface` and `network_interfaces` properties may only be specified if `primary_network_interface` is specified in the source template. */
   export interface InstanceTemplatePrototypeInstanceTemplateBySourceTemplate extends InstanceTemplatePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -41843,8 +46775,12 @@ namespace VpcV1 {
     catalog_offering?: InstanceCatalogOfferingPrototype;
     /** The image to use when provisioning the virtual server instance. */
     image?: ImageIdentity;
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment?: InstanceNetworkAttachmentPrototype;
     /** The primary instance network interface to create. */
     primary_network_interface?: NetworkInterfacePrototype;
     /** The template to create this virtual server instance from. */
@@ -41867,10 +46803,6 @@ namespace VpcV1 {
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
-    /** The additional instance network interfaces to create. */
-    network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary instance network interface to create. */
-    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
@@ -41881,10 +46813,6 @@ namespace VpcV1 {
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
     /** The image to use when provisioning the virtual server instance. */
     image: ImageIdentity;
-    /** The additional instance network interfaces to create. */
-    network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary instance network interface to create. */
-    primary_network_interface?: NetworkInterfacePrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
@@ -41893,10 +46821,12 @@ namespace VpcV1 {
   export interface InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext extends InstanceTemplate {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
-    /** The primary instance network interface to create. */
-    primary_network_interface?: NetworkInterfacePrototype;
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment?: InstanceNetworkAttachmentPrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
@@ -42774,8 +47704,30 @@ namespace VpcV1 {
     name: string;
   }
 
+  /** ReservationIdentityByCRN. */
+  export interface ReservationIdentityByCRN extends ReservationIdentity {
+    /** The CRN for this reservation. */
+    crn: string;
+  }
+
+  /** ReservationIdentityByHref. */
+  export interface ReservationIdentityByHref extends ReservationIdentity {
+    /** The URL for this reservation. */
+    href: string;
+  }
+
+  /** ReservationIdentityById. */
+  export interface ReservationIdentityById extends ReservationIdentity {
+    /** The unique identifier for this reservation. */
+    id: string;
+  }
+
   /** ReservedIPTargetPrototypeEndpointGatewayIdentity. */
   export interface ReservedIPTargetPrototypeEndpointGatewayIdentity extends ReservedIPTargetPrototype {
+  }
+
+  /** Identifies a virtual network interface by a unique property. */
+  export interface ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentity extends ReservedIPTargetPrototype {
   }
 
   /** ReservedIPTargetBareMetalServerNetworkInterfaceReferenceTargetContext. */
@@ -42784,9 +47736,20 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: BareMetalServerNetworkInterfaceReferenceTargetContextDeleted;
-    /** The URL for this bare metal server network interface. */
+    /** The URL for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this bare metal server network interface. */
+    /** The unique identifier for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
     /** The name for this bare metal server network interface. */
     name: string;
@@ -42880,9 +47843,20 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceReferenceTargetContextDeleted;
-    /** The URL for this instance network interface. */
+    /** The URL for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this instance network interface. */
+    /** The unique identifier for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
     /** The name for this instance network interface. */
     name: string;
@@ -43421,9 +48395,20 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: BareMetalServerNetworkInterfaceReferenceTargetContextDeleted;
-    /** The URL for this bare metal server network interface. */
+    /** The URL for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this bare metal server network interface. */
+    /** The unique identifier for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
     /** The name for this bare metal server network interface. */
     name: string;
@@ -43497,9 +48482,20 @@ namespace VpcV1 {
      *  some supplementary information.
      */
     deleted?: NetworkInterfaceReferenceTargetContextDeleted;
-    /** The URL for this instance network interface. */
+    /** The URL for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
-    /** The unique identifier for this instance network interface. */
+    /** The unique identifier for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
     /** The name for this instance network interface. */
     name: string;
@@ -43591,7 +48587,7 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** The virtual network interface for this share mount target. The virtual network interface's VPC must not be used by a virtual network interface for another mount target for this share. Required if the share's `access_control_mode` is `security_group`. */
+  /** The virtual network interface for this share mount target. The virtual network interface must: - have `allow_ip_spoofing` set to `false` - have `enable_infrastructure_nat` set to `true` - not be in the same VPC as an existing mount target for this share - not have `ips` other than the `primary_ip` address If an existing virtual network interface is specified, it must not have a floating IP bound to it, and it must not be the target of a flow log collector. Required if the share's `access_control_mode` is `security_group`. */
   export interface ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup extends ShareMountTargetPrototype {
     virtual_network_interface: ShareMountTargetVirtualNetworkInterfacePrototype;
   }
@@ -43620,8 +48616,41 @@ namespace VpcV1 {
     }
   }
 
+  /** Identifies a virtual network interface by a unique property. */
+  export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentity extends ShareMountTargetVirtualNetworkInterfacePrototype {
+  }
+
   /** The virtual network interface for this target. */
   export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfacePrototypeShareMountTargetContext extends ShareMountTargetVirtualNetworkInterfacePrototype {
+    /** Indicates whether source IP spoofing is allowed on this interface. If `false`, source IP spoofing is
+     *  prevented on this interface. If `true`, source IP spoofing is allowed on this interface.
+     */
+    allow_ip_spoofing?: boolean;
+    /** Indicates whether this virtual network interface will be automatically deleted when `target` is deleted. */
+    auto_delete?: boolean;
+    /** If `true`:
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
+     *
+     *  If `false`:
+     *  - Packets are passed unchanged to/from the virtual network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     *  - `allow_ip_spoofing` must be `false`.
+     *  - Can only be attached to a `target` with a `resource_type` of
+     *    `bare_metal_server_network_attachment`.
+     */
+    enable_infrastructure_nat?: boolean;
+    /** Additional IP addresses to bind to the virtual network interface. Each item may be either a reserved IP
+     *  identity, or a reserved IP prototype object which will be used to create a new reserved IP. All IP addresses
+     *  must be in the primary IP's subnet.
+     *
+     *  If reserved IP identities are provided, the specified reserved IPs must be unbound.
+     *
+     *  If reserved IP prototype objects with addresses are provided, the addresses must be available on the virtual
+     *  network interface's subnet. For any prototype objects that do not specify an address, an available address on
+     *  the subnet will be automatically selected and reserved.
+     */
+    ips?: VirtualNetworkInterfaceIPPrototype[];
     /** The name for this virtual network interface. The name must not be used by another virtual network interface
      *  in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words. Names beginning with
      *  `ibm-` are reserved for provider-owned resources, and are not allowed.
@@ -43858,8 +48887,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Create a replica file share for an existing file share. The values for `access_control_mode`, `encryption_key`, `initial_owner`, and `size` will be inherited from `source_share`. */
+  /** Create a replica file share for an existing file share. The values for `initial_owner`, `access_control_mode`, `encryption_key` and `size` will be inherited from `source_share`. */
   export interface SharePrototypeShareBySourceShare extends SharePrototype {
+    /** The root key to use to wrap the data encryption key for the share.
+     *
+     *  This property must be specified if the `source_share` is in a different region and has
+     *  an `encryption` type of `user_managed`, and must not be specified otherwise (its value
+     *  will be inherited from `source_share`).
+     */
+    encryption_key?: EncryptionKeyIdentity;
     /** The cron specification for the file share replication schedule.
      *
      *  Replication of a share can be scheduled to occur at most once per hour.
@@ -43868,9 +48904,19 @@ namespace VpcV1 {
     /** The resource group to use. If unspecified, the resource group from the source share will be used. */
     resource_group?: ResourceGroupIdentity;
     /** The source file share for this replica file share. The specified file share must not
-     *  already have a replica, and must not be a replica.
+     *  already have a replica, and must not be a replica. If source file share is specified
+     *  by CRN, it may be in an [associated partner
+     *  region](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-replication).
      */
     source_share: ShareIdentity;
+  }
+
+  /** SnapshotConsistencyGroupPrototypeSnapshotConsistencyGroupBySnapshots. */
+  export interface SnapshotConsistencyGroupPrototypeSnapshotConsistencyGroupBySnapshots extends SnapshotConsistencyGroupPrototype {
+    /** The data-consistent member snapshots to create.  All snapshots must specify a
+     *  `source_volume` attached to the same virtual server instance.
+     */
+    snapshots: SnapshotPrototypeSnapshotConsistencyGroupContext[];
   }
 
   /** SnapshotIdentityByCRN. */
@@ -44010,6 +49056,14 @@ namespace VpcV1 {
      *
      *  - have a unique `zone_affinity`, or
      *  - not have a `zone_affinity`.
+     *
+     *  If `zone_affinity` is specified, exactly one DNS server must be specified for each zone in the region. The DHCP
+     *  [Domain Name Server Option](https://datatracker.ietf.org/doc/html/rfc2132#section-3.8) for a zone will list this
+     *  DNS server first, followed by unique DNS servers from other zones if available.
+     *
+     *  If `zone_affinity` is not specified, the DHCP [Domain Name Server
+     *  Option](https://datatracker.ietf.org/doc/html/rfc2132#section-3.8) for each zone will list all the manual DNS
+     *  servers in the order specified.
      */
     manual_servers: DNSServerPrototype[];
     /** The type of the DNS resolver to use. */
@@ -44059,7 +49113,16 @@ namespace VpcV1 {
 
   /** The DNS server addresses are manually specified. */
   export interface VPCDNSResolverTypeManual extends VPCDNSResolver {
-    /** The manually specified DNS servers for this VPC. */
+    /** The manually specified DNS servers for this VPC.
+     *
+     *  If the DNS servers have `zone_affinity`, the DHCP [Domain Name Server
+     *  Option](https://datatracker.ietf.org/doc/html/rfc2132#section-3.8) for a zone will list the DNS server with the
+     *  affinity for that zone first, followed by the unique DNS servers from other zones.
+     *
+     *  If the DNS servers do not have `zone_affinity`, the DHCP [Domain Name Server
+     *  Option](https://datatracker.ietf.org/doc/html/rfc2132#section-3.8) for each zone will list all the manual DNS
+     *  servers in the order specified.
+     */
     manual_servers: DNSServer[];
     /** The type of the DNS resolver used for the VPC. */
     type: VPCDNSResolverTypeManual.Constants.Type | string;
@@ -44194,20 +49257,6 @@ namespace VpcV1 {
   export interface VPNGatewayConnectionIPsecPolicyPrototypeIPsecPolicyIdentityById extends VPNGatewayConnectionIPsecPolicyPrototype {
     /** The unique identifier for this IPsec policy. */
     id: string;
-  }
-
-  /** VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch. */
-  export interface VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch extends VPNGatewayConnectionPatch {
-    /** Routing protocols are disabled for this VPN gateway connection. */
-    routing_protocol?: VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch.Constants.RoutingProtocol | string;
-  }
-  export namespace VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch {
-    export namespace Constants {
-      /** Routing protocols are disabled for this VPN gateway connection. */
-      export enum RoutingProtocol {
-        NONE = 'none',
-      }
-    }
   }
 
   /** VPNGatewayConnectionPolicyMode. */
@@ -44478,6 +49527,28 @@ namespace VpcV1 {
     }
   }
 
+  /** Identifies a reserved IP by a unique property. The reserved IP must be currently unbound and in the primary IP's subnet. */
+  export interface VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContext extends VirtualNetworkInterfaceIPPrototype {
+  }
+
+  /** The prototype for a new reserved IP. Must be in the primary IP's subnet. */
+  export interface VirtualNetworkInterfaceIPPrototypeReservedIPPrototypeVirtualNetworkInterfaceIPsContext extends VirtualNetworkInterfaceIPPrototype {
+    /** The IP address to reserve, which must not already be reserved on the subnet.
+     *
+     *  If unspecified, an available address on the subnet will automatically be selected.
+     */
+    address?: string;
+    /** Indicates whether this reserved IP member will be automatically deleted when either
+     *  `target` is deleted, or the reserved IP is unbound.
+     */
+    auto_delete?: boolean;
+    /** The name for this reserved IP. The name must not be used by another reserved IP in the subnet. Names
+     *  starting with `ibm-` are reserved for provider-owned resources, and are not allowed. If unspecified, the name
+     *  will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+  }
+
   /** Identifies a reserved IP by a unique property. Required if `subnet` is not specified. The reserved IP must be currently unbound. */
   export interface VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContext extends VirtualNetworkInterfacePrimaryIPPrototype {
   }
@@ -44498,6 +49569,50 @@ namespace VpcV1 {
      *  will be a hyphenated list of randomly-selected words.
      */
     name?: string;
+  }
+
+  /** VirtualNetworkInterfaceTargetBareMetalServerNetworkAttachmentReferenceVirtualNetworkInterfaceContext. */
+  export interface VirtualNetworkInterfaceTargetBareMetalServerNetworkAttachmentReferenceVirtualNetworkInterfaceContext extends VirtualNetworkInterfaceTarget {
+    /** The URL for this bare metal server network attachment. */
+    href: string;
+    /** The unique identifier for this bare metal server network attachment. */
+    id: string;
+    /** The name for this bare metal server network attachment. The name is unique across all network attachments
+     *  for the bare metal server.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: VirtualNetworkInterfaceTargetBareMetalServerNetworkAttachmentReferenceVirtualNetworkInterfaceContext.Constants.ResourceType | string;
+  }
+  export namespace VirtualNetworkInterfaceTargetBareMetalServerNetworkAttachmentReferenceVirtualNetworkInterfaceContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER_NETWORK_ATTACHMENT = 'bare_metal_server_network_attachment',
+      }
+    }
+  }
+
+  /** VirtualNetworkInterfaceTargetInstanceNetworkAttachmentReferenceVirtualNetworkInterfaceContext. */
+  export interface VirtualNetworkInterfaceTargetInstanceNetworkAttachmentReferenceVirtualNetworkInterfaceContext extends VirtualNetworkInterfaceTarget {
+    /** The URL for this instance network attachment. */
+    href: string;
+    /** The unique identifier for this instance network attachment. */
+    id: string;
+    /** The name for this instance network attachment. The name is unique across all network attachments for the
+     *  instance.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: VirtualNetworkInterfaceTargetInstanceNetworkAttachmentReferenceVirtualNetworkInterfaceContext.Constants.ResourceType | string;
+  }
+  export namespace VirtualNetworkInterfaceTargetInstanceNetworkAttachmentReferenceVirtualNetworkInterfaceContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_NETWORK_ATTACHMENT = 'instance_network_attachment',
+      }
+    }
   }
 
   /** VirtualNetworkInterfaceTargetShareMountTargetReference. */
@@ -44624,6 +49739,24 @@ namespace VpcV1 {
     crn: string;
   }
 
+  /** BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+  }
+
+  /** BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
+    /** The URL for this virtual network interface. */
+    href: string;
+  }
+
+  /** BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
+    /** The unique identifier for this virtual network interface. */
+    id: string;
+  }
+
   /** EndpointGatewayReservedIPReservedIPIdentityByHref. */
   export interface EndpointGatewayReservedIPReservedIPIdentityByHref extends EndpointGatewayReservedIPReservedIPIdentity {
     /** The URL for this reserved IP. */
@@ -44670,49 +49803,129 @@ namespace VpcV1 {
 
   /** FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref. */
   export interface FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref extends FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentity {
-    /** The URL for this bare metal server network interface. */
+    /** The URL for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
   }
 
   /** FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById. */
   export interface FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById extends FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentity {
-    /** The unique identifier for this bare metal server network interface. */
+    /** The unique identifier for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
   }
 
   /** FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
   export interface FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FloatingIPTargetPatchNetworkInterfaceIdentity {
-    /** The URL for this instance network interface. */
+    /** The URL for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
   }
 
   /** FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
   export interface FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FloatingIPTargetPatchNetworkInterfaceIdentity {
-    /** The unique identifier for this instance network interface. */
+    /** The unique identifier for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
+    id: string;
+  }
+
+  /** FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  export interface FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends FloatingIPTargetPatchVirtualNetworkInterfaceIdentity {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+  }
+
+  /** FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  export interface FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends FloatingIPTargetPatchVirtualNetworkInterfaceIdentity {
+    /** The URL for this virtual network interface. */
+    href: string;
+  }
+
+  /** FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  export interface FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends FloatingIPTargetPatchVirtualNetworkInterfaceIdentity {
+    /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
   /** FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref. */
   export interface FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref extends FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentity {
-    /** The URL for this bare metal server network interface. */
+    /** The URL for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
   }
 
   /** FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById. */
   export interface FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById extends FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentity {
-    /** The unique identifier for this bare metal server network interface. */
+    /** The unique identifier for this bare metal server network interface.
+     *
+     *  If this bare metal server has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
   }
 
   /** FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
   export interface FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FloatingIPTargetPrototypeNetworkInterfaceIdentity {
-    /** The URL for this instance network interface. */
+    /** The URL for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
   }
 
   /** FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
   export interface FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FloatingIPTargetPrototypeNetworkInterfaceIdentity {
-    /** The unique identifier for this instance network interface. */
+    /** The unique identifier for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
+    id: string;
+  }
+
+  /** FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  export interface FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentity {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+  }
+
+  /** FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  export interface FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentity {
+    /** The URL for this virtual network interface. */
+    href: string;
+  }
+
+  /** FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  export interface FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentity {
+    /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
@@ -44734,15 +49947,38 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentityInstanceNetworkAttachmentIdentityByHref. */
+  export interface FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentityInstanceNetworkAttachmentIdentityByHref extends FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentity {
+    /** The URL for this instance network attachment. */
+    href: string;
+  }
+
+  /** FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentityInstanceNetworkAttachmentIdentityById. */
+  export interface FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentityInstanceNetworkAttachmentIdentityById extends FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentity {
+    /** The unique identifier for this instance network attachment. */
+    id: string;
+  }
+
   /** FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
   export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity {
-    /** The URL for this instance network interface. */
+    /** The URL for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment.
+     */
     href: string;
   }
 
   /** FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
   export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity {
-    /** The unique identifier for this instance network interface. */
+    /** The unique identifier for this instance network interface.
+     *
+     *  If this instance has network attachments, this network interface is a
+     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
+     *  corresponding network attachment and its attached virtual network interface, and the identifier is that of the
+     *  corresponding network attachment.
+     */
     id: string;
   }
 
@@ -44779,6 +50015,24 @@ namespace VpcV1 {
   /** FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityById. */
   export interface FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityById extends FlowLogCollectorTargetPrototypeVPCIdentity {
     /** The unique identifier for this VPC. */
+    id: string;
+  }
+
+  /** FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  export interface FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentity {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+  }
+
+  /** FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  export interface FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentity {
+    /** The URL for this virtual network interface. */
+    href: string;
+  }
+
+  /** FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  export interface FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentity {
+    /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
@@ -44855,6 +50109,24 @@ namespace VpcV1 {
   /** InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeById. */
   export interface InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeById extends InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototype {
     /** The unique identifier for this instance group manager. */
+    id: string;
+  }
+
+  /** InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+  }
+
+  /** InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
+    /** The URL for this virtual network interface. */
+    href: string;
+  }
+
+  /** InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
+    /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
@@ -44946,6 +50218,166 @@ namespace VpcV1 {
   export interface InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityById extends InstancePlacementTargetPrototypePlacementGroupIdentity {
     /** The unique identifier for this placement group. */
     id: string;
+  }
+
+  /** InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkAttachment. */
+  export interface InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkAttachment extends InstancePrototypeInstanceByCatalogOffering {
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment: InstanceNetworkAttachmentPrototype;
+  }
+
+  /** InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkInterface. */
+  export interface InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkInterface extends InstancePrototypeInstanceByCatalogOffering {
+    /** The additional instance network interfaces to create. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary instance network interface to create. */
+    primary_network_interface: NetworkInterfacePrototype;
+  }
+
+  /** InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkAttachment. */
+  export interface InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkAttachment extends InstancePrototypeInstanceByImage {
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment: InstanceNetworkAttachmentPrototype;
+  }
+
+  /** InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkInterface. */
+  export interface InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkInterface extends InstancePrototypeInstanceByImage {
+    /** The additional instance network interfaces to create. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary instance network interface to create. */
+    primary_network_interface: NetworkInterfacePrototype;
+  }
+
+  /** InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkAttachment. */
+  export interface InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkAttachment extends InstancePrototypeInstanceBySourceSnapshot {
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment: InstanceNetworkAttachmentPrototype;
+  }
+
+  /** InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkInterface. */
+  export interface InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkInterface extends InstancePrototypeInstanceBySourceSnapshot {
+    /** The additional instance network interfaces to create. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary instance network interface to create. */
+    primary_network_interface: NetworkInterfacePrototype;
+  }
+
+  /** InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkAttachment. */
+  export interface InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkAttachment extends InstancePrototypeInstanceByVolume {
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment: InstanceNetworkAttachmentPrototype;
+  }
+
+  /** InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkInterface. */
+  export interface InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkInterface extends InstancePrototypeInstanceByVolume {
+    /** The additional instance network interfaces to create. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary instance network interface to create. */
+    primary_network_interface: NetworkInterfacePrototype;
+  }
+
+  /** InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkAttachment. */
+  export interface InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkAttachment extends InstanceTemplatePrototypeInstanceTemplateByCatalogOffering {
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment: InstanceNetworkAttachmentPrototype;
+  }
+
+  /** InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkInterface. */
+  export interface InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkInterface extends InstanceTemplatePrototypeInstanceTemplateByCatalogOffering {
+    /** The additional instance network interfaces to create. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary instance network interface to create. */
+    primary_network_interface: NetworkInterfacePrototype;
+  }
+
+  /** InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkAttachment. */
+  export interface InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkAttachment extends InstanceTemplatePrototypeInstanceTemplateByImage {
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment: InstanceNetworkAttachmentPrototype;
+  }
+
+  /** InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkInterface. */
+  export interface InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkInterface extends InstanceTemplatePrototypeInstanceTemplateByImage {
+    /** The additional instance network interfaces to create. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary instance network interface to create. */
+    primary_network_interface: NetworkInterfacePrototype;
+  }
+
+  /** InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkAttachment. */
+  export interface InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkAttachment extends InstanceTemplatePrototypeInstanceTemplateBySourceSnapshot {
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment: InstanceNetworkAttachmentPrototype;
+  }
+
+  /** InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkInterface. */
+  export interface InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkInterface extends InstanceTemplatePrototypeInstanceTemplateBySourceSnapshot {
+    /** The additional instance network interfaces to create. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary instance network interface to create. */
+    primary_network_interface: NetworkInterfacePrototype;
+  }
+
+  /** InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkAttachment. */
+  export interface InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkAttachment extends InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext {
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment: InstanceNetworkAttachmentPrototype;
+  }
+
+  /** InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkInterface. */
+  export interface InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkInterface extends InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext {
+    /** The additional instance network interfaces to create. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary instance network interface to create. */
+    primary_network_interface: NetworkInterfacePrototype;
+  }
+
+  /** InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkAttachment. */
+  export interface InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkAttachment extends InstanceTemplateInstanceByImageInstanceTemplateContext {
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment: InstanceNetworkAttachmentPrototype;
+  }
+
+  /** InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkInterface. */
+  export interface InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkInterface extends InstanceTemplateInstanceByImageInstanceTemplateContext {
+    /** The additional instance network interfaces to create. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary instance network interface to create. */
+    primary_network_interface: NetworkInterfacePrototype;
+  }
+
+  /** InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkAttachment. */
+  export interface InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkAttachment extends InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext {
+    /** The additional network attachments to create for the virtual server instance. */
+    network_attachments?: InstanceNetworkAttachmentPrototype[];
+    /** The primary network attachment to create for the virtual server instance. */
+    primary_network_attachment: InstanceNetworkAttachmentPrototype;
+  }
+
+  /** InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkInterface. */
+  export interface InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkInterface extends InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext {
+    /** The additional instance network interfaces to create. */
+    network_interfaces?: NetworkInterfacePrototype[];
+    /** The primary instance network interface to create. */
+    primary_network_interface: NetworkInterfacePrototype;
   }
 
   /** LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
@@ -45041,6 +50473,24 @@ namespace VpcV1 {
   /** ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityById. */
   export interface ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityById extends ReservedIPTargetPrototypeEndpointGatewayIdentity {
     /** The unique identifier for this endpoint gateway. */
+    id: string;
+  }
+
+  /** ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  export interface ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentity {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+  }
+
+  /** ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  export interface ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentity {
+    /** The URL for this virtual network interface. */
+    href: string;
+  }
+
+  /** ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  export interface ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentity {
+    /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
@@ -45153,6 +50603,36 @@ namespace VpcV1 {
   /** SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityById. */
   export interface SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityById extends SecurityGroupRuleRemotePrototypeSecurityGroupIdentity {
     /** The unique identifier for this security group. */
+    id: string;
+  }
+
+  /** ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentity {
+    /** The CRN for this virtual network interface. */
+    crn: string;
+  }
+
+  /** ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentity {
+    /** The URL for this virtual network interface. */
+    href: string;
+  }
+
+  /** ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentity {
+    /** The unique identifier for this virtual network interface. */
+    id: string;
+  }
+
+  /** VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextByHref. */
+  export interface VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextByHref extends VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContext {
+    /** The URL for this reserved IP. */
+    href: string;
+  }
+
+  /** VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextById. */
+  export interface VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextById extends VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContext {
+    /** The unique identifier for this reserved IP. */
     id: string;
   }
 
@@ -46699,6 +52179,87 @@ namespace VpcV1 {
   }
 
   /**
+   * ReservationsPager can be used to simplify the use of listReservations().
+   */
+  export class ReservationsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListReservationsParams;
+
+    /**
+     * Construct a ReservationsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listReservations()
+     * @param {Object} [params] - The parameters to be passed to listReservations()
+     * @constructor
+     * @returns {ReservationsPager}
+     */
+    constructor(client: VpcV1, params?: VpcV1.ListReservationsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listReservations().
+     * @returns {Promise<VpcV1.Reservation[]>}
+     */
+    public async getNext(): Promise<VpcV1.Reservation[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listReservations(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.reservations;
+    }
+
+    /**
+     * Returns all results by invoking listReservations() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.Reservation[]>}
+     */
+    public async getAll(): Promise<VpcV1.Reservation[]> {
+      const results: Reservation[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
    * DedicatedHostGroupsPager can be used to simplify the use of listDedicatedHostGroups().
    */
   export class DedicatedHostGroupsPager {
@@ -47347,6 +52908,87 @@ namespace VpcV1 {
   }
 
   /**
+   * BareMetalServerNetworkAttachmentsPager can be used to simplify the use of listBareMetalServerNetworkAttachments().
+   */
+  export class BareMetalServerNetworkAttachmentsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListBareMetalServerNetworkAttachmentsParams;
+
+    /**
+     * Construct a BareMetalServerNetworkAttachmentsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listBareMetalServerNetworkAttachments()
+     * @param {Object} params - The parameters to be passed to listBareMetalServerNetworkAttachments()
+     * @constructor
+     * @returns {BareMetalServerNetworkAttachmentsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListBareMetalServerNetworkAttachmentsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listBareMetalServerNetworkAttachments().
+     * @returns {Promise<VpcV1.BareMetalServerNetworkAttachment[]>}
+     */
+    public async getNext(): Promise<VpcV1.BareMetalServerNetworkAttachment[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listBareMetalServerNetworkAttachments(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.network_attachments;
+    }
+
+    /**
+     * Returns all results by invoking listBareMetalServerNetworkAttachments() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.BareMetalServerNetworkAttachment[]>}
+     */
+    public async getAll(): Promise<VpcV1.BareMetalServerNetworkAttachment[]> {
+      const results: BareMetalServerNetworkAttachment[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
    * BareMetalServerNetworkInterfacesPager can be used to simplify the use of listBareMetalServerNetworkInterfaces().
    */
   export class BareMetalServerNetworkInterfacesPager {
@@ -47581,6 +53223,87 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.Volume[]> {
       const results: Volume[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * SnapshotConsistencyGroupsPager can be used to simplify the use of listSnapshotConsistencyGroups().
+   */
+  export class SnapshotConsistencyGroupsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListSnapshotConsistencyGroupsParams;
+
+    /**
+     * Construct a SnapshotConsistencyGroupsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listSnapshotConsistencyGroups()
+     * @param {Object} [params] - The parameters to be passed to listSnapshotConsistencyGroups()
+     * @constructor
+     * @returns {SnapshotConsistencyGroupsPager}
+     */
+    constructor(client: VpcV1, params?: VpcV1.ListSnapshotConsistencyGroupsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listSnapshotConsistencyGroups().
+     * @returns {Promise<VpcV1.SnapshotConsistencyGroup[]>}
+     */
+    public async getNext(): Promise<VpcV1.SnapshotConsistencyGroup[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listSnapshotConsistencyGroups(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.snapshot_consistency_groups;
+    }
+
+    /**
+     * Returns all results by invoking listSnapshotConsistencyGroups() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.SnapshotConsistencyGroup[]>}
+     */
+    public async getAll(): Promise<VpcV1.SnapshotConsistencyGroup[]> {
+      const results: SnapshotConsistencyGroup[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
@@ -47986,6 +53709,168 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.VirtualNetworkInterface[]> {
       const results: VirtualNetworkInterface[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * NetworkInterfaceFloatingIpsPager can be used to simplify the use of listNetworkInterfaceFloatingIps().
+   */
+  export class NetworkInterfaceFloatingIpsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListNetworkInterfaceFloatingIpsParams;
+
+    /**
+     * Construct a NetworkInterfaceFloatingIpsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listNetworkInterfaceFloatingIps()
+     * @param {Object} params - The parameters to be passed to listNetworkInterfaceFloatingIps()
+     * @constructor
+     * @returns {NetworkInterfaceFloatingIpsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListNetworkInterfaceFloatingIpsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listNetworkInterfaceFloatingIps().
+     * @returns {Promise<VpcV1.FloatingIPReference[]>}
+     */
+    public async getNext(): Promise<VpcV1.FloatingIPReference[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listNetworkInterfaceFloatingIps(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.floating_ips;
+    }
+
+    /**
+     * Returns all results by invoking listNetworkInterfaceFloatingIps() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.FloatingIPReference[]>}
+     */
+    public async getAll(): Promise<VpcV1.FloatingIPReference[]> {
+      const results: FloatingIPReference[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * VirtualNetworkInterfaceIpsPager can be used to simplify the use of listVirtualNetworkInterfaceIps().
+   */
+  export class VirtualNetworkInterfaceIpsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListVirtualNetworkInterfaceIpsParams;
+
+    /**
+     * Construct a VirtualNetworkInterfaceIpsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listVirtualNetworkInterfaceIps()
+     * @param {Object} params - The parameters to be passed to listVirtualNetworkInterfaceIps()
+     * @constructor
+     * @returns {VirtualNetworkInterfaceIpsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListVirtualNetworkInterfaceIpsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listVirtualNetworkInterfaceIps().
+     * @returns {Promise<VpcV1.ReservedIPReference[]>}
+     */
+    public async getNext(): Promise<VpcV1.ReservedIPReference[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listVirtualNetworkInterfaceIps(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.ips;
+    }
+
+    /**
+     * Returns all results by invoking listVirtualNetworkInterfaceIps() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.ReservedIPReference[]>}
+     */
+    public async getAll(): Promise<VpcV1.ReservedIPReference[]> {
+      const results: ReservedIPReference[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
