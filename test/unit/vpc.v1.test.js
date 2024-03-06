@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023.
+ * (C) Copyright IBM Corp. 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -224,9 +224,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/vpcs';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"vpcs":[{"classic_access":false,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","cse_source_ips":[{"ip":{"address":"192.168.3.4"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"default_network_acl":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::network-acl:a4e28308-8ee7-46ab-8108-9f881f22bdbf","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/network_acls/a4e28308-8ee7-46ab-8108-9f881f22bdbf","id":"a4e28308-8ee7-46ab-8108-9f881f22bdbf","name":"my-network-acl"},"default_routing_table":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-routing-table-1","resource_type":"routing_table"},"default_security_group":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"},"dns":{"enable_hub":true,"resolution_binding_count":0,"resolver":{"servers":[{"address":"192.168.3.4","zone_affinity":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"type":"delegated","vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"vpc"}}},"health_reasons":[{"code":"internal_error","message":"Internal error (contact IBM support).","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-troubleshoot-hub-spoke-1"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpc","status":"available"}]}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"vpcs":[{"classic_access":false,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","cse_source_ips":[{"ip":{"address":"192.168.3.4"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"default_network_acl":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::network-acl:a4e28308-8ee7-46ab-8108-9f881f22bdbf","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/network_acls/a4e28308-8ee7-46ab-8108-9f881f22bdbf","id":"a4e28308-8ee7-46ab-8108-9f881f22bdbf","name":"my-network-acl"},"default_routing_table":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-routing-table-1","resource_type":"routing_table"},"default_security_group":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"},"dns":{"enable_hub":true,"resolution_binding_count":0,"resolver":{"servers":[{"address":"192.168.3.4","zone_affinity":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"type":"delegated","vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"vpc"}}},"health_reasons":[{"code":"dns_resolution_binding_failed","message":"The VPC specified in the DNS resolution binding has been disconnected.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-troubleshoot-hub-spoke-1"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpc","status":"available"}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"vpcs":[{"classic_access":false,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","cse_source_ips":[{"ip":{"address":"192.168.3.4"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"default_network_acl":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::network-acl:a4e28308-8ee7-46ab-8108-9f881f22bdbf","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/network_acls/a4e28308-8ee7-46ab-8108-9f881f22bdbf","id":"a4e28308-8ee7-46ab-8108-9f881f22bdbf","name":"my-network-acl"},"default_routing_table":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-routing-table-1","resource_type":"routing_table"},"default_security_group":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"},"dns":{"enable_hub":true,"resolution_binding_count":0,"resolver":{"servers":[{"address":"192.168.3.4","zone_affinity":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"type":"delegated","vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"vpc"}}},"health_reasons":[{"code":"internal_error","message":"Internal error (contact IBM support).","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-troubleshoot-hub-spoke-1"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpc","status":"available"}]}';
+        '{"total_count":2,"limit":1,"vpcs":[{"classic_access":false,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","cse_source_ips":[{"ip":{"address":"192.168.3.4"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"default_network_acl":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::network-acl:a4e28308-8ee7-46ab-8108-9f881f22bdbf","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/network_acls/a4e28308-8ee7-46ab-8108-9f881f22bdbf","id":"a4e28308-8ee7-46ab-8108-9f881f22bdbf","name":"my-network-acl"},"default_routing_table":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-routing-table-1","resource_type":"routing_table"},"default_security_group":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"},"dns":{"enable_hub":true,"resolution_binding_count":0,"resolver":{"servers":[{"address":"192.168.3.4","zone_affinity":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"type":"delegated","vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"vpc"}}},"health_reasons":[{"code":"dns_resolution_binding_failed","message":"The VPC specified in the DNS resolution binding has been disconnected.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-troubleshoot-hub-spoke-1"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpc","status":"available"}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -1787,7 +1787,7 @@ describe('VpcV1', () => {
           '/vpcs/{vpc_id}/dns_resolution_bindings/{id}',
           'DELETE'
         );
-        const expectedAccept = undefined;
+        const expectedAccept = 'application/json';
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
@@ -2147,9 +2147,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/vpcs/testString/routes';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"routes":[{"action":"delegate","created_at":"2019-01-01T12:00:00.000Z","creator":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","name":"my-vpn-gateway","resource_type":"vpn_gateway"},"destination":"192.168.3.0/24","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","lifecycle_state":"stable","name":"my-route-1","next_hop":{"address":"192.168.3.4"},"origin":"service","priority":1,"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"routes":[{"action":"delegate","advertise":false,"created_at":"2019-01-01T12:00:00.000Z","creator":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","name":"my-vpn-gateway","resource_type":"vpn_gateway"},"destination":"192.168.3.0/24","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","lifecycle_state":"stable","name":"my-route-1","next_hop":{"address":"192.168.3.4"},"origin":"service","priority":1,"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"routes":[{"action":"delegate","created_at":"2019-01-01T12:00:00.000Z","creator":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","name":"my-vpn-gateway","resource_type":"vpn_gateway"},"destination":"192.168.3.0/24","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","lifecycle_state":"stable","name":"my-route-1","next_hop":{"address":"192.168.3.4"},"origin":"service","priority":1,"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"routes":[{"action":"delegate","advertise":false,"created_at":"2019-01-01T12:00:00.000Z","creator":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","name":"my-vpn-gateway","resource_type":"vpn_gateway"},"destination":"192.168.3.0/24","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","lifecycle_state":"stable","name":"my-route-1","next_hop":{"address":"192.168.3.4"},"origin":"service","priority":1,"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -2216,6 +2216,7 @@ describe('VpcV1', () => {
         const destination = '192.168.3.0/24';
         const zone = zoneIdentityModel;
         const action = 'deliver';
+        const advertise = false;
         const name = 'my-route-1';
         const nextHop = routePrototypeNextHopModel;
         const priority = 1;
@@ -2224,6 +2225,7 @@ describe('VpcV1', () => {
           destination,
           zone,
           action,
+          advertise,
           name,
           nextHop,
           priority,
@@ -2246,6 +2248,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.body.destination).toEqual(destination);
         expect(mockRequestOptions.body.zone).toEqual(zone);
         expect(mockRequestOptions.body.action).toEqual(action);
+        expect(mockRequestOptions.body.advertise).toEqual(advertise);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.next_hop).toEqual(nextHop);
         expect(mockRequestOptions.body.priority).toEqual(priority);
@@ -2511,12 +2514,14 @@ describe('VpcV1', () => {
         // Construct the params object for operation updateVpcRoute
         const vpcId = 'testString';
         const id = 'testString';
+        const advertise = true;
         const name = 'my-route-2';
         const nextHop = routeNextHopPatchModel;
         const priority = 1;
         const updateVpcRouteParams = {
           vpcId,
           id,
+          advertise,
           name,
           nextHop,
           priority,
@@ -2536,6 +2541,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.advertise).toEqual(advertise);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.next_hop).toEqual(nextHop);
         expect(mockRequestOptions.body.priority).toEqual(priority);
@@ -2705,9 +2711,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/vpcs/testString/routing_tables';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"routing_tables":[{"accept_routes_from":[{"resource_type":"vpn_gateway"}],"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":true,"lifecycle_state":"stable","name":"my-routing-table-1","resource_type":"routing_table","route_direct_link_ingress":false,"route_internet_ingress":true,"route_transit_gateway_ingress":false,"route_vpc_zone_ingress":true,"routes":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-route-1"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}]}],"total_count":2,"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"routing_tables":[{"accept_routes_from":[{"resource_type":"vpn_gateway"}],"advertise_routes_to":["transit_gateway"],"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":true,"lifecycle_state":"stable","name":"my-routing-table-1","resource_type":"routing_table","route_direct_link_ingress":false,"route_internet_ingress":true,"route_transit_gateway_ingress":false,"route_vpc_zone_ingress":true,"routes":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-route-1"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}]}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"routing_tables":[{"accept_routes_from":[{"resource_type":"vpn_gateway"}],"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":true,"lifecycle_state":"stable","name":"my-routing-table-1","resource_type":"routing_table","route_direct_link_ingress":false,"route_internet_ingress":true,"route_transit_gateway_ingress":false,"route_vpc_zone_ingress":true,"routes":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-route-1"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}]}],"total_count":2,"limit":1}';
+        '{"routing_tables":[{"accept_routes_from":[{"resource_type":"vpn_gateway"}],"advertise_routes_to":["transit_gateway"],"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/982d72b7-db1b-4606-afb2-ed6bd4b0bed1/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","is_default":true,"lifecycle_state":"stable","name":"my-routing-table-1","resource_type":"routing_table","route_direct_link_ingress":false,"route_internet_ingress":true,"route_transit_gateway_ingress":false,"route_vpc_zone_ingress":true,"routes":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","name":"my-route-1"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}]}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -2776,6 +2782,7 @@ describe('VpcV1', () => {
       // RoutePrototype
       const routePrototypeModel = {
         action: 'deliver',
+        advertise: false,
         destination: '192.168.3.0/24',
         name: 'my-route-1',
         next_hop: routePrototypeNextHopModel,
@@ -2787,6 +2794,7 @@ describe('VpcV1', () => {
         // Construct the params object for operation createVpcRoutingTable
         const vpcId = 'testString';
         const acceptRoutesFrom = [resourceFilterModel];
+        const advertiseRoutesTo = [];
         const name = 'my-routing-table-1';
         const routeDirectLinkIngress = false;
         const routeInternetIngress = false;
@@ -2796,6 +2804,7 @@ describe('VpcV1', () => {
         const createVpcRoutingTableParams = {
           vpcId,
           acceptRoutesFrom,
+          advertiseRoutesTo,
           name,
           routeDirectLinkIngress,
           routeInternetIngress,
@@ -2821,6 +2830,7 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.body.accept_routes_from).toEqual(acceptRoutesFrom);
+        expect(mockRequestOptions.body.advertise_routes_to).toEqual(advertiseRoutesTo);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.route_direct_link_ingress).toEqual(routeDirectLinkIngress);
         expect(mockRequestOptions.body.route_internet_ingress).toEqual(routeInternetIngress);
@@ -3093,6 +3103,7 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const id = 'testString';
         const acceptRoutesFrom = [resourceFilterModel];
+        const advertiseRoutesTo = ['transit_gateway'];
         const name = 'my-routing-table-2';
         const routeDirectLinkIngress = true;
         const routeInternetIngress = true;
@@ -3103,6 +3114,7 @@ describe('VpcV1', () => {
           vpcId,
           id,
           acceptRoutesFrom,
+          advertiseRoutesTo,
           name,
           routeDirectLinkIngress,
           routeInternetIngress,
@@ -3129,6 +3141,7 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.body.accept_routes_from).toEqual(acceptRoutesFrom);
+        expect(mockRequestOptions.body.advertise_routes_to).toEqual(advertiseRoutesTo);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.route_direct_link_ingress).toEqual(routeDirectLinkIngress);
         expect(mockRequestOptions.body.route_internet_ingress).toEqual(routeInternetIngress);
@@ -3308,9 +3321,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/vpcs/testString/routing_tables/testString/routes';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"routes":[{"action":"delegate","created_at":"2019-01-01T12:00:00.000Z","creator":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","name":"my-vpn-gateway","resource_type":"vpn_gateway"},"destination":"192.168.3.0/24","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","lifecycle_state":"stable","name":"my-route-1","next_hop":{"address":"192.168.3.4"},"origin":"service","priority":1,"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"routes":[{"action":"delegate","advertise":false,"created_at":"2019-01-01T12:00:00.000Z","creator":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","name":"my-vpn-gateway","resource_type":"vpn_gateway"},"destination":"192.168.3.0/24","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","lifecycle_state":"stable","name":"my-route-1","next_hop":{"address":"192.168.3.4"},"origin":"service","priority":1,"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"routes":[{"action":"delegate","created_at":"2019-01-01T12:00:00.000Z","creator":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","name":"my-vpn-gateway","resource_type":"vpn_gateway"},"destination":"192.168.3.0/24","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","lifecycle_state":"stable","name":"my-route-1","next_hop":{"address":"192.168.3.4"},"origin":"service","priority":1,"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"routes":[{"action":"delegate","advertise":false,"created_at":"2019-01-01T12:00:00.000Z","creator":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","name":"my-vpn-gateway","resource_type":"vpn_gateway"},"destination":"192.168.3.0/24","href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/8e454ead-0db7-48ac-9a8b-2698d8c470a7/routing_tables/6885e83f-03b2-4603-8a86-db2a0f55c840/routes/1a15dca5-7e33-45e1-b7c5-bc690e569531","id":"1a15dca5-7e33-45e1-b7c5-bc690e569531","lifecycle_state":"stable","name":"my-route-1","next_hop":{"address":"192.168.3.4"},"origin":"service","priority":1,"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -3378,6 +3391,7 @@ describe('VpcV1', () => {
         const destination = '192.168.3.0/24';
         const zone = zoneIdentityModel;
         const action = 'deliver';
+        const advertise = false;
         const name = 'my-route-1';
         const nextHop = routePrototypeNextHopModel;
         const priority = 1;
@@ -3387,6 +3401,7 @@ describe('VpcV1', () => {
           destination,
           zone,
           action,
+          advertise,
           name,
           nextHop,
           priority,
@@ -3415,6 +3430,7 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.body.destination).toEqual(destination);
         expect(mockRequestOptions.body.zone).toEqual(zone);
         expect(mockRequestOptions.body.action).toEqual(action);
+        expect(mockRequestOptions.body.advertise).toEqual(advertise);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.next_hop).toEqual(nextHop);
         expect(mockRequestOptions.body.priority).toEqual(priority);
@@ -3706,6 +3722,7 @@ describe('VpcV1', () => {
         const vpcId = 'testString';
         const routingTableId = 'testString';
         const id = 'testString';
+        const advertise = true;
         const name = 'my-route-2';
         const nextHop = routeNextHopPatchModel;
         const priority = 1;
@@ -3713,6 +3730,7 @@ describe('VpcV1', () => {
           vpcId,
           routingTableId,
           id,
+          advertise,
           name,
           nextHop,
           priority,
@@ -3738,6 +3756,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.advertise).toEqual(advertise);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.next_hop).toEqual(nextHop);
         expect(mockRequestOptions.body.priority).toEqual(priority);
@@ -5041,11 +5060,20 @@ describe('VpcV1', () => {
         const start = 'testString';
         const limit = 50;
         const sort = 'name';
+        const targetId = 'testString';
+        const targetCrn =
+          'crn:v1:bluemix:public:is:us-south:a/123456::load-balancer:dd754295-e9e0-4c9d-bf6c-58fbc59e5727';
+        const targetName = 'my-resource';
+        const targetResourceType = 'testString';
         const listSubnetReservedIpsParams = {
           subnetId,
           start,
           limit,
           sort,
+          targetId,
+          targetCrn,
+          targetName,
+          targetResourceType,
         };
 
         const listSubnetReservedIpsResult = vpcService.listSubnetReservedIps(
@@ -5069,6 +5097,10 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.qs.start).toEqual(start);
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs['target.id']).toEqual(targetId);
+        expect(mockRequestOptions.qs['target.crn']).toEqual(targetCrn);
+        expect(mockRequestOptions.qs['target.name']).toEqual(targetName);
+        expect(mockRequestOptions.qs['target.resource_type']).toEqual(targetResourceType);
         expect(mockRequestOptions.path.subnet_id).toEqual(subnetId);
       }
 
@@ -5156,6 +5188,11 @@ describe('VpcV1', () => {
           subnetId: 'testString',
           limit: 10,
           sort: 'name',
+          targetId: 'testString',
+          targetCrn:
+            'crn:v1:bluemix:public:is:us-south:a/123456::load-balancer:dd754295-e9e0-4c9d-bf6c-58fbc59e5727',
+          targetName: 'my-resource',
+          targetResourceType: 'testString',
         };
         const allResults = [];
         const pager = new VpcV1.SubnetReservedIpsPager(vpcService, params);
@@ -5173,6 +5210,11 @@ describe('VpcV1', () => {
           subnetId: 'testString',
           limit: 10,
           sort: 'name',
+          targetId: 'testString',
+          targetCrn:
+            'crn:v1:bluemix:public:is:us-south:a/123456::load-balancer:dd754295-e9e0-4c9d-bf6c-58fbc59e5727',
+          targetName: 'my-resource',
+          targetResourceType: 'testString',
         };
         const pager = new VpcV1.SubnetReservedIpsPager(vpcService, params);
         const allResults = await pager.getAll();
@@ -7686,6 +7728,17 @@ describe('VpcV1', () => {
         name: 'bx2-2x8',
       };
 
+      // ReservationIdentityById
+      const reservationIdentityModel = {
+        id: '7187-ba49df72-37b8-43ac-98da-f8e029de0e63',
+      };
+
+      // InstanceReservationAffinityPrototype
+      const instanceReservationAffinityPrototypeModel = {
+        policy: 'disabled',
+        pool: [reservationIdentityModel],
+      };
+
       // ResourceGroupIdentityById
       const resourceGroupIdentityModel = {
         id: 'fee82deba12e4c0fb69c3b09d1f12345',
@@ -7736,13 +7789,30 @@ describe('VpcV1', () => {
         volume: volumePrototypeInstanceByImageContextModel,
       };
 
+      // CatalogOfferingIdentityCatalogOfferingByCRN
+      const catalogOfferingIdentityModel = {
+        crn: 'crn:v1:bluemix:public:globalcatalog-collection:global:a/123456:1082e7d2-5e2f-0a11-a3bc-f88a8e1931fc:offering:00111601-0ec5-41ac-b142-96d1e64e6442',
+      };
+
+      // InstanceCatalogOfferingPrototypeCatalogOfferingByOffering
+      const instanceCatalogOfferingPrototypeModel = {
+        offering: catalogOfferingIdentityModel,
+      };
+
       // ImageIdentityById
       const imageIdentityModel = {
         id: '3f9a2d96-830e-4100-9b4c-663225a3f872',
       };
 
-      // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
-      const networkInterfaceIpPrototypeModel = {
+      // VirtualNetworkInterfaceIPPrototypeReservedIPPrototypeVirtualNetworkInterfaceIPsContext
+      const virtualNetworkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
+      // VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext
+      const virtualNetworkInterfacePrimaryIpPrototypeModel = {
         address: '10.0.0.5',
         auto_delete: false,
         name: 'my-reserved-ip',
@@ -7758,6 +7828,32 @@ describe('VpcV1', () => {
         id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
       };
 
+      // InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeInstanceNetworkAttachmentContext
+      const instanceNetworkAttachmentPrototypeVirtualNetworkInterfaceModel = {
+        allow_ip_spoofing: true,
+        auto_delete: false,
+        enable_infrastructure_nat: true,
+        ips: [virtualNetworkInterfaceIpPrototypeModel],
+        name: 'my-virtual-network-interface',
+        primary_ip: virtualNetworkInterfacePrimaryIpPrototypeModel,
+        resource_group: resourceGroupIdentityModel,
+        security_groups: [securityGroupIdentityModel],
+        subnet: subnetIdentityModel,
+      };
+
+      // InstanceNetworkAttachmentPrototype
+      const instanceNetworkAttachmentPrototypeModel = {
+        name: 'my-instance-network-attachment',
+        virtual_network_interface: instanceNetworkAttachmentPrototypeVirtualNetworkInterfaceModel,
+      };
+
+      // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
+      const networkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
       // NetworkInterfacePrototype
       const networkInterfacePrototypeModel = {
         allow_ip_spoofing: true,
@@ -7767,12 +7863,17 @@ describe('VpcV1', () => {
         subnet: subnetIdentityModel,
       };
 
+      // InstanceTemplateIdentityById
+      const instanceTemplateIdentityModel = {
+        id: 'a6b1a881-2ce8-41a3-80fc-36316a73f803',
+      };
+
       // ZoneIdentityByName
       const zoneIdentityModel = {
         name: 'us-south-1',
       };
 
-      // InstanceTemplatePrototypeInstanceTemplateByImage
+      // InstanceTemplatePrototypeInstanceTemplateBySourceTemplate
       const instanceTemplatePrototypeModel = {
         availability_policy: instanceAvailabilityPolicyPrototypeModel,
         default_trusted_profile: instanceDefaultTrustedProfilePrototypeModel,
@@ -7781,15 +7882,20 @@ describe('VpcV1', () => {
         name: 'my-instance-template',
         placement_target: instancePlacementTargetPrototypeModel,
         profile: instanceProfileIdentityModel,
+        reservation_affinity: instanceReservationAffinityPrototypeModel,
         resource_group: resourceGroupIdentityModel,
         total_volume_bandwidth: 500,
         user_data: 'testString',
         volume_attachments: [volumeAttachmentPrototypeModel],
         vpc: vpcIdentityModel,
         boot_volume_attachment: volumeAttachmentPrototypeInstanceByImageContextModel,
+        catalog_offering: instanceCatalogOfferingPrototypeModel,
         image: imageIdentityModel,
+        network_attachments: [instanceNetworkAttachmentPrototypeModel],
         network_interfaces: [networkInterfacePrototypeModel],
+        primary_network_attachment: instanceNetworkAttachmentPrototypeModel,
         primary_network_interface: networkInterfacePrototypeModel,
+        source_template: instanceTemplateIdentityModel,
         zone: zoneIdentityModel,
       };
 
@@ -8164,6 +8270,10 @@ describe('VpcV1', () => {
         const placementGroupCrn =
           'crn:v1:bluemix:public:is:us-south:a/123456::placement-group:r018-418fe842-a3e9-47b9-a938-1aa5bd632871';
         const placementGroupName = 'my-placement-group';
+        const reservationId = 'testString';
+        const reservationCrn =
+          'crn:v1:bluemix:public:is:us-south:a/123456::reservation:7187-ba49df72-37b8-43ac-98da-f8e029de0e63';
+        const reservationName = 'my-reservation';
         const listInstancesParams = {
           start,
           limit,
@@ -8178,6 +8288,9 @@ describe('VpcV1', () => {
           placementGroupId,
           placementGroupCrn,
           placementGroupName,
+          reservationId,
+          reservationCrn,
+          reservationName,
         };
 
         const listInstancesResult = vpcService.listInstances(listInstancesParams);
@@ -8209,6 +8322,9 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.qs['placement_group.id']).toEqual(placementGroupId);
         expect(mockRequestOptions.qs['placement_group.crn']).toEqual(placementGroupCrn);
         expect(mockRequestOptions.qs['placement_group.name']).toEqual(placementGroupName);
+        expect(mockRequestOptions.qs['reservation.id']).toEqual(reservationId);
+        expect(mockRequestOptions.qs['reservation.crn']).toEqual(reservationCrn);
+        expect(mockRequestOptions.qs['reservation.name']).toEqual(reservationName);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -8252,9 +8368,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/instances';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"instances":[{"availability_policy":{"host_failure":"restart"},"bandwidth":1000,"boot_volume_attachment":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","name":"my-volume-attachment","volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","resource_type":"volume"}},"catalog_offering":{"version":{"crn":"crn:v1:bluemix:public:globalcatalog-collection:global:a/123456:1082e7d2-5e2f-0a11-a3bc-f88a8e1931fc:version:00111601-0ec5-41ac-b142-96d1e64e6442/ec66bec2-6a33-42d6-9323-26dd4dc8875d"}},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","dedicated_host":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-host","resource_type":"dedicated_host"},"disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"nvme","name":"my-instance-disk","resource_type":"instance_disk","size":100}],"gpu":{"count":1,"manufacturer":"nvidia","memory":1,"model":"Tesla V100"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"image"},"lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","memory":8,"metadata_service":{"enabled":false,"protocol":"http","response_hop_limit":1},"name":"my-instance","network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"numa_count":2,"placement_target":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_type":"dedicated_host_group"},"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"instance","startable":false,"status":"deleting","status_reasons":[{"code":"cannot_start_storage","message":"The virtual server instance is unusable because the encryption key for the boot volume\\nhas been deleted","more_info":"https://cloud.ibm.com/docs/key-protect?topic=key-protect-restore-keys"}],"total_network_bandwidth":500,"total_volume_bandwidth":500,"vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"volume_attachments":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","name":"my-volume-attachment","volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","resource_type":"volume"}}],"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"instances":[{"availability_policy":{"host_failure":"restart"},"bandwidth":1000,"boot_volume_attachment":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","name":"my-volume-attachment","volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","resource_type":"volume"}},"catalog_offering":{"version":{"crn":"crn:v1:bluemix:public:globalcatalog-collection:global:a/123456:1082e7d2-5e2f-0a11-a3bc-f88a8e1931fc:version:00111601-0ec5-41ac-b142-96d1e64e6442/ec66bec2-6a33-42d6-9323-26dd4dc8875d"}},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","dedicated_host":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-host","resource_type":"dedicated_host"},"disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"nvme","name":"my-instance-disk","resource_type":"instance_disk","size":100}],"gpu":{"count":1,"manufacturer":"nvidia","memory":1,"model":"Tesla V100"},"health_reasons":[{"code":"reservation_expired","message":"The reservation cannot be used because it has expired.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-virtual-server-health-status-reasons"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"image"},"lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","memory":8,"metadata_service":{"enabled":false,"protocol":"http","response_hop_limit":1},"name":"my-instance","network_attachments":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/5dd61d72-acaa-47c2-a336-3d849660d010/network_attachments/0767-d54eb633-98ea-459d-aa00-6a8e780175a7","id":"0767-d54eb633-98ea-459d-aa00-6a8e780175a7","name":"my-instance-network-attachment","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"instance_network_attachment","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"numa_count":2,"placement_target":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_type":"dedicated_host_group"},"primary_network_attachment":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/5dd61d72-acaa-47c2-a336-3d849660d010/network_attachments/0767-d54eb633-98ea-459d-aa00-6a8e780175a7","id":"0767-d54eb633-98ea-459d-aa00-6a8e780175a7","name":"my-instance-network-attachment","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"instance_network_attachment","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16","resource_type":"instance_profile"},"reservation":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::reservation:7187-ba49df72-37b8-43ac-98da-f8e029de0e63","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/reservations/7187-ba49df72-37b8-43ac-98da-f8e029de0e63","id":"7187-ba49df72-37b8-43ac-98da-f8e029de0e63","name":"my-reservation","resource_type":"reservation"},"reservation_affinity":{"policy":"disabled","pool":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::reservation:7187-ba49df72-37b8-43ac-98da-f8e029de0e63","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/reservations/7187-ba49df72-37b8-43ac-98da-f8e029de0e63","id":"7187-ba49df72-37b8-43ac-98da-f8e029de0e63","name":"my-reservation","resource_type":"reservation"}]},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"instance","startable":false,"status":"deleting","status_reasons":[{"code":"cannot_start_storage","message":"The virtual server instance is unusable because the encryption key for the boot volume\\nhas been deleted","more_info":"https://cloud.ibm.com/docs/key-protect?topic=key-protect-restore-keys"}],"total_network_bandwidth":500,"total_volume_bandwidth":500,"vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"volume_attachments":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","name":"my-volume-attachment","volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","resource_type":"volume"}}],"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"instances":[{"availability_policy":{"host_failure":"restart"},"bandwidth":1000,"boot_volume_attachment":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","name":"my-volume-attachment","volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","resource_type":"volume"}},"catalog_offering":{"version":{"crn":"crn:v1:bluemix:public:globalcatalog-collection:global:a/123456:1082e7d2-5e2f-0a11-a3bc-f88a8e1931fc:version:00111601-0ec5-41ac-b142-96d1e64e6442/ec66bec2-6a33-42d6-9323-26dd4dc8875d"}},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","dedicated_host":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-host","resource_type":"dedicated_host"},"disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"nvme","name":"my-instance-disk","resource_type":"instance_disk","size":100}],"gpu":{"count":1,"manufacturer":"nvidia","memory":1,"model":"Tesla V100"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"image"},"lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","memory":8,"metadata_service":{"enabled":false,"protocol":"http","response_hop_limit":1},"name":"my-instance","network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"numa_count":2,"placement_target":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_type":"dedicated_host_group"},"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"instance","startable":false,"status":"deleting","status_reasons":[{"code":"cannot_start_storage","message":"The virtual server instance is unusable because the encryption key for the boot volume\\nhas been deleted","more_info":"https://cloud.ibm.com/docs/key-protect?topic=key-protect-restore-keys"}],"total_network_bandwidth":500,"total_volume_bandwidth":500,"vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"volume_attachments":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","name":"my-volume-attachment","volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","resource_type":"volume"}}],"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"instances":[{"availability_policy":{"host_failure":"restart"},"bandwidth":1000,"boot_volume_attachment":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","name":"my-volume-attachment","volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","resource_type":"volume"}},"catalog_offering":{"version":{"crn":"crn:v1:bluemix:public:globalcatalog-collection:global:a/123456:1082e7d2-5e2f-0a11-a3bc-f88a8e1931fc:version:00111601-0ec5-41ac-b142-96d1e64e6442/ec66bec2-6a33-42d6-9323-26dd4dc8875d"}},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","dedicated_host":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-host","resource_type":"dedicated_host"},"disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"nvme","name":"my-instance-disk","resource_type":"instance_disk","size":100}],"gpu":{"count":1,"manufacturer":"nvidia","memory":1,"model":"Tesla V100"},"health_reasons":[{"code":"reservation_expired","message":"The reservation cannot be used because it has expired.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-virtual-server-health-status-reasons"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"image"},"lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","memory":8,"metadata_service":{"enabled":false,"protocol":"http","response_hop_limit":1},"name":"my-instance","network_attachments":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/5dd61d72-acaa-47c2-a336-3d849660d010/network_attachments/0767-d54eb633-98ea-459d-aa00-6a8e780175a7","id":"0767-d54eb633-98ea-459d-aa00-6a8e780175a7","name":"my-instance-network-attachment","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"instance_network_attachment","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"numa_count":2,"placement_target":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_type":"dedicated_host_group"},"primary_network_attachment":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/5dd61d72-acaa-47c2-a336-3d849660d010/network_attachments/0767-d54eb633-98ea-459d-aa00-6a8e780175a7","id":"0767-d54eb633-98ea-459d-aa00-6a8e780175a7","name":"my-instance-network-attachment","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"instance_network_attachment","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16","resource_type":"instance_profile"},"reservation":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::reservation:7187-ba49df72-37b8-43ac-98da-f8e029de0e63","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/reservations/7187-ba49df72-37b8-43ac-98da-f8e029de0e63","id":"7187-ba49df72-37b8-43ac-98da-f8e029de0e63","name":"my-reservation","resource_type":"reservation"},"reservation_affinity":{"policy":"disabled","pool":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::reservation:7187-ba49df72-37b8-43ac-98da-f8e029de0e63","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/reservations/7187-ba49df72-37b8-43ac-98da-f8e029de0e63","id":"7187-ba49df72-37b8-43ac-98da-f8e029de0e63","name":"my-reservation","resource_type":"reservation"}]},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"instance","startable":false,"status":"deleting","status_reasons":[{"code":"cannot_start_storage","message":"The virtual server instance is unusable because the encryption key for the boot volume\\nhas been deleted","more_info":"https://cloud.ibm.com/docs/key-protect?topic=key-protect-restore-keys"}],"total_network_bandwidth":500,"total_volume_bandwidth":500,"vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"volume_attachments":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"device":{"id":"80b3e36e-41f4-40e9-bd56-beae81792a68"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/volume_attachments/82cbf856-9cbb-45fb-b62f-d7bcef32399a","id":"82cbf856-9cbb-45fb-b62f-d7bcef32399a","name":"my-volume-attachment","volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","resource_type":"volume"}}],"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -8287,6 +8403,10 @@ describe('VpcV1', () => {
           placementGroupCrn:
             'crn:v1:bluemix:public:is:us-south:a/123456::placement-group:r018-418fe842-a3e9-47b9-a938-1aa5bd632871',
           placementGroupName: 'my-placement-group',
+          reservationId: 'testString',
+          reservationCrn:
+            'crn:v1:bluemix:public:is:us-south:a/123456::reservation:7187-ba49df72-37b8-43ac-98da-f8e029de0e63',
+          reservationName: 'my-reservation',
         };
         const allResults = [];
         const pager = new VpcV1.InstancesPager(vpcService, params);
@@ -8316,6 +8436,10 @@ describe('VpcV1', () => {
           placementGroupCrn:
             'crn:v1:bluemix:public:is:us-south:a/123456::placement-group:r018-418fe842-a3e9-47b9-a938-1aa5bd632871',
           placementGroupName: 'my-placement-group',
+          reservationId: 'testString',
+          reservationCrn:
+            'crn:v1:bluemix:public:is:us-south:a/123456::reservation:7187-ba49df72-37b8-43ac-98da-f8e029de0e63',
+          reservationName: 'my-reservation',
         };
         const pager = new VpcV1.InstancesPager(vpcService, params);
         const allResults = await pager.getAll();
@@ -8365,6 +8489,17 @@ describe('VpcV1', () => {
       // InstanceProfileIdentityByName
       const instanceProfileIdentityModel = {
         name: 'bx2-2x8',
+      };
+
+      // ReservationIdentityById
+      const reservationIdentityModel = {
+        id: '7187-ba49df72-37b8-43ac-98da-f8e029de0e63',
+      };
+
+      // InstanceReservationAffinityPrototype
+      const instanceReservationAffinityPrototypeModel = {
+        policy: 'disabled',
+        pool: [reservationIdentityModel],
       };
 
       // ResourceGroupIdentityById
@@ -8423,13 +8558,30 @@ describe('VpcV1', () => {
         volume: volumePrototypeInstanceByImageContextModel,
       };
 
+      // CatalogOfferingIdentityCatalogOfferingByCRN
+      const catalogOfferingIdentityModel = {
+        crn: 'crn:v1:bluemix:public:globalcatalog-collection:global:a/123456:1082e7d2-5e2f-0a11-a3bc-f88a8e1931fc:offering:00111601-0ec5-41ac-b142-96d1e64e6442',
+      };
+
+      // InstanceCatalogOfferingPrototypeCatalogOfferingByOffering
+      const instanceCatalogOfferingPrototypeModel = {
+        offering: catalogOfferingIdentityModel,
+      };
+
       // ImageIdentityById
       const imageIdentityModel = {
         id: '9aaf3bcb-dcd7-4de7-bb60-24e39ff9d366',
       };
 
-      // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
-      const networkInterfaceIpPrototypeModel = {
+      // VirtualNetworkInterfaceIPPrototypeReservedIPPrototypeVirtualNetworkInterfaceIPsContext
+      const virtualNetworkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
+      // VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext
+      const virtualNetworkInterfacePrimaryIpPrototypeModel = {
         address: '10.0.0.5',
         auto_delete: false,
         name: 'my-reserved-ip',
@@ -8445,6 +8597,32 @@ describe('VpcV1', () => {
         id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
       };
 
+      // InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeInstanceNetworkAttachmentContext
+      const instanceNetworkAttachmentPrototypeVirtualNetworkInterfaceModel = {
+        allow_ip_spoofing: true,
+        auto_delete: false,
+        enable_infrastructure_nat: true,
+        ips: [virtualNetworkInterfaceIpPrototypeModel],
+        name: 'my-virtual-network-interface',
+        primary_ip: virtualNetworkInterfacePrimaryIpPrototypeModel,
+        resource_group: resourceGroupIdentityModel,
+        security_groups: [securityGroupIdentityModel],
+        subnet: subnetIdentityModel,
+      };
+
+      // InstanceNetworkAttachmentPrototype
+      const instanceNetworkAttachmentPrototypeModel = {
+        name: 'my-instance-network-attachment',
+        virtual_network_interface: instanceNetworkAttachmentPrototypeVirtualNetworkInterfaceModel,
+      };
+
+      // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
+      const networkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
       // NetworkInterfacePrototype
       const networkInterfacePrototypeModel = {
         allow_ip_spoofing: true,
@@ -8454,12 +8632,17 @@ describe('VpcV1', () => {
         subnet: subnetIdentityModel,
       };
 
+      // InstanceTemplateIdentityById
+      const instanceTemplateIdentityModel = {
+        id: 'a6b1a881-2ce8-41a3-80fc-36316a73f803',
+      };
+
       // ZoneIdentityByName
       const zoneIdentityModel = {
         name: 'us-south-1',
       };
 
-      // InstancePrototypeInstanceByImage
+      // InstancePrototypeInstanceBySourceTemplate
       const instancePrototypeModel = {
         availability_policy: instanceAvailabilityPolicyPrototypeModel,
         default_trusted_profile: instanceDefaultTrustedProfilePrototypeModel,
@@ -8468,15 +8651,20 @@ describe('VpcV1', () => {
         name: 'my-instance',
         placement_target: instancePlacementTargetPrototypeModel,
         profile: instanceProfileIdentityModel,
+        reservation_affinity: instanceReservationAffinityPrototypeModel,
         resource_group: resourceGroupIdentityModel,
         total_volume_bandwidth: 500,
         user_data: 'testString',
         volume_attachments: [volumeAttachmentPrototypeModel],
         vpc: vpcIdentityModel,
         boot_volume_attachment: volumeAttachmentPrototypeInstanceByImageContextModel,
+        catalog_offering: instanceCatalogOfferingPrototypeModel,
         image: imageIdentityModel,
+        network_attachments: [instanceNetworkAttachmentPrototypeModel],
         network_interfaces: [networkInterfacePrototypeModel],
+        primary_network_attachment: instanceNetworkAttachmentPrototypeModel,
         primary_network_interface: networkInterfacePrototypeModel,
+        source_template: instanceTemplateIdentityModel,
         zone: zoneIdentityModel,
       };
 
@@ -8569,8 +8757,10 @@ describe('VpcV1', () => {
       function __deleteInstanceTest() {
         // Construct the params object for operation deleteInstance
         const id = 'testString';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const deleteInstanceParams = {
           id,
+          ifMatch,
         };
 
         const deleteInstanceResult = vpcService.deleteInstance(deleteInstanceParams);
@@ -8587,6 +8777,7 @@ describe('VpcV1', () => {
         const expectedAccept = undefined;
         const expectedContentType = undefined;
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
         expect(mockRequestOptions.path.id).toEqual(id);
@@ -8762,6 +8953,17 @@ describe('VpcV1', () => {
         name: 'bx2-4x16',
       };
 
+      // ReservationIdentityById
+      const reservationIdentityModel = {
+        id: '7187-ba49df72-37b8-43ac-98da-f8e029de0e63',
+      };
+
+      // InstanceReservationAffinityPatch
+      const instanceReservationAffinityPatchModel = {
+        policy: 'disabled',
+        pool: [reservationIdentityModel],
+      };
+
       function __updateInstanceTest() {
         // Construct the params object for operation updateInstance
         const id = 'testString';
@@ -8770,7 +8972,9 @@ describe('VpcV1', () => {
         const name = 'my-instance';
         const placementTarget = instancePlacementTargetPatchModel;
         const profile = instancePatchProfileModel;
+        const reservationAffinity = instanceReservationAffinityPatchModel;
         const totalVolumeBandwidth = 500;
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateInstanceParams = {
           id,
           availabilityPolicy,
@@ -8778,7 +8982,9 @@ describe('VpcV1', () => {
           name,
           placementTarget,
           profile,
+          reservationAffinity,
           totalVolumeBandwidth,
+          ifMatch,
         };
 
         const updateInstanceResult = vpcService.updateInstance(updateInstanceParams);
@@ -8795,11 +9001,13 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
         expect(mockRequestOptions.body.availability_policy).toEqual(availabilityPolicy);
         expect(mockRequestOptions.body.metadata_service).toEqual(metadataService);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.body.placement_target).toEqual(placementTarget);
         expect(mockRequestOptions.body.profile).toEqual(profile);
+        expect(mockRequestOptions.body.reservation_affinity).toEqual(reservationAffinity);
         expect(mockRequestOptions.body.total_volume_bandwidth).toEqual(totalVolumeBandwidth);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
@@ -9410,6 +9618,538 @@ describe('VpcV1', () => {
         let err;
         try {
           await vpcService.updateInstanceDisk();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listInstanceNetworkAttachments', () => {
+    describe('positive tests', () => {
+      function __listInstanceNetworkAttachmentsTest() {
+        // Construct the params object for operation listInstanceNetworkAttachments
+        const instanceId = 'testString';
+        const listInstanceNetworkAttachmentsParams = {
+          instanceId,
+        };
+
+        const listInstanceNetworkAttachmentsResult = vpcService.listInstanceNetworkAttachments(
+          listInstanceNetworkAttachmentsParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listInstanceNetworkAttachmentsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_attachments',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listInstanceNetworkAttachmentsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listInstanceNetworkAttachmentsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listInstanceNetworkAttachmentsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listInstanceNetworkAttachmentsParams = {
+          instanceId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listInstanceNetworkAttachments(listInstanceNetworkAttachmentsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceNetworkAttachments({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listInstanceNetworkAttachments();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('createInstanceNetworkAttachment', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // VirtualNetworkInterfaceIPPrototypeReservedIPPrototypeVirtualNetworkInterfaceIPsContext
+      const virtualNetworkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
+      // VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext
+      const virtualNetworkInterfacePrimaryIpPrototypeModel = {
+        address: '10.0.0.7',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      // SecurityGroupIdentityById
+      const securityGroupIdentityModel = {
+        id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
+      };
+
+      // SubnetIdentityById
+      const subnetIdentityModel = {
+        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+      };
+
+      // InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeInstanceNetworkAttachmentContext
+      const instanceNetworkAttachmentPrototypeVirtualNetworkInterfaceModel = {
+        allow_ip_spoofing: true,
+        auto_delete: false,
+        enable_infrastructure_nat: true,
+        ips: [virtualNetworkInterfaceIpPrototypeModel],
+        name: 'my-virtual-network-interface',
+        primary_ip: virtualNetworkInterfacePrimaryIpPrototypeModel,
+        resource_group: resourceGroupIdentityModel,
+        security_groups: [securityGroupIdentityModel],
+        subnet: subnetIdentityModel,
+      };
+
+      function __createInstanceNetworkAttachmentTest() {
+        // Construct the params object for operation createInstanceNetworkAttachment
+        const instanceId = 'testString';
+        const virtualNetworkInterface =
+          instanceNetworkAttachmentPrototypeVirtualNetworkInterfaceModel;
+        const name = 'testString';
+        const createInstanceNetworkAttachmentParams = {
+          instanceId,
+          virtualNetworkInterface,
+          name,
+        };
+
+        const createInstanceNetworkAttachmentResult = vpcService.createInstanceNetworkAttachment(
+          createInstanceNetworkAttachmentParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createInstanceNetworkAttachmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_attachments',
+          'POST'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.virtual_network_interface).toEqual(virtualNetworkInterface);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createInstanceNetworkAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createInstanceNetworkAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createInstanceNetworkAttachmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const virtualNetworkInterface =
+          instanceNetworkAttachmentPrototypeVirtualNetworkInterfaceModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createInstanceNetworkAttachmentParams = {
+          instanceId,
+          virtualNetworkInterface,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createInstanceNetworkAttachment(createInstanceNetworkAttachmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceNetworkAttachment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createInstanceNetworkAttachment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteInstanceNetworkAttachment', () => {
+    describe('positive tests', () => {
+      function __deleteInstanceNetworkAttachmentTest() {
+        // Construct the params object for operation deleteInstanceNetworkAttachment
+        const instanceId = 'testString';
+        const id = 'testString';
+        const deleteInstanceNetworkAttachmentParams = {
+          instanceId,
+          id,
+        };
+
+        const deleteInstanceNetworkAttachmentResult = vpcService.deleteInstanceNetworkAttachment(
+          deleteInstanceNetworkAttachmentParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteInstanceNetworkAttachmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_attachments/{id}',
+          'DELETE'
+        );
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteInstanceNetworkAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteInstanceNetworkAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteInstanceNetworkAttachmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteInstanceNetworkAttachmentParams = {
+          instanceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteInstanceNetworkAttachment(deleteInstanceNetworkAttachmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceNetworkAttachment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteInstanceNetworkAttachment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getInstanceNetworkAttachment', () => {
+    describe('positive tests', () => {
+      function __getInstanceNetworkAttachmentTest() {
+        // Construct the params object for operation getInstanceNetworkAttachment
+        const instanceId = 'testString';
+        const id = 'testString';
+        const getInstanceNetworkAttachmentParams = {
+          instanceId,
+          id,
+        };
+
+        const getInstanceNetworkAttachmentResult = vpcService.getInstanceNetworkAttachment(
+          getInstanceNetworkAttachmentParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getInstanceNetworkAttachmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_attachments/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getInstanceNetworkAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getInstanceNetworkAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getInstanceNetworkAttachmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getInstanceNetworkAttachmentParams = {
+          instanceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getInstanceNetworkAttachment(getInstanceNetworkAttachmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceNetworkAttachment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getInstanceNetworkAttachment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('updateInstanceNetworkAttachment', () => {
+    describe('positive tests', () => {
+      function __updateInstanceNetworkAttachmentTest() {
+        // Construct the params object for operation updateInstanceNetworkAttachment
+        const instanceId = 'testString';
+        const id = 'testString';
+        const name = 'my-instance-network-attachment-updated';
+        const updateInstanceNetworkAttachmentParams = {
+          instanceId,
+          id,
+          name,
+        };
+
+        const updateInstanceNetworkAttachmentResult = vpcService.updateInstanceNetworkAttachment(
+          updateInstanceNetworkAttachmentParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(updateInstanceNetworkAttachmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/instances/{instance_id}/network_attachments/{id}',
+          'PATCH'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.instance_id).toEqual(instanceId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateInstanceNetworkAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateInstanceNetworkAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateInstanceNetworkAttachmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const instanceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateInstanceNetworkAttachmentParams = {
+          instanceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateInstanceNetworkAttachment(updateInstanceNetworkAttachmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceNetworkAttachment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateInstanceNetworkAttachment();
         } catch (e) {
           err = e;
         }
@@ -14037,6 +14777,652 @@ describe('VpcV1', () => {
     });
   });
 
+  describe('listReservations', () => {
+    describe('positive tests', () => {
+      function __listReservationsTest() {
+        // Construct the params object for operation listReservations
+        const start = 'testString';
+        const limit = 50;
+        const name = 'testString';
+        const resourceGroupId = 'testString';
+        const zoneName = 'us-south-1';
+        const listReservationsParams = {
+          start,
+          limit,
+          name,
+          resourceGroupId,
+          zoneName,
+        };
+
+        const listReservationsResult = vpcService.listReservations(listReservationsParams);
+
+        // all methods should return a Promise
+        expectToBePromise(listReservationsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/reservations', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs['zone.name']).toEqual(zoneName);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listReservationsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listReservationsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listReservationsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listReservationsParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listReservations(listReservationsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listReservations({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+
+    describe('ReservationsPager tests', () => {
+      const serviceUrl = vpcServiceOptions.url;
+      const path = '/reservations';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"reservations":[{"affinity_policy":"restricted","capacity":{"allocated":10,"available":2,"status":"allocated","total":10,"used":8},"committed_use":{"expiration_at":"2019-01-01T12:00:00.000Z","expiration_policy":"release","term":"term"},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::reservation:7187-ba49df72-37b8-43ac-98da-f8e029de0e63","href":"https://us-south.iaas.cloud.ibm.com/v1/reservations/7187-ba49df72-37b8-43ac-98da-f8e029de0e63","id":"7187-ba49df72-37b8-43ac-98da-f8e029de0e63","lifecycle_state":"stable","name":"my-reservation","profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16","resource_type":"instance_profile"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"reservation","status":"activating","status_reasons":[{"code":"cannot_activate_no_capacity_available","message":"The reservation cannot be activated because capacity is unavailable","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-reserved-capacity-status-reasons"}],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"reservations":[{"affinity_policy":"restricted","capacity":{"allocated":10,"available":2,"status":"allocated","total":10,"used":8},"committed_use":{"expiration_at":"2019-01-01T12:00:00.000Z","expiration_policy":"release","term":"term"},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::reservation:7187-ba49df72-37b8-43ac-98da-f8e029de0e63","href":"https://us-south.iaas.cloud.ibm.com/v1/reservations/7187-ba49df72-37b8-43ac-98da-f8e029de0e63","id":"7187-ba49df72-37b8-43ac-98da-f8e029de0e63","lifecycle_state":"stable","name":"my-reservation","profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16","resource_type":"instance_profile"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"reservation","status":"activating","status_reasons":[{"code":"cannot_activate_no_capacity_available","message":"The reservation cannot be activated because capacity is unavailable","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-reserved-capacity-status-reasons"}],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          limit: 10,
+          name: 'testString',
+          resourceGroupId: 'testString',
+          zoneName: 'us-south-1',
+        };
+        const allResults = [];
+        const pager = new VpcV1.ReservationsPager(vpcService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          limit: 10,
+          name: 'testString',
+          resourceGroupId: 'testString',
+          zoneName: 'us-south-1',
+        };
+        const pager = new VpcV1.ReservationsPager(vpcService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('createReservation', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // ReservationCapacityPrototype
+      const reservationCapacityPrototypeModel = {
+        total: 10,
+      };
+
+      // ReservationCommittedUsePrototype
+      const reservationCommittedUsePrototypeModel = {
+        expiration_policy: 'release',
+        term: 'testString',
+      };
+
+      // ReservationProfilePrototype
+      const reservationProfilePrototypeModel = {
+        name: 'bx2-4x16',
+        resource_type: 'instance_profile',
+      };
+
+      // ZoneIdentityByName
+      const zoneIdentityModel = {
+        name: 'us-south-1',
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      function __createReservationTest() {
+        // Construct the params object for operation createReservation
+        const capacity = reservationCapacityPrototypeModel;
+        const committedUse = reservationCommittedUsePrototypeModel;
+        const profile = reservationProfilePrototypeModel;
+        const zone = zoneIdentityModel;
+        const affinityPolicy = 'restricted';
+        const name = 'my-reservation';
+        const resourceGroup = resourceGroupIdentityModel;
+        const createReservationParams = {
+          capacity,
+          committedUse,
+          profile,
+          zone,
+          affinityPolicy,
+          name,
+          resourceGroup,
+        };
+
+        const createReservationResult = vpcService.createReservation(createReservationParams);
+
+        // all methods should return a Promise
+        expectToBePromise(createReservationResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/reservations', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.capacity).toEqual(capacity);
+        expect(mockRequestOptions.body.committed_use).toEqual(committedUse);
+        expect(mockRequestOptions.body.profile).toEqual(profile);
+        expect(mockRequestOptions.body.zone).toEqual(zone);
+        expect(mockRequestOptions.body.affinity_policy).toEqual(affinityPolicy);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createReservationTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createReservationTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createReservationTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const capacity = reservationCapacityPrototypeModel;
+        const committedUse = reservationCommittedUsePrototypeModel;
+        const profile = reservationProfilePrototypeModel;
+        const zone = zoneIdentityModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createReservationParams = {
+          capacity,
+          committedUse,
+          profile,
+          zone,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createReservation(createReservationParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.createReservation({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createReservation();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteReservation', () => {
+    describe('positive tests', () => {
+      function __deleteReservationTest() {
+        // Construct the params object for operation deleteReservation
+        const id = 'testString';
+        const deleteReservationParams = {
+          id,
+        };
+
+        const deleteReservationResult = vpcService.deleteReservation(deleteReservationParams);
+
+        // all methods should return a Promise
+        expectToBePromise(deleteReservationResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/reservations/{id}', 'DELETE');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteReservationTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteReservationTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteReservationTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteReservationParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteReservation(deleteReservationParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteReservation({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteReservation();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getReservation', () => {
+    describe('positive tests', () => {
+      function __getReservationTest() {
+        // Construct the params object for operation getReservation
+        const id = 'testString';
+        const getReservationParams = {
+          id,
+        };
+
+        const getReservationResult = vpcService.getReservation(getReservationParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getReservationResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/reservations/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getReservationTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getReservationTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getReservationTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getReservationParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getReservation(getReservationParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getReservation({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getReservation();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('updateReservation', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // ReservationCapacityPatch
+      const reservationCapacityPatchModel = {
+        total: 10,
+      };
+
+      // ReservationCommittedUsePatch
+      const reservationCommittedUsePatchModel = {
+        expiration_policy: 'release',
+        term: 'testString',
+      };
+
+      // ReservationProfilePatch
+      const reservationProfilePatchModel = {
+        name: 'bx2-4x16',
+        resource_type: 'instance_profile',
+      };
+
+      function __updateReservationTest() {
+        // Construct the params object for operation updateReservation
+        const id = 'testString';
+        const capacity = reservationCapacityPatchModel;
+        const committedUse = reservationCommittedUsePatchModel;
+        const name = 'my-reservation';
+        const profile = reservationProfilePatchModel;
+        const updateReservationParams = {
+          id,
+          capacity,
+          committedUse,
+          name,
+          profile,
+        };
+
+        const updateReservationResult = vpcService.updateReservation(updateReservationParams);
+
+        // all methods should return a Promise
+        expectToBePromise(updateReservationResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/reservations/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.capacity).toEqual(capacity);
+        expect(mockRequestOptions.body.committed_use).toEqual(committedUse);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.profile).toEqual(profile);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateReservationTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateReservationTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateReservationTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateReservationParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateReservation(updateReservationParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateReservation({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateReservation();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('activateReservation', () => {
+    describe('positive tests', () => {
+      function __activateReservationTest() {
+        // Construct the params object for operation activateReservation
+        const id = 'testString';
+        const activateReservationParams = {
+          id,
+        };
+
+        const activateReservationResult = vpcService.activateReservation(activateReservationParams);
+
+        // all methods should return a Promise
+        expectToBePromise(activateReservationResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/reservations/{id}/activate', 'POST');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __activateReservationTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __activateReservationTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __activateReservationTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const activateReservationParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.activateReservation(activateReservationParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.activateReservation({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.activateReservation();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('listDedicatedHostGroups', () => {
     describe('positive tests', () => {
       function __listDedicatedHostGroupsTest() {
@@ -14120,9 +15506,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/dedicated_host/groups';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"groups":[{"class":"mx2","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","dedicated_hosts":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-host","resource_type":"dedicated_host"}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"dedicated_host_group","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16"}],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"groups":[{"class":"mx2","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","dedicated_hosts":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-host","resource_type":"dedicated_host"}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"dedicated_host_group","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16","resource_type":"instance_profile"}],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"groups":[{"class":"mx2","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","dedicated_hosts":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-host","resource_type":"dedicated_host"}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"dedicated_host_group","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16"}],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
+        '{"total_count":2,"limit":1,"groups":[{"class":"mx2","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","dedicated_hosts":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-host","resource_type":"dedicated_host"}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"dedicated_host_group","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16","resource_type":"instance_profile"}],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -14628,9 +16014,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/dedicated_host/profiles';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"profiles":[{"class":"mx2","disks":[{"interface_type":{"type":"fixed","value":"nvme"},"quantity":{"type":"fixed","value":4},"size":{"type":"fixed","value":3200},"supported_instance_interface_types":{"type":"fixed","value":["nvme"]}}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","memory":{"type":"fixed","value":16},"name":"mx2-host-152x1216","socket_count":{"type":"fixed","value":2},"status":"current","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16"}],"vcpu_architecture":{"type":"fixed","value":"amd64"},"vcpu_count":{"type":"fixed","value":16},"vcpu_manufacturer":{"type":"fixed","value":"intel"}}]}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"profiles":[{"class":"mx2","disks":[{"interface_type":{"type":"fixed","value":"nvme"},"quantity":{"type":"fixed","value":4},"size":{"type":"fixed","value":3200},"supported_instance_interface_types":{"type":"fixed","value":["nvme"]}}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","memory":{"type":"fixed","value":16},"name":"mx2-host-152x1216","socket_count":{"type":"fixed","value":2},"status":"current","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16","resource_type":"instance_profile"}],"vcpu_architecture":{"type":"fixed","value":"amd64"},"vcpu_count":{"type":"fixed","value":16},"vcpu_manufacturer":{"type":"fixed","value":"intel"}}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"profiles":[{"class":"mx2","disks":[{"interface_type":{"type":"fixed","value":"nvme"},"quantity":{"type":"fixed","value":4},"size":{"type":"fixed","value":3200},"supported_instance_interface_types":{"type":"fixed","value":["nvme"]}}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","memory":{"type":"fixed","value":16},"name":"mx2-host-152x1216","socket_count":{"type":"fixed","value":2},"status":"current","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16"}],"vcpu_architecture":{"type":"fixed","value":"amd64"},"vcpu_count":{"type":"fixed","value":16},"vcpu_manufacturer":{"type":"fixed","value":"intel"}}]}';
+        '{"total_count":2,"limit":1,"profiles":[{"class":"mx2","disks":[{"interface_type":{"type":"fixed","value":"nvme"},"quantity":{"type":"fixed","value":4},"size":{"type":"fixed","value":3200},"supported_instance_interface_types":{"type":"fixed","value":["nvme"]}}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","memory":{"type":"fixed","value":16},"name":"mx2-host-152x1216","socket_count":{"type":"fixed","value":2},"status":"current","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16","resource_type":"instance_profile"}],"vcpu_architecture":{"type":"fixed","value":"amd64"},"vcpu_count":{"type":"fixed","value":16},"vcpu_manufacturer":{"type":"fixed","value":"intel"}}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -14845,9 +16231,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/dedicated_hosts';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"dedicated_hosts":[{"available_memory":128,"available_vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"available":9,"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","instance_disks":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-disk","resource_type":"instance_disk"}],"interface_type":"nvme","lifecycle_state":"stable","name":"my-dedicated-host-disk","provisionable":false,"resource_type":"dedicated_host_disk","size":4,"supported_instance_interface_types":["nvme"]}],"group":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_type":"dedicated_host_group"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","instance_placement_enabled":true,"instances":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance"}],"lifecycle_state":"stable","memory":128,"name":"my-host","numa":{"count":2,"nodes":[{"available_vcpu":24,"vcpu":56}]},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","name":"mx2-host-152x1216"},"provisionable":false,"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"dedicated_host","socket_count":4,"state":"available","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16"}],"vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"dedicated_hosts":[{"available_memory":128,"available_vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"available":9,"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","instance_disks":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-disk","resource_type":"instance_disk"}],"interface_type":"nvme","lifecycle_state":"stable","name":"my-dedicated-host-disk","provisionable":false,"resource_type":"dedicated_host_disk","size":4,"supported_instance_interface_types":["nvme"]}],"group":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_type":"dedicated_host_group"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","instance_placement_enabled":true,"instances":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance"}],"lifecycle_state":"stable","memory":128,"name":"my-host","numa":{"count":2,"nodes":[{"available_vcpu":24,"vcpu":56}]},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","name":"mx2-host-152x1216"},"provisionable":false,"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"dedicated_host","socket_count":4,"state":"available","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16","resource_type":"instance_profile"}],"vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"dedicated_hosts":[{"available_memory":128,"available_vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"available":9,"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","instance_disks":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-disk","resource_type":"instance_disk"}],"interface_type":"nvme","lifecycle_state":"stable","name":"my-dedicated-host-disk","provisionable":false,"resource_type":"dedicated_host_disk","size":4,"supported_instance_interface_types":["nvme"]}],"group":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_type":"dedicated_host_group"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","instance_placement_enabled":true,"instances":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance"}],"lifecycle_state":"stable","memory":128,"name":"my-host","numa":{"count":2,"nodes":[{"available_vcpu":24,"vcpu":56}]},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","name":"mx2-host-152x1216"},"provisionable":false,"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"dedicated_host","socket_count":4,"state":"available","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16"}],"vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"dedicated_hosts":[{"available_memory":128,"available_vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"available":9,"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","instance_disks":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-instance-disk","resource_type":"instance_disk"}],"interface_type":"nvme","lifecycle_state":"stable","name":"my-dedicated-host-disk","provisionable":false,"resource_type":"dedicated_host_disk","size":4,"supported_instance_interface_types":["nvme"]}],"group":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::dedicated-host-group:bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_host/groups/bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","id":"bcc5b834-1258-4b9c-c3b4-43bc9cf5cde0","name":"my-host-group","resource_type":"dedicated_host_group"},"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","instance_placement_enabled":true,"instances":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::instance:1e09281b-f177-46fb-baf1-bc152b2e391a","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/instances/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","name":"my-instance"}],"lifecycle_state":"stable","memory":128,"name":"my-host","numa":{"count":2,"nodes":[{"available_vcpu":24,"vcpu":56}]},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/dedicated_hosts/1e09281b-f177-46fb-baf1-bc152b2e391a","name":"mx2-host-152x1216"},"provisionable":false,"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"dedicated_host","socket_count":4,"state":"available","supported_instance_profiles":[{"href":"https://us-south.iaas.cloud.ibm.com/v1/instance/profiles/bx2-4x16","name":"bx2-4x16","resource_type":"instance_profile"}],"vcpu":{"architecture":"amd64","count":4,"manufacturer":"intel"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -15642,9 +17028,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/backup_policies';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"backup_policies":[{"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::backup-policy:r134-076191ba-49c2-4763-94fd-c70de73ee2e6","health_reasons":[{"code":"missing_service_authorization_policies","message":"One or more accounts are missing service authorization policies","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-backup-service-about&interface=ui"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6","id":"r134-076191ba-49c2-4763-94fd-c70de73ee2e6","last_job_completed_at":"2019-01-01T12:00:00.000Z","lifecycle_state":"stable","match_resource_types":["volume"],"match_user_tags":["match_user_tags"],"name":"my-backup-policy","plans":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"backup_policy_plan"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"backup_policy","scope":{"crn":"crn:v1:bluemix:public:enterprise::a/123456::enterprise:ebc2b430240943458b9e91e1432cfcce","id":"fee82deba12e4c0fb69c3b09d1f12345","resource_type":"enterprise"}}],"total_count":2,"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"backup_policies":[{"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::backup-policy:r134-076191ba-49c2-4763-94fd-c70de73ee2e6","health_reasons":[{"code":"missing_service_authorization_policies","message":"One or more accounts are missing service authorization policies","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-backup-service-about&interface=ui"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6","id":"r134-076191ba-49c2-4763-94fd-c70de73ee2e6","last_job_completed_at":"2019-01-01T12:00:00.000Z","lifecycle_state":"stable","match_user_tags":["match_user_tags"],"name":"my-backup-policy","plans":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"backup_policy_plan"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"backup_policy","scope":{"crn":"crn:v1:bluemix:public:enterprise::a/123456::enterprise:ebc2b430240943458b9e91e1432cfcce","id":"fee82deba12e4c0fb69c3b09d1f12345","resource_type":"enterprise"},"included_content":["data_volumes"],"match_resource_type":"instance"}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"backup_policies":[{"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::backup-policy:r134-076191ba-49c2-4763-94fd-c70de73ee2e6","health_reasons":[{"code":"missing_service_authorization_policies","message":"One or more accounts are missing service authorization policies","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-backup-service-about&interface=ui"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6","id":"r134-076191ba-49c2-4763-94fd-c70de73ee2e6","last_job_completed_at":"2019-01-01T12:00:00.000Z","lifecycle_state":"stable","match_resource_types":["volume"],"match_user_tags":["match_user_tags"],"name":"my-backup-policy","plans":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"backup_policy_plan"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"backup_policy","scope":{"crn":"crn:v1:bluemix:public:enterprise::a/123456::enterprise:ebc2b430240943458b9e91e1432cfcce","id":"fee82deba12e4c0fb69c3b09d1f12345","resource_type":"enterprise"}}],"total_count":2,"limit":1}';
+        '{"backup_policies":[{"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::backup-policy:r134-076191ba-49c2-4763-94fd-c70de73ee2e6","health_reasons":[{"code":"missing_service_authorization_policies","message":"One or more accounts are missing service authorization policies","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-backup-service-about&interface=ui"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6","id":"r134-076191ba-49c2-4763-94fd-c70de73ee2e6","last_job_completed_at":"2019-01-01T12:00:00.000Z","lifecycle_state":"stable","match_user_tags":["match_user_tags"],"name":"my-backup-policy","plans":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"backup_policy_plan"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"backup_policy","scope":{"crn":"crn:v1:bluemix:public:enterprise::a/123456::enterprise:ebc2b430240943458b9e91e1432cfcce","id":"fee82deba12e4c0fb69c3b09d1f12345","resource_type":"enterprise"},"included_content":["data_volumes"],"match_resource_type":"instance"}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -15753,21 +17139,21 @@ describe('VpcV1', () => {
         crn: 'crn:v1:bluemix:public:enterprise::a/123456::enterprise:ebc2b430240943458b9e91e1432cfcce',
       };
 
+      // BackupPolicyPrototypeBackupPolicyMatchResourceTypeVolumePrototype
+      const backupPolicyPrototypeModel = {
+        match_user_tags: ['my-daily-backup-policy'],
+        name: 'my-backup-policy',
+        plans: [backupPolicyPlanPrototypeModel],
+        resource_group: resourceGroupIdentityModel,
+        scope: backupPolicyScopePrototypeModel,
+        match_resource_type: 'volume',
+      };
+
       function __createBackupPolicyTest() {
         // Construct the params object for operation createBackupPolicy
-        const matchUserTags = ['my-daily-backup-policy'];
-        const matchResourceTypes = ['volume'];
-        const name = 'my-backup-policy';
-        const plans = [backupPolicyPlanPrototypeModel];
-        const resourceGroup = resourceGroupIdentityModel;
-        const scope = backupPolicyScopePrototypeModel;
+        const backupPolicyPrototype = backupPolicyPrototypeModel;
         const createBackupPolicyParams = {
-          matchUserTags,
-          matchResourceTypes,
-          name,
-          plans,
-          resourceGroup,
-          scope,
+          backupPolicyPrototype,
         };
 
         const createBackupPolicyResult = vpcService.createBackupPolicy(createBackupPolicyParams);
@@ -15784,12 +17170,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body.match_user_tags).toEqual(matchUserTags);
-        expect(mockRequestOptions.body.match_resource_types).toEqual(matchResourceTypes);
-        expect(mockRequestOptions.body.name).toEqual(name);
-        expect(mockRequestOptions.body.plans).toEqual(plans);
-        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
-        expect(mockRequestOptions.body.scope).toEqual(scope);
+        expect(mockRequestOptions.body).toEqual(backupPolicyPrototype);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
       }
@@ -15811,11 +17192,11 @@ describe('VpcV1', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const matchUserTags = ['my-daily-backup-policy'];
+        const backupPolicyPrototype = backupPolicyPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const createBackupPolicyParams = {
-          matchUserTags,
+          backupPolicyPrototype,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -16900,11 +18281,13 @@ describe('VpcV1', () => {
       function __updateBackupPolicyTest() {
         // Construct the params object for operation updateBackupPolicy
         const id = 'testString';
+        const includedContent = ['data_volumes'];
         const matchUserTags = ['my-daily-backup-policy'];
         const name = 'my-backup-policy';
         const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
         const updateBackupPolicyParams = {
           id,
+          includedContent,
           matchUserTags,
           name,
           ifMatch,
@@ -16925,6 +18308,7 @@ describe('VpcV1', () => {
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.included_content).toEqual(includedContent);
         expect(mockRequestOptions.body.match_user_tags).toEqual(matchUserTags);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
@@ -17547,9 +18931,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/bare_metal_server/profiles';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"profiles":[{"bandwidth":{"type":"fixed","value":20000},"console_types":{"type":"enum","values":["serial"]},"cpu_architecture":{"default":"amd64","type":"fixed","value":"amd64"},"cpu_core_count":{"type":"fixed","value":80},"cpu_socket_count":{"type":"fixed","value":4},"disks":[{"quantity":{"type":"fixed","value":4},"size":{"type":"fixed","value":100},"supported_interface_types":{"default":"fcp","type":"enum","values":["fcp"]}}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","memory":{"type":"fixed","value":16},"name":"bx2-metal-192x768","network_interface_count":{"max":128,"min":1,"type":"range"},"os_architecture":{"default":"amd64","type":"enum","values":["amd64"]},"resource_type":"bare_metal_server_profile","supported_trusted_platform_module_modes":{"type":"enum","values":["disabled"]}}]}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"profiles":[{"bandwidth":{"type":"fixed","value":20000},"console_types":{"type":"enum","values":["serial"]},"cpu_architecture":{"default":"amd64","type":"fixed","value":"amd64"},"cpu_core_count":{"type":"fixed","value":80},"cpu_socket_count":{"type":"fixed","value":4},"disks":[{"quantity":{"type":"fixed","value":4},"size":{"type":"fixed","value":100},"supported_interface_types":{"default":"fcp","type":"enum","values":["fcp"]}}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","memory":{"type":"fixed","value":16},"name":"bx2-metal-192x768","network_attachment_count":{"max":128,"min":1,"type":"range"},"network_interface_count":{"max":128,"min":1,"type":"range"},"os_architecture":{"default":"amd64","type":"enum","values":["amd64"]},"resource_type":"bare_metal_server_profile","supported_trusted_platform_module_modes":{"type":"enum","values":["disabled"]},"virtual_network_interfaces_supported":{"type":"fixed","value":false}}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"profiles":[{"bandwidth":{"type":"fixed","value":20000},"console_types":{"type":"enum","values":["serial"]},"cpu_architecture":{"default":"amd64","type":"fixed","value":"amd64"},"cpu_core_count":{"type":"fixed","value":80},"cpu_socket_count":{"type":"fixed","value":4},"disks":[{"quantity":{"type":"fixed","value":4},"size":{"type":"fixed","value":100},"supported_interface_types":{"default":"fcp","type":"enum","values":["fcp"]}}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","memory":{"type":"fixed","value":16},"name":"bx2-metal-192x768","network_interface_count":{"max":128,"min":1,"type":"range"},"os_architecture":{"default":"amd64","type":"enum","values":["amd64"]},"resource_type":"bare_metal_server_profile","supported_trusted_platform_module_modes":{"type":"enum","values":["disabled"]}}]}';
+        '{"total_count":2,"limit":1,"profiles":[{"bandwidth":{"type":"fixed","value":20000},"console_types":{"type":"enum","values":["serial"]},"cpu_architecture":{"default":"amd64","type":"fixed","value":"amd64"},"cpu_core_count":{"type":"fixed","value":80},"cpu_socket_count":{"type":"fixed","value":4},"disks":[{"quantity":{"type":"fixed","value":4},"size":{"type":"fixed","value":100},"supported_interface_types":{"default":"fcp","type":"enum","values":["fcp"]}}],"family":"balanced","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","memory":{"type":"fixed","value":16},"name":"bx2-metal-192x768","network_attachment_count":{"max":128,"min":1,"type":"range"},"network_interface_count":{"max":128,"min":1,"type":"range"},"os_architecture":{"default":"amd64","type":"enum","values":["amd64"]},"resource_type":"bare_metal_server_profile","supported_trusted_platform_module_modes":{"type":"enum","values":["disabled"]},"virtual_network_interfaces_supported":{"type":"fixed","value":false}}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -17770,9 +19154,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/bare_metal_servers';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"bare_metal_servers":[{"bandwidth":20000,"boot_target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk"},"cpu":{"architecture":"amd64","core_count":80,"socket_count":4,"threads_per_core":2},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::bare-metal-server:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"fcp","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk","size":100}],"enable_secure_boot":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","memory":1536,"name":"my-bare-metal-server","network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","name":"bx2-metal-192x768","resource_type":"bare_metal_server_profile"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"bare_metal_server","status":"deleting","status_reasons":[{"code":"cannot_start_capacity","message":"The bare metal server cannot start as there is no more capacity in this\\nzone for a bare metal server with the requested profile.","more_info":"https://console.bluemix.net/docs/iaas/bare_metal_server.html"}],"trusted_platform_module":{"enabled":true,"mode":"disabled","supported_modes":["disabled"]},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"bare_metal_servers":[{"bandwidth":20000,"boot_target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk"},"cpu":{"architecture":"amd64","core_count":80,"socket_count":4,"threads_per_core":2},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::bare-metal-server:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"fcp","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk","size":100}],"enable_secure_boot":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","memory":1536,"name":"my-bare-metal-server","network_attachments":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/2302-f7a2bf57-af7c-49d9-b599-b2c91293d30c/network_attachments/2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","id":"2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","name":"my-bare-metal-server-network-attachment","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"bare_metal_server_network_attachment","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"primary_network_attachment":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/2302-f7a2bf57-af7c-49d9-b599-b2c91293d30c/network_attachments/2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","id":"2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","name":"my-bare-metal-server-network-attachment","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"bare_metal_server_network_attachment","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","name":"bx2-metal-192x768","resource_type":"bare_metal_server_profile"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"bare_metal_server","status":"deleting","status_reasons":[{"code":"cannot_start_capacity","message":"The bare metal server cannot start as there is no more capacity in this\\nzone for a bare metal server with the requested profile.","more_info":"https://console.bluemix.net/docs/iaas/bare_metal_server.html"}],"trusted_platform_module":{"enabled":true,"mode":"disabled","supported_modes":["disabled"]},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"bare_metal_servers":[{"bandwidth":20000,"boot_target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk"},"cpu":{"architecture":"amd64","core_count":80,"socket_count":4,"threads_per_core":2},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::bare-metal-server:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"fcp","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk","size":100}],"enable_secure_boot":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","memory":1536,"name":"my-bare-metal-server","network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","name":"bx2-metal-192x768","resource_type":"bare_metal_server_profile"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"bare_metal_server","status":"deleting","status_reasons":[{"code":"cannot_start_capacity","message":"The bare metal server cannot start as there is no more capacity in this\\nzone for a bare metal server with the requested profile.","more_info":"https://console.bluemix.net/docs/iaas/bare_metal_server.html"}],"trusted_platform_module":{"enabled":true,"mode":"disabled","supported_modes":["disabled"]},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
+        '{"total_count":2,"limit":1,"bare_metal_servers":[{"bandwidth":20000,"boot_target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk"},"cpu":{"architecture":"amd64","core_count":80,"socket_count":4,"threads_per_core":2},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::bare-metal-server:1e09281b-f177-46fb-baf1-bc152b2e391a","disks":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/disks/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","interface_type":"fcp","name":"my-bare-metal-server-disk","resource_type":"bare_metal_server_disk","size":100}],"enable_secure_boot":false,"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a","id":"1e09281b-f177-46fb-baf1-bc152b2e391a","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","memory":1536,"name":"my-bare-metal-server","network_attachments":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/2302-f7a2bf57-af7c-49d9-b599-b2c91293d30c/network_attachments/2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","id":"2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","name":"my-bare-metal-server-network-attachment","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"bare_metal_server_network_attachment","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"network_interfaces":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}}],"primary_network_attachment":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/2302-f7a2bf57-af7c-49d9-b599-b2c91293d30c/network_attachments/2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","id":"2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","name":"my-bare-metal-server-network-attachment","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"bare_metal_server_network_attachment","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"primary_network_interface":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/1e09281b-f177-46fb-baf1-bc152b2e391a/network_interfaces/10c02d81-0ecb-4dc5-897d-28392913b81e","id":"10c02d81-0ecb-4dc5-897d-28392913b81e","name":"my-bare-metal-server-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"network_interface","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}},"profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/profiles/bx2-metal-192x768","name":"bx2-metal-192x768","resource_type":"bare_metal_server_profile"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"bare_metal_server","status":"deleting","status_reasons":[{"code":"cannot_start_capacity","message":"The bare metal server cannot start as there is no more capacity in this\\nzone for a bare metal server with the requested profile.","more_info":"https://console.bluemix.net/docs/iaas/bare_metal_server.html"}],"trusted_platform_module":{"enabled":true,"mode":"disabled","supported_modes":["disabled"]},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -17848,54 +19232,9 @@ describe('VpcV1', () => {
         user_data: 'testString',
       };
 
-      // NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext
-      const networkInterfaceIpPrototypeModel = {
-        address: '10.0.0.5',
-        auto_delete: false,
-        name: 'my-reserved-ip',
-      };
-
-      // SecurityGroupIdentityById
-      const securityGroupIdentityModel = {
-        id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
-      };
-
-      // SubnetIdentityById
-      const subnetIdentityModel = {
-        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
-      };
-
-      // BareMetalServerPrimaryNetworkInterfacePrototype
-      const bareMetalServerPrimaryNetworkInterfacePrototypeModel = {
-        allow_ip_spoofing: true,
-        allowed_vlans: [4],
-        enable_infrastructure_nat: true,
-        interface_type: 'pci',
-        name: 'my-bare-metal-server-network-interface',
-        primary_ip: networkInterfaceIpPrototypeModel,
-        security_groups: [securityGroupIdentityModel],
-        subnet: subnetIdentityModel,
-      };
-
       // BareMetalServerProfileIdentityByName
       const bareMetalServerProfileIdentityModel = {
         name: 'bx2-metal-192x768',
-      };
-
-      // ZoneIdentityByName
-      const zoneIdentityModel = {
-        name: 'us-south-1',
-      };
-
-      // BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByHiperSocketPrototype
-      const bareMetalServerNetworkInterfacePrototypeModel = {
-        allow_ip_spoofing: true,
-        enable_infrastructure_nat: true,
-        name: 'my-bare-metal-server-network-interface',
-        primary_ip: networkInterfaceIpPrototypeModel,
-        security_groups: [securityGroupIdentityModel],
-        subnet: subnetIdentityModel,
-        interface_type: 'hipersocket',
       };
 
       // ResourceGroupIdentityById
@@ -17913,29 +19252,85 @@ describe('VpcV1', () => {
         id: '4727d842-f94f-4a2d-824a-9bc9b02c523b',
       };
 
+      // ZoneIdentityByName
+      const zoneIdentityModel = {
+        name: 'us-south-1',
+      };
+
+      // VirtualNetworkInterfaceIPPrototypeReservedIPPrototypeVirtualNetworkInterfaceIPsContext
+      const virtualNetworkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
+      // VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext
+      const virtualNetworkInterfacePrimaryIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
+      // SecurityGroupIdentityById
+      const securityGroupIdentityModel = {
+        id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
+      };
+
+      // SubnetIdentityById
+      const subnetIdentityModel = {
+        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+      };
+
+      // BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeBareMetalServerNetworkAttachmentContext
+      const bareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceModel = {
+        allow_ip_spoofing: true,
+        auto_delete: false,
+        enable_infrastructure_nat: true,
+        ips: [virtualNetworkInterfaceIpPrototypeModel],
+        name: 'my-virtual-network-interface',
+        primary_ip: virtualNetworkInterfacePrimaryIpPrototypeModel,
+        resource_group: resourceGroupIdentityModel,
+        security_groups: [securityGroupIdentityModel],
+        subnet: subnetIdentityModel,
+      };
+
+      // BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByPCIPrototype
+      const bareMetalServerNetworkAttachmentPrototypeModel = {
+        name: 'my-bare-metal-server-network-attachment',
+        virtual_network_interface:
+          bareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceModel,
+        allowed_vlans: [],
+        interface_type: 'pci',
+      };
+
+      // BareMetalServerPrimaryNetworkAttachmentPrototypeBareMetalServerPrimaryNetworkAttachmentByPCIPrototype
+      const bareMetalServerPrimaryNetworkAttachmentPrototypeModel = {
+        name: 'my-bare-metal-server-network-attachment',
+        virtual_network_interface:
+          bareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceModel,
+        allowed_vlans: [],
+        interface_type: 'pci',
+      };
+
+      // BareMetalServerPrototypeBareMetalServerByNetworkAttachment
+      const bareMetalServerPrototypeModel = {
+        enable_secure_boot: false,
+        initialization: bareMetalServerInitializationPrototypeModel,
+        name: 'my-bare-metal-server',
+        profile: bareMetalServerProfileIdentityModel,
+        resource_group: resourceGroupIdentityModel,
+        trusted_platform_module: bareMetalServerTrustedPlatformModulePrototypeModel,
+        vpc: vpcIdentityModel,
+        zone: zoneIdentityModel,
+        network_attachments: [bareMetalServerNetworkAttachmentPrototypeModel],
+        primary_network_attachment: bareMetalServerPrimaryNetworkAttachmentPrototypeModel,
+      };
+
       function __createBareMetalServerTest() {
         // Construct the params object for operation createBareMetalServer
-        const initialization = bareMetalServerInitializationPrototypeModel;
-        const primaryNetworkInterface = bareMetalServerPrimaryNetworkInterfacePrototypeModel;
-        const profile = bareMetalServerProfileIdentityModel;
-        const zone = zoneIdentityModel;
-        const enableSecureBoot = false;
-        const name = 'my-bare-metal-server';
-        const networkInterfaces = [bareMetalServerNetworkInterfacePrototypeModel];
-        const resourceGroup = resourceGroupIdentityModel;
-        const trustedPlatformModule = bareMetalServerTrustedPlatformModulePrototypeModel;
-        const vpc = vpcIdentityModel;
+        const bareMetalServerPrototype = bareMetalServerPrototypeModel;
         const createBareMetalServerParams = {
-          initialization,
-          primaryNetworkInterface,
-          profile,
-          zone,
-          enableSecureBoot,
-          name,
-          networkInterfaces,
-          resourceGroup,
-          trustedPlatformModule,
-          vpc,
+          bareMetalServerPrototype,
         };
 
         const createBareMetalServerResult = vpcService.createBareMetalServer(
@@ -17954,16 +19349,7 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body.initialization).toEqual(initialization);
-        expect(mockRequestOptions.body.primary_network_interface).toEqual(primaryNetworkInterface);
-        expect(mockRequestOptions.body.profile).toEqual(profile);
-        expect(mockRequestOptions.body.zone).toEqual(zone);
-        expect(mockRequestOptions.body.enable_secure_boot).toEqual(enableSecureBoot);
-        expect(mockRequestOptions.body.name).toEqual(name);
-        expect(mockRequestOptions.body.network_interfaces).toEqual(networkInterfaces);
-        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
-        expect(mockRequestOptions.body.trusted_platform_module).toEqual(trustedPlatformModule);
-        expect(mockRequestOptions.body.vpc).toEqual(vpc);
+        expect(mockRequestOptions.body).toEqual(bareMetalServerPrototype);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
       }
@@ -17985,17 +19371,11 @@ describe('VpcV1', () => {
 
       test('should prioritize user-given headers', () => {
         // parameters
-        const initialization = bareMetalServerInitializationPrototypeModel;
-        const primaryNetworkInterface = bareMetalServerPrimaryNetworkInterfacePrototypeModel;
-        const profile = bareMetalServerProfileIdentityModel;
-        const zone = zoneIdentityModel;
+        const bareMetalServerPrototype = bareMetalServerPrototypeModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const createBareMetalServerParams = {
-          initialization,
-          primaryNetworkInterface,
-          profile,
-          zone,
+          bareMetalServerPrototype,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -18415,6 +19795,614 @@ describe('VpcV1', () => {
         let err;
         try {
           await vpcService.updateBareMetalServerDisk();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listBareMetalServerNetworkAttachments', () => {
+    describe('positive tests', () => {
+      function __listBareMetalServerNetworkAttachmentsTest() {
+        // Construct the params object for operation listBareMetalServerNetworkAttachments
+        const bareMetalServerId = 'testString';
+        const start = 'testString';
+        const limit = 50;
+        const listBareMetalServerNetworkAttachmentsParams = {
+          bareMetalServerId,
+          start,
+          limit,
+        };
+
+        const listBareMetalServerNetworkAttachmentsResult =
+          vpcService.listBareMetalServerNetworkAttachments(
+            listBareMetalServerNetworkAttachmentsParams
+          );
+
+        // all methods should return a Promise
+        expectToBePromise(listBareMetalServerNetworkAttachmentsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_attachments',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listBareMetalServerNetworkAttachmentsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listBareMetalServerNetworkAttachmentsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listBareMetalServerNetworkAttachmentsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listBareMetalServerNetworkAttachmentsParams = {
+          bareMetalServerId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listBareMetalServerNetworkAttachments(
+          listBareMetalServerNetworkAttachmentsParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listBareMetalServerNetworkAttachments({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listBareMetalServerNetworkAttachments();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('BareMetalServerNetworkAttachmentsPager tests', () => {
+      const serviceUrl = vpcServiceOptions.url;
+      const path = '/bare_metal_servers/testString/network_attachments';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"network_attachments":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/2302-f7a2bf57-af7c-49d9-b599-b2c91293d30c/network_attachments/2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","id":"2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","lifecycle_state":"stable","name":"my-bare-metal-server-network-attachment","port_speed":1000,"primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"bare_metal_server_network_attachment","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"},"type":"primary","virtual_network_interface":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::virtual-network-interface:0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","href":"https://us-south.iaas.cloud.ibm.com/v1/virtual_network_interfaces/0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","id":"0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","name":"my-virtual-network-interface","resource_type":"virtual_network_interface"},"allowed_vlans":[4],"interface_type":"pci"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"network_attachments":[{"created_at":"2019-01-01T12:00:00.000Z","href":"https://us-south.iaas.cloud.ibm.com/v1/bare_metal_servers/2302-f7a2bf57-af7c-49d9-b599-b2c91293d30c/network_attachments/2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","id":"2302-da8c43ec-b6ca-4bd2-871e-72e288c66ee6","lifecycle_state":"stable","name":"my-bare-metal-server-network-attachment","port_speed":1000,"primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_type":"bare_metal_server_network_attachment","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"},"type":"primary","virtual_network_interface":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::virtual-network-interface:0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","href":"https://us-south.iaas.cloud.ibm.com/v1/virtual_network_interfaces/0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","id":"0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","name":"my-virtual-network-interface","resource_type":"virtual_network_interface"},"allowed_vlans":[4],"interface_type":"pci"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          bareMetalServerId: 'testString',
+          limit: 10,
+        };
+        const allResults = [];
+        const pager = new VpcV1.BareMetalServerNetworkAttachmentsPager(vpcService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          bareMetalServerId: 'testString',
+          limit: 10,
+        };
+        const pager = new VpcV1.BareMetalServerNetworkAttachmentsPager(vpcService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('createBareMetalServerNetworkAttachment', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // VirtualNetworkInterfaceIPPrototypeReservedIPPrototypeVirtualNetworkInterfaceIPsContext
+      const virtualNetworkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
+      // VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext
+      const virtualNetworkInterfacePrimaryIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      // SecurityGroupIdentityById
+      const securityGroupIdentityModel = {
+        id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
+      };
+
+      // SubnetIdentityById
+      const subnetIdentityModel = {
+        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+      };
+
+      // BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeBareMetalServerNetworkAttachmentContext
+      const bareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceModel = {
+        allow_ip_spoofing: true,
+        auto_delete: false,
+        enable_infrastructure_nat: true,
+        ips: [virtualNetworkInterfaceIpPrototypeModel],
+        name: 'my-virtual-network-interface',
+        primary_ip: virtualNetworkInterfacePrimaryIpPrototypeModel,
+        resource_group: resourceGroupIdentityModel,
+        security_groups: [securityGroupIdentityModel],
+        subnet: subnetIdentityModel,
+      };
+
+      // BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByPCIPrototype
+      const bareMetalServerNetworkAttachmentPrototypeModel = {
+        name: 'my-bare-metal-server-network-attachment',
+        virtual_network_interface:
+          bareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceModel,
+        allowed_vlans: [],
+        interface_type: 'pci',
+      };
+
+      function __createBareMetalServerNetworkAttachmentTest() {
+        // Construct the params object for operation createBareMetalServerNetworkAttachment
+        const bareMetalServerId = 'testString';
+        const bareMetalServerNetworkAttachmentPrototype =
+          bareMetalServerNetworkAttachmentPrototypeModel;
+        const createBareMetalServerNetworkAttachmentParams = {
+          bareMetalServerId,
+          bareMetalServerNetworkAttachmentPrototype,
+        };
+
+        const createBareMetalServerNetworkAttachmentResult =
+          vpcService.createBareMetalServerNetworkAttachment(
+            createBareMetalServerNetworkAttachmentParams
+          );
+
+        // all methods should return a Promise
+        expectToBePromise(createBareMetalServerNetworkAttachmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_attachments',
+          'POST'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body).toEqual(bareMetalServerNetworkAttachmentPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createBareMetalServerNetworkAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createBareMetalServerNetworkAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createBareMetalServerNetworkAttachmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const bareMetalServerNetworkAttachmentPrototype =
+          bareMetalServerNetworkAttachmentPrototypeModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createBareMetalServerNetworkAttachmentParams = {
+          bareMetalServerId,
+          bareMetalServerNetworkAttachmentPrototype,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createBareMetalServerNetworkAttachment(
+          createBareMetalServerNetworkAttachmentParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.createBareMetalServerNetworkAttachment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createBareMetalServerNetworkAttachment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteBareMetalServerNetworkAttachment', () => {
+    describe('positive tests', () => {
+      function __deleteBareMetalServerNetworkAttachmentTest() {
+        // Construct the params object for operation deleteBareMetalServerNetworkAttachment
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const deleteBareMetalServerNetworkAttachmentParams = {
+          bareMetalServerId,
+          id,
+        };
+
+        const deleteBareMetalServerNetworkAttachmentResult =
+          vpcService.deleteBareMetalServerNetworkAttachment(
+            deleteBareMetalServerNetworkAttachmentParams
+          );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteBareMetalServerNetworkAttachmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_attachments/{id}',
+          'DELETE'
+        );
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteBareMetalServerNetworkAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteBareMetalServerNetworkAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteBareMetalServerNetworkAttachmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteBareMetalServerNetworkAttachmentParams = {
+          bareMetalServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteBareMetalServerNetworkAttachment(
+          deleteBareMetalServerNetworkAttachmentParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteBareMetalServerNetworkAttachment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteBareMetalServerNetworkAttachment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getBareMetalServerNetworkAttachment', () => {
+    describe('positive tests', () => {
+      function __getBareMetalServerNetworkAttachmentTest() {
+        // Construct the params object for operation getBareMetalServerNetworkAttachment
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const getBareMetalServerNetworkAttachmentParams = {
+          bareMetalServerId,
+          id,
+        };
+
+        const getBareMetalServerNetworkAttachmentResult =
+          vpcService.getBareMetalServerNetworkAttachment(getBareMetalServerNetworkAttachmentParams);
+
+        // all methods should return a Promise
+        expectToBePromise(getBareMetalServerNetworkAttachmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_attachments/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getBareMetalServerNetworkAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getBareMetalServerNetworkAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getBareMetalServerNetworkAttachmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getBareMetalServerNetworkAttachmentParams = {
+          bareMetalServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getBareMetalServerNetworkAttachment(getBareMetalServerNetworkAttachmentParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerNetworkAttachment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getBareMetalServerNetworkAttachment();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('updateBareMetalServerNetworkAttachment', () => {
+    describe('positive tests', () => {
+      function __updateBareMetalServerNetworkAttachmentTest() {
+        // Construct the params object for operation updateBareMetalServerNetworkAttachment
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const allowedVlans = [4];
+        const name = 'my-bare-metal-server-network-attachment-updated';
+        const updateBareMetalServerNetworkAttachmentParams = {
+          bareMetalServerId,
+          id,
+          allowedVlans,
+          name,
+        };
+
+        const updateBareMetalServerNetworkAttachmentResult =
+          vpcService.updateBareMetalServerNetworkAttachment(
+            updateBareMetalServerNetworkAttachmentParams
+          );
+
+        // all methods should return a Promise
+        expectToBePromise(updateBareMetalServerNetworkAttachmentResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/bare_metal_servers/{bare_metal_server_id}/network_attachments/{id}',
+          'PATCH'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.allowed_vlans).toEqual(allowedVlans);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.bare_metal_server_id).toEqual(bareMetalServerId);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateBareMetalServerNetworkAttachmentTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateBareMetalServerNetworkAttachmentTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateBareMetalServerNetworkAttachmentTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const bareMetalServerId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateBareMetalServerNetworkAttachmentParams = {
+          bareMetalServerId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateBareMetalServerNetworkAttachment(
+          updateBareMetalServerNetworkAttachmentParams
+        );
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateBareMetalServerNetworkAttachment({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateBareMetalServerNetworkAttachment();
         } catch (e) {
           err = e;
         }
@@ -21022,6 +23010,533 @@ describe('VpcV1', () => {
     });
   });
 
+  describe('listSnapshotConsistencyGroups', () => {
+    describe('positive tests', () => {
+      function __listSnapshotConsistencyGroupsTest() {
+        // Construct the params object for operation listSnapshotConsistencyGroups
+        const start = 'testString';
+        const limit = 50;
+        const resourceGroupId = 'testString';
+        const name = 'testString';
+        const sort = 'name';
+        const backupPolicyPlanId = 'testString';
+        const listSnapshotConsistencyGroupsParams = {
+          start,
+          limit,
+          resourceGroupId,
+          name,
+          sort,
+          backupPolicyPlanId,
+        };
+
+        const listSnapshotConsistencyGroupsResult = vpcService.listSnapshotConsistencyGroups(
+          listSnapshotConsistencyGroupsParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listSnapshotConsistencyGroupsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/snapshot_consistency_groups', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
+        expect(mockRequestOptions.qs.name).toEqual(name);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs['backup_policy_plan.id']).toEqual(backupPolicyPlanId);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listSnapshotConsistencyGroupsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listSnapshotConsistencyGroupsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listSnapshotConsistencyGroupsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listSnapshotConsistencyGroupsParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listSnapshotConsistencyGroups(listSnapshotConsistencyGroupsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.listSnapshotConsistencyGroups({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+
+    describe('SnapshotConsistencyGroupsPager tests', () => {
+      const serviceUrl = vpcServiceOptions.url;
+      const path = '/snapshot_consistency_groups';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"snapshot_consistency_groups":[{"backup_policy_plan":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"backup_policy_plan"},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot-consistency-group:r134-fa329f6b-0e36-433f-a3bb-0df632e79263","delete_snapshots_on_delete":true,"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshot_consistency_groups/r134-fa329f6b-0e36-433f-a3bb-0df632e79263","id":"r134-fa329f6b-0e36-433f-a3bb-0df632e79263","lifecycle_state":"stable","name":"my-snapshot-consistency-group","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"snapshot_consistency_group","service_tags":["service_tags"],"snapshots":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"snapshot"}]}],"total_count":2,"limit":1}';
+      const mockPagerResponse2 =
+        '{"snapshot_consistency_groups":[{"backup_policy_plan":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"backup_policy_plan"},"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot-consistency-group:r134-fa329f6b-0e36-433f-a3bb-0df632e79263","delete_snapshots_on_delete":true,"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshot_consistency_groups/r134-fa329f6b-0e36-433f-a3bb-0df632e79263","id":"r134-fa329f6b-0e36-433f-a3bb-0df632e79263","lifecycle_state":"stable","name":"my-snapshot-consistency-group","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"snapshot_consistency_group","service_tags":["service_tags"],"snapshots":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"snapshot"}]}],"total_count":2,"limit":1}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          limit: 10,
+          resourceGroupId: 'testString',
+          name: 'testString',
+          sort: 'name',
+          backupPolicyPlanId: 'testString',
+        };
+        const allResults = [];
+        const pager = new VpcV1.SnapshotConsistencyGroupsPager(vpcService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          limit: 10,
+          resourceGroupId: 'testString',
+          name: 'testString',
+          sort: 'name',
+          backupPolicyPlanId: 'testString',
+        };
+        const pager = new VpcV1.SnapshotConsistencyGroupsPager(vpcService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('createSnapshotConsistencyGroup', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      // VolumeIdentityById
+      const volumeIdentityModel = {
+        id: '1a6b7274-678d-4dfb-8981-c71dd9d4daa5',
+      };
+
+      // SnapshotPrototypeSnapshotConsistencyGroupContext
+      const snapshotPrototypeSnapshotConsistencyGroupContextModel = {
+        name: 'my-snapshot',
+        source_volume: volumeIdentityModel,
+        user_tags: ['testString'],
+      };
+
+      // SnapshotConsistencyGroupPrototypeSnapshotConsistencyGroupBySnapshots
+      const snapshotConsistencyGroupPrototypeModel = {
+        delete_snapshots_on_delete: true,
+        name: 'my-snapshot-consistency-group',
+        resource_group: resourceGroupIdentityModel,
+        snapshots: [snapshotPrototypeSnapshotConsistencyGroupContextModel],
+      };
+
+      function __createSnapshotConsistencyGroupTest() {
+        // Construct the params object for operation createSnapshotConsistencyGroup
+        const snapshotConsistencyGroupPrototype = snapshotConsistencyGroupPrototypeModel;
+        const createSnapshotConsistencyGroupParams = {
+          snapshotConsistencyGroupPrototype,
+        };
+
+        const createSnapshotConsistencyGroupResult = vpcService.createSnapshotConsistencyGroup(
+          createSnapshotConsistencyGroupParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createSnapshotConsistencyGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/snapshot_consistency_groups', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body).toEqual(snapshotConsistencyGroupPrototype);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createSnapshotConsistencyGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createSnapshotConsistencyGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createSnapshotConsistencyGroupTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const snapshotConsistencyGroupPrototype = snapshotConsistencyGroupPrototypeModel;
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createSnapshotConsistencyGroupParams = {
+          snapshotConsistencyGroupPrototype,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createSnapshotConsistencyGroup(createSnapshotConsistencyGroupParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.createSnapshotConsistencyGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.createSnapshotConsistencyGroup();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('deleteSnapshotConsistencyGroup', () => {
+    describe('positive tests', () => {
+      function __deleteSnapshotConsistencyGroupTest() {
+        // Construct the params object for operation deleteSnapshotConsistencyGroup
+        const id = 'testString';
+        const deleteSnapshotConsistencyGroupParams = {
+          id,
+        };
+
+        const deleteSnapshotConsistencyGroupResult = vpcService.deleteSnapshotConsistencyGroup(
+          deleteSnapshotConsistencyGroupParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteSnapshotConsistencyGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/snapshot_consistency_groups/{id}', 'DELETE');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteSnapshotConsistencyGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteSnapshotConsistencyGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteSnapshotConsistencyGroupTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteSnapshotConsistencyGroupParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteSnapshotConsistencyGroup(deleteSnapshotConsistencyGroupParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteSnapshotConsistencyGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteSnapshotConsistencyGroup();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getSnapshotConsistencyGroup', () => {
+    describe('positive tests', () => {
+      function __getSnapshotConsistencyGroupTest() {
+        // Construct the params object for operation getSnapshotConsistencyGroup
+        const id = 'testString';
+        const getSnapshotConsistencyGroupParams = {
+          id,
+        };
+
+        const getSnapshotConsistencyGroupResult = vpcService.getSnapshotConsistencyGroup(
+          getSnapshotConsistencyGroupParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getSnapshotConsistencyGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/snapshot_consistency_groups/{id}', 'GET');
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getSnapshotConsistencyGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getSnapshotConsistencyGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getSnapshotConsistencyGroupTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getSnapshotConsistencyGroupParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getSnapshotConsistencyGroup(getSnapshotConsistencyGroupParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getSnapshotConsistencyGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getSnapshotConsistencyGroup();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('updateSnapshotConsistencyGroup', () => {
+    describe('positive tests', () => {
+      function __updateSnapshotConsistencyGroupTest() {
+        // Construct the params object for operation updateSnapshotConsistencyGroup
+        const id = 'testString';
+        const deleteSnapshotsOnDelete = true;
+        const name = 'my-snapshot-consistency-group';
+        const ifMatch = 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"';
+        const updateSnapshotConsistencyGroupParams = {
+          id,
+          deleteSnapshotsOnDelete,
+          name,
+          ifMatch,
+        };
+
+        const updateSnapshotConsistencyGroupResult = vpcService.updateSnapshotConsistencyGroup(
+          updateSnapshotConsistencyGroupParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(updateSnapshotConsistencyGroupResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/snapshot_consistency_groups/{id}', 'PATCH');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/merge-patch+json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        checkUserHeader(createRequestMock, 'If-Match', ifMatch);
+        expect(mockRequestOptions.body.delete_snapshots_on_delete).toEqual(deleteSnapshotsOnDelete);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __updateSnapshotConsistencyGroupTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __updateSnapshotConsistencyGroupTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __updateSnapshotConsistencyGroupTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const updateSnapshotConsistencyGroupParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.updateSnapshotConsistencyGroup(updateSnapshotConsistencyGroupParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.updateSnapshotConsistencyGroup({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.updateSnapshotConsistencyGroup();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
   describe('deleteSnapshots', () => {
     describe('positive tests', () => {
       function __deleteSnapshotsTest() {
@@ -21134,6 +23649,9 @@ describe('VpcV1', () => {
         const sourceVolumeRemoteRegionName = 'us-south';
         const sourceImageRemoteRegionName = 'us-south';
         const clonesZoneName = 'us-south-1';
+        const snapshotConsistencyGroupId = 'testString';
+        const snapshotConsistencyGroupCrn =
+          'crn:v1:bluemix:public:is:us-south:a/123456::snapshot-consistency-group:r134-fa329f6b-0e36-433f-a3bb-0df632e79263';
         const listSnapshotsParams = {
           start,
           limit,
@@ -21155,6 +23673,8 @@ describe('VpcV1', () => {
           sourceVolumeRemoteRegionName,
           sourceImageRemoteRegionName,
           clonesZoneName,
+          snapshotConsistencyGroupId,
+          snapshotConsistencyGroupCrn,
         };
 
         const listSnapshotsResult = vpcService.listSnapshots(listSnapshotsParams);
@@ -21201,6 +23721,12 @@ describe('VpcV1', () => {
           sourceImageRemoteRegionName
         );
         expect(mockRequestOptions.qs['clones[].zone.name']).toEqual(clonesZoneName);
+        expect(mockRequestOptions.qs['snapshot_consistency_group.id']).toEqual(
+          snapshotConsistencyGroupId
+        );
+        expect(mockRequestOptions.qs['snapshot_consistency_group.crn']).toEqual(
+          snapshotConsistencyGroupCrn
+        );
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -21244,9 +23770,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/snapshots';
       const mockPagerResponse1 =
-        '{"snapshots":[{"backup_policy_plan":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"backup_policy_plan"},"bootable":true,"captured_at":"2019-01-01T12:00:00.000Z","clones":[{"available":false,"created_at":"2019-01-01T12:00:00.000Z","zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"copies":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"snapshot"}],"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deletable":false,"encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/123456:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","lifecycle_state":"stable","minimum_capacity":1,"name":"my-snapshot","operating_system":{"architecture":"amd64","dedicated_host_only":false,"display_name":"Ubuntu Server 16.04 LTS amd64","family":"Ubuntu Server","href":"https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-16-amd64","name":"ubuntu-16-amd64","vendor":"Canonical","version":"16.04 LTS"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"snapshot","service_tags":["service_tags"],"size":1,"source_image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"image"},"source_snapshot":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"snapshot"},"source_volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"volume"},"user_tags":["user_tags"]}],"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1}';
+        '{"snapshots":[{"backup_policy_plan":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"backup_policy_plan"},"bootable":true,"captured_at":"2019-01-01T12:00:00.000Z","clones":[{"available":false,"created_at":"2019-01-01T12:00:00.000Z","zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"copies":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"snapshot"}],"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deletable":false,"encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/123456:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","lifecycle_state":"stable","minimum_capacity":1,"name":"my-snapshot","operating_system":{"architecture":"amd64","dedicated_host_only":false,"display_name":"Ubuntu Server 16.04 LTS amd64","family":"Ubuntu Server","href":"https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-16-amd64","name":"ubuntu-16-amd64","vendor":"Canonical","version":"16.04 LTS"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"snapshot","service_tags":["service_tags"],"size":1,"snapshot_consistency_group":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot-consistency-group:r134-fa329f6b-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshot_consistency_groups/r134-fa329f6b-0e36-433f-a3bb-0df632e79263","id":"r134-fa329f6b-0e36-433f-a3bb-0df632e79263","name":"my-snapshot-consistency-group","resource_type":"snapshot_consistency_group"},"source_image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"image"},"source_snapshot":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"snapshot"},"source_volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"volume"},"user_tags":["user_tags"]}],"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"snapshots":[{"backup_policy_plan":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"backup_policy_plan"},"bootable":true,"captured_at":"2019-01-01T12:00:00.000Z","clones":[{"available":false,"created_at":"2019-01-01T12:00:00.000Z","zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"copies":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"snapshot"}],"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deletable":false,"encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/123456:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","lifecycle_state":"stable","minimum_capacity":1,"name":"my-snapshot","operating_system":{"architecture":"amd64","dedicated_host_only":false,"display_name":"Ubuntu Server 16.04 LTS amd64","family":"Ubuntu Server","href":"https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-16-amd64","name":"ubuntu-16-amd64","vendor":"Canonical","version":"16.04 LTS"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"snapshot","service_tags":["service_tags"],"size":1,"source_image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"image"},"source_snapshot":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"snapshot"},"source_volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"volume"},"user_tags":["user_tags"]}],"total_count":2,"limit":1}';
+        '{"snapshots":[{"backup_policy_plan":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/backup_policies/r134-076191ba-49c2-4763-94fd-c70de73ee2e6/plans/r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","id":"r134-6da51cfe-6f7b-4638-a6ba-00e9c327b178","name":"my-policy-plan","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"backup_policy_plan"},"bootable":true,"captured_at":"2019-01-01T12:00:00.000Z","clones":[{"available":false,"created_at":"2019-01-01T12:00:00.000Z","zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"copies":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"snapshot"}],"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deletable":false,"encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/123456:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","lifecycle_state":"stable","minimum_capacity":1,"name":"my-snapshot","operating_system":{"architecture":"amd64","dedicated_host_only":false,"display_name":"Ubuntu Server 16.04 LTS amd64","family":"Ubuntu Server","href":"https://us-south.iaas.cloud.ibm.com/v1/operating_systems/ubuntu-16-amd64","name":"ubuntu-16-amd64","vendor":"Canonical","version":"16.04 LTS"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"snapshot","service_tags":["service_tags"],"size":1,"snapshot_consistency_group":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot-consistency-group:r134-fa329f6b-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshot_consistency_groups/r134-fa329f6b-0e36-433f-a3bb-0df632e79263","id":"r134-fa329f6b-0e36-433f-a3bb-0df632e79263","name":"my-snapshot-consistency-group","resource_type":"snapshot_consistency_group"},"source_image":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::image:72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/images/72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","id":"72b27b5c-f4b0-48bb-b954-5becc7c1dcb8","name":"my-image","remote":{"account":{"id":"aa2432b1fa4d4ace891e9b80fc104e34","resource_type":"account"},"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"image"},"source_snapshot":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::snapshot:r134-f6bfa329-0e36-433f-a3bb-0df632e79263","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/snapshots/r134-f6bfa329-0e36-433f-a3bb-0df632e79263","id":"r134-f6bfa329-0e36-433f-a3bb-0df632e79263","name":"my-snapshot","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"snapshot"},"source_volume":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::volume:1a6b7274-678d-4dfb-8981-c71dd9d4daa5","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/volumes/1a6b7274-678d-4dfb-8981-c71dd9d4daa5","id":"1a6b7274-678d-4dfb-8981-c71dd9d4daa5","name":"my-volume","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"volume"},"user_tags":["user_tags"]}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -21285,6 +23811,9 @@ describe('VpcV1', () => {
           sourceVolumeRemoteRegionName: 'us-south',
           sourceImageRemoteRegionName: 'us-south',
           clonesZoneName: 'us-south-1',
+          snapshotConsistencyGroupId: 'testString',
+          snapshotConsistencyGroupCrn:
+            'crn:v1:bluemix:public:is:us-south:a/123456::snapshot-consistency-group:r134-fa329f6b-0e36-433f-a3bb-0df632e79263',
         };
         const allResults = [];
         const pager = new VpcV1.SnapshotsPager(vpcService, params);
@@ -21320,6 +23849,9 @@ describe('VpcV1', () => {
           sourceVolumeRemoteRegionName: 'us-south',
           sourceImageRemoteRegionName: 'us-south',
           clonesZoneName: 'us-south-1',
+          snapshotConsistencyGroupId: 'testString',
+          snapshotConsistencyGroupCrn:
+            'crn:v1:bluemix:public:is:us-south:a/123456::snapshot-consistency-group:r134-fa329f6b-0e36-433f-a3bb-0df632e79263',
         };
         const pager = new VpcV1.SnapshotsPager(vpcService, params);
         const allResults = await pager.getAll();
@@ -22367,9 +24899,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/shares';
       const mockPagerResponse1 =
-        '{"shares":[{"access_control_mode":"security_group","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/123456:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","iops":100,"latest_job":{"status":"cancelled","status_reasons":[{"code":"cannot_reach_source_share","message":"The replication failover failed because the source share cannot be reached.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-planning"}],"type":"replication_failover"},"lifecycle_state":"stable","mount_targets":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58/mount_targets/4cf9171a-0043-4434-8727-15b53dbc374c","id":"4cf9171a-0043-4434-8727-15b53dbc374c","name":"my-share-mount-target","resource_type":"share_mount_target"}],"name":"my-share","profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/share/profiles/tier-3iops","name":"tier-3iops","resource_type":"share_profile"},"replica_share":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","name":"my-share","resource_type":"share"},"replication_cron_spec":"0 */5 * * *","replication_role":"none","replication_status":"active","replication_status_reasons":[{"code":"cannot_reach_source_share","message":"The replication failover failed because the source share cannot be reached.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-planning"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"share","size":200,"source_share":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","name":"my-share","resource_type":"share"},"user_tags":["user_tags"],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1}';
+        '{"shares":[{"access_control_mode":"security_group","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/123456:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","iops":100,"latest_job":{"status":"cancelled","status_reasons":[{"code":"cannot_reach_source_share","message":"The replication failover failed because the source share cannot be reached.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-planning"}],"type":"replication_failover"},"latest_sync":{"completed_at":"2019-01-01T12:00:00.000Z","data_transferred":0,"started_at":"2019-01-01T12:00:00.000Z"},"lifecycle_state":"stable","mount_targets":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58/mount_targets/4cf9171a-0043-4434-8727-15b53dbc374c","id":"4cf9171a-0043-4434-8727-15b53dbc374c","name":"my-share-mount-target","resource_type":"share_mount_target"}],"name":"my-share","profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/share/profiles/tier-3iops","name":"tier-3iops","resource_type":"share_profile"},"replica_share":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","name":"my-share","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"share"},"replication_cron_spec":"0 */5 * * *","replication_role":"none","replication_status":"active","replication_status_reasons":[{"code":"cannot_reach_source_share","message":"The replication failover failed because the source share cannot be reached.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-planning"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"share","size":200,"source_share":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","name":"my-share","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"share"},"user_tags":["user_tags"],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"shares":[{"access_control_mode":"security_group","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/123456:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","iops":100,"latest_job":{"status":"cancelled","status_reasons":[{"code":"cannot_reach_source_share","message":"The replication failover failed because the source share cannot be reached.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-planning"}],"type":"replication_failover"},"lifecycle_state":"stable","mount_targets":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58/mount_targets/4cf9171a-0043-4434-8727-15b53dbc374c","id":"4cf9171a-0043-4434-8727-15b53dbc374c","name":"my-share-mount-target","resource_type":"share_mount_target"}],"name":"my-share","profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/share/profiles/tier-3iops","name":"tier-3iops","resource_type":"share_profile"},"replica_share":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","name":"my-share","resource_type":"share"},"replication_cron_spec":"0 */5 * * *","replication_role":"none","replication_status":"active","replication_status_reasons":[{"code":"cannot_reach_source_share","message":"The replication failover failed because the source share cannot be reached.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-planning"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"share","size":200,"source_share":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","name":"my-share","resource_type":"share"},"user_tags":["user_tags"],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"shares":[{"access_control_mode":"security_group","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","encryption":"provider_managed","encryption_key":{"crn":"crn:v1:bluemix:public:kms:us-south:a/123456:e4a29d1a-2ef0-42a6-8fd2-350deb1c647e:key:5437653b-c4b1-447f-9646-b2a2a4cd6179"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","iops":100,"latest_job":{"status":"cancelled","status_reasons":[{"code":"cannot_reach_source_share","message":"The replication failover failed because the source share cannot be reached.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-planning"}],"type":"replication_failover"},"latest_sync":{"completed_at":"2019-01-01T12:00:00.000Z","data_transferred":0,"started_at":"2019-01-01T12:00:00.000Z"},"lifecycle_state":"stable","mount_targets":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58/mount_targets/4cf9171a-0043-4434-8727-15b53dbc374c","id":"4cf9171a-0043-4434-8727-15b53dbc374c","name":"my-share-mount-target","resource_type":"share_mount_target"}],"name":"my-share","profile":{"href":"https://us-south.iaas.cloud.ibm.com/v1/share/profiles/tier-3iops","name":"tier-3iops","resource_type":"share_profile"},"replica_share":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","name":"my-share","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"share"},"replication_cron_spec":"0 */5 * * *","replication_role":"none","replication_status":"active","replication_status_reasons":[{"code":"cannot_reach_source_share","message":"The replication failover failed because the source share cannot be reached.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-planning"}],"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"share","size":200,"source_share":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::share:0fe9e5d8-0a4d-4818-96ec-e99708644a58","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58","id":"0fe9e5d8-0a4d-4818-96ec-e99708644a58","name":"my-share","remote":{"region":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south","name":"us-south"}},"resource_type":"share"},"user_tags":["user_tags"],"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -22424,6 +24956,13 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
+      // VirtualNetworkInterfaceIPPrototypeReservedIPPrototypeVirtualNetworkInterfaceIPsContext
+      const virtualNetworkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
       // VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext
       const virtualNetworkInterfacePrimaryIpPrototypeModel = {
         address: '10.0.0.5',
@@ -22448,6 +24987,10 @@ describe('VpcV1', () => {
 
       // ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfacePrototypeShareMountTargetContext
       const shareMountTargetVirtualNetworkInterfacePrototypeModel = {
+        allow_ip_spoofing: true,
+        auto_delete: false,
+        enable_infrastructure_nat: true,
+        ips: [virtualNetworkInterfaceIpPrototypeModel],
         name: 'my-virtual-network-interface',
         primary_ip: virtualNetworkInterfacePrimaryIpPrototypeModel,
         resource_group: resourceGroupIdentityModel,
@@ -23132,6 +25675,13 @@ describe('VpcV1', () => {
     describe('positive tests', () => {
       // Request models needed by this operation.
 
+      // VirtualNetworkInterfaceIPPrototypeReservedIPPrototypeVirtualNetworkInterfaceIPsContext
+      const virtualNetworkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
       // VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext
       const virtualNetworkInterfacePrimaryIpPrototypeModel = {
         address: '10.0.0.5',
@@ -23156,6 +25706,10 @@ describe('VpcV1', () => {
 
       // ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfacePrototypeShareMountTargetContext
       const shareMountTargetVirtualNetworkInterfacePrototypeModel = {
+        allow_ip_spoofing: true,
+        auto_delete: false,
+        enable_infrastructure_nat: true,
+        ips: [virtualNetworkInterfaceIpPrototypeModel],
         name: 'my-virtual-network-interface',
         primary_ip: virtualNetworkInterfacePrimaryIpPrototypeModel,
         resource_group: resourceGroupIdentityModel,
@@ -24115,9 +26669,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/virtual_network_interfaces';
       const mockPagerResponse1 =
-        '{"virtual_network_interfaces":[{"auto_delete":false,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::virtual-network-interface:0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","href":"https://us-south.iaas.cloud.ibm.com/v1/virtual_network_interfaces/0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","id":"0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","lifecycle_state":"stable","name":"my-virtual-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"virtual_network_interface","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"},"target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58/mount_targets/4cf9171a-0043-4434-8727-15b53dbc374c","id":"4cf9171a-0043-4434-8727-15b53dbc374c","name":"my-share-mount-target","resource_type":"share_mount_target"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1}';
+        '{"virtual_network_interfaces":[{"allow_ip_spoofing":true,"auto_delete":false,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::virtual-network-interface:0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","enable_infrastructure_nat":true,"href":"https://us-south.iaas.cloud.ibm.com/v1/virtual_network_interfaces/0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","id":"0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"lifecycle_state":"stable","mac_address":"02:00:4D:45:45:4D","name":"my-virtual-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"virtual_network_interface","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"},"target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58/mount_targets/4cf9171a-0043-4434-8727-15b53dbc374c","id":"4cf9171a-0043-4434-8727-15b53dbc374c","name":"my-share-mount-target","resource_type":"share_mount_target"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"virtual_network_interfaces":[{"auto_delete":false,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::virtual-network-interface:0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","href":"https://us-south.iaas.cloud.ibm.com/v1/virtual_network_interfaces/0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","id":"0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","lifecycle_state":"stable","name":"my-virtual-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"virtual_network_interface","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"},"target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58/mount_targets/4cf9171a-0043-4434-8727-15b53dbc374c","id":"4cf9171a-0043-4434-8727-15b53dbc374c","name":"my-share-mount-target","resource_type":"share_mount_target"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
+        '{"virtual_network_interfaces":[{"allow_ip_spoofing":true,"auto_delete":false,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::virtual-network-interface:0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","enable_infrastructure_nat":true,"href":"https://us-south.iaas.cloud.ibm.com/v1/virtual_network_interfaces/0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","id":"0767-fa41aecb-4f21-423d-8082-630bfba1e1d9","ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"lifecycle_state":"stable","mac_address":"02:00:4D:45:45:4D","name":"my-virtual-network-interface","primary_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"virtual_network_interface","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"},"target":{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/shares/0fe9e5d8-0a4d-4818-96ec-e99708644a58/mount_targets/4cf9171a-0043-4434-8727-15b53dbc374c","id":"4cf9171a-0043-4434-8727-15b53dbc374c","name":"my-share-mount-target","resource_type":"share_mount_target"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"zone":{"href":"https://us-south.iaas.cloud.ibm.com/v1/regions/us-south/zones/us-south-1","name":"us-south-1"}}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -24158,6 +26712,217 @@ describe('VpcV1', () => {
         const allResults = await pager.getAll();
         expect(allResults).not.toBeNull();
         expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('createVirtualNetworkInterface', () => {
+    describe('positive tests', () => {
+      // Request models needed by this operation.
+
+      // VirtualNetworkInterfaceIPPrototypeReservedIPPrototypeVirtualNetworkInterfaceIPsContext
+      const virtualNetworkInterfaceIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
+      // VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext
+      const virtualNetworkInterfacePrimaryIpPrototypeModel = {
+        address: '10.0.0.5',
+        auto_delete: false,
+        name: 'my-reserved-ip',
+      };
+
+      // ResourceGroupIdentityById
+      const resourceGroupIdentityModel = {
+        id: 'fee82deba12e4c0fb69c3b09d1f12345',
+      };
+
+      // SecurityGroupIdentityById
+      const securityGroupIdentityModel = {
+        id: 'be5df5ca-12a0-494b-907e-aa6ec2bfa271',
+      };
+
+      // SubnetIdentityById
+      const subnetIdentityModel = {
+        id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+      };
+
+      function __createVirtualNetworkInterfaceTest() {
+        // Construct the params object for operation createVirtualNetworkInterface
+        const allowIpSpoofing = true;
+        const autoDelete = false;
+        const enableInfrastructureNat = true;
+        const ips = [virtualNetworkInterfaceIpPrototypeModel];
+        const name = 'my-virtual-network-interface';
+        const primaryIp = virtualNetworkInterfacePrimaryIpPrototypeModel;
+        const resourceGroup = resourceGroupIdentityModel;
+        const securityGroups = [securityGroupIdentityModel];
+        const subnet = subnetIdentityModel;
+        const createVirtualNetworkInterfaceParams = {
+          allowIpSpoofing,
+          autoDelete,
+          enableInfrastructureNat,
+          ips,
+          name,
+          primaryIp,
+          resourceGroup,
+          securityGroups,
+          subnet,
+        };
+
+        const createVirtualNetworkInterfaceResult = vpcService.createVirtualNetworkInterface(
+          createVirtualNetworkInterfaceParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(createVirtualNetworkInterfaceResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/virtual_network_interfaces', 'POST');
+        const expectedAccept = 'application/json';
+        const expectedContentType = 'application/json';
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.allow_ip_spoofing).toEqual(allowIpSpoofing);
+        expect(mockRequestOptions.body.auto_delete).toEqual(autoDelete);
+        expect(mockRequestOptions.body.enable_infrastructure_nat).toEqual(enableInfrastructureNat);
+        expect(mockRequestOptions.body.ips).toEqual(ips);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.primary_ip).toEqual(primaryIp);
+        expect(mockRequestOptions.body.resource_group).toEqual(resourceGroup);
+        expect(mockRequestOptions.body.security_groups).toEqual(securityGroups);
+        expect(mockRequestOptions.body.subnet).toEqual(subnet);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __createVirtualNetworkInterfaceTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __createVirtualNetworkInterfaceTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __createVirtualNetworkInterfaceTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const createVirtualNetworkInterfaceParams = {
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.createVirtualNetworkInterface(createVirtualNetworkInterfaceParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+
+      test('should not have any problems when no parameters are passed in', () => {
+        // invoke the method with no parameters
+        vpcService.createVirtualNetworkInterface({});
+        checkForSuccessfulExecution(createRequestMock);
+      });
+    });
+  });
+
+  describe('deleteVirtualNetworkInterfaces', () => {
+    describe('positive tests', () => {
+      function __deleteVirtualNetworkInterfacesTest() {
+        // Construct the params object for operation deleteVirtualNetworkInterfaces
+        const id = 'testString';
+        const deleteVirtualNetworkInterfacesParams = {
+          id,
+        };
+
+        const deleteVirtualNetworkInterfacesResult = vpcService.deleteVirtualNetworkInterfaces(
+          deleteVirtualNetworkInterfacesParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(deleteVirtualNetworkInterfacesResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(mockRequestOptions, '/virtual_network_interfaces/{id}', 'DELETE');
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __deleteVirtualNetworkInterfacesTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __deleteVirtualNetworkInterfacesTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __deleteVirtualNetworkInterfacesTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const deleteVirtualNetworkInterfacesParams = {
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.deleteVirtualNetworkInterfaces(deleteVirtualNetworkInterfacesParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.deleteVirtualNetworkInterfaces({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.deleteVirtualNetworkInterfaces();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
       });
     });
   });
@@ -24255,9 +27020,15 @@ describe('VpcV1', () => {
       function __updateVirtualNetworkInterfaceTest() {
         // Construct the params object for operation updateVirtualNetworkInterface
         const id = 'testString';
+        const allowIpSpoofing = true;
+        const autoDelete = false;
+        const enableInfrastructureNat = true;
         const name = 'my-virtual-network-interface';
         const updateVirtualNetworkInterfaceParams = {
           id,
+          allowIpSpoofing,
+          autoDelete,
+          enableInfrastructureNat,
           name,
         };
 
@@ -24277,6 +27048,9 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.body.allow_ip_spoofing).toEqual(allowIpSpoofing);
+        expect(mockRequestOptions.body.auto_delete).toEqual(autoDelete);
+        expect(mockRequestOptions.body.enable_infrastructure_nat).toEqual(enableInfrastructureNat);
         expect(mockRequestOptions.body.name).toEqual(name);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
@@ -24332,6 +27106,910 @@ describe('VpcV1', () => {
         let err;
         try {
           await vpcService.updateVirtualNetworkInterface();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listNetworkInterfaceFloatingIps', () => {
+    describe('positive tests', () => {
+      function __listNetworkInterfaceFloatingIpsTest() {
+        // Construct the params object for operation listNetworkInterfaceFloatingIps
+        const virtualNetworkInterfaceId = 'testString';
+        const start = 'testString';
+        const limit = 50;
+        const sort = 'name';
+        const listNetworkInterfaceFloatingIpsParams = {
+          virtualNetworkInterfaceId,
+          start,
+          limit,
+          sort,
+        };
+
+        const listNetworkInterfaceFloatingIpsResult = vpcService.listNetworkInterfaceFloatingIps(
+          listNetworkInterfaceFloatingIpsParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listNetworkInterfaceFloatingIpsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/virtual_network_interfaces/{virtual_network_interface_id}/floating_ips',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.path.virtual_network_interface_id).toEqual(
+          virtualNetworkInterfaceId
+        );
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listNetworkInterfaceFloatingIpsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listNetworkInterfaceFloatingIpsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listNetworkInterfaceFloatingIpsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const virtualNetworkInterfaceId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listNetworkInterfaceFloatingIpsParams = {
+          virtualNetworkInterfaceId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listNetworkInterfaceFloatingIps(listNetworkInterfaceFloatingIpsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listNetworkInterfaceFloatingIps({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listNetworkInterfaceFloatingIps();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('NetworkInterfaceFloatingIpsPager tests', () => {
+      const serviceUrl = vpcServiceOptions.url;
+      const path = '/virtual_network_interfaces/testString/floating_ips';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"floating_ips":[{"address":"203.0.113.1","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::floating-ip:39300233-9995-4806-89a5-3c1b6eb88689","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/floating_ips/39300233-9995-4806-89a5-3c1b6eb88689","id":"39300233-9995-4806-89a5-3c1b6eb88689","name":"my-floating-ip"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"floating_ips":[{"address":"203.0.113.1","crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::floating-ip:39300233-9995-4806-89a5-3c1b6eb88689","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/floating_ips/39300233-9995-4806-89a5-3c1b6eb88689","id":"39300233-9995-4806-89a5-3c1b6eb88689","name":"my-floating-ip"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          virtualNetworkInterfaceId: 'testString',
+          limit: 10,
+          sort: 'name',
+        };
+        const allResults = [];
+        const pager = new VpcV1.NetworkInterfaceFloatingIpsPager(vpcService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          virtualNetworkInterfaceId: 'testString',
+          limit: 10,
+          sort: 'name',
+        };
+        const pager = new VpcV1.NetworkInterfaceFloatingIpsPager(vpcService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('removeNetworkInterfaceFloatingIp', () => {
+    describe('positive tests', () => {
+      function __removeNetworkInterfaceFloatingIpTest() {
+        // Construct the params object for operation removeNetworkInterfaceFloatingIp
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const removeNetworkInterfaceFloatingIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+        };
+
+        const removeNetworkInterfaceFloatingIpResult = vpcService.removeNetworkInterfaceFloatingIp(
+          removeNetworkInterfaceFloatingIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(removeNetworkInterfaceFloatingIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/virtual_network_interfaces/{virtual_network_interface_id}/floating_ips/{id}',
+          'DELETE'
+        );
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.virtual_network_interface_id).toEqual(
+          virtualNetworkInterfaceId
+        );
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeNetworkInterfaceFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __removeNetworkInterfaceFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __removeNetworkInterfaceFloatingIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const removeNetworkInterfaceFloatingIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.removeNetworkInterfaceFloatingIp(removeNetworkInterfaceFloatingIpParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.removeNetworkInterfaceFloatingIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.removeNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getNetworkInterfaceFloatingIp', () => {
+    describe('positive tests', () => {
+      function __getNetworkInterfaceFloatingIpTest() {
+        // Construct the params object for operation getNetworkInterfaceFloatingIp
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const getNetworkInterfaceFloatingIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+        };
+
+        const getNetworkInterfaceFloatingIpResult = vpcService.getNetworkInterfaceFloatingIp(
+          getNetworkInterfaceFloatingIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getNetworkInterfaceFloatingIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/virtual_network_interfaces/{virtual_network_interface_id}/floating_ips/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.virtual_network_interface_id).toEqual(
+          virtualNetworkInterfaceId
+        );
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getNetworkInterfaceFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getNetworkInterfaceFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getNetworkInterfaceFloatingIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getNetworkInterfaceFloatingIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getNetworkInterfaceFloatingIp(getNetworkInterfaceFloatingIpParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getNetworkInterfaceFloatingIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('addNetworkInterfaceFloatingIp', () => {
+    describe('positive tests', () => {
+      function __addNetworkInterfaceFloatingIpTest() {
+        // Construct the params object for operation addNetworkInterfaceFloatingIp
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const addNetworkInterfaceFloatingIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+        };
+
+        const addNetworkInterfaceFloatingIpResult = vpcService.addNetworkInterfaceFloatingIp(
+          addNetworkInterfaceFloatingIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(addNetworkInterfaceFloatingIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/virtual_network_interfaces/{virtual_network_interface_id}/floating_ips/{id}',
+          'PUT'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.virtual_network_interface_id).toEqual(
+          virtualNetworkInterfaceId
+        );
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addNetworkInterfaceFloatingIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __addNetworkInterfaceFloatingIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __addNetworkInterfaceFloatingIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const addNetworkInterfaceFloatingIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.addNetworkInterfaceFloatingIp(addNetworkInterfaceFloatingIpParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.addNetworkInterfaceFloatingIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.addNetworkInterfaceFloatingIp();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('listVirtualNetworkInterfaceIps', () => {
+    describe('positive tests', () => {
+      function __listVirtualNetworkInterfaceIpsTest() {
+        // Construct the params object for operation listVirtualNetworkInterfaceIps
+        const virtualNetworkInterfaceId = 'testString';
+        const start = 'testString';
+        const limit = 50;
+        const sort = 'name';
+        const listVirtualNetworkInterfaceIpsParams = {
+          virtualNetworkInterfaceId,
+          start,
+          limit,
+          sort,
+        };
+
+        const listVirtualNetworkInterfaceIpsResult = vpcService.listVirtualNetworkInterfaceIps(
+          listVirtualNetworkInterfaceIpsParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(listVirtualNetworkInterfaceIpsResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/virtual_network_interfaces/{virtual_network_interface_id}/ips',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.qs.start).toEqual(start);
+        expect(mockRequestOptions.qs.limit).toEqual(limit);
+        expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.path.virtual_network_interface_id).toEqual(
+          virtualNetworkInterfaceId
+        );
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __listVirtualNetworkInterfaceIpsTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __listVirtualNetworkInterfaceIpsTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __listVirtualNetworkInterfaceIpsTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const virtualNetworkInterfaceId = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const listVirtualNetworkInterfaceIpsParams = {
+          virtualNetworkInterfaceId,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.listVirtualNetworkInterfaceIps(listVirtualNetworkInterfaceIpsParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.listVirtualNetworkInterfaceIps({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.listVirtualNetworkInterfaceIps();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+
+    describe('VirtualNetworkInterfaceIpsPager tests', () => {
+      const serviceUrl = vpcServiceOptions.url;
+      const path = '/virtual_network_interfaces/testString/ips';
+      const mockPagerResponse1 =
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}]}';
+      const mockPagerResponse2 =
+        '{"total_count":2,"limit":1,"ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}]}';
+
+      beforeEach(() => {
+        unmock_createRequest();
+        const scope = nock(serviceUrl)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse1)
+          .get((uri) => uri.includes(path))
+          .reply(200, mockPagerResponse2);
+      });
+
+      afterEach(() => {
+        nock.cleanAll();
+        mock_createRequest();
+      });
+
+      test('getNext()', async () => {
+        const params = {
+          virtualNetworkInterfaceId: 'testString',
+          limit: 10,
+          sort: 'name',
+        };
+        const allResults = [];
+        const pager = new VpcV1.VirtualNetworkInterfaceIpsPager(vpcService, params);
+        while (pager.hasNext()) {
+          const nextPage = await pager.getNext();
+          expect(nextPage).not.toBeNull();
+          allResults.push(...nextPage);
+        }
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+
+      test('getAll()', async () => {
+        const params = {
+          virtualNetworkInterfaceId: 'testString',
+          limit: 10,
+          sort: 'name',
+        };
+        const pager = new VpcV1.VirtualNetworkInterfaceIpsPager(vpcService, params);
+        const allResults = await pager.getAll();
+        expect(allResults).not.toBeNull();
+        expect(allResults).toHaveLength(2);
+      });
+    });
+  });
+
+  describe('removeVirtualNetworkInterfaceIp', () => {
+    describe('positive tests', () => {
+      function __removeVirtualNetworkInterfaceIpTest() {
+        // Construct the params object for operation removeVirtualNetworkInterfaceIp
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const removeVirtualNetworkInterfaceIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+        };
+
+        const removeVirtualNetworkInterfaceIpResult = vpcService.removeVirtualNetworkInterfaceIp(
+          removeVirtualNetworkInterfaceIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(removeVirtualNetworkInterfaceIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/virtual_network_interfaces/{virtual_network_interface_id}/ips/{id}',
+          'DELETE'
+        );
+        const expectedAccept = undefined;
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.virtual_network_interface_id).toEqual(
+          virtualNetworkInterfaceId
+        );
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __removeVirtualNetworkInterfaceIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __removeVirtualNetworkInterfaceIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __removeVirtualNetworkInterfaceIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const removeVirtualNetworkInterfaceIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.removeVirtualNetworkInterfaceIp(removeVirtualNetworkInterfaceIpParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.removeVirtualNetworkInterfaceIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.removeVirtualNetworkInterfaceIp();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('getVirtualNetworkInterfaceIp', () => {
+    describe('positive tests', () => {
+      function __getVirtualNetworkInterfaceIpTest() {
+        // Construct the params object for operation getVirtualNetworkInterfaceIp
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const getVirtualNetworkInterfaceIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+        };
+
+        const getVirtualNetworkInterfaceIpResult = vpcService.getVirtualNetworkInterfaceIp(
+          getVirtualNetworkInterfaceIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(getVirtualNetworkInterfaceIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/virtual_network_interfaces/{virtual_network_interface_id}/ips/{id}',
+          'GET'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.virtual_network_interface_id).toEqual(
+          virtualNetworkInterfaceId
+        );
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __getVirtualNetworkInterfaceIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __getVirtualNetworkInterfaceIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __getVirtualNetworkInterfaceIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const getVirtualNetworkInterfaceIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.getVirtualNetworkInterfaceIp(getVirtualNetworkInterfaceIpParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.getVirtualNetworkInterfaceIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.getVirtualNetworkInterfaceIp();
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+    });
+  });
+
+  describe('addVirtualNetworkInterfaceIp', () => {
+    describe('positive tests', () => {
+      function __addVirtualNetworkInterfaceIpTest() {
+        // Construct the params object for operation addVirtualNetworkInterfaceIp
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const addVirtualNetworkInterfaceIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+        };
+
+        const addVirtualNetworkInterfaceIpResult = vpcService.addVirtualNetworkInterfaceIp(
+          addVirtualNetworkInterfaceIpParams
+        );
+
+        // all methods should return a Promise
+        expectToBePromise(addVirtualNetworkInterfaceIpResult);
+
+        // assert that create request was called
+        expect(createRequestMock).toHaveBeenCalledTimes(1);
+
+        const mockRequestOptions = getOptions(createRequestMock);
+
+        checkUrlAndMethod(
+          mockRequestOptions,
+          '/virtual_network_interfaces/{virtual_network_interface_id}/ips/{id}',
+          'PUT'
+        );
+        const expectedAccept = 'application/json';
+        const expectedContentType = undefined;
+        checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
+        expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
+        expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
+        expect(mockRequestOptions.path.virtual_network_interface_id).toEqual(
+          virtualNetworkInterfaceId
+        );
+        expect(mockRequestOptions.path.id).toEqual(id);
+      }
+
+      test('should pass the right params to createRequest with enable and disable retries', () => {
+        // baseline test
+        __addVirtualNetworkInterfaceIpTest();
+
+        // enable retries and test again
+        createRequestMock.mockClear();
+        vpcService.enableRetries();
+        __addVirtualNetworkInterfaceIpTest();
+
+        // disable retries and test again
+        createRequestMock.mockClear();
+        vpcService.disableRetries();
+        __addVirtualNetworkInterfaceIpTest();
+      });
+
+      test('should prioritize user-given headers', () => {
+        // parameters
+        const virtualNetworkInterfaceId = 'testString';
+        const id = 'testString';
+        const userAccept = 'fake/accept';
+        const userContentType = 'fake/contentType';
+        const addVirtualNetworkInterfaceIpParams = {
+          virtualNetworkInterfaceId,
+          id,
+          headers: {
+            Accept: userAccept,
+            'Content-Type': userContentType,
+          },
+        };
+
+        vpcService.addVirtualNetworkInterfaceIp(addVirtualNetworkInterfaceIpParams);
+        checkMediaHeaders(createRequestMock, userAccept, userContentType);
+      });
+    });
+
+    describe('negative tests', () => {
+      test('should enforce required parameters', async () => {
+        let err;
+        try {
+          await vpcService.addVirtualNetworkInterfaceIp({});
+        } catch (e) {
+          err = e;
+        }
+
+        expect(err.message).toMatch(/Missing required parameters/);
+      });
+
+      test('should reject promise when required params are not given', async () => {
+        let err;
+        try {
+          await vpcService.addVirtualNetworkInterfaceIp();
         } catch (e) {
           err = e;
         }
@@ -24854,11 +28532,20 @@ describe('VpcV1', () => {
         const limit = 50;
         const resourceGroupId = 'testString';
         const sort = 'name';
+        const targetId = 'testString';
+        const targetCrn =
+          'crn:v1:bluemix:public:is:us-south:a/123456::load-balancer:dd754295-e9e0-4c9d-bf6c-58fbc59e5727';
+        const targetName = 'my-resource';
+        const targetResourceType = 'testString';
         const listFloatingIpsParams = {
           start,
           limit,
           resourceGroupId,
           sort,
+          targetId,
+          targetCrn,
+          targetName,
+          targetResourceType,
         };
 
         const listFloatingIpsResult = vpcService.listFloatingIps(listFloatingIpsParams);
@@ -24881,6 +28568,10 @@ describe('VpcV1', () => {
         expect(mockRequestOptions.qs.limit).toEqual(limit);
         expect(mockRequestOptions.qs['resource_group.id']).toEqual(resourceGroupId);
         expect(mockRequestOptions.qs.sort).toEqual(sort);
+        expect(mockRequestOptions.qs['target.id']).toEqual(targetId);
+        expect(mockRequestOptions.qs['target.crn']).toEqual(targetCrn);
+        expect(mockRequestOptions.qs['target.name']).toEqual(targetName);
+        expect(mockRequestOptions.qs['target.resource_type']).toEqual(targetResourceType);
       }
 
       test('should pass the right params to createRequest with enable and disable retries', () => {
@@ -24947,6 +28638,11 @@ describe('VpcV1', () => {
           limit: 10,
           resourceGroupId: 'testString',
           sort: 'name',
+          targetId: 'testString',
+          targetCrn:
+            'crn:v1:bluemix:public:is:us-south:a/123456::load-balancer:dd754295-e9e0-4c9d-bf6c-58fbc59e5727',
+          targetName: 'my-resource',
+          targetResourceType: 'testString',
         };
         const allResults = [];
         const pager = new VpcV1.FloatingIpsPager(vpcService, params);
@@ -24964,6 +28660,11 @@ describe('VpcV1', () => {
           limit: 10,
           resourceGroupId: 'testString',
           sort: 'name',
+          targetId: 'testString',
+          targetCrn:
+            'crn:v1:bluemix:public:is:us-south:a/123456::load-balancer:dd754295-e9e0-4c9d-bf6c-58fbc59e5727',
+          targetName: 'my-resource',
+          targetResourceType: 'testString',
         };
         const pager = new VpcV1.FloatingIpsPager(vpcService, params);
         const allResults = await pager.getAll();
@@ -29187,9 +32888,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/vpn_gateways';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"vpn_gateways":[{"connections":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b/connections/93487806-7743-4c46-81d6-72869883ea0b","id":"a10a5771-dc23-442c-8460-c3601d8542f7","name":"my-vpn-connection","resource_type":"vpn_gateway_connection"}],"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","health_reasons":[{"code":"cannot_reserve_ip_address","message":"IP address exhaustion (release addresses on the VPNs subnet).","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-health"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","members":[{"health_reasons":[{"code":"cannot_reserve_ip_address","message":"IP address exhaustion (release addresses on the VPNs subnet).","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-health"}],"health_state":"ok","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","private_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"public_ip":{"address":"192.168.3.4"},"role":"active"}],"name":"my-vpn-gateway","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpn_gateway","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"mode":"route"}]}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"total_count":2,"limit":1,"vpn_gateways":[{"connections":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b/connections/93487806-7743-4c46-81d6-72869883ea0b","id":"a10a5771-dc23-442c-8460-c3601d8542f7","name":"my-vpn-connection","resource_type":"vpn_gateway_connection"}],"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","health_reasons":[{"code":"cannot_reserve_ip_address","message":"IP address exhaustion (release addresses on the VPN\'s subnet).","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-health"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","members":[{"health_reasons":[{"code":"cannot_reserve_ip_address","message":"IP address exhaustion (release addresses on the VPN\'s subnet).","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-health"}],"health_state":"ok","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","private_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"public_ip":{"address":"192.168.3.4"},"role":"active"}],"name":"my-vpn-gateway","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpn_gateway","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"mode":"route"}]}';
       const mockPagerResponse2 =
-        '{"total_count":2,"limit":1,"vpn_gateways":[{"connections":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b/connections/93487806-7743-4c46-81d6-72869883ea0b","id":"a10a5771-dc23-442c-8460-c3601d8542f7","name":"my-vpn-connection","resource_type":"vpn_gateway_connection"}],"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","health_reasons":[{"code":"cannot_reserve_ip_address","message":"IP address exhaustion (release addresses on the VPNs subnet).","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-health"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","members":[{"health_reasons":[{"code":"cannot_reserve_ip_address","message":"IP address exhaustion (release addresses on the VPNs subnet).","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-health"}],"health_state":"ok","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","private_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"public_ip":{"address":"192.168.3.4"},"role":"active"}],"name":"my-vpn-gateway","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpn_gateway","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"mode":"route"}]}';
+        '{"total_count":2,"limit":1,"vpn_gateways":[{"connections":[{"deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b/connections/93487806-7743-4c46-81d6-72869883ea0b","id":"a10a5771-dc23-442c-8460-c3601d8542f7","name":"my-vpn-connection","resource_type":"vpn_gateway_connection"}],"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn:ddf51bec-3424-11e8-b467-0ed5f89f718b","health_reasons":[{"code":"cannot_reserve_ip_address","message":"IP address exhaustion (release addresses on the VPN\'s subnet).","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-health"}],"health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_gateways/ddf51bec-3424-11e8-b467-0ed5f89f718b","id":"ddf51bec-3424-11e8-b467-0ed5f89f718b","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","members":[{"health_reasons":[{"code":"cannot_reserve_ip_address","message":"IP address exhaustion (release addresses on the VPN\'s subnet).","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-health"}],"health_state":"ok","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","private_ip":{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"},"public_ip":{"address":"192.168.3.4"},"role":"active"}],"name":"my-vpn-gateway","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpn_gateway","subnet":{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"},"mode":"route"}]}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -30035,27 +33736,29 @@ describe('VpcV1', () => {
         id: 'ddf51bec-3424-11e8-b467-0ed5f89f718b',
       };
 
-      // VPNGatewayConnectionPatchVPNGatewayConnectionStaticRouteModePatch
-      const vpnGatewayConnectionPatchModel = {
-        admin_state_up: true,
-        dead_peer_detection: vpnGatewayConnectionDpdPatchModel,
-        ike_policy: vpnGatewayConnectionIkePolicyPatchModel,
-        ipsec_policy: vpnGatewayConnectionIPsecPolicyPatchModel,
-        name: 'my-vpn-connection',
-        peer_address: '169.21.50.5',
-        psk: 'lkj14b1oi0alcniejkso',
-        routing_protocol: 'none',
-      };
-
       function __updateVpnGatewayConnectionTest() {
         // Construct the params object for operation updateVpnGatewayConnection
         const vpnGatewayId = 'testString';
         const id = 'testString';
-        const vpnGatewayConnectionPatch = vpnGatewayConnectionPatchModel;
+        const adminStateUp = true;
+        const deadPeerDetection = vpnGatewayConnectionDpdPatchModel;
+        const ikePolicy = vpnGatewayConnectionIkePolicyPatchModel;
+        const ipsecPolicy = vpnGatewayConnectionIPsecPolicyPatchModel;
+        const name = 'my-vpn-connection';
+        const peerAddress = '169.21.50.5';
+        const psk = 'lkj14b1oi0alcniejkso';
+        const routingProtocol = 'none';
         const updateVpnGatewayConnectionParams = {
           vpnGatewayId,
           id,
-          vpnGatewayConnectionPatch,
+          adminStateUp,
+          deadPeerDetection,
+          ikePolicy,
+          ipsecPolicy,
+          name,
+          peerAddress,
+          psk,
+          routingProtocol,
         };
 
         const updateVpnGatewayConnectionResult = vpcService.updateVpnGatewayConnection(
@@ -30078,7 +33781,14 @@ describe('VpcV1', () => {
         const expectedAccept = 'application/json';
         const expectedContentType = 'application/merge-patch+json';
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
-        expect(mockRequestOptions.body).toEqual(vpnGatewayConnectionPatch);
+        expect(mockRequestOptions.body.admin_state_up).toEqual(adminStateUp);
+        expect(mockRequestOptions.body.dead_peer_detection).toEqual(deadPeerDetection);
+        expect(mockRequestOptions.body.ike_policy).toEqual(ikePolicy);
+        expect(mockRequestOptions.body.ipsec_policy).toEqual(ipsecPolicy);
+        expect(mockRequestOptions.body.name).toEqual(name);
+        expect(mockRequestOptions.body.peer_address).toEqual(peerAddress);
+        expect(mockRequestOptions.body.psk).toEqual(psk);
+        expect(mockRequestOptions.body.routing_protocol).toEqual(routingProtocol);
         expect(mockRequestOptions.qs.version).toEqual(vpcServiceOptions.version);
         expect(mockRequestOptions.qs.generation).toEqual(vpcServiceOptions.generation);
         expect(mockRequestOptions.path.vpn_gateway_id).toEqual(vpnGatewayId);
@@ -30104,13 +33814,11 @@ describe('VpcV1', () => {
         // parameters
         const vpnGatewayId = 'testString';
         const id = 'testString';
-        const vpnGatewayConnectionPatch = vpnGatewayConnectionPatchModel;
         const userAccept = 'fake/accept';
         const userContentType = 'fake/contentType';
         const updateVpnGatewayConnectionParams = {
           vpnGatewayId,
           id,
-          vpnGatewayConnectionPatch,
           headers: {
             Accept: userAccept,
             'Content-Type': userContentType,
@@ -31058,9 +34766,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/vpn_servers';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"vpn_servers":[{"certificate":{"crn":"crn:v1:bluemix:public:secrets-manager:us-south:a/123456:36fa422d-080d-4d83-8d2d-86851b4001df:secret:2e786aab-42fa-63ed-14f8-d66d552f4dd5"},"client_authentication":[{"method":"certificate","identity_provider":{"provider_type":"iam"}}],"client_auto_delete":true,"client_auto_delete_timeout":1,"client_dns_server_ips":[{"address":"192.168.3.4"}],"client_idle_timeout":600,"client_ip_pool":"172.16.0.0/16","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn-server:r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","enable_split_tunneling":true,"health_reasons":[{"code":"cannot_access_server_certificate","message":"Failed to get VPN servers server certificate from Secrets Manager.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-server-health"}],"health_state":"ok","hostname":"a8506291.us-south.vpn-server.appdomain.cloud","href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_servers/r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","id":"r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","name":"my-vpn-server","port":443,"private_ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"protocol":"udp","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpn_server","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}],"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"}}],"total_count":2,"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"vpn_servers":[{"certificate":{"crn":"crn:v1:bluemix:public:secrets-manager:us-south:a/123456:36fa422d-080d-4d83-8d2d-86851b4001df:secret:2e786aab-42fa-63ed-14f8-d66d552f4dd5"},"client_authentication":[{"method":"certificate","identity_provider":{"provider_type":"iam"}}],"client_auto_delete":true,"client_auto_delete_timeout":1,"client_dns_server_ips":[{"address":"192.168.3.4"}],"client_idle_timeout":600,"client_ip_pool":"172.16.0.0/16","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn-server:r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","enable_split_tunneling":true,"health_reasons":[{"code":"cannot_access_server_certificate","message":"Failed to get VPN server\'s server certificate from Secrets Manager.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-server-health"}],"health_state":"ok","hostname":"a8506291.us-south.vpn-server.appdomain.cloud","href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_servers/r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","id":"r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","name":"my-vpn-server","port":443,"private_ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"protocol":"udp","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpn_server","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}],"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"}}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"vpn_servers":[{"certificate":{"crn":"crn:v1:bluemix:public:secrets-manager:us-south:a/123456:36fa422d-080d-4d83-8d2d-86851b4001df:secret:2e786aab-42fa-63ed-14f8-d66d552f4dd5"},"client_authentication":[{"method":"certificate","identity_provider":{"provider_type":"iam"}}],"client_auto_delete":true,"client_auto_delete_timeout":1,"client_dns_server_ips":[{"address":"192.168.3.4"}],"client_idle_timeout":600,"client_ip_pool":"172.16.0.0/16","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn-server:r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","enable_split_tunneling":true,"health_reasons":[{"code":"cannot_access_server_certificate","message":"Failed to get VPN servers server certificate from Secrets Manager.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-server-health"}],"health_state":"ok","hostname":"a8506291.us-south.vpn-server.appdomain.cloud","href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_servers/r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","id":"r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","name":"my-vpn-server","port":443,"private_ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"protocol":"udp","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpn_server","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}],"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"}}],"total_count":2,"limit":1}';
+        '{"vpn_servers":[{"certificate":{"crn":"crn:v1:bluemix:public:secrets-manager:us-south:a/123456:36fa422d-080d-4d83-8d2d-86851b4001df:secret:2e786aab-42fa-63ed-14f8-d66d552f4dd5"},"client_authentication":[{"method":"certificate","identity_provider":{"provider_type":"iam"}}],"client_auto_delete":true,"client_auto_delete_timeout":1,"client_dns_server_ips":[{"address":"192.168.3.4"}],"client_idle_timeout":600,"client_ip_pool":"172.16.0.0/16","created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpn-server:r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","enable_split_tunneling":true,"health_reasons":[{"code":"cannot_access_server_certificate","message":"Failed to get VPN server\'s server certificate from Secrets Manager.","more_info":"https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-server-health"}],"health_state":"ok","hostname":"a8506291.us-south.vpn-server.appdomain.cloud","href":"https://us-south.iaas.cloud.ibm.com/v1/vpn_servers/r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","id":"r006-d7cc5196-9864-48c4-82d8-3f30da41fcc5","lifecycle_reasons":[{"code":"resource_suspended_by_provider","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","name":"my-vpn-server","port":443,"private_ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"protocol":"udp","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"vpn_server","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"subnets":[{"crn":"crn:v1:bluemix:public:is:us-south-1:a/123456::subnet:7ec86020-1c6e-4889-b3f0-a15f2e50f87e","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e","id":"7ec86020-1c6e-4889-b3f0-a15f2e50f87e","name":"my-subnet","resource_type":"subnet"}],"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"}}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
@@ -32973,11 +36681,6 @@ describe('VpcV1', () => {
         id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
       };
 
-      // LoadBalancerLoggingDatapathPrototype
-      const loadBalancerLoggingDatapathPrototypeModel = {
-        active: true,
-      };
-
       // DNSInstanceIdentityByCRN
       const dnsInstanceIdentityModel = {
         crn: 'crn:v1:bluemix:public:dns-svcs:global:a/123456:6860c359-b2e2-46fa-a944-b38c28201c6e',
@@ -33028,6 +36731,11 @@ describe('VpcV1', () => {
         port_max: 499,
         port_min: 443,
         protocol: 'http',
+      };
+
+      // LoadBalancerLoggingDatapathPrototype
+      const loadBalancerLoggingDatapathPrototypeModel = {
+        active: true,
       };
 
       // LoadBalancerLoggingPrototype
@@ -33093,7 +36801,6 @@ describe('VpcV1', () => {
         // Construct the params object for operation createLoadBalancer
         const isPublic = true;
         const subnets = [subnetIdentityModel];
-        const datapath = loadBalancerLoggingDatapathPrototypeModel;
         const dns = loadBalancerDnsPrototypeModel;
         const listeners = [loadBalancerListenerPrototypeLoadBalancerContextModel];
         const logging = loadBalancerLoggingPrototypeModel;
@@ -33106,7 +36813,6 @@ describe('VpcV1', () => {
         const createLoadBalancerParams = {
           isPublic,
           subnets,
-          datapath,
           dns,
           listeners,
           logging,
@@ -33134,7 +36840,6 @@ describe('VpcV1', () => {
         checkMediaHeaders(createRequestMock, expectedAccept, expectedContentType);
         expect(mockRequestOptions.body.is_public).toEqual(isPublic);
         expect(mockRequestOptions.body.subnets).toEqual(subnets);
-        expect(mockRequestOptions.body.datapath).toEqual(datapath);
         expect(mockRequestOptions.body.dns).toEqual(dns);
         expect(mockRequestOptions.body.listeners).toEqual(listeners);
         expect(mockRequestOptions.body.logging).toEqual(logging);
@@ -36626,9 +40331,9 @@ describe('VpcV1', () => {
       const serviceUrl = vpcServiceOptions.url;
       const path = '/endpoint_gateways';
       const mockPagerResponse1 =
-        '{"next":{"href":"https://myhost.com/somePath?start=1"},"endpoint_gateways":[{"allow_dns_resolution_binding":true,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::endpoint-gateway:r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/endpoint_gateways/r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","id":"r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"lifecycle_state":"stable","name":"my-endpoint-gateway","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"endpoint_gateway","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"service_endpoint":"my-cloudant-instance.appdomain.cloud","service_endpoints":["my-cloudant-instance.appdomain.cloud"],"target":{"crn":"crn:v1:bluemix:public:cloudant:us-south:a/123456:3527280b-9327-4411-8020-591092e60353::","resource_type":"provider_cloud_service"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"}}],"total_count":2,"limit":1}';
+        '{"next":{"href":"https://myhost.com/somePath?start=1"},"endpoint_gateways":[{"allow_dns_resolution_binding":true,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::endpoint-gateway:r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/endpoint_gateways/r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","id":"r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"lifecycle_reasons":[{"code":"dns_resolution_binding_pending","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","name":"my-endpoint-gateway","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"endpoint_gateway","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"service_endpoint":"my-cloudant-instance.appdomain.cloud","service_endpoints":["my-cloudant-instance.appdomain.cloud"],"target":{"crn":"crn:v1:bluemix:public:cloudant:us-south:a/123456:3527280b-9327-4411-8020-591092e60353::","resource_type":"provider_cloud_service"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"}}],"total_count":2,"limit":1}';
       const mockPagerResponse2 =
-        '{"endpoint_gateways":[{"allow_dns_resolution_binding":true,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::endpoint-gateway:r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/endpoint_gateways/r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","id":"r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"lifecycle_state":"stable","name":"my-endpoint-gateway","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"endpoint_gateway","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"service_endpoint":"my-cloudant-instance.appdomain.cloud","service_endpoints":["my-cloudant-instance.appdomain.cloud"],"target":{"crn":"crn:v1:bluemix:public:cloudant:us-south:a/123456:3527280b-9327-4411-8020-591092e60353::","resource_type":"provider_cloud_service"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"}}],"total_count":2,"limit":1}';
+        '{"endpoint_gateways":[{"allow_dns_resolution_binding":true,"created_at":"2019-01-01T12:00:00.000Z","crn":"crn:v1:bluemix:public:is:us-south:a/123456::endpoint-gateway:r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","health_state":"ok","href":"https://us-south.iaas.cloud.ibm.com/v1/endpoint_gateways/r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","id":"r134-d7cc5196-9864-48c4-82d8-3f30da41fcc5","ips":[{"address":"192.168.3.4","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/subnets/7ec86020-1c6e-4889-b3f0-a15f2e50f87e/reserved_ips/6d353a0f-aeb1-4ae1-832e-1110d10981bb","id":"6d353a0f-aeb1-4ae1-832e-1110d10981bb","name":"my-reserved-ip","resource_type":"subnet_reserved_ip"}],"lifecycle_reasons":[{"code":"dns_resolution_binding_pending","message":"The resource has been suspended. Contact IBM support with the CRN for next steps.","more_info":"https://cloud.ibm.com/apidocs/vpc#resource-suspension"}],"lifecycle_state":"stable","name":"my-endpoint-gateway","resource_group":{"href":"https://resource-controller.cloud.ibm.com/v2/resource_groups/fee82deba12e4c0fb69c3b09d1f12345","id":"fee82deba12e4c0fb69c3b09d1f12345","name":"my-resource-group"},"resource_type":"endpoint_gateway","security_groups":[{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::security-group:be5df5ca-12a0-494b-907e-aa6ec2bfa271","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/security_groups/be5df5ca-12a0-494b-907e-aa6ec2bfa271","id":"be5df5ca-12a0-494b-907e-aa6ec2bfa271","name":"my-security-group"}],"service_endpoint":"my-cloudant-instance.appdomain.cloud","service_endpoints":["my-cloudant-instance.appdomain.cloud"],"target":{"crn":"crn:v1:bluemix:public:cloudant:us-south:a/123456:3527280b-9327-4411-8020-591092e60353::","resource_type":"provider_cloud_service"},"vpc":{"crn":"crn:v1:bluemix:public:is:us-south:a/123456::vpc:4727d842-f94f-4a2d-824a-9bc9b02c523b","deleted":{"more_info":"https://cloud.ibm.com/apidocs/vpc#deleted-resources"},"href":"https://us-south.iaas.cloud.ibm.com/v1/vpcs/4727d842-f94f-4a2d-824a-9bc9b02c523b","id":"4727d842-f94f-4a2d-824a-9bc9b02c523b","name":"my-vpc","resource_type":"vpc"}}],"total_count":2,"limit":1}';
 
       beforeEach(() => {
         unmock_createRequest();
