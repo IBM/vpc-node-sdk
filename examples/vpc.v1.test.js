@@ -8035,7 +8035,7 @@ describe('VpcV1', () => {
   test('deleteVpnServer request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-    });
+    }); 
     consoleWarnMock.mockImplementation((output) => {
       // if an error occurs, display the message and then fail the test
       originalWarn(output);
