@@ -3742,8 +3742,24 @@ describe('VpcV1_integration', () => {
       });
   });
   test('createVpnGatewayConnection()', (done) => {
+    const vpnGatewayConnectionIkeIdentityPrototypeModel = {
+      type: 'fqdn',
+      value: 'my-service.example.com',
+    };
+
+    const vpnGatewayConnectionPolicyModeLocalPrototypeModel = {
+      cidrs: ['192.132.0.0/28'],
+      ike_identities: [vpnGatewayConnectionIkeIdentityPrototypeModel],
+    };
+    const vpnGatewayConnectionPolicyModePeerPrototypeModel = {
+      ike_identity: vpnGatewayConnectionIkeIdentityPrototypeModel,
+      address: '169.21.50.5',
+      cidrs: ['192.132.0.0/28'],
+    };
+
     const vpnGatewayConnectionPrototypeModel = {
-      peerAddress: '169.21.50.5',
+      peer: vpnGatewayConnectionPolicyModePeerPrototypeModel,
+      local: vpnGatewayConnectionPolicyModeLocalPrototypeModel,
       psk: 'lkj14b1oi0alcniejkso',
       name: 'my-vpn-connection',
     };
@@ -3799,15 +3815,14 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('addVpnGatewayConnectionLocalCidr()', (done) => {
+  test('addVpnGatewayConnectionsLocalCidr()', (done) => {
     const params = {
       vpnGatewayId: dict.createdVpnGateway,
       id: dict.createdVpnGatewayConnection,
-      cidrPrefix: '192.129.10.0',
-      prefixLength: '28',
+      cidr: '192.129.10.0/28',
     };
     vpcService
-      .addVpnGatewayConnectionLocalCidr(params)
+      .addVpnGatewayConnectionsLocalCidr(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();
@@ -3817,14 +3832,14 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('listVpnGatewayConnectionLocalCidrs()', (done) => {
+  test('listVpnGatewayConnectionsLocalCidrs()', (done) => {
     const params = {
       vpnGatewayId: dict.createdVpnGateway,
       id: dict.createdVpnGatewayConnection,
     };
 
     vpcService
-      .listVpnGatewayConnectionLocalCidrs(params)
+      .listVpnGatewayConnectionsLocalCidrs(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();
@@ -3834,16 +3849,15 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('checkVpnGatewayConnectionLocalCidr()', (done) => {
+  test('checkVpnGatewayConnectionsLocalCidr()', (done) => {
     const params = {
       vpnGatewayId: dict.createdVpnGateway,
       id: dict.createdVpnGatewayConnection,
-      cidrPrefix: '192.129.10.0',
-      prefixLength: '28',
+      cidr: '192.129.10.0/28',
     };
 
     vpcService
-      .checkVpnGatewayConnectionLocalCidr(params)
+      .checkVpnGatewayConnectionsLocalCidr(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();
@@ -3853,16 +3867,15 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('removeVpnGatewayConnectionLocalCidr()', (done) => {
+  test('removeVpnGatewayConnectionsLocalCidr()', (done) => {
     const params = {
       vpnGatewayId: dict.createdVpnGateway,
       id: dict.createdVpnGatewayConnection,
-      cidrPrefix: '192.129.10.0',
-      prefixLength: '28',
+      cidr: '192.129.10.0/28',
     };
 
     vpcService
-      .removeVpnGatewayConnectionLocalCidr(params)
+      .removeVpnGatewayConnectionsLocalCidr(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();
@@ -3872,16 +3885,15 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('addVpnGatewayConnectionPeerCidr()', (done) => {
+  test('addVpnGatewayConnectionsPeerCidr()', (done) => {
     const params = {
       vpnGatewayId: dict.createdVpnGateway,
       id: dict.createdVpnGatewayConnection,
-      cidrPrefix: '199.129.10.0',
-      prefixLength: '28',
+      cidr: '199.129.10.0/28',
     };
 
     vpcService
-      .addVpnGatewayConnectionPeerCidr(params)
+      .addVpnGatewayConnectionsPeerCidr(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();
@@ -3891,14 +3903,14 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('listVpnGatewayConnectionPeerCidrs()', (done) => {
+  test('listVpnGatewayConnectionsPeerCidrs()', (done) => {
     const params = {
       vpnGatewayId: dict.createdVpnGateway,
       id: dict.createdVpnGatewayConnection,
     };
 
     vpcService
-      .listVpnGatewayConnectionPeerCidrs(params)
+      .listVpnGatewayConnectionsPeerCidrs(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();
@@ -3908,16 +3920,15 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('checkVpnGatewayConnectionPeerCidr()', (done) => {
+  test('checkVpnGatewayConnectionsPeerCidr()', (done) => {
     const params = {
       vpnGatewayId: dict.createdVpnGateway,
       id: dict.createdVpnGatewayConnection,
-      cidrPrefix: '199.129.10.0',
-      prefixLength: '28',
+      cidr: '199.129.10.0/28',
     };
 
     vpcService
-      .checkVpnGatewayConnectionPeerCidr(params)
+      .checkVpnGatewayConnectionsPeerCidr(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();
@@ -3927,16 +3938,15 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test('removeVpnGatewayConnectionPeerCidr()', (done) => {
+  test('removeVpnGatewayConnectionsPeerCidr()', (done) => {
     const params = {
       vpnGatewayId: dict.createdVpnGateway,
       id: dict.createdVpnGatewayConnection,
-      cidrPrefix: '199.129.10.0',
-      prefixLength: '28',
+      cidr: '199.129.10.0/28',
     };
 
     vpcService
-      .removeVpnGatewayConnectionPeerCidr(params)
+      .removeVpnGatewayConnectionsPeerCidr(params)
       .then((res) => {
         expect(res.result).not.toBeNull();
         done();
