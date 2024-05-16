@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.84.2-a032c73d-20240125-175315
+ * IBM OpenAPI SDK Code Generator Version: 3.88.0-b0b4c159-20240402-205910
  */
 
 /* eslint-disable max-classes-per-file */
@@ -84,7 +84,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2023-12-05` and `2024-02-15`.
+   *  `2024-04-30` and `2024-05-15`.
    */
   version: string;
 
@@ -93,7 +93,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} options - Options for the service.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2023-12-05` and `2024-02-15`.
+   * specify any date between `2024-04-30` and `2024-05-15`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -110,7 +110,7 @@ class VpcV1 extends BaseService {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
     this.generation = options.generation;
-    this.version = options.version || '2024-02-20';
+    this.version = options.version || '2024-04-30';
   }
 
   /*************************
@@ -1719,9 +1719,6 @@ class VpcV1 extends BaseService {
    * @param {string} params.vpcId - The VPC identifier.
    * @param {ResourceFilter[]} [params.acceptRoutesFrom] - The filters specifying the resources that may create routes
    * in this routing table.
-   *
-   * At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but filter
-   * support is expected to expand in the future.
    * @param {string[]} [params.advertiseRoutesTo] - The ingress sources to advertise routes to. Routes in the table with
    * `advertise` enabled will be advertised to these sources.
    * @param {string} [params.name] - The name for this routing table. The name must not be used by another routing table
@@ -1956,9 +1953,6 @@ class VpcV1 extends BaseService {
    * (replacing any existing filters). All routes created by resources that match a given filter will be removed when an
    * existing filter is removed. Therefore, if an empty array is specified, all filters will be removed, resulting in
    * all routes not directly created by the user being removed.
-   *
-   * At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but filter
-   * support is expected to expand in the future.
    * @param {string[]} [params.advertiseRoutesTo] - The ingress sources to advertise routes to, replacing any existing
    * sources to advertise to. Routes in the table with `advertise` enabled will be advertised to these sources.
    * @param {string} [params.name] - The name for this routing table. The name must not be used by another routing table
@@ -5065,30 +5059,30 @@ class VpcV1 extends BaseService {
    * matching the specified identifier.
    * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
    * specified name.
+   * @param {string} [params.dedicatedHostId] - Filters the collection to resources with a `dedicated_host.id` property
+   * matching the specified identifier.
+   * @param {string} [params.dedicatedHostCrn] - Filters the collection to resources with a `dedicated_host.crn`
+   * property matching the specified CRN.
+   * @param {string} [params.dedicatedHostName] - Filters the collection to resources with a `dedicated_host.name`
+   * property matching the exact specified name.
+   * @param {string} [params.placementGroupId] - Filters the collection to resources with a `placement_target.id`
+   * property matching the specified placement group identifier.
+   * @param {string} [params.placementGroupCrn] - Filters the collection to resources with a `placement_target.crn`
+   * property matching the specified placement group CRN.
+   * @param {string} [params.placementGroupName] - Filters the collection to resources with a `placement_target.name`
+   * property matching the exact specified placement group name.
+   * @param {string} [params.reservationId] - Filters the collection to resources with a `reservation.id` property
+   * matching the specified identifier.
+   * @param {string} [params.reservationCrn] - Filters the collection to resources with a `reservation.crn` property
+   * matching the specified identifier.
+   * @param {string} [params.reservationName] - Filters the collection to resources with a `reservation.name` property
+   * matching the specified identifier.
    * @param {string} [params.vpcId] - Filters the collection to resources with a `vpc.id` property matching the
    * specified identifier.
    * @param {string} [params.vpcCrn] - Filters the collection to resources with a `vpc.crn` property matching the
    * specified CRN.
    * @param {string} [params.vpcName] - Filters the collection to resources with a `vpc.name` property matching the
    * exact specified name.
-   * @param {string} [params.dedicatedHostId] - Filters the collection to instances with a `dedicated_host.id` property
-   * matching the specified identifier.
-   * @param {string} [params.dedicatedHostCrn] - Filters the collection to instances with a `dedicated_host.crn`
-   * property matching the specified CRN.
-   * @param {string} [params.dedicatedHostName] - Filters the collection to instances with a `dedicated_host.name`
-   * property matching the exact specified name.
-   * @param {string} [params.placementGroupId] - Filters the collection to instances with a `placement_target.id`
-   * property matching the specified placement group identifier.
-   * @param {string} [params.placementGroupCrn] - Filters the collection to instances with a `placement_target.crn`
-   * property matching the specified placement group CRN.
-   * @param {string} [params.placementGroupName] - Filters the collection to instances with a `placement_target.name`
-   * property matching the exact specified placement group name.
-   * @param {string} [params.reservationId] - Filters the collection to instances with a `reservation.id` property
-   * matching the specified identifier.
-   * @param {string} [params.reservationCrn] - Filters the collection to instances with a `reservation.crn` property
-   * matching the specified CRN.
-   * @param {string} [params.reservationName] - Filters the collection to resources with a `reservation.name` property
-   * matching the exact specified name.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceCollection>>}
    */
@@ -5097,7 +5091,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'vpcId', 'vpcCrn', 'vpcName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationId', 'reservationCrn', 'reservationName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5110,9 +5104,6 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
       'name': _params.name,
-      'vpc.id': _params.vpcId,
-      'vpc.crn': _params.vpcCrn,
-      'vpc.name': _params.vpcName,
       'dedicated_host.id': _params.dedicatedHostId,
       'dedicated_host.crn': _params.dedicatedHostCrn,
       'dedicated_host.name': _params.dedicatedHostName,
@@ -5122,6 +5113,9 @@ class VpcV1 extends BaseService {
       'reservation.id': _params.reservationId,
       'reservation.crn': _params.reservationCrn,
       'reservation.name': _params.reservationName,
+      'vpc.id': _params.vpcId,
+      'vpc.crn': _params.vpcCrn,
+      'vpc.name': _params.vpcName,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstances');
@@ -6688,10 +6682,12 @@ class VpcV1 extends BaseService {
    * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionInstanceNetworkInterfaceContext>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public listInstanceNetworkInterfaceIps(
     params: VpcV1.ListInstanceNetworkInterfaceIpsParams
   ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionInstanceNetworkInterfaceContext>> {
+    VpcV1._logger.warn('A deprecated operation has been invoked: listInstanceNetworkInterfaceIps');
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'networkInterfaceId'];
     const _validParams = ['instanceId', 'networkInterfaceId', 'start', 'limit', 'headers'];
@@ -6747,10 +6743,12 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The reserved IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public getInstanceNetworkInterfaceIp(
     params: VpcV1.GetInstanceNetworkInterfaceIpParams
   ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
+    VpcV1._logger.warn('A deprecated operation has been invoked: getInstanceNetworkInterfaceIp');
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
     const _validParams = ['instanceId', 'networkInterfaceId', 'id', 'headers'];
@@ -8976,8 +8974,6 @@ class VpcV1 extends BaseService {
    * @param {ReservationProfilePatch} [params.profile] - The
    * [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
    * reservation.
-   *
-   * The profile can only be changed for a reservation with a `status` of `inactive`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Reservation>>}
    */
@@ -9962,805 +9958,6 @@ class VpcV1 extends BaseService {
     return this.createRequest(parameters);
   }
   /*************************
-   * backupPolicies
-   ************************/
-
-  /**
-   * List all backup policies.
-   *
-   * This request lists all backup policies in the region. Backup policies control which sources are selected for backup
-   * and include a set of backup policy plans that provide the backup schedules and deletion triggers.
-   *
-   * @param {Object} [params] - The parameters to send to the service.
-   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
-   * @param {number} [params.limit] - The number of resources to return on a page.
-   * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
-   * matching the specified identifier.
-   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
-   * specified name.
-   * @param {string} [params.tag] - Filters the collection to resources with an item in the `tags` property matching the
-   * exact specified tag.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyCollection>>}
-   */
-  public listBackupPolicies(
-    params?: VpcV1.ListBackupPoliciesParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicyCollection>> {
-    const _params = { ...params };
-    const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'tag', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-      'start': _params.start,
-      'limit': _params.limit,
-      'resource_group.id': _params.resourceGroupId,
-      'name': _params.name,
-      'tag': _params.tag,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBackupPolicies');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies',
-        method: 'GET',
-        qs: query,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Create a backup policy.
-   *
-   * This request creates a new backup policy from a backup policy prototype object. The prototype object is structured
-   * in the same way as a retrieved backup policy, and contains the information necessary to create the new backup
-   * policy.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {BackupPolicyPrototype} params.backupPolicyPrototype - The backup policy prototype object.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
-   */
-  public createBackupPolicy(
-    params: VpcV1.CreateBackupPolicyParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
-    const _params = { ...params };
-    const _requiredParams = ['backupPolicyPrototype'];
-    const _validParams = ['backupPolicyPrototype', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const body = _params.backupPolicyPrototype;
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createBackupPolicy');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies',
-        method: 'POST',
-        body,
-        qs: query,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * List all jobs for a backup policy.
-   *
-   * This request retrieves all jobs for a backup policy. A backup job represents the execution of a backup policy plan
-   * for a resource matching the policy's criteria.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.backupPolicyId - The backup policy identifier.
-   * @param {string} [params.status] - Filters the collection to backup policy jobs with a `status` property matching
-   * the specified value.
-   * @param {string} [params.backupPolicyPlanId] - Filters the collection to backup policy jobs with a
-   * `backup_policy_plan.id` property matching the specified identifier.
-   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
-   * @param {number} [params.limit] - The number of resources to return on a page.
-   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
-   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
-   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
-   * in ascending order.
-   * @param {string} [params.sourceId] - Filters the collection to backup policy jobs with a `source.id` property
-   * matching the specified identifier.
-   * @param {string} [params.targetSnapshotsId] - Filters the collection to backup policy jobs with an item in the
-   * `target_snapshots` property with an `id` property matching the specified identifier.
-   * @param {string} [params.targetSnapshotsCrn] - Filters the collection to backup policy jobs with an item in the
-   * `target_snapshots` property with a `crn` property matching the specified CRN.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyJobCollection>>}
-   */
-  public listBackupPolicyJobs(
-    params: VpcV1.ListBackupPolicyJobsParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicyJobCollection>> {
-    const _params = { ...params };
-    const _requiredParams = ['backupPolicyId'];
-    const _validParams = ['backupPolicyId', 'status', 'backupPolicyPlanId', 'start', 'limit', 'sort', 'sourceId', 'targetSnapshotsId', 'targetSnapshotsCrn', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-      'status': _params.status,
-      'backup_policy_plan.id': _params.backupPolicyPlanId,
-      'start': _params.start,
-      'limit': _params.limit,
-      'sort': _params.sort,
-      'source.id': _params.sourceId,
-      'target_snapshots[].id': _params.targetSnapshotsId,
-      'target_snapshots[].crn': _params.targetSnapshotsCrn,
-    };
-
-    const path = {
-      'backup_policy_id': _params.backupPolicyId,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBackupPolicyJobs');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies/{backup_policy_id}/jobs',
-        method: 'GET',
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Retrieve a backup policy job.
-   *
-   * This request retrieves a single backup policy job specified by the identifier in the URL.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.backupPolicyId - The backup policy identifier.
-   * @param {string} params.id - The backup policy job identifier.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyJob>>}
-   */
-  public getBackupPolicyJob(
-    params: VpcV1.GetBackupPolicyJobParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicyJob>> {
-    const _params = { ...params };
-    const _requiredParams = ['backupPolicyId', 'id'];
-    const _validParams = ['backupPolicyId', 'id', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-    };
-
-    const path = {
-      'backup_policy_id': _params.backupPolicyId,
-      'id': _params.id,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBackupPolicyJob');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies/{backup_policy_id}/jobs/{id}',
-        method: 'GET',
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * List all plans for a backup policy.
-   *
-   * This request retrieves all plans for a backup policy. Backup plans provide the backup schedule and deletion
-   * triggers.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.backupPolicyId - The backup policy identifier.
-   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
-   * specified name.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlanCollection>>}
-   */
-  public listBackupPolicyPlans(
-    params: VpcV1.ListBackupPolicyPlansParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlanCollection>> {
-    const _params = { ...params };
-    const _requiredParams = ['backupPolicyId'];
-    const _validParams = ['backupPolicyId', 'name', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-      'name': _params.name,
-    };
-
-    const path = {
-      'backup_policy_id': _params.backupPolicyId,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBackupPolicyPlans');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies/{backup_policy_id}/plans',
-        method: 'GET',
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Create a plan for a backup policy.
-   *
-   * This request creates a new backup policy plan from a backup policy plan prototype object. The prototype object is
-   * structured in the same way as a retrieved backup policy plan, and contains the information necessary to create the
-   * new backup policy plan.
-   *
-   * Backups created by this plan will use the resource group of the source being backed up.
-   *
-   * Backups created by this plan will use the plan's name truncated to 46 characters, followed by a unique 16-character
-   * suffix.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.backupPolicyId - The backup policy identifier.
-   * @param {string} params.cronSpec - The cron specification for the backup schedule. The backup policy jobs
-   * (which create and delete backups for this plan) will not start until this time, and may start for up to 90 minutes
-   * after this time.
-   *
-   * All backup schedules for plans in the same policy must be at least an hour apart.
-   * @param {boolean} [params.active] - Indicates whether the plan is active.
-   * @param {string[]} [params.attachUserTags] - User tags to attach to each backup (snapshot) created by this plan. If
-   * unspecified, no user tags will be attached.
-   * @param {BackupPolicyPlanClonePolicyPrototype} [params.clonePolicy] -
-   * @param {boolean} [params.copyUserTags] - Indicates whether to copy the source's user tags to the created backups
-   * (snapshots).
-   * @param {BackupPolicyPlanDeletionTriggerPrototype} [params.deletionTrigger] -
-   * @param {string} [params.name] - The name for this backup policy plan. The name must not be used by another plan for
-   * the backup policy. If unspecified, the name will be a hyphenated list of randomly-selected words.
-   * @param {BackupPolicyPlanRemoteRegionPolicyPrototype[]} [params.remoteRegionPolicies] - The policies for additional
-   * backups in remote regions.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
-   */
-  public createBackupPolicyPlan(
-    params: VpcV1.CreateBackupPolicyPlanParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
-    const _params = { ...params };
-    const _requiredParams = ['backupPolicyId', 'cronSpec'];
-    const _validParams = ['backupPolicyId', 'cronSpec', 'active', 'attachUserTags', 'clonePolicy', 'copyUserTags', 'deletionTrigger', 'name', 'remoteRegionPolicies', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const body = {
-      'cron_spec': _params.cronSpec,
-      'active': _params.active,
-      'attach_user_tags': _params.attachUserTags,
-      'clone_policy': _params.clonePolicy,
-      'copy_user_tags': _params.copyUserTags,
-      'deletion_trigger': _params.deletionTrigger,
-      'name': _params.name,
-      'remote_region_policies': _params.remoteRegionPolicies,
-    };
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-    };
-
-    const path = {
-      'backup_policy_id': _params.backupPolicyId,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createBackupPolicyPlan');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies/{backup_policy_id}/plans',
-        method: 'POST',
-        body,
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Delete a backup policy plan.
-   *
-   * This request deletes a backup policy plan. This operation cannot be reversed. Any backups that have been created by
-   * the plan will remain but will no longer be subject to the plan's deletion trigger. Any running jobs associated with
-   * the plan will run to completion before the plan is deleted.
-   *
-   * If the request is accepted, the backup policy plan `status` will be set to `deleting`. Once deletion processing
-   * completes, the backup policy plan will no longer be retrievable.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.backupPolicyId - The backup policy identifier.
-   * @param {string} params.id - The backup policy plan identifier.
-   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
-   * resource's current ETag value.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
-   */
-  public deleteBackupPolicyPlan(
-    params: VpcV1.DeleteBackupPolicyPlanParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
-    const _params = { ...params };
-    const _requiredParams = ['backupPolicyId', 'id'];
-    const _validParams = ['backupPolicyId', 'id', 'ifMatch', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-    };
-
-    const path = {
-      'backup_policy_id': _params.backupPolicyId,
-      'id': _params.id,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteBackupPolicyPlan');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies/{backup_policy_id}/plans/{id}',
-        method: 'DELETE',
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-            'If-Match': _params.ifMatch,
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Retrieve a backup policy plan.
-   *
-   * This request retrieves a single backup policy plan specified by the identifier in the URL.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.backupPolicyId - The backup policy identifier.
-   * @param {string} params.id - The backup policy plan identifier.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
-   */
-  public getBackupPolicyPlan(
-    params: VpcV1.GetBackupPolicyPlanParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
-    const _params = { ...params };
-    const _requiredParams = ['backupPolicyId', 'id'];
-    const _validParams = ['backupPolicyId', 'id', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-    };
-
-    const path = {
-      'backup_policy_id': _params.backupPolicyId,
-      'id': _params.id,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBackupPolicyPlan');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies/{backup_policy_id}/plans/{id}',
-        method: 'GET',
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Update a backup policy plan.
-   *
-   * This request updates a backup policy plan with the information in a provided plan patch. The plan patch object is
-   * structured in the same way as a retrieved backup policy plan and can contains only the information to be updated.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.backupPolicyId - The backup policy identifier.
-   * @param {string} params.id - The backup policy plan identifier.
-   * @param {boolean} [params.active] - Indicates whether the plan is active.
-   * @param {string[]} [params.attachUserTags] - The user tags to attach to backups (snapshots) created by this plan.
-   * Updating this value does not change the user tags for backups that have already been created by this plan.
-   * @param {BackupPolicyPlanClonePolicyPatch} [params.clonePolicy] -
-   * @param {boolean} [params.copyUserTags] - Indicates whether to copy the source's user tags to the created backups
-   * (snapshots).
-   * @param {string} [params.cronSpec] - The cron specification for the backup schedule. The backup policy jobs
-   * (which create and delete backups for this plan) will not start until this time, and may start for up to 90 minutes
-   * after this time.
-   *
-   * All backup schedules for plans in the same policy must be at least an hour apart.
-   * @param {BackupPolicyPlanDeletionTriggerPatch} [params.deletionTrigger] -
-   * @param {string} [params.name] - The name for this backup policy plan. The name must not be used by another plan for
-   * the backup policy.
-   * @param {BackupPolicyPlanRemoteRegionPolicyPrototype[]} [params.remoteRegionPolicies] - The policies for additional
-   * backups in remote regions (replacing any existing policies).
-   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
-   * resource's current ETag value. Required if the request body includes an array.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
-   */
-  public updateBackupPolicyPlan(
-    params: VpcV1.UpdateBackupPolicyPlanParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
-    const _params = { ...params };
-    const _requiredParams = ['backupPolicyId', 'id'];
-    const _validParams = ['backupPolicyId', 'id', 'active', 'attachUserTags', 'clonePolicy', 'copyUserTags', 'cronSpec', 'deletionTrigger', 'name', 'remoteRegionPolicies', 'ifMatch', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const body = {
-      'active': _params.active,
-      'attach_user_tags': _params.attachUserTags,
-      'clone_policy': _params.clonePolicy,
-      'copy_user_tags': _params.copyUserTags,
-      'cron_spec': _params.cronSpec,
-      'deletion_trigger': _params.deletionTrigger,
-      'name': _params.name,
-      'remote_region_policies': _params.remoteRegionPolicies,
-    };
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-    };
-
-    const path = {
-      'backup_policy_id': _params.backupPolicyId,
-      'id': _params.id,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateBackupPolicyPlan');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies/{backup_policy_id}/plans/{id}',
-        method: 'PATCH',
-        body,
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-            'Content-Type': 'application/merge-patch+json',
-            'If-Match': _params.ifMatch,
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Delete a backup policy.
-   *
-   * This request deletes a backup policy. This operation cannot be reversed.
-   *
-   * If the request is accepted, the backup policy `status` will be set to `deleting`. Once deletion processing
-   * completes, the backup policy will no longer be retrievable.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The backup policy identifier.
-   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
-   * resource's current ETag value.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
-   */
-  public deleteBackupPolicy(
-    params: VpcV1.DeleteBackupPolicyParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
-    const _params = { ...params };
-    const _requiredParams = ['id'];
-    const _validParams = ['id', 'ifMatch', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-    };
-
-    const path = {
-      'id': _params.id,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteBackupPolicy');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies/{id}',
-        method: 'DELETE',
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-            'If-Match': _params.ifMatch,
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Retrieve a backup policy.
-   *
-   * This request retrieves a single backup policy specified by the identifier in the URL.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The backup policy identifier.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
-   */
-  public getBackupPolicy(
-    params: VpcV1.GetBackupPolicyParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
-    const _params = { ...params };
-    const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-    };
-
-    const path = {
-      'id': _params.id,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBackupPolicy');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies/{id}',
-        method: 'GET',
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-
-  /**
-   * Update a backup policy.
-   *
-   * This request updates a backup policy with the information in a provided backup policy patch. The backup policy
-   * patch object is structured in the same way as a retrieved backup policy and contains only the information to be
-   * updated.
-   *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.id - The backup policy identifier.
-   * @param {string[]} [params.includedContent] - The included content for backups created using this policy:
-   * - `boot_volume`: Include the instance's boot volume.
-   * - `data_volumes`: Include the instance's data volumes.
-   * @param {string[]} [params.matchUserTags] - The user tags this backup policy will apply to (replacing any existing
-   * tags). Resources that have both a matching user tag and a matching type will be subject to the backup policy.
-   * @param {string} [params.name] - The name for this backup policy. The name must not be used by another backup policy
-   * in the region.
-   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
-   * resource's current ETag value. Required if the request body includes an array.
-   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
-   */
-  public updateBackupPolicy(
-    params: VpcV1.UpdateBackupPolicyParams
-  ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
-    const _params = { ...params };
-    const _requiredParams = ['id'];
-    const _validParams = ['id', 'includedContent', 'matchUserTags', 'name', 'ifMatch', 'headers'];
-    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
-    if (_validationErrors) {
-      return Promise.reject(_validationErrors);
-    }
-
-    const body = {
-      'included_content': _params.includedContent,
-      'match_user_tags': _params.matchUserTags,
-      'name': _params.name,
-    };
-
-    const query = {
-      'version': this.version,
-      'generation': this.generation,
-    };
-
-    const path = {
-      'id': _params.id,
-    };
-
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateBackupPolicy');
-
-    const parameters = {
-      options: {
-        url: '/backup_policies/{id}',
-        method: 'PATCH',
-        body,
-        qs: query,
-        path,
-      },
-      defaultOptions: extend(true, {}, this.baseOptions, {
-        headers: extend(
-          true,
-          sdkHeaders,
-          {
-            'Accept': 'application/json',
-            'Content-Type': 'application/merge-patch+json',
-            'If-Match': _params.ifMatch,
-          },
-          _params.headers
-        ),
-      }),
-    };
-
-    return this.createRequest(parameters);
-  }
-  /*************************
    * placementGroups
    ************************/
 
@@ -10822,13 +10019,12 @@ class VpcV1 extends BaseService {
    * This request creates a new placement group.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.strategy - The strategy for this placement group
+   * @param {string} params.strategy - The strategy for this placement group:
    * - `host_spread`: place on different compute hosts
    * - `power_spread`: place on compute hosts that use different power sources
    *
-   * The enumerated values for this property may expand in the future. When processing this property, check for and log
-   * unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the
-   * unexpected strategy was encountered.
+   * The enumerated values for this property may
+   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
    * @param {string} [params.name] - The name for this placement group. The name must not be used by another placement
    * group in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
@@ -12442,10 +11638,12 @@ class VpcV1 extends BaseService {
    * @param {string} params.networkInterfaceId - The bare metal server network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIPCollectionBareMetalServerNetworkInterfaceContext>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public listBareMetalServerNetworkInterfaceIps(
     params: VpcV1.ListBareMetalServerNetworkInterfaceIpsParams
   ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionBareMetalServerNetworkInterfaceContext>> {
+    VpcV1._logger.warn('A deprecated operation has been invoked: listBareMetalServerNetworkInterfaceIps');
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId'];
     const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'headers'];
@@ -12499,10 +11697,12 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The reserved IP identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ReservedIP>>}
+   * @deprecated this method is deprecated and may be removed in a future release
    */
   public getBareMetalServerNetworkInterfaceIp(
     params: VpcV1.GetBareMetalServerNetworkInterfaceIpParams
   ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
+    VpcV1._logger.warn('A deprecated operation has been invoked: getBareMetalServerNetworkInterfaceIp');
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId', 'id'];
     const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'headers'];
@@ -13088,6 +12288,8 @@ class VpcV1 extends BaseService {
    * no operating system or any operating system, respectively.
    * @param {string} [params.zoneName] - Filters the collection to resources with a `zone.name` property matching the
    * exact specified name.
+   * @param {string} [params.tag] - Filters the collection to resources with an item in the `tags` property matching the
+   * exact specified tag.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeCollection>>}
    */
@@ -13096,7 +12298,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'name', 'attachmentState', 'encryption', 'operatingSystemFamily', 'operatingSystemArchitecture', 'zoneName', 'headers'];
+    const _validParams = ['start', 'limit', 'name', 'attachmentState', 'encryption', 'operatingSystemFamily', 'operatingSystemArchitecture', 'zoneName', 'tag', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13113,6 +12315,7 @@ class VpcV1 extends BaseService {
       'operating_system.family': _params.operatingSystemFamily,
       'operating_system.architecture': _params.operatingSystemArchitecture,
       'zone.name': _params.zoneName,
+      'tag': _params.tag,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumes');
@@ -13314,7 +12517,8 @@ class VpcV1 extends BaseService {
    * to a running virtual server instance, and the specified value must not be less than the current capacity.
    * Additionally, if the volume is attached as a boot volume, the maximum value is 250 gigabytes.
    *
-   * The minimum and maximum capacity limits for creating or updating volumes may expand in the future.
+   * The minimum and maximum limits for this property may
+   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
    * @param {number} [params.iops] - The maximum I/O operations per second (IOPS) to use for this volume. Applicable
    * only to volumes using a profile `family` of `custom`. The volume must be attached as a data volume to a running
    * virtual server instance.
@@ -14692,7 +13896,8 @@ class VpcV1 extends BaseService {
    * @param {number} [params.iops] - The maximum input/output operations per second (IOPS) for the file share. The value
    * must be in the range supported by the share's size.
    *
-   * For this property to be changed, the share `lifecycle_state` must be `stable`.
+   * For this property to be changed, the share `lifecycle_state` must be `stable` and
+   * `replication_role` must not be `replica`.
    * @param {string} [params.name] - The name for this share. The name must not be used by another share in the region.
    * @param {ShareProfileIdentity} [params.profile] - The profile to use for this file share.
    *
@@ -14705,7 +13910,8 @@ class VpcV1 extends BaseService {
    * @param {number} [params.size] - The size of the file share rounded up to the next gigabyte. The value must not be
    * less than the share's current size, and must not exceed the maximum supported by the share's profile and IOPS.
    *
-   * For this property to be changed, the share `lifecycle_state` must be `stable`.
+   * For this property to be changed, the share `lifecycle_state` must be `stable` and
+   * `replication_role` must not be `replica`.
    * @param {string[]} [params.userTags] - Tags for this resource.
    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
    * resource's current ETag value. Required if the request body includes an array.
@@ -15254,6 +14460,805 @@ class VpcV1 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * backupPolicies
+   ************************/
+
+  /**
+   * List all backup policies.
+   *
+   * This request lists all backup policies in the region. Backup policies control which sources are selected for backup
+   * and include a set of backup policy plans that provide the backup schedules and deletion triggers.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
+   * matching the specified identifier.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.tag] - Filters the collection to resources with an item in the `tags` property matching the
+   * exact specified tag.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyCollection>>}
+   */
+  public listBackupPolicies(
+    params?: VpcV1.ListBackupPoliciesParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicyCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'tag', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'name': _params.name,
+      'tag': _params.tag,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBackupPolicies');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a backup policy.
+   *
+   * This request creates a new backup policy from a backup policy prototype object. The prototype object is structured
+   * in the same way as a retrieved backup policy, and contains the information necessary to create the new backup
+   * policy.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {BackupPolicyPrototype} params.backupPolicyPrototype - The backup policy prototype object.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
+   */
+  public createBackupPolicy(
+    params: VpcV1.CreateBackupPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
+    const _params = { ...params };
+    const _requiredParams = ['backupPolicyPrototype'];
+    const _validParams = ['backupPolicyPrototype', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = _params.backupPolicyPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createBackupPolicy');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List all jobs for a backup policy.
+   *
+   * This request retrieves all jobs for a backup policy. A backup job represents the execution of a backup policy plan
+   * for a resource matching the policy's criteria.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.backupPolicyId - The backup policy identifier.
+   * @param {string} [params.status] - Filters the collection to backup policy jobs with a `status` property matching
+   * the specified value.
+   * @param {string} [params.backupPolicyPlanId] - Filters the collection to backup policy jobs with a
+   * `backup_policy_plan.id` property matching the specified identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {string} [params.sourceId] - Filters the collection to backup policy jobs with a `source.id` property
+   * matching the specified identifier.
+   * @param {string} [params.targetSnapshotsId] - Filters the collection to backup policy jobs with an item in the
+   * `target_snapshots` property with an `id` property matching the specified identifier.
+   * @param {string} [params.targetSnapshotsCrn] - Filters the collection to backup policy jobs with an item in the
+   * `target_snapshots` property with a `crn` property matching the specified CRN.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyJobCollection>>}
+   */
+  public listBackupPolicyJobs(
+    params: VpcV1.ListBackupPolicyJobsParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicyJobCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['backupPolicyId'];
+    const _validParams = ['backupPolicyId', 'status', 'backupPolicyPlanId', 'start', 'limit', 'sort', 'sourceId', 'targetSnapshotsId', 'targetSnapshotsCrn', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'status': _params.status,
+      'backup_policy_plan.id': _params.backupPolicyPlanId,
+      'start': _params.start,
+      'limit': _params.limit,
+      'sort': _params.sort,
+      'source.id': _params.sourceId,
+      'target_snapshots[].id': _params.targetSnapshotsId,
+      'target_snapshots[].crn': _params.targetSnapshotsCrn,
+    };
+
+    const path = {
+      'backup_policy_id': _params.backupPolicyId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBackupPolicyJobs');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies/{backup_policy_id}/jobs',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a backup policy job.
+   *
+   * This request retrieves a single backup policy job specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.backupPolicyId - The backup policy identifier.
+   * @param {string} params.id - The backup policy job identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyJob>>}
+   */
+  public getBackupPolicyJob(
+    params: VpcV1.GetBackupPolicyJobParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicyJob>> {
+    const _params = { ...params };
+    const _requiredParams = ['backupPolicyId', 'id'];
+    const _validParams = ['backupPolicyId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'backup_policy_id': _params.backupPolicyId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBackupPolicyJob');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies/{backup_policy_id}/jobs/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List all plans for a backup policy.
+   *
+   * This request retrieves all plans for a backup policy. Backup plans provide the backup schedule and deletion
+   * triggers.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.backupPolicyId - The backup policy identifier.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlanCollection>>}
+   */
+  public listBackupPolicyPlans(
+    params: VpcV1.ListBackupPolicyPlansParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlanCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['backupPolicyId'];
+    const _validParams = ['backupPolicyId', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'name': _params.name,
+    };
+
+    const path = {
+      'backup_policy_id': _params.backupPolicyId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBackupPolicyPlans');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies/{backup_policy_id}/plans',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a plan for a backup policy.
+   *
+   * This request creates a new backup policy plan from a backup policy plan prototype object. The prototype object is
+   * structured in the same way as a retrieved backup policy plan, and contains the information necessary to create the
+   * new backup policy plan.
+   *
+   * Backups created by this plan will use the resource group of the source being backed up.
+   *
+   * Backups created by this plan will use the plan's name truncated to 46 characters, followed by a unique 16-character
+   * suffix.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.backupPolicyId - The backup policy identifier.
+   * @param {string} params.cronSpec - The cron specification for the backup schedule. The backup policy jobs
+   * (which create and delete backups for this plan) will not start until this time, and may start for up to 90 minutes
+   * after this time.
+   *
+   * All backup schedules for plans in the same policy must be at least an hour apart.
+   * @param {boolean} [params.active] - Indicates whether the plan is active.
+   * @param {string[]} [params.attachUserTags] - User tags to attach to each backup (snapshot) created by this plan. If
+   * unspecified, no user tags will be attached.
+   * @param {BackupPolicyPlanClonePolicyPrototype} [params.clonePolicy] -
+   * @param {boolean} [params.copyUserTags] - Indicates whether to copy the source's user tags to the created backups
+   * (snapshots).
+   * @param {BackupPolicyPlanDeletionTriggerPrototype} [params.deletionTrigger] -
+   * @param {string} [params.name] - The name for this backup policy plan. The name must not be used by another plan for
+   * the backup policy. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * @param {BackupPolicyPlanRemoteRegionPolicyPrototype[]} [params.remoteRegionPolicies] - The policies for additional
+   * backups in remote regions.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
+   */
+  public createBackupPolicyPlan(
+    params: VpcV1.CreateBackupPolicyPlanParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
+    const _params = { ...params };
+    const _requiredParams = ['backupPolicyId', 'cronSpec'];
+    const _validParams = ['backupPolicyId', 'cronSpec', 'active', 'attachUserTags', 'clonePolicy', 'copyUserTags', 'deletionTrigger', 'name', 'remoteRegionPolicies', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'cron_spec': _params.cronSpec,
+      'active': _params.active,
+      'attach_user_tags': _params.attachUserTags,
+      'clone_policy': _params.clonePolicy,
+      'copy_user_tags': _params.copyUserTags,
+      'deletion_trigger': _params.deletionTrigger,
+      'name': _params.name,
+      'remote_region_policies': _params.remoteRegionPolicies,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'backup_policy_id': _params.backupPolicyId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createBackupPolicyPlan');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies/{backup_policy_id}/plans',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a backup policy plan.
+   *
+   * This request deletes a backup policy plan. This operation cannot be reversed. Any backups that have been created by
+   * the plan will remain but will no longer be subject to the plan's deletion trigger. Any running jobs associated with
+   * the plan will run to completion before the plan is deleted.
+   *
+   * If the request is accepted, the backup policy plan `status` will be set to `deleting`. Once deletion processing
+   * completes, the backup policy plan will no longer be retrievable.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.backupPolicyId - The backup policy identifier.
+   * @param {string} params.id - The backup policy plan identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
+   */
+  public deleteBackupPolicyPlan(
+    params: VpcV1.DeleteBackupPolicyPlanParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
+    const _params = { ...params };
+    const _requiredParams = ['backupPolicyId', 'id'];
+    const _validParams = ['backupPolicyId', 'id', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'backup_policy_id': _params.backupPolicyId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteBackupPolicyPlan');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies/{backup_policy_id}/plans/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a backup policy plan.
+   *
+   * This request retrieves a single backup policy plan specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.backupPolicyId - The backup policy identifier.
+   * @param {string} params.id - The backup policy plan identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
+   */
+  public getBackupPolicyPlan(
+    params: VpcV1.GetBackupPolicyPlanParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
+    const _params = { ...params };
+    const _requiredParams = ['backupPolicyId', 'id'];
+    const _validParams = ['backupPolicyId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'backup_policy_id': _params.backupPolicyId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBackupPolicyPlan');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies/{backup_policy_id}/plans/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a backup policy plan.
+   *
+   * This request updates a backup policy plan with the information in a provided plan patch. The plan patch object is
+   * structured in the same way as a retrieved backup policy plan and can contains only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.backupPolicyId - The backup policy identifier.
+   * @param {string} params.id - The backup policy plan identifier.
+   * @param {boolean} [params.active] - Indicates whether the plan is active.
+   * @param {string[]} [params.attachUserTags] - The user tags to attach to backups (snapshots) created by this plan.
+   * Updating this value does not change the user tags for backups that have already been created by this plan.
+   * @param {BackupPolicyPlanClonePolicyPatch} [params.clonePolicy] -
+   * @param {boolean} [params.copyUserTags] - Indicates whether to copy the source's user tags to the created backups
+   * (snapshots).
+   * @param {string} [params.cronSpec] - The cron specification for the backup schedule. The backup policy jobs
+   * (which create and delete backups for this plan) will not start until this time, and may start for up to 90 minutes
+   * after this time.
+   *
+   * All backup schedules for plans in the same policy must be at least an hour apart.
+   * @param {BackupPolicyPlanDeletionTriggerPatch} [params.deletionTrigger] -
+   * @param {string} [params.name] - The name for this backup policy plan. The name must not be used by another plan for
+   * the backup policy.
+   * @param {BackupPolicyPlanRemoteRegionPolicyPrototype[]} [params.remoteRegionPolicies] - The policies for additional
+   * backups in remote regions (replacing any existing policies).
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>>}
+   */
+  public updateBackupPolicyPlan(
+    params: VpcV1.UpdateBackupPolicyPlanParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
+    const _params = { ...params };
+    const _requiredParams = ['backupPolicyId', 'id'];
+    const _validParams = ['backupPolicyId', 'id', 'active', 'attachUserTags', 'clonePolicy', 'copyUserTags', 'cronSpec', 'deletionTrigger', 'name', 'remoteRegionPolicies', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'active': _params.active,
+      'attach_user_tags': _params.attachUserTags,
+      'clone_policy': _params.clonePolicy,
+      'copy_user_tags': _params.copyUserTags,
+      'cron_spec': _params.cronSpec,
+      'deletion_trigger': _params.deletionTrigger,
+      'name': _params.name,
+      'remote_region_policies': _params.remoteRegionPolicies,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'backup_policy_id': _params.backupPolicyId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateBackupPolicyPlan');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies/{backup_policy_id}/plans/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a backup policy.
+   *
+   * This request deletes a backup policy. This operation cannot be reversed.
+   *
+   * If the request is accepted, the backup policy `status` will be set to `deleting`. Once deletion processing
+   * completes, the backup policy will no longer be retrievable.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The backup policy identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
+   */
+  public deleteBackupPolicy(
+    params: VpcV1.DeleteBackupPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteBackupPolicy');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a backup policy.
+   *
+   * This request retrieves a single backup policy specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The backup policy identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
+   */
+  public getBackupPolicy(
+    params: VpcV1.GetBackupPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getBackupPolicy');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a backup policy.
+   *
+   * This request updates a backup policy with the information in a provided backup policy patch. The backup policy
+   * patch object is structured in the same way as a retrieved backup policy and contains only the information to be
+   * updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The backup policy identifier.
+   * @param {string[]} [params.includedContent] - The included content for backups created using this policy:
+   * - `boot_volume`: Include the instance's boot volume.
+   * - `data_volumes`: Include the instance's data volumes.
+   * @param {string[]} [params.matchUserTags] - The user tags this backup policy will apply to (replacing any existing
+   * tags). Resources that have both a matching user tag and a matching type will be subject to the backup policy.
+   * @param {string} [params.name] - The name for this backup policy. The name must not be used by another backup policy
+   * in the region.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BackupPolicy>>}
+   */
+  public updateBackupPolicy(
+    params: VpcV1.UpdateBackupPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'includedContent', 'matchUserTags', 'name', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'included_content': _params.includedContent,
+      'match_user_tags': _params.matchUserTags,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateBackupPolicy');
+
+    const parameters = {
+      options: {
+        url: '/backup_policies/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -18116,9 +18121,18 @@ class VpcV1 extends BaseService {
    *
    * Specify `null` to remove an existing ICMP traffic code.
    * @param {string} [params.direction] - The direction of traffic to enforce.
-   * @param {string} [params.ipVersion] - The IP version to enforce. The format of `remote.address` or
-   * `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security
-   * group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version.
+   * @param {string} [params.ipVersion] - The IP version to enforce. The format of `local.address`, `remote.address`,
+   * `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
+   *
+   * If `remote` references a security group, then this rule only applies to IP addresses
+   * (network interfaces) in that group matching this IP version.
+   * @param {SecurityGroupRuleLocalPatch} [params.local] - The local IP address or range of local IP addresses to which
+   * this rule will allow inbound
+   * traffic (or from which, for outbound traffic). Can be specified as an IP address or a CIDR
+   * block.
+   *
+   * Specify a CIDR block of `0.0.0.0/0` to allow traffic to all local IP addresses (or from all
+   * local IP addresses, for outbound rules).
    * @param {number} [params.portMax] - The inclusive upper bound of the protocol destination port range. If set,
    * `port_min` must also be set, and must not be larger.
    *
@@ -18143,7 +18157,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId', 'id'];
-    const _validParams = ['securityGroupId', 'id', 'code', 'direction', 'ipVersion', 'portMax', 'portMin', 'remote', 'type', 'headers'];
+    const _validParams = ['securityGroupId', 'id', 'code', 'direction', 'ipVersion', 'local', 'portMax', 'portMin', 'remote', 'type', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18153,6 +18167,7 @@ class VpcV1 extends BaseService {
       'code': _params.code,
       'direction': _params.direction,
       'ip_version': _params.ipVersion,
+      'local': _params.local,
       'port_max': _params.portMax,
       'port_min': _params.portMin,
       'remote': _params.remote,
@@ -19692,6 +19707,13 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The VPN gateway connection identifier.
    * @param {boolean} [params.adminStateUp] - If set to false, the VPN gateway connection is shut down.
    * @param {VPNGatewayConnectionDPDPatch} [params.deadPeerDetection] - The Dead Peer Detection settings.
+   * @param {string} [params.establishMode] - The establish mode of the VPN gateway connection:
+   * - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol
+   *    negotiations or rekeying processes.
+   * - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway
+   *    connection. Additionally, the peer is responsible for initiating the rekeying process
+   *    after the connection is established. If rekeying does not occur, the VPN gateway
+   *    connection will be brought down after its lifetime expires.
    * @param {VPNGatewayConnectionIKEPolicyPatch} [params.ikePolicy] - The IKE policy to use. Specify `null` to remove
    * any existing policy, [resulting in
    * auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1).
@@ -19700,7 +19722,7 @@ class VpcV1 extends BaseService {
    * auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ipsec-auto-negotiation-phase-2).
    * @param {string} [params.name] - The name for this VPN gateway connection. The name must not be used by another
    * connection for the VPN gateway.
-   * @param {string} [params.peerAddress] - The IP address of the peer VPN gateway.
+   * @param {VPNGatewayConnectionPeerPatch} [params.peer] -
    * @param {string} [params.psk] - The pre-shared key.
    * @param {string} [params.routingProtocol] - Routing protocols are disabled for this VPN gateway connection.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -19711,7 +19733,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
-    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'ikePolicy', 'ipsecPolicy', 'name', 'peerAddress', 'psk', 'routingProtocol', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'establishMode', 'ikePolicy', 'ipsecPolicy', 'name', 'peer', 'psk', 'routingProtocol', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19720,10 +19742,11 @@ class VpcV1 extends BaseService {
     const body = {
       'admin_state_up': _params.adminStateUp,
       'dead_peer_detection': _params.deadPeerDetection,
+      'establish_mode': _params.establishMode,
       'ike_policy': _params.ikePolicy,
       'ipsec_policy': _params.ipsecPolicy,
       'name': _params.name,
-      'peer_address': _params.peerAddress,
+      'peer': _params.peer,
       'psk': _params.psk,
       'routing_protocol': _params.routingProtocol,
     };
@@ -19775,11 +19798,11 @@ class VpcV1 extends BaseService {
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
    * @param {string} params.id - The VPN gateway connection identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionLocalCIDRs>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCIDRs>>}
    */
-  public listVpnGatewayConnectionLocalCidrs(
-    params: VpcV1.ListVpnGatewayConnectionLocalCidrsParams
-  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionLocalCIDRs>> {
+  public listVpnGatewayConnectionsLocalCidrs(
+    params: VpcV1.ListVpnGatewayConnectionsLocalCidrsParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCIDRs>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
     const _validParams = ['vpnGatewayId', 'id', 'headers'];
@@ -19798,11 +19821,11 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionLocalCidrs');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionsLocalCidrs');
 
     const parameters = {
       options: {
-        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs',
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local/cidrs',
         method: 'GET',
         qs: query,
         path,
@@ -19832,17 +19855,16 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
    * @param {string} params.id - The VPN gateway connection identifier.
-   * @param {string} params.cidrPrefix - The address prefix part of the CIDR.
-   * @param {string} params.prefixLength - The prefix length part of the CIDR.
+   * @param {string} params.cidr - The IP address range in CIDR block notation.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
-  public removeVpnGatewayConnectionLocalCidr(
-    params: VpcV1.RemoveVpnGatewayConnectionLocalCidrParams
+  public removeVpnGatewayConnectionsLocalCidr(
+    params: VpcV1.RemoveVpnGatewayConnectionsLocalCidrParams
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
-    const _requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength', 'headers'];
+    const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19856,15 +19878,14 @@ class VpcV1 extends BaseService {
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
-      'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength,
+      'cidr': _params.cidr,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionLocalCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionsLocalCidr');
 
     const parameters = {
       options: {
-        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local/cidrs/{cidr}',
         method: 'DELETE',
         qs: query,
         path,
@@ -19893,17 +19914,16 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
    * @param {string} params.id - The VPN gateway connection identifier.
-   * @param {string} params.cidrPrefix - The address prefix part of the CIDR.
-   * @param {string} params.prefixLength - The prefix length part of the CIDR.
+   * @param {string} params.cidr - The IP address range in CIDR block notation.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
-  public checkVpnGatewayConnectionLocalCidr(
-    params: VpcV1.CheckVpnGatewayConnectionLocalCidrParams
+  public checkVpnGatewayConnectionsLocalCidr(
+    params: VpcV1.CheckVpnGatewayConnectionsLocalCidrParams
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
-    const _requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength', 'headers'];
+    const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19917,15 +19937,14 @@ class VpcV1 extends BaseService {
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
-      'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength,
+      'cidr': _params.cidr,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionLocalCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionsLocalCidr');
 
     const parameters = {
       options: {
-        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local/cidrs/{cidr}',
         method: 'GET',
         qs: query,
         path,
@@ -19955,17 +19974,16 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
    * @param {string} params.id - The VPN gateway connection identifier.
-   * @param {string} params.cidrPrefix - The address prefix part of the CIDR.
-   * @param {string} params.prefixLength - The prefix length part of the CIDR.
+   * @param {string} params.cidr - The IP address range in CIDR block notation.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
-  public addVpnGatewayConnectionLocalCidr(
-    params: VpcV1.AddVpnGatewayConnectionLocalCidrParams
+  public addVpnGatewayConnectionsLocalCidr(
+    params: VpcV1.AddVpnGatewayConnectionsLocalCidrParams
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
-    const _requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength', 'headers'];
+    const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19979,15 +19997,14 @@ class VpcV1 extends BaseService {
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
-      'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength,
+      'cidr': _params.cidr,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionLocalCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionsLocalCidr');
 
     const parameters = {
       options: {
-        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local_cidrs/{cidr_prefix}/{prefix_length}',
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/local/cidrs/{cidr}',
         method: 'PUT',
         qs: query,
         path,
@@ -20017,11 +20034,11 @@ class VpcV1 extends BaseService {
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
    * @param {string} params.id - The VPN gateway connection identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionPeerCIDRs>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCIDRs>>}
    */
-  public listVpnGatewayConnectionPeerCidrs(
-    params: VpcV1.ListVpnGatewayConnectionPeerCidrsParams
-  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionPeerCIDRs>> {
+  public listVpnGatewayConnectionsPeerCidrs(
+    params: VpcV1.ListVpnGatewayConnectionsPeerCidrsParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCIDRs>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
     const _validParams = ['vpnGatewayId', 'id', 'headers'];
@@ -20040,11 +20057,11 @@ class VpcV1 extends BaseService {
       'id': _params.id,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionPeerCidrs');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayConnectionsPeerCidrs');
 
     const parameters = {
       options: {
-        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs',
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer/cidrs',
         method: 'GET',
         qs: query,
         path,
@@ -20074,17 +20091,16 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
    * @param {string} params.id - The VPN gateway connection identifier.
-   * @param {string} params.cidrPrefix - The address prefix part of the CIDR.
-   * @param {string} params.prefixLength - The prefix length part of the CIDR.
+   * @param {string} params.cidr - The IP address range in CIDR block notation.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
-  public removeVpnGatewayConnectionPeerCidr(
-    params: VpcV1.RemoveVpnGatewayConnectionPeerCidrParams
+  public removeVpnGatewayConnectionsPeerCidr(
+    params: VpcV1.RemoveVpnGatewayConnectionsPeerCidrParams
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
-    const _requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength', 'headers'];
+    const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20098,15 +20114,14 @@ class VpcV1 extends BaseService {
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
-      'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength,
+      'cidr': _params.cidr,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionPeerCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayConnectionsPeerCidr');
 
     const parameters = {
       options: {
-        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer/cidrs/{cidr}',
         method: 'DELETE',
         qs: query,
         path,
@@ -20135,17 +20150,16 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
    * @param {string} params.id - The VPN gateway connection identifier.
-   * @param {string} params.cidrPrefix - The address prefix part of the CIDR.
-   * @param {string} params.prefixLength - The prefix length part of the CIDR.
+   * @param {string} params.cidr - The IP address range in CIDR block notation.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
-  public checkVpnGatewayConnectionPeerCidr(
-    params: VpcV1.CheckVpnGatewayConnectionPeerCidrParams
+  public checkVpnGatewayConnectionsPeerCidr(
+    params: VpcV1.CheckVpnGatewayConnectionsPeerCidrParams
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
-    const _requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength', 'headers'];
+    const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20159,15 +20173,14 @@ class VpcV1 extends BaseService {
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
-      'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength,
+      'cidr': _params.cidr,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionPeerCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayConnectionsPeerCidr');
 
     const parameters = {
       options: {
-        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer/cidrs/{cidr}',
         method: 'GET',
         qs: query,
         path,
@@ -20197,17 +20210,16 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
    * @param {string} params.id - The VPN gateway connection identifier.
-   * @param {string} params.cidrPrefix - The address prefix part of the CIDR.
-   * @param {string} params.prefixLength - The prefix length part of the CIDR.
+   * @param {string} params.cidr - The IP address range in CIDR block notation.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
-  public addVpnGatewayConnectionPeerCidr(
-    params: VpcV1.AddVpnGatewayConnectionPeerCidrParams
+  public addVpnGatewayConnectionsPeerCidr(
+    params: VpcV1.AddVpnGatewayConnectionsPeerCidrParams
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
-    const _requiredParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidrPrefix', 'prefixLength', 'headers'];
+    const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20221,15 +20233,14 @@ class VpcV1 extends BaseService {
     const path = {
       'vpn_gateway_id': _params.vpnGatewayId,
       'id': _params.id,
-      'cidr_prefix': _params.cidrPrefix,
-      'prefix_length': _params.prefixLength,
+      'cidr': _params.cidr,
     };
 
-    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionPeerCidr');
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayConnectionsPeerCidr');
 
     const parameters = {
       options: {
-        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer_cidrs/{cidr_prefix}/{prefix_length}',
+        url: '/vpn_gateways/{vpn_gateway_id}/connections/{id}/peer/cidrs/{cidr}',
         method: 'PUT',
         qs: query,
         path,
@@ -20986,14 +20997,10 @@ class VpcV1 extends BaseService {
    * @param {string} params.destination - The destination to use for this VPN route in the VPN server. Must be unique
    * within the VPN server. If an incoming packet does not match any destination, it will be dropped.
    * @param {string} [params.action] - The action to perform with a packet matching the VPN route:
-   * - `translate`: translate the source IP address to one of the private IP addresses of the VPN server, then deliver
-   * the packet to target.
+   * - `translate`: translate the source IP address to one of the private IP addresses of
+   *   the VPN server, then deliver the packet to target.
    * - `deliver`: deliver the packet to the target.
-   * - `drop`: drop the packet
-   *
-   * The enumerated values for this property are expected to expand in the future. When processing this property, check
-   * for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on which the
-   * unexpected property value was encountered.
+   * - `drop`: drop the packet.
    * @param {string} [params.name] - The name for this VPN server route. The name must not be used by another route for
    * the VPN server. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -21824,8 +21831,11 @@ class VpcV1 extends BaseService {
    * termination. The listener must have a
    * `protocol` of `https`.
    * @param {number} [params.connectionLimit] - The connection limit of the listener.
-   * @param {LoadBalancerPoolIdentity} [params.defaultPool] - The default pool for this listener. If specified, the pool
-   * must:
+   * @param {LoadBalancerPoolIdentity} [params.defaultPool] - The default pool for this listener. If `https_redirect` is
+   * specified, the
+   * default pool will not be used.
+   * If specified, the pool must:
+   *
    * - Belong to this load balancer.
    * - Have the same `protocol` as this listener, or have a compatible protocol.
    *   At present, the compatible protocols are `http` and `https`.
@@ -21834,8 +21844,11 @@ class VpcV1 extends BaseService {
    * If unspecified, this listener will be created with no default pool, but one may be
    * subsequently set.
    * @param {LoadBalancerListenerHTTPSRedirectPrototype} [params.httpsRedirect] - The target listener that requests will
-   * be redirected to. This listener must have a
-   * `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+   * be redirected to if none of the listener's
+   * `policies` match.
+   *
+   * If specified, this listener must have a `protocol` of `http`, and the target
+   * listener must have a `protocol` of `https`.
    * @param {number} [params.idleConnectionTimeout] - The idle connection timeout of the listener in seconds. Supported
    * for load balancers in the `application` family.
    * @param {LoadBalancerListenerPolicyPrototype[]} [params.policies] - The policy prototype objects for this listener.
@@ -22057,8 +22070,9 @@ class VpcV1 extends BaseService {
    * termination. The listener must have a
    * `protocol` of `https`.
    * @param {number} [params.connectionLimit] - The connection limit of the listener.
-   * @param {LoadBalancerPoolIdentity} [params.defaultPool] - The default pool for this listener. The specified pool
-   * must:
+   * @param {LoadBalancerListenerDefaultPoolPatch} [params.defaultPool] - The default pool for this listener. If
+   * `https_redirect` is set, the default pool will not
+   * be used. The specified pool must:
    *
    * - Belong to this load balancer
    * - Have the same `protocol` as this listener, or have a compatible protocol.
@@ -22067,8 +22081,11 @@ class VpcV1 extends BaseService {
    *
    * Specify `null` to remove an existing default pool.
    * @param {LoadBalancerListenerHTTPSRedirectPatch} [params.httpsRedirect] - The target listener that requests will be
-   * redirected to. This listener must have a
-   * `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+   * redirected to if none of the listener's
+   * `policies` match.
+   *
+   * If specified, this listener must have a `protocol` of `http`, and the target listener
+   * must have a `protocol` of `https`.
    *
    * Specify `null` to remove any existing https redirect.
    * @param {number} [params.idleConnectionTimeout] - The idle connection timeout of the listener in seconds. Supported
@@ -22173,7 +22190,8 @@ class VpcV1 extends BaseService {
   /**
    * List all policies for a load balancer listener.
    *
-   * This request lists all policies for a load balancer listener.
+   * This request lists all policies for a load balancer listener. A policy consists of rules to match against each
+   * incoming request, and an action to apply to the request if a rule matches.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -22229,25 +22247,34 @@ class VpcV1 extends BaseService {
   /**
    * Create a policy for a load balancer listener.
    *
-   * Creates a new policy for a load balancer listener.
+   * This request creates a new policy from a load balancer listener policy object. The prototype object is structured
+   * in the same way as a retrieved policy, and contains the information necessary to create the new policy. For this
+   * request to succeed, the listener must have a `protocol` of `http` or `https`.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
    * @param {string} params.listenerId - The listener identifier.
    * @param {string} params.action - The policy action.
    *
-   * The enumerated values for this property are expected to expand in the future. When processing this property, check
-   * for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on which the
-   * unexpected property value was encountered.
-   * @param {number} params.priority - Priority of the policy. Lower value indicates higher priority.
+   * - `forward`: Requests will be forwarded to the specified `target` pool
+   * - `https_redirect`: Requests will be redirected to the specified target listener. The
+   *   listener must have a `protocol` of `http`, and the target listener must have a
+   *   `protocol` of `https`
+   * - `redirect`: Requests will be redirected to the specified `target.url`
+   * - `reject`: Requests will be rejected with a `403` status code
+   *
+   * The enumerated values for this property may
+   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+   * @param {number} params.priority - Priority of the policy. The priority is unique across all policies for this load
+   * balancer listener. Lower value indicates higher priority.
    * @param {string} [params.name] - The name for this policy. The name must not be used by another policy for the load
    * balancer listener. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {LoadBalancerListenerPolicyRulePrototype[]} [params.rules] - The rule prototype objects for this policy.
    * @param {LoadBalancerListenerPolicyTargetPrototype} [params.target] - - If `action` is `forward`, specify a
    * `LoadBalancerPoolIdentity`.
-   * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
    * - If `action` is `https_redirect`, specify a
-   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
+   * `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
+   * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>>}
    */
@@ -22424,7 +22451,8 @@ class VpcV1 extends BaseService {
   /**
    * Update a load balancer listener policy.
    *
-   * Updates a policy from a policy patch.
+   * This request updates a load balancer listener policy with the information in a provided policy patch. The policy
+   * patch object is structured in the same way as a retrieved policy and contains only the information to be updated.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -22432,12 +22460,13 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The policy identifier.
    * @param {string} [params.name] - The name for this policy. The name must not be used by another policy for the load
    * balancer listener.
-   * @param {number} [params.priority] - Priority of the policy. Lower value indicates higher priority.
+   * @param {number} [params.priority] - Priority of the policy. The priority is unique across all policies for this
+   * load balancer listener. Lower value indicates higher priority.
    * @param {LoadBalancerListenerPolicyTargetPatch} [params.target] - - If `action` is `forward`, specify a
    * `LoadBalancerPoolIdentity`.
-   * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
    * - If `action` is `https_redirect`, specify a
-   *   `LoadBalancerListenerPolicyHTTPSRedirectPatch`.
+   * `LoadBalancerListenerPolicyHTTPSRedirectPatch`.
+   * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>>}
    */
@@ -22916,6 +22945,8 @@ class VpcV1 extends BaseService {
    *
    * Supported by load balancers in the `application` family (otherwise always `disabled`).
    * @param {LoadBalancerPoolSessionPersistencePrototype} [params.sessionPersistence] - The session persistence of this
+   * pool. If unspecified, session persistence will be
+   * disabled, and traffic will be distributed across backend server members of the
    * pool.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPool>>}
@@ -24482,7 +24513,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2023-12-05` and `2024-02-15`.
+     *  `2024-04-30` and `2024-05-15`.
      */
     version: string;
   }
@@ -24929,11 +24960,7 @@ namespace VpcV1 {
   export interface CreateVpcRoutingTableParams {
     /** The VPC identifier. */
     vpcId: string;
-    /** The filters specifying the resources that may create routes in this routing table.
-     *
-     *  At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but
-     *  filter support is expected to expand in the future.
-     */
+    /** The filters specifying the resources that may create routes in this routing table. */
     acceptRoutesFrom?: ResourceFilter[];
     /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised
      *  to these sources.
@@ -25036,9 +25063,6 @@ namespace VpcV1 {
      *  (replacing any existing filters). All routes created by resources that match a given filter will be removed when
      *  an existing filter is removed. Therefore, if an empty array is specified, all filters will be removed, resulting
      *  in all routes not directly created by the user being removed.
-     *
-     *  At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but
-     *  filter support is expected to expand in the future.
      */
     acceptRoutesFrom?: ResourceFilter[];
     /** The ingress sources to advertise routes to, replacing any existing sources to advertise to. Routes in the
@@ -25800,36 +25824,36 @@ namespace VpcV1 {
     resourceGroupId?: string;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
+    /** Filters the collection to resources with a `dedicated_host.id` property matching the specified identifier. */
+    dedicatedHostId?: string;
+    /** Filters the collection to resources with a `dedicated_host.crn` property matching the specified CRN. */
+    dedicatedHostCrn?: string;
+    /** Filters the collection to resources with a `dedicated_host.name` property matching the exact specified name. */
+    dedicatedHostName?: string;
+    /** Filters the collection to resources with a `placement_target.id` property matching the specified placement
+     *  group identifier.
+     */
+    placementGroupId?: string;
+    /** Filters the collection to resources with a `placement_target.crn` property matching the specified placement
+     *  group CRN.
+     */
+    placementGroupCrn?: string;
+    /** Filters the collection to resources with a `placement_target.name` property matching the exact specified
+     *  placement group name.
+     */
+    placementGroupName?: string;
+    /** Filters the collection to resources with a `reservation.id` property matching the specified identifier. */
+    reservationId?: string;
+    /** Filters the collection to resources with a `reservation.crn` property matching the specified identifier. */
+    reservationCrn?: string;
+    /** Filters the collection to resources with a `reservation.name` property matching the specified identifier. */
+    reservationName?: string;
     /** Filters the collection to resources with a `vpc.id` property matching the specified identifier. */
     vpcId?: string;
     /** Filters the collection to resources with a `vpc.crn` property matching the specified CRN. */
     vpcCrn?: string;
     /** Filters the collection to resources with a `vpc.name` property matching the exact specified name. */
     vpcName?: string;
-    /** Filters the collection to instances with a `dedicated_host.id` property matching the specified identifier. */
-    dedicatedHostId?: string;
-    /** Filters the collection to instances with a `dedicated_host.crn` property matching the specified CRN. */
-    dedicatedHostCrn?: string;
-    /** Filters the collection to instances with a `dedicated_host.name` property matching the exact specified name. */
-    dedicatedHostName?: string;
-    /** Filters the collection to instances with a `placement_target.id` property matching the specified placement
-     *  group identifier.
-     */
-    placementGroupId?: string;
-    /** Filters the collection to instances with a `placement_target.crn` property matching the specified placement
-     *  group CRN.
-     */
-    placementGroupCrn?: string;
-    /** Filters the collection to instances with a `placement_target.name` property matching the exact specified
-     *  placement group name.
-     */
-    placementGroupName?: string;
-    /** Filters the collection to instances with a `reservation.id` property matching the specified identifier. */
-    reservationId?: string;
-    /** Filters the collection to instances with a `reservation.crn` property matching the specified CRN. */
-    reservationCrn?: string;
-    /** Filters the collection to resources with a `reservation.name` property matching the exact specified name. */
-    reservationName?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -26678,11 +26702,7 @@ namespace VpcV1 {
     committedUse?: ReservationCommittedUsePatch;
     /** The name for this reservation. The name must not be used by another reservation in the region. */
     name?: string;
-    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
-     *  reservation.
-     *
-     *  The profile can only be changed for a reservation with a `status` of `inactive`.
-     */
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation. */
     profile?: ReservationProfilePatch;
     headers?: OutgoingHttpHeaders;
   }
@@ -26855,229 +26875,6 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `listBackupPolicies` operation. */
-  export interface ListBackupPoliciesParams {
-    /** A server-provided token determining what resource to start the page on. */
-    start?: string;
-    /** The number of resources to return on a page. */
-    limit?: number;
-    /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
-    resourceGroupId?: string;
-    /** Filters the collection to resources with a `name` property matching the exact specified name. */
-    name?: string;
-    /** Filters the collection to resources with an item in the `tags` property matching the exact specified tag. */
-    tag?: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `createBackupPolicy` operation. */
-  export interface CreateBackupPolicyParams {
-    /** The backup policy prototype object. */
-    backupPolicyPrototype: BackupPolicyPrototype;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `listBackupPolicyJobs` operation. */
-  export interface ListBackupPolicyJobsParams {
-    /** The backup policy identifier. */
-    backupPolicyId: string;
-    /** Filters the collection to backup policy jobs with a `status` property matching the specified value. */
-    status?: ListBackupPolicyJobsConstants.Status | string;
-    /** Filters the collection to backup policy jobs with a `backup_policy_plan.id` property matching the specified
-     *  identifier.
-     */
-    backupPolicyPlanId?: string;
-    /** A server-provided token determining what resource to start the page on. */
-    start?: string;
-    /** The number of resources to return on a page. */
-    limit?: number;
-    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
-     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
-     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
-     *  order.
-     */
-    sort?: ListBackupPolicyJobsConstants.Sort | string;
-    /** Filters the collection to backup policy jobs with a `source.id` property matching the specified identifier. */
-    sourceId?: string;
-    /** Filters the collection to backup policy jobs with an item in the `target_snapshots` property with an `id`
-     *  property matching the specified identifier.
-     */
-    targetSnapshotsId?: string;
-    /** Filters the collection to backup policy jobs with an item in the `target_snapshots` property with a `crn`
-     *  property matching the specified CRN.
-     */
-    targetSnapshotsCrn?: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Constants for the `listBackupPolicyJobs` operation. */
-  export namespace ListBackupPolicyJobsConstants {
-    /** Filters the collection to backup policy jobs with a `status` property matching the specified value. */
-    export enum Status {
-      FAILED = 'failed',
-      RUNNING = 'running',
-      SUCCEEDED = 'succeeded',
-    }
-    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
-    export enum Sort {
-      CREATED_AT = 'created_at',
-      NAME = 'name',
-    }
-  }
-
-  /** Parameters for the `getBackupPolicyJob` operation. */
-  export interface GetBackupPolicyJobParams {
-    /** The backup policy identifier. */
-    backupPolicyId: string;
-    /** The backup policy job identifier. */
-    id: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `listBackupPolicyPlans` operation. */
-  export interface ListBackupPolicyPlansParams {
-    /** The backup policy identifier. */
-    backupPolicyId: string;
-    /** Filters the collection to resources with a `name` property matching the exact specified name. */
-    name?: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `createBackupPolicyPlan` operation. */
-  export interface CreateBackupPolicyPlanParams {
-    /** The backup policy identifier. */
-    backupPolicyId: string;
-    /** The cron specification for the backup schedule. The backup policy jobs
-     *  (which create and delete backups for this plan) will not start until this time, and may start for up to 90
-     *  minutes after this time.
-     *
-     *  All backup schedules for plans in the same policy must be at least an hour apart.
-     */
-    cronSpec: string;
-    /** Indicates whether the plan is active. */
-    active?: boolean;
-    /** User tags to attach to each backup (snapshot) created by this plan. If unspecified, no user tags will be
-     *  attached.
-     */
-    attachUserTags?: string[];
-    clonePolicy?: BackupPolicyPlanClonePolicyPrototype;
-    /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
-    copyUserTags?: boolean;
-    deletionTrigger?: BackupPolicyPlanDeletionTriggerPrototype;
-    /** The name for this backup policy plan. The name must not be used by another plan for the backup policy. If
-     *  unspecified, the name will be a hyphenated list of randomly-selected words.
-     */
-    name?: string;
-    /** The policies for additional backups in remote regions. */
-    remoteRegionPolicies?: BackupPolicyPlanRemoteRegionPolicyPrototype[];
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `deleteBackupPolicyPlan` operation. */
-  export interface DeleteBackupPolicyPlanParams {
-    /** The backup policy identifier. */
-    backupPolicyId: string;
-    /** The backup policy plan identifier. */
-    id: string;
-    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
-     *  value.
-     */
-    ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `getBackupPolicyPlan` operation. */
-  export interface GetBackupPolicyPlanParams {
-    /** The backup policy identifier. */
-    backupPolicyId: string;
-    /** The backup policy plan identifier. */
-    id: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `updateBackupPolicyPlan` operation. */
-  export interface UpdateBackupPolicyPlanParams {
-    /** The backup policy identifier. */
-    backupPolicyId: string;
-    /** The backup policy plan identifier. */
-    id: string;
-    /** Indicates whether the plan is active. */
-    active?: boolean;
-    /** The user tags to attach to backups (snapshots) created by this plan. Updating this value does not change the
-     *  user tags for backups that have already been created by this plan.
-     */
-    attachUserTags?: string[];
-    clonePolicy?: BackupPolicyPlanClonePolicyPatch;
-    /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
-    copyUserTags?: boolean;
-    /** The cron specification for the backup schedule. The backup policy jobs
-     *  (which create and delete backups for this plan) will not start until this time, and may start for up to 90
-     *  minutes after this time.
-     *
-     *  All backup schedules for plans in the same policy must be at least an hour apart.
-     */
-    cronSpec?: string;
-    deletionTrigger?: BackupPolicyPlanDeletionTriggerPatch;
-    /** The name for this backup policy plan. The name must not be used by another plan for the backup policy. */
-    name?: string;
-    /** The policies for additional backups in remote regions (replacing any existing policies). */
-    remoteRegionPolicies?: BackupPolicyPlanRemoteRegionPolicyPrototype[];
-    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
-     *  value. Required if the request body includes an array.
-     */
-    ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `deleteBackupPolicy` operation. */
-  export interface DeleteBackupPolicyParams {
-    /** The backup policy identifier. */
-    id: string;
-    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
-     *  value.
-     */
-    ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `getBackupPolicy` operation. */
-  export interface GetBackupPolicyParams {
-    /** The backup policy identifier. */
-    id: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Parameters for the `updateBackupPolicy` operation. */
-  export interface UpdateBackupPolicyParams {
-    /** The backup policy identifier. */
-    id: string;
-    /** The included content for backups created using this policy:
-     *  - `boot_volume`: Include the instance's boot volume.
-     *  - `data_volumes`: Include the instance's data volumes.
-     */
-    includedContent?: UpdateBackupPolicyConstants.IncludedContent[] | string[];
-    /** The user tags this backup policy will apply to (replacing any existing tags). Resources that have both a
-     *  matching user tag and a matching type will be subject to the backup policy.
-     */
-    matchUserTags?: string[];
-    /** The name for this backup policy. The name must not be used by another backup policy in the region. */
-    name?: string;
-    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
-     *  value. Required if the request body includes an array.
-     */
-    ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
-  }
-
-  /** Constants for the `updateBackupPolicy` operation. */
-  export namespace UpdateBackupPolicyConstants {
-    /** An item to include. */
-    export enum IncludedContent {
-      BOOT_VOLUME = 'boot_volume',
-      DATA_VOLUMES = 'data_volumes',
-    }
-  }
-
   /** Parameters for the `listPlacementGroups` operation. */
   export interface ListPlacementGroupsParams {
     /** A server-provided token determining what resource to start the page on. */
@@ -27089,13 +26886,12 @@ namespace VpcV1 {
 
   /** Parameters for the `createPlacementGroup` operation. */
   export interface CreatePlacementGroupParams {
-    /** The strategy for this placement group
+    /** The strategy for this placement group:
      *  - `host_spread`: place on different compute hosts
      *  - `power_spread`: place on compute hosts that use different power sources
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the
-     *  unexpected strategy was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     strategy: CreatePlacementGroupConstants.Strategy | string;
     /** The name for this placement group. The name must not be used by another placement group in the region. If
@@ -27111,7 +26907,7 @@ namespace VpcV1 {
 
   /** Constants for the `createPlacementGroup` operation. */
   export namespace CreatePlacementGroupConstants {
-    /** The strategy for this placement group - `host_spread`: place on different compute hosts - `power_spread`: place on compute hosts that use different power sources The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the unexpected strategy was encountered. */
+    /** The strategy for this placement group: - `host_spread`: place on different compute hosts - `power_spread`: place on compute hosts that use different power sources The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
     export enum Strategy {
       HOST_SPREAD = 'host_spread',
       POWER_SPREAD = 'power_spread',
@@ -27552,6 +27348,8 @@ namespace VpcV1 {
     operatingSystemArchitecture?: string;
     /** Filters the collection to resources with a `zone.name` property matching the exact specified name. */
     zoneName?: string;
+    /** Filters the collection to resources with an item in the `tags` property matching the exact specified tag. */
+    tag?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -27603,7 +27401,8 @@ namespace VpcV1 {
      *  instance, and the specified value must not be less than the current capacity. Additionally, if the volume is
      *  attached as a boot volume, the maximum value is 250 gigabytes.
      *
-     *  The minimum and maximum capacity limits for creating or updating volumes may expand in the future.
+     *  The minimum and maximum limits for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     capacity?: number;
     /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
@@ -27979,7 +27778,8 @@ namespace VpcV1 {
     /** The maximum input/output operations per second (IOPS) for the file share. The value must be in the range
      *  supported by the share's size.
      *
-     *  For this property to be changed, the share `lifecycle_state` must be `stable`.
+     *  For this property to be changed, the share `lifecycle_state` must be `stable` and
+     *  `replication_role` must not be `replica`.
      */
     iops?: number;
     /** The name for this share. The name must not be used by another share in the region. */
@@ -27999,7 +27799,8 @@ namespace VpcV1 {
     /** The size of the file share rounded up to the next gigabyte. The value must not be less than the share's
      *  current size, and must not exceed the maximum supported by the share's profile and IOPS.
      *
-     *  For this property to be changed, the share `lifecycle_state` must be `stable`.
+     *  For this property to be changed, the share `lifecycle_state` must be `stable` and
+     *  `replication_role` must not be `replica`.
      */
     size?: number;
     /** Tags for this resource. */
@@ -28112,6 +27913,229 @@ namespace VpcV1 {
     /** The file share identifier. */
     shareId: string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listBackupPolicies` operation. */
+  export interface ListBackupPoliciesParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
+    resourceGroupId?: string;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** Filters the collection to resources with an item in the `tags` property matching the exact specified tag. */
+    tag?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createBackupPolicy` operation. */
+  export interface CreateBackupPolicyParams {
+    /** The backup policy prototype object. */
+    backupPolicyPrototype: BackupPolicyPrototype;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listBackupPolicyJobs` operation. */
+  export interface ListBackupPolicyJobsParams {
+    /** The backup policy identifier. */
+    backupPolicyId: string;
+    /** Filters the collection to backup policy jobs with a `status` property matching the specified value. */
+    status?: ListBackupPolicyJobsConstants.Status | string;
+    /** Filters the collection to backup policy jobs with a `backup_policy_plan.id` property matching the specified
+     *  identifier.
+     */
+    backupPolicyPlanId?: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListBackupPolicyJobsConstants.Sort | string;
+    /** Filters the collection to backup policy jobs with a `source.id` property matching the specified identifier. */
+    sourceId?: string;
+    /** Filters the collection to backup policy jobs with an item in the `target_snapshots` property with an `id`
+     *  property matching the specified identifier.
+     */
+    targetSnapshotsId?: string;
+    /** Filters the collection to backup policy jobs with an item in the `target_snapshots` property with a `crn`
+     *  property matching the specified CRN.
+     */
+    targetSnapshotsCrn?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listBackupPolicyJobs` operation. */
+  export namespace ListBackupPolicyJobsConstants {
+    /** Filters the collection to backup policy jobs with a `status` property matching the specified value. */
+    export enum Status {
+      FAILED = 'failed',
+      RUNNING = 'running',
+      SUCCEEDED = 'succeeded',
+    }
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `getBackupPolicyJob` operation. */
+  export interface GetBackupPolicyJobParams {
+    /** The backup policy identifier. */
+    backupPolicyId: string;
+    /** The backup policy job identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listBackupPolicyPlans` operation. */
+  export interface ListBackupPolicyPlansParams {
+    /** The backup policy identifier. */
+    backupPolicyId: string;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createBackupPolicyPlan` operation. */
+  export interface CreateBackupPolicyPlanParams {
+    /** The backup policy identifier. */
+    backupPolicyId: string;
+    /** The cron specification for the backup schedule. The backup policy jobs
+     *  (which create and delete backups for this plan) will not start until this time, and may start for up to 90
+     *  minutes after this time.
+     *
+     *  All backup schedules for plans in the same policy must be at least an hour apart.
+     */
+    cronSpec: string;
+    /** Indicates whether the plan is active. */
+    active?: boolean;
+    /** User tags to attach to each backup (snapshot) created by this plan. If unspecified, no user tags will be
+     *  attached.
+     */
+    attachUserTags?: string[];
+    clonePolicy?: BackupPolicyPlanClonePolicyPrototype;
+    /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
+    copyUserTags?: boolean;
+    deletionTrigger?: BackupPolicyPlanDeletionTriggerPrototype;
+    /** The name for this backup policy plan. The name must not be used by another plan for the backup policy. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The policies for additional backups in remote regions. */
+    remoteRegionPolicies?: BackupPolicyPlanRemoteRegionPolicyPrototype[];
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteBackupPolicyPlan` operation. */
+  export interface DeleteBackupPolicyPlanParams {
+    /** The backup policy identifier. */
+    backupPolicyId: string;
+    /** The backup policy plan identifier. */
+    id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getBackupPolicyPlan` operation. */
+  export interface GetBackupPolicyPlanParams {
+    /** The backup policy identifier. */
+    backupPolicyId: string;
+    /** The backup policy plan identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateBackupPolicyPlan` operation. */
+  export interface UpdateBackupPolicyPlanParams {
+    /** The backup policy identifier. */
+    backupPolicyId: string;
+    /** The backup policy plan identifier. */
+    id: string;
+    /** Indicates whether the plan is active. */
+    active?: boolean;
+    /** The user tags to attach to backups (snapshots) created by this plan. Updating this value does not change the
+     *  user tags for backups that have already been created by this plan.
+     */
+    attachUserTags?: string[];
+    clonePolicy?: BackupPolicyPlanClonePolicyPatch;
+    /** Indicates whether to copy the source's user tags to the created backups (snapshots). */
+    copyUserTags?: boolean;
+    /** The cron specification for the backup schedule. The backup policy jobs
+     *  (which create and delete backups for this plan) will not start until this time, and may start for up to 90
+     *  minutes after this time.
+     *
+     *  All backup schedules for plans in the same policy must be at least an hour apart.
+     */
+    cronSpec?: string;
+    deletionTrigger?: BackupPolicyPlanDeletionTriggerPatch;
+    /** The name for this backup policy plan. The name must not be used by another plan for the backup policy. */
+    name?: string;
+    /** The policies for additional backups in remote regions (replacing any existing policies). */
+    remoteRegionPolicies?: BackupPolicyPlanRemoteRegionPolicyPrototype[];
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteBackupPolicy` operation. */
+  export interface DeleteBackupPolicyParams {
+    /** The backup policy identifier. */
+    id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getBackupPolicy` operation. */
+  export interface GetBackupPolicyParams {
+    /** The backup policy identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateBackupPolicy` operation. */
+  export interface UpdateBackupPolicyParams {
+    /** The backup policy identifier. */
+    id: string;
+    /** The included content for backups created using this policy:
+     *  - `boot_volume`: Include the instance's boot volume.
+     *  - `data_volumes`: Include the instance's data volumes.
+     */
+    includedContent?: UpdateBackupPolicyConstants.IncludedContent[] | string[];
+    /** The user tags this backup policy will apply to (replacing any existing tags). Resources that have both a
+     *  matching user tag and a matching type will be subject to the backup policy.
+     */
+    matchUserTags?: string[];
+    /** The name for this backup policy. The name must not be used by another backup policy in the region. */
+    name?: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `updateBackupPolicy` operation. */
+  export namespace UpdateBackupPolicyConstants {
+    /** An item to include. */
+    export enum IncludedContent {
+      BOOT_VOLUME = 'boot_volume',
+      DATA_VOLUMES = 'data_volumes',
+    }
   }
 
   /** Parameters for the `listRegions` operation. */
@@ -28759,11 +28783,21 @@ namespace VpcV1 {
     code?: number;
     /** The direction of traffic to enforce. */
     direction?: UpdateSecurityGroupRuleConstants.Direction | string;
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
-     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
-     *  addresses (network interfaces) in that group matching this IP version.
+    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+     *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
+     *
+     *  If `remote` references a security group, then this rule only applies to IP addresses
+     *  (network interfaces) in that group matching this IP version.
      */
     ipVersion?: UpdateSecurityGroupRuleConstants.IpVersion | string;
+    /** The local IP address or range of local IP addresses to which this rule will allow inbound
+     *  traffic (or from which, for outbound traffic). Can be specified as an IP address or a CIDR
+     *  block.
+     *
+     *  Specify a CIDR block of `0.0.0.0/0` to allow traffic to all local IP addresses (or from all
+     *  local IP addresses, for outbound rules).
+     */
+    local?: SecurityGroupRuleLocalPatch;
     /** The inclusive upper bound of the protocol destination port range. If set, `port_min` must also be set, and
      *  must not be larger.
      *
@@ -28797,7 +28831,7 @@ namespace VpcV1 {
       INBOUND = 'inbound',
       OUTBOUND = 'outbound',
     }
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+    /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
     export enum IpVersion {
       IPV4 = 'ipv4',
     }
@@ -29221,6 +29255,15 @@ namespace VpcV1 {
     adminStateUp?: boolean;
     /** The Dead Peer Detection settings. */
     deadPeerDetection?: VPNGatewayConnectionDPDPatch;
+    /** The establish mode of the VPN gateway connection:
+     *  - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol
+     *     negotiations or rekeying processes.
+     *  - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway
+     *     connection. Additionally, the peer is responsible for initiating the rekeying process
+     *     after the connection is established. If rekeying does not occur, the VPN gateway
+     *     connection will be brought down after its lifetime expires.
+     */
+    establishMode?: UpdateVpnGatewayConnectionConstants.EstablishMode | string;
     /** The IKE policy to use. Specify `null` to remove any existing policy, [resulting in
      *  auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1).
      */
@@ -29233,8 +29276,7 @@ namespace VpcV1 {
      *  gateway.
      */
     name?: string;
-    /** The IP address of the peer VPN gateway. */
-    peerAddress?: string;
+    peer?: VPNGatewayConnectionPeerPatch;
     /** The pre-shared key. */
     psk?: string;
     /** Routing protocols are disabled for this VPN gateway connection. */
@@ -29244,14 +29286,19 @@ namespace VpcV1 {
 
   /** Constants for the `updateVpnGatewayConnection` operation. */
   export namespace UpdateVpnGatewayConnectionConstants {
+    /** The establish mode of the VPN gateway connection: - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol negotiations or rekeying processes. - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway connection. Additionally, the peer is responsible for initiating the rekeying process after the connection is established. If rekeying does not occur, the VPN gateway connection will be brought down after its lifetime expires. */
+    export enum EstablishMode {
+      BIDIRECTIONAL = 'bidirectional',
+      PEER_ONLY = 'peer_only',
+    }
     /** Routing protocols are disabled for this VPN gateway connection. */
     export enum RoutingProtocol {
       NONE = 'none',
     }
   }
 
-  /** Parameters for the `listVpnGatewayConnectionLocalCidrs` operation. */
-  export interface ListVpnGatewayConnectionLocalCidrsParams {
+  /** Parameters for the `listVpnGatewayConnectionsLocalCidrs` operation. */
+  export interface ListVpnGatewayConnectionsLocalCidrsParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
@@ -29259,47 +29306,41 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `removeVpnGatewayConnectionLocalCidr` operation. */
-  export interface RemoveVpnGatewayConnectionLocalCidrParams {
+  /** Parameters for the `removeVpnGatewayConnectionsLocalCidr` operation. */
+  export interface RemoveVpnGatewayConnectionsLocalCidrParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    /** The address prefix part of the CIDR. */
-    cidrPrefix: string;
-    /** The prefix length part of the CIDR. */
-    prefixLength: string;
+    /** The IP address range in CIDR block notation. */
+    cidr: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `checkVpnGatewayConnectionLocalCidr` operation. */
-  export interface CheckVpnGatewayConnectionLocalCidrParams {
+  /** Parameters for the `checkVpnGatewayConnectionsLocalCidr` operation. */
+  export interface CheckVpnGatewayConnectionsLocalCidrParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    /** The address prefix part of the CIDR. */
-    cidrPrefix: string;
-    /** The prefix length part of the CIDR. */
-    prefixLength: string;
+    /** The IP address range in CIDR block notation. */
+    cidr: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `addVpnGatewayConnectionLocalCidr` operation. */
-  export interface AddVpnGatewayConnectionLocalCidrParams {
+  /** Parameters for the `addVpnGatewayConnectionsLocalCidr` operation. */
+  export interface AddVpnGatewayConnectionsLocalCidrParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    /** The address prefix part of the CIDR. */
-    cidrPrefix: string;
-    /** The prefix length part of the CIDR. */
-    prefixLength: string;
+    /** The IP address range in CIDR block notation. */
+    cidr: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `listVpnGatewayConnectionPeerCidrs` operation. */
-  export interface ListVpnGatewayConnectionPeerCidrsParams {
+  /** Parameters for the `listVpnGatewayConnectionsPeerCidrs` operation. */
+  export interface ListVpnGatewayConnectionsPeerCidrsParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
@@ -29307,42 +29348,36 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `removeVpnGatewayConnectionPeerCidr` operation. */
-  export interface RemoveVpnGatewayConnectionPeerCidrParams {
+  /** Parameters for the `removeVpnGatewayConnectionsPeerCidr` operation. */
+  export interface RemoveVpnGatewayConnectionsPeerCidrParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    /** The address prefix part of the CIDR. */
-    cidrPrefix: string;
-    /** The prefix length part of the CIDR. */
-    prefixLength: string;
+    /** The IP address range in CIDR block notation. */
+    cidr: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `checkVpnGatewayConnectionPeerCidr` operation. */
-  export interface CheckVpnGatewayConnectionPeerCidrParams {
+  /** Parameters for the `checkVpnGatewayConnectionsPeerCidr` operation. */
+  export interface CheckVpnGatewayConnectionsPeerCidrParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    /** The address prefix part of the CIDR. */
-    cidrPrefix: string;
-    /** The prefix length part of the CIDR. */
-    prefixLength: string;
+    /** The IP address range in CIDR block notation. */
+    cidr: string;
     headers?: OutgoingHttpHeaders;
   }
 
-  /** Parameters for the `addVpnGatewayConnectionPeerCidr` operation. */
-  export interface AddVpnGatewayConnectionPeerCidrParams {
+  /** Parameters for the `addVpnGatewayConnectionsPeerCidr` operation. */
+  export interface AddVpnGatewayConnectionsPeerCidrParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    /** The address prefix part of the CIDR. */
-    cidrPrefix: string;
-    /** The prefix length part of the CIDR. */
-    prefixLength: string;
+    /** The IP address range in CIDR block notation. */
+    cidr: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -29599,14 +29634,10 @@ namespace VpcV1 {
      */
     destination: string;
     /** The action to perform with a packet matching the VPN route:
-     *  - `translate`: translate the source IP address to one of the private IP addresses of the VPN server, then
-     *  deliver the packet to target.
+     *  - `translate`: translate the source IP address to one of the private IP addresses of
+     *    the VPN server, then deliver the packet to target.
      *  - `deliver`: deliver the packet to the target.
-     *  - `drop`: drop the packet
-     *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on
-     *  which the unexpected property value was encountered.
+     *  - `drop`: drop the packet.
      */
     action?: CreateVpnServerRouteConstants.Action | string;
     /** The name for this VPN server route. The name must not be used by another route for the VPN server. If
@@ -29618,7 +29649,7 @@ namespace VpcV1 {
 
   /** Constants for the `createVpnServerRoute` operation. */
   export namespace CreateVpnServerRouteConstants {
-    /** The action to perform with a packet matching the VPN route: - `translate`: translate the source IP address to one of the private IP addresses of the VPN server, then deliver the packet to target. - `deliver`: deliver the packet to the target. - `drop`: drop the packet The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on which the unexpected property value was encountered. */
+    /** The action to perform with a packet matching the VPN route: - `translate`: translate the source IP address to one of the private IP addresses of the VPN server, then deliver the packet to target. - `deliver`: deliver the packet to the target. - `drop`: drop the packet. */
     export enum Action {
       DELIVER = 'deliver',
       DROP = 'drop',
@@ -29833,7 +29864,10 @@ namespace VpcV1 {
     certificateInstance?: CertificateInstanceIdentity;
     /** The connection limit of the listener. */
     connectionLimit?: number;
-    /** The default pool for this listener. If specified, the pool must:
+    /** The default pool for this listener. If `https_redirect` is specified, the
+     *  default pool will not be used.
+     *  If specified, the pool must:
+     *
      *  - Belong to this load balancer.
      *  - Have the same `protocol` as this listener, or have a compatible protocol.
      *    At present, the compatible protocols are `http` and `https`.
@@ -29843,8 +29877,11 @@ namespace VpcV1 {
      *  subsequently set.
      */
     defaultPool?: LoadBalancerPoolIdentity;
-    /** The target listener that requests will be redirected to. This listener must have a
-     *  `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+    /** The target listener that requests will be redirected to if none of the listener's
+     *  `policies` match.
+     *
+     *  If specified, this listener must have a `protocol` of `http`, and the target
+     *  listener must have a `protocol` of `https`.
      */
     httpsRedirect?: LoadBalancerListenerHTTPSRedirectPrototype;
     /** The idle connection timeout of the listener in seconds. Supported for load balancers in the `application`
@@ -29929,7 +29966,8 @@ namespace VpcV1 {
     certificateInstance?: CertificateInstanceIdentity;
     /** The connection limit of the listener. */
     connectionLimit?: number;
-    /** The default pool for this listener. The specified pool must:
+    /** The default pool for this listener. If `https_redirect` is set, the default pool will not
+     *  be used. The specified pool must:
      *
      *  - Belong to this load balancer
      *  - Have the same `protocol` as this listener, or have a compatible protocol.
@@ -29938,9 +29976,12 @@ namespace VpcV1 {
      *
      *  Specify `null` to remove an existing default pool.
      */
-    defaultPool?: LoadBalancerPoolIdentity;
-    /** The target listener that requests will be redirected to. This listener must have a
-     *  `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+    defaultPool?: LoadBalancerListenerDefaultPoolPatch;
+    /** The target listener that requests will be redirected to if none of the listener's
+     *  `policies` match.
+     *
+     *  If specified, this listener must have a `protocol` of `http`, and the target listener
+     *  must have a `protocol` of `https`.
      *
      *  Specify `null` to remove any existing https redirect.
      */
@@ -30020,12 +30061,20 @@ namespace VpcV1 {
     listenerId: string;
     /** The policy action.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on
-     *  which the unexpected property value was encountered.
+     *  - `forward`: Requests will be forwarded to the specified `target` pool
+     *  - `https_redirect`: Requests will be redirected to the specified target listener. The
+     *    listener must have a `protocol` of `http`, and the target listener must have a
+     *    `protocol` of `https`
+     *  - `redirect`: Requests will be redirected to the specified `target.url`
+     *  - `reject`: Requests will be rejected with a `403` status code
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     action: CreateLoadBalancerListenerPolicyConstants.Action | string;
-    /** Priority of the policy. Lower value indicates higher priority. */
+    /** Priority of the policy. The priority is unique across all policies for this load balancer listener. Lower
+     *  value indicates higher priority.
+     */
     priority: number;
     /** The name for this policy. The name must not be used by another policy for the load balancer listener. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -30034,9 +30083,9 @@ namespace VpcV1 {
     /** The rule prototype objects for this policy. */
     rules?: LoadBalancerListenerPolicyRulePrototype[];
     /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
-     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
      *  - If `action` is `https_redirect`, specify a
-     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
+     *  `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
+     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
      */
     target?: LoadBalancerListenerPolicyTargetPrototype;
     headers?: OutgoingHttpHeaders;
@@ -30044,7 +30093,7 @@ namespace VpcV1 {
 
   /** Constants for the `createLoadBalancerListenerPolicy` operation. */
   export namespace CreateLoadBalancerListenerPolicyConstants {
-    /** The policy action. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on which the unexpected property value was encountered. */
+    /** The policy action. - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
     export enum Action {
       FORWARD = 'forward',
       HTTPS_REDIRECT = 'https_redirect',
@@ -30085,12 +30134,14 @@ namespace VpcV1 {
     id: string;
     /** The name for this policy. The name must not be used by another policy for the load balancer listener. */
     name?: string;
-    /** Priority of the policy. Lower value indicates higher priority. */
+    /** Priority of the policy. The priority is unique across all policies for this load balancer listener. Lower
+     *  value indicates higher priority.
+     */
     priority?: number;
     /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
-     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
      *  - If `action` is `https_redirect`, specify a
-     *    `LoadBalancerListenerPolicyHTTPSRedirectPatch`.
+     *  `LoadBalancerListenerPolicyHTTPSRedirectPatch`.
+     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
      */
     target?: LoadBalancerListenerPolicyTargetPatch;
     headers?: OutgoingHttpHeaders;
@@ -30273,7 +30324,10 @@ namespace VpcV1 {
      *  Supported by load balancers in the `application` family (otherwise always `disabled`).
      */
     proxyProtocol?: CreateLoadBalancerPoolConstants.ProxyProtocol | string;
-    /** The session persistence of this pool. */
+    /** The session persistence of this pool. If unspecified, session persistence will be
+     *  disabled, and traffic will be distributed across backend server members of the
+     *  pool.
+     */
     sessionPersistence?: LoadBalancerPoolSessionPersistencePrototype;
     headers?: OutgoingHttpHeaders;
   }
@@ -30771,20 +30825,15 @@ namespace VpcV1 {
     created_at: string;
     /** The CRN for this backup policy. */
     crn: string;
-    /** The reasons for the current `health_state` (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `health_state` (if any). */
     health_reasons: BackupPolicyHealthReason[];
-    /** The health of this resource.
+    /** The health of this resource:
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
      *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
-     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
-     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
-     *  also have this state.
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: BackupPolicy.Constants.HealthState | string;
     /** The URL for this backup policy. */
@@ -30801,9 +30850,8 @@ namespace VpcV1 {
     /** The resource type this backup policy applies to. Resources that have both a matching type and a matching
      *  user tag will be subject to the backup policy.
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     match_resource_type: BackupPolicy.Constants.MatchResourceType | string;
     /** The user tags this backup policy applies to. Resources that have both a matching user tag and a matching
@@ -30823,7 +30871,7 @@ namespace VpcV1 {
   }
   export namespace BackupPolicy {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -30840,7 +30888,7 @@ namespace VpcV1 {
         UPDATING = 'updating',
         WAITING = 'waiting',
       }
-      /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the unexpected property value was encountered. */
+      /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum MatchResourceType {
         INSTANCE = 'instance',
         VOLUME = 'volume',
@@ -30880,7 +30928,7 @@ namespace VpcV1 {
 
   /** BackupPolicyHealthReason. */
   export interface BackupPolicyHealthReason {
-    /** A snake case string succinctly identifying the reason for this health state. */
+    /** A reason code for this health state. */
     code: BackupPolicyHealthReason.Constants.Code | string;
     /** An explanation of the reason for this health state. */
     message: string;
@@ -30889,7 +30937,7 @@ namespace VpcV1 {
   }
   export namespace BackupPolicyHealthReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this health state. */
+      /** A reason code for this health state. */
       export enum Code {
         MISSING_SERVICE_AUTHORIZATION_POLICIES = 'missing_service_authorization_policies',
       }
@@ -30923,9 +30971,8 @@ namespace VpcV1 {
     id: string;
     /** The type of backup policy job.
      *
-     *  The enumerated values for this property will expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy job on which
-     *  the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     job_type: BackupPolicyJob.Constants.JobType | string;
     /** The resource type. */
@@ -30936,17 +30983,11 @@ namespace VpcV1 {
     source: BackupPolicyJobSource;
     /** The status of the backup policy job.
      *
-     *  The enumerated values for this property will expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy job on which
-     *  the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: BackupPolicyJob.Constants.Status | string;
-    /** The reasons for the current status (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current status (if any). */
     status_reasons: BackupPolicyJobStatusReason[];
     /** The snapshots operated on by this backup policy job (may be
      *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
@@ -30955,7 +30996,7 @@ namespace VpcV1 {
   }
   export namespace BackupPolicyJob {
     export namespace Constants {
-      /** The type of backup policy job. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy job on which the unexpected property value was encountered. */
+      /** The type of backup policy job. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum JobType {
         CREATION = 'creation',
         DELETION = 'deletion',
@@ -30964,7 +31005,7 @@ namespace VpcV1 {
       export enum ResourceType {
         BACKUP_POLICY_JOB = 'backup_policy_job',
       }
-      /** The status of the backup policy job. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy job on which the unexpected property value was encountered. */
+      /** The status of the backup policy job. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         FAILED = 'failed',
         RUNNING = 'running',
@@ -31005,11 +31046,14 @@ namespace VpcV1 {
 
   /** BackupPolicyJobStatusReason. */
   export interface BackupPolicyJobStatusReason {
-    /** A snake case string succinctly identifying the status reason:
+    /** A reason code for the status:
      *  - `internal_error`: Internal error (contact IBM support)
      *  - `snapshot_pending`: Cannot delete backup (snapshot) in the `pending` lifecycle state
      *  - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached
-     *  - `source_volume_busy`: The source volume has `busy` set (after multiple retries).
+     *  - `source_volume_busy`: The source volume has `busy` set (after multiple retries)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     code: BackupPolicyJobStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
@@ -31019,7 +31063,7 @@ namespace VpcV1 {
   }
   export namespace BackupPolicyJobStatusReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the status reason: - `internal_error`: Internal error (contact IBM support) - `snapshot_pending`: Cannot delete backup (snapshot) in the `pending` lifecycle state - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached - `source_volume_busy`: The source volume has `busy` set (after multiple retries). */
+      /** A reason code for the status: - `internal_error`: Internal error (contact IBM support) - `snapshot_pending`: Cannot delete backup (snapshot) in the `pending` lifecycle state - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached - `source_volume_busy`: The source volume has `busy` set (after multiple retries) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         INTERNAL_ERROR = 'internal_error',
         SNAPSHOT_PENDING = 'snapshot_pending',
@@ -31108,8 +31152,28 @@ namespace VpcV1 {
 
   /** BackupPolicyPlanCollection. */
   export interface BackupPolicyPlanCollection {
+    /** A link to the first page of resources. */
+    first: BackupPolicyPlanCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: BackupPolicyPlanCollectionNext;
     /** Collection of backup policy plans. */
     plans: BackupPolicyPlan[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface BackupPolicyPlanCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface BackupPolicyPlanCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
   }
 
   /** BackupPolicyPlanDeletionTrigger. */
@@ -31279,7 +31343,11 @@ namespace VpcV1 {
      *  metal server network interfaces.
      */
     bandwidth: number;
-    /** The possible resource types for this property are expected to expand in the future. */
+    /** The resource from which this bare metal server is booted.
+     *
+     *  The resources supported by this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     boot_target: BareMetalServerBootTarget;
     /** The bare metal server CPU configuration. */
     cpu: BareMetalServerCPU;
@@ -31297,12 +31365,7 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this bare metal server. */
     id: string;
-    /** The reasons for the current `lifecycle_state` (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `lifecycle_state` (if any). */
     lifecycle_reasons: BareMetalServerLifecycleReason[];
     /** The lifecycle state of the bare metal server. */
     lifecycle_state: BareMetalServer.Constants.LifecycleState | string;
@@ -31337,14 +31400,21 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: BareMetalServer.Constants.ResourceType | string;
-    /** The status of the bare metal server. */
-    status: BareMetalServer.Constants.Status | string;
-    /** The reasons for the current status (if any).
+    /** The status of this bare metal server:
+     *  - `deleting`: server is undergoing deletion
+     *  - `failed`: server is failed and not usable (see `status_reasons`)
+     *  - `maintenance`: server is undergoing maintenance (not usable)
+     *  - `pending`: server is being provisioned and not yet usable
+     *  - `restarting`: server is restarting and not yet usable
+     *  - `running`: server is powered on
+     *  - `starting`: server is starting and not yet usable
+     *  - `stopped`: server is powered off
      *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
+    status: BareMetalServer.Constants.Status | string;
+    /** The reasons for the current status (if any). */
     status_reasons: BareMetalServerStatusReason[];
     trusted_platform_module: BareMetalServerTrustedPlatformModule;
     /** The VPC this bare metal server resides in. */
@@ -31368,7 +31438,7 @@ namespace VpcV1 {
       export enum ResourceType {
         BARE_METAL_SERVER = 'bare_metal_server',
       }
-      /** The status of the bare metal server. */
+      /** The status of this bare metal server: - `deleting`: server is undergoing deletion - `failed`: server is failed and not usable (see `status_reasons`) - `maintenance`: server is undergoing maintenance (not usable) - `pending`: server is being provisioned and not yet usable - `restarting`: server is restarting and not yet usable - `running`: server is powered on - `starting`: server is starting and not yet usable - `stopped`: server is powered off The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         DELETING = 'deleting',
         FAILED = 'failed',
@@ -31378,12 +31448,11 @@ namespace VpcV1 {
         RUNNING = 'running',
         STARTING = 'starting',
         STOPPED = 'stopped',
-        STOPPING = 'stopping',
       }
     }
   }
 
-  /** The possible resource types for this property are expected to expand in the future. */
+  /** The resource from which this bare metal server is booted. The resources supported by this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
   export interface BareMetalServerBootTarget {
   }
 
@@ -31460,15 +31529,13 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this bare metal server disk. */
     id: string;
-    /** The disk interface used for attaching the disk.
-     *
+    /** The disk interface used for attaching the disk:
      *  - `fcp`: Attached using Fiber Channel Protocol
      *  - `sata`: Attached using Serial Advanced Technology Attachment
      *  - `nvme`: Attached using Non-Volatile Memory Express
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     interface_type: BareMetalServerDisk.Constants.InterfaceType | string;
     /** The name for this bare metal server disk. The name is unique across all disks on the bare metal server. */
@@ -31480,7 +31547,7 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerDisk {
     export namespace Constants {
-      /** The disk interface used for attaching the disk. - `fcp`: Attached using Fiber Channel Protocol - `sata`: Attached using Serial Advanced Technology Attachment - `nvme`: Attached using Non-Volatile Memory Express The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The disk interface used for attaching the disk: - `fcp`: Attached using Fiber Channel Protocol - `sata`: Attached using Serial Advanced Technology Attachment - `nvme`: Attached using Non-Volatile Memory Express The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum InterfaceType {
         FCP = 'fcp',
         NVME = 'nvme',
@@ -31540,7 +31607,14 @@ namespace VpcV1 {
 
   /** BareMetalServerLifecycleReason. */
   export interface BareMetalServerLifecycleReason {
-    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: BareMetalServerLifecycleReason.Constants.Code | string;
     /** An explanation of the reason for this lifecycle state. */
     message: string;
@@ -31549,8 +31623,9 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerLifecycleReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
+        INTERNAL_ERROR = 'internal_error',
         RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
       }
     }
@@ -31574,9 +31649,8 @@ namespace VpcV1 {
      *    array of `allowed_vlans`.
      *    - Must use an IEEE 802.1Q tag.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     interface_type: BareMetalServerNetworkAttachment.Constants.InterfaceType | string;
     /** The lifecycle state of the bare metal server network attachment. */
@@ -31600,7 +31674,7 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerNetworkAttachment {
     export namespace Constants {
-      /** The network attachment's interface type: - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI attachment - Cannot directly use an IEEE 802.1Q tag. - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The network attachment's interface type: - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI attachment - Cannot directly use an IEEE 802.1Q tag. - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum InterfaceType {
         PCI = 'pci',
         VLAN = 'vlan',
@@ -31807,9 +31881,8 @@ namespace VpcV1 {
      *  corresponding network attachment and its attached virtual network interface, and the interface type is that of
      *  the corresponding network attachment.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     interface_type: BareMetalServerNetworkInterface.Constants.InterfaceType | string;
     /** The MAC address of this bare metal server network interface. If the MAC address has not yet been selected,
@@ -31868,7 +31941,7 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerNetworkInterface {
     export namespace Constants {
-      /** The interface type: - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity within a `s390x` based system - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI interface - Cannot directly use an IEEE 802.1Q tag. - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. - Has its own security groups and does not inherit those of the PCI device through which traffic flows. If this bare metal server has network attachments, this network interface is a [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding network attachment and its attached virtual network interface, and the interface type is that of the corresponding network attachment. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The interface type: - `hipersocket`: a virtual device that provides high-speed TCP/IP connectivity within a `s390x` based system - `pci`: a physical PCI device which can only be created or deleted when the bare metal server is stopped - Has an `allowed_vlans` property which controls the VLANs that will be permitted to use the PCI interface - Cannot directly use an IEEE 802.1Q tag. - `vlan`: a virtual device, used through a `pci` device that has the `vlan` in its array of `allowed_vlans`. - Must use an IEEE 802.1Q tag. - Has its own security groups and does not inherit those of the PCI device through which traffic flows. If this bare metal server has network attachments, this network interface is a [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding network attachment and its attached virtual network interface, and the interface type is that of the corresponding network attachment. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum InterfaceType {
         HIPERSOCKET = 'hipersocket',
         PCI = 'pci',
@@ -32246,15 +32319,13 @@ namespace VpcV1 {
 
   /** BareMetalServerProfileDiskSupportedInterfaces. */
   export interface BareMetalServerProfileDiskSupportedInterfaces {
-    /** The disk interface used for attaching the disk.
-     *
+    /** The disk interface used for attaching the disk:
      *  - `fcp`: Attached using Fiber Channel Protocol
      *  - `sata`: Attached using Serial Advanced Technology Attachment
      *  - `nvme`: Attached using Non-Volatile Memory Express
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     default: BareMetalServerProfileDiskSupportedInterfaces.Constants.Default | string;
     /** The type for this profile field. */
@@ -32264,7 +32335,7 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerProfileDiskSupportedInterfaces {
     export namespace Constants {
-      /** The disk interface used for attaching the disk. - `fcp`: Attached using Fiber Channel Protocol - `sata`: Attached using Serial Advanced Technology Attachment - `nvme`: Attached using Non-Volatile Memory Express The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The disk interface used for attaching the disk: - `fcp`: Attached using Fiber Channel Protocol - `sata`: Attached using Serial Advanced Technology Attachment - `nvme`: Attached using Non-Volatile Memory Express The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Default {
         FCP = 'fcp',
         NVME = 'nvme',
@@ -32411,7 +32482,10 @@ namespace VpcV1 {
      *  - `cannot_start_capacity`: Insufficient capacity within the selected zone
      *  - `cannot_start_compute`: An error occurred while allocating compute resources
      *  - `cannot_start_ip_address`: An error occurred while allocating an IP address
-     *  - `cannot_start_network`: An error occurred while allocating network resources.
+     *  - `cannot_start_network`: An error occurred while allocating network resources
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     code: BareMetalServerStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
@@ -32421,7 +32495,7 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerStatusReason {
     export namespace Constants {
-      /** The status reason code: - `cannot_start`: Failed to start due to an internal error - `cannot_start_capacity`: Insufficient capacity within the selected zone - `cannot_start_compute`: An error occurred while allocating compute resources - `cannot_start_ip_address`: An error occurred while allocating an IP address - `cannot_start_network`: An error occurred while allocating network resources. */
+      /** The status reason code: - `cannot_start`: Failed to start due to an internal error - `cannot_start_capacity`: Insufficient capacity within the selected zone - `cannot_start_compute`: An error occurred while allocating compute resources - `cannot_start_ip_address`: An error occurred while allocating an IP address - `cannot_start_network`: An error occurred while allocating network resources The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_START = 'cannot_start',
         CANNOT_START_CAPACITY = 'cannot_start_capacity',
@@ -32440,9 +32514,8 @@ namespace VpcV1 {
      *  - `disabled`: No TPM functionality
      *  - `tpm_2`: TPM 2.0
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     mode: BareMetalServerTrustedPlatformModule.Constants.Mode | string;
     /** The supported trusted platform module modes. */
@@ -32450,7 +32523,7 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerTrustedPlatformModule {
     export namespace Constants {
-      /** The trusted platform module (TPM) mode: - `disabled`: No TPM functionality - `tpm_2`: TPM 2.0 The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The trusted platform module (TPM) mode: - `disabled`: No TPM functionality - `tpm_2`: TPM 2.0 The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Mode {
         DISABLED = 'disabled',
         TPM_2 = 'tpm_2',
@@ -32557,9 +32630,8 @@ namespace VpcV1 {
   export interface DNSServer {
     /** The IP address.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
     /** If present, DHCP configuration for this zone will have this DNS server listed first. */
@@ -32570,9 +32642,8 @@ namespace VpcV1 {
   export interface DNSServerPrototype {
     /** The IP address.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
     /** DHCP configuration for the specified zone will have this DNS server listed first. */
@@ -32630,9 +32701,8 @@ namespace VpcV1 {
     socket_count: number;
     /** The administrative state of the dedicated host.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the dedicated host
-     *  on which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     state: DedicatedHost.Constants.State | string;
     /** The instance profiles usable by instances placed on this dedicated host. */
@@ -32658,7 +32728,7 @@ namespace VpcV1 {
       export enum ResourceType {
         DEDICATED_HOST = 'dedicated_host',
       }
-      /** The administrative state of the dedicated host. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the dedicated host on which the unexpected property value was encountered. */
+      /** The administrative state of the dedicated host. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum State {
         AVAILABLE = 'available',
         DEGRADED = 'degraded',
@@ -32708,9 +32778,8 @@ namespace VpcV1 {
     instance_disks: InstanceDiskReference[];
     /** The disk interface used for attaching the disk
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     interface_type: DedicatedHostDisk.Constants.InterfaceType | string;
     /** The lifecycle state of this dedicated host disk. */
@@ -32728,7 +32797,7 @@ namespace VpcV1 {
   }
   export namespace DedicatedHostDisk {
     export namespace Constants {
-      /** The disk interface used for attaching the disk The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The disk interface used for attaching the disk The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum InterfaceType {
         NVME = 'nvme',
       }
@@ -32898,9 +32967,8 @@ namespace VpcV1 {
     disks: DedicatedHostProfileDisk[];
     /** The product family this dedicated host profile belongs to
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     family: DedicatedHostProfile.Constants.Family | string;
     /** The URL for this dedicated host. */
@@ -32910,18 +32978,16 @@ namespace VpcV1 {
     name: string;
     socket_count: DedicatedHostProfileSocket;
     /** The status of the dedicated host profile:
-     *    - `previous`:  This dedicated host profile is an older revision, but remains provisionable
+     *  - `previous`: This dedicated host profile is an older revision, but remains provisionable
      *    and usable.
-     *    - `current`:  This profile is the latest revision.
+     *  - `current`: This dedicated host profile is the latest revision.
      *
-     *  Note that revisions are indicated by the generation of a dedicated host profile.  Refer to the [profile naming
-     *  conventions]
+     *  Revisions are indicated by the generation of a dedicated host profile. Refer to the [profile naming conventions]
      *  (https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles&interface=ui#profiles-naming-rule) for information on how
      *  generations are defined within a dedicated host profile.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the profile on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: DedicatedHostProfile.Constants.Status | string;
     /** The instance profiles usable by instances placed on dedicated hosts with this profile. */
@@ -32932,13 +32998,13 @@ namespace VpcV1 {
   }
   export namespace DedicatedHostProfile {
     export namespace Constants {
-      /** The product family this dedicated host profile belongs to The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The product family this dedicated host profile belongs to The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Family {
         BALANCED = 'balanced',
         COMPUTE = 'compute',
         MEMORY = 'memory',
       }
-      /** The status of the dedicated host profile: - `previous`:  This dedicated host profile is an older revision, but remains provisionable and usable. - `current`:  This profile is the latest revision. Note that revisions are indicated by the generation of a dedicated host profile.  Refer to the [profile naming conventions] (https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within a dedicated host profile. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the profile on which the unexpected property value was encountered. */
+      /** The status of the dedicated host profile: - `previous`: This dedicated host profile is an older revision, but remains provisionable and usable. - `current`: This dedicated host profile is the latest revision. Revisions are indicated by the generation of a dedicated host profile. Refer to the [profile naming conventions] (https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within a dedicated host profile. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         CURRENT = 'current',
         PREVIOUS = 'previous',
@@ -32988,9 +33054,8 @@ namespace VpcV1 {
     type: DedicatedHostProfileDiskInterface.Constants.Type | string;
     /** The interface of the disk for a dedicated host with this profile
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     value: DedicatedHostProfileDiskInterface.Constants.Value | string;
   }
@@ -33000,7 +33065,7 @@ namespace VpcV1 {
       export enum Type {
         FIXED = 'fixed',
       }
-      /** The interface of the disk for a dedicated host with this profile The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The interface of the disk for a dedicated host with this profile The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Value {
         NVME = 'nvme',
       }
@@ -33194,16 +33259,15 @@ namespace VpcV1 {
   export interface DefaultRoutingTable {
     /** The filters specifying the resources that may create routes in this routing table.
      *
-     *  At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but
-     *  filter support is expected to expand in the future.
+     *  At present, only the `resource_type` filter is permitted, and only the values
+     *  `vpn_gateway` and `vpn_server` are supported, but filter support is expected to expand in the future.
      */
     accept_routes_from: ResourceFilter[];
     /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised
      *  to these sources.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     advertise_routes_to: DefaultRoutingTable.Constants.AdvertiseRoutesTo[] | string[];
     /** The date and time that this routing table was created. */
@@ -33269,7 +33333,7 @@ namespace VpcV1 {
   }
   export namespace DefaultRoutingTable {
     export namespace Constants {
-      /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised to these sources. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised to these sources. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AdvertiseRoutesTo {
         DIRECT_LINK = 'direct_link',
         TRANSIT_GATEWAY = 'transit_gateway',
@@ -33341,13 +33405,13 @@ namespace VpcV1 {
     created_at: string;
     /** The CRN for this endpoint gateway. */
     crn: string;
-    /** The health of this resource.
+    /** The health of this resource:
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
      *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
-     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
-     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
-     *  also have this state.
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: EndpointGateway.Constants.HealthState | string;
     /** The URL for this endpoint gateway. */
@@ -33356,9 +33420,7 @@ namespace VpcV1 {
     id: string;
     /** The reserved IPs bound to this endpoint gateway. */
     ips: ReservedIPReference[];
-    /** The reasons for the current `lifecycle_state` (if any):
-     *  - `dns_resolution_binding_pending`: the DNS resolution binding is being set up.
-     */
+    /** The reasons for the current `lifecycle_state` (if any). */
     lifecycle_reasons: EndpointGatewayLifecycleReason[];
     /** The lifecycle state of the endpoint gateway. */
     lifecycle_state: EndpointGateway.Constants.LifecycleState | string;
@@ -33381,7 +33443,7 @@ namespace VpcV1 {
   }
   export namespace EndpointGateway {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -33433,7 +33495,15 @@ namespace VpcV1 {
 
   /** EndpointGatewayLifecycleReason. */
   export interface EndpointGatewayLifecycleReason {
-    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    /** A reason code for this lifecycle state:
+     *  - `dns_resolution_binding_pending`: the DNS resolution binding is being set up
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: EndpointGatewayLifecycleReason.Constants.Code | string;
     /** An explanation of the reason for this lifecycle state. */
     message: string;
@@ -33442,9 +33512,10 @@ namespace VpcV1 {
   }
   export namespace EndpointGatewayLifecycleReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      /** A reason code for this lifecycle state: - `dns_resolution_binding_pending`: the DNS resolution binding is being set up - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         DNS_RESOLUTION_BINDING_PENDING = 'dns_resolution_binding_pending',
+        INTERNAL_ERROR = 'internal_error',
         RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
       }
     }
@@ -33686,13 +33757,14 @@ namespace VpcV1 {
      */
     storage_bucket: LegacyCloudObjectStorageBucketReference;
     /** The target this collector is collecting flow logs for.
+     *
      *  - If the target is an instance network attachment, flow logs will be collected
      *    for that instance network attachment.
      *  - If the target is an instance network interface, flow logs will be collected
      *    for that instance network interface.
      *  - If the target is a virtual network interface, flow logs will be collected for the
-     *    the virtual network interface's `target` resource if the resource is:
-     *    - an instance network attachment
+     *    virtual network interface's `target` resource if the resource is an instance network
+     *    attachment, unless the target resource is itself the target of a flow log collector.
      *  - If the target is a virtual server instance, flow logs will be collected
      *    for all network attachments or network interfaces on that instance.
      *  - If the target is a subnet, flow logs will be collected
@@ -33700,6 +33772,7 @@ namespace VpcV1 {
      *    attached to that subnet.
      *  - If the target is a VPC, flow logs will be collected for all instance network
      *    interfaces and virtual network interfaces  attached to all subnets within that VPC.
+     *
      *  If the target is an instance, subnet, or VPC, flow logs will not be collected
      *  for any instance network attachments or instance network interfaces within the target
      *  that are themselves the target of a more specific flow log collector.
@@ -33749,7 +33822,7 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** The target this collector is collecting flow logs for. - If the target is an instance network attachment, flow logs will be collected for that instance network attachment. - If the target is an instance network interface, flow logs will be collected for that instance network interface. - If the target is a virtual network interface, flow logs will be collected for the the virtual network interface's `target` resource if the resource is: - an instance network attachment - If the target is a virtual server instance, flow logs will be collected for all network attachments or network interfaces on that instance. - If the target is a subnet, flow logs will be collected for all instance network interfaces and virtual network interfaces attached to that subnet. - If the target is a VPC, flow logs will be collected for all instance network interfaces and virtual network interfaces  attached to all subnets within that VPC. If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network attachments or instance network interfaces within the target that are themselves the target of a more specific flow log collector. */
+  /** The target this collector is collecting flow logs for. - If the target is an instance network attachment, flow logs will be collected for that instance network attachment. - If the target is an instance network interface, flow logs will be collected for that instance network interface. - If the target is a virtual network interface, flow logs will be collected for the virtual network interface's `target` resource if the resource is an instance network attachment, unless the target resource is itself the target of a flow log collector. - If the target is a virtual server instance, flow logs will be collected for all network attachments or network interfaces on that instance. - If the target is a subnet, flow logs will be collected for all instance network interfaces and virtual network interfaces attached to that subnet. - If the target is a VPC, flow logs will be collected for all instance network interfaces and virtual network interfaces  attached to all subnets within that VPC. If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network attachments or instance network interfaces within the target that are themselves the target of a more specific flow log collector. */
   export interface FlowLogCollectorTarget {
   }
 
@@ -33889,9 +33962,8 @@ namespace VpcV1 {
   export interface IP {
     /** The IP address.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -34100,7 +34172,7 @@ namespace VpcV1 {
      *  If absent, this image was not created from a volume.
      */
     source_volume?: VolumeReference;
-    /** The status of this image
+    /** The status of this image:
      *  - available: image can be used (provisionable)
      *  - deleting: image is being deleted, and can no longer be used to provision new
      *    resources
@@ -34110,28 +34182,10 @@ namespace VpcV1 {
      *  - pending: image is being imported and is not yet `available`
      *  - unusable: image cannot be used (see `status_reasons[]` for possible remediation)
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the image on which
-     *  the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: Image.Constants.Status | string;
-    /** The reasons for the current status (if any):
-     *  - `encrypted_data_key_invalid`: image cannot be decrypted with the specified
-     *    `encryption_key`
-     *  - `encryption_key_deleted`: image unusable because its `encryption_key` was deleted
-     *  - `encryption_key_disabled`: image unusable until its `encryption_key` is re-enabled
-     *  - `image_data_corrupted`: image data is corrupt, or is not in the specified format
-     *  - `image_provisioned_size_unsupported`: image requires a boot volume size greater
-     *    than the maximum supported value
-     *  - `image_request_in_progress`: image operation is in progress (such as an import from
-     *     Cloud Object Storage)
-     *  - `image_request_queued`: image request has been accepted but the requested
-     *    operation has not started
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
     status_reasons: ImageStatusReason[];
     /** The visibility of this image. - `private`: Visible only to this account - `public`: Visible to all accounts. */
     visibility: Image.Constants.Visibility | string;
@@ -34147,7 +34201,7 @@ namespace VpcV1 {
       export enum ResourceType {
         IMAGE = 'image',
       }
-      /** The status of this image - available: image can be used (provisionable) - deleting: image is being deleted, and can no longer be used to provision new resources - deprecated: image is administratively slated to become `obsolete` - failed: image is corrupt or did not pass validation - obsolete: image administratively set to not be used for new resources - pending: image is being imported and is not yet `available` - unusable: image cannot be used (see `status_reasons[]` for possible remediation) The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the image on which the unexpected property value was encountered. */
+      /** The status of this image: - available: image can be used (provisionable) - deleting: image is being deleted, and can no longer be used to provision new resources - deprecated: image is administratively slated to become `obsolete` - failed: image is corrupt or did not pass validation - obsolete: image administratively set to not be used for new resources - pending: image is being imported and is not yet `available` - unusable: image cannot be used (see `status_reasons[]` for possible remediation) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         AVAILABLE = 'available',
         DELETING = 'deleting',
@@ -34169,9 +34223,8 @@ namespace VpcV1 {
   export interface ImageCatalogOffering {
     /** Indicates whether this image is managed as part of a
      *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering. If an image is managed,
-     *  accounts in the same
-     *  [enterprise](https://cloud.ibm.com/docs/account?topic=account-what-is-enterprise) with access to that catalog
-     *  can specify the image's catalog offering version CRN to provision virtual server instances using the image.
+     *  accounts with access to that catalog can specify the image's catalog offering version CRN to provision virtual
+     *  server instances using the image.
      */
     managed: boolean;
     /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
@@ -34252,12 +34305,7 @@ namespace VpcV1 {
      *  The exported image object is automatically deleted for `failed` jobs.
      */
     status: ImageExportJob.Constants.Status | string;
-    /** The reasons for the current status (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current status (if any). */
     status_reasons: ImageExportJobStatusReason[];
     /** The Cloud Object Storage bucket of the exported image object. */
     storage_bucket: CloudObjectStorageBucketReference;
@@ -34298,7 +34346,11 @@ namespace VpcV1 {
 
   /** ImageExportJobStatusReason. */
   export interface ImageExportJobStatusReason {
-    /** A snake case string succinctly identifying the status reason. */
+    /** A snake case string succinctly identifying the status reason.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: ImageExportJobStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
@@ -34307,7 +34359,7 @@ namespace VpcV1 {
   }
   export namespace ImageExportJobStatusReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the status reason. */
+      /** A snake case string succinctly identifying the status reason. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_ACCESS_STORAGE_BUCKET = 'cannot_access_storage_bucket',
         INTERNAL_ERROR = 'internal_error',
@@ -34443,7 +34495,22 @@ namespace VpcV1 {
 
   /** ImageStatusReason. */
   export interface ImageStatusReason {
-    /** A snake case string succinctly identifying the status reason. */
+    /** A reason code for the status:
+     *  - `encrypted_data_key_invalid`: image cannot be decrypted with the specified
+     *    `encryption_key`
+     *  - `encryption_key_deleted`: image unusable because its `encryption_key` was deleted
+     *  - `encryption_key_disabled`: image unusable until its `encryption_key` is re-enabled
+     *  - `image_data_corrupted`: image data is corrupt, or is not in the specified format
+     *  - `image_provisioned_size_unsupported`: image requires a boot volume size greater
+     *    than the maximum supported value
+     *  - `image_request_in_progress`: image operation is in progress (such as an import from
+     *     Cloud Object Storage)
+     *  - `image_request_queued`: image request has been accepted but the requested
+     *    operation has not started
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: ImageStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
@@ -34452,7 +34519,7 @@ namespace VpcV1 {
   }
   export namespace ImageStatusReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the status reason. */
+      /** A reason code for the status: - `encrypted_data_key_invalid`: image cannot be decrypted with the specified `encryption_key` - `encryption_key_deleted`: image unusable because its `encryption_key` was deleted - `encryption_key_disabled`: image unusable until its `encryption_key` is re-enabled - `image_data_corrupted`: image data is corrupt, or is not in the specified format - `image_provisioned_size_unsupported`: image requires a boot volume size greater than the maximum supported value - `image_request_in_progress`: image operation is in progress (such as an import from Cloud Object Storage) - `image_request_queued`: image request has been accepted but the requested operation has not started The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         ENCRYPTED_DATA_KEY_INVALID = 'encrypted_data_key_invalid',
         ENCRYPTION_KEY_DELETED = 'encryption_key_deleted',
@@ -34489,25 +34556,15 @@ namespace VpcV1 {
     disks: InstanceDisk[];
     /** The virtual server instance GPU configuration. */
     gpu?: InstanceGPU;
-    /** The reasons for the current instance `health_state` (if any):
-     *  - `reservation_capacity_unavailable`: The reservation affinity pool has no
-     *    available capacity.
-     *  - `reservation_deleted`: The reservation affinity pool has a deleted reservation.
-     *  - `reservation_expired`: The reservation affinity pool has an expired reservation.
-     *  - `reservation_failed`: The reservation affinity pool has a failed reservation.
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `health_state` (if any). */
     health_reasons: InstanceHealthReason[];
-    /** The health of this resource.
+    /** The health of this resource:
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
      *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
-     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
-     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
-     *  also have this state.
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: Instance.Constants.HealthState | string;
     /** The URL for this virtual server instance. */
@@ -34516,12 +34573,7 @@ namespace VpcV1 {
     id: string;
     /** The image the virtual server instance was provisioned from. */
     image?: ImageReference;
-    /** The reasons for the current `lifecycle_state` (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `lifecycle_state` (if any). */
     lifecycle_reasons: InstanceLifecycleReason[];
     /** The lifecycle state of the virtual server instance. */
     lifecycle_state: Instance.Constants.LifecycleState | string;
@@ -34575,17 +34627,11 @@ namespace VpcV1 {
     startable: boolean;
     /** The status of the virtual server instance.
      *
-     *  The enumerated values for this property will expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the instance on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: Instance.Constants.Status | string;
-    /** The reasons for the current status (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current status (if any). */
     status_reasons: InstanceStatusReason[];
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance network attachments or
      *  instance network interfaces.
@@ -34607,7 +34653,7 @@ namespace VpcV1 {
   }
   export namespace Instance {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -34628,7 +34674,7 @@ namespace VpcV1 {
       export enum ResourceType {
         INSTANCE = 'instance',
       }
-      /** The status of the virtual server instance. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on which the unexpected property value was encountered. */
+      /** The status of the virtual server instance. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         DELETING = 'deleting',
         FAILED = 'failed',
@@ -34683,19 +34729,18 @@ namespace VpcV1 {
 
   /** InstanceAvailabilityPolicy. */
   export interface InstanceAvailabilityPolicy {
-    /** The action to perform if the compute host experiences a failure.
+    /** The action to perform if the compute host experiences a failure:
      *  - `restart`: Automatically restart the virtual server instance after host failure
      *  - `stop`: Leave the virtual server instance stopped after host failure
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     host_failure: InstanceAvailabilityPolicy.Constants.HostFailure | string;
   }
   export namespace InstanceAvailabilityPolicy {
     export namespace Constants {
-      /** The action to perform if the compute host experiences a failure. - `restart`: Automatically restart the virtual server instance after host failure - `stop`: Leave the virtual server instance stopped after host failure The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the instance on which the unexpected property value was encountered. */
+      /** The action to perform if the compute host experiences a failure: - `restart`: Automatically restart the virtual server instance after host failure - `stop`: Leave the virtual server instance stopped after host failure The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum HostFailure {
         RESTART = 'restart',
         STOP = 'stop',
@@ -34751,7 +34796,7 @@ namespace VpcV1 {
     version: CatalogOfferingVersionReference;
   }
 
-  /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering or offering version to use when provisioning this virtual server instance. If an offering is specified, the latest version of that offering will be used. The specified offering or offering version may be in a different account in the same [enterprise](https://cloud.ibm.com/docs/account?topic=account-what-is-enterprise), subject to IAM policies. */
+  /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering or offering version to use when provisioning this virtual server instance. If an offering is specified, the latest version of that offering will be used. The specified offering or offering version may be in a different account, subject to IAM policies. */
   export interface InstanceCatalogOfferingPrototype {
   }
 
@@ -34829,9 +34874,8 @@ namespace VpcV1 {
     id: string;
     /** The disk interface used for attaching the disk.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     interface_type: InstanceDisk.Constants.InterfaceType | string;
     /** The name for this instance disk. The name is unique across all disks on the instance. */
@@ -34843,7 +34887,7 @@ namespace VpcV1 {
   }
   export namespace InstanceDisk {
     export namespace Constants {
-      /** The disk interface used for attaching the disk. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The disk interface used for attaching the disk. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum InterfaceType {
         NVME = 'nvme',
         VIRTIO_BLK = 'virtio_blk',
@@ -34920,6 +34964,10 @@ namespace VpcV1 {
     id: string;
     /** The template used to create new instances for this group. */
     instance_template: InstanceTemplateReference;
+    /** The reasons for the current `lifecycle_state` (if any). */
+    lifecycle_reasons: InstanceGroupLifecycleReason[];
+    /** The lifecycle state of the instance group. */
+    lifecycle_state: InstanceGroup.Constants.LifecycleState | string;
     /** If present, the load balancer pool this instance group manages. A pool member will
      *  be created for each instance created by this group.
      */
@@ -34948,6 +34996,16 @@ namespace VpcV1 {
   }
   export namespace InstanceGroup {
     export namespace Constants {
+      /** The lifecycle state of the instance group. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
       /** The status of the instance group - `deleting`: Group is being deleted - `healthy`: Group has `membership_count` instances - `scaling`: Instances in the group are being created or deleted to reach `membership_count` - `unhealthy`: Group is unable to reach `membership_count` instances. */
       export enum Status {
         DELETING = 'deleting',
@@ -34982,6 +35040,32 @@ namespace VpcV1 {
   export interface InstanceGroupCollectionNext {
     /** The URL for a page of resources. */
     href: string;
+  }
+
+  /** InstanceGroupLifecycleReason. */
+  export interface InstanceGroupLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: InstanceGroupLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace InstanceGroupLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
   }
 
   /** InstanceGroupManager. */
@@ -35371,7 +35455,16 @@ namespace VpcV1 {
 
   /** InstanceHealthReason. */
   export interface InstanceHealthReason {
-    /** A snake case string succinctly identifying the reason for this health state. */
+    /** A reason code for this health state:
+     *  - `reservation_capacity_unavailable`: The reservation affinity pool has no
+     *    available capacity.
+     *  - `reservation_deleted`: The reservation affinity pool has a deleted reservation.
+     *  - `reservation_expired`: The reservation affinity pool has an expired reservation.
+     *  - `reservation_failed`: The reservation affinity pool has a failed reservation.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: InstanceHealthReason.Constants.Code | string;
     /** An explanation of the reason for this health state. */
     message: string;
@@ -35380,7 +35473,7 @@ namespace VpcV1 {
   }
   export namespace InstanceHealthReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this health state. */
+      /** A reason code for this health state: - `reservation_capacity_unavailable`: The reservation affinity pool has no available capacity. - `reservation_deleted`: The reservation affinity pool has a deleted reservation. - `reservation_expired`: The reservation affinity pool has an expired reservation. - `reservation_failed`: The reservation affinity pool has a failed reservation. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         RESERVATION_CAPACITY_UNAVAILABLE = 'reservation_capacity_unavailable',
         RESERVATION_DELETED = 'reservation_deleted',
@@ -35422,7 +35515,14 @@ namespace VpcV1 {
 
   /** InstanceLifecycleReason. */
   export interface InstanceLifecycleReason {
-    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: InstanceLifecycleReason.Constants.Code | string;
     /** An explanation of the reason for this lifecycle state. */
     message: string;
@@ -35431,8 +35531,9 @@ namespace VpcV1 {
   }
   export namespace InstanceLifecycleReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
+        INTERNAL_ERROR = 'internal_error',
         RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
       }
     }
@@ -35667,18 +35768,16 @@ namespace VpcV1 {
     /** The resource type. */
     resource_type: InstanceProfile.Constants.ResourceType | string;
     /** The status of the instance profile:
-     *    - `previous`:  This instance profile is an older revision, but remains provisionable and
+     *  - `previous`:  This instance profile is an older revision, but remains provisionable and
      *    usable.
-     *    - `current`:  This profile is the latest revision.
+     *  - `current`:  This profile is the latest revision.
      *
-     *  Note that revisions are indicated by the generation of an instance profile.  Refer to the
-     *  [profile naming conventions]
+     *  Revisions are indicated by the generation of an instance profile. Refer to the [profile naming conventions]
      *  (https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui#profiles-naming-rule) for information on how
      *  generations are defined within an instance profile.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the profile on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: InstanceProfile.Constants.Status | string;
     total_volume_bandwidth: InstanceProfileVolumeBandwidth;
@@ -35692,7 +35791,7 @@ namespace VpcV1 {
       export enum ResourceType {
         INSTANCE_PROFILE = 'instance_profile',
       }
-      /** The status of the instance profile: - `previous`:  This instance profile is an older revision, but remains provisionable and usable. - `current`:  This profile is the latest revision. Note that revisions are indicated by the generation of an instance profile.  Refer to the [profile naming conventions] (https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within an instance profile. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the profile on which the unexpected property value was encountered. */
+      /** The status of the instance profile: - `previous`:  This instance profile is an older revision, but remains provisionable and usable. - `current`:  This profile is the latest revision. Revisions are indicated by the generation of an instance profile. Refer to the [profile naming conventions] (https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within an instance profile. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         CURRENT = 'current',
         PREVIOUS = 'previous',
@@ -35729,9 +35828,8 @@ namespace VpcV1 {
   export interface InstanceProfileDiskSupportedInterfaces {
     /** The disk interface used for attaching the disk.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     default: InstanceProfileDiskSupportedInterfaces.Constants.Default | string;
     /** The type for this profile field. */
@@ -35741,7 +35839,7 @@ namespace VpcV1 {
   }
   export namespace InstanceProfileDiskSupportedInterfaces {
     export namespace Constants {
-      /** The disk interface used for attaching the disk. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The disk interface used for attaching the disk. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Default {
         NVME = 'nvme',
         VIRTIO_BLK = 'virtio_blk',
@@ -36039,11 +36137,9 @@ namespace VpcV1 {
 
   /** InstanceReservationAffinityPatch. */
   export interface InstanceReservationAffinityPatch {
-    /** The reservation affinity policy for this virtual server instance.
-     *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+    /** The reservation affinity policy to use for this virtual server instance:
+     *  - `disabled`: Reservations will not be used
+     *  - `manual`: Reservations in `pool` are available for use.
      */
     policy?: InstanceReservationAffinityPatch.Constants.Policy | string;
     /** The pool of reservations available for use by this virtual server instance, replacing the existing pool of
@@ -36059,7 +36155,7 @@ namespace VpcV1 {
   }
   export namespace InstanceReservationAffinityPatch {
     export namespace Constants {
-      /** The reservation affinity policy for this virtual server instance. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` are available for use. */
       export enum Policy {
         DISABLED = 'disabled',
         MANUAL = 'manual',
@@ -36098,7 +36194,11 @@ namespace VpcV1 {
 
   /** InstanceStatusReason. */
   export interface InstanceStatusReason {
-    /** A snake case string succinctly identifying the status reason. */
+    /** A snake case string succinctly identifying the status reason.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: InstanceStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
@@ -36107,7 +36207,7 @@ namespace VpcV1 {
   }
   export namespace InstanceStatusReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the status reason. */
+      /** A snake case string succinctly identifying the status reason. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_START = 'cannot_start',
         CANNOT_START_CAPACITY = 'cannot_start_capacity',
@@ -36469,7 +36569,6 @@ namespace VpcV1 {
     /** The profile for this load balancer. */
     profile: LoadBalancerProfileReference;
     /** The provisioning status of this load balancer:
-     *
      *  - `active`: The load balancer is running.
      *  - `create_pending`: The load balancer is being created.
      *  - `delete_pending`: The load balancer is being deleted.
@@ -36480,10 +36579,8 @@ namespace VpcV1 {
      *  - `update_pending`: The load balancer is being updated
      *      to the requested configuration.
      *
-     *    The enumerated values for this property are expected to expand in the future. When
-     *    processing this property, check for and log unknown values. Optionally halt
-     *    processing and surface the error, or bypass the load balancer on which the
-     *    unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     provisioning_status: LoadBalancer.Constants.ProvisioningStatus | string;
     /** The public IP addresses assigned to this load balancer.
@@ -36525,7 +36622,7 @@ namespace VpcV1 {
         OFFLINE = 'offline',
         ONLINE = 'online',
       }
-      /** The provisioning status of this load balancer: - `active`: The load balancer is running. - `create_pending`: The load balancer is being created. - `delete_pending`: The load balancer is being deleted. - `maintenance_pending`: The load balancer is unavailable due to an internal error (contact IBM support). - `migrate_pending`: The load balancer is migrating to the requested configuration. Performance may be degraded. - `update_pending`: The load balancer is being updated to the requested configuration. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the load balancer on which the unexpected property value was encountered. */
+      /** The provisioning status of this load balancer: - `active`: The load balancer is running. - `create_pending`: The load balancer is being created. - `delete_pending`: The load balancer is being deleted. - `maintenance_pending`: The load balancer is unavailable due to an internal error (contact IBM support). - `migrate_pending`: The load balancer is migrating to the requested configuration. Performance may be degraded. - `update_pending`: The load balancer is being updated to the requested configuration. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ProvisioningStatus {
         ACTIVE = 'active',
         CREATE_PENDING = 'create_pending',
@@ -36629,11 +36726,14 @@ namespace VpcV1 {
     connection_limit: number;
     /** The date and time that this listener was created. */
     created_at: string;
-    /** The default pool for this listener. If absent, this listener has no default pool. */
+    /** The default pool for this listener. If absent, this listener has no default pool.
+     *
+     *  If `https_redirect` is set, the default pool will not be used.
+     */
     default_pool?: LoadBalancerPoolReference;
     /** The listener's canonical URL. */
     href: string;
-    /** If present, the target listener that requests are redirected to. */
+    /** If present, the target listener that requests are redirected to if none of the listener's `policies` match. */
     https_redirect?: LoadBalancerListenerHTTPSRedirect;
     /** The unique identifier for this load balancer listener. */
     id: string;
@@ -36657,29 +36757,27 @@ namespace VpcV1 {
     port_min: number;
     /** The listener protocol.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the listener on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     protocol: LoadBalancerListener.Constants.Protocol | string;
     /** The provisioning status of this listener
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the listener on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     provisioning_status: LoadBalancerListener.Constants.ProvisioningStatus | string;
   }
   export namespace LoadBalancerListener {
     export namespace Constants {
-      /** The listener protocol. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the listener on which the unexpected property value was encountered. */
+      /** The listener protocol. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Protocol {
         HTTP = 'http',
         HTTPS = 'https',
         TCP = 'tcp',
         UDP = 'udp',
       }
-      /** The provisioning status of this listener The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the listener on which the unexpected property value was encountered. */
+      /** The provisioning status of this listener The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ProvisioningStatus {
         ACTIVE = 'active',
         CREATE_PENDING = 'create_pending',
@@ -36694,6 +36792,10 @@ namespace VpcV1 {
   export interface LoadBalancerListenerCollection {
     /** Collection of listeners. */
     listeners: LoadBalancerListener[];
+  }
+
+  /** The default pool for this listener. If `https_redirect` is set, the default pool will not be used. The specified pool must: - Belong to this load balancer - Have the same `protocol` as this listener, or have a compatible protocol. At present, the compatible protocols are `http` and `https`. - Not already be the `default_pool` for another listener Specify `null` to remove an existing default pool. */
+  export interface LoadBalancerListenerDefaultPoolPatch {
   }
 
   /** LoadBalancerListenerHTTPSRedirect. */
@@ -36733,9 +36835,15 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicy {
     /** The policy action.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on
-     *  which the unexpected property value was encountered.
+     *  - `forward`: Requests will be forwarded to the specified `target` pool
+     *  - `https_redirect`: Requests will be redirected to the specified target listener. The
+     *    listener must have a `protocol` of `http`, and the target listener must have a
+     *    `protocol` of `https`
+     *  - `redirect`: Requests will be redirected to the specified `target.url`
+     *  - `reject`: Requests will be rejected with a `403` status code
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     action: LoadBalancerListenerPolicy.Constants.Action | string;
     /** The date and time that this policy was created. */
@@ -36748,33 +36856,35 @@ namespace VpcV1 {
      *  balancer listener.
      */
     name: string;
-    /** Priority of the policy. Lower value indicates higher priority. */
+    /** Priority of the policy. The priority is unique across all policies for this load balancer listener. Lower
+     *  value indicates higher priority.
+     */
     priority: number;
     /** The provisioning status of this policy
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     provisioning_status: LoadBalancerListenerPolicy.Constants.ProvisioningStatus | string;
     /** The rules for this policy. */
     rules: LoadBalancerListenerPolicyRuleReference[];
     /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference`
-     *  - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`
-     *  - If `action` is `https_redirect`, the response is a `LoadBalancerListenerHTTPSRedirect`.
+     *  - If `action` is `https_redirect`, the response is a
+     *  `LoadBalancerListenerPolicyHTTPSRedirect`
+     *  - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`.
      */
     target?: LoadBalancerListenerPolicyTarget;
   }
   export namespace LoadBalancerListenerPolicy {
     export namespace Constants {
-      /** The policy action. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on which the unexpected property value was encountered. */
+      /** The policy action. - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Action {
         FORWARD = 'forward',
         HTTPS_REDIRECT = 'https_redirect',
         REDIRECT = 'redirect',
         REJECT = 'reject',
       }
-      /** The provisioning status of this policy The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on which the unexpected property value was encountered. */
+      /** The provisioning status of this policy The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ProvisioningStatus {
         ACTIVE = 'active',
         CREATE_PENDING = 'create_pending',
@@ -36795,29 +36905,37 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyPrototype {
     /** The policy action.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on
-     *  which the unexpected property value was encountered.
+     *  - `forward`: Requests will be forwarded to the specified `target` pool
+     *  - `https_redirect`: Requests will be redirected to the specified target listener. The
+     *    listener must have a `protocol` of `http`, and the target listener must have a
+     *    `protocol` of `https`
+     *  - `redirect`: Requests will be redirected to the specified `target.url`
+     *  - `reject`: Requests will be rejected with a `403` status code
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     action: LoadBalancerListenerPolicyPrototype.Constants.Action | string;
     /** The name for this policy. The name must not be used by another policy for the load balancer listener. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** Priority of the policy. Lower value indicates higher priority. */
+    /** Priority of the policy. The priority is unique across all policies for this load balancer listener. Lower
+     *  value indicates higher priority.
+     */
     priority: number;
     /** The rule prototype objects for this policy. */
     rules?: LoadBalancerListenerPolicyRulePrototype[];
     /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
-     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
      *  - If `action` is `https_redirect`, specify a
-     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
+     *  `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
+     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
      */
     target?: LoadBalancerListenerPolicyTargetPrototype;
   }
   export namespace LoadBalancerListenerPolicyPrototype {
     export namespace Constants {
-      /** The policy action. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the policy on which the unexpected property value was encountered. */
+      /** The policy action. - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Action {
         FORWARD = 'forward',
         HTTPS_REDIRECT = 'https_redirect',
@@ -36871,9 +36989,8 @@ namespace VpcV1 {
     id: string;
     /** The provisioning status of this rule
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the rule on which
-     *  the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     provisioning_status: LoadBalancerListenerPolicyRule.Constants.ProvisioningStatus | string;
     /** The type of the rule.
@@ -36895,7 +37012,7 @@ namespace VpcV1 {
         EQUALS = 'equals',
         MATCHES_REGEX = 'matches_regex',
       }
-      /** The provisioning status of this rule The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the rule on which the unexpected property value was encountered. */
+      /** The provisioning status of this rule The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ProvisioningStatus {
         ACTIVE = 'active',
         CREATE_PENDING = 'create_pending',
@@ -36982,15 +37099,15 @@ namespace VpcV1 {
     more_info: string;
   }
 
-  /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference` - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL` - If `action` is `https_redirect`, the response is a `LoadBalancerListenerHTTPSRedirect`. */
+  /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference` - If `action` is `https_redirect`, the response is a `LoadBalancerListenerPolicyHTTPSRedirect` - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`. */
   export interface LoadBalancerListenerPolicyTarget {
   }
 
-  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`. - If `action` is `https_redirect`, specify a `LoadBalancerListenerPolicyHTTPSRedirectPatch`. */
+  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `https_redirect`, specify a `LoadBalancerListenerPolicyHTTPSRedirectPatch`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`. */
   export interface LoadBalancerListenerPolicyTargetPatch {
   }
 
-  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`. - If `action` is `https_redirect`, specify a `LoadBalancerListenerPolicyHTTPSRedirectPrototype`. */
+  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `https_redirect`, specify a `LoadBalancerListenerPolicyHTTPSRedirectPrototype`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`. */
   export interface LoadBalancerListenerPolicyTargetPrototype {
   }
 
@@ -37008,18 +37125,23 @@ namespace VpcV1 {
     certificate_instance?: CertificateInstanceIdentity;
     /** The connection limit of the listener. */
     connection_limit?: number;
-    /** The default pool for this listener. If specified, the pool must:
-     *    - Belong to this load balancer.
-     *    - Have the same `protocol` as this listener, or have a compatible protocol.
-     *      At present, the compatible protocols are `http` and `https`.
-     *    - Not already be the `default_pool` for another listener.
+    /** The default pool for this listener.  If `https_redirect` is specified,
+     *  the default pool will not be used. If specified, the pool must:
+     *
+     *  - Belong to this load balancer.
+     *  - Have the same `protocol` as this listener, or have a compatible protocol.
+     *    At present, the compatible protocols are `http` and `https`.
+     *  - Not already be the `default_pool` for another listener.
      *
      *  If unspecified, this listener will be created with no default pool, but one may be
      *  subsequently set.
      */
     default_pool?: LoadBalancerPoolIdentityByName;
-    /** The target listener that requests will be redirected to. This listener must have a
-     *  `protocol` of `http`, and the target listener must have a `protocol` of `https`.
+    /** The target listener that requests will be redirected to if none of the listener's
+     *  `policies` match.
+     *
+     *  If specified, this listener must have a `protocol` of `http`, and the target
+     *  listener must have a `protocol` of `https`.
      */
     https_redirect?: LoadBalancerListenerHTTPSRedirectPrototype;
     /** The idle connection timeout of the listener in seconds. Supported for load balancers in the `application`
@@ -37153,16 +37275,14 @@ namespace VpcV1 {
     name: string;
     /** The protocol for this load balancer pool.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which
-     *  the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     protocol: LoadBalancerPool.Constants.Protocol | string;
     /** The provisioning status of this pool
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which
-     *  the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     provisioning_status: LoadBalancerPool.Constants.ProvisioningStatus | string;
     /** The PROXY protocol setting for this pool:
@@ -37173,13 +37293,7 @@ namespace VpcV1 {
      *  Supported by load balancers in the `application` family (otherwise always `disabled`).
      */
     proxy_protocol: LoadBalancerPool.Constants.ProxyProtocol | string;
-    /** The session persistence of this pool.
-     *
-     *  The enumerated values for this property are expected to expand in the future. When
-     *  processing this property, check for and log unknown values. Optionally halt
-     *  processing and surface the error, or bypass the pool on which the unexpected
-     *  property value was encountered.
-     */
+    /** The session persistence of this pool. */
     session_persistence?: LoadBalancerPoolSessionPersistence;
   }
   export namespace LoadBalancerPool {
@@ -37190,14 +37304,14 @@ namespace VpcV1 {
         ROUND_ROBIN = 'round_robin',
         WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
       }
-      /** The protocol for this load balancer pool. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which the unexpected property value was encountered. */
+      /** The protocol for this load balancer pool. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Protocol {
         HTTP = 'http',
         HTTPS = 'https',
         TCP = 'tcp',
         UDP = 'udp',
       }
-      /** The provisioning status of this pool The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool on which the unexpected property value was encountered. */
+      /** The provisioning status of this pool The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ProvisioningStatus {
         ACTIVE = 'active',
         CREATE_PENDING = 'create_pending',
@@ -37235,9 +37349,8 @@ namespace VpcV1 {
     timeout: number;
     /** The protocol type to use for health checks.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the health monitor
-     *  on which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     type: LoadBalancerPoolHealthMonitor.Constants.Type | string;
     /** The health check URL path. Applicable when `type` is `http` or `https`.
@@ -37248,7 +37361,7 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerPoolHealthMonitor {
     export namespace Constants {
-      /** The protocol type to use for health checks. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the health monitor on which the unexpected property value was encountered. */
+      /** The protocol type to use for health checks. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         HTTP = 'http',
         HTTPS = 'https',
@@ -37353,9 +37466,8 @@ namespace VpcV1 {
     port: number;
     /** The provisioning status of this member
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool member on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     provisioning_status: LoadBalancerPoolMember.Constants.ProvisioningStatus | string;
     /** The pool member target. Load balancers in the `network` family support virtual server
@@ -37375,7 +37487,7 @@ namespace VpcV1 {
         OK = 'ok',
         UNKNOWN = 'unknown',
       }
-      /** The provisioning status of this member The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the pool member on which the unexpected property value was encountered. */
+      /** The provisioning status of this member The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ProvisioningStatus {
         ACTIVE = 'active',
         CREATE_PENDING = 'create_pending',
@@ -37467,7 +37579,10 @@ namespace VpcV1 {
      *  Supported by load balancers in the `application` family (otherwise always `disabled`).
      */
     proxy_protocol?: LoadBalancerPoolPrototype.Constants.ProxyProtocol | string;
-    /** The session persistence of this pool. */
+    /** The session persistence of this pool. If unspecified, session persistence will be
+     *  disabled, and traffic will be distributed across backend server members of the
+     *  pool.
+     */
     session_persistence?: LoadBalancerPoolSessionPersistencePrototype;
   }
   export namespace LoadBalancerPoolPrototype {
@@ -37522,12 +37637,15 @@ namespace VpcV1 {
     cookie_name?: string;
     /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and
      *  `https` protocols.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     type: LoadBalancerPoolSessionPersistence.Constants.Type | string;
   }
   export namespace LoadBalancerPoolSessionPersistence {
     export namespace Constants {
-      /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and `https` protocols. */
+      /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and `https` protocols. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         APP_COOKIE = 'app_cookie',
         HTTP_COOKIE = 'http_cookie',
@@ -37586,9 +37704,8 @@ namespace VpcV1 {
      *
      *  If the address has not yet been selected, the value will be `0.0.0.0`.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
     /** If present, this property indicates the referenced resource has been deleted, and provides
@@ -37615,8 +37732,12 @@ namespace VpcV1 {
 
   /** LoadBalancerProfile. */
   export interface LoadBalancerProfile {
-    /** The product family this load balancer profile belongs to. */
-    family: string;
+    /** The product family this load balancer profile belongs to.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    family: LoadBalancerProfile.Constants.Family | string;
     /** The URL for this load balancer profile. */
     href: string;
     instance_groups_supported: LoadBalancerProfileInstanceGroupsSupported;
@@ -37627,6 +37748,15 @@ namespace VpcV1 {
     route_mode_supported: LoadBalancerProfileRouteModeSupported;
     security_groups_supported: LoadBalancerProfileSecurityGroupsSupported;
     udp_supported: LoadBalancerProfileUDPSupported;
+  }
+  export namespace LoadBalancerProfile {
+    export namespace Constants {
+      /** The product family this load balancer profile belongs to. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Family {
+        APPLICATION = 'application',
+        NETWORK = 'network',
+      }
+    }
   }
 
   /** LoadBalancerProfileCollection. */
@@ -37681,12 +37811,25 @@ namespace VpcV1 {
 
   /** LoadBalancerProfileReference. */
   export interface LoadBalancerProfileReference {
-    /** The product family this load balancer profile belongs to. */
-    family: string;
+    /** The product family this load balancer profile belongs to.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    family: LoadBalancerProfileReference.Constants.Family | string;
     /** The URL for this load balancer profile. */
     href: string;
     /** The globally unique name for this load balancer profile. */
     name: string;
+  }
+  export namespace LoadBalancerProfileReference {
+    export namespace Constants {
+      /** The product family this load balancer profile belongs to. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Family {
+        APPLICATION = 'application',
+        NETWORK = 'network',
+      }
+    }
   }
 
   /** LoadBalancerProfileRouteModeSupported. */
@@ -38382,13 +38525,12 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: PlacementGroup.Constants.ResourceType | string;
-    /** The strategy for this placement group
+    /** The strategy for this placement group:
      *  - `host_spread`: place on different compute hosts
      *  - `power_spread`: place on compute hosts that use different power sources
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the
-     *  unexpected strategy was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     strategy: PlacementGroup.Constants.Strategy | string;
   }
@@ -38408,7 +38550,7 @@ namespace VpcV1 {
       export enum ResourceType {
         PLACEMENT_GROUP = 'placement_group',
       }
-      /** The strategy for this placement group - `host_spread`: place on different compute hosts - `power_spread`: place on compute hosts that use different power sources The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the placement group on which the unexpected strategy was encountered. */
+      /** The strategy for this placement group: - `host_spread`: place on different compute hosts - `power_spread`: place on compute hosts that use different power sources The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Strategy {
         HOST_SPREAD = 'host_spread',
         POWER_SPREAD = 'power_spread',
@@ -38617,9 +38759,8 @@ namespace VpcV1 {
     /** The affinity policy to use for this reservation:
      *  - `restricted`: The reservation must be manually requested
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     affinity_policy: Reservation.Constants.AffinityPolicy | string;
     /** The capacity configuration for this reservation
@@ -38652,24 +38793,18 @@ namespace VpcV1 {
     resource_type: Reservation.Constants.ResourceType | string;
     /** The status of the reservation.
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: Reservation.Constants.Status | string;
-    /** The reasons for the current status (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current status (if any). */
     status_reasons: ReservationStatusReason[];
     /** The zone for this reservation. */
     zone: ZoneReference;
   }
   export namespace Reservation {
     export namespace Constants {
-      /** The affinity policy to use for this reservation: - `restricted`: The reservation must be manually requested The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The affinity policy to use for this reservation: - `restricted`: The reservation must be manually requested The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AffinityPolicy {
         RESTRICTED = 'restricted',
       }
@@ -38687,7 +38822,7 @@ namespace VpcV1 {
       export enum ResourceType {
         RESERVATION = 'reservation',
       }
-      /** The status of the reservation. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The status of the reservation. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         ACTIVATING = 'activating',
         ACTIVE = 'active',
@@ -38713,9 +38848,8 @@ namespace VpcV1 {
      *    See https://cloud.ibm.com/docs/vpc?topic=vpc-capacity-status for more information.
      *  - `unallocated`: The capacity reservation is not allocated for use
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: ReservationCapacity.Constants.Status | string;
     /** The total amount of this capacity reservation. */
@@ -38725,7 +38859,7 @@ namespace VpcV1 {
   }
   export namespace ReservationCapacity {
     export namespace Constants {
-      /** The status of the capacity reservation: - `allocating`: The capacity reservation is being allocated for use - `allocated`: The total capacity of the reservation has been allocated for use - `degraded`: The capacity reservation has been allocated for use, but some of the capacity is not available. See https://cloud.ibm.com/docs/vpc?topic=vpc-capacity-status for more information. - `unallocated`: The capacity reservation is not allocated for use The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The status of the capacity reservation: - `allocating`: The capacity reservation is being allocated for use - `allocated`: The total capacity of the reservation has been allocated for use - `degraded`: The capacity reservation has been allocated for use, but some of the capacity is not available. See https://cloud.ibm.com/docs/vpc?topic=vpc-capacity-status for more information. - `unallocated`: The capacity reservation is not allocated for use The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         ALLOCATED = 'allocated',
         ALLOCATING = 'allocating',
@@ -38782,24 +38916,22 @@ namespace VpcV1 {
      *  - `renew`: Renew for another term, provided the term remains listed in the
      *    `reservation_terms` for the profile. Otherwise, let the reservation expire.
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     expiration_policy: ReservationCommittedUse.Constants.ExpirationPolicy | string;
     /** The term for this committed use reservation:
      *  - `one_year`: 1 year
      *  - `three_year`: 3 years
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     term: string;
   }
   export namespace ReservationCommittedUse {
     export namespace Constants {
-      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ExpirationPolicy {
         RELEASE = 'release',
         RENEW = 'renew',
@@ -38814,9 +38946,8 @@ namespace VpcV1 {
      *  - `renew`: Renew for another term, provided the term remains listed in the
      *    `reservation_terms` for the profile. Otherwise, let the reservation expire.
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     expiration_policy?: ReservationCommittedUsePatch.Constants.ExpirationPolicy | string;
     /** The term for this committed use reservation:
@@ -38831,7 +38962,7 @@ namespace VpcV1 {
   }
   export namespace ReservationCommittedUsePatch {
     export namespace Constants {
-      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ExpirationPolicy {
         RELEASE = 'release',
         RENEW = 'renew',
@@ -38846,9 +38977,8 @@ namespace VpcV1 {
      *  - `renew`: Renew for another term, provided the term remains listed in the
      *    `reservation_terms` for the profile. Otherwise, let the reservation expire.
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     expiration_policy?: ReservationCommittedUsePrototype.Constants.ExpirationPolicy | string;
     /** The term for this committed use reservation:
@@ -38861,7 +38991,7 @@ namespace VpcV1 {
   }
   export namespace ReservationCommittedUsePrototype {
     export namespace Constants {
-      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ExpirationPolicy {
         RELEASE = 'release',
         RENEW = 'renew',
@@ -38891,7 +39021,7 @@ namespace VpcV1 {
     }
   }
 
-  /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation. The profile can only be changed for a reservation with a `status` of `inactive`. */
+  /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation. */
   export interface ReservationProfilePatch {
     /** The globally unique name of the profile. */
     name?: string;
@@ -38957,7 +39087,11 @@ namespace VpcV1 {
 
   /** ReservationStatusReason. */
   export interface ReservationStatusReason {
-    /** A snake case string succinctly identifying the status reason. */
+    /** A snake case string succinctly identifying the status reason.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: ReservationStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
@@ -38966,7 +39100,7 @@ namespace VpcV1 {
   }
   export namespace ReservationStatusReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the status reason. */
+      /** A snake case string succinctly identifying the status reason. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_ACTIVATE_NO_CAPACITY_AVAILABLE = 'cannot_activate_no_capacity_available',
         CANNOT_RENEW_UNSUPPORTED_PROFILE_TERM = 'cannot_renew_unsupported_profile_term',
@@ -38980,9 +39114,8 @@ namespace VpcV1 {
      *
      *  If the address has not yet been selected, the value will be `0.0.0.0`.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
     /** Indicates whether this reserved IP member will be automatically deleted when either
@@ -39169,9 +39302,8 @@ namespace VpcV1 {
      *
      *  If the address has not yet been selected, the value will be `0.0.0.0`.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
     /** If present, this property indicates the referenced resource has been deleted, and provides
@@ -39268,9 +39400,8 @@ namespace VpcV1 {
      *  - `service`: route was directly created by a service
      *  - `user`: route was directly created by a user
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which
-     *  the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     origin?: Route.Constants.Origin | string;
     /** The priority of this route. Smaller values have higher priority.
@@ -39309,7 +39440,7 @@ namespace VpcV1 {
         UPDATING = 'updating',
         WAITING = 'waiting',
       }
-      /** The origin of this route: - `service`: route was directly created by a service - `user`: route was directly created by a user The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which the unexpected property value was encountered. */
+      /** The origin of this route: - `service`: route was directly created by a service - `user`: route was directly created by a user The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Origin {
         SERVICE = 'service',
         USER = 'user',
@@ -39407,9 +39538,8 @@ namespace VpcV1 {
      *  - `service`: route was directly created by a service
      *  - `user`: route was directly created by a user
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which
-     *  the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     origin?: RouteCollectionVPCContextRoutesItem.Constants.Origin | string;
     /** The priority of this route. Smaller values have higher priority.
@@ -39448,7 +39578,7 @@ namespace VpcV1 {
         UPDATING = 'updating',
         WAITING = 'waiting',
       }
-      /** The origin of this route: - `service`: route was directly created by a service - `user`: route was directly created by a user The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which the unexpected property value was encountered. */
+      /** The origin of this route: - `service`: route was directly created by a service - `user`: route was directly created by a user The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Origin {
         SERVICE = 'service',
         USER = 'user',
@@ -39559,16 +39689,15 @@ namespace VpcV1 {
   export interface RoutingTable {
     /** The filters specifying the resources that may create routes in this routing table.
      *
-     *  At present, only the `resource_type` filter is permitted, and only the `vpn_server` value is supported, but
-     *  filter support is expected to expand in the future.
+     *  At present, only the `resource_type` filter is permitted, and only the values
+     *  `vpn_gateway` and `vpn_server` are supported, but filter support is expected to expand in the future.
      */
     accept_routes_from: ResourceFilter[];
     /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised
      *  to these sources.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     advertise_routes_to: RoutingTable.Constants.AdvertiseRoutesTo[] | string[];
     /** The date and time that this routing table was created. */
@@ -39630,7 +39759,7 @@ namespace VpcV1 {
   }
   export namespace RoutingTable {
     export namespace Constants {
-      /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised to these sources. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised to these sources. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AdvertiseRoutesTo {
         DIRECT_LINK = 'direct_link',
         TRANSIT_GATEWAY = 'transit_gateway',
@@ -39794,11 +39923,18 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this security group rule. */
     id: string;
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
-     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
-     *  addresses (network interfaces) in that group matching this IP version.
+    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+     *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
+     *
+     *  If `remote` references a security group, then this rule only applies to IP addresses
+     *  (network interfaces) in that group matching this IP version.
      */
     ip_version: SecurityGroupRule.Constants.IpVersion | string;
+    /** The local IP address or range of local IP addresses to which this rule will allow inbound
+     *  traffic (or from which, for outbound traffic). A CIDR block of `0.0.0.0/0` allows traffic
+     *  to all local IP addresses (or from all local IP addresses, for outbound rules).
+     */
+    local: SecurityGroupRuleLocal;
     /** The protocol to enforce. */
     protocol: SecurityGroupRule.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule allows traffic (or to
@@ -39814,7 +39950,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -39834,15 +39970,36 @@ namespace VpcV1 {
     rules: SecurityGroupRule[];
   }
 
+  /** The local IP address or range of local IP addresses to which this rule will allow inbound traffic (or from which, for outbound traffic). A CIDR block of `0.0.0.0/0` allows traffic to all local IP addresses (or from all local IP addresses, for outbound rules). */
+  export interface SecurityGroupRuleLocal {
+  }
+
+  /** The local IP address or range of local IP addresses to which this rule will allow inbound traffic (or from which, for outbound traffic). Can be specified as an IP address or a CIDR block. Specify a CIDR block of `0.0.0.0/0` to allow traffic to all local IP addresses (or from all local IP addresses, for outbound rules). */
+  export interface SecurityGroupRuleLocalPatch {
+  }
+
+  /** The local IP address or range of local IP addresses to which this rule will allow inbound traffic (or from which, for outbound traffic) If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP addresses (or from all local IP addresses, for outbound rules). */
+  export interface SecurityGroupRuleLocalPrototype {
+  }
+
   /** SecurityGroupRulePrototype. */
   export interface SecurityGroupRulePrototype {
     /** The direction of traffic to enforce. */
     direction: SecurityGroupRulePrototype.Constants.Direction | string;
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
-     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
-     *  addresses (network interfaces) in that group matching this IP version.
+    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+     *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
+     *
+     *  If `remote` references a security group, then this rule only applies to IP addresses
+     *  (network interfaces) in that group matching this IP version.
      */
     ip_version?: SecurityGroupRulePrototype.Constants.IpVersion | string;
+    /** The local IP address or range of local IP addresses to which this rule will allow inbound
+     *  traffic (or from which, for outbound traffic)
+     *
+     *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP
+     *  addresses (or from all local IP addresses, for outbound rules).
+     */
+    local?: SecurityGroupRuleLocalPrototype;
     /** The protocol to enforce. */
     protocol: SecurityGroupRulePrototype.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
@@ -39861,7 +40018,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -39913,7 +40070,7 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** The resource types that can be security group targets are expected to expand in the future. When iterating over security group targets, do not assume that every target resource will be from a known set of resource types. Optionally halt processing and surface an error, or bypass resources of unrecognized types. */
+  /** A target of this security group. The resources supported by this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
   export interface SecurityGroupTargetReference {
   }
 
@@ -39925,9 +40082,8 @@ namespace VpcV1 {
      *    target control access to the mount target.
      *  - `vpc`: All clients in the VPC for a mount target have access to the mount target.
      *
-     *  The enumerated access control mode values for this property may expand in the future. When processing this
-     *  property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the
-     *  resource on which the unexpected access control mode was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     access_control_mode: Share.Constants.AccessControlMode | string;
     /** The date and time that the file share is created. */
@@ -39938,7 +40094,7 @@ namespace VpcV1 {
     encryption: Share.Constants.Encryption | string;
     /** The key used to encrypt this file share.
      *
-     *  This property will be present if `encryption_type` is `user_managed`.
+     *  This property will be present if `encryption` is `user_managed`.
      */
     encryption_key?: EncryptionKeyReference;
     /** The URL for this file share. */
@@ -39980,31 +40136,30 @@ namespace VpcV1 {
      *  This property will be present when the `replication_role` is `replica`.
      */
     replication_cron_spec?: string;
-    /** The replication role of the file share.
+    /** The replication role of the file share:
+     *  - `none`: This share is not participating in replication.
+     *  - `replica`: This share is a replication target.
+     *  - `source`: This share is a replication source.
      *
-     *  * `none`: This share is not participating in replication.
-     *  * `replica`: This share is a replication target.
-     *  * `source`: This share is a replication source.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     replication_role: Share.Constants.ReplicationRole | string;
-    /** The replication status of the file share.
+    /** The replication status of the file share:
+     *  - `active`: This share is actively participating in replication, and the replica's data is up-to-date with the
+     *  replication schedule.
+     *  - `degraded`: This is share is participating in replication, but the replica's data has fallen behind the
+     *  replication schedule.
+     *  - `failover_pending`: This share is performing a replication failover.
+     *  - `initializing`: This share is initializing replication.
+     *  - `none`: This share is not participating in replication.
+     *  - `split_pending`: This share is performing a replication split.
      *
-     *  * `active`: This share is actively participating in replication, and the replica's data is up-to-date with the
-     *  replication schedule.
-     *  * `degraded`: This is share is participating in replication, but the replica's data has fallen behind the
-     *  replication schedule.
-     *  * `failover_pending`: This share is performing a replication failover.
-     *  * `initializing`: This share is initializing replication.
-     *  * `none`: This share is not participating in replication.
-     *  * `split_pending`: This share is performing a replication split.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     replication_status: Share.Constants.ReplicationStatus | string;
-    /** The reasons for the current replication status (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current replication status (if any). */
     replication_status_reasons: ShareReplicationStatusReason[];
     /** The resource group for this file share. */
     resource_group: ResourceGroupReference;
@@ -40027,7 +40182,7 @@ namespace VpcV1 {
   }
   export namespace Share {
     export namespace Constants {
-      /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. The enumerated access control mode values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected access control mode was encountered. */
+      /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AccessControlMode {
         SECURITY_GROUP = 'security_group',
         VPC = 'vpc',
@@ -40047,13 +40202,13 @@ namespace VpcV1 {
         UPDATING = 'updating',
         WAITING = 'waiting',
       }
-      /** The replication role of the file share. * `none`: This share is not participating in replication. * `replica`: This share is a replication target. * `source`: This share is a replication source. */
+      /** The replication role of the file share: - `none`: This share is not participating in replication. - `replica`: This share is a replication target. - `source`: This share is a replication source. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ReplicationRole {
         NONE = 'none',
         REPLICA = 'replica',
         SOURCE = 'source',
       }
-      /** The replication status of the file share. * `active`: This share is actively participating in replication, and the replica's data is up-to-date with the replication schedule. * `degraded`: This is share is participating in replication, but the replica's data has fallen behind the replication schedule. * `failover_pending`: This share is performing a replication failover. * `initializing`: This share is initializing replication. * `none`: This share is not participating in replication. * `split_pending`: This share is performing a replication split. */
+      /** The replication status of the file share: - `active`: This share is actively participating in replication, and the replica's data is up-to-date with the replication schedule. - `degraded`: This is share is participating in replication, but the replica's data has fallen behind the replication schedule. - `failover_pending`: This share is performing a replication failover. - `initializing`: This share is initializing replication. - `none`: This share is not participating in replication. - `split_pending`: This share is performing a replication split. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ReplicationStatus {
         ACTIVE = 'active',
         DEGRADED = 'degraded',
@@ -40109,41 +40264,32 @@ namespace VpcV1 {
 
   /** ShareJob. */
   export interface ShareJob {
-    /** The status of the file share job.
+    /** The status of the file share job:
+     *  - `cancelled`: This job has been cancelled.
+     *  - `failed`: This job has failed.
+     *  - `queued`: This job is queued.
+     *  - `running`: This job is running.
+     *  - `succeeded`: This job completed successfully.
      *
-     *  The enumerated values for this property will expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the file share job on which the
-     *  unexpected property value was encountered.
-     *
-     *  * `cancelled`: This job has been cancelled.
-     *  * `failed`: This job has failed.
-     *  * `queued`: This job is queued.
-     *  * `running`: This job is running.
-     *  * `succeeded`: This job completed successfully.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: ShareJob.Constants.Status | string;
-    /** The reasons for the file share job status (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the file share job status (if any). */
     status_reasons: ShareJobStatusReason[];
-    /** The type of the file share job.
+    /** The type of the file share job:
+     *  - `replication_failover`: This is a share replication failover job.
+     *  - `replication_init`: This is a share replication is initialization job.
+     *  - `replication_split`: This is a share replication split job.
      *
-     *  The enumerated values for this property will expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the file share job on which the
-     *  unexpected property value was encountered.
-     *
-     *  * `replication_failover`: This is a share replication failover job.
-     *  * `replication_init`: This is a share replication is initialization job.
-     *  * `replication_split`: This is a share replication split job.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     type: ShareJob.Constants.Type | string;
   }
   export namespace ShareJob {
     export namespace Constants {
-      /** The status of the file share job. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the file share job on which the unexpected property value was encountered. * `cancelled`: This job has been cancelled. * `failed`: This job has failed. * `queued`: This job is queued. * `running`: This job is running. * `succeeded`: This job completed successfully. */
+      /** The status of the file share job: - `cancelled`: This job has been cancelled. - `failed`: This job has failed. - `queued`: This job is queued. - `running`: This job is running. - `succeeded`: This job completed successfully. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         CANCELLED = 'cancelled',
         FAILED = 'failed',
@@ -40151,7 +40297,7 @@ namespace VpcV1 {
         RUNNING = 'running',
         SUCCEEDED = 'succeeded',
       }
-      /** The type of the file share job. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the file share job on which the unexpected property value was encountered. * `replication_failover`: This is a share replication failover job. * `replication_init`: This is a share replication is initialization job. * `replication_split`: This is a share replication split job. */
+      /** The type of the file share job: - `replication_failover`: This is a share replication failover job. - `replication_init`: This is a share replication is initialization job. - `replication_split`: This is a share replication split job. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         REPLICATION_FAILOVER = 'replication_failover',
         REPLICATION_INIT = 'replication_init',
@@ -40162,7 +40308,11 @@ namespace VpcV1 {
 
   /** ShareJobStatusReason. */
   export interface ShareJobStatusReason {
-    /** A snake case string succinctly identifying the status reason. */
+    /** A snake case string succinctly identifying the status reason.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: ShareJobStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
@@ -40171,7 +40321,7 @@ namespace VpcV1 {
   }
   export namespace ShareJobStatusReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the status reason. */
+      /** A snake case string succinctly identifying the status reason. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_INITIALIZE_REPLICATION = 'cannot_initialize_replication',
         CANNOT_REACH_REPLICA_SHARE = 'cannot_reach_replica_share',
@@ -40198,9 +40348,8 @@ namespace VpcV1 {
      *    target control access to the mount target.
      *  - `vpc`: All clients in the VPC for a mount target have access to the mount target.
      *
-     *  The enumerated access control mode values for this property may expand in the future. When processing this
-     *  property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the
-     *  resource on which the unexpected access control mode was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     access_control_mode: ShareMountTarget.Constants.AccessControlMode | string;
     /** The date and time that the share mount target was created. */
@@ -40243,9 +40392,8 @@ namespace VpcV1 {
      *  - `none`: Not encrypted in transit
      *  - `user_managed`: Encrypted in transit using an instance identity certificate
      *
-     *  The enumerated values for this property will expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     transit_encryption: ShareMountTarget.Constants.TransitEncryption | string;
     /** The virtual network interface for this file share mount target.
@@ -40264,7 +40412,7 @@ namespace VpcV1 {
   }
   export namespace ShareMountTarget {
     export namespace Constants {
-      /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. The enumerated access control mode values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected access control mode was encountered. */
+      /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AccessControlMode {
         SECURITY_GROUP = 'security_group',
         VPC = 'vpc',
@@ -40283,7 +40431,7 @@ namespace VpcV1 {
       export enum ResourceType {
         SHARE_MOUNT_TARGET = 'share_mount_target',
       }
-      /** The transit encryption mode for this share mount target: - `none`: Not encrypted in transit - `user_managed`: Encrypted in transit using an instance identity certificate The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on which the unexpected property value was encountered. */
+      /** The transit encryption mode for this share mount target: - `none`: Not encrypted in transit - `user_managed`: Encrypted in transit using an instance identity certificate The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum TransitEncryption {
         NONE = 'none',
         USER_MANAGED = 'user_managed',
@@ -40482,10 +40630,8 @@ namespace VpcV1 {
     replica_share?: SharePrototypeShareContext;
     /** Tags for this resource. */
     user_tags?: string[];
-    /** The zone this file share will reside in.
-     *
-     *  For a replica share, this must be a different zone in the same region as the
-     *  source share.
+    /** The zone this file share will reside in. For a replica share, this must be a different
+     *  zone in the same region as the source share.
      */
     zone: ZoneIdentity;
   }
@@ -40574,7 +40720,11 @@ namespace VpcV1 {
 
   /** ShareReplicationStatusReason. */
   export interface ShareReplicationStatusReason {
-    /** A snake case string succinctly identifying the status reason. */
+    /** A snake case string succinctly identifying the status reason.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: ShareReplicationStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
@@ -40583,7 +40733,7 @@ namespace VpcV1 {
   }
   export namespace ShareReplicationStatusReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the status reason. */
+      /** A snake case string succinctly identifying the status reason. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_INITIALIZE_REPLICATION = 'cannot_initialize_replication',
         CANNOT_REACH_REPLICA_SHARE = 'cannot_reach_replica_share',
@@ -40763,7 +40913,7 @@ namespace VpcV1 {
     /** The member snapshots that are data-consistent with respect to captured time. (may be
      *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
      */
-    snapshots: SnapshotConsistencyGroupSnapshotsItem[];
+    snapshots: SnapshotReference[];
   }
   export namespace SnapshotConsistencyGroup {
     export namespace Constants {
@@ -40858,36 +41008,6 @@ namespace VpcV1 {
   export interface SnapshotConsistencyGroupReferenceDeleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
-  }
-
-  /** SnapshotConsistencyGroupSnapshotsItem. */
-  export interface SnapshotConsistencyGroupSnapshotsItem {
-    /** The CRN of this snapshot. */
-    crn: string;
-    /** If present, this property indicates the referenced resource has been deleted, and provides
-     *  some supplementary information.
-     */
-    deleted?: SnapshotReferenceDeleted;
-    /** The URL for this snapshot. */
-    href: string;
-    /** The unique identifier for this snapshot. */
-    id: string;
-    /** The name for this snapshot. The name is unique across all snapshots in the region. */
-    name: string;
-    /** If present, this property indicates that the resource associated with this reference
-     *  is remote and therefore may not be directly retrievable.
-     */
-    remote?: SnapshotRemote;
-    /** The resource type. */
-    resource_type: SnapshotConsistencyGroupSnapshotsItem.Constants.ResourceType | string;
-  }
-  export namespace SnapshotConsistencyGroupSnapshotsItem {
-    export namespace Constants {
-      /** The resource type. */
-      export enum ResourceType {
-        SNAPSHOT = 'snapshot',
-      }
-    }
   }
 
   /** SnapshotCopiesItem. */
@@ -41251,20 +41371,15 @@ namespace VpcV1 {
     default_security_group: SecurityGroupReference;
     /** The DNS configuration for this VPC. */
     dns: VPCDNS;
-    /** The reasons for the current `health_state` (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `health_state` (if any). */
     health_reasons: VPCHealthReason[];
-    /** The health of this resource.
+    /** The health of this resource:
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
      *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
-     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
-     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
-     *  also have this state.
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: VPC.Constants.HealthState | string;
     /** The URL for this VPC. */
@@ -41282,7 +41397,7 @@ namespace VpcV1 {
   }
   export namespace VPC {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -41377,6 +41492,17 @@ namespace VpcV1 {
      *  The endpoint gateways may be remote and therefore may not be directly retrievable.
      */
     endpoint_gateways: EndpointGatewayReferenceRemote[];
+    /** The reasons for the current `health_state` (if any). */
+    health_reasons: VPCDNSResolutionBindingHealthReason[];
+    /** The health of this resource:
+     *  - `ok`: No abnormal behavior detected
+     *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
+     *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
+     */
+    health_state: VPCDNSResolutionBinding.Constants.HealthState | string;
     /** The URL for this DNS resolution binding. */
     href: string;
     /** The unique identifier for this DNS resolution binding. */
@@ -41395,6 +41521,13 @@ namespace VpcV1 {
   }
   export namespace VPCDNSResolutionBinding {
     export namespace Constants {
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
       /** The lifecycle state of the DNS resolution binding. */
       export enum LifecycleState {
         DELETING = 'deleting',
@@ -41436,6 +41569,25 @@ namespace VpcV1 {
   export interface VPCDNSResolutionBindingCollectionNext {
     /** The URL for a page of resources. */
     href: string;
+  }
+
+  /** VPCDNSResolutionBindingHealthReason. */
+  export interface VPCDNSResolutionBindingHealthReason {
+    /** A reason code for this health state. */
+    code: VPCDNSResolutionBindingHealthReason.Constants.Code | string;
+    /** An explanation of the reason for this health state. */
+    message: string;
+    /** Link to documentation about the reason for this health state. */
+    more_info?: string;
+  }
+  export namespace VPCDNSResolutionBindingHealthReason {
+    export namespace Constants {
+      /** A reason code for this health state. */
+      export enum Code {
+        DISCONNECTED_FROM_BOUND_VPC = 'disconnected_from_bound_vpc',
+        INTERNAL_ERROR = 'internal_error',
+      }
+    }
   }
 
   /** VPCDNSResolver. */
@@ -41549,7 +41701,7 @@ namespace VpcV1 {
 
   /** VPCHealthReason. */
   export interface VPCHealthReason {
-    /** A snake case string succinctly identifying the reason for this health state. */
+    /** A reason code for this health state. */
     code: VPCHealthReason.Constants.Code | string;
     /** An explanation of the reason for this health state. */
     message: string;
@@ -41558,7 +41710,7 @@ namespace VpcV1 {
   }
   export namespace VPCHealthReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this health state. */
+      /** A reason code for this health state. */
       export enum Code {
         DNS_RESOLUTION_BINDING_FAILED = 'dns_resolution_binding_failed',
         INTERNAL_ERROR = 'internal_error',
@@ -41684,38 +41836,22 @@ namespace VpcV1 {
     created_at: string;
     /** The VPN gateway's CRN. */
     crn: string;
-    /** The reasons for the current VPN gateway health_state (if any):
-     *  - `cannot_create_vpc_route`: VPN cannot create route (check for conflict)
-     *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
-     *    subnet)
-     *  - `internal_error`: Internal error (contact IBM support)
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `health_state` (if any). */
     health_reasons: VPNGatewayHealthReason[];
-    /** The health of this resource.
+    /** The health of this resource:
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
      *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
-     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
-     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
-     *  also have this state.
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: VPNGateway.Constants.HealthState | string;
     /** The VPN gateway's canonical URL. */
     href: string;
     /** The unique identifier for this VPN gateway. */
     id: string;
-    /** The reasons for the current VPN gateway lifecycle_state (if any):
-     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
-     *    support)
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `lifecycle_state` (if any). */
     lifecycle_reasons: VPNGatewayLifecycleReason[];
     /** The lifecycle state of the VPN gateway. */
     lifecycle_state: VPNGateway.Constants.LifecycleState | string;
@@ -41733,7 +41869,7 @@ namespace VpcV1 {
   }
   export namespace VPNGateway {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -41793,6 +41929,15 @@ namespace VpcV1 {
     created_at: string;
     /** The Dead Peer Detection settings. */
     dead_peer_detection: VPNGatewayConnectionDPD;
+    /** The establish mode of the VPN gateway connection:
+     *  - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol
+     *     negotiations or rekeying processes.
+     *  - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway
+     *     connection. Additionally, the peer is responsible for initiating the rekeying process
+     *     after the connection is established. If rekeying does not occur, the VPN gateway
+     *     connection will be brought down after its lifetime expires.
+     */
+    establish_mode: VPNGatewayConnection.Constants.EstablishMode | string;
     /** The VPN connection's canonical URL. */
     href: string;
     /** The unique identifier for this VPN gateway connection. */
@@ -41809,34 +41954,13 @@ namespace VpcV1 {
     mode: VPNGatewayConnection.Constants.Mode | string;
     /** The name for this VPN gateway connection. The name is unique across all connections for the VPN gateway. */
     name: string;
-    /** The IP address of the peer VPN gateway. */
-    peer_address: string;
     /** The pre-shared key. */
     psk: string;
     /** The resource type. */
     resource_type: VPNGatewayConnection.Constants.ResourceType | string;
     /** The status of a VPN gateway connection. */
     status: VPNGatewayConnection.Constants.Status | string;
-    /** The reasons for the current VPN gateway connection status (if any):
-     *  - `cannot_authenticate_connection`: Failed to authenticate a connection because of
-     *    mismatched IKE ID and PSK (check IKE ID and PSK in peer VPN configuration)
-     *  - `internal_error`: Internal error (contact IBM support)
-     *  - `ike_policy_mismatch`: None of the proposed IKE crypto suites was acceptable (check
-     *     the IKE policies on both sides of the VPN)
-     *  - `ike_v1_id_local_remote_cidr_mismatch`: Invalid IKE ID or mismatched local CIDRs and
-     *    remote CIDRs in IKE V1 (check the IKE ID or the local CIDRs and remote CIDRs in IKE
-     *    V1 configuration)
-     *  - `ike_v2_local_remote_cidr_mismatch`: Mismatched local CIDRs and remote CIDRs in IKE
-     *    V2 (check the local CIDRs and remote CIDRs in IKE V2 configuration)
-     *  - `ipsec_policy_mismatch`: None of the proposed IPsec crypto suites was acceptable
-     *    (check the IPsec policies on both sides of the VPN)
-     *  - `peer_not_responding`: No response from peer (check network ACL configuration, peer
-     *    availability, and on-premise firewall configuration)
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current VPN gateway connection status (if any). */
     status_reasons: VPNGatewayConnectionStatusReason[];
   }
   export namespace VPNGatewayConnection {
@@ -41844,6 +41968,11 @@ namespace VpcV1 {
       /** The authentication mode. Only `psk` is currently supported. */
       export enum AuthenticationMode {
         PSK = 'psk',
+      }
+      /** The establish mode of the VPN gateway connection: - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol negotiations or rekeying processes. - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway connection. Additionally, the peer is responsible for initiating the rekeying process after the connection is established. If rekeying does not occur, the VPN gateway connection will be brought down after its lifetime expires. */
+      export enum EstablishMode {
+        BIDIRECTIONAL = 'bidirectional',
+        PEER_ONLY = 'peer_only',
       }
       /** The mode of the VPN gateway. */
       export enum Mode {
@@ -41860,6 +41989,12 @@ namespace VpcV1 {
         UP = 'up',
       }
     }
+  }
+
+  /** VPNGatewayConnectionCIDRs. */
+  export interface VPNGatewayConnectionCIDRs {
+    /** The CIDRs for this resource. */
+    cidrs: string[];
   }
 
   /** Collection of VPN gateway connections in a VPN gateway. */
@@ -41931,6 +42066,44 @@ namespace VpcV1 {
     }
   }
 
+  /** VPNGatewayConnectionIKEIdentity. */
+  export interface VPNGatewayConnectionIKEIdentity {
+    /** The IKE identity type.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    type: VPNGatewayConnectionIKEIdentity.Constants.Type | string;
+  }
+  export namespace VPNGatewayConnectionIKEIdentity {
+    export namespace Constants {
+      /** The IKE identity type. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Type {
+        FQDN = 'fqdn',
+        HOSTNAME = 'hostname',
+        IPV4_ADDRESS = 'ipv4_address',
+        KEY_ID = 'key_id',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionIKEIdentityPrototype. */
+  export interface VPNGatewayConnectionIKEIdentityPrototype {
+    /** The IKE identity type. */
+    type: VPNGatewayConnectionIKEIdentityPrototype.Constants.Type | string;
+  }
+  export namespace VPNGatewayConnectionIKEIdentityPrototype {
+    export namespace Constants {
+      /** The IKE identity type. */
+      export enum Type {
+        FQDN = 'fqdn',
+        HOSTNAME = 'hostname',
+        IPV4_ADDRESS = 'ipv4_address',
+        KEY_ID = 'key_id',
+      }
+    }
+  }
+
   /** The IKE policy to use. Specify `null` to remove any existing policy, [resulting in auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1). */
   export interface VPNGatewayConnectionIKEPolicyPatch {
   }
@@ -41947,16 +42120,68 @@ namespace VpcV1 {
   export interface VPNGatewayConnectionIPsecPolicyPrototype {
   }
 
-  /** VPNGatewayConnectionLocalCIDRs. */
-  export interface VPNGatewayConnectionLocalCIDRs {
-    /** The local CIDRs for this resource. */
-    local_cidrs?: string[];
+  /** VPNGatewayConnectionPeerPatch. */
+  export interface VPNGatewayConnectionPeerPatch {
   }
 
-  /** VPNGatewayConnectionPeerCIDRs. */
-  export interface VPNGatewayConnectionPeerCIDRs {
-    /** The peer CIDRs for this resource. */
-    peer_cidrs?: string[];
+  /** VPNGatewayConnectionPolicyModeLocal. */
+  export interface VPNGatewayConnectionPolicyModeLocal {
+    /** The local CIDRs for this VPN gateway connection. */
+    cidrs: string[];
+    /** The local IKE identities.
+     *
+     *  A VPN gateway in policy mode consists of two members in active-standby mode. The local IKE identity applies to
+     *  the active member.
+     */
+    ike_identities: VPNGatewayConnectionIKEIdentity[];
+  }
+
+  /** VPNGatewayConnectionPolicyModeLocalPrototype. */
+  export interface VPNGatewayConnectionPolicyModeLocalPrototype {
+    /** The local CIDRs for this VPN gateway connection. */
+    cidrs: string[];
+    /** The local IKE identities to use.
+     *
+     *  A VPN gateway in policy mode consists of two members in active-standby mode. The specified identity will be
+     *  applied to the active member.
+     *
+     *  If unspecified, then `type` will be `ipv4_address` and `value` will be the public IP address of the VPN gateway.
+     */
+    ike_identities?: VPNGatewayConnectionIKEIdentityPrototype[];
+  }
+
+  /** VPNGatewayConnectionPolicyModePeer. */
+  export interface VPNGatewayConnectionPolicyModePeer {
+    /** The peer CIDRs for this VPN gateway connection. */
+    cidrs: string[];
+    /** The peer IKE identity. */
+    ike_identity: VPNGatewayConnectionIKEIdentity;
+    /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+    type: VPNGatewayConnectionPolicyModePeer.Constants.Type | string;
+  }
+  export namespace VPNGatewayConnectionPolicyModePeer {
+    export namespace Constants {
+      /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+      export enum Type {
+        ADDRESS = 'address',
+        FQDN = 'fqdn',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionPolicyModePeerPrototype. */
+  export interface VPNGatewayConnectionPolicyModePeerPrototype {
+    /** The peer CIDRs for this VPN gateway connection. */
+    cidrs: string[];
+    /** The peer IKE identity to use.
+     *
+     *  If unspecified:
+     *  - If `peer.address` is specified, the `type` will be `ipv4_address`, and
+     *  the `value` will be `peer.address`.
+     *  - If `peer.fqdn` is specified, the `type` will be `fqdn`, and the `value`
+     *  will be `peer.fqdn`.
+     */
+    ike_identity?: VPNGatewayConnectionIKEIdentityPrototype;
   }
 
   /** VPNGatewayConnectionPrototype. */
@@ -41965,6 +42190,15 @@ namespace VpcV1 {
     admin_state_up?: boolean;
     /** The Dead Peer Detection settings. */
     dead_peer_detection?: VPNGatewayConnectionDPDPrototype;
+    /** The establish mode of the VPN gateway connection:
+     *  - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol
+     *     negotiations or rekeying processes.
+     *  - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway
+     *     connection. Additionally, the peer is responsible for initiating the rekeying process
+     *     after the connection is established. If rekeying does not occur, the VPN gateway
+     *     connection will be brought down after its lifetime expires.
+     */
+    establish_mode?: VPNGatewayConnectionPrototype.Constants.EstablishMode | string;
     /** The IKE policy to use. If unspecified, [auto-negotiation will be
      *  used](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1).
      */
@@ -41977,10 +42211,17 @@ namespace VpcV1 {
      *  gateway. If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The IP address of the peer VPN gateway. */
-    peer_address: string;
     /** The pre-shared key. */
     psk: string;
+  }
+  export namespace VPNGatewayConnectionPrototype {
+    export namespace Constants {
+      /** The establish mode of the VPN gateway connection: - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol negotiations or rekeying processes. - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway connection. Additionally, the peer is responsible for initiating the rekeying process after the connection is established. If rekeying does not occur, the VPN gateway connection will be brought down after its lifetime expires. */
+      export enum EstablishMode {
+        BIDIRECTIONAL = 'bidirectional',
+        PEER_ONLY = 'peer_only',
+      }
+    }
   }
 
   /** VPNGatewayConnectionReference. */
@@ -42013,13 +42254,109 @@ namespace VpcV1 {
     more_info: string;
   }
 
+  /** VPNGatewayConnectionStaticRouteModeLocal. */
+  export interface VPNGatewayConnectionStaticRouteModeLocal {
+    /** The local IKE identities.
+     *
+     *  A VPN gateway in static route mode consists of two members in active-active mode. The first identity applies to
+     *  the first member, and the second identity applies to the second member.
+     */
+    ike_identities: VPNGatewayConnectionIKEIdentity[];
+  }
+
+  /** VPNGatewayConnectionStaticRouteModeLocalPrototype. */
+  export interface VPNGatewayConnectionStaticRouteModeLocalPrototype {
+    /** The local IKE identities to use.
+     *
+     *  A VPN gateway in static route mode consists of two members in active-active mode. The first specified identity
+     *  will be applied to the first member, and the second specified identity will be applied to the second member.
+     *
+     *  If unspecified, then `type` will be `ipv4_address` and `value` will be the public IP address of the member's VPN
+     *  connection tunnel.
+     */
+    ike_identities?: VPNGatewayConnectionIKEIdentityPrototype[];
+  }
+
+  /** VPNGatewayConnectionStaticRouteModePeer. */
+  export interface VPNGatewayConnectionStaticRouteModePeer {
+    /** The peer IKE identity. */
+    ike_identity: VPNGatewayConnectionIKEIdentity;
+    /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+    type: VPNGatewayConnectionStaticRouteModePeer.Constants.Type | string;
+  }
+  export namespace VPNGatewayConnectionStaticRouteModePeer {
+    export namespace Constants {
+      /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+      export enum Type {
+        ADDRESS = 'address',
+        FQDN = 'fqdn',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionStaticRouteModePeerPrototype. */
+  export interface VPNGatewayConnectionStaticRouteModePeerPrototype {
+    /** The peer IKE identity to use.
+     *
+     *  If unspecified:
+     *  - If `peer.address` is specified, the `type` will be `ipv4_address`, and
+     *  the `value` will be `peer.address`.
+     *  - If `peer.fqdn` is specified, the `type` will be `fqdn`, and the `value`
+     *  will be `peer.fqdn`.
+     */
+    ike_identity?: VPNGatewayConnectionIKEIdentityPrototype;
+  }
+
   /** VPNGatewayConnectionStaticRouteModeTunnel. */
   export interface VPNGatewayConnectionStaticRouteModeTunnel {
     /** The IP address of the VPN gateway member in which the tunnel resides. */
     public_ip: IP;
     /** The status of the VPN Tunnel. */
     status: VPNGatewayConnectionStaticRouteModeTunnel.Constants.Status | string;
-    /** The reasons for the current VPN gateway connection tunnels status (if any):
+    /** The reasons for the current status (if any). */
+    status_reasons: VPNGatewayConnectionTunnelStatusReason[];
+  }
+  export namespace VPNGatewayConnectionStaticRouteModeTunnel {
+    export namespace Constants {
+      /** The status of the VPN Tunnel. */
+      export enum Status {
+        DOWN = 'down',
+        UP = 'up',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionStatusReason. */
+  export interface VPNGatewayConnectionStatusReason {
+    /** A snake case string succinctly identifying the status reason.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: VPNGatewayConnectionStatusReason.Constants.Code | string;
+    /** An explanation of the reason for this VPN gateway connection's status. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
+  }
+  export namespace VPNGatewayConnectionStatusReason {
+    export namespace Constants {
+      /** A snake case string succinctly identifying the status reason. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        CANNOT_AUTHENTICATE_CONNECTION = 'cannot_authenticate_connection',
+        IKE_POLICY_MISMATCH = 'ike_policy_mismatch',
+        IKE_V1_ID_LOCAL_REMOTE_CIDR_MISMATCH = 'ike_v1_id_local_remote_cidr_mismatch',
+        IKE_V2_LOCAL_REMOTE_CIDR_MISMATCH = 'ike_v2_local_remote_cidr_mismatch',
+        INTERNAL_ERROR = 'internal_error',
+        IPSEC_POLICY_MISMATCH = 'ipsec_policy_mismatch',
+        PEER_NOT_RESPONDING = 'peer_not_responding',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionTunnelStatusReason. */
+  export interface VPNGatewayConnectionTunnelStatusReason {
+    /** A reason code for this status:
      *  - `cannot_authenticate_connection`: Failed to authenticate a connection because of
      *    mismatched IKE ID and PSK (check IKE ID and PSK in peer VPN configuration)
      *  - `internal_error`: Internal error (contact IBM support)
@@ -42035,49 +42372,9 @@ namespace VpcV1 {
      *  - `peer_not_responding`: No response from peer (check network ACL configuration, peer
      *    availability, and on-premise firewall configuration)
      *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
-    status_reasons: VPNGatewayConnectionTunnelStatusReason[];
-  }
-  export namespace VPNGatewayConnectionStaticRouteModeTunnel {
-    export namespace Constants {
-      /** The status of the VPN Tunnel. */
-      export enum Status {
-        DOWN = 'down',
-        UP = 'up',
-      }
-    }
-  }
-
-  /** VPNGatewayConnectionStatusReason. */
-  export interface VPNGatewayConnectionStatusReason {
-    /** A snake case string succinctly identifying the status reason. */
-    code: VPNGatewayConnectionStatusReason.Constants.Code | string;
-    /** An explanation of the reason for this VPN gateway connection's status. */
-    message: string;
-    /** Link to documentation about this status reason. */
-    more_info?: string;
-  }
-  export namespace VPNGatewayConnectionStatusReason {
-    export namespace Constants {
-      /** A snake case string succinctly identifying the status reason. */
-      export enum Code {
-        CANNOT_AUTHENTICATE_CONNECTION = 'cannot_authenticate_connection',
-        IKE_POLICY_MISMATCH = 'ike_policy_mismatch',
-        IKE_V1_ID_LOCAL_REMOTE_CIDR_MISMATCH = 'ike_v1_id_local_remote_cidr_mismatch',
-        IKE_V2_LOCAL_REMOTE_CIDR_MISMATCH = 'ike_v2_local_remote_cidr_mismatch',
-        INTERNAL_ERROR = 'internal_error',
-        IPSEC_POLICY_MISMATCH = 'ipsec_policy_mismatch',
-        PEER_NOT_RESPONDING = 'peer_not_responding',
-      }
-    }
-  }
-
-  /** VPNGatewayConnectionTunnelStatusReason. */
-  export interface VPNGatewayConnectionTunnelStatusReason {
-    /** A snake case string succinctly identifying the status reason. */
     code: VPNGatewayConnectionTunnelStatusReason.Constants.Code | string;
     /** An explanation of the reason for this VPN gateway connection tunnel's status. */
     message: string;
@@ -42086,7 +42383,7 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayConnectionTunnelStatusReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the status reason. */
+      /** A reason code for this status: - `cannot_authenticate_connection`: Failed to authenticate a connection because of mismatched IKE ID and PSK (check IKE ID and PSK in peer VPN configuration) - `internal_error`: Internal error (contact IBM support) - `ike_policy_mismatch`: None of the proposed IKE crypto suites was acceptable (check the IKE policies on both sides of the VPN) - `ike_v1_id_local_remote_cidr_mismatch`: Invalid IKE ID or mismatched local CIDRs and remote CIDRs in IKE V1 (check the IKE ID or the local CIDRs and remote CIDRs in IKE V1 configuration) - `ike_v2_local_remote_cidr_mismatch`: Mismatched local CIDRs and remote CIDRs in IKE V2 (check the local CIDRs and remote CIDRs in IKE V2 configuration) - `ipsec_policy_mismatch`: None of the proposed IPsec crypto suites was acceptable (check the IPsec policies on both sides of the VPN) - `peer_not_responding`: No response from peer (check network ACL configuration, peer availability, and on-premise firewall configuration) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_AUTHENTICATE_CONNECTION = 'cannot_authenticate_connection',
         IKE_POLICY_MISMATCH = 'ike_policy_mismatch',
@@ -42101,7 +42398,15 @@ namespace VpcV1 {
 
   /** VPNGatewayHealthReason. */
   export interface VPNGatewayHealthReason {
-    /** A snake case string succinctly identifying the reason for this health state. */
+    /** A reason code for this health state:
+     *  - `cannot_create_vpc_route`: VPN cannot create route (check for conflict)
+     *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
+     *    subnet)
+     *  - `internal_error`: Internal error (contact IBM support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: VPNGatewayHealthReason.Constants.Code | string;
     /** An explanation of the reason for this health state. */
     message: string;
@@ -42110,7 +42415,7 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayHealthReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this health state. */
+      /** A reason code for this health state: - `cannot_create_vpc_route`: VPN cannot create route (check for conflict) - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's subnet) - `internal_error`: Internal error (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_CREATE_VPC_ROUTE = 'cannot_create_vpc_route',
         CANNOT_RESERVE_IP_ADDRESS = 'cannot_reserve_ip_address',
@@ -42121,7 +42426,14 @@ namespace VpcV1 {
 
   /** VPNGatewayLifecycleReason. */
   export interface VPNGatewayLifecycleReason {
-    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: VPNGatewayLifecycleReason.Constants.Code | string;
     /** An explanation of the reason for this lifecycle state. */
     message: string;
@@ -42130,8 +42442,9 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayLifecycleReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
+        INTERNAL_ERROR = 'internal_error',
         RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
       }
     }
@@ -42139,33 +42452,18 @@ namespace VpcV1 {
 
   /** VPNGatewayMember. */
   export interface VPNGatewayMember {
-    /** The reasons for the current VPN gateway member health_state (if any):
-     *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
-     *    subnet)
-     *  - `internal_error`: Internal error (contact IBM support)
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `health_state` (if any). */
     health_reasons: VPNGatewayMemberHealthReason[];
-    /** The health of this resource.
+    /** The health of this resource:
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
      *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
-     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
-     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
-     *  also have this state.
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: VPNGatewayMember.Constants.HealthState | string;
-    /** The reasons for the current VPN gateway member lifecycle_state (if any):
-     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
-     *    support)
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `lifecycle_state` (if any). */
     lifecycle_reasons: VPNGatewayMemberLifecycleReason[];
     /** The lifecycle state of the VPN gateway member. */
     lifecycle_state: VPNGatewayMember.Constants.LifecycleState | string;
@@ -42181,7 +42479,7 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayMember {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -42208,7 +42506,14 @@ namespace VpcV1 {
 
   /** VPNGatewayMemberHealthReason. */
   export interface VPNGatewayMemberHealthReason {
-    /** A snake case string succinctly identifying the reason for this health state. */
+    /** A reason code for this health state:
+     *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
+     *    subnet)
+     *  - `internal_error`: Internal error (contact IBM support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: VPNGatewayMemberHealthReason.Constants.Code | string;
     /** An explanation of the reason for this health state. */
     message: string;
@@ -42217,7 +42522,7 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayMemberHealthReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this health state. */
+      /** A reason code for this health state: - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's subnet) - `internal_error`: Internal error (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_RESERVE_IP_ADDRESS = 'cannot_reserve_ip_address',
         INTERNAL_ERROR = 'internal_error',
@@ -42227,7 +42532,14 @@ namespace VpcV1 {
 
   /** VPNGatewayMemberLifecycleReason. */
   export interface VPNGatewayMemberLifecycleReason {
-    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: VPNGatewayMemberLifecycleReason.Constants.Code | string;
     /** An explanation of the reason for this lifecycle state. */
     message: string;
@@ -42236,8 +42548,9 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayMemberLifecycleReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
+        INTERNAL_ERROR = 'internal_error',
         RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
       }
     }
@@ -42295,30 +42608,15 @@ namespace VpcV1 {
     crn: string;
     /** Indicates whether the split tunneling is enabled on this VPN server. */
     enable_split_tunneling: boolean;
-    /** The reasons for the current VPN server health_state (if any):
-     *  - `cannot_access_client_certificate`: VPN server's client certificate is inaccessible
-     *    (verify certificate exists and that IAM policies grant `VPN server for VPC` access
-     *    to `Secrets Manager`)
-     *  - `cannot_access_server_certificate`: VPN server's server certificate is inaccessible
-     *    (verify certificate exists and that IAM policies grant `VPN server for VPC` access
-     *    to `Secrets Manager`)
-     *  - `cannot_create_vpc_route`: VPN cannot create route (check for conflict)
-     *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
-     *    subnet)
-     *  - `internal_error`: Internal error (contact IBM support)
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `health_state` (if any). */
     health_reasons: VPNServerHealthReason[];
-    /** The health of this resource.
+    /** The health of this resource:
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
      *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
-     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
-     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
-     *  also have this state.
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: VPNServer.Constants.HealthState | string;
     /** Fully qualified domain name assigned to this VPN server. */
@@ -42327,14 +42625,7 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this VPN server. */
     id: string;
-    /** The reasons for the current VPN server lifecycle_state (if any):
-     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
-     *    support)
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `lifecycle_state` (if any). */
     lifecycle_reasons: VPNServerLifecycleReason[];
     /** The lifecycle state of the VPN server. */
     lifecycle_state: VPNServer.Constants.LifecycleState | string;
@@ -42359,7 +42650,7 @@ namespace VpcV1 {
   }
   export namespace VPNServer {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -42453,9 +42744,8 @@ namespace VpcV1 {
      *  - `connected`: the VPN client is `connected` to this VPN server.
      *  - `disconnected`: the VPN client is `disconnected` from this VPN server.
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN client on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: VPNServerClient.Constants.Status | string;
     /** The username that this VPN client provided when connecting to the VPN server.
@@ -42471,7 +42761,7 @@ namespace VpcV1 {
       export enum ResourceType {
         VPN_SERVER_CLIENT = 'vpn_server_client',
       }
-      /** The status of the VPN client: - `connected`: the VPN client is `connected` to this VPN server. - `disconnected`: the VPN client is `disconnected` from this VPN server. The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN client on which the unexpected property value was encountered. */
+      /** The status of the VPN client: - `connected`: the VPN client is `connected` to this VPN server. - `disconnected`: the VPN client is `disconnected` from this VPN server. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         CONNECTED = 'connected',
         DISCONNECTED = 'disconnected',
@@ -42533,7 +42823,21 @@ namespace VpcV1 {
 
   /** VPNServerHealthReason. */
   export interface VPNServerHealthReason {
-    /** A snake case string succinctly identifying the reason for this health state. */
+    /** A reason code for this health state:
+     *  - `cannot_access_client_certificate`: VPN server's client certificate is inaccessible
+     *    (verify certificate exists and that IAM policies grant `VPN server for VPC` access
+     *    to `Secrets Manager`)
+     *  - `cannot_access_server_certificate`: VPN server's server certificate is inaccessible
+     *    (verify certificate exists and that IAM policies grant `VPN server for VPC` access
+     *    to `Secrets Manager`)
+     *  - `cannot_create_vpc_route`: VPN cannot create route (check for conflict)
+     *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
+     *    subnet)
+     *  - `internal_error`: Internal error (contact IBM support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: VPNServerHealthReason.Constants.Code | string;
     /** An explanation of the reason for this health state. */
     message: string;
@@ -42542,7 +42846,7 @@ namespace VpcV1 {
   }
   export namespace VPNServerHealthReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this health state. */
+      /** A reason code for this health state: - `cannot_access_client_certificate`: VPN server's client certificate is inaccessible (verify certificate exists and that IAM policies grant `VPN server for VPC` access to `Secrets Manager`) - `cannot_access_server_certificate`: VPN server's server certificate is inaccessible (verify certificate exists and that IAM policies grant `VPN server for VPC` access to `Secrets Manager`) - `cannot_create_vpc_route`: VPN cannot create route (check for conflict) - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's subnet) - `internal_error`: Internal error (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_ACCESS_CLIENT_CERTIFICATE = 'cannot_access_client_certificate',
         CANNOT_ACCESS_SERVER_CERTIFICATE = 'cannot_access_server_certificate',
@@ -42555,7 +42859,14 @@ namespace VpcV1 {
 
   /** VPNServerLifecycleReason. */
   export interface VPNServerLifecycleReason {
-    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: VPNServerLifecycleReason.Constants.Code | string;
     /** An explanation of the reason for this lifecycle state. */
     message: string;
@@ -42564,8 +42875,9 @@ namespace VpcV1 {
   }
   export namespace VPNServerLifecycleReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
+        INTERNAL_ERROR = 'internal_error',
         RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
       }
     }
@@ -42580,13 +42892,13 @@ namespace VpcV1 {
   /** VPNServerRoute. */
   export interface VPNServerRoute {
     /** The action to perform with a packet matching the VPN route:
-     *  - `translate`: translate the source IP address to one of the private IP addresses of the VPN server.
+     *  - `translate`: translate the source IP address to one of the private IP addresses of
+     *    the VPN server, then deliver the packet to target.
      *  - `deliver`: deliver the packet into the VPC.
      *  - `drop`: drop the packet
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on
-     *  which the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     action: VPNServerRoute.Constants.Action | string;
     /** The date and time that the VPN route was created. */
@@ -42595,35 +42907,22 @@ namespace VpcV1 {
      *  it will be dropped.
      */
     destination: string;
-    /** The reasons for the current VPN server route health_state (if any):
-     *  - `internal_error`: Internal error (contact IBM support)
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `health_state` (if any). */
     health_reasons: VPNServerRouteHealthReason[];
-    /** The health of this resource.
+    /** The health of this resource:
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
      *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
-     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
-     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
-     *  also have this state.
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: VPNServerRoute.Constants.HealthState | string;
     /** The URL for this VPN route. */
     href: string;
     /** The unique identifier for this VPN route. */
     id: string;
-    /** The reasons for the current VPN server route lifecycle_state (if any):
-     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
-     *    support)
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `lifecycle_state` (if any). */
     lifecycle_reasons: VPNServerRouteLifecycleReason[];
     /** The lifecycle state of the VPN route. */
     lifecycle_state: VPNServerRoute.Constants.LifecycleState | string;
@@ -42634,13 +42933,13 @@ namespace VpcV1 {
   }
   export namespace VPNServerRoute {
     export namespace Constants {
-      /** The action to perform with a packet matching the VPN route: - `translate`: translate the source IP address to one of the private IP addresses of the VPN server. - `deliver`: deliver the packet into the VPC. - `drop`: drop the packet The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the VPN route on which the unexpected property value was encountered. */
+      /** The action to perform with a packet matching the VPN route: - `translate`: translate the source IP address to one of the private IP addresses of the VPN server, then deliver the packet to target. - `deliver`: deliver the packet into the VPC. - `drop`: drop the packet The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Action {
         DELIVER = 'deliver',
         DROP = 'drop',
         TRANSLATE = 'translate',
       }
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -42692,7 +42991,12 @@ namespace VpcV1 {
 
   /** VPNServerRouteHealthReason. */
   export interface VPNServerRouteHealthReason {
-    /** A snake case string succinctly identifying the reason for this health state. */
+    /** A reason code for this health state:
+     *  - `internal_error`: Internal error (contact IBM support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: VPNServerRouteHealthReason.Constants.Code | string;
     /** An explanation of the reason for this health state. */
     message: string;
@@ -42701,7 +43005,7 @@ namespace VpcV1 {
   }
   export namespace VPNServerRouteHealthReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this health state. */
+      /** A reason code for this health state: - `internal_error`: Internal error (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         INTERNAL_ERROR = 'internal_error',
       }
@@ -42710,7 +43014,14 @@ namespace VpcV1 {
 
   /** VPNServerRouteLifecycleReason. */
   export interface VPNServerRouteLifecycleReason {
-    /** A snake case string succinctly identifying the reason for this lifecycle state. */
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: VPNServerRouteLifecycleReason.Constants.Code | string;
     /** An explanation of the reason for this lifecycle state. */
     message: string;
@@ -42719,8 +43030,9 @@ namespace VpcV1 {
   }
   export namespace VPNServerRouteLifecycleReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this lifecycle state. */
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
+        INTERNAL_ERROR = 'internal_error',
         RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
       }
     }
@@ -42870,7 +43182,7 @@ namespace VpcV1 {
     more_info: string;
   }
 
-  /** A virtual network interface target. The resource types that can be virtual network interface targets are expected to expand in the future. When iterating over virtual network interface targets, do not assume that every target resource will be from a known set of resource types. Optionally halt processing and surface an error, or bypass resources of unrecognized types. */
+  /** A virtual network interface target. The resources supported by this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
   export interface VirtualNetworkInterfaceTarget {
   }
 
@@ -42890,8 +43202,10 @@ namespace VpcV1 {
      *  perform an operation that is specified to require serialization.
      */
     busy: boolean;
-    /** The capacity to use for the volume (in gigabytes). The specified minimum and maximum capacity values for
-     *  creating or updating volumes may expand in the future.
+    /** The capacity to use for the volume (in gigabytes).
+     *
+     *  The minimum and maximum limits for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     capacity: number;
     /** The date and time that the volume was created. */
@@ -42906,20 +43220,15 @@ namespace VpcV1 {
      *  `user_managed`.
      */
     encryption_key?: EncryptionKeyReference;
-    /** The reasons for the current `health_state` (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current `health_state` (if any). */
     health_reasons: VolumeHealthReason[];
-    /** The health of this resource.
+    /** The health of this resource:
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
      *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
-     *  - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a
-     *  lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may
-     *  also have this state.
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: Volume.Constants.HealthState | string;
     /** The URL for this volume. */
@@ -42949,17 +43258,11 @@ namespace VpcV1 {
     source_snapshot?: SnapshotReference;
     /** The status of the volume.
      *
-     *  The enumerated values for this property will expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the volume on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: Volume.Constants.Status | string;
-    /** The reasons for the current status (if any).
-     *
-     *  The enumerated reason code values for this property will expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the resource on
-     *  which the unexpected reason code was encountered.
-     */
+    /** The reasons for the current status (if any). */
     status_reasons: VolumeStatusReason[];
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume. */
     user_tags: string[];
@@ -42981,7 +43284,7 @@ namespace VpcV1 {
         PROVIDER_MANAGED = 'provider_managed',
         USER_MANAGED = 'user_managed',
       }
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -42992,7 +43295,7 @@ namespace VpcV1 {
       export enum ResourceType {
         VOLUME = 'volume',
       }
-      /** The status of the volume. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the volume on which the unexpected property value was encountered. */
+      /** The status of the volume. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         AVAILABLE = 'available',
         FAILED = 'failed',
@@ -43214,7 +43517,7 @@ namespace VpcV1 {
 
   /** VolumeHealthReason. */
   export interface VolumeHealthReason {
-    /** A snake case string succinctly identifying the reason for this health state. */
+    /** A reason code for this health state. */
     code: VolumeHealthReason.Constants.Code | string;
     /** An explanation of the reason for this health state. */
     message: string;
@@ -43223,7 +43526,7 @@ namespace VpcV1 {
   }
   export namespace VolumeHealthReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the reason for this health state. */
+      /** A reason code for this health state. */
       export enum Code {
         INITIALIZING_FROM_SNAPSHOT = 'initializing_from_snapshot',
       }
@@ -43238,9 +43541,8 @@ namespace VpcV1 {
   export interface VolumeProfile {
     /** The product family this volume profile belongs to.
      *
-     *  The enumerated values for this property will expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the volume profile on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     family: VolumeProfile.Constants.Family | string;
     /** The URL for this volume profile. */
@@ -43250,7 +43552,7 @@ namespace VpcV1 {
   }
   export namespace VolumeProfile {
     export namespace Constants {
-      /** The product family this volume profile belongs to. The enumerated values for this property will expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the volume profile on which the unexpected property value was encountered. */
+      /** The product family this volume profile belongs to. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Family {
         CUSTOM = 'custom',
         TIERED = 'tiered',
@@ -43456,7 +43758,11 @@ namespace VpcV1 {
 
   /** VolumeStatusReason. */
   export interface VolumeStatusReason {
-    /** A snake case string succinctly identifying the status reason. */
+    /** A snake case string succinctly identifying the status reason.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     code: VolumeStatusReason.Constants.Code | string;
     /** An explanation of the status reason. */
     message: string;
@@ -43465,7 +43771,7 @@ namespace VpcV1 {
   }
   export namespace VolumeStatusReason {
     export namespace Constants {
-      /** A snake case string succinctly identifying the status reason. */
+      /** A snake case string succinctly identifying the status reason. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         ENCRYPTION_KEY_DELETED = 'encryption_key_deleted',
       }
@@ -43566,23 +43872,21 @@ namespace VpcV1 {
      *  - `boot_volume`: Include the instance's boot volume.
      *  - `data_volumes`: Include the instance's data volumes.
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     included_content: BackupPolicyMatchResourceTypeInstance.Constants.IncludedContent[] | string[];
     /** The resource type this backup policy applies to. Resources that have both a matching type and a matching
      *  user tag will be subject to the backup policy.
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     match_resource_type: BackupPolicyMatchResourceTypeInstance.Constants.MatchResourceType | string;
   }
   export namespace BackupPolicyMatchResourceTypeInstance {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -43603,12 +43907,12 @@ namespace VpcV1 {
       export enum ResourceType {
         BACKUP_POLICY = 'backup_policy',
       }
-      /** The included content for backups created using this policy: - `boot_volume`: Include the instance's boot volume. - `data_volumes`: Include the instance's data volumes. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the unexpected property value was encountered. */
+      /** The included content for backups created using this policy: - `boot_volume`: Include the instance's boot volume. - `data_volumes`: Include the instance's data volumes. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum IncludedContent {
         BOOT_VOLUME = 'boot_volume',
         DATA_VOLUMES = 'data_volumes',
       }
-      /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the unexpected property value was encountered. */
+      /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum MatchResourceType {
         INSTANCE = 'instance',
       }
@@ -43620,15 +43924,14 @@ namespace VpcV1 {
     /** The resource type this backup policy applies to. Resources that have both a matching type and a matching
      *  user tag will be subject to the backup policy.
      *
-     *  The enumerated values for this property may expand in the future. When processing this property, check for and
-     *  log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the
-     *  unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     match_resource_type: BackupPolicyMatchResourceTypeVolume.Constants.MatchResourceType | string;
   }
   export namespace BackupPolicyMatchResourceTypeVolume {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -43649,7 +43952,7 @@ namespace VpcV1 {
       export enum ResourceType {
         BACKUP_POLICY = 'backup_policy',
       }
-      /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the backup policy on which the unexpected property value was encountered. */
+      /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum MatchResourceType {
         VOLUME = 'volume',
       }
@@ -46638,8 +46941,7 @@ namespace VpcV1 {
      *
      *  If an offering is specified, the latest version of that offering will be used.
      *
-     *  The specified offering or offering version may be in a different account in the same
-     *  [enterprise](https://cloud.ibm.com/docs/account?topic=account-what-is-enterprise), subject
+     *  The specified offering or offering version may be in a different account, subject
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
@@ -46731,8 +47033,7 @@ namespace VpcV1 {
      *
      *  If an offering is specified, the latest version of that offering will be used.
      *
-     *  The specified offering or offering version may be in a different account in the same
-     *  [enterprise](https://cloud.ibm.com/docs/account?topic=account-what-is-enterprise), subject
+     *  The specified offering or offering version may be in a different account, subject
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
@@ -46798,8 +47099,7 @@ namespace VpcV1 {
      *
      *  If an offering is specified, the latest version of that offering will be used.
      *
-     *  The specified offering or offering version may be in a different account in the same
-     *  [enterprise](https://cloud.ibm.com/docs/account?topic=account-what-is-enterprise), subject
+     *  The specified offering or offering version may be in a different account, subject
      *  to IAM policies.
      */
     catalog_offering: InstanceCatalogOfferingPrototype;
@@ -46881,6 +47181,18 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityByHref. */
+  export interface LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityByHref extends LoadBalancerListenerDefaultPoolPatch {
+    /** The pool's canonical URL. */
+    href: string;
+  }
+
+  /** LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityById. */
+  export interface LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityById extends LoadBalancerListenerDefaultPoolPatch {
+    /** The unique identifier for this load balancer pool. */
+    id: string;
+  }
+
   /** LoadBalancerListenerIdentityByHref. */
   export interface LoadBalancerListenerIdentityByHref extends LoadBalancerListenerIdentity {
     /** The listener's canonical URL. */
@@ -46893,8 +47205,8 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerHTTPSRedirectPatch. */
-  export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerHTTPSRedirectPatch extends LoadBalancerListenerPolicyTargetPatch {
+  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyHTTPSRedirectPatch. */
+  export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyHTTPSRedirectPatch extends LoadBalancerListenerPolicyTargetPatch {
     /** The HTTP status code for this redirect. */
     http_status_code?: number;
     /** Identifies a load balancer listener by a unique property. */
@@ -46915,8 +47227,8 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity extends LoadBalancerListenerPolicyTargetPatch {
   }
 
-  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerHTTPSRedirectPrototype. */
-  export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerHTTPSRedirectPrototype extends LoadBalancerListenerPolicyTargetPrototype {
+  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyHTTPSRedirectPrototype. */
+  export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyHTTPSRedirectPrototype extends LoadBalancerListenerPolicyTargetPrototype {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
     /** Identifies a load balancer listener by a unique property. */
@@ -46937,8 +47249,8 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentity extends LoadBalancerListenerPolicyTargetPrototype {
   }
 
-  /** LoadBalancerListenerPolicyTargetLoadBalancerListenerHTTPSRedirect. */
-  export interface LoadBalancerListenerPolicyTargetLoadBalancerListenerHTTPSRedirect extends LoadBalancerListenerPolicyTarget {
+  /** LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyHTTPSRedirect. */
+  export interface LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyHTTPSRedirect extends LoadBalancerListenerPolicyTarget {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
     listener: LoadBalancerListenerReference;
@@ -46968,14 +47280,14 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** LoadBalancerPoolIdentityByHref. */
-  export interface LoadBalancerPoolIdentityByHref extends LoadBalancerPoolIdentity {
+  /** LoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
+  export interface LoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerPoolIdentity {
     /** The pool's canonical URL. */
     href: string;
   }
 
-  /** LoadBalancerPoolIdentityById. */
-  export interface LoadBalancerPoolIdentityById extends LoadBalancerPoolIdentity {
+  /** LoadBalancerPoolIdentityLoadBalancerPoolIdentityById. */
+  export interface LoadBalancerPoolIdentityLoadBalancerPoolIdentityById extends LoadBalancerPoolIdentity {
     /** The unique identifier for this load balancer pool. */
     id: string;
   }
@@ -46984,9 +47296,8 @@ namespace VpcV1 {
   export interface LoadBalancerPoolMemberTargetPrototypeIP extends LoadBalancerPoolMemberTargetPrototype {
     /** The IP address.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -46999,9 +47310,8 @@ namespace VpcV1 {
   export interface LoadBalancerPoolMemberTargetIP extends LoadBalancerPoolMemberTarget {
     /** The IP address.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -48010,9 +48320,8 @@ namespace VpcV1 {
   export interface RouteNextHopIP extends RouteNextHop {
     /** The IP address.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -48087,15 +48396,84 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** SecurityGroupRuleLocalPatchCIDR. */
+  export interface SecurityGroupRuleLocalPatchCIDR extends SecurityGroupRuleLocalPatch {
+    /** The CIDR block.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
+     *  blocks in the future.
+     */
+    cidr_block: string;
+  }
+
+  /** SecurityGroupRuleLocalPatchIP. */
+  export interface SecurityGroupRuleLocalPatchIP extends SecurityGroupRuleLocalPatch {
+    /** The IP address.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
+     */
+    address: string;
+  }
+
+  /** SecurityGroupRuleLocalPrototypeCIDR. */
+  export interface SecurityGroupRuleLocalPrototypeCIDR extends SecurityGroupRuleLocalPrototype {
+    /** The CIDR block.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
+     *  blocks in the future.
+     */
+    cidr_block: string;
+  }
+
+  /** SecurityGroupRuleLocalPrototypeIP. */
+  export interface SecurityGroupRuleLocalPrototypeIP extends SecurityGroupRuleLocalPrototype {
+    /** The IP address.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
+     */
+    address: string;
+  }
+
+  /** SecurityGroupRuleLocalCIDR. */
+  export interface SecurityGroupRuleLocalCIDR extends SecurityGroupRuleLocal {
+    /** The CIDR block.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
+     *  blocks in the future.
+     */
+    cidr_block: string;
+  }
+
+  /** SecurityGroupRuleLocalIP. */
+  export interface SecurityGroupRuleLocalIP extends SecurityGroupRuleLocal {
+    /** The IP address.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
+     */
+    address: string;
+  }
+
   /** A rule allowing traffic for all supported protocols. */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll extends SecurityGroupRulePrototype {
     /** The direction of traffic to enforce. */
     direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.Direction | string;
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
-     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
-     *  addresses (network interfaces) in that group matching this IP version.
+    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+     *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
+     *
+     *  If `remote` references a security group, then this rule only applies to IP addresses
+     *  (network interfaces) in that group matching this IP version.
      */
     ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.IpVersion | string;
+    /** The local IP address or range of local IP addresses to which this rule will allow inbound
+     *  traffic (or from which, for outbound traffic)
+     *
+     *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP
+     *  addresses (or from all local IP addresses, for outbound rules).
+     */
+    local?: SecurityGroupRuleLocalPrototype;
     /** The protocol to enforce. */
     protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
@@ -48114,7 +48492,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -48134,11 +48512,20 @@ namespace VpcV1 {
     code?: number;
     /** The direction of traffic to enforce. */
     direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.Direction | string;
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
-     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
-     *  addresses (network interfaces) in that group matching this IP version.
+    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+     *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
+     *
+     *  If `remote` references a security group, then this rule only applies to IP addresses
+     *  (network interfaces) in that group matching this IP version.
      */
     ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.IpVersion | string;
+    /** The local IP address or range of local IP addresses to which this rule will allow inbound
+     *  traffic (or from which, for outbound traffic)
+     *
+     *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP
+     *  addresses (or from all local IP addresses, for outbound rules).
+     */
+    local?: SecurityGroupRuleLocalPrototype;
     /** The protocol to enforce. */
     protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
@@ -48162,7 +48549,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -48177,11 +48564,20 @@ namespace VpcV1 {
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP extends SecurityGroupRulePrototype {
     /** The direction of traffic to enforce. */
     direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.Direction | string;
-    /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property,
-     *  if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP
-     *  addresses (network interfaces) in that group matching this IP version.
+    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+     *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
+     *
+     *  If `remote` references a security group, then this rule only applies to IP addresses
+     *  (network interfaces) in that group matching this IP version.
      */
     ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.IpVersion | string;
+    /** The local IP address or range of local IP addresses to which this rule will allow inbound
+     *  traffic (or from which, for outbound traffic)
+     *
+     *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP
+     *  addresses (or from all local IP addresses, for outbound rules).
+     */
+    local?: SecurityGroupRuleLocalPrototype;
     /** The inclusive upper bound of TCP/UDP destination port range.
      *
      *  If specified, `port_min` must also be specified, and must not be larger. If unspecified,
@@ -48212,7 +48608,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -48226,10 +48622,10 @@ namespace VpcV1 {
 
   /** SecurityGroupRuleRemotePatchCIDR. */
   export interface SecurityGroupRuleRemotePatchCIDR extends SecurityGroupRuleRemotePatch {
-    /** The CIDR block. This property may add support for IPv6 CIDR blocks in the future. When processing a value in
-     *  this property, verify that the CIDR block is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected CIDR block format was
-     *  encountered.
+    /** The CIDR block.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
+     *  blocks in the future.
      */
     cidr_block: string;
   }
@@ -48238,9 +48634,8 @@ namespace VpcV1 {
   export interface SecurityGroupRuleRemotePatchIP extends SecurityGroupRuleRemotePatch {
     /** The IP address.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -48251,10 +48646,10 @@ namespace VpcV1 {
 
   /** SecurityGroupRuleRemotePrototypeCIDR. */
   export interface SecurityGroupRuleRemotePrototypeCIDR extends SecurityGroupRuleRemotePrototype {
-    /** The CIDR block. This property may add support for IPv6 CIDR blocks in the future. When processing a value in
-     *  this property, verify that the CIDR block is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected CIDR block format was
-     *  encountered.
+    /** The CIDR block.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
+     *  blocks in the future.
      */
     cidr_block: string;
   }
@@ -48263,9 +48658,8 @@ namespace VpcV1 {
   export interface SecurityGroupRuleRemotePrototypeIP extends SecurityGroupRuleRemotePrototype {
     /** The IP address.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -48276,10 +48670,10 @@ namespace VpcV1 {
 
   /** SecurityGroupRuleRemoteCIDR. */
   export interface SecurityGroupRuleRemoteCIDR extends SecurityGroupRuleRemote {
-    /** The CIDR block. This property may add support for IPv6 CIDR blocks in the future. When processing a value in
-     *  this property, verify that the CIDR block is in an expected format. If it is not, log an error. Optionally halt
-     *  processing and surface the error, or bypass the resource on which the unexpected CIDR block format was
-     *  encountered.
+    /** The CIDR block.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
+     *  blocks in the future.
      */
     cidr_block: string;
   }
@@ -48288,9 +48682,8 @@ namespace VpcV1 {
   export interface SecurityGroupRuleRemoteIP extends SecurityGroupRuleRemote {
     /** The IP address.
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -48323,7 +48716,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -48350,7 +48743,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -48377,7 +48770,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `remote.address` or `remote.cidr_block` must match this property, if they are used. Alternatively, if `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -48587,7 +48980,7 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** The virtual network interface for this share mount target. The virtual network interface must: - have `allow_ip_spoofing` set to `false` - have `enable_infrastructure_nat` set to `true` - not be in the same VPC as an existing mount target for this share - not have `ips` other than the `primary_ip` address If an existing virtual network interface is specified, it must not have a floating IP bound to it, and it must not be the target of a flow log collector. Required if the share's `access_control_mode` is `security_group`. */
+  /** The virtual network interface for this share mount target. The virtual network interface must: - be in the same `zone` as the share - have `allow_ip_spoofing` set to `false` - have `enable_infrastructure_nat` set to `true` - not be in the same VPC as an existing mount target for this share - not have `ips` other than the `primary_ip` address If an existing virtual network interface is specified, it must not have a floating IP bound to it, and it must not be the target of a flow log collector. Required if the share's `access_control_mode` is `security_group`. */
   export interface ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup extends ShareMountTargetPrototype {
     virtual_network_interface: ShareMountTargetVirtualNetworkInterfacePrototype;
   }
@@ -49211,6 +49604,142 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityFQDN. */
+  export interface VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityFQDN extends VPNGatewayConnectionIKEIdentityPrototype {
+    /** The IKE identity FQDN value. */
+    value: string;
+  }
+  export namespace VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityFQDN {
+    export namespace Constants {
+      /** The IKE identity type. */
+      export enum Type {
+        FQDN = 'fqdn',
+        HOSTNAME = 'hostname',
+        IPV4_ADDRESS = 'ipv4_address',
+        KEY_ID = 'key_id',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityHostname. */
+  export interface VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityHostname extends VPNGatewayConnectionIKEIdentityPrototype {
+    /** The IKE identity hostname value. */
+    value: string;
+  }
+  export namespace VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityHostname {
+    export namespace Constants {
+      /** The IKE identity type. */
+      export enum Type {
+        FQDN = 'fqdn',
+        HOSTNAME = 'hostname',
+        IPV4_ADDRESS = 'ipv4_address',
+        KEY_ID = 'key_id',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityIPv4. */
+  export interface VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityIPv4 extends VPNGatewayConnectionIKEIdentityPrototype {
+    /** The IKE identity IPv4 address value. */
+    value: string;
+  }
+  export namespace VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityIPv4 {
+    export namespace Constants {
+      /** The IKE identity type. */
+      export enum Type {
+        FQDN = 'fqdn',
+        HOSTNAME = 'hostname',
+        IPV4_ADDRESS = 'ipv4_address',
+        KEY_ID = 'key_id',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityKeyID. */
+  export interface VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityKeyID extends VPNGatewayConnectionIKEIdentityPrototype {
+    /** The base64-encoded IKE identity key ID value. */
+    value: string;
+  }
+  export namespace VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityKeyID {
+    export namespace Constants {
+      /** The IKE identity type. */
+      export enum Type {
+        FQDN = 'fqdn',
+        HOSTNAME = 'hostname',
+        IPV4_ADDRESS = 'ipv4_address',
+        KEY_ID = 'key_id',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityFQDN. */
+  export interface VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityFQDN extends VPNGatewayConnectionIKEIdentity {
+    /** The IKE identity FQDN value. */
+    value: string;
+  }
+  export namespace VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityFQDN {
+    export namespace Constants {
+      /** The IKE identity type. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Type {
+        FQDN = 'fqdn',
+        HOSTNAME = 'hostname',
+        IPV4_ADDRESS = 'ipv4_address',
+        KEY_ID = 'key_id',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityHostname. */
+  export interface VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityHostname extends VPNGatewayConnectionIKEIdentity {
+    /** The IKE identity hostname value. */
+    value: string;
+  }
+  export namespace VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityHostname {
+    export namespace Constants {
+      /** The IKE identity type. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Type {
+        FQDN = 'fqdn',
+        HOSTNAME = 'hostname',
+        IPV4_ADDRESS = 'ipv4_address',
+        KEY_ID = 'key_id',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityIPv4. */
+  export interface VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityIPv4 extends VPNGatewayConnectionIKEIdentity {
+    /** The IKE identity IPv4 address value. */
+    value: string;
+  }
+  export namespace VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityIPv4 {
+    export namespace Constants {
+      /** The IKE identity type. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Type {
+        FQDN = 'fqdn',
+        HOSTNAME = 'hostname',
+        IPV4_ADDRESS = 'ipv4_address',
+        KEY_ID = 'key_id',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityKeyID. */
+  export interface VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityKeyID extends VPNGatewayConnectionIKEIdentity {
+    /** The base64-encoded IKE identity key ID value. */
+    value: string;
+  }
+  export namespace VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityKeyID {
+    export namespace Constants {
+      /** The IKE identity type. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Type {
+        FQDN = 'fqdn',
+        HOSTNAME = 'hostname',
+        IPV4_ADDRESS = 'ipv4_address',
+        KEY_ID = 'key_id',
+      }
+    }
+  }
+
   /** VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityByHref. */
   export interface VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityByHref extends VPNGatewayConnectionIKEPolicyPatch {
     /** The IKE policy's canonical URL. */
@@ -49259,12 +49788,18 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** The peer VPN gateway for this connection. If `peer.type` is `ipv4_address`, only `peer.address` may be specified. If `peer.type` is fqdn, only `peer.fqdn` may be specified. */
+  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatch extends VPNGatewayConnectionPeerPatch {
+  }
+
+  /** The peer VPN gateway for this connection. If `peer.type` is `ipv4_address`, only `peer.address` may be specified. If `peer.type` is fqdn, only `peer.fqdn` may be specified. */
+  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatch extends VPNGatewayConnectionPeerPatch {
+  }
+
   /** VPNGatewayConnectionPolicyMode. */
   export interface VPNGatewayConnectionPolicyMode extends VPNGatewayConnection {
-    /** The local CIDRs for this resource. */
-    local_cidrs: string[];
-    /** The peer CIDRs for this resource. */
-    peer_cidrs: string[];
+    local: VPNGatewayConnectionPolicyModeLocal;
+    peer: VPNGatewayConnectionPolicyModePeer;
   }
   export namespace VPNGatewayConnectionPolicyMode {
     export namespace Constants {
@@ -49272,6 +49807,11 @@ namespace VpcV1 {
       export enum AuthenticationMode {
         PSK = 'psk',
       }
+      /** The establish mode of the VPN gateway connection: - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol negotiations or rekeying processes. - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway connection. Additionally, the peer is responsible for initiating the rekeying process after the connection is established. If rekeying does not occur, the VPN gateway connection will be brought down after its lifetime expires. */
+      export enum EstablishMode {
+        BIDIRECTIONAL = 'bidirectional',
+        PEER_ONLY = 'peer_only',
+      }
       /** The mode of the VPN gateway. */
       export enum Mode {
         POLICY = 'policy',
@@ -49285,25 +49825,81 @@ namespace VpcV1 {
       export enum Status {
         DOWN = 'down',
         UP = 'up',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionPolicyModePeerPrototypeVPNGatewayConnectionPeerByAddress. */
+  export interface VPNGatewayConnectionPolicyModePeerPrototypeVPNGatewayConnectionPeerByAddress extends VPNGatewayConnectionPolicyModePeerPrototype {
+    /** The IP address of the peer VPN gateway for this connection. */
+    address: string;
+  }
+
+  /** VPNGatewayConnectionPolicyModePeerPrototypeVPNGatewayConnectionPeerByFQDN. */
+  export interface VPNGatewayConnectionPolicyModePeerPrototypeVPNGatewayConnectionPeerByFQDN extends VPNGatewayConnectionPolicyModePeerPrototype {
+    /** The FQDN of the peer VPN gateway for this connection. */
+    fqdn: string;
+  }
+
+  /** VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByAddress. */
+  export interface VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByAddress extends VPNGatewayConnectionPolicyModePeer {
+    /** The IP address of the peer VPN gateway for this connection. */
+    address: string;
+  }
+  export namespace VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByAddress {
+    export namespace Constants {
+      /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+      export enum Type {
+        ADDRESS = 'address',
+        FQDN = 'fqdn',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByFQDN. */
+  export interface VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByFQDN extends VPNGatewayConnectionPolicyModePeer {
+    /** The FQDN of the peer VPN gateway for this connection. */
+    fqdn: string;
+  }
+  export namespace VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByFQDN {
+    export namespace Constants {
+      /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+      export enum Type {
+        ADDRESS = 'address',
+        FQDN = 'fqdn',
       }
     }
   }
 
   /** VPNGatewayConnectionPrototypeVPNGatewayConnectionPolicyModePrototype. */
   export interface VPNGatewayConnectionPrototypeVPNGatewayConnectionPolicyModePrototype extends VPNGatewayConnectionPrototype {
-    /** The local CIDRs for this resource. */
-    local_cidrs: string[];
-    /** The peer CIDRs for this resource. */
-    peer_cidrs: string[];
+    local: VPNGatewayConnectionPolicyModeLocalPrototype;
+    peer: VPNGatewayConnectionPolicyModePeerPrototype;
+  }
+  export namespace VPNGatewayConnectionPrototypeVPNGatewayConnectionPolicyModePrototype {
+    export namespace Constants {
+      /** The establish mode of the VPN gateway connection: - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol negotiations or rekeying processes. - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway connection. Additionally, the peer is responsible for initiating the rekeying process after the connection is established. If rekeying does not occur, the VPN gateway connection will be brought down after its lifetime expires. */
+      export enum EstablishMode {
+        BIDIRECTIONAL = 'bidirectional',
+        PEER_ONLY = 'peer_only',
+      }
+    }
   }
 
   /** VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype. */
   export interface VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype extends VPNGatewayConnectionPrototype {
+    local?: VPNGatewayConnectionStaticRouteModeLocalPrototype;
+    peer: VPNGatewayConnectionStaticRouteModePeerPrototype;
     /** Routing protocols are disabled for this VPN gateway connection. */
     routing_protocol?: VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype.Constants.RoutingProtocol | string;
   }
   export namespace VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype {
     export namespace Constants {
+      /** The establish mode of the VPN gateway connection: - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol negotiations or rekeying processes. - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway connection. Additionally, the peer is responsible for initiating the rekeying process after the connection is established. If rekeying does not occur, the VPN gateway connection will be brought down after its lifetime expires. */
+      export enum EstablishMode {
+        BIDIRECTIONAL = 'bidirectional',
+        PEER_ONLY = 'peer_only',
+      }
       /** Routing protocols are disabled for this VPN gateway connection. */
       export enum RoutingProtocol {
         NONE = 'none',
@@ -49311,18 +49907,19 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionStaticRouteMode. */
-  export interface VPNGatewayConnectionStaticRouteMode extends VPNGatewayConnection {
-    /** Routing protocols are disabled for this VPN gateway connection. */
-    routing_protocol: VPNGatewayConnectionStaticRouteMode.Constants.RoutingProtocol | string;
-    /** The VPN tunnel configuration for this VPN gateway connection (in static route mode). */
-    tunnels: VPNGatewayConnectionStaticRouteModeTunnel[];
+  /** VPNGatewayConnectionRouteMode. */
+  export interface VPNGatewayConnectionRouteMode extends VPNGatewayConnection {
   }
-  export namespace VPNGatewayConnectionStaticRouteMode {
+  export namespace VPNGatewayConnectionRouteMode {
     export namespace Constants {
       /** The authentication mode. Only `psk` is currently supported. */
       export enum AuthenticationMode {
         PSK = 'psk',
+      }
+      /** The establish mode of the VPN gateway connection: - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol negotiations or rekeying processes. - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway connection. Additionally, the peer is responsible for initiating the rekeying process after the connection is established. If rekeying does not occur, the VPN gateway connection will be brought down after its lifetime expires. */
+      export enum EstablishMode {
+        BIDIRECTIONAL = 'bidirectional',
+        PEER_ONLY = 'peer_only',
       }
       /** The mode of the VPN gateway. */
       export enum Mode {
@@ -49338,9 +49935,47 @@ namespace VpcV1 {
         DOWN = 'down',
         UP = 'up',
       }
-      /** Routing protocols are disabled for this VPN gateway connection. */
-      export enum RoutingProtocol {
-        NONE = 'none',
+    }
+  }
+
+  /** VPNGatewayConnectionStaticRouteModePeerPrototypeVPNGatewayConnectionPeerByAddress. */
+  export interface VPNGatewayConnectionStaticRouteModePeerPrototypeVPNGatewayConnectionPeerByAddress extends VPNGatewayConnectionStaticRouteModePeerPrototype {
+    /** The IP address of the peer VPN gateway for this connection. */
+    address: string;
+  }
+
+  /** VPNGatewayConnectionStaticRouteModePeerPrototypeVPNGatewayConnectionPeerByFQDN. */
+  export interface VPNGatewayConnectionStaticRouteModePeerPrototypeVPNGatewayConnectionPeerByFQDN extends VPNGatewayConnectionStaticRouteModePeerPrototype {
+    /** The FQDN of the peer VPN gateway for this connection. */
+    fqdn: string;
+  }
+
+  /** VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByAddress. */
+  export interface VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByAddress extends VPNGatewayConnectionStaticRouteModePeer {
+    /** The IP address of the peer VPN gateway for this connection. */
+    address: string;
+  }
+  export namespace VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByAddress {
+    export namespace Constants {
+      /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+      export enum Type {
+        ADDRESS = 'address',
+        FQDN = 'fqdn',
+      }
+    }
+  }
+
+  /** VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByFQDN. */
+  export interface VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByFQDN extends VPNGatewayConnectionStaticRouteModePeer {
+    /** The FQDN of the peer VPN gateway for this connection. */
+    fqdn: string;
+  }
+  export namespace VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByFQDN {
+    export namespace Constants {
+      /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+      export enum Type {
+        ADDRESS = 'address',
+        FQDN = 'fqdn',
       }
     }
   }
@@ -49352,7 +49987,7 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayPolicyMode {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -49415,7 +50050,7 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayRouteMode {
     export namespace Constants {
-      /** The health of this resource. - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
         FAULTED = 'faulted',
@@ -49477,18 +50112,17 @@ namespace VpcV1 {
 
   /** VPNServerAuthenticationByUsernameIdProviderByIAM. */
   export interface VPNServerAuthenticationByUsernameIdProviderByIAM extends VPNServerAuthenticationByUsernameIdProvider {
-    /** The type of identity provider to be used by the VPN client.
+    /** The type of identity provider to be used by the VPN client:
      *  - `iam`: IBM identity and access management
      *
-     *  The enumerated values for this property are expected to expand in the future. When processing this property,
-     *  check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which
-     *  the unexpected property value was encountered.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     provider_type: VPNServerAuthenticationByUsernameIdProviderByIAM.Constants.ProviderType | string;
   }
   export namespace VPNServerAuthenticationByUsernameIdProviderByIAM {
     export namespace Constants {
-      /** The type of identity provider to be used by the VPN client. - `iam`: IBM identity and access management The enumerated values for this property are expected to expand in the future. When processing this property, check for and log unknown values. Optionally halt processing and surface the error, or bypass the route on which the unexpected property value was encountered. */
+      /** The type of identity provider to be used by the VPN client: - `iam`: IBM identity and access management The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ProviderType {
         IAM = 'iam',
       }
@@ -49693,8 +50327,10 @@ namespace VpcV1 {
 
   /** VolumePrototypeVolumeByCapacity. */
   export interface VolumePrototypeVolumeByCapacity extends VolumePrototype {
-    /** The capacity to use for the volume (in gigabytes). The specified minimum and maximum capacity values for
-     *  creating or updating volumes may expand in the future.
+    /** The capacity to use for the volume (in gigabytes).
+     *
+     *  The minimum and maximum limits for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     capacity: number;
     /** The root key to use to wrap the data encryption key for the volume.
@@ -50380,26 +51016,26 @@ namespace VpcV1 {
     primary_network_interface: NetworkInterfacePrototype;
   }
 
-  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
-  export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity {
+  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
+  export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity {
     /** The pool's canonical URL. */
     href: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityById. */
-  export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityById extends LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity {
+  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById. */
+  export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById extends LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity {
     /** The unique identifier for this load balancer pool. */
     id: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
-  export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentity {
+  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
+  export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentity {
     /** The pool's canonical URL. */
     href: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityById. */
-  export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityById extends LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentity {
+  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById. */
+  export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById extends LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentity {
     /** The unique identifier for this load balancer pool. */
     id: string;
   }
@@ -50498,9 +51134,8 @@ namespace VpcV1 {
   export interface RouteNextHopPatchRouteNextHopIPRouteNextHopIPSentinelIP extends RouteNextHopPatchRouteNextHopIP {
     /** The sentinel IP address (`0.0.0.0`).
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -50513,9 +51148,8 @@ namespace VpcV1 {
      *  - `224.0.0.0` to `239.255.255.255` (multicast IP addresses)
      *  - `255.255.255.255` (the broadcast IP address)
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -50536,9 +51170,8 @@ namespace VpcV1 {
   export interface RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIPRouteNextHopPrototypeRouteNextHopIPRouteNextHopIPSentinelIP extends RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP {
     /** The sentinel IP address (`0.0.0.0`).
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -50551,9 +51184,8 @@ namespace VpcV1 {
      *  - `224.0.0.0` to `239.255.255.255` (multicast IP addresses)
      *  - `255.255.255.255` (the broadcast IP address)
      *
-     *  This property may add support for IPv6 addresses in the future. When processing a value in this property, verify
-     *  that the address is in an expected format. If it is not, log an error. Optionally halt processing and surface
-     *  the error, or bypass the resource on which the unexpected IP address format was encountered.
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
      */
     address: string;
   }
@@ -50624,6 +51256,71 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerAddressPatch. */
+  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerAddressPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatch {
+    /** The IP address of the peer VPN gateway for this connection. */
+    address?: string;
+  }
+
+  /** VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerFQDNPatch. */
+  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerFQDNPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatch {
+    /** The FQDN of the peer VPN gateway for this connection. */
+    fqdn?: string;
+  }
+
+  /** VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerAddressPatch. */
+  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerAddressPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatch {
+    /** The IP address of the peer VPN gateway for this connection. */
+    address?: string;
+  }
+
+  /** VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch. */
+  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatch {
+    /** The FQDN of the peer VPN gateway for this connection. */
+    fqdn?: string;
+  }
+
+  /** VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode. */
+  export interface VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode extends VPNGatewayConnectionRouteMode {
+    local: VPNGatewayConnectionStaticRouteModeLocal;
+    peer: VPNGatewayConnectionStaticRouteModePeer;
+    /** Routing protocols are disabled for this VPN gateway connection. */
+    routing_protocol: VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode.Constants.RoutingProtocol | string;
+    /** The VPN tunnel configuration for this VPN gateway connection (in static route mode). */
+    tunnels: VPNGatewayConnectionStaticRouteModeTunnel[];
+  }
+  export namespace VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode {
+    export namespace Constants {
+      /** The authentication mode. Only `psk` is currently supported. */
+      export enum AuthenticationMode {
+        PSK = 'psk',
+      }
+      /** The establish mode of the VPN gateway connection: - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol negotiations or rekeying processes. - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway connection. Additionally, the peer is responsible for initiating the rekeying process after the connection is established. If rekeying does not occur, the VPN gateway connection will be brought down after its lifetime expires. */
+      export enum EstablishMode {
+        BIDIRECTIONAL = 'bidirectional',
+        PEER_ONLY = 'peer_only',
+      }
+      /** The mode of the VPN gateway. */
+      export enum Mode {
+        POLICY = 'policy',
+        ROUTE = 'route',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY_CONNECTION = 'vpn_gateway_connection',
+      }
+      /** The status of a VPN gateway connection. */
+      export enum Status {
+        DOWN = 'down',
+        UP = 'up',
+      }
+      /** Routing protocols are disabled for this VPN gateway connection. */
+      export enum RoutingProtocol {
+        NONE = 'none',
+      }
+    }
+  }
+
   /** VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextByHref. */
   export interface VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextByHref extends VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContext {
     /** The URL for this reserved IP. */
@@ -50668,8 +51365,10 @@ namespace VpcV1 {
 
   /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity. */
   export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity extends VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext {
-    /** The capacity to use for the volume (in gigabytes). The specified minimum and maximum capacity values for
-     *  creating or updating volumes may expand in the future.
+    /** The capacity to use for the volume (in gigabytes).
+     *
+     *  The minimum and maximum limits for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     capacity: number;
     /** The root key to use to wrap the data encryption key for the volume.
@@ -52503,168 +53202,6 @@ namespace VpcV1 {
   }
 
   /**
-   * BackupPoliciesPager can be used to simplify the use of listBackupPolicies().
-   */
-  export class BackupPoliciesPager {
-    protected _hasNext: boolean;
-
-    protected pageContext: any;
-
-    protected client: VpcV1;
-
-    protected params: VpcV1.ListBackupPoliciesParams;
-
-    /**
-     * Construct a BackupPoliciesPager object.
-     *
-     * @param {VpcV1}  client - The service client instance used to invoke listBackupPolicies()
-     * @param {Object} [params] - The parameters to be passed to listBackupPolicies()
-     * @constructor
-     * @returns {BackupPoliciesPager}
-     */
-    constructor(client: VpcV1, params?: VpcV1.ListBackupPoliciesParams) {
-      if (params && params.start) {
-        throw new Error(`the params.start field should not be set`);
-      }
-
-      this._hasNext = true;
-      this.pageContext = { next: undefined };
-      this.client = client;
-      this.params = JSON.parse(JSON.stringify(params || {}));
-    }
-
-    /**
-     * Returns true if there are potentially more results to be retrieved by invoking getNext().
-     * @returns {boolean}
-     */
-    public hasNext(): boolean {
-      return this._hasNext;
-    }
-
-    /**
-     * Returns the next page of results by invoking listBackupPolicies().
-     * @returns {Promise<VpcV1.BackupPolicy[]>}
-     */
-    public async getNext(): Promise<VpcV1.BackupPolicy[]> {
-      if (!this.hasNext()) {
-        throw new Error('No more results available');
-      }
-
-      if (this.pageContext.next) {
-        this.params.start = this.pageContext.next;
-      }
-      const response = await this.client.listBackupPolicies(this.params);
-      const { result } = response;
-
-      let next;
-      if (result && result.next) {
-        if (result.next.href) {
-          next = getQueryParam(result.next.href, 'start');
-        }
-      }
-      this.pageContext.next = next;
-      if (!this.pageContext.next) {
-        this._hasNext = false;
-      }
-      return result.backup_policies;
-    }
-
-    /**
-     * Returns all results by invoking listBackupPolicies() repeatedly until all pages of results have been retrieved.
-     * @returns {Promise<VpcV1.BackupPolicy[]>}
-     */
-    public async getAll(): Promise<VpcV1.BackupPolicy[]> {
-      const results: BackupPolicy[] = [];
-      while (this.hasNext()) {
-        const nextPage = await this.getNext();
-        results.push(...nextPage);
-      }
-      return results;
-    }
-  }
-
-  /**
-   * BackupPolicyJobsPager can be used to simplify the use of listBackupPolicyJobs().
-   */
-  export class BackupPolicyJobsPager {
-    protected _hasNext: boolean;
-
-    protected pageContext: any;
-
-    protected client: VpcV1;
-
-    protected params: VpcV1.ListBackupPolicyJobsParams;
-
-    /**
-     * Construct a BackupPolicyJobsPager object.
-     *
-     * @param {VpcV1}  client - The service client instance used to invoke listBackupPolicyJobs()
-     * @param {Object} params - The parameters to be passed to listBackupPolicyJobs()
-     * @constructor
-     * @returns {BackupPolicyJobsPager}
-     */
-    constructor(client: VpcV1, params: VpcV1.ListBackupPolicyJobsParams) {
-      if (params && params.start) {
-        throw new Error(`the params.start field should not be set`);
-      }
-
-      this._hasNext = true;
-      this.pageContext = { next: undefined };
-      this.client = client;
-      this.params = JSON.parse(JSON.stringify(params || {}));
-    }
-
-    /**
-     * Returns true if there are potentially more results to be retrieved by invoking getNext().
-     * @returns {boolean}
-     */
-    public hasNext(): boolean {
-      return this._hasNext;
-    }
-
-    /**
-     * Returns the next page of results by invoking listBackupPolicyJobs().
-     * @returns {Promise<VpcV1.BackupPolicyJob[]>}
-     */
-    public async getNext(): Promise<VpcV1.BackupPolicyJob[]> {
-      if (!this.hasNext()) {
-        throw new Error('No more results available');
-      }
-
-      if (this.pageContext.next) {
-        this.params.start = this.pageContext.next;
-      }
-      const response = await this.client.listBackupPolicyJobs(this.params);
-      const { result } = response;
-
-      let next;
-      if (result && result.next) {
-        if (result.next.href) {
-          next = getQueryParam(result.next.href, 'start');
-        }
-      }
-      this.pageContext.next = next;
-      if (!this.pageContext.next) {
-        this._hasNext = false;
-      }
-      return result.jobs;
-    }
-
-    /**
-     * Returns all results by invoking listBackupPolicyJobs() repeatedly until all pages of results have been retrieved.
-     * @returns {Promise<VpcV1.BackupPolicyJob[]>}
-     */
-    public async getAll(): Promise<VpcV1.BackupPolicyJob[]> {
-      const results: BackupPolicyJob[] = [];
-      while (this.hasNext()) {
-        const nextPage = await this.getNext();
-        results.push(...nextPage);
-      }
-      return results;
-    }
-  }
-
-  /**
    * PlacementGroupsPager can be used to simplify the use of listPlacementGroups().
    */
   export class PlacementGroupsPager {
@@ -53628,6 +54165,168 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.ShareMountTarget[]> {
       const results: ShareMountTarget[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * BackupPoliciesPager can be used to simplify the use of listBackupPolicies().
+   */
+  export class BackupPoliciesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListBackupPoliciesParams;
+
+    /**
+     * Construct a BackupPoliciesPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listBackupPolicies()
+     * @param {Object} [params] - The parameters to be passed to listBackupPolicies()
+     * @constructor
+     * @returns {BackupPoliciesPager}
+     */
+    constructor(client: VpcV1, params?: VpcV1.ListBackupPoliciesParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listBackupPolicies().
+     * @returns {Promise<VpcV1.BackupPolicy[]>}
+     */
+    public async getNext(): Promise<VpcV1.BackupPolicy[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listBackupPolicies(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.backup_policies;
+    }
+
+    /**
+     * Returns all results by invoking listBackupPolicies() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.BackupPolicy[]>}
+     */
+    public async getAll(): Promise<VpcV1.BackupPolicy[]> {
+      const results: BackupPolicy[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * BackupPolicyJobsPager can be used to simplify the use of listBackupPolicyJobs().
+   */
+  export class BackupPolicyJobsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListBackupPolicyJobsParams;
+
+    /**
+     * Construct a BackupPolicyJobsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listBackupPolicyJobs()
+     * @param {Object} params - The parameters to be passed to listBackupPolicyJobs()
+     * @constructor
+     * @returns {BackupPolicyJobsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListBackupPolicyJobsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listBackupPolicyJobs().
+     * @returns {Promise<VpcV1.BackupPolicyJob[]>}
+     */
+    public async getNext(): Promise<VpcV1.BackupPolicyJob[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listBackupPolicyJobs(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.jobs;
+    }
+
+    /**
+     * Returns all results by invoking listBackupPolicyJobs() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.BackupPolicyJob[]>}
+     */
+    public async getAll(): Promise<VpcV1.BackupPolicyJob[]> {
+      const results: BackupPolicyJob[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);

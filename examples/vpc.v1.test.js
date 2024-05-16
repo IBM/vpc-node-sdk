@@ -6172,13 +6172,27 @@ describe('VpcV1', () => {
 
     // begin-create_vpn_gateway_connection
 
+    const vpnGatewayConnectionIkeIdentityPrototypeModel = {
+      type: 'fqdn',
+      value: 'my-service.example.com',
+    };
+    
+    const vpnGatewayConnectionPolicyModeLocalPrototypeModel = {
+      cidrs: ['192.132.0.0/28'],
+      ike_identities: [vpnGatewayConnectionIkeIdentityPrototypeModel],
+    };
+    const vpnGatewayConnectionPolicyModePeerPrototypeModel = {
+      ike_identity: vpnGatewayConnectionIkeIdentityPrototypeModel,
+      address: '169.21.50.5',
+      cidrs: ['192.132.0.0/28'],
+    };
+
     const vpnGatewayConnectionPrototypeModel = {
       admin_state_up: true,
-      name: 'my-vpn-connection',
-      peer_address: '192.132.5.0',
+      peer: vpnGatewayConnectionPolicyModePeerPrototypeModel,
+      local: vpnGatewayConnectionPolicyModeLocalPrototypeModel,
       psk: 'lkj14b1oi0alcniejkso',
-      peer_cidrs: ['197.155.0.0/28'],
-      local_cidrs: ['192.132.0.0/28'],
+      name: 'my-vpn-connection',
     };
     const params = {
       vpnGatewayId: data.vpnGatewayId,
@@ -6245,7 +6259,7 @@ describe('VpcV1', () => {
 
   });
 
-  test('addVpnGatewayConnectionLocalCidr request example', async () => {
+  test('addVpnGatewayConnectiosnLocalCidr request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -6261,18 +6275,17 @@ describe('VpcV1', () => {
     const params = {
       vpnGatewayId: data.vpnGatewayId,
       id: data.vpnGatewayConnectionId,
-      cidrPrefix: '192.134.0.0',
-      prefixLength: '28',
+      cidr: '192.134.0.0/28',
     };
 
-    const response = await vpcService.addVpnGatewayConnectionLocalCidr(params);
+    const response = await vpcService.addVpnGatewayConnectionsLocalCidr(params);
 
     // end-add_vpn_gateway_connection_local_cidr
     expect(response.result).not.toBeNull();
 
   });
 
-  test('listVpnGatewayConnectionLocalCidrs request example', async () => {
+  test('listVpnGatewayConnectionsLocalCidrs request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -6290,7 +6303,7 @@ describe('VpcV1', () => {
       id: data.vpnGatewayConnectionId,
     };
 
-    const response = await vpcService.listVpnGatewayConnectionLocalCidrs(params);
+    const response = await vpcService.listVpnGatewayConnectionsLocalCidrs(params);
 
     // end-list_vpn_gateway_connection_local_cidrs
     expect(response.result).not.toBeNull();
@@ -6298,7 +6311,7 @@ describe('VpcV1', () => {
   });
 
 
-  test('addVpnGatewayConnectionPeerCidr request example', async () => {
+  test('addVpnGatewayConnectionsPeerCidr request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -6314,18 +6327,17 @@ describe('VpcV1', () => {
     const params = {
       vpnGatewayId: data.vpnGatewayId,
       id: data.vpnGatewayConnectionId,
-      cidrPrefix: '192.144.0.0',
-      prefixLength: '28',
+      cidr: '192.144.0.0/28',
     };
 
-    const response = await vpcService.addVpnGatewayConnectionPeerCidr(params);
+    const response = await vpcService.addVpnGatewayConnectionsPeerCidr(params);
 
     // end-add_vpn_gateway_connection_peer_cidr
     expect(response.result).not.toBeNull();
 
   });
 
-  test('checkVpnGatewayConnectionLocalCidr request example', async () => {
+  test('checkVpnGatewayConnectionsLocalCidr request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -6341,18 +6353,17 @@ describe('VpcV1', () => {
     const params = {
       vpnGatewayId: data.vpnGatewayId,
       id: data.vpnGatewayConnectionId,
-      cidrPrefix: '192.134.0.0',
-      prefixLength: '28',
+      cidr: '192.134.0.0/28',
     };
 
-    const response = await vpcService.checkVpnGatewayConnectionLocalCidr(params);
+    const response = await vpcService.checkVpnGatewayConnectionsLocalCidr(params);
 
     // end-check_vpn_gateway_connection_local_cidr
     expect(response.result).not.toBeNull();
 
   });
 
-  test('listVpnGatewayConnectionPeerCidrs request example', async () => {
+  test('listVpnGatewayConnectionsPeerCidrs request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -6370,14 +6381,14 @@ describe('VpcV1', () => {
       id: data.vpnGatewayConnectionId,
     };
 
-    const response = await vpcService.listVpnGatewayConnectionPeerCidrs(params);
+    const response = await vpcService.listVpnGatewayConnectionsPeerCidrs(params);
 
     // end-list_vpn_gateway_connection_peer_cidrs
     expect(response.result).not.toBeNull();
 
   });
 
-  test('checkVpnGatewayConnectionPeerCidr request example', async () => {
+  test('checkVpnGatewayConnectionsPeerCidr request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
@@ -6393,11 +6404,10 @@ describe('VpcV1', () => {
     const params = {
       vpnGatewayId: data.vpnGatewayId,
       id: data.vpnGatewayConnectionId,
-      cidrPrefix: '192.144.0.0',
-      prefixLength: '28',
+      cidr: '192.144.0.0/28',
     };
 
-    const response = await vpcService.checkVpnGatewayConnectionPeerCidr(params);
+    const response = await vpcService.checkVpnGatewayConnectionsPeerCidr(params);
 
     // end-check_vpn_gateway_connection_peer_cidr
     expect(response.result).not.toBeNull();
@@ -8035,7 +8045,7 @@ describe('VpcV1', () => {
   test('deleteVpnServer request example', async () => {
     consoleLogMock.mockImplementation((output) => {
       originalLog(output);
-    }); 
+    });
     consoleWarnMock.mockImplementation((output) => {
       // if an error occurs, display the message and then fail the test
       originalWarn(output);
