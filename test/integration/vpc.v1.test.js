@@ -1184,6 +1184,7 @@ describe('VpcV1_integration', () => {
 
     const res = await vpcService.createShare(params);
     dict.shareId = res.result.id;
+    dict.shareCRN = res.result.crn;
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
@@ -1206,6 +1207,31 @@ describe('VpcV1_integration', () => {
 
     const replicaRes = await vpcService.createShare(replicaParams);
     dict.shareReplicaId = replicaRes.result.id;
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+  });
+
+  test('createAccessorShare()', async () => {
+    // Request models needed by this operation.
+
+    // ShareIdentityModel
+    const shareIdentityModel = {
+      crn: dict.shareCRN,
+    };
+
+    // SharePrototypeShareByOriginShare
+    const sharePrototypeModel = {
+      origin_share: shareIdentityModel,
+      name: 'my-accessor-share',
+    };
+
+    const params = {
+      sharePrototype: sharePrototypeModel,
+    };
+
+    const res = await vpcService.createShare(params);
+    dict.shareAccessorId = res.result.id;
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
@@ -1235,6 +1261,43 @@ describe('VpcV1_integration', () => {
     const res = await vpcService.updateShare(params);
     expect(res).toBeDefined();
     expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listShareAccessorBindings()', async () => {
+    const params = {
+      id: dict.shareId,
+      limit: 10,
+    };
+
+    const res = await vpcService.listShareAccessorBindings(params);
+    dict.shareAccessorBindingId = res.result.accessor_bindings[0].id;
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getShareAccessorBinding()', async () => {
+    const params = {
+      id: dict.shareAccessorBindingId,
+      shareId: dict.shareId,
+    };
+
+    const res = await vpcService.getShareAccessorBinding(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteShareAccessorBinding()', async () => {
+    const params = {
+      id: dict.shareAccessorBindingId,
+      shareId: dict.shareId,
+    };
+
+    const res = await vpcService.deleteShareAccessorBinding(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
     expect(res.result).toBeDefined();
   });
 

@@ -1246,6 +1246,7 @@ describe('VpcV1', () => {
 
     // begin-list_images
     const params = {
+      userDataFormat: 'cloud_init',
       visibility: 'private',
       limit: 10,
     }
@@ -4588,6 +4589,7 @@ describe('VpcV1', () => {
     try {
       res = await vpcService.createShare(params);
       data.shareId = res.result.id;
+      data.shareCRN = res.result.crn;
     } catch (err) {
       console.warn(err);
     }
@@ -4616,6 +4618,47 @@ describe('VpcV1', () => {
       console.warn(err);
     }
 
+    // end-create_share
+  });
+
+
+  test('createAccessorShare request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createShare() result:');
+    // begin-create_share
+
+    // Request models needed by this operation.
+
+    // ShareIdentityModel
+    const shareIdentityModel = {
+      crn: data.shareCRN,
+    };
+
+    // SharePrototypeShareByOriginShare
+    const sharePrototypeModel = {
+      origin_share: shareIdentityModel,
+      name: 'my-accessor-share',
+    };
+
+    const params = {
+      sharePrototype: sharePrototypeModel,
+    };
+
+    let res;
+    try {
+      res = await vpcService.createShare(params);
+      data.shareAccessorId = res.result.id;
+    } catch (err) {
+      console.warn(err);
+    }
     // end-create_share
   });
 
@@ -4673,6 +4716,96 @@ describe('VpcV1', () => {
     }
 
     // end-update_share
+  });
+
+  test('listShareAccessorBindings request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listShareAccessorBindings() result:');
+    // begin-list_shares_accessor_bindings
+
+    const params = {
+      id: data.shareId,
+      limit: 10,
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.ShareAccessorBindingsPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      data.shareAccessorBindingId = allResults[0].id;
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_shares_accessor_bindings
+  });
+
+  test('getShareAccessorBinding request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getShareAccessorBinding() result:');
+    // begin-get_share-accessor-bindings
+
+    const params = {
+      id: data.shareAccessorBindingId,
+      shareId: data.shareId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getShareAccessorBinding(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_share-accessor-bindings
+  });
+
+  test('deleteShareAccessorBinding request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteShareAccessorBinding() result:');
+    // begin-delete_share_accessor_binding
+
+    const params = {
+      shareId: data.shareId,
+      id: data.shareAccessorBindingId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.deleteShareAccessorBinding(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-delete_share_accessor_binding
   });
 
   test('failoverShare request example', async () => {
