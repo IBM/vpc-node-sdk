@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.88.0-b0b4c159-20240402-205910
+ * IBM OpenAPI SDK Code Generator Version: 3.91.0-d9755c53-20240605-153412
  */
 
 /* eslint-disable max-classes-per-file */
@@ -39,7 +39,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: today
+ * API Version: 2024-04-30
  */
 
 class VpcV1 extends BaseService {
@@ -84,7 +84,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2024-04-30` and `2024-05-15`.
+   *  `2024-04-30` and `2024-07-03`.
    */
   version: string;
 
@@ -92,8 +92,10 @@ class VpcV1 extends BaseService {
    * Construct a VpcV1 object.
    *
    * @param {Object} options - Options for the service.
+   * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
+   * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2024-04-30` and `2024-05-15`.
+   * specify any date between `2024-04-30` and `2024-07-03`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -102,7 +104,7 @@ class VpcV1 extends BaseService {
    */
   constructor(options: UserOptions) {
     options = options || {};
-    options.generation = 2;
+
     super(options);
     if (options.serviceUrl) {
       this.setServiceUrl(options.serviceUrl);
@@ -110,7 +112,10 @@ class VpcV1 extends BaseService {
       this.setServiceUrl(VpcV1.DEFAULT_SERVICE_URL);
     }
     this.generation = options.generation;
-    this.version = options.version || '2024-04-30';
+    if (!('generation' in options)) {
+      this.generation = 2;
+    }
+    this.version = options.version || '2024-07-02';
   }
 
   /*************************
@@ -118,11 +123,11 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all VPCs.
+   * List VPCs.
    *
-   * This request lists all VPCs in the region. A VPC is a virtual network that belongs to an account and provides
-   * logical isolation from other networks. A VPC is made up of resources in one or more zones. VPCs are regional, and
-   * each VPC can contain resources in multiple zones in a region.
+   * This request lists VPCs in the region. A VPC is a virtual network that belongs to an account and provides logical
+   * isolation from other networks. A VPC is made up of resources in one or more zones. VPCs are regional, and each VPC
+   * can contain resources in multiple zones in a region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -607,9 +612,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all address prefixes for a VPC.
+   * List address prefixes for a VPC.
    *
-   * This request lists all address pool prefixes for a VPC.
+   * This request lists address pool prefixes for a VPC.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
@@ -925,9 +930,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all DNS resolution bindings for a VPC.
+   * List DNS resolution bindings for a VPC.
    *
-   * This request lists all DNS resolution bindings for a VPC. A DNS resolution binding represents an association with
+   * This request lists DNS resolution bindings for a VPC. A DNS resolution binding represents an association with
    * another VPC for centralizing DNS name resolution.
    *
    * If the VPC specified by the identifier in the URL is a DNS hub VPC (has `dns.enable_hub` set to `true`) then there
@@ -1272,10 +1277,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all routes in a VPC's default routing table.
+   * List routes in a VPC's default routing table.
    *
-   * This request lists all routes in the VPC's default routing table. Each route is zone-specific and directs any
-   * packets matching its destination CIDR block to a `next_hop` IP address. The most specific route matching a packet's
+   * This request lists routes in the VPC's default routing table. Each route is zone-specific and directs any packets
+   * matching its destination CIDR block to a `next_hop` IP address. The most specific route matching a packet's
    * destination will be used. If multiple equally-specific routes exist, traffic will be distributed across them.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -1646,9 +1651,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all routing tables for a VPC.
+   * List routing tables for a VPC.
    *
-   * This request lists all routing tables for a VPC. Each subnet in a VPC is associated with a routing table, which
+   * This request lists routing tables for a VPC. Each subnet in a VPC is associated with a routing table, which
    * controls delivery of packets sent on that subnet according to the action of the most specific matching route in the
    * table. If multiple equally-specific routes exist, traffic will be distributed across them. If no routes match,
    * delivery will be controlled by the system's built-in routes.
@@ -2068,10 +2073,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all routes in a VPC routing table.
+   * List routes in a VPC routing table.
    *
-   * This request lists all routes in a VPC routing table. If subnets are associated with this routing table, delivery
-   * of packets sent on a subnet is performed according to the action of the most specific matching route in the table
+   * This request lists routes in a VPC routing table. If subnets are associated with this routing table, delivery of
+   * packets sent on a subnet is performed according to the action of the most specific matching route in the table
    * (provided the subnet and route are in the same zone). If multiple equally-specific routes exist, the route with the
    * highest priority will be used. If two matching routes have the same destination and priority, traffic will be
    * distributed between them. If no routes match, delivery will be controlled by the system's built-in routes.
@@ -2445,9 +2450,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all subnets.
+   * List subnets.
    *
-   * This request lists all subnets in the region. Subnets are contiguous ranges of IP addresses specified in CIDR block
+   * This request lists subnets in the region. Subnets are contiguous ranges of IP addresses specified in CIDR block
    * notation. Each subnet is within a particular zone and cannot span multiple zones or regions.
    *
    * @param {Object} [params] - The parameters to send to the service.
@@ -3149,9 +3154,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all reserved IPs in a subnet.
+   * List reserved IPs in a subnet.
    *
-   * This request lists all reserved IPs in a subnet. A reserved IP resource will exist for every address in the subnet
+   * This request lists reserved IPs in a subnet. A reserved IP resource will exist for every address in the subnet
    * which is not available for use.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -3495,10 +3500,10 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all images.
+   * List images.
    *
-   * This request lists all images available in the region. An image provides source data for a volume. Images are
-   * either system-provided, or created from another source, such as importing from Cloud Object Storage.
+   * This request lists images available in the region. An image provides source data for a volume. Images are either
+   * system-provided, or created from another source, such as importing from Cloud Object Storage.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -3511,6 +3516,8 @@ class VpcV1 extends BaseService {
    * specified comma-separated values.
    * @param {string} [params.visibility] - Filters the collection to images with a `visibility` property matching the
    * specified value.
+   * @param {string[]} [params.userDataFormat] - Filters the collection to images with a `user_data_format` property
+   * matching one of the specified comma-separated values.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ImageCollection>>}
    */
@@ -3519,7 +3526,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ImageCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'status', 'visibility', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'status', 'visibility', 'userDataFormat', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3534,6 +3541,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'status': _params.status,
       'visibility': _params.visibility,
+      'user_data_format': _params.userDataFormat,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listImages');
@@ -3947,10 +3955,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all image export jobs.
+   * List export jobs for an image.
    *
-   * This request lists all export jobs for an image. Each job tracks the exporting of the image to another location,
-   * such as a bucket within cloud object storage.
+   * This request lists export jobs for an image. Each job tracks the exporting of the image to another location, such
+   * as a bucket within cloud object storage.
    *
    * The jobs will be sorted by their `created_at` property values, with newest jobs first. Jobs with identical
    * `created_at` property values will in turn be sorted by ascending
@@ -4009,7 +4017,7 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Create an image export job.
+   * Create an export job for an image.
    *
    * This request creates and queues a new export job for the image specified in the URL using the image export job
    * prototype object. The image must be owned by the account and be in the `available`, `deprecated`, `obsolete`, or
@@ -4266,9 +4274,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all operating systems.
+   * List operating systems.
    *
-   * This request lists all operating systems in the region.
+   * This request lists operating systems in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -4375,9 +4383,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all keys.
+   * List keys.
    *
-   * This request lists all keys in the region. A key contains a public SSH key which may be installed on instances when
+   * This request lists keys in the region. A key contains a public SSH key which may be installed on instances when
    * they are created. Private keys are not stored.
    *
    * @param {Object} [params] - The parameters to send to the service.
@@ -4670,7 +4678,7 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all instance profiles.
+   * List instance profiles.
    *
    * This request lists provisionable [instance profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) in the
    * region. An instance profile specifies the performance characteristics and pricing model for an instance.
@@ -4773,9 +4781,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all instance templates.
+   * List instance templates.
    *
-   * This request lists all instance templates in the region.
+   * This request lists instance templates in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -5048,9 +5056,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all instances.
+   * List instances.
    *
-   * This request lists all instances in the region.
+   * This request lists instances in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -5319,6 +5327,16 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The virtual server instance identifier.
    * @param {InstanceAvailabilityPolicyPatch} [params.availabilityPolicy] - The availability policy for this virtual
    * server instance.
+   * @param {string} [params.confidentialComputeMode] - The confidential compute mode to use for this virtual server
+   * instance.
+   *
+   * For this property to be changed, the virtual server instance `status` must be
+   * `stopping` or `stopped`.
+   * @param {boolean} [params.enableSecureBoot] - Indicates whether secure boot is enabled for this virtual server
+   * instance.
+   *
+   * For this property to be changed, the virtual server instance `status` must be
+   * `stopping` or `stopped`.
    * @param {InstanceMetadataServicePatch} [params.metadataService] - The metadata service configuration.
    * @param {string} [params.name] - The name for this virtual server instance. The name must not be used by another
    * virtual server instance in the region. Changing the name will not affect the system hostname.
@@ -5354,7 +5372,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Instance>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'availabilityPolicy', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'totalVolumeBandwidth', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'availabilityPolicy', 'confidentialComputeMode', 'enableSecureBoot', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'totalVolumeBandwidth', 'ifMatch', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5362,6 +5380,8 @@ class VpcV1 extends BaseService {
 
     const body = {
       'availability_policy': _params.availabilityPolicy,
+      'confidential_compute_mode': _params.confidentialComputeMode,
+      'enable_secure_boot': _params.enableSecureBoot,
       'metadata_service': _params.metadataService,
       'name': _params.name,
       'placement_target': _params.placementTarget,
@@ -5594,9 +5614,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all disks on an instance.
+   * List disks on an instance.
    *
-   * This request lists all disks on an instance.  A disk is a block device that is locally attached to the instance's
+   * This request lists disks on an instance.  A disk is a block device that is locally attached to the instance's
    * physical host and is also referred to as instance storage. By default, the listed disks are sorted by their
    * `created_at` property values, with the newest disk first.
    *
@@ -5770,10 +5790,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all network attachments on an instance.
+   * List network attachments on an instance.
    *
-   * This request lists all network attachments on an instance. A network attachment represents a device on the instance
-   * to which a virtual network interface is attached.
+   * This request lists network attachments on an instance. A network attachment represents a device on the instance to
+   * which a virtual network interface is attached.
    *
    * The network attachments will be sorted by their `created_at` property values, with newest network attachments
    * first. Network attachments with identical `created_at` property values will in turn be sorted by ascending `name`
@@ -6081,12 +6101,12 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all network interfaces on an instance.
+   * List network interfaces on an instance.
    *
-   * This request lists all network interfaces on an instance. An instance network interface is an abstract
-   * representation of a network device and attaches an instance to a single subnet. Each network interface on an
-   * instance can attach to any subnet in the zone, including subnets that are already attached to the instance.
-   * Multiple network interfaces on the instance may also attach to the same subnet.
+   * This request lists network interfaces on an instance. An instance network interface is an abstract representation
+   * of a network device and attaches an instance to a single subnet. Each network interface on an instance can attach
+   * to any subnet in the zone, including subnets that are already attached to the instance. Multiple network interfaces
+   * on the instance may also attach to the same subnet.
    *
    * If this instance has network attachments, each returned network interface is a [read-only
    * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
@@ -6434,9 +6454,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all floating IPs associated with an instance network interface.
+   * List floating IPs associated with an instance network interface.
    *
-   * This request lists all floating IPs associated with an instance network interface.
+   * This request lists floating IPs associated with an instance network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
@@ -6793,11 +6813,11 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all volumes attachments on an instance.
+   * List volumes attachments on an instance.
    *
-   * This request lists all volume attachments on an instance. A volume attachment connects a volume to an instance.
-   * Each instance may have many volume attachments but each volume attachment connects exactly one instance to exactly
-   * one volume.
+   * This request lists volume attachments on an instance. A volume attachment connects a volume to an instance. Each
+   * instance may have many volume attachments but each volume attachment connects exactly one instance to exactly one
+   * volume.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
@@ -7104,9 +7124,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all instance groups.
+   * List instance groups.
    *
-   * This request lists all instance groups in the region.
+   * This request lists instance groups in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -7497,9 +7517,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all managers for an instance group.
+   * List managers for an instance group.
    *
-   * This request lists all managers for an instance group.
+   * This request lists managers for an instance group.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
@@ -7800,9 +7820,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all actions for an instance group manager.
+   * List actions for an instance group manager.
    *
-   * This request lists all instance group actions for an instance group manager.
+   * This request lists instance group actions for an instance group manager.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
@@ -8111,9 +8131,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all policies for an instance group manager.
+   * List policies for an instance group manager.
    *
-   * This request lists all policies for an instance group manager.
+   * This request lists policies for an instance group manager.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
@@ -8417,10 +8437,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Delete all memberships from an instance group.
+   * Delete memberships from an instance group.
    *
-   * This request deletes all memberships of an instance group. This operation cannot be reversed. reversed. Any
-   * memberships that have `delete_instance_on_membership_delete` set to `true` will also have their instances deleted.
+   * This request deletes memberships of an instance group. This operation cannot be reversed. Memberships that have
+   * `delete_instance_on_membership_delete` set to `true` will also have their instances deleted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
@@ -8471,9 +8491,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all memberships for an instance group.
+   * List memberships for an instance group.
    *
-   * This request lists all instance group memberships for an instance group.
+   * This request lists instance group memberships for an instance group.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
@@ -8708,10 +8728,10 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all reservations.
+   * List reservations.
    *
-   * This request lists all reservations in the region. A reservation provides reserved capacity for a specified profile
-   * in a specified zone. A reservation can also include a long-term committed use discount.
+   * This request lists reservations in the region. A reservation provides reserved capacity for a specified profile in
+   * a specified zone. A reservation can also include a long-term committed use discount.
    *
    * The reservations will be sorted by their `created_at` property values, with newest reservations first. Reservations
    * with identical `created_at` property values will in turn be sorted by ascending `name` property values.
@@ -9087,9 +9107,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all dedicated host groups.
+   * List dedicated host groups.
    *
-   * This request lists all dedicated host groups in the region. Host groups are a collection of dedicated hosts for
+   * This request lists dedicated host groups in the region. Host groups are a collection of dedicated hosts for
    * placement of instances. Each dedicated host must belong to one and only one group. Host groups do not span zones.
    *
    * @param {Object} [params] - The parameters to send to the service.
@@ -9386,7 +9406,7 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all dedicated host profiles.
+   * List dedicated host profiles.
    *
    * This request lists provisionable [dedicated host profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles) in
    * the region. A dedicated host profile specifies the hardware characteristics for a dedicated host.
@@ -9493,9 +9513,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all dedicated hosts.
+   * List dedicated hosts.
    *
-   * This request lists all dedicated hosts in the region.
+   * This request lists dedicated hosts in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.dedicatedHostGroupId] - Filters the collection to dedicated hosts with a `group.id`
@@ -9609,10 +9629,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all disks on a dedicated host.
+   * List disks on a dedicated host.
    *
-   * This request lists all disks on a dedicated host.  A disk is a physical device that is locally attached to the
-   * compute node. By default, the listed disks are sorted by their
+   * This request lists disks on a dedicated host.  A disk is a physical device that is locally attached to the compute
+   * node. By default, the listed disks are sorted by their
    * `created_at` property values, with the newest disk first.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -9962,9 +9982,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all placement groups.
+   * List placement groups.
    *
-   * This request lists all placement groups in the region.
+   * This request lists placement groups in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -10256,9 +10276,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all bare metal server profiles.
+   * List bare metal server profiles.
    *
-   * This request lists all [bare metal server
+   * This request lists [bare metal server
    * profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile) available in the region. A bare
    * metal server profile specifies the performance characteristics and pricing model for a bare metal server.
    *
@@ -10364,9 +10384,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all bare metal servers.
+   * List bare metal servers.
    *
-   * This request lists all bare metal servers in the region.
+   * This request lists bare metal servers in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -10490,7 +10510,8 @@ class VpcV1 extends BaseService {
    * This request creates a new single-use console access token for a bare metal server. All console configuration is
    * provided at token create time, and the token is subsequently used in the `access_token` query parameter for the
    * WebSocket request.  The access token is only valid for a short period of time, and a maximum of one token is valid
-   * for a given bare metal server at a time.
+   * for a given bare metal server at a time.  For this request to succeed, the server must have a `status` of
+   * `stopped`, `starting`, or `running`.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
@@ -10554,9 +10575,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all disks on a bare metal server.
+   * List disks on a bare metal server.
    *
-   * This request lists all disks on a bare metal server.  A disk is a block device that is locally attached to the
+   * This request lists  disks on a bare metal server.  A disk is a block device that is locally attached to the
    * physical server.  By default, the listed disks are sorted by their `created_at` property values, with the newest
    * disk first.
    *
@@ -10730,9 +10751,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all network attachments on a bare metal server.
+   * List network attachments on a bare metal server.
    *
-   * This request lists all network attachments on a bare metal server. A bare metal server network attachment is an
+   * This request lists network attachments on a bare metal server. A bare metal server network attachment is an
    * abstract representation of a network device and attaches a bare metal server to a single subnet. Each network
    * interface on a bare metal server can attach to any subnet in the zone, including subnets that are already attached
    * to the bare metal server.
@@ -11040,12 +11061,12 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all network interfaces on a bare metal server.
+   * List network interfaces on a bare metal server.
    *
-   * This request lists all network interfaces on a bare metal server. A bare metal server network interface is an
-   * abstract representation of a network device and attaches a bare metal server to a single subnet. Each network
-   * interface on a bare metal server can attach to any subnet in the zone, including subnets that are already attached
-   * to the bare metal server.
+   * This request lists network interfaces on a bare metal server. A bare metal server network interface is an abstract
+   * representation of a network device and attaches a bare metal server to a single subnet. Each network interface on a
+   * bare metal server can attach to any subnet in the zone, including subnets that are already attached to the bare
+   * metal server.
    *
    * If this bare metal server has network attachments, each returned network interface is a [read-only
    * representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
@@ -11391,9 +11412,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all floating IPs associated with a bare metal server network interface.
+   * List floating IPs associated with a bare metal server network interface.
    *
-   * This request lists all floating IPs associated with a bare metal server network interface.
+   * This request lists floating IPs associated with a bare metal server network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.bareMetalServerId - The bare metal server identifier.
@@ -11863,6 +11884,9 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The bare metal server identifier.
+   * @param {number} [params.bandwidth] - The total bandwidth (in megabits per second) shared across the bare metal
+   * server's network interfaces. The specified value must match one of the bandwidth values in the bare metal server's
+   * profile.
    * @param {boolean} [params.enableSecureBoot] - Indicates whether secure boot is enabled. If enabled, the image must
    * support secure boot or the bare metal server will fail to boot.
    *
@@ -11879,13 +11903,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServer>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'enableSecureBoot', 'name', 'trustedPlatformModule', 'headers'];
+    const _validParams = ['id', 'bandwidth', 'enableSecureBoot', 'name', 'trustedPlatformModule', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'bandwidth': _params.bandwidth,
       'enable_secure_boot': _params.enableSecureBoot,
       'name': _params.name,
       'trusted_platform_module': _params.trustedPlatformModule,
@@ -11985,7 +12010,8 @@ class VpcV1 extends BaseService {
   /**
    * Restart a bare metal server.
    *
-   * This request restarts a bare metal server.  It will run immediately regardless of the state of the server.
+   * This request immediately restarts a bare metal server.  For this request to succeed, the server must have a
+   * `status` of `running`.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The bare metal server identifier.
@@ -12155,10 +12181,10 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all volume profiles.
+   * List volume profiles.
    *
-   * This request lists all [volume profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) available
-   * in the region. A volume profile specifies the performance characteristics and pricing model for a volume.
+   * This request lists [volume profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) available in
+   * the region. A volume profile specifies the performance characteristics and pricing model for a volume.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -12262,10 +12288,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all volumes.
+   * List volumes.
    *
-   * This request lists all volumes in the region. Volumes are network-connected block storage devices that may be
-   * attached to one or more instances in the same region.
+   * This request lists volumes in the region. Volumes are network-connected block storage devices that may be attached
+   * to one or more instances in the same region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -12595,9 +12621,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all snapshot consistency groups.
+   * List snapshot consistency groups.
    *
-   * This request lists all snapshot consistency groups in the region. A snapshot consistency group is a collection of
+   * This request lists snapshot consistency groups in the region. A snapshot consistency group is a collection of
    * individual snapshots taken at the same time.
    *
    * @param {Object} [params] - The parameters to send to the service.
@@ -12898,7 +12924,7 @@ class VpcV1 extends BaseService {
   /**
    * Delete a filtered collection of snapshots.
    *
-   * This request deletes all snapshots created from a specific source volume.
+   * This request deletes snapshots that match the specified filter. This operation cannot be reversed.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.sourceVolumeId - Filters the collection to resources with a `source_volume.id` property
@@ -12946,10 +12972,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all snapshots.
+   * List snapshots.
    *
-   * This request lists all snapshots in the region. A snapshot preserves the data of a volume at the time the snapshot
-   * is created.
+   * This request lists snapshots in the region. A snapshot preserves the data of a volume at the time the snapshot is
+   * created.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -13300,9 +13326,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all clones for a snapshot.
+   * List clones for a snapshot.
    *
-   * This request lists all clones for a snapshot. Use a clone to quickly restore a snapshot within the clone's zone.
+   * This request lists clones for a snapshot. Use a clone to quickly restore a snapshot within the clone's zone.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The snapshot identifier.
@@ -13526,11 +13552,10 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all file share profiles.
+   * List file share profiles.
    *
-   * This request lists all [file share profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles)
-   * available in the region. A file share profile specifies the performance characteristics and pricing model for a
-   * file share.
+   * This request lists [file share profiles](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) available
+   * in the region. A file share profile specifies the performance characteristics and pricing model for a file share.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -13639,9 +13664,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all file shares.
+   * List file shares.
    *
-   * This request lists all file shares in the region.
+   * This request lists file shares in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -13891,13 +13916,16 @@ class VpcV1 extends BaseService {
    *   mount target control access to the mount target.
    * - `vpc`: All clients in the VPC for a mount target have access to the mount target.
    *
-   * For this property to be changed, the share must have no mount targets and
-   * `replication_role` must be `none`.
-   * @param {number} [params.iops] - The maximum input/output operations per second (IOPS) for the file share. The value
-   * must be in the range supported by the share's size.
+   * For this property to be changed, the share must have no mount targets,
+   * `replication_role` must be `none` and `accessor_binding_role` must not be `accessor`.
+   * @param {string[]} [params.allowedTransitEncryptionModes] - The transit encryption modes to allow for this share.
    *
-   * For this property to be changed, the share `lifecycle_state` must be `stable` and
-   * `replication_role` must not be `replica`.
+   * For this property to be updated, the `accessor_binding_role` must be `none`.
+   * @param {number} [params.iops] - The maximum input/output operations per second (IOPS) for the file share. In
+   * addition, each client accessing the share will be restricted to 48,000 IOPS.
+   *
+   * The maximum IOPS for a share may increase in the future. For this property to be changed, the share
+   * `accessor_binding_role` must not be `accessor`.
    * @param {string} [params.name] - The name for this share. The name must not be used by another share in the region.
    * @param {ShareProfileIdentity} [params.profile] - The profile to use for this file share.
    *
@@ -13910,8 +13938,10 @@ class VpcV1 extends BaseService {
    * @param {number} [params.size] - The size of the file share rounded up to the next gigabyte. The value must not be
    * less than the share's current size, and must not exceed the maximum supported by the share's profile and IOPS.
    *
-   * For this property to be changed, the share `lifecycle_state` must be `stable` and
-   * `replication_role` must not be `replica`.
+   * For this property to be changed:
+   * - The share `lifecycle_state` must be `stable`
+   * - The share `replication_role` must not be `replica`
+   * - The share `accessor_binding_role` must not be `accessor`.
    * @param {string[]} [params.userTags] - Tags for this resource.
    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
    * resource's current ETag value. Required if the request body includes an array.
@@ -13923,7 +13953,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Share>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'accessControlMode', 'iops', 'name', 'profile', 'replicationCronSpec', 'size', 'userTags', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'accessControlMode', 'allowedTransitEncryptionModes', 'iops', 'name', 'profile', 'replicationCronSpec', 'size', 'userTags', 'ifMatch', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13931,6 +13961,7 @@ class VpcV1 extends BaseService {
 
     const body = {
       'access_control_mode': _params.accessControlMode,
+      'allowed_transit_encryption_modes': _params.allowedTransitEncryptionModes,
       'iops': _params.iops,
       'name': _params.name,
       'profile': _params.profile,
@@ -13966,6 +13997,178 @@ class VpcV1 extends BaseService {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
             'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List accessor bindings for a share.
+   *
+   * This request lists accessor bindings for a share. Each accessor binding identifies a resource (possibly in another
+   * account) with access to this file share's data.
+   *
+   * The share accessor bindings will be sorted by their `created_at` property values, with newest bindings first.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The file share identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareAccessorBindingCollection>>}
+   */
+  public listShareAccessorBindings(
+    params: VpcV1.ListShareAccessorBindingsParams
+  ): Promise<VpcV1.Response<VpcV1.ShareAccessorBindingCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'start', 'limit', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listShareAccessorBindings');
+
+    const parameters = {
+      options: {
+        url: '/shares/{id}/accessor_bindings',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a share accessor binding.
+   *
+   * This request deletes a share accessor binding. This operation cannot be reversed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} params.id - The file share accessor binding identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deleteShareAccessorBinding(
+    params: VpcV1.DeleteShareAccessorBindingParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId', 'id'];
+    const _validParams = ['shareId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteShareAccessorBinding');
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/accessor_bindings/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a share accessor binding.
+   *
+   * This request retrieves a single accessor binding specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} params.id - The file share accessor binding identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareAccessorBinding>>}
+   */
+  public getShareAccessorBinding(
+    params: VpcV1.GetShareAccessorBindingParams
+  ): Promise<VpcV1.Response<VpcV1.ShareAccessorBinding>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId', 'id'];
+    const _validParams = ['shareId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getShareAccessorBinding');
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/accessor_bindings/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
           },
           _params.headers
         ),
@@ -14051,11 +14254,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all mount targets for a file share.
+   * List mount targets for a file share.
    *
-   * This request retrieves all share mount targets for a file share. A share mount target is a network endpoint at
-   * which a file share may be mounted. The file share can be mounted by clients in the same VPC and zone after creating
-   * share mount targets.
+   * This request lists mount targets for a file share. A mount target is a network endpoint at which a file share may
+   * be mounted. The file share can be mounted by clients in the same VPC and zone after creating share mount targets.
    *
    * The share mount targets will be sorted by their `created_at` property values, with newest targets first.
    *
@@ -14473,10 +14675,10 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all backup policies.
+   * List backup policies.
    *
-   * This request lists all backup policies in the region. Backup policies control which sources are selected for backup
-   * and include a set of backup policy plans that provide the backup schedules and deletion triggers.
+   * This request lists backup policies in the region. Backup policies control which sources are selected for backup and
+   * include a set of backup policy plans that provide the backup schedules and deletion triggers.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -14589,10 +14791,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all jobs for a backup policy.
+   * List jobs for a backup policy.
    *
-   * This request retrieves all jobs for a backup policy. A backup job represents the execution of a backup policy plan
-   * for a resource matching the policy's criteria.
+   * This request retrieves jobs for a backup policy. A backup job represents the execution of a backup policy plan for
+   * a resource matching the policy's criteria.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.backupPolicyId - The backup policy identifier.
@@ -14724,10 +14926,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all plans for a backup policy.
+   * List plans for a backup policy.
    *
-   * This request retrieves all plans for a backup policy. Backup plans provide the backup schedule and deletion
-   * triggers.
+   * This request retrieves plans for a backup policy. Backup plans provide the backup schedule and deletion triggers.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.backupPolicyId - The backup policy identifier.
@@ -15272,9 +15473,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all regions.
+   * List regions.
    *
-   * This request lists all regions. Each region is a separate geographic area that contains multiple isolated zones.
+   * This request lists regions. Each region is a separate geographic area that contains multiple isolated zones.
    * Resources can be provisioned into one or more zones in a region. Each zone is isolated, but connected to other
    * zones in the same region with low-latency and high-bandwidth links. Regions represent the top-level of fault
    * isolation available. Resources deployed within a single region also benefit from the low latency afforded by
@@ -15378,9 +15579,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all zones in a region.
+   * List zones in a region.
    *
-   * This request lists all zones in a region. Zones represent logically-isolated data centers with high-bandwidth and
+   * This request lists zones in a region. Zones represent logically-isolated data centers with high-bandwidth and
    * low-latency interconnects to other zones in the same region. Faults in a zone do not affect other zones.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -15492,10 +15693,10 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all virtual network interfaces.
+   * List virtual network interfaces.
    *
-   * This request lists all virtual network interfaces in the region. A virtual network interface is a logical
-   * abstraction of a virtual network interface in a subnet, and may be attached to a target resource.
+   * This request lists virtual network interfaces in the region. A virtual network interface is a logical abstraction
+   * of a virtual network interface in a subnet, and may be attached to a target resource.
    *
    * The virtual network interfaces will be sorted by their `created_at` property values, with newest virtual network
    * interfaces first. Virtual network interfaces with identical
@@ -15597,6 +15798,18 @@ class VpcV1 extends BaseService {
    * If a reserved IP prototype object with an address is provided, the address must be
    * available on the virtual network interface's subnet. If no address is specified,
    * an available address on the subnet will be automatically selected and reserved.
+   * @param {string} [params.protocolStateFilteringMode] - The protocol state filtering mode to use for this virtual
+   * network interface. If
+   * `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target`
+   * resource type:
+   *
+   * - `bare_metal_server_network_attachment`: disabled
+   * - `instance_network_attachment`: enabled
+   * - `share_mount_target`: enabled
+   *
+   * Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
+   * any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
+   * mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
@@ -15613,7 +15826,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'ips', 'name', 'primaryIp', 'resourceGroup', 'securityGroups', 'subnet', 'headers'];
+    const _validParams = ['allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'ips', 'name', 'primaryIp', 'protocolStateFilteringMode', 'resourceGroup', 'securityGroups', 'subnet', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15626,6 +15839,7 @@ class VpcV1 extends BaseService {
       'ips': _params.ips,
       'name': _params.name,
       'primary_ip': _params.primaryIp,
+      'protocol_state_filtering_mode': _params.protocolStateFilteringMode,
       'resource_group': _params.resourceGroup,
       'security_groups': _params.securityGroups,
       'subnet': _params.subnet,
@@ -15798,6 +16012,17 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this virtual network interface. The name must not be used by another
    * virtual network interface in the region. Names beginning with `ibm-` are reserved for provider-owned resources, and
    * are not allowed.
+   * @param {string} [params.protocolStateFilteringMode] - The protocol state filtering mode used for this virtual
+   * network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network
+   * interface's `target` resource type:
+   *
+   * - `bare_metal_server_network_attachment`: disabled
+   * - `instance_network_attachment`: enabled
+   * - `share_mount_target`: enabled
+   *
+   * Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
+   * any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
+   * mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering)) for more information.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>>}
    */
@@ -15806,7 +16031,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'name', 'headers'];
+    const _validParams = ['id', 'allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'name', 'protocolStateFilteringMode', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15817,6 +16042,7 @@ class VpcV1 extends BaseService {
       'auto_delete': _params.autoDelete,
       'enable_infrastructure_nat': _params.enableInfrastructureNat,
       'name': _params.name,
+      'protocol_state_filtering_mode': _params.protocolStateFilteringMode,
     };
 
     const query = {
@@ -15855,9 +16081,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all floating IPs associated with a virtual network interface.
+   * List floating IPs associated with a virtual network interface.
    *
-   * This request lists all floating IPs associated with a virtual network interface.
+   * This request lists floating IPs associated with a virtual network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
@@ -16101,9 +16327,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all reserved IPs bound to a virtual network interface.
+   * List reserved IPs bound to a virtual network interface.
    *
-   * This request lists all reserved IPs bound to a virtual network interface.
+   * This request lists reserved IPs bound to a virtual network interface.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
@@ -16341,11 +16567,11 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all public gateways.
+   * List public gateways.
    *
-   * This request lists all public gateways in the region. A public gateway is a virtual network device associated with
-   * a VPC, which allows access to the Internet. A public gateway resides in a zone and can be connected to subnets in
-   * the same zone only.
+   * This request lists public gateways in the region. A public gateway is a virtual network device associated with a
+   * VPC, which allows access to the Internet. A public gateway resides in a zone and can be connected to subnets in the
+   * same zone only.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -16643,10 +16869,10 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all floating IPs.
+   * List floating IPs.
    *
-   * This request lists all floating IPs in the region. Floating IPs allow inbound and outbound traffic from the
-   * Internet to an instance.
+   * This request lists floating IPs in the region. Floating IPs allow inbound and outbound traffic from the Internet to
+   * an instance.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -16954,10 +17180,10 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all network ACLs.
+   * List network ACLs.
    *
-   * This request lists all network ACLs in the region. A network ACL defines a set of packet filtering (5-tuple) rules
-   * for all traffic in and out of a subnet. Both allow and deny rules can be defined, and rules are stateless such that
+   * This request lists network ACLs in the region. A network ACL defines a set of packet filtering (5-tuple) rules for
+   * all traffic in and out of a subnet. Both allow and deny rules can be defined, and rules are stateless such that
    * reverse traffic in response to allowed traffic is not automatically permitted.
    *
    * @param {Object} [params] - The parameters to send to the service.
@@ -17235,10 +17461,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all rules for a network ACL.
+   * List rules for a network ACL.
    *
-   * This request lists all rules for a network ACL. These rules can allow or deny traffic between a source CIDR block
-   * and a destination CIDR block over a particular protocol and port range.
+   * This request lists rules for a network ACL. These rules can allow or deny traffic between a source CIDR block and a
+   * destination CIDR block over a particular protocol and port range.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.networkAclId - The network ACL identifier.
@@ -17567,9 +17793,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all security groups.
+   * List security groups.
    *
-   * This request lists all security groups in the region. Security groups provide a way to apply IP filtering rules to
+   * This request lists security groups in the region. Security groups provide a way to apply IP filtering rules to
    * instances in the associated VPC. With security groups, all traffic is denied by default, and rules added to
    * security groups define which traffic the security group permits. Security group rules are stateful such that
    * reverse traffic in response to allowed traffic is automatically permitted.
@@ -17876,11 +18102,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all rules in a security group.
+   * List rules in a security group.
    *
-   * This request lists all rules in a security group. These rules define what traffic the security group permits.
-   * Security group rules are stateful, such that reverse traffic in response to allowed traffic is automatically
-   * permitted.
+   * This request lists rules in a security group. These rules define what traffic the security group permits. Security
+   * group rules are stateful, such that reverse traffic in response to allowed traffic is automatically permitted.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.securityGroupId - The security group identifier.
@@ -18211,10 +18436,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all targets associated with a security group.
+   * List targets associated with a security group.
    *
-   * This request lists all targets associated with a security group, to which the rules in the security group are
-   * applied.
+   * This request lists targets associated with a security group, to which the rules in the security group are applied.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.securityGroupId - The security group identifier.
@@ -18462,9 +18686,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all IKE policies.
+   * List IKE policies.
    *
-   * This request lists all IKE policies in the region.
+   * This request lists IKE policies in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -18764,21 +18988,23 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all VPN gateway connections that use a specified IKE policy.
+   * List VPN gateway connections that use a specified IKE policy.
    *
-   * This request lists all VPN gateway connections that use a policy.
+   * This request lists VPN gateway connections that use a IKE policy.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The IKE policy identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.IKEPolicyConnectionCollection>>}
    */
   public listIkePolicyConnections(
     params: VpcV1.ListIkePolicyConnectionsParams
-  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>> {
+  ): Promise<VpcV1.Response<VpcV1.IKEPolicyConnectionCollection>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'start', 'limit', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18787,6 +19013,8 @@ class VpcV1 extends BaseService {
     const query = {
       'version': this.version,
       'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
     };
 
     const path = {
@@ -18818,9 +19046,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all IPsec policies.
+   * List IPsec policies.
    *
-   * This request lists all IPsec policies in the region.
+   * This request lists IPsec policies in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -19130,21 +19358,23 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all VPN gateway connections that use a specified IPsec policy.
+   * List VPN gateway connections that use a specified IPsec policy.
    *
-   * This request lists all VPN gateway connections that use a policy.
+   * This request lists VPN gateway connections that use a IPsec policy.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The IPsec policy identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.IPsecPolicyConnectionCollection>>}
    */
   public listIpsecPolicyConnections(
     params: VpcV1.ListIpsecPolicyConnectionsParams
-  ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>> {
+  ): Promise<VpcV1.Response<VpcV1.IPsecPolicyConnectionCollection>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'start', 'limit', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19153,6 +19383,8 @@ class VpcV1 extends BaseService {
     const query = {
       'version': this.version,
       'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
     };
 
     const path = {
@@ -19184,9 +19416,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all VPN gateways.
+   * List VPN gateways.
    *
-   * This request lists all VPN gateways in the region.
+   * This request lists VPN gateways in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -19470,12 +19702,14 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all connections of a VPN gateway.
+   * List connections of a VPN gateway.
    *
-   * This request lists all connections of a VPN gateway.
+   * This request lists connections of a VPN gateway.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {string} [params.status] - Filters the collection to VPN gateway connections with a `status` property
    * matching the specified value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -19486,7 +19720,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId'];
-    const _validParams = ['vpnGatewayId', 'status', 'headers'];
+    const _validParams = ['vpnGatewayId', 'start', 'limit', 'status', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19495,6 +19729,8 @@ class VpcV1 extends BaseService {
     const query = {
       'version': this.version,
       'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
       'status': _params.status,
     };
 
@@ -19724,7 +19960,6 @@ class VpcV1 extends BaseService {
    * connection for the VPN gateway.
    * @param {VPNGatewayConnectionPeerPatch} [params.peer] -
    * @param {string} [params.psk] - The pre-shared key.
-   * @param {string} [params.routingProtocol] - Routing protocols are disabled for this VPN gateway connection.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>>}
    */
@@ -19733,7 +19968,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
-    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'establishMode', 'ikePolicy', 'ipsecPolicy', 'name', 'peer', 'psk', 'routingProtocol', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'establishMode', 'ikePolicy', 'ipsecPolicy', 'name', 'peer', 'psk', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19748,7 +19983,6 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'peer': _params.peer,
       'psk': _params.psk,
-      'routing_protocol': _params.routingProtocol,
     };
 
     const query = {
@@ -19788,9 +20022,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all local CIDRs for a VPN gateway connection.
+   * List local CIDRs for a VPN gateway connection.
    *
-   * This request lists all local CIDRs for a VPN gateway connection.
+   * This request lists local CIDRs for a VPN gateway connection.
    *
    * This request is only supported for policy mode VPN gateways.
    *
@@ -20024,9 +20258,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all peer CIDRs for a VPN gateway connection.
+   * List peer CIDRs for a VPN gateway connection.
    *
-   * This request lists all peer CIDRs for a VPN gateway connection.
+   * This request lists peer CIDRs for a VPN gateway connection.
    *
    * This request is only supported for policy mode VPN gateways.
    *
@@ -20263,9 +20497,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all VPN servers.
+   * List VPN servers.
    *
-   * This request lists all VPN servers.
+   * This request lists VPN servers.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
@@ -20534,8 +20768,8 @@ class VpcV1 extends BaseService {
   /**
    * Update a VPN server.
    *
-   * This request updates the properties of an existing VPN server. Any property changes will cause all connected VPN
-   * clients are disconnected from this VPN server except for the name change.
+   * This request updates the properties of an existing VPN server. Any updates other than to `name` will cause all
+   * connected VPN clients to be disconnected.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The VPN server identifier.
@@ -20687,9 +20921,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all VPN clients for a VPN server.
+   * List VPN clients for a VPN server.
    *
-   * This request retrieves all connected VPN clients, and any disconnected VPN clients that the VPN server has not yet
+   * This request retrieves connected VPN clients, and any disconnected VPN clients that the VPN server has not yet
    * deleted based on its auto-deletion policy.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -20920,11 +21154,11 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all VPN routes for a VPN server.
+   * List VPN routes for a VPN server.
    *
-   * This request lists all VPN routes in a VPN server. All VPN routes are provided to the VPN client when the
-   * connection is established.  Packets received from the VPN client will be dropped by the VPN server if there is no
-   * VPN route matching their specified destinations. All VPN routes must be unique within the VPN server.
+   * This request lists VPN routes in a VPN server. All VPN routes are provided to the VPN client when the connection is
+   * established.  Packets received from the VPN client will be dropped by the VPN server if there is no VPN route
+   * matching their specified destinations. All VPN routes must be unique within the VPN server.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnServerId - The VPN server identifier.
@@ -20989,8 +21223,7 @@ class VpcV1 extends BaseService {
    *
    * This request creates a new VPN route in the VPN server. All VPN routes are provided to the VPN client when the
    * connection is established. Packets received from the VPN client will be dropped by the VPN server if there is no
-   * VPN route matching their specified destinations. All VPN routes must be unique within the VPN server. destination
-   * of the packet.
+   * VPN route matching their specified destinations. All VPN routes must be unique within the VPN server.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnServerId - The VPN server identifier.
@@ -21238,9 +21471,9 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all load balancer profiles.
+   * List load balancer profiles.
    *
-   * This request lists all load balancer profiles available in the region. A load balancer profile specifies the
+   * This request lists load balancer profiles available in the region. A load balancer profile specifies the
    * performance characteristics and pricing model for a load balancer.
    *
    * @param {Object} [params] - The parameters to send to the service.
@@ -21345,9 +21578,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all load balancers.
+   * List load balancers.
    *
-   * This request lists all load balancers in the region.
+   * This request lists load balancers in the region.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -21694,7 +21927,7 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all statistics of a load balancer.
+   * List statistics of a load balancer.
    *
    * This request lists statistics of a load balancer.
    *
@@ -21748,9 +21981,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all listeners for a load balancer.
+   * List listeners for a load balancer.
    *
-   * This request lists all listeners for a load balancer.
+   * This request lists listeners for a load balancer.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -22188,10 +22421,10 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all policies for a load balancer listener.
+   * List policies for a load balancer listener.
    *
-   * This request lists all policies for a load balancer listener. A policy consists of rules to match against each
-   * incoming request, and an action to apply to the request if a rule matches.
+   * This request lists policies for a load balancer listener. A policy consists of rules to match against each incoming
+   * request, and an action to apply to the request if a rule matches.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -22525,9 +22758,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all rules of a load balancer listener policy.
+   * List rules of a load balancer listener policy.
    *
-   * This request lists all rules of a load balancer listener policy.
+   * This request lists rules of a load balancer listener policy.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -22868,9 +23101,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all pools of a load balancer.
+   * List pools of a load balancer.
    *
-   * This request lists all pools of a load balancer.
+   * This request lists pools of a load balancer.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -23207,9 +23440,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all members of a load balancer pool.
+   * List members of a load balancer pool.
    *
-   * This request lists all members of a load balancer pool.
+   * This request lists members of a load balancer pool.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -23605,10 +23838,10 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all endpoint gateways.
+   * List endpoint gateways.
    *
-   * This request lists all endpoint gateways in the region. An endpoint gateway maps one or more reserved IPs in a VPC
-   * to a target outside the VPC.
+   * This request lists endpoint gateways in the region. An endpoint gateway maps one or more reserved IPs in a VPC to a
+   * target outside the VPC.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
@@ -23756,9 +23989,9 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List all reserved IPs bound to an endpoint gateway.
+   * List reserved IPs bound to an endpoint gateway.
    *
-   * This request lists all reserved IPs bound to an endpoint gateway.
+   * This request lists reserved IPs bound to an endpoint gateway.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.endpointGatewayId - The endpoint gateway identifier.
@@ -24173,10 +24406,10 @@ class VpcV1 extends BaseService {
    ************************/
 
   /**
-   * List all flow log collectors.
+   * List flow log collectors.
    *
-   * This request lists all flow log collectors in the region. A flow log collector summarizes data sent over the
-   * instance network interfaces and instance network attachments contained within its target.
+   * This request lists flow log collectors in the region. A flow log collector summarizes data sent over the instance
+   * network interfaces and instance network attachments contained within its target.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -24513,7 +24746,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2024-04-30` and `2024-05-15`.
+     *  `2024-04-30` and `2024-07-03`.
      */
     version: string;
   }
@@ -25514,6 +25747,10 @@ namespace VpcV1 {
     status?: ListImagesConstants.Status[] | string[];
     /** Filters the collection to images with a `visibility` property matching the specified value. */
     visibility?: ListImagesConstants.Visibility | string;
+    /** Filters the collection to images with a `user_data_format` property matching one of the specified
+     *  comma-separated values.
+     */
+    userDataFormat?: ListImagesConstants.UserDataFormat[] | string[];
     headers?: OutgoingHttpHeaders;
   }
 
@@ -25533,6 +25770,12 @@ namespace VpcV1 {
     export enum Visibility {
       PRIVATE = 'private',
       PUBLIC = 'public',
+    }
+    /** Filters the collection to images with a `user_data_format` property matching one of the specified comma-separated values. */
+    export enum UserDataFormat {
+      CLOUD_INIT = 'cloud_init',
+      ESXI_KICKSTART = 'esxi_kickstart',
+      IPXE = 'ipxe',
     }
   }
 
@@ -25888,6 +26131,18 @@ namespace VpcV1 {
     id: string;
     /** The availability policy for this virtual server instance. */
     availabilityPolicy?: InstanceAvailabilityPolicyPatch;
+    /** The confidential compute mode to use for this virtual server instance.
+     *
+     *  For this property to be changed, the virtual server instance `status` must be
+     *  `stopping` or `stopped`.
+     */
+    confidentialComputeMode?: UpdateInstanceConstants.ConfidentialComputeMode | string;
+    /** Indicates whether secure boot is enabled for this virtual server instance.
+     *
+     *  For this property to be changed, the virtual server instance `status` must be
+     *  `stopping` or `stopped`.
+     */
+    enableSecureBoot?: boolean;
     /** The metadata service configuration. */
     metadataService?: InstanceMetadataServicePatch;
     /** The name for this virtual server instance. The name must not be used by another virtual server instance in
@@ -25925,6 +26180,15 @@ namespace VpcV1 {
      */
     ifMatch?: string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `updateInstance` operation. */
+  export namespace UpdateInstanceConstants {
+    /** The confidential compute mode to use for this virtual server instance. For this property to be changed, the virtual server instance `status` must be `stopping` or `stopped`. */
+    export enum ConfidentialComputeMode {
+      DISABLED = 'disabled',
+      SGX = 'sgx',
+    }
   }
 
   /** Parameters for the `getInstanceInitialization` operation. */
@@ -27247,6 +27511,10 @@ namespace VpcV1 {
   export interface UpdateBareMetalServerParams {
     /** The bare metal server identifier. */
     id: string;
+    /** The total bandwidth (in megabits per second) shared across the bare metal server's network interfaces. The
+     *  specified value must match one of the bandwidth values in the bare metal server's profile.
+     */
+    bandwidth?: number;
     /** Indicates whether secure boot is enabled. If enabled, the image must support secure boot or the bare metal
      *  server will fail to boot.
      *
@@ -27771,15 +28039,20 @@ namespace VpcV1 {
      *    mount target control access to the mount target.
      *  - `vpc`: All clients in the VPC for a mount target have access to the mount target.
      *
-     *  For this property to be changed, the share must have no mount targets and
-     *  `replication_role` must be `none`.
+     *  For this property to be changed, the share must have no mount targets,
+     *  `replication_role` must be `none` and `accessor_binding_role` must not be `accessor`.
      */
     accessControlMode?: UpdateShareConstants.AccessControlMode | string;
-    /** The maximum input/output operations per second (IOPS) for the file share. The value must be in the range
-     *  supported by the share's size.
+    /** The transit encryption modes to allow for this share.
      *
-     *  For this property to be changed, the share `lifecycle_state` must be `stable` and
-     *  `replication_role` must not be `replica`.
+     *  For this property to be updated, the `accessor_binding_role` must be `none`.
+     */
+    allowedTransitEncryptionModes?: UpdateShareConstants.AllowedTransitEncryptionModes[] | string[];
+    /** The maximum input/output operations per second (IOPS) for the file share. In addition, each client accessing
+     *  the share will be restricted to 48,000 IOPS.
+     *
+     *  The maximum IOPS for a share may increase in the future. For this property to be changed, the share
+     *  `accessor_binding_role` must not be `accessor`.
      */
     iops?: number;
     /** The name for this share. The name must not be used by another share in the region. */
@@ -27799,8 +28072,10 @@ namespace VpcV1 {
     /** The size of the file share rounded up to the next gigabyte. The value must not be less than the share's
      *  current size, and must not exceed the maximum supported by the share's profile and IOPS.
      *
-     *  For this property to be changed, the share `lifecycle_state` must be `stable` and
-     *  `replication_role` must not be `replica`.
+     *  For this property to be changed:
+     *  - The share `lifecycle_state` must be `stable`
+     *  - The share `replication_role` must not be `replica`
+     *  - The share `accessor_binding_role` must not be `accessor`.
      */
     size?: number;
     /** Tags for this resource. */
@@ -27814,11 +28089,45 @@ namespace VpcV1 {
 
   /** Constants for the `updateShare` operation. */
   export namespace UpdateShareConstants {
-    /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. For this property to be changed, the share must have no mount targets and `replication_role` must be `none`. */
+    /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. For this property to be changed, the share must have no mount targets, `replication_role` must be `none` and `accessor_binding_role` must not be `accessor`. */
     export enum AccessControlMode {
       SECURITY_GROUP = 'security_group',
       VPC = 'vpc',
     }
+    /** An allowed transit encryption mode for this share. - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+    export enum AllowedTransitEncryptionModes {
+      NONE = 'none',
+      USER_MANAGED = 'user_managed',
+    }
+  }
+
+  /** Parameters for the `listShareAccessorBindings` operation. */
+  export interface ListShareAccessorBindingsParams {
+    /** The file share identifier. */
+    id: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteShareAccessorBinding` operation. */
+  export interface DeleteShareAccessorBindingParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The file share accessor binding identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getShareAccessorBinding` operation. */
+  export interface GetShareAccessorBindingParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The file share accessor binding identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `failoverShare` operation. */
@@ -28226,6 +28535,19 @@ namespace VpcV1 {
      *  an available address on the subnet will be automatically selected and reserved.
      */
     primaryIp?: VirtualNetworkInterfacePrimaryIPPrototype;
+    /** The protocol state filtering mode to use for this virtual network interface. If
+     *  `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target`
+     *  resource type:
+     *
+     *  - `bare_metal_server_network_attachment`: disabled
+     *  - `instance_network_attachment`: enabled
+     *  - `share_mount_target`: enabled
+     *
+     *  Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
+     *  any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
+     *  mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information.
+     */
+    protocolStateFilteringMode?: CreateVirtualNetworkInterfaceConstants.ProtocolStateFilteringMode | string;
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
@@ -28237,6 +28559,16 @@ namespace VpcV1 {
     /** The associated subnet. Required if `primary_ip` does not specify a reserved IP identity. */
     subnet?: SubnetIdentity;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createVirtualNetworkInterface` operation. */
+  export namespace CreateVirtualNetworkInterfaceConstants {
+    /** The protocol state filtering mode to use for this virtual network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target` resource type: - `bare_metal_server_network_attachment`: disabled - `instance_network_attachment`: enabled - `share_mount_target`: enabled Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information. */
+    export enum ProtocolStateFilteringMode {
+      AUTO = 'auto',
+      DISABLED = 'disabled',
+      ENABLED = 'enabled',
+    }
   }
 
   /** Parameters for the `deleteVirtualNetworkInterfaces` operation. */
@@ -28282,7 +28614,29 @@ namespace VpcV1 {
      *  in the region. Names beginning with `ibm-` are reserved for provider-owned resources, and are not allowed.
      */
     name?: string;
+    /** The protocol state filtering mode used for this virtual network interface. If `auto`, protocol state packet
+     *  filtering is enabled or disabled based on the virtual network interface's `target` resource type:
+     *
+     *  - `bare_metal_server_network_attachment`: disabled
+     *  - `instance_network_attachment`: enabled
+     *  - `share_mount_target`: enabled
+     *
+     *  Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
+     *  any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
+     *  mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering)) for more information.
+     */
+    protocolStateFilteringMode?: UpdateVirtualNetworkInterfaceConstants.ProtocolStateFilteringMode | string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `updateVirtualNetworkInterface` operation. */
+  export namespace UpdateVirtualNetworkInterfaceConstants {
+    /** The protocol state filtering mode used for this virtual network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target` resource type: - `bare_metal_server_network_attachment`: disabled - `instance_network_attachment`: enabled - `share_mount_target`: enabled Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering)) for more information. */
+    export enum ProtocolStateFilteringMode {
+      AUTO = 'auto',
+      DISABLED = 'disabled',
+      ENABLED = 'enabled',
+    }
   }
 
   /** Parameters for the `listNetworkInterfaceFloatingIps` operation. */
@@ -28976,6 +29330,10 @@ namespace VpcV1 {
   export interface ListIkePolicyConnectionsParams {
     /** The IKE policy identifier. */
     id: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -29134,6 +29492,10 @@ namespace VpcV1 {
   export interface ListIpsecPolicyConnectionsParams {
     /** The IPsec policy identifier. */
     id: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -29204,6 +29566,10 @@ namespace VpcV1 {
   export interface ListVpnGatewayConnectionsParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
     /** Filters the collection to VPN gateway connections with a `status` property matching the specified value. */
     status?: ListVpnGatewayConnectionsConstants.Status | string;
     headers?: OutgoingHttpHeaders;
@@ -29279,8 +29645,6 @@ namespace VpcV1 {
     peer?: VPNGatewayConnectionPeerPatch;
     /** The pre-shared key. */
     psk?: string;
-    /** Routing protocols are disabled for this VPN gateway connection. */
-    routingProtocol?: UpdateVpnGatewayConnectionConstants.RoutingProtocol | string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -29290,10 +29654,6 @@ namespace VpcV1 {
     export enum EstablishMode {
       BIDIRECTIONAL = 'bidirectional',
       PEER_ONLY = 'peer_only',
-    }
-    /** Routing protocols are disabled for this VPN gateway connection. */
-    export enum RoutingProtocol {
-      NONE = 'none',
     }
   }
 
@@ -31597,7 +31957,10 @@ namespace VpcV1 {
      *  unless the specified image provides another means of access.
      */
     keys: KeyIdentity[];
-    /** User data to be made available when initializing the bare metal server. */
+    /** User data to be made available when initializing the bare metal server.
+     *
+     *  If unspecified, no user data will be made available.
+     */
     user_data?: string;
   }
 
@@ -32408,6 +32771,8 @@ namespace VpcV1 {
 
   /** The supported trusted platform module modes for this bare metal server profile. */
   export interface BareMetalServerProfileSupportedTrustedPlatformModuleModes {
+    /** The default trusted platform module for a bare metal server with this profile. */
+    default?: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Default | string;
     /** The type for this profile field. */
     type: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Type | string;
     /** The supported trusted platform module modes. */
@@ -32415,6 +32780,11 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerProfileSupportedTrustedPlatformModuleModes {
     export namespace Constants {
+      /** The default trusted platform module for a bare metal server with this profile. */
+      export enum Default {
+        DISABLED = 'disabled',
+        TPM_2 = 'tpm_2',
+      }
       /** The type for this profile field. */
       export enum Type {
         ENUM = 'enum',
@@ -32445,6 +32815,11 @@ namespace VpcV1 {
 
   /** BareMetalServerPrototype. */
   export interface BareMetalServerPrototype {
+    /** The total bandwidth (in megabits per second) shared across the bare metal server's network interfaces. The
+     *  specified value must match one of the bandwidth values in the bare metal server's profile. If unspecified, the
+     *  default value from the profile will be used.
+     */
+    bandwidth?: number;
     /** Indicates whether secure boot is enabled. If enabled, the image must support secure boot or the server will
      *  fail to boot.
      */
@@ -32559,12 +32934,14 @@ namespace VpcV1 {
   export interface BareMetalServerTrustedPlatformModulePrototype {
     /** The trusted platform module mode to use. The specified value must be listed in the bare metal server
      *  profile's `supported_trusted_platform_module_modes`.
+     *
+     *  If unspecified, the default trusted platform module mode from the profile will be used.
      */
     mode?: BareMetalServerTrustedPlatformModulePrototype.Constants.Mode | string;
   }
   export namespace BareMetalServerTrustedPlatformModulePrototype {
     export namespace Constants {
-      /** The trusted platform module mode to use. The specified value must be listed in the bare metal server profile's `supported_trusted_platform_module_modes`. */
+      /** The trusted platform module mode to use. The specified value must be listed in the bare metal server profile's `supported_trusted_platform_module_modes`. If unspecified, the default trusted platform module mode from the profile will be used. */
       export enum Mode {
         DISABLED = 'disabled',
         TPM_2 = 'tpm_2',
@@ -32578,6 +32955,28 @@ namespace VpcV1 {
 
   /** Identifies a version of a [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering by a unique property. */
   export interface CatalogOfferingVersionIdentity {
+  }
+
+  /** Identifies a catalog offering version's billing plan by a unique property. */
+  export interface CatalogOfferingVersionPlanIdentity {
+  }
+
+  /** CatalogOfferingVersionPlanReference. */
+  export interface CatalogOfferingVersionPlanReference {
+    /** The CRN for this
+     *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering version's billing plan.
+     */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: CatalogOfferingVersionPlanReferenceDeleted;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface CatalogOfferingVersionPlanReferenceDeleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
   }
 
   /** CatalogOfferingVersionReference. */
@@ -32620,8 +33019,8 @@ namespace VpcV1 {
   export interface DNSInstanceIdentity {
   }
 
-  /** DNSInstanceReference. */
-  export interface DNSInstanceReference {
+  /** DNSInstanceReferenceLoadBalancerDNSContext. */
+  export interface DNSInstanceReferenceLoadBalancerDNSContext {
     /** The CRN for this DNS instance. */
     crn: string;
   }
@@ -33928,6 +34327,34 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** IKEPolicyConnectionCollection. */
+  export interface IKEPolicyConnectionCollection {
+    /** Collection of VPN gateway connections that use a specified IKE policy specified by the identifier in the
+     *  URL.
+     */
+    connections: VPNGatewayConnection[];
+    /** A link to the first page of resources. */
+    first: IKEPolicyConnectionCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: IKEPolicyConnectionCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface IKEPolicyConnectionCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface IKEPolicyConnectionCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
   /** IKEPolicyReference. */
   export interface IKEPolicyReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
@@ -34093,6 +34520,34 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** IPsecPolicyConnectionCollection. */
+  export interface IPsecPolicyConnectionCollection {
+    /** Collection of VPN gateway connections that use a specified IPsec policy specified by the identifier in the
+     *  URL.
+     */
+    connections: VPNGatewayConnection[];
+    /** A link to the first page of resources. */
+    first: IPsecPolicyConnectionCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: IPsecPolicyConnectionCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface IPsecPolicyConnectionCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface IPsecPolicyConnectionCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
   /** IPsecPolicyReference. */
   export interface IPsecPolicyReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
@@ -34187,6 +34642,15 @@ namespace VpcV1 {
      */
     status: Image.Constants.Status | string;
     status_reasons: ImageStatusReason[];
+    /** The user data format for this image:
+     *  - `cloud_init`: `user_data` will be interpreted according to the cloud-init standard
+     *  - `esxi_kickstart`: `user_data` will be interpreted as a VMware ESXi installation script
+     *  - `ipxe`: `user_data` will be interpreted as a single URL to an iPXE script or as the
+     *    text of an iPXE script
+     *
+     *  The value for this property is inherited from `operating_system.user_data_format`.
+     */
+    user_data_format: Image.Constants.UserDataFormat | string;
     /** The visibility of this image. - `private`: Visible only to this account - `public`: Visible to all accounts. */
     visibility: Image.Constants.Visibility | string;
   }
@@ -34210,6 +34674,12 @@ namespace VpcV1 {
         OBSOLETE = 'obsolete',
         PENDING = 'pending',
         UNUSABLE = 'unusable',
+      }
+      /** The user data format for this image: - `cloud_init`: `user_data` will be interpreted according to the cloud-init standard - `esxi_kickstart`: `user_data` will be interpreted as a VMware ESXi installation script - `ipxe`: `user_data` will be interpreted as a single URL to an iPXE script or as the text of an iPXE script The value for this property is inherited from `operating_system.user_data_format`. */
+      export enum UserDataFormat {
+        CLOUD_INIT = 'cloud_init',
+        ESXI_KICKSTART = 'esxi_kickstart',
+        IPXE = 'ipxe',
       }
       /** The visibility of this image. - `private`: Visible only to this account - `public`: Visible to all accounts. */
       export enum Visibility {
@@ -34546,6 +35016,8 @@ namespace VpcV1 {
      *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user).
      */
     catalog_offering?: InstanceCatalogOffering;
+    /** The confidential compute mode for this virtual server instance. */
+    confidential_compute_mode: Instance.Constants.ConfidentialComputeMode | string;
     /** The date and time that the virtual server instance was created. */
     created_at: string;
     /** The CRN for this virtual server instance. */
@@ -34554,6 +35026,8 @@ namespace VpcV1 {
     dedicated_host?: DedicatedHostReference;
     /** The instance disks for this virtual server instance. */
     disks: InstanceDisk[];
+    /** Indicates whether secure boot is enabled for this virtual server instance. */
+    enable_secure_boot: boolean;
     /** The virtual server instance GPU configuration. */
     gpu?: InstanceGPU;
     /** The reasons for the current `health_state` (if any). */
@@ -34653,6 +35127,11 @@ namespace VpcV1 {
   }
   export namespace Instance {
     export namespace Constants {
+      /** The confidential compute mode for this virtual server instance. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
       /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
@@ -34786,6 +35265,11 @@ namespace VpcV1 {
 
   /** InstanceCatalogOffering. */
   export interface InstanceCatalogOffering {
+    /** The billing plan used for the catalog offering version.
+     *
+     *  If absent, no billing plan is in use (free).
+     */
+    plan?: CatalogOfferingVersionPlanReference;
     /** The catalog offering version this virtual server instance was provisioned from.
      *
      *  The catalog offering version is not managed by the IBM VPC service, and may no longer
@@ -34798,6 +35282,11 @@ namespace VpcV1 {
 
   /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering or offering version to use when provisioning this virtual server instance. If an offering is specified, the latest version of that offering will be used. The specified offering or offering version may be in a different account, subject to IAM policies. */
   export interface InstanceCatalogOfferingPrototype {
+    /** The billing plan to use for the catalog offering version. If unspecified, no billing
+     *  plan will be used (free). Must be specified for catalog offering versions that require
+     *  a billing plan to be used.
+     */
+    plan?: CatalogOfferingVersionPlanIdentity;
   }
 
   /** InstanceCollection. */
@@ -35516,7 +36005,12 @@ namespace VpcV1 {
   /** InstanceLifecycleReason. */
   export interface InstanceLifecycleReason {
     /** A reason code for this lifecycle state:
+     *  - `failed_registration`: the instance's registration to Resource Controller has
+     *    failed. Delete the instance and provision it again. If the problem persists,
+     *    contact IBM Support.
      *  - `internal_error`: internal error (contact IBM support)
+     *  - `pending_registration`: the instance's registration to Resource Controller is
+     *    being processed.
      *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
      *    support)
      *
@@ -35531,9 +36025,11 @@ namespace VpcV1 {
   }
   export namespace InstanceLifecycleReason {
     export namespace Constants {
-      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** A reason code for this lifecycle state: - `failed_registration`: the instance's registration to Resource Controller has failed. Delete the instance and provision it again. If the problem persists, contact IBM Support. - `internal_error`: internal error (contact IBM support) - `pending_registration`: the instance's registration to Resource Controller is being processed. - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
+        FAILED_REGISTRATION = 'failed_registration',
         INTERNAL_ERROR = 'internal_error',
+        PENDING_REGISTRATION = 'pending_registration',
         RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
       }
     }
@@ -35746,6 +36242,7 @@ namespace VpcV1 {
   /** InstanceProfile. */
   export interface InstanceProfile {
     bandwidth: InstanceProfileBandwidth;
+    confidential_compute_modes: InstanceProfileSupportedConfidentialComputeModes;
     /** Collection of the instance profile's disks. */
     disks: InstanceProfileDisk[];
     /** The product family this virtual server instance profile belongs to. */
@@ -35767,6 +36264,7 @@ namespace VpcV1 {
     reservation_terms: InstanceProfileReservationTerms;
     /** The resource type. */
     resource_type: InstanceProfile.Constants.ResourceType | string;
+    secure_boot_modes: InstanceProfileSupportedSecureBootModes;
     /** The status of the instance profile:
      *  - `previous`:  This instance profile is an older revision, but remains provisionable and
      *    usable.
@@ -35977,6 +36475,52 @@ namespace VpcV1 {
     }
   }
 
+  /** InstanceProfileSupportedConfidentialComputeModes. */
+  export interface InstanceProfileSupportedConfidentialComputeModes {
+    /** The default confidential compute mode for this profile. */
+    default: InstanceProfileSupportedConfidentialComputeModes.Constants.Default | string;
+    /** The type for this profile field. */
+    type: InstanceProfileSupportedConfidentialComputeModes.Constants.Type | string;
+    /** The supported confidential compute modes. */
+    values: InstanceProfileSupportedConfidentialComputeModes.Constants.Values[] | string[];
+  }
+  export namespace InstanceProfileSupportedConfidentialComputeModes {
+    export namespace Constants {
+      /** The default confidential compute mode for this profile. */
+      export enum Default {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The supported confidential compute modes. */
+      export enum Values {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
+
+  /** InstanceProfileSupportedSecureBootModes. */
+  export interface InstanceProfileSupportedSecureBootModes {
+    /** The default secure boot mode for this profile. */
+    default: boolean;
+    /** The type for this profile field. */
+    type: InstanceProfileSupportedSecureBootModes.Constants.Type | string;
+    /** The supported `enable_secure_boot` values for an instance using this profile. */
+    values: boolean[];
+  }
+  export namespace InstanceProfileSupportedSecureBootModes {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
+  }
+
   /** InstanceProfileVCPU. */
   export interface InstanceProfileVCPU {
   }
@@ -36025,6 +36569,11 @@ namespace VpcV1 {
   export interface InstancePrototype {
     /** The availability policy to use for this virtual server instance. */
     availability_policy?: InstanceAvailabilityPolicyPrototype;
+    /** The confidential compute mode to use for this virtual server instance.
+     *
+     *  If unspecified, the default confidential compute mode from the profile will be used.
+     */
+    confidential_compute_mode?: InstancePrototype.Constants.ConfidentialComputeMode | string;
     /** The default trusted profile configuration to use for this virtual server instance
      *
      *  This property's value is used when provisioning the virtual server instance, but not
@@ -36033,6 +36582,11 @@ namespace VpcV1 {
      *  property.
      */
     default_trusted_profile?: InstanceDefaultTrustedProfilePrototype;
+    /** Indicates whether secure boot is enabled for this virtual server instance.
+     *
+     *  If unspecified, the default secure boot mode from the profile will be used.
+     */
+    enable_secure_boot?: boolean;
     /** The public SSH keys for the administrative user of the virtual server instance. Keys will be made available
      *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
      *  added as SSH authorized keys for the administrative user.
@@ -36090,6 +36644,15 @@ namespace VpcV1 {
      */
     vpc?: VPCIdentity;
   }
+  export namespace InstancePrototype {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstanceReference. */
   export interface InstanceReference {
@@ -36139,23 +36702,24 @@ namespace VpcV1 {
   export interface InstanceReservationAffinityPatch {
     /** The reservation affinity policy to use for this virtual server instance:
      *  - `disabled`: Reservations will not be used
-     *  - `manual`: Reservations in `pool` are available for use.
+     *  - `manual`: Reservations in `pool` will be available for use
+     *
+     *  The policy must be `disabled` if `placement_target` is set.
      */
     policy?: InstanceReservationAffinityPatch.Constants.Policy | string;
     /** The pool of reservations available for use by this virtual server instance, replacing the existing pool of
      *  reservations.
      *
-     *  Specified reservations must have a `status` of `active`, and have the same `profile` and
-     *  `zone` as this virtual server instance.
+     *  Specified reservations must have a `status` of `active`, and have the same
+     *  `profile` and `zone` as this virtual server instance.
      *
-     *  If `policy` is `manual`, a pool must be specified with at least one reservation. If
-     *  `policy` is `disabled` and a pool is specified, it must be empty.
+     *  If `policy` is `manual`, `pool` must have one reservation. If `policy` is `disabled`, `pool` must be empty.
      */
     pool?: ReservationIdentity[];
   }
   export namespace InstanceReservationAffinityPatch {
     export namespace Constants {
-      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` are available for use. */
+      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` will be available for use The policy must be `disabled` if `placement_target` is set. */
       export enum Policy {
         DISABLED = 'disabled',
         MANUAL = 'manual',
@@ -36174,8 +36738,8 @@ namespace VpcV1 {
     policy?: InstanceReservationAffinityPrototype.Constants.Policy | string;
     /** The pool of reservations available for use by this virtual server instance.
      *
-     *  Specified reservations must have a `status` of `active`, and have the same `profile` and
-     *  `zone` as this virtual server instance.
+     *  Specified reservations must have a `status` of `active`, and have the same
+     *  `profile` and `zone` as this virtual server instance.
      *
      *  If `policy` is `manual`, a pool must be specified with at least one reservation. If
      *  `policy` is `disabled` and a pool is specified, it must be empty.
@@ -36229,6 +36793,11 @@ namespace VpcV1 {
   export interface InstanceTemplate {
     /** The availability policy to use for this virtual server instance. */
     availability_policy?: InstanceAvailabilityPolicyPrototype;
+    /** The confidential compute mode to use for this virtual server instance.
+     *
+     *  If unspecified, the default confidential compute mode from the profile will be used.
+     */
+    confidential_compute_mode?: InstanceTemplate.Constants.ConfidentialComputeMode | string;
     /** The date and time that the instance template was created. */
     created_at: string;
     /** The CRN for this instance template. */
@@ -36241,6 +36810,11 @@ namespace VpcV1 {
      *  property.
      */
     default_trusted_profile?: InstanceDefaultTrustedProfilePrototype;
+    /** Indicates whether secure boot is enabled for this virtual server instance.
+     *
+     *  If unspecified, the default secure boot mode from the profile will be used.
+     */
+    enable_secure_boot?: boolean;
     /** The URL for this instance template. */
     href: string;
     /** The unique identifier for this instance template. */
@@ -36296,6 +36870,15 @@ namespace VpcV1 {
      */
     vpc?: VPCIdentity;
   }
+  export namespace InstanceTemplate {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstanceTemplateCollection. */
   export interface InstanceTemplateCollection {
@@ -36331,6 +36914,11 @@ namespace VpcV1 {
   export interface InstanceTemplatePrototype {
     /** The availability policy to use for this virtual server instance. */
     availability_policy?: InstanceAvailabilityPolicyPrototype;
+    /** The confidential compute mode to use for this virtual server instance.
+     *
+     *  If unspecified, the default confidential compute mode from the profile will be used.
+     */
+    confidential_compute_mode?: InstanceTemplatePrototype.Constants.ConfidentialComputeMode | string;
     /** The default trusted profile configuration to use for this virtual server instance
      *
      *  This property's value is used when provisioning the virtual server instance, but not
@@ -36339,6 +36927,11 @@ namespace VpcV1 {
      *  property.
      */
     default_trusted_profile?: InstanceDefaultTrustedProfilePrototype;
+    /** Indicates whether secure boot is enabled for this virtual server instance.
+     *
+     *  If unspecified, the default secure boot mode from the profile will be used.
+     */
+    enable_secure_boot?: boolean;
     /** The public SSH keys for the administrative user of the virtual server instance. Keys will be made available
      *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
      *  added as SSH authorized keys for the administrative user.
@@ -36393,6 +36986,15 @@ namespace VpcV1 {
      *  attachments or instance network interfaces.
      */
     vpc?: VPCIdentity;
+  }
+  export namespace InstanceTemplatePrototype {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstanceTemplateReference. */
@@ -36668,7 +37270,7 @@ namespace VpcV1 {
   /** The DNS configuration for this load balancer. If absent, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone `lb.appdomain.cloud`. */
   export interface LoadBalancerDNS {
     /** The DNS instance associated with this load balancer. */
-    instance: DNSInstanceReference;
+    instance: DNSInstanceReferenceLoadBalancerDNSContext;
     /** The DNS zone associated with this load balancer. */
     zone: DNSZoneReference;
   }
@@ -37293,7 +37895,11 @@ namespace VpcV1 {
      *  Supported by load balancers in the `application` family (otherwise always `disabled`).
      */
     proxy_protocol: LoadBalancerPool.Constants.ProxyProtocol | string;
-    /** The session persistence of this pool. */
+    /** The session persistence of this pool.
+     *
+     *  If absent, session persistence will be disabled, and traffic will be distributed
+     *  across backend server members of the pool.
+     */
     session_persistence?: LoadBalancerPoolSessionPersistence;
   }
   export namespace LoadBalancerPool {
@@ -38459,6 +39065,8 @@ namespace VpcV1 {
 
   /** OperatingSystem. */
   export interface OperatingSystem {
+    /** Users may create new images with this operating system. */
+    allow_user_image_creation: boolean;
     /** The operating system architecture. */
     architecture: string;
     /** Images with this operating system can only be used on dedicated hosts or dedicated host groups. */
@@ -38471,10 +39079,27 @@ namespace VpcV1 {
     href: string;
     /** The globally unique name for this operating system. */
     name: string;
+    /** The user data format for this operating system:
+     *  - `cloud_init`: `user_data` will be interpreted according to the cloud-init standard
+     *  - `esxi_kickstart`: `user_data` will be interpreted as a VMware ESXi installation script
+     *  - `ipxe`: `user_data` will be interpreted as a single URL to an iPXE script or as the
+     *    text of an iPXE script.
+     */
+    user_data_format: OperatingSystem.Constants.UserDataFormat | string;
     /** The vendor of the operating system. */
     vendor: string;
     /** The major release version of this operating system. */
     version: string;
+  }
+  export namespace OperatingSystem {
+    export namespace Constants {
+      /** The user data format for this operating system: - `cloud_init`: `user_data` will be interpreted according to the cloud-init standard - `esxi_kickstart`: `user_data` will be interpreted as a VMware ESXi installation script - `ipxe`: `user_data` will be interpreted as a single URL to an iPXE script or as the text of an iPXE script. */
+      export enum UserDataFormat {
+        CLOUD_INIT = 'cloud_init',
+        ESXI_KICKSTART = 'esxi_kickstart',
+        IPXE = 'ipxe',
+      }
+    }
   }
 
   /** OperatingSystemCollection. */
@@ -40086,6 +40711,20 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     access_control_mode: Share.Constants.AccessControlMode | string;
+    /** The accessor binding role of this file share:
+     *  - `none`: This file share is not participating in access with another file share
+     *  - `origin`: This file share is the origin for one or more file shares
+     *    (which may be in other accounts)
+     *  - `accessor`: This file share is providing access to another file share
+     *    (which may be in another account).
+     */
+    accessor_binding_role: Share.Constants.AccessorBindingRole | string;
+    /** The accessor bindings for this file share. Each accessor binding identifies a resource (possibly in another
+     *  account) with access to this file share's data.
+     */
+    accessor_bindings: ShareAccessorBindingReference[];
+    /** The transit encryption modes allowed for this share. */
+    allowed_transit_encryption_modes: Share.Constants.AllowedTransitEncryptionModes[] | string[];
     /** The date and time that the file share is created. */
     created_at: string;
     /** The CRN for this file share. */
@@ -40118,12 +40757,19 @@ namespace VpcV1 {
      *  one replication sync has been completed.
      */
     latest_sync?: ShareLatestSync;
+    /** The reasons for the current `lifecycle_state` (if any). */
+    lifecycle_reasons: ShareLifecycleReason[];
     /** The lifecycle state of the file share. */
     lifecycle_state: Share.Constants.LifecycleState | string;
     /** The mount targets for the file share. */
     mount_targets: ShareMountTargetReference[];
     /** The name for this share. The name is unique across all shares in the region. */
     name: string;
+    /** The origin share this accessor share is referring to.
+     *
+     *  This property will be present when the `accessor_binding_role` is `accessor`.
+     */
+    origin_share?: ShareReference;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) for this file share. */
     profile: ShareProfileReference;
     /** The replica file share for this source file share.
@@ -40187,6 +40833,17 @@ namespace VpcV1 {
         SECURITY_GROUP = 'security_group',
         VPC = 'vpc',
       }
+      /** The accessor binding role of this file share: - `none`: This file share is not participating in access with another file share - `origin`: This file share is the origin for one or more file shares (which may be in other accounts) - `accessor`: This file share is providing access to another file share (which may be in another account). */
+      export enum AccessorBindingRole {
+        ACCESSOR = 'accessor',
+        NONE = 'none',
+        ORIGIN = 'origin',
+      }
+      /** The transit encryption modes allowed for this share. */
+      export enum AllowedTransitEncryptionModes {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
       /** The type of encryption used for this file share. */
       export enum Encryption {
         PROVIDER_MANAGED = 'provider_managed',
@@ -40220,6 +40877,92 @@ namespace VpcV1 {
       /** The resource type. */
       export enum ResourceType {
         SHARE = 'share',
+      }
+    }
+  }
+
+  /** ShareAccessorBinding. */
+  export interface ShareAccessorBinding {
+    /** The accessor for this share accessor binding.
+     *
+     *  The resources supported by this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    accessor: ShareAccessorBindingAccessor;
+    /** The date and time that the share accessor binding was created. */
+    created_at: string;
+    /** The URL for this share accessor binding. */
+    href: string;
+    /** The unique identifier for this share accessor binding. */
+    id: string;
+    /** The lifecycle state of the file share accessor binding. */
+    lifecycle_state: ShareAccessorBinding.Constants.LifecycleState | string;
+    /** The resource type. */
+    resource_type: ShareAccessorBinding.Constants.ResourceType | string;
+  }
+  export namespace ShareAccessorBinding {
+    export namespace Constants {
+      /** The lifecycle state of the file share accessor binding. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE_ACCESSOR_BINDING = 'share_accessor_binding',
+      }
+    }
+  }
+
+  /** The accessor for this share accessor binding. The resources supported by this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+  export interface ShareAccessorBindingAccessor {
+  }
+
+  /** ShareAccessorBindingCollection. */
+  export interface ShareAccessorBindingCollection {
+    /** Collection of share accessor bindings. */
+    accessor_bindings: ShareAccessorBinding[];
+    /** A link to the first page of resources. */
+    first: ShareAccessorBindingCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: ShareAccessorBindingCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface ShareAccessorBindingCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface ShareAccessorBindingCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** ShareAccessorBindingReference. */
+  export interface ShareAccessorBindingReference {
+    /** The URL for this share accessor binding. */
+    href: string;
+    /** The unique identifier for this share accessor binding. */
+    id: string;
+    /** The resource type. */
+    resource_type: ShareAccessorBindingReference.Constants.ResourceType | string;
+  }
+  export namespace ShareAccessorBindingReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE_ACCESSOR_BINDING = 'share_accessor_binding',
       }
     }
   }
@@ -40338,6 +41081,34 @@ namespace VpcV1 {
     data_transferred: number;
     /** The start date and time of last synchronization between the replica share and its source. */
     started_at: string;
+  }
+
+  /** ShareLifecycleReason. */
+  export interface ShareLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `origin_share_access_revoked`: The resource has been revoked by the share owner
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: ShareLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace ShareLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `origin_share_access_revoked`: The resource has been revoked by the share owner - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        ORIGIN_SHARE_ACCESS_REVOKED = 'origin_share_access_revoked',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
   }
 
   /** ShareMountTarget. */
@@ -40473,12 +41244,15 @@ namespace VpcV1 {
      *  - `none`: Not encrypted in transit.
      *  - `user_managed`: Encrypted in transit using an instance identity certificate.  The
      *                    `access_control_mode` for the share must be `security_group`.
+     *
+     *  The specified value must be listed in the share's
+     *  `allowed_transit_encryption_modes`.
      */
     transit_encryption?: ShareMountTargetPrototype.Constants.TransitEncryption | string;
   }
   export namespace ShareMountTargetPrototype {
     export namespace Constants {
-      /** The transit encryption mode to use for this share mount target: - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate.  The `access_control_mode` for the share must be `security_group`. */
+      /** The transit encryption mode to use for this share mount target: - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate.  The `access_control_mode` for the share must be `security_group`. The specified value must be listed in the share's `allowed_transit_encryption_modes`. */
       export enum TransitEncryption {
         NONE = 'none',
         USER_MANAGED = 'user_managed',
@@ -40606,23 +41380,18 @@ namespace VpcV1 {
 
   /** SharePrototype. */
   export interface SharePrototype {
-    /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
-     *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
-     *  size.
-     *
-     *  In addition, each client accessing the share will be restricted to 48,000 IOPS.
+    /** The transit encryption modes to allow for this share. If unspecified:
+     *  - If share mount targets are specified, and those share mount targets all specify a
+     *    `transit_encryption` of `user_managed`, then only `user_managed` will be allowed.
+     *  - Otherwise, all `transit_encryption` modes will be allowed.
      */
-    iops?: number;
+    allowed_transit_encryption_modes?: SharePrototype.Constants.AllowedTransitEncryptionModes[] | string[];
     /** The mount targets for the file share. Each mount target must be in a unique VPC. */
     mount_targets?: ShareMountTargetPrototype[];
     /** The name for this share. The name must not be used by another share in the region. If unspecified, the name
      *  will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) to use
-     *  for this file share. The profile must support the share's specified IOPS and size.
-     */
-    profile: ShareProfileIdentity;
     /** Configuration for a replica file share to create and associate with this file share. If
      *  unspecified, a replica may be subsequently added by creating a new file share with a
      *  `source_share` referencing this file share.
@@ -40630,14 +41399,25 @@ namespace VpcV1 {
     replica_share?: SharePrototypeShareContext;
     /** Tags for this resource. */
     user_tags?: string[];
-    /** The zone this file share will reside in. For a replica share, this must be a different
-     *  zone in the same region as the source share.
-     */
-    zone: ZoneIdentity;
+  }
+  export namespace SharePrototype {
+    export namespace Constants {
+      /** The transit encryption modes to allow for this share. If unspecified: - If share mount targets are specified, and those share mount targets all specify a `transit_encryption` of `user_managed`, then only `user_managed` will be allowed. - Otherwise, all `transit_encryption` modes will be allowed. */
+      export enum AllowedTransitEncryptionModes {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
+    }
   }
 
   /** Configuration for a replica file share to create and associate with this file share. If unspecified, a replica may be subsequently added by creating a new file share with a `source_share` referencing this file share. */
   export interface SharePrototypeShareContext {
+    /** The transit encryption modes to allow for this share. If unspecified:
+     *  - If share mount targets are specified, and those share mount targets all specify a
+     *    `transit_encryption` of `user_managed`, then only `user_managed` will be allowed.
+     *  - Otherwise, all `transit_encryption` modes will be allowed.
+     */
+    allowed_transit_encryption_modes?: SharePrototypeShareContext.Constants.AllowedTransitEncryptionModes[] | string[];
     /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
      *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
      *  size.
@@ -40672,6 +41452,15 @@ namespace VpcV1 {
      *  Must be a different zone in the same region as the source share.
      */
     zone: ZoneIdentity;
+  }
+  export namespace SharePrototypeShareContext {
+    export namespace Constants {
+      /** The transit encryption modes to allow for this share. If unspecified: - If share mount targets are specified, and those share mount targets all specify a `transit_encryption` of `user_managed`, then only `user_managed` will be allowed. - Otherwise, all `transit_encryption` modes will be allowed. */
+      export enum AllowedTransitEncryptionModes {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
+    }
   }
 
   /** ShareReference. */
@@ -40712,6 +41501,10 @@ namespace VpcV1 {
 
   /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
   export interface ShareRemote {
+    /** If present, this property indicates that the referenced resource is remote to this
+     *  account, and identifies the owning account.
+     */
+    account?: AccountReference;
     /** If present, this property indicates that the referenced resource is remote to this
      *  region, and identifies the native region.
      */
@@ -40754,6 +41547,14 @@ namespace VpcV1 {
      *  snapshots created before 1 January 2022.
      */
     captured_at?: string;
+    /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
+     *  offering inherited from the snapshot's source. If a virtual server instance is
+     *  provisioned with a `source_snapshot` specifying this snapshot, the virtual server
+     *  instance will use this snapshot's catalog offering, including its pricing plan.
+     *
+     *  If absent, this snapshot is not associated with a catalog offering.
+     */
+    catalog_offering?: SnapshotCatalogOffering;
     /** Clones for this snapshot. */
     clones: SnapshotClone[];
     /** The copies of this snapshot. */
@@ -40831,6 +41632,20 @@ namespace VpcV1 {
         SNAPSHOT = 'snapshot',
       }
     }
+  }
+
+  /** SnapshotCatalogOffering. */
+  export interface SnapshotCatalogOffering {
+    /** The billing plan associated with the catalog offering version.
+     *
+     *  If absent, no billing plan is associated with the catalog offering version
+     *  (free).
+     */
+    plan?: CatalogOfferingVersionPlanReference;
+    /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
+     *  offering version contained in this snapshot.
+     */
+    version: CatalogOfferingVersionReference;
   }
 
   /** SnapshotClone. */
@@ -41596,7 +42411,10 @@ namespace VpcV1 {
      *
      *  - by the system when `dns.resolver.type` is `system`
      *  - using the DNS servers in `dns.resolver.vpc` when `dns.resolver.type` is `delegated`
-     *  - using `dns.resolver.manual_servers` when the `dns.resolver.type` is `manual`.
+     *  - using `dns.resolver.manual_servers` when the `dns.resolver.type` is `manual`
+     *
+     *  The maximum number of DNS servers is expected to
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     servers: DNSServer[];
     /** The type of the DNS resolver used for the VPC.
@@ -41605,12 +42423,15 @@ namespace VpcV1 {
      *                 specified in `dns.resolver.vpc`.
      *  - `manual`: DNS server addresses are specified in `dns.resolver.manual_servers`.
      *  - `system`: DNS server addresses are provided by the system.
+     *
+     *  The maximum number of DNS servers is expected to
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     type: VPCDNSResolver.Constants.Type | string;
   }
   export namespace VPCDNSResolver {
     export namespace Constants {
-      /** The type of the DNS resolver used for the VPC. - `delegated`: DNS server addresses are provided by the DNS resolver of the VPC specified in `dns.resolver.vpc`. - `manual`: DNS server addresses are specified in `dns.resolver.manual_servers`. - `system`: DNS server addresses are provided by the system. */
+      /** The type of the DNS resolver used for the VPC. - `delegated`: DNS server addresses are provided by the DNS resolver of the VPC specified in `dns.resolver.vpc`. - `manual`: DNS server addresses are specified in `dns.resolver.manual_servers`. - `system`: DNS server addresses are provided by the system. The maximum number of DNS servers is expected to [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         DELEGATED = 'delegated',
         MANUAL = 'manual',
@@ -41997,10 +42818,30 @@ namespace VpcV1 {
     cidrs: string[];
   }
 
-  /** Collection of VPN gateway connections in a VPN gateway. */
+  /** VPNGatewayConnectionCollection. */
   export interface VPNGatewayConnectionCollection {
-    /** Array of VPN gateway connections. */
+    /** Collection of VPN gateway connections in a VPN gateway. */
     connections: VPNGatewayConnection[];
+    /** A link to the first page of resources. */
+    first: VPNGatewayConnectionCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: VPNGatewayConnectionCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface VPNGatewayConnectionCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface VPNGatewayConnectionCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
   }
 
   /** The Dead Peer Detection settings. */
@@ -43081,6 +43922,18 @@ namespace VpcV1 {
     name: string;
     /** The reserved IP for this virtual network interface. */
     primary_ip: ReservedIPReference;
+    /** The protocol state filtering mode used for this virtual network interface. If `auto`, protocol state packet
+     *  filtering is enabled or disabled based on the virtual network interface's `target` resource type:
+     *
+     *  - `bare_metal_server_network_attachment`: disabled
+     *  - `instance_network_attachment`: enabled
+     *  - `share_mount_target`: enabled
+     *
+     *  Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
+     *  any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
+     *  mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering)) for more information.
+     */
+    protocol_state_filtering_mode: VirtualNetworkInterface.Constants.ProtocolStateFilteringMode | string;
     /** The resource group for this virtual network interface. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
@@ -43110,6 +43963,12 @@ namespace VpcV1 {
         SUSPENDED = 'suspended',
         UPDATING = 'updating',
         WAITING = 'waiting',
+      }
+      /** The protocol state filtering mode used for this virtual network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target` resource type: - `bare_metal_server_network_attachment`: disabled - `instance_network_attachment`: enabled - `share_mount_target`: enabled Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering)) for more information. */
+      export enum ProtocolStateFilteringMode {
+        AUTO = 'auto',
+        DISABLED = 'disabled',
+        ENABLED = 'enabled',
       }
       /** The resource type. */
       export enum ResourceType {
@@ -43208,6 +44067,14 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     capacity: number;
+    /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
+     *  offering this volume was created from. If a virtual server instance is provisioned
+     *  with a `boot_volume_attachment` specifying this volume, the virtual server instance
+     *  will use this volume's catalog offering, including its pricing plan.
+     *
+     *  If absent, this volume was not created from a catalog offering.
+     */
+    catalog_offering?: VolumeCatalogOffering;
     /** The date and time that the volume was created. */
     created_at: string;
     /** The CRN for this volume. */
@@ -43487,6 +44354,20 @@ namespace VpcV1 {
   export interface VolumeAttachmentReferenceVolumeContextDeleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
+  }
+
+  /** VolumeCatalogOffering. */
+  export interface VolumeCatalogOffering {
+    /** The billing plan associated with the catalog offering version.
+     *
+     *  If absent, no billing plan is associated with the catalog offering version
+     *  (free).
+     */
+    plan?: CatalogOfferingVersionPlanReference;
+    /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
+     *  offering version this volume was created from.
+     */
+    version: CatalogOfferingVersionReference;
   }
 
   /** VolumeCollection. */
@@ -44225,6 +45106,19 @@ namespace VpcV1 {
      *  an available address on the subnet will be automatically selected and reserved.
      */
     primary_ip?: VirtualNetworkInterfacePrimaryIPPrototype;
+    /** The protocol state filtering mode to use for this virtual network interface. If
+     *  `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target`
+     *  resource type:
+     *
+     *  - `bare_metal_server_network_attachment`: disabled
+     *  - `instance_network_attachment`: enabled
+     *  - `share_mount_target`: enabled
+     *
+     *  Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
+     *  any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
+     *  mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information.
+     */
+    protocol_state_filtering_mode?: BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeBareMetalServerNetworkAttachmentContext.Constants.ProtocolStateFilteringMode | string;
     /** The resource group to use for this virtual network interface. If unspecified, the
      *  bare metal server's resource group will be used.
      */
@@ -44235,6 +45129,16 @@ namespace VpcV1 {
     security_groups?: SecurityGroupIdentity[];
     /** The associated subnet. Required if `primary_ip` does not specify a reserved IP identity. */
     subnet?: SubnetIdentity;
+  }
+  export namespace BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeBareMetalServerNetworkAttachmentContext {
+    export namespace Constants {
+      /** The protocol state filtering mode to use for this virtual network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target` resource type: - `bare_metal_server_network_attachment`: disabled - `instance_network_attachment`: enabled - `share_mount_target`: enabled Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information. */
+      export enum ProtocolStateFilteringMode {
+        AUTO = 'auto',
+        DISABLED = 'disabled',
+        ENABLED = 'enabled',
+      }
+    }
   }
 
   /** BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByPCIPrototype. */
@@ -45054,6 +45958,14 @@ namespace VpcV1 {
   export interface CatalogOfferingVersionIdentityCatalogOfferingVersionByCRN extends CatalogOfferingVersionIdentity {
     /** The CRN for this version of a
      *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering.
+     */
+    crn: string;
+  }
+
+  /** CatalogOfferingVersionPlanIdentityCatalogOfferingVersionPlanByCRN. */
+  export interface CatalogOfferingVersionPlanIdentityCatalogOfferingVersionPlanByCRN extends CatalogOfferingVersionPlanIdentity {
+    /** The CRN for this
+     *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering version's billing plan.
      */
     crn: string;
   }
@@ -46114,6 +47026,19 @@ namespace VpcV1 {
      *  an available address on the subnet will be automatically selected and reserved.
      */
     primary_ip?: VirtualNetworkInterfacePrimaryIPPrototype;
+    /** The protocol state filtering mode to use for this virtual network interface. If
+     *  `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target`
+     *  resource type:
+     *
+     *  - `bare_metal_server_network_attachment`: disabled
+     *  - `instance_network_attachment`: enabled
+     *  - `share_mount_target`: enabled
+     *
+     *  Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
+     *  any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
+     *  mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information.
+     */
+    protocol_state_filtering_mode?: InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeInstanceNetworkAttachmentContext.Constants.ProtocolStateFilteringMode | string;
     /** The resource group to use for this virtual network interface. If unspecified, the
      *  virtual server instance's resource group will be used.
      */
@@ -46124,6 +47049,16 @@ namespace VpcV1 {
     security_groups?: SecurityGroupIdentity[];
     /** The associated subnet. Required if `primary_ip` does not specify a reserved IP identity. */
     subnet?: SubnetIdentity;
+  }
+  export namespace InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeInstanceNetworkAttachmentContext {
+    export namespace Constants {
+      /** The protocol state filtering mode to use for this virtual network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target` resource type: - `bare_metal_server_network_attachment`: disabled - `instance_network_attachment`: enabled - `share_mount_target`: enabled Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information. */
+      export enum ProtocolStateFilteringMode {
+        AUTO = 'auto',
+        DISABLED = 'disabled',
+        ENABLED = 'enabled',
+      }
+    }
   }
 
   /** InstancePatchProfileInstanceProfileIdentityByHref. */
@@ -46948,8 +47883,17 @@ namespace VpcV1 {
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
+  export namespace InstancePrototypeInstanceByCatalogOffering {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
-  /** Create an instance by using an image. */
+  /** Create an instance by using an image. The image's `user_data_format` must be `cloud_init`. */
   export interface InstancePrototypeInstanceByImage extends InstancePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -46958,6 +47902,15 @@ namespace VpcV1 {
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
+  export namespace InstancePrototypeInstanceByImage {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** Create an instance by using a snapshot. */
   export interface InstancePrototypeInstanceBySourceSnapshot extends InstancePrototype {
@@ -46965,6 +47918,15 @@ namespace VpcV1 {
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
+  }
+  export namespace InstancePrototypeInstanceBySourceSnapshot {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** Create an instance by using an instance template. The `primary_network_attachment` and `network_attachments` properties may only be specified if `primary_network_attachment` is specified in the source template. The `primary_network_interface` and `network_interfaces` properties may only be specified if `primary_network_interface` is specified in the source template. */
@@ -46997,6 +47959,15 @@ namespace VpcV1 {
     /** The zone this virtual server instance will reside in. */
     zone?: ZoneIdentity;
   }
+  export namespace InstancePrototypeInstanceBySourceTemplate {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** Create an instance by using a boot volume. */
   export interface InstancePrototypeInstanceByVolume extends InstancePrototype {
@@ -47004,6 +47975,15 @@ namespace VpcV1 {
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
+  }
+  export namespace InstancePrototypeInstanceByVolume {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstanceTemplateIdentityByCRN. */
@@ -47040,8 +48020,17 @@ namespace VpcV1 {
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
+  export namespace InstanceTemplatePrototypeInstanceTemplateByCatalogOffering {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
-  /** Create an instance template that creates instances by using an image. */
+  /** Create an instance template that creates instances by using an image. The image's `user_data_format` must be `cloud_init`. */
   export interface InstanceTemplatePrototypeInstanceTemplateByImage extends InstanceTemplatePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -47050,6 +48039,15 @@ namespace VpcV1 {
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
+  export namespace InstanceTemplatePrototypeInstanceTemplateByImage {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** Create an instance template that creates instances by using a snapshot. */
   export interface InstanceTemplatePrototypeInstanceTemplateBySourceSnapshot extends InstanceTemplatePrototype {
@@ -47057,6 +48055,15 @@ namespace VpcV1 {
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
+  }
+  export namespace InstanceTemplatePrototypeInstanceTemplateBySourceSnapshot {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** Create an instance template from an existing source instance template. The `primary_network_attachment` and `network_attachments` properties may only be specified if `primary_network_attachment` is specified in the source template. The `primary_network_interface` and `network_interfaces` properties may only be specified if `primary_network_interface` is specified in the source template. */
@@ -47089,6 +48096,15 @@ namespace VpcV1 {
     /** The zone this virtual server instance will reside in. */
     zone?: ZoneIdentity;
   }
+  export namespace InstanceTemplatePrototypeInstanceTemplateBySourceTemplate {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** Create an instance by using a catalog offering. */
   export interface InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext extends InstanceTemplate {
@@ -47106,6 +48122,15 @@ namespace VpcV1 {
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
   }
+  export namespace InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** Create an instance by using an image. */
   export interface InstanceTemplateInstanceByImageInstanceTemplateContext extends InstanceTemplate {
@@ -47115,6 +48140,15 @@ namespace VpcV1 {
     image: ImageIdentity;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
+  }
+  export namespace InstanceTemplateInstanceByImageInstanceTemplateContext {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** Create an instance by using a snapshot. */
@@ -47129,6 +48163,15 @@ namespace VpcV1 {
     primary_network_attachment?: InstanceNetworkAttachmentPrototype;
     /** The zone this virtual server instance will reside in. */
     zone: ZoneIdentity;
+  }
+  export namespace InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** KeyIdentityByCRN. */
@@ -48962,6 +50005,52 @@ namespace VpcV1 {
     }
   }
 
+  /** ShareAccessorBindingAccessorShareReference. */
+  export interface ShareAccessorBindingAccessorShareReference extends ShareAccessorBindingAccessor {
+    /** The CRN for this file share. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: ShareReferenceDeleted;
+    /** The URL for this file share. */
+    href: string;
+    /** The unique identifier for this file share. */
+    id: string;
+    /** The name for this share. The name is unique across all shares in the region. */
+    name: string;
+    /** If present, this property indicates that the resource associated with this reference
+     *  is remote and therefore may not be directly retrievable.
+     */
+    remote?: ShareRemote;
+    /** The resource type. */
+    resource_type: ShareAccessorBindingAccessorShareReference.Constants.ResourceType | string;
+  }
+  export namespace ShareAccessorBindingAccessorShareReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE = 'share',
+      }
+    }
+  }
+
+  /** ShareAccessorBindingAccessorWatsonxMachineLearningReference. */
+  export interface ShareAccessorBindingAccessorWatsonxMachineLearningReference extends ShareAccessorBindingAccessor {
+    /** The CRN for the watsonx machine learning resource. */
+    crn: string;
+    /** The resource type. */
+    resource_type: ShareAccessorBindingAccessorWatsonxMachineLearningReference.Constants.ResourceType | string;
+  }
+  export namespace ShareAccessorBindingAccessorWatsonxMachineLearningReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        WATSONX_MACHINE_LEARNING = 'watsonx_machine_learning',
+      }
+    }
+  }
+
   /** ShareIdentityByCRN. */
   export interface ShareIdentityByCRN extends ShareIdentity {
     /** The CRN for this file share. */
@@ -48980,13 +50069,13 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** The virtual network interface for this share mount target. The virtual network interface must: - be in the same `zone` as the share - have `allow_ip_spoofing` set to `false` - have `enable_infrastructure_nat` set to `true` - not be in the same VPC as an existing mount target for this share - not have `ips` other than the `primary_ip` address If an existing virtual network interface is specified, it must not have a floating IP bound to it, and it must not be the target of a flow log collector. Required if the share's `access_control_mode` is `security_group`. */
+  /** The virtual network interface for this share mount target. The virtual network interface must: - be in the same `zone` as the share - have `allow_ip_spoofing` set to `false` - have `enable_infrastructure_nat` set to `true` - have `protocol_state_filtering_mode` set to `auto` or `enabled` - not be in the same VPC as an existing mount target for this share - not have `ips` other than the `primary_ip` address If an existing virtual network interface is specified, it must not have a floating IP bound to it, and it must not be the target of a flow log collector. Required if the share's `access_control_mode` is `security_group`. */
   export interface ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup extends ShareMountTargetPrototype {
     virtual_network_interface: ShareMountTargetVirtualNetworkInterfacePrototype;
   }
   export namespace ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup {
     export namespace Constants {
-      /** The transit encryption mode to use for this share mount target: - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate.  The `access_control_mode` for the share must be `security_group`. */
+      /** The transit encryption mode to use for this share mount target: - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate.  The `access_control_mode` for the share must be `security_group`. The specified value must be listed in the share's `allowed_transit_encryption_modes`. */
       export enum TransitEncryption {
         NONE = 'none',
         USER_MANAGED = 'user_managed',
@@ -49001,7 +50090,7 @@ namespace VpcV1 {
   }
   export namespace ShareMountTargetPrototypeShareMountTargetByAccessControlModeVPC {
     export namespace Constants {
-      /** The transit encryption mode to use for this share mount target: - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate.  The `access_control_mode` for the share must be `security_group`. */
+      /** The transit encryption mode to use for this share mount target: - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate.  The `access_control_mode` for the share must be `security_group`. The specified value must be listed in the share's `allowed_transit_encryption_modes`. */
       export enum TransitEncryption {
         NONE = 'none',
         USER_MANAGED = 'user_managed',
@@ -49060,6 +50149,19 @@ namespace VpcV1 {
      *  an available address on the subnet will be automatically selected and reserved.
      */
     primary_ip?: VirtualNetworkInterfacePrimaryIPPrototype;
+    /** The protocol state filtering mode to use for this virtual network interface. If
+     *  `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target`
+     *  resource type:
+     *
+     *  - `bare_metal_server_network_attachment`: disabled
+     *  - `instance_network_attachment`: enabled
+     *  - `share_mount_target`: enabled
+     *
+     *  Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
+     *  any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
+     *  mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information.
+     */
+    protocol_state_filtering_mode?: ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfacePrototypeShareMountTargetContext.Constants.ProtocolStateFilteringMode | string;
     /** The resource group to use for this virtual network interface. If unspecified, the
      *  share's resource group will be used.
      */
@@ -49070,6 +50172,16 @@ namespace VpcV1 {
     security_groups?: SecurityGroupIdentity[];
     /** The associated subnet. Required if `primary_ip` does not specify a reserved IP identity. */
     subnet?: SubnetIdentity;
+  }
+  export namespace ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfacePrototypeShareMountTargetContext {
+    export namespace Constants {
+      /** The protocol state filtering mode to use for this virtual network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target` resource type: - `bare_metal_server_network_attachment`: disabled - `instance_network_attachment`: enabled - `share_mount_target`: enabled Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information. */
+      export enum ProtocolStateFilteringMode {
+        AUTO = 'auto',
+        DISABLED = 'disabled',
+        ENABLED = 'enabled',
+      }
+    }
   }
 
   /** The permitted total capacity (in gigabytes) of a share with this profile depends on its configuration. */
@@ -49238,6 +50350,26 @@ namespace VpcV1 {
     name: string;
   }
 
+  /** Create an accessor file share for an existing file share. The values for `initial_owner`, `access_control_mode`, `encryption_key`, `zone`, `profile`, `iops` and `size` will be inherited from `origin_share`. */
+  export interface SharePrototypeShareByOriginShare extends SharePrototype {
+    /** The origin share for the accessor share. The origin share must have an
+     *  `access_control_mode` of `security_group`, and must not have an
+     *  `accessor_binding_role` of `accessor`.
+     *
+     *  The specified share may be in a different account, subject to IAM policies.
+     */
+    origin_share: ShareIdentity;
+  }
+  export namespace SharePrototypeShareByOriginShare {
+    export namespace Constants {
+      /** The transit encryption modes to allow for this share. If unspecified: - If share mount targets are specified, and those share mount targets all specify a `transit_encryption` of `user_managed`, then only `user_managed` will be allowed. - Otherwise, all `transit_encryption` modes will be allowed. */
+      export enum AllowedTransitEncryptionModes {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
+    }
+  }
+
   /** Create a file share by size. */
   export interface SharePrototypeShareBySize extends SharePrototype {
     /** The access control mode for the share:
@@ -49260,6 +50392,17 @@ namespace VpcV1 {
      *  must be performed by a client that has mounted the file share.
      */
     initial_owner?: ShareInitialOwner;
+    /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
+     *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
+     *  size.
+     *
+     *  In addition, each client accessing the share will be restricted to 48,000 IOPS.
+     */
+    iops?: number;
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) to use
+     *  for this file share. The profile must support the share's specified IOPS and size.
+     */
+    profile: ShareProfileIdentity;
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
@@ -49269,9 +50412,18 @@ namespace VpcV1 {
      *  The maximum size for a share may increase in the future.
      */
     size: number;
+    /** The zone this file share will reside in. For a replica share, this must be a different
+     *  zone in the same region as the source share.
+     */
+    zone: ZoneIdentity;
   }
   export namespace SharePrototypeShareBySize {
     export namespace Constants {
+      /** The transit encryption modes to allow for this share. If unspecified: - If share mount targets are specified, and those share mount targets all specify a `transit_encryption` of `user_managed`, then only `user_managed` will be allowed. - Otherwise, all `transit_encryption` modes will be allowed. */
+      export enum AllowedTransitEncryptionModes {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
       /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. Mount targets for this share require a virtual network interface. - `vpc`: All clients in the VPC for a mount target have access to the mount target. Mount targets for this share require a VPC. */
       export enum AccessControlMode {
         SECURITY_GROUP = 'security_group',
@@ -49289,6 +50441,17 @@ namespace VpcV1 {
      *  will be inherited from `source_share`).
      */
     encryption_key?: EncryptionKeyIdentity;
+    /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
+     *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
+     *  size.
+     *
+     *  In addition, each client accessing the share will be restricted to 48,000 IOPS.
+     */
+    iops?: number;
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) to use
+     *  for this file share. The profile must support the share's specified IOPS and size.
+     */
+    profile: ShareProfileIdentity;
     /** The cron specification for the file share replication schedule.
      *
      *  Replication of a share can be scheduled to occur at most once per hour.
@@ -49302,6 +50465,19 @@ namespace VpcV1 {
      *  region](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-replication).
      */
     source_share: ShareIdentity;
+    /** The zone this file share will reside in. For a replica share, this must be a different
+     *  zone in the same region as the source share.
+     */
+    zone: ZoneIdentity;
+  }
+  export namespace SharePrototypeShareBySourceShare {
+    export namespace Constants {
+      /** The transit encryption modes to allow for this share. If unspecified: - If share mount targets are specified, and those share mount targets all specify a `transit_encryption` of `user_managed`, then only `user_managed` will be allowed. - Otherwise, all `transit_encryption` modes will be allowed. */
+      export enum AllowedTransitEncryptionModes {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
+    }
   }
 
   /** SnapshotConsistencyGroupPrototypeSnapshotConsistencyGroupBySnapshots. */
@@ -49515,6 +50691,9 @@ namespace VpcV1 {
      *  If the DNS servers do not have `zone_affinity`, the DHCP [Domain Name Server
      *  Option](https://datatracker.ietf.org/doc/html/rfc2132#section-3.8) for each zone will list all the manual DNS
      *  servers in the order specified.
+     *
+     *  The maximum number of manual DNS servers is expected to
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     manual_servers: DNSServer[];
     /** The type of the DNS resolver used for the VPC. */
@@ -50863,6 +52042,15 @@ namespace VpcV1 {
     /** The primary network attachment to create for the virtual server instance. */
     primary_network_attachment: InstanceNetworkAttachmentPrototype;
   }
+  export namespace InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkAttachment {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkInterface. */
   export interface InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkInterface extends InstancePrototypeInstanceByCatalogOffering {
@@ -50870,6 +52058,15 @@ namespace VpcV1 {
     network_interfaces?: NetworkInterfacePrototype[];
     /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
+  }
+  export namespace InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkInterface {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkAttachment. */
@@ -50879,6 +52076,15 @@ namespace VpcV1 {
     /** The primary network attachment to create for the virtual server instance. */
     primary_network_attachment: InstanceNetworkAttachmentPrototype;
   }
+  export namespace InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkAttachment {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkInterface. */
   export interface InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkInterface extends InstancePrototypeInstanceByImage {
@@ -50886,6 +52092,15 @@ namespace VpcV1 {
     network_interfaces?: NetworkInterfacePrototype[];
     /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
+  }
+  export namespace InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkInterface {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkAttachment. */
@@ -50895,6 +52110,15 @@ namespace VpcV1 {
     /** The primary network attachment to create for the virtual server instance. */
     primary_network_attachment: InstanceNetworkAttachmentPrototype;
   }
+  export namespace InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkAttachment {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkInterface. */
   export interface InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkInterface extends InstancePrototypeInstanceBySourceSnapshot {
@@ -50902,6 +52126,15 @@ namespace VpcV1 {
     network_interfaces?: NetworkInterfacePrototype[];
     /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
+  }
+  export namespace InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkInterface {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkAttachment. */
@@ -50911,6 +52144,15 @@ namespace VpcV1 {
     /** The primary network attachment to create for the virtual server instance. */
     primary_network_attachment: InstanceNetworkAttachmentPrototype;
   }
+  export namespace InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkAttachment {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkInterface. */
   export interface InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkInterface extends InstancePrototypeInstanceByVolume {
@@ -50918,6 +52160,15 @@ namespace VpcV1 {
     network_interfaces?: NetworkInterfacePrototype[];
     /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
+  }
+  export namespace InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkInterface {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkAttachment. */
@@ -50927,6 +52178,15 @@ namespace VpcV1 {
     /** The primary network attachment to create for the virtual server instance. */
     primary_network_attachment: InstanceNetworkAttachmentPrototype;
   }
+  export namespace InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkAttachment {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkInterface. */
   export interface InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkInterface extends InstanceTemplatePrototypeInstanceTemplateByCatalogOffering {
@@ -50934,6 +52194,15 @@ namespace VpcV1 {
     network_interfaces?: NetworkInterfacePrototype[];
     /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
+  }
+  export namespace InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkInterface {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkAttachment. */
@@ -50943,6 +52212,15 @@ namespace VpcV1 {
     /** The primary network attachment to create for the virtual server instance. */
     primary_network_attachment: InstanceNetworkAttachmentPrototype;
   }
+  export namespace InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkAttachment {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkInterface. */
   export interface InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkInterface extends InstanceTemplatePrototypeInstanceTemplateByImage {
@@ -50950,6 +52228,15 @@ namespace VpcV1 {
     network_interfaces?: NetworkInterfacePrototype[];
     /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
+  }
+  export namespace InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkInterface {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkAttachment. */
@@ -50959,6 +52246,15 @@ namespace VpcV1 {
     /** The primary network attachment to create for the virtual server instance. */
     primary_network_attachment: InstanceNetworkAttachmentPrototype;
   }
+  export namespace InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkAttachment {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkInterface. */
   export interface InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkInterface extends InstanceTemplatePrototypeInstanceTemplateBySourceSnapshot {
@@ -50966,6 +52262,15 @@ namespace VpcV1 {
     network_interfaces?: NetworkInterfacePrototype[];
     /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
+  }
+  export namespace InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkInterface {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkAttachment. */
@@ -50975,6 +52280,15 @@ namespace VpcV1 {
     /** The primary network attachment to create for the virtual server instance. */
     primary_network_attachment: InstanceNetworkAttachmentPrototype;
   }
+  export namespace InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkAttachment {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkInterface. */
   export interface InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkInterface extends InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext {
@@ -50982,6 +52296,15 @@ namespace VpcV1 {
     network_interfaces?: NetworkInterfacePrototype[];
     /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
+  }
+  export namespace InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkInterface {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkAttachment. */
@@ -50991,6 +52314,15 @@ namespace VpcV1 {
     /** The primary network attachment to create for the virtual server instance. */
     primary_network_attachment: InstanceNetworkAttachmentPrototype;
   }
+  export namespace InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkAttachment {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkInterface. */
   export interface InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkInterface extends InstanceTemplateInstanceByImageInstanceTemplateContext {
@@ -50998,6 +52330,15 @@ namespace VpcV1 {
     network_interfaces?: NetworkInterfacePrototype[];
     /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
+  }
+  export namespace InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkInterface {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkAttachment. */
@@ -51007,6 +52348,15 @@ namespace VpcV1 {
     /** The primary network attachment to create for the virtual server instance. */
     primary_network_attachment: InstanceNetworkAttachmentPrototype;
   }
+  export namespace InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkAttachment {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
+  }
 
   /** InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkInterface. */
   export interface InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkInterface extends InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext {
@@ -51014,6 +52364,15 @@ namespace VpcV1 {
     network_interfaces?: NetworkInterfacePrototype[];
     /** The primary instance network interface to create. */
     primary_network_interface: NetworkInterfacePrototype;
+  }
+  export namespace InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkInterface {
+    export namespace Constants {
+      /** The confidential compute mode to use for this virtual server instance. If unspecified, the default confidential compute mode from the profile will be used. */
+      export enum ConfidentialComputeMode {
+        DISABLED = 'disabled',
+        SGX = 'sgx',
+      }
+    }
   }
 
   /** LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
@@ -54093,6 +55452,87 @@ namespace VpcV1 {
   }
 
   /**
+   * ShareAccessorBindingsPager can be used to simplify the use of listShareAccessorBindings().
+   */
+  export class ShareAccessorBindingsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListShareAccessorBindingsParams;
+
+    /**
+     * Construct a ShareAccessorBindingsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listShareAccessorBindings()
+     * @param {Object} params - The parameters to be passed to listShareAccessorBindings()
+     * @constructor
+     * @returns {ShareAccessorBindingsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListShareAccessorBindingsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listShareAccessorBindings().
+     * @returns {Promise<VpcV1.ShareAccessorBinding[]>}
+     */
+    public async getNext(): Promise<VpcV1.ShareAccessorBinding[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listShareAccessorBindings(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.accessor_bindings;
+    }
+
+    /**
+     * Returns all results by invoking listShareAccessorBindings() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.ShareAccessorBinding[]>}
+     */
+    public async getAll(): Promise<VpcV1.ShareAccessorBinding[]> {
+      const results: ShareAccessorBinding[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
    * ShareMountTargetsPager can be used to simplify the use of listShareMountTargets().
    */
   export class ShareMountTargetsPager {
@@ -55146,6 +56586,87 @@ namespace VpcV1 {
   }
 
   /**
+   * IkePolicyConnectionsPager can be used to simplify the use of listIkePolicyConnections().
+   */
+  export class IkePolicyConnectionsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListIkePolicyConnectionsParams;
+
+    /**
+     * Construct a IkePolicyConnectionsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listIkePolicyConnections()
+     * @param {Object} params - The parameters to be passed to listIkePolicyConnections()
+     * @constructor
+     * @returns {IkePolicyConnectionsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListIkePolicyConnectionsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listIkePolicyConnections().
+     * @returns {Promise<VpcV1.VPNGatewayConnection[]>}
+     */
+    public async getNext(): Promise<VpcV1.VPNGatewayConnection[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listIkePolicyConnections(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.connections;
+    }
+
+    /**
+     * Returns all results by invoking listIkePolicyConnections() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.VPNGatewayConnection[]>}
+     */
+    public async getAll(): Promise<VpcV1.VPNGatewayConnection[]> {
+      const results: VPNGatewayConnection[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
    * IpsecPoliciesPager can be used to simplify the use of listIpsecPolicies().
    */
   export class IpsecPoliciesPager {
@@ -55227,6 +56748,87 @@ namespace VpcV1 {
   }
 
   /**
+   * IpsecPolicyConnectionsPager can be used to simplify the use of listIpsecPolicyConnections().
+   */
+  export class IpsecPolicyConnectionsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListIpsecPolicyConnectionsParams;
+
+    /**
+     * Construct a IpsecPolicyConnectionsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listIpsecPolicyConnections()
+     * @param {Object} params - The parameters to be passed to listIpsecPolicyConnections()
+     * @constructor
+     * @returns {IpsecPolicyConnectionsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListIpsecPolicyConnectionsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listIpsecPolicyConnections().
+     * @returns {Promise<VpcV1.VPNGatewayConnection[]>}
+     */
+    public async getNext(): Promise<VpcV1.VPNGatewayConnection[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listIpsecPolicyConnections(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.connections;
+    }
+
+    /**
+     * Returns all results by invoking listIpsecPolicyConnections() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.VPNGatewayConnection[]>}
+     */
+    public async getAll(): Promise<VpcV1.VPNGatewayConnection[]> {
+      const results: VPNGatewayConnection[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
    * VpnGatewaysPager can be used to simplify the use of listVpnGateways().
    */
   export class VpnGatewaysPager {
@@ -55299,6 +56901,87 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.VPNGateway[]> {
       const results: VPNGateway[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * VpnGatewayConnectionsPager can be used to simplify the use of listVpnGatewayConnections().
+   */
+  export class VpnGatewayConnectionsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListVpnGatewayConnectionsParams;
+
+    /**
+     * Construct a VpnGatewayConnectionsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listVpnGatewayConnections()
+     * @param {Object} params - The parameters to be passed to listVpnGatewayConnections()
+     * @constructor
+     * @returns {VpnGatewayConnectionsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListVpnGatewayConnectionsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listVpnGatewayConnections().
+     * @returns {Promise<VpcV1.VPNGatewayConnection[]>}
+     */
+    public async getNext(): Promise<VpcV1.VPNGatewayConnection[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listVpnGatewayConnections(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.connections;
+    }
+
+    /**
+     * Returns all results by invoking listVpnGatewayConnections() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.VPNGatewayConnection[]>}
+     */
+    public async getAll(): Promise<VpcV1.VPNGatewayConnection[]> {
+      const results: VPNGatewayConnection[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
