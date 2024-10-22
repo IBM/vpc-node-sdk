@@ -48,7 +48,7 @@ Service Name | Import Path
 
 ## Prerequisites
 * An [IBM Cloud][ibm-cloud-onboarding] account
-* Node.js version 14 or newer
+* Node.js version 18 or newer
 
 [ibm-cloud-onboarding]: http://cloud.ibm.com/registration
 
