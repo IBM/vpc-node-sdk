@@ -215,7 +215,7 @@ describe('VpcV1_integration', () => {
     };
 
     const floatingIpPrototypeModel = {
-      name: generateName('my-floating-ip'),
+      name: generateName('my-floating-ip1'),
       zone: zoneIdentityModel,
     };
 
