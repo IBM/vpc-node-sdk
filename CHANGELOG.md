@@ -1,3 +1,11 @@
+# [0.22.0](https://github.com/IBM/vpc-node-sdk/compare/v0.21.0...v0.22.0) (2024-10-22)
+
+
+### Features
+
+* **2024-10-17:** Update SDK to use API generated on 2024-10-17 ([#46](https://github.com/IBM/vpc-node-sdk/issues/46)) ([cdda116](https://github.com/IBM/vpc-node-sdk/commit/cdda11624358d277f11bc187dccec364b4721496))
+* **2024-10-17:** Update SDK to use API generated on 2024-10-17 ([#47](https://github.com/IBM/vpc-node-sdk/issues/47)) ([72c936a](https://github.com/IBM/vpc-node-sdk/commit/72c936ab8a16ee6d68dfafc7464bf437fd8d7176))
+
 # [0.21.0](https://github.com/IBM/vpc-node-sdk/compare/v0.20.0...v0.21.0) (2024-07-08)
 
 
