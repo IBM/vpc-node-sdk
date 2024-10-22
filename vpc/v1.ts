@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2024.
+ * (C) Copyright IBM Corp. 2022, 2023, 2024.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.91.0-d9755c53-20240605-153412
+ * IBM OpenAPI SDK Code Generator Version: 3.92.2-3f2a0533-20240712-183330
  */
 
 /* eslint-disable max-classes-per-file */
@@ -39,7 +39,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: 2024-04-30
+ * API Version: 2024-10-17
  */
 
 class VpcV1 extends BaseService {
@@ -84,7 +84,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2024-04-30` and `2024-07-03`.
+   *  `2024-04-30` and `2024-10-17`.
    */
   version: string;
 
@@ -95,7 +95,7 @@ class VpcV1 extends BaseService {
    * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
    * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2024-04-30` and `2024-07-03`.
+   * specify any date between `2024-04-30` and `2024-10-17`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -105,6 +105,11 @@ class VpcV1 extends BaseService {
   constructor(options: UserOptions) {
     options = options || {};
 
+    const _requiredParams = ['version'];
+    const _validationErrors = validateParams(options, _requiredParams, null);
+    if (_validationErrors) {
+      throw _validationErrors;
+    }
     super(options);
     if (options.serviceUrl) {
       this.setServiceUrl(options.serviceUrl);
@@ -115,7 +120,7 @@ class VpcV1 extends BaseService {
     if (!('generation' in options)) {
       this.generation = 2;
     }
-    this.version = options.version || '2024-07-02';
+    this.version = options.version || '2024-10-15';
   }
 
   /*************************
@@ -266,7 +271,8 @@ class VpcV1 extends BaseService {
    * This request deletes a VPC. This operation cannot be reversed.
    *
    * For this request to succeed:
-   * - Instances, subnets, public gateways, and endpoint gateways must not reside in this VPC
+   * - Instances, subnets, public gateways, endpoint gateways, and private path service
+   *   gateways must not reside in this VPC
    * - The VPC must not be providing DNS resolution for any other VPCs
    * - If `dns.enable_hub` is `true`, `dns.resolution_binding_count` must be zero
    *
@@ -1029,7 +1035,7 @@ class VpcV1 extends BaseService {
    * For this request to succeed, `dns.enable_hub` must be `false` for the VPC specified by the identifier in the URL,
    * and the VPC must not already have a DNS resolution binding.
    *
-   * See [About DNS sharing for VPE gateways](/docs/vpc?topic=vpc-hub-spoke-model) for more information.
+   * See [About DNS sharing for VPE gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) for more information.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
@@ -1375,9 +1381,9 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed. If unspecified, the
    * name will be a hyphenated list of randomly-selected words.
-   * @param {RoutePrototypeNextHop} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
-   * delivered to. For other
-   * `action` values, it must be omitted or specified as `0.0.0.0`.
+   * @param {RouteNextHopPrototype} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
+   * delivered to (must not be
+   * `0.0.0.0`). For other `action` values, it must be omitted or specified as `0.0.0.0`.
    *
    * At most two routes per `zone` in a table can have the same `destination` and `priority`,
    * and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
@@ -1581,8 +1587,9 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed.
    * @param {RouteNextHopPatch} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be delivered
-   * to. For other
-   * `action` values, specify `0.0.0.0` or remove it by specifying `null`.
+   * to (must not be
+   * `0.0.0.0`). For other `action` values, specify `0.0.0.0` or remove it by specifying
+   * `null`.
    *
    * At most two routes per `zone` in a table can have the same `destination` and `priority`,
    * and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
@@ -1719,6 +1726,9 @@ class VpcV1 extends BaseService {
    *
    * This request creates a routing table from a routing table prototype object. The prototype object is structured in
    * the same way as a retrieved routing table, and contains the information necessary to create the new routing table.
+   *
+   * At present, the routing table's `resource_group` will be inherited from its VPC, but may be specifiable in the
+   * future.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
@@ -2170,9 +2180,9 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed. If unspecified, the
    * name will be a hyphenated list of randomly-selected words.
-   * @param {RoutePrototypeNextHop} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
-   * delivered to. For other
-   * `action` values, it must be omitted or specified as `0.0.0.0`.
+   * @param {RouteNextHopPrototype} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be
+   * delivered to (must not be
+   * `0.0.0.0`). For other `action` values, it must be omitted or specified as `0.0.0.0`.
    *
    * At most two routes per `zone` in a table can have the same `destination` and `priority`,
    * and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
@@ -2378,8 +2388,9 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this route. The name must not be used by another route in the routing
    * table. Names starting with `ibm-` are reserved for system-provided routes, and are not allowed.
    * @param {RouteNextHopPatch} [params.nextHop] - If `action` is `deliver`, the next hop that packets will be delivered
-   * to. For other
-   * `action` values, specify `0.0.0.0` or remove it by specifying `null`.
+   * to (must not be
+   * `0.0.0.0`). For other `action` values, specify `0.0.0.0` or remove it by specifying
+   * `null`.
    *
    * At most two routes per `zone` in a table can have the same `destination` and `priority`,
    * and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
@@ -4454,7 +4465,7 @@ class VpcV1 extends BaseService {
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
-   * @param {string} [params.type] - The crypto-system used by this key.
+   * @param {string} [params.type] - The crypto-system for this key.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Key>>}
    */
@@ -5341,9 +5352,8 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this virtual server instance. The name must not be used by another
    * virtual server instance in the region. Changing the name will not affect the system hostname.
    * @param {InstancePlacementTargetPatch} [params.placementTarget] - The placement restrictions to use for the virtual
-   * server instance. For the placement
-   * restrictions to be changed, the instance `status` must be `stopping` or `stopped`.
-   *
+   * server instance. For the placement restrictions to be changed, the instance `status` must be `stopping` or
+   * `stopped`.
    * If set, `reservation_affinity.policy` must be `disabled`.
    * @param {InstancePatchProfile} [params.profile] - The profile to use for this virtual server instance. For the
    * profile to be changed,
@@ -8064,6 +8074,11 @@ class VpcV1 extends BaseService {
    * @param {string} params.instanceGroupId - The instance group identifier.
    * @param {string} params.instanceGroupManagerId - The instance group manager identifier.
    * @param {string} params.id - The instance group manager action identifier.
+   * @param {boolean} [params.autoDelete] - Indicates whether this scheduled action will be automatically deleted after
+   * it has completed and `auto_delete_timeout` hours have passed.
+   * @param {number} [params.autoDeleteTimeout] - If `auto_delete` is `true`, and this scheduled action has finished,
+   * the hours after which it will be automatically deleted. If the value is `0`, the action will be deleted once it has
+   * finished.
    * @param {string} [params.cronSpec] - The cron specification for a recurring scheduled action. Actions can be applied
    * a maximum of one time within a 5 min period.
    * @param {InstanceGroupManagerActionGroupPatch} [params.group] -
@@ -8079,13 +8094,15 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'cronSpec', 'group', 'manager', 'name', 'runAt', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'autoDelete', 'autoDeleteTimeout', 'cronSpec', 'group', 'manager', 'name', 'runAt', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'auto_delete': _params.autoDelete,
+      'auto_delete_timeout': _params.autoDeleteTimeout,
       'cron_spec': _params.cronSpec,
       'group': _params.group,
       'manager': _params.manager,
@@ -8668,6 +8685,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceGroupId - The instance group identifier.
    * @param {string} params.id - The instance group membership identifier.
+   * @param {boolean} [params.deleteInstanceOnMembershipDelete] - If set to true, when deleting the membership the
+   * instance will also be deleted.
    * @param {string} [params.name] - The name for this instance group membership. The name must not be used by another
    * membership for the instance group manager.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -8678,13 +8697,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupMembership>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'id'];
-    const _validParams = ['instanceGroupId', 'id', 'name', 'headers'];
+    const _validParams = ['instanceGroupId', 'id', 'deleteInstanceOnMembershipDelete', 'name', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'delete_instance_on_membership_delete': _params.deleteInstanceOnMembershipDelete,
       'name': _params.name,
     };
 
@@ -9109,8 +9129,8 @@ class VpcV1 extends BaseService {
   /**
    * List dedicated host groups.
    *
-   * This request lists dedicated host groups in the region. Host groups are a collection of dedicated hosts for
-   * placement of instances. Each dedicated host must belong to one and only one group. Host groups do not span zones.
+   * This request lists dedicated host groups in the region. Each dedicated host must belong to exactly one group, which
+   * controls placement of instances. Dedicated host groups do not span zones.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -10041,10 +10061,7 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.strategy - The strategy for this placement group:
    * - `host_spread`: place on different compute hosts
-   * - `power_spread`: place on compute hosts that use different power sources
-   *
-   * The enumerated values for this property may
-   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+   * - `power_spread`: place on compute hosts that use different power sources.
    * @param {string} [params.name] - The name for this placement group. The name must not be used by another placement
    * group in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
@@ -11952,6 +11969,67 @@ class VpcV1 extends BaseService {
   }
 
   /**
+   * Update firmware for a bare metal server.
+   *
+   * This request updates a bare metal server to the latest available firmware. The server must be stopped.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The bare metal server identifier.
+   * @param {boolean} [params.autoStart] - Indicates whether to automatically start the bare metal server after the
+   * firmware update is successfully completed.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public updateFirmwareForBareMetalServer(
+    params: VpcV1.UpdateFirmwareForBareMetalServerParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'autoStart', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'auto_start': _params.autoStart,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateFirmwareForBareMetalServer');
+
+    const parameters = {
+      options: {
+        url: '/bare_metal_servers/{id}/firmware/update',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * Retrieve initialization configuration for a bare metal server.
    *
    * This request retrieves configuration used to initialize the bare metal server, such as the image used, SSH keys,
@@ -11998,6 +12076,80 @@ class VpcV1 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Reinitialize a bare metal server.
+   *
+   * This request reinitializes a bare metal server with the specified image and SSH keys. The server must be stopped.
+   * Upon successful reinitiatilization, the bare metal server will be started automatically.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The bare metal server identifier.
+   * @param {ImageIdentity} params.image - The image to be used when provisioning the bare metal server.
+   * @param {KeyIdentity[]} params.keys - The public SSH keys to install on the bare metal server. Keys will be made
+   * available to the bare metal server as cloud-init vendor data. For cloud-init enabled images, these keys will also
+   * be added as SSH authorized keys for the administrative user.
+   *
+   * For Windows images, at least one key must be specified, and one will be selected to encrypt the administrator
+   * password. Keys are optional for other images, but if no keys are specified, the instance will be inaccessible
+   * unless the specified image provides another means of access.
+   * @param {string} [params.userData] - User data to be made available when initializing the bare metal server.
+   *
+   * If unspecified, no user data will be made available.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerInitialization>>}
+   */
+  public replaceBareMetalServerInitialization(
+    params: VpcV1.ReplaceBareMetalServerInitializationParams
+  ): Promise<VpcV1.Response<VpcV1.BareMetalServerInitialization>> {
+    const _params = { ...params };
+    const _requiredParams = ['id', 'image', 'keys'];
+    const _validParams = ['id', 'image', 'keys', 'userData', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'image': _params.image,
+      'keys': _params.keys,
+      'user_data': _params.userData,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceBareMetalServerInitialization');
+
+    const parameters = {
+      options: {
+        url: '/bare_metal_servers/{id}/initialization',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
           },
           _params.headers
         ),
@@ -12539,22 +12691,29 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The volume identifier.
-   * @param {number} [params.capacity] - The capacity to use for the volume (in gigabytes). The volume must be attached
-   * to a running virtual server instance, and the specified value must not be less than the current capacity.
-   * Additionally, if the volume is attached as a boot volume, the maximum value is 250 gigabytes.
-   *
-   * The minimum and maximum limits for this property may
-   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
-   * @param {number} [params.iops] - The maximum I/O operations per second (IOPS) to use for this volume. Applicable
-   * only to volumes using a profile `family` of `custom`. The volume must be attached as a data volume to a running
-   * virtual server instance.
+   * @param {number} [params.capacity] - The capacity to use for the volume (in gigabytes). For the capacity to be
+   * changed the volume's current `attachment_state` must be one of the values included in
+   * `adjustable_capacity_states`. If `adjustable_capacity_states` is empty, then the volume capacity cannot be changed.
+   *  Additionally:
+   * - The specified value must not be less than the current capacity.
+   * - If the volume is attached as a boot volume, the specified value must not exceed
+   *   the `boot_capacity.max` of the volume profile.
+   * - If the volume is attached as a data volume, the specified value must not exceed
+   *   the `capacity.max` of the volume profile.
+   * @param {number} [params.iops] - The maximum I/O operations per second (IOPS) to use for this volume.  For the IOPS
+   * to be changed the volume's current `attachment_state` must be one of the values included in
+   * `adjustable_iops_states`. If `adjustable_iops_states` is empty, then the IOPS cannot be changed.
    * @param {string} [params.name] - The name for this volume. The name must not be used by another volume in the
    * region.
    * @param {VolumeProfileIdentity} [params.profile] - The profile to use for this volume. The requested profile must be
    * in the same
-   * `family` as the current profile. The volume must be attached as a data volume to
-   * a running virtual server instance, and must have a `capacity` within the range
-   * supported by the specified profile.
+   * `family` as the current profile.  Additionally:
+   * - If the volume is a boot volume then the value specified for `capacity` property
+   * must not be less than the `boot_capacity.min` and must not exceed the
+   * `boot_capacity.max` of the specified volume profile.
+   * - If the volume is a data volume then the value specified for `capacity` property
+   * must not be less than the `capacity.min` and must not exceed the `capacity.max`
+   * of the specified volume profile.
    * @param {string[]} [params.userTags] - The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags)
    * associated with this volume.
    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
@@ -14007,7 +14166,7 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * List accessor bindings for a share.
+   * List accessor bindings for a file share.
    *
    * This request lists accessor bindings for a share. Each accessor binding identifies a resource (possibly in another
    * account) with access to this file share's data.
@@ -14068,7 +14227,7 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Delete a share accessor binding.
+   * Delete a file share accessor binding.
    *
    * This request deletes a share accessor binding. This operation cannot be reversed.
    *
@@ -14123,7 +14282,7 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Retrieve a share accessor binding.
+   * Retrieve a file share accessor binding.
    *
    * This request retrieves a single accessor binding specified by the identifier in the URL.
    *
@@ -14379,7 +14538,7 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Delete a share mount target.
+   * Delete a file share mount target.
    *
    * This request deletes a share mount target. This operation cannot be reversed.
    *
@@ -14388,7 +14547,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.shareId - The file share identifier.
-   * @param {string} params.id - The share mount target identifier.
+   * @param {string} params.id - The file share mount target identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ShareMountTarget>>}
    */
@@ -14438,13 +14597,13 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Retrieve a share mount target.
+   * Retrieve a file share mount target.
    *
    * This request retrieves a single share mount target specified by the identifier in the URL.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.shareId - The file share identifier.
-   * @param {string} params.id - The share mount target identifier.
+   * @param {string} params.id - The file share mount target identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ShareMountTarget>>}
    */
@@ -14494,7 +14653,7 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Update a share mount target.
+   * Update a file share mount target.
    *
    * This request updates a share mount target with the information provided in a share mount target patch object. The
    * share mount target patch object is structured in the same way as a retrieved share mount target and needs to
@@ -14502,7 +14661,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.shareId - The file share identifier.
-   * @param {string} params.id - The share mount target identifier.
+   * @param {string} params.id - The file share mount target identifier.
    * @param {string} [params.name] - The name for this share mount target. The name must not be used by another mount
    * target for the file share.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -14560,7 +14719,7 @@ class VpcV1 extends BaseService {
   }
 
   /**
-   * Split the source file share from a replica share.
+   * Split the source file share from a replica file share.
    *
    * This request removes the replication relationship between a source share and the replica share specified by the
    * identifier in the URL. The replication relationship cannot be removed if a source share or the replica share has a
@@ -15885,11 +16044,11 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The virtual network interface identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>>}
    */
   public deleteVirtualNetworkInterfaces(
     params: VpcV1.DeleteVirtualNetworkInterfacesParams
-  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+  ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'headers'];
@@ -15921,6 +16080,7 @@ class VpcV1 extends BaseService {
           true,
           sdkHeaders,
           {
+            'Accept': 'application/json',
           },
           _params.headers
         ),
@@ -17696,7 +17856,8 @@ class VpcV1 extends BaseService {
    * Update a network ACL rule.
    *
    * This request updates a rule with the information in a provided rule patch. The rule patch object contains only the
-   * information to be updated. The request will fail if the information is not applicable to the rule's protocol.
+   * information to be updated. The request will fail if the provided patch includes properties that are not used by the
+   * rule's protocol.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.networkAclId - The network ACL identifier.
@@ -17715,7 +17876,7 @@ class VpcV1 extends BaseService {
    * @param {string} [params.direction] - The direction of traffic to match.
    * @param {string} [params.name] - The name for this network ACL rule. The name must not be used by another rule for
    * the network ACL.
-   * @param {string} [params.protocol] - The protocol to enforce.
+   * @param {string} [params.protocol] - The network protocol.
    * @param {string} [params.source] - The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches
    * all source addresses.
    * @param {number} [params.sourcePortMax] - The inclusive upper bound of TCP/UDP source port range.
@@ -18336,8 +18497,8 @@ class VpcV1 extends BaseService {
    * Update a security group rule.
    *
    * This request updates a security group rule with the information in a provided rule patch object. The rule patch
-   * object contains only the information to be updated. The request will fail if the information is not applicable to
-   * the rule's protocol.
+   * object contains only the information to be updated. The request will fail if the provided patch includes properties
+   * that are not used by the rule's protocol.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.securityGroupId - The security group identifier.
@@ -18345,12 +18506,12 @@ class VpcV1 extends BaseService {
    * @param {number} [params.code] - The ICMP traffic code to allow. If set, `type` must also be set.
    *
    * Specify `null` to remove an existing ICMP traffic code.
-   * @param {string} [params.direction] - The direction of traffic to enforce.
-   * @param {string} [params.ipVersion] - The IP version to enforce. The format of `local.address`, `remote.address`,
+   * @param {string} [params.direction] - The direction of traffic to allow.
+   * @param {string} [params.ipVersion] - The IP version to allow. The format of `local.address`, `remote.address`,
    * `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
    *
-   * If `remote` references a security group, then this rule only applies to IP addresses
-   * (network interfaces) in that group matching this IP version.
+   * If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP
+   * version.
    * @param {SecurityGroupRuleLocalPatch} [params.local] - The local IP address or range of local IP addresses to which
    * this rule will allow inbound
    * traffic (or from which, for outbound traffic). Can be specified as an IP address or a CIDR
@@ -19105,14 +19266,19 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.authenticationAlgorithm - The authentication algorithm
    *
-   * Must be `disabled` if and only if the `encryption_algorithm` is
-   * `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`.
+   * Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
+   * `aes192gcm16`, or `aes256gcm16`
+   *
+   * The `md5` and `sha1` algorithms have been deprecated.
    * @param {string} params.encryptionAlgorithm - The encryption algorithm
    *
    * The `authentication_algorithm` must be `disabled` if and only if
-   * `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or
-   * `aes256gcm16`.
-   * @param {string} params.pfs - Perfect Forward Secrecy.
+   * `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`
+   *
+   * The `triple_des` algorithm has been deprecated.
+   * @param {string} params.pfs - The Perfect Forward Secrecy group.
+   *
+   * Groups `group_2` and `group_5` have been deprecated.
    * @param {number} [params.keyLifetime] - The key lifetime in seconds.
    * @param {string} [params.name] - The name for this IPsec policy. The name must not be used by another IPsec policies
    * in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -19289,17 +19455,22 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The IPsec policy identifier.
    * @param {string} [params.authenticationAlgorithm] - The authentication algorithm
    *
-   * Must be `disabled` if and only if the `encryption_algorithm` is
-   * `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`.
+   * Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
+   * `aes192gcm16`, or `aes256gcm16`
+   *
+   * The `md5` and `sha1` algorithms have been deprecated.
    * @param {string} [params.encryptionAlgorithm] - The encryption algorithm
    *
    * The `authentication_algorithm` must be `disabled` if and only if
-   * `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or
-   * `aes256gcm16`.
+   * `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`
+   *
+   * The `triple_des` algorithm has been deprecated.
    * @param {number} [params.keyLifetime] - The key lifetime in seconds.
    * @param {string} [params.name] - The name for this IPsec policy. The name must not be used by another IPsec policy
    * in the region.
-   * @param {string} [params.pfs] - Perfect Forward Secrecy.
+   * @param {string} [params.pfs] - The Perfect Forward Secrecy group.
+   *
+   * Groups `group_2` and `group_5` have been deprecated.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IPsecPolicy>>}
    */
@@ -19943,6 +20114,14 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The VPN gateway connection identifier.
    * @param {boolean} [params.adminStateUp] - If set to false, the VPN gateway connection is shut down.
    * @param {VPNGatewayConnectionDPDPatch} [params.deadPeerDetection] - The Dead Peer Detection settings.
+   * @param {boolean} [params.distributeTraffic] - Indicates whether the traffic is distributed between the `up` tunnels
+   * of the VPN gateway connection when the VPC route's next hop is a VPN connection. If `false`, the traffic is only
+   * routed through the `up` tunnel with the lower `public_ip` address. Before enabling it on VPN connections to on-prem
+   * private networks, review
+   * [distributing traffic
+   * restrictions](https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-limitations#distributing-traffic-restrictions).
+   *
+   * If specified, `mode` must be `route`.
    * @param {string} [params.establishMode] - The establish mode of the VPN gateway connection:
    * - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol
    *    negotiations or rekeying processes.
@@ -19968,7 +20147,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
-    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'establishMode', 'ikePolicy', 'ipsecPolicy', 'name', 'peer', 'psk', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'distributeTraffic', 'establishMode', 'ikePolicy', 'ipsecPolicy', 'name', 'peer', 'psk', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19977,6 +20156,7 @@ class VpcV1 extends BaseService {
     const body = {
       'admin_state_up': _params.adminStateUp,
       'dead_peer_detection': _params.deadPeerDetection,
+      'distribute_traffic': _params.distributeTraffic,
       'establish_mode': _params.establishMode,
       'ike_policy': _params.ikePolicy,
       'ipsec_policy': _params.ipsecPolicy,
@@ -20797,7 +20977,7 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this VPN server. The name must not be used by another VPN server in
    * the VPC.
    * @param {number} [params.port] - The port number used by this VPN server.
-   * @param {string} [params.protocol] - The transport protocol used by this VPN server.
+   * @param {string} [params.protocol] - The transport protocol to use for this VPN server.
    * @param {SubnetIdentity[]} [params.subnets] - The subnets to provision this VPN server in (replacing the existing
    * subnets).
    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
@@ -21637,10 +21817,15 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {boolean} params.isPublic - Indicates whether this load balancer is public.
    *
-   * At present, if route mode is enabled, the load balancer must not be public.
-   * @param {SubnetIdentity[]} params.subnets - The subnets to provision this load balancer in. The subnets must be in
-   * the same VPC. The load balancer's availability will depend on the availability of the zones that the subnets reside
-   * in.
+   * At present,
+   * - If route mode is enabled, the load balancer must be private.
+   * - If `is_private_path` is specified, it must be set to `false`.
+   * @param {SubnetIdentity[]} params.subnets - The subnets to provision this load balancer in.  The subnets must be in
+   * the same VPC.
+   * - If 'availability' is specified as `subnet` in the profile, the load balancer's availability will depend on the
+   * availability of the zones that the subnets reside in.
+   * - If 'availability' is specified as `region` in the profile, the load balancer remains available as long as any
+   * zone in the region is available. Only members in healthy zones will be sent new connections.
    *
    * Load balancers in the `network` family allow only one subnet to be specified.
    * @param {LoadBalancerDNSPrototype} [params.dns] - The DNS configuration for this load balancer.
@@ -21648,6 +21833,9 @@ class VpcV1 extends BaseService {
    * If unspecified, DNS `A` records for this load balancer's `hostname` property will be added
    * to the public DNS zone `lb.appdomain.cloud`. Otherwise, those DNS `A` records will be
    * added to the specified `zone`.
+   *
+   * Not supported by private path load balancers.
+   * @param {boolean} [params.isPrivatePath] - Indicates whether this is a private path load balancer.
    * @param {LoadBalancerListenerPrototypeLoadBalancerContext[]} [params.listeners] - The listeners of this load
    * balancer.
    * @param {LoadBalancerLoggingPrototype} [params.logging] - The logging configuration to use for this load balancer.
@@ -21680,7 +21868,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
     const _params = { ...params };
     const _requiredParams = ['isPublic', 'subnets'];
-    const _validParams = ['isPublic', 'subnets', 'dns', 'listeners', 'logging', 'name', 'pools', 'profile', 'resourceGroup', 'routeMode', 'securityGroups', 'headers'];
+    const _validParams = ['isPublic', 'subnets', 'dns', 'isPrivatePath', 'listeners', 'logging', 'name', 'pools', 'profile', 'resourceGroup', 'routeMode', 'securityGroups', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21690,6 +21878,7 @@ class VpcV1 extends BaseService {
       'is_public': _params.isPublic,
       'subnets': _params.subnets,
       'dns': _params.dns,
+      'is_private_path': _params.isPrivatePath,
       'listeners': _params.listeners,
       'logging': _params.logging,
       'name': _params.name,
@@ -21855,6 +22044,8 @@ class VpcV1 extends BaseService {
    * Specify `null` to remove the existing DNS configuration, which will remove all DNS `A`
    * records for this load balancer that had been added to `zone`, and add equivalent `A`
    * records to the public DNS zone `lb.appdomain.cloud`.
+   *
+   * Not supported by private path load balancers.
    * @param {LoadBalancerLoggingPatch} [params.logging] - The logging configuration to use for this load balancer.
    *
    * To activate logging, the load balancer profile must support the specified logging type.
@@ -22094,18 +22285,18 @@ class VpcV1 extends BaseService {
    * @param {number} [params.portMax] - The inclusive upper bound of the range of ports used by this listener. Must not
    * be less than `port_min`.
    *
-   * At present, only load balancers operating with route mode enabled, and public load balancers in the `network`
-   * family support different values for `port_min` and
-   * `port_max`. When route mode is enabled, the value `65535` must be specified.
+   * Only load balancers with route mode enabled, or network load balancers with
+   * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
+   * mode is enabled, the value `65535` must be specified.
    *
    * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
    * same protocol.
    * @param {number} [params.portMin] - The inclusive lower bound of the range of ports used by this listener. Must not
    * be greater than `port_max`.
    *
-   * At present, only load balancers operating with route mode enabled, and public load balancers in the `network`
-   * family support different values for `port_min` and
-   * `port_max`. When route mode is enabled, the value `1` must be specified.
+   * Only load balancers with route mode enabled, or network load balancers with
+   * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
+   * mode is enabled, the value `1` must be specified.
    *
    * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
    * same protocol.
@@ -22330,18 +22521,18 @@ class VpcV1 extends BaseService {
    * @param {number} [params.portMax] - The inclusive upper bound of the range of ports used by this listener. Must not
    * be less than `port_min`.
    *
-   * At present, only load balancers operating with route mode enabled, and public load balancers in the `network`
-   * family support different values for `port_min` and
-   * `port_max`. When route mode is enabled, the value `65535` must be specified.
+   * Only load balancers with route mode enabled, or network load balancers with
+   * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
+   * mode is enabled, the value `65535` must be specified.
    *
    * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
    * same protocol.
    * @param {number} [params.portMin] - The inclusive lower bound of the range of ports used by this listener. Must not
    * be greater than `port_max`.
    *
-   * At present, only load balancers operating with route mode enabled, and public load balancers in the `network`
-   * family support different values for `port_min` and
-   * `port_max`. When route mode is enabled, the value `1` must be specified.
+   * Only load balancers with route mode enabled, or network load balancers with
+   * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
+   * mode is enabled, the value `1` must be specified.
    *
    * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
    * same protocol.
@@ -22487,17 +22678,13 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
    * @param {string} params.listenerId - The listener identifier.
-   * @param {string} params.action - The policy action.
-   *
+   * @param {string} params.action - The policy action:
    * - `forward`: Requests will be forwarded to the specified `target` pool
    * - `https_redirect`: Requests will be redirected to the specified target listener. The
    *   listener must have a `protocol` of `http`, and the target listener must have a
    *   `protocol` of `https`
    * - `redirect`: Requests will be redirected to the specified `target.url`
-   * - `reject`: Requests will be rejected with a `403` status code
-   *
-   * The enumerated values for this property may
-   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+   * - `reject`: Requests will be rejected with a `403` status code.
    * @param {number} params.priority - Priority of the policy. The priority is unique across all policies for this load
    * balancer listener. Lower value indicates higher priority.
    * @param {string} [params.name] - The name for this policy. The name must not be used by another policy for the load
@@ -22824,21 +23011,18 @@ class VpcV1 extends BaseService {
    * @param {string} params.loadBalancerId - The load balancer identifier.
    * @param {string} params.listenerId - The listener identifier.
    * @param {string} params.policyId - The policy identifier.
-   * @param {string} params.condition - The condition of the rule.
-   * @param {string} params.type - The type of the rule.
-   *
-   * Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
-   * @param {string} params.value - Value to be matched for rule condition.
+   * @param {string} params.condition - The condition for the rule.
+   * @param {string} params.type - The type of the rule. Body rules are applied to form-encoded request bodies using the
+   * `UTF-8` character set.
+   * @param {string} params.value - The value to be matched for the rule condition.
    *
    * If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
-   * @param {string} [params.field] - The field. This is applicable to `header`, `query`, and `body` rule types.
+   * @param {string} [params.field] - The field to match for this rule. This property must be specified if the rule type
+   * is
+   * `header`, may be specified if the rule type is `body` or `query`, and must not be specified if the rule type is
+   * `hostname` or `path`.
    *
-   * If the rule type is `header`, this property is required.
-   *
-   * If the rule type is `query`, this is optional. If specified and the rule condition is not
-   * `matches_regex`, the value must be percent-encoded.
-   *
-   * If the rule type is `body`, this is optional.
+   * If the rule condition is not `matches_regex`, the value must be percent-encoded.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>>}
    */
@@ -23026,19 +23210,17 @@ class VpcV1 extends BaseService {
    * @param {string} params.listenerId - The listener identifier.
    * @param {string} params.policyId - The policy identifier.
    * @param {string} params.id - The rule identifier.
-   * @param {string} [params.condition] - The condition of the rule.
-   * @param {string} [params.field] - The field. This is applicable to `header`, `query`, and `body` rule types.
+   * @param {string} [params.condition] - The condition for the rule.
+   * @param {string} [params.field] - The field to match for this rule. This property must be specified if the rule type
+   * is
+   * `header`, may be specified if the rule type is `body` or `query`, and must not be specified if the rule type is
+   * `hostname` or `path`.
    *
-   * If the rule type is `header`, this property is required.
-   *
-   * If the rule type is `query`, this is optional. If specified and the rule condition is not
-   * `matches_regex`, the value must be percent-encoded.
-   *
-   * If the rule type is `body`, this is optional.
-   * @param {string} [params.type] - The type of the rule.
-   *
-   * Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
-   * @param {string} [params.value] - Value to be matched for rule condition.
+   * If the rule condition is not `matches_regex`, the value must be percent-encoded.
+   * @param {string} [params.type] - The type of the rule. Body rules are applied to form-encoded request bodies using
+   * the
+   * `UTF-8` character set.
+   * @param {string} [params.value] - The value to be matched for the rule condition.
    *
    * If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -23161,7 +23343,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
-   * @param {string} params.algorithm - The load balancing algorithm.
+   * @param {string} params.algorithm - The load balancing algorithm. The `least_connections` algorithm is only
+   * supported for load balancers that have `availability` with value `subnet` in the profile.
    * @param {LoadBalancerPoolHealthMonitorPrototype} params.healthMonitor - The health monitor of this pool.
    * @param {string} params.protocol - The protocol used for this load balancer pool. Load balancers in the `network`
    * family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the
@@ -23176,11 +23359,12 @@ class VpcV1 extends BaseService {
    * - `v2`: Enabled with version 2 (binary header format)
    * - `disabled`: Disabled
    *
-   * Supported by load balancers in the `application` family (otherwise always `disabled`).
+   * For load balancers in the `network` family, this property must be `disabled`.
    * @param {LoadBalancerPoolSessionPersistencePrototype} [params.sessionPersistence] - The session persistence of this
-   * pool. If unspecified, session persistence will be
-   * disabled, and traffic will be distributed across backend server members of the
-   * pool.
+   * pool. If specified, the load balancer must have
+   * `source_ip_session_persistence_supported` set to `true` in its profile. If
+   * unspecified, session persistence will be disabled, and traffic will be distributed
+   * across backend server members of the pool.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPool>>}
    */
@@ -23377,7 +23561,7 @@ class VpcV1 extends BaseService {
    * - `v2`: Enabled with version 2 (binary header format)
    * - `disabled`: Disabled
    *
-   * Supported by load balancers in the `application` family (otherwise always `disabled`).
+   * For load balancers in the `network` family, this property must be `disabled`.
    * @param {LoadBalancerPoolSessionPersistencePatch} [params.sessionPersistence] - The session persistence of this
    * pool.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -23516,8 +23700,9 @@ class VpcV1 extends BaseService {
    * instances. Load balancers in the `application` family support IP addresses. If the load
    * balancer has route mode enabled, the member must be in a zone the load balancer has a
    * subnet in.
-   * @param {number} [params.weight] - Weight of the server member. Applicable only if the pool algorithm is
-   * `weighted_round_robin`.
+   * @param {number} [params.weight] - The weight of the server member.
+   *
+   * If specified, the pool algorithm must be `weighted_round_robin`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>>}
    */
@@ -23775,8 +23960,9 @@ class VpcV1 extends BaseService {
    * instances. Load balancers in the `application` family support IP addresses. If the load
    * balancer has route mode enabled, the member must be in a zone the load balancer has a
    * subnet in.
-   * @param {number} [params.weight] - Weight of the server member. Applicable only if the pool algorithm is
-   * `weighted_round_robin`.
+   * @param {number} [params.weight] - The weight of the server member.
+   *
+   * If specified, the pool algorithm must be `weighted_round_robin`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>>}
    */
@@ -23850,6 +24036,8 @@ class VpcV1 extends BaseService {
    * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
    * matching the specified identifier.
+   * @param {string[]} [params.lifecycleState] - Filters the collection to resources with a `lifecycle_state` property
+   * matching one of the specified comma-separated values.
    * @param {string} [params.vpcId] - Filters the collection to resources with a `vpc.id` property matching the
    * specified identifier.
    * @param {string} [params.vpcCrn] - Filters the collection to resources with a `vpc.crn` property matching the
@@ -23866,7 +24054,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGatewayCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'vpcId', 'vpcCrn', 'vpcName', 'allowDnsResolutionBinding', 'headers'];
+    const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'lifecycleState', 'vpcId', 'vpcCrn', 'vpcName', 'allowDnsResolutionBinding', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23879,6 +24067,7 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
+      'lifecycle_state': _params.lifecycleState,
       'vpc.id': _params.vpcId,
       'vpc.crn': _params.vpcCrn,
       'vpc.name': _params.vpcName,
@@ -23915,9 +24104,10 @@ class VpcV1 extends BaseService {
    * outside the VPC.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {EndpointGatewayTargetPrototype} params.target - The target to use for this endpoint gateway. Must not
-   * already be the target of another
-   * endpoint gateway in the VPC.
+   * @param {EndpointGatewayTargetPrototype} params.target - The target to use for this endpoint gateway. The target:
+   * - Must not already be the target of another endpoint gateway in the VPC
+   * - Must not have a service endpoint that duplicates or overlaps with any `service_endpoints`
+   *   of another endpoint gateway in the VPC.
    * @param {VPCIdentity} params.vpc - The VPC this endpoint gateway will reside in.
    * @param {boolean} [params.allowDnsResolutionBinding] - Indicates whether to allow DNS resolution for this endpoint
    * gateway when the VPC this endpoint gateway resides in has a DNS resolution binding to a VPC with `dns.enable_hub`
@@ -24408,8 +24598,10 @@ class VpcV1 extends BaseService {
   /**
    * List flow log collectors.
    *
-   * This request lists flow log collectors in the region. A flow log collector summarizes data sent over the instance
-   * network interfaces and instance network attachments contained within its target.
+   * This request lists flow log collectors in the region. A [flow log
+   * collector](https://cloud.ibm.com/docs/vpc?topic=vpc-flow-logs) summarizes data sent over the instance network
+   * interfaces and instance network attachments contained within its target. The collected flow logs are written to a
+   * cloud object storage bucket, where they can be [viewed](https://cloud.ibm.com/docs/vpc?topic=vpc-fl-analyze).
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -24734,6 +24926,1119 @@ class VpcV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+  /*************************
+   * privatePathServiceGateways
+   ************************/
+
+  /**
+   * List private path service gateways.
+   *
+   * This request lists private path service gateways in the region. Private path service gateways allow
+   * [service
+   * providers](https://cloud.ibm.com/docs/private-path?topic=private-path-private-path-service-architecture#private-path-service-components)
+   * to make their services available using
+   * [private path
+   * connectivity](https://cloud.ibm.com/docs/private-path?topic=private-path-private-path-service-architecture#private-path-service-components).
+   * Private path service gateways are used to facilitate and manage the private path connectivity between private path
+   * network load balancers and their associated endpoint gateways.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
+   * matching the specified identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayCollection>>}
+   */
+  public listPrivatePathServiceGateways(
+    params?: VpcV1.ListPrivatePathServiceGatewaysParams
+  ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listPrivatePathServiceGateways');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a private path service gateway.
+   *
+   * This request creates a private path service gateway from a private path service gateway prototype object. The
+   * prototype object is structured in the same way as a retrieved private path service gateway, and contains the
+   * information necessary to create the new private path service gateway.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {LoadBalancerIdentity} params.loadBalancer - The load balancer for this private path service gateway. The
+   * load balancer must
+   * have `is_private_path` set to `true`.
+   *
+   * The private path service gateway will reside in the same VPC as the specified load
+   * balancer.
+   * @param {string[]} params.serviceEndpoints - The fully qualified domain names for this private path service gateway.
+   * Any uppercase letters will be converted to lowercase.
+   * @param {string} [params.defaultAccessPolicy] - The policy to use for bindings from accounts without an explicit
+   * account policy.
+   * @param {string} [params.name] - The name for this private path service gateway. The name must not be used by
+   * another private path service gateway in the VPC. If unspecified, the name will be a hyphenated list of
+   * randomly-selected words.
+   * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
+   * [default resource
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+   * @param {boolean} [params.zonalAffinity] - Indicates whether this private path service gateway has zonal affinity.
+   * - `true`:  Traffic to the service from a zone the service resides in will remain in
+   *            that zone.
+   * - `false`: Traffic to the service from a zone will be load balanced across all zones
+   *            in the region the service resides in.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PrivatePathServiceGateway>>}
+   */
+  public createPrivatePathServiceGateway(
+    params: VpcV1.CreatePrivatePathServiceGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGateway>> {
+    const _params = { ...params };
+    const _requiredParams = ['loadBalancer', 'serviceEndpoints'];
+    const _validParams = ['loadBalancer', 'serviceEndpoints', 'defaultAccessPolicy', 'name', 'resourceGroup', 'zonalAffinity', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'load_balancer': _params.loadBalancer,
+      'service_endpoints': _params.serviceEndpoints,
+      'default_access_policy': _params.defaultAccessPolicy,
+      'name': _params.name,
+      'resource_group': _params.resourceGroup,
+      'zonal_affinity': _params.zonalAffinity,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createPrivatePathServiceGateway');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a private path service gateway.
+   *
+   * This request deletes a private path service gateway.  For this request to succeed, the value of
+   * `endpoint_gateway_count` must be `0`. This operation cannot be reversed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The private path service gateway identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deletePrivatePathServiceGateway(
+    params: VpcV1.DeletePrivatePathServiceGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePrivatePathServiceGateway');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a private path service gateway.
+   *
+   * This request retrieves the private path service gateway specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The private path service gateway identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PrivatePathServiceGateway>>}
+   */
+  public getPrivatePathServiceGateway(
+    params: VpcV1.GetPrivatePathServiceGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGateway>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getPrivatePathServiceGateway');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a private path service gateway.
+   *
+   * This request updates a private path service gateway with the information provided in a private path service gateway
+   * patch object. The private path service gateway patch object is structured in the same way as a retrieved private
+   * path service gateway and contains only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The private path service gateway identifier.
+   * @param {string} [params.defaultAccessPolicy] - The policy to use for bindings from accounts without an explicit
+   * account policy.
+   * @param {LoadBalancerIdentity} [params.loadBalancer] - The load balancer for this private path service gateway. The
+   * load balancer must
+   * have `is_private_path` set to `true`, and must be in the same VPC as the private
+   * path service gateway.
+   * @param {string} [params.name] - The name for this private path service gateway. The name must not be used by
+   * another private path service gateway in the VPC.
+   * @param {boolean} [params.zonalAffinity] - Updating the value of `zonal_affinity` changes how traffic for existing
+   * and future endpoint gateway bindings will be routed:
+   * - `true`:  Traffic to the service from a zone the service resides in will remain in
+   *            that zone.
+   * - `false`: Traffic to the service from a zone will be load balanced across all zones
+   *            in the region the service resides in.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PrivatePathServiceGateway>>}
+   */
+  public updatePrivatePathServiceGateway(
+    params: VpcV1.UpdatePrivatePathServiceGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGateway>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'defaultAccessPolicy', 'loadBalancer', 'name', 'zonalAffinity', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'default_access_policy': _params.defaultAccessPolicy,
+      'load_balancer': _params.loadBalancer,
+      'name': _params.name,
+      'zonal_affinity': _params.zonalAffinity,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updatePrivatePathServiceGateway');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List account policies for a private path service gateway.
+   *
+   * This request lists account policies for a private path service gateway. Each policy defines how requests to use the
+   * private path service gateway from that account will be handled.
+   *
+   * The account policies will be sorted by their `created_at` property values, with newest account policies first.
+   * Account policies with identical `created_at` property values will in turn be sorted by ascending `id` property
+   * values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.accountId] - Filters the collection to resources with an `account.id` property matching the
+   * specified identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicyCollection>>}
+   */
+  public listPrivatePathServiceGatewayAccountPolicies(
+    params: VpcV1.ListPrivatePathServiceGatewayAccountPoliciesParams
+  ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicyCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId'];
+    const _validParams = ['privatePathServiceGatewayId', 'start', 'limit', 'accountId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'account.id': _params.accountId,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listPrivatePathServiceGatewayAccountPolicies');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/account_policies',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create an account policy for a private path service gateway.
+   *
+   * This request creates an account policy from an account policy prototype object. The prototype object is structured
+   * in the same way as a retrieved account policy, and contains the information necessary to create the new account
+   * policy.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {string} params.accessPolicy - The access policy for the account. Updating the access policy only affects
+   * pending and future endpoint gateway bindings.
+   * - permit: access will be permitted
+   * - deny: access will be denied
+   * - review: access will be manually reviewed
+   *
+   * - Updating to `review` sets the status of future endpoint gateway bindings from
+   *    this account to `pending`.
+   * - Updating to `permit` updates both the status of any `pending` and future endpoint
+   *   gateway bindings from this account to `permitted`.
+   * - Updating to `deny` updates both the status of any `pending` and future endpoint
+   *   gateway bindings from this account to `denied`.
+   * @param {AccountIdentity} params.account - The account for this access policy. The account must be unique across all
+   * account
+   * policies for this private path service gateway.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicy>>}
+   */
+  public createPrivatePathServiceGatewayAccountPolicy(
+    params: VpcV1.CreatePrivatePathServiceGatewayAccountPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicy>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId', 'accessPolicy', 'account'];
+    const _validParams = ['privatePathServiceGatewayId', 'accessPolicy', 'account', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'access_policy': _params.accessPolicy,
+      'account': _params.account,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createPrivatePathServiceGatewayAccountPolicy');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/account_policies',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete an account policy for a private path service gateway.
+   *
+   * This request deletes an account policy. This operation cannot be reversed and it does not affect the `status` of
+   * any existing endpoint gateway bindings.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {string} params.id - The account policy identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deletePrivatePathServiceGatewayAccountPolicy(
+    params: VpcV1.DeletePrivatePathServiceGatewayAccountPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId', 'id'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deletePrivatePathServiceGatewayAccountPolicy');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/account_policies/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve an account policy for a private path service gateway.
+   *
+   * This request retrieves a single account policy specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {string} params.id - The account policy identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicy>>}
+   */
+  public getPrivatePathServiceGatewayAccountPolicy(
+    params: VpcV1.GetPrivatePathServiceGatewayAccountPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicy>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId', 'id'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getPrivatePathServiceGatewayAccountPolicy');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/account_policies/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update an account policy for a private path service gateway.
+   *
+   * This request updates an account policy with the information in a provided account policy patch. The account policy
+   * patch object is structured in the same way as a retrieved account policy and contains only the information to be
+   * updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {string} params.id - The account policy identifier.
+   * @param {string} [params.accessPolicy] - The access policy for the account. Updating the access policy only affects
+   * pending and future endpoint gateway bindings.
+   * - permit: access will be permitted
+   * - deny: access will be denied
+   * - review: access will be manually reviewed
+   *
+   * - Updating to `review` sets the status of future endpoint gateway bindings from
+   *    this account to `pending`.
+   * - Updating to `permit` updates both the status of any `pending` and future endpoint
+   *   gateway bindings from this account to `permitted`.
+   * - Updating to `deny` updates both the status of any `pending` and future endpoint
+   *   gateway bindings from this account to `denied`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicy>>}
+   */
+  public updatePrivatePathServiceGatewayAccountPolicy(
+    params: VpcV1.UpdatePrivatePathServiceGatewayAccountPolicyParams
+  ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicy>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId', 'id'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'accessPolicy', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'access_policy': _params.accessPolicy,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updatePrivatePathServiceGatewayAccountPolicy');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/account_policies/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List endpoint gateway bindings for a private path service gateway.
+   *
+   * This request lists endpoint gateway bindings for a private path service gateway. Each endpoint gateway binding is
+   * implicitly created when an endpoint gateway is created targeting the private path service gateway. The associated
+   * account policy is applied to all new endpoint gateway bindings. If an associated account policy doesn't exist, the
+   * private path service gateway's `default_access_policy` is used.
+   *
+   * The endpoint gateway bindings will be sorted by their `created_at` property values, with newest endpoint gateway
+   * bindings first. Endpoint gateway bindings with identical
+   * `created_at` property values will in turn be sorted by ascending `name` property values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.status] - Filters the collection to endpoint gateway bindings with a `status` property
+   * matching the specified value.
+   * @param {string} [params.accountId] - Filters the collection to resources with an `account.id` property matching the
+   * specified identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayEndpointGatewayBindingCollection>>}
+   */
+  public listPrivatePathServiceGatewayEndpointGatewayBindings(
+    params: VpcV1.ListPrivatePathServiceGatewayEndpointGatewayBindingsParams
+  ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayEndpointGatewayBindingCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId'];
+    const _validParams = ['privatePathServiceGatewayId', 'start', 'limit', 'status', 'accountId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'status': _params.status,
+      'account.id': _params.accountId,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listPrivatePathServiceGatewayEndpointGatewayBindings');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/endpoint_gateway_bindings',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve an endpoint gateway binding for a private path service gateway.
+   *
+   * This request retrieves a single endpoint gateway binding specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {string} params.id - The endpoint gateway binding identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayEndpointGatewayBinding>>}
+   */
+  public getPrivatePathServiceGatewayEndpointGatewayBinding(
+    params: VpcV1.GetPrivatePathServiceGatewayEndpointGatewayBindingParams
+  ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayEndpointGatewayBinding>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId', 'id'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getPrivatePathServiceGatewayEndpointGatewayBinding');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/endpoint_gateway_bindings/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Deny an endpoint gateway binding for a private path service gateway.
+   *
+   * This request denies a `pending` endpoint gateway request, and optionally sets the policy to deny future requests
+   * from the same account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {string} params.id - The endpoint gateway binding identifier.
+   * @param {boolean} [params.setAccountPolicy] - Indicates whether this will become the access policy for any `pending`
+   * and future endpoint gateway bindings from the same account.
+   *
+   * If set to `true`:
+   * - If the account has an existing access policy, that policy will be updated to `deny`.
+   *   Otherwise, a new `deny` access policy will be created for the account.
+   * - All `pending` endpoint gateway bindings for the account will be denied.
+   *
+   * If set to `false`:
+   * - No access policies will be created or updated
+   * - All `pending` endpoint gateway bindings for the account will remain `pending`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public denyPrivatePathServiceGatewayEndpointGatewayBinding(
+    params: VpcV1.DenyPrivatePathServiceGatewayEndpointGatewayBindingParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId', 'id'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'setAccountPolicy', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'set_account_policy': _params.setAccountPolicy,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'denyPrivatePathServiceGatewayEndpointGatewayBinding');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/endpoint_gateway_bindings/{id}/deny',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Permit an endpoint gateway binding for a private path service gateway.
+   *
+   * This request permits a `pending` endpoint gateway request, and optionally sets the policy to permit future requests
+   * from the same account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {string} params.id - The endpoint gateway binding identifier.
+   * @param {boolean} [params.setAccountPolicy] - Indicates whether this will become the access policy for any `pending`
+   * and future endpoint gateway bindings from the same account.
+   *
+   * If set to `true`:
+   *
+   * - If the account has an existing access policy, that policy will be updated to
+   *   `permit`. Otherwise, a new `permit` access policy will be created for the account.
+   * - All `pending` endpoint gateway bindings for the account will be permitted.
+   *
+   * If set to `false`:
+   *
+   * - No access policies will be created or updated
+   * - All `pending` endpoint gateway bindings for the account will remain `pending`.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public permitPrivatePathServiceGatewayEndpointGatewayBinding(
+    params: VpcV1.PermitPrivatePathServiceGatewayEndpointGatewayBindingParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId', 'id'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'setAccountPolicy', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'set_account_policy': _params.setAccountPolicy,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'permitPrivatePathServiceGatewayEndpointGatewayBinding');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/endpoint_gateway_bindings/{id}/permit',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Publish a private path service gateway.
+   *
+   * This request publishes a private path service gateway, allowing any account to request access to it.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public publishPrivatePathServiceGateway(
+    params: VpcV1.PublishPrivatePathServiceGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId'];
+    const _validParams = ['privatePathServiceGatewayId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'publishPrivatePathServiceGateway');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/publish',
+        method: 'POST',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Revoke access to a private path service gateway for an account.
+   *
+   * This request revokes a consumer account. This operation cannot be reversed. The `status` of all endpoint gateway
+   * bindings associated with the specified private path service gateway become `denied`. If the specified account has
+   * an existing access policy, that policy will be updated to `denied`. Otherwise, a new `deny` access policy will be
+   * created for the account.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {AccountIdentity} params.account - The account that will be revoked access to the private path service
+   * gateway.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public revokeAccountForPrivatePathServiceGateway(
+    params: VpcV1.RevokeAccountForPrivatePathServiceGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId', 'account'];
+    const _validParams = ['privatePathServiceGatewayId', 'account', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'account': _params.account,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'revokeAccountForPrivatePathServiceGateway');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/revoke_account',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Unpublish a private path service gateway.
+   *
+   * This request unpublishes a private path service gateway. For this request to succeed, any existing access from
+   * other accounts must first be revoked. Once unpublished, access will again be restricted to the account that created
+   * this private path service gateway.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.privatePathServiceGatewayId - The private path service gateway identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public unpublishPrivatePathServiceGateway(
+    params: VpcV1.UnpublishPrivatePathServiceGatewayParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['privatePathServiceGatewayId'];
+    const _validParams = ['privatePathServiceGatewayId', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'private_path_service_gateway_id': _params.privatePathServiceGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'unpublishPrivatePathServiceGateway');
+
+    const parameters = {
+      options: {
+        url: '/private_path_service_gateways/{private_path_service_gateway_id}/unpublish',
+        method: 'POST',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 }
 
 /*************************
@@ -24746,7 +26051,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2024-04-30` and `2024-07-03`.
+     *  `2024-04-30` and `2024-10-17`.
      */
     version: string;
   }
@@ -25094,13 +26399,13 @@ namespace VpcV1 {
      *  hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other
-     *  `action` values, it must be omitted or specified as `0.0.0.0`.
+    /** If `action` is `deliver`, the next hop that packets will be delivered to (must not be
+     *  `0.0.0.0`). For other `action` values, it must be omitted or specified as `0.0.0.0`.
      *
      *  At most two routes per `zone` in a table can have the same `destination` and `priority`,
      *  and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
      */
-    nextHop?: RoutePrototypeNextHop;
+    nextHop?: RouteNextHopPrototype;
     /** The priority of this route. Smaller values have higher priority.
      *
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
@@ -25159,8 +26464,9 @@ namespace VpcV1 {
      *  with `ibm-` are reserved for system-provided routes, and are not allowed.
      */
     name?: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other
-     *  `action` values, specify `0.0.0.0` or remove it by specifying `null`.
+    /** If `action` is `deliver`, the next hop that packets will be delivered to (must not be
+     *  `0.0.0.0`). For other `action` values, specify `0.0.0.0` or remove it by specifying
+     *  `null`.
      *
      *  At most two routes per `zone` in a table can have the same `destination` and `priority`,
      *  and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
@@ -25426,13 +26732,13 @@ namespace VpcV1 {
      *  hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other
-     *  `action` values, it must be omitted or specified as `0.0.0.0`.
+    /** If `action` is `deliver`, the next hop that packets will be delivered to (must not be
+     *  `0.0.0.0`). For other `action` values, it must be omitted or specified as `0.0.0.0`.
      *
      *  At most two routes per `zone` in a table can have the same `destination` and `priority`,
      *  and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
      */
-    nextHop?: RoutePrototypeNextHop;
+    nextHop?: RouteNextHopPrototype;
     /** The priority of this route. Smaller values have higher priority.
      *
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
@@ -25497,8 +26803,9 @@ namespace VpcV1 {
      *  with `ibm-` are reserved for system-provided routes, and are not allowed.
      */
     name?: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other
-     *  `action` values, specify `0.0.0.0` or remove it by specifying `null`.
+    /** If `action` is `deliver`, the next hop that packets will be delivered to (must not be
+     *  `0.0.0.0`). For other `action` values, specify `0.0.0.0` or remove it by specifying
+     *  `null`.
      *
      *  At most two routes per `zone` in a table can have the same `destination` and `priority`,
      *  and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
@@ -25973,14 +27280,14 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    /** The crypto-system used by this key. */
+    /** The crypto-system for this key. */
     type?: CreateKeyConstants.Type | string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createKey` operation. */
   export namespace CreateKeyConstants {
-    /** The crypto-system used by this key. */
+    /** The crypto-system for this key. */
     export enum Type {
       ED25519 = 'ed25519',
       RSA = 'rsa',
@@ -26149,9 +27456,8 @@ namespace VpcV1 {
      *  the region. Changing the name will not affect the system hostname.
      */
     name?: string;
-    /** The placement restrictions to use for the virtual server instance. For the placement
-     *  restrictions to be changed, the instance `status` must be `stopping` or `stopped`.
-     *
+    /** The placement restrictions to use for the virtual server instance. For the placement restrictions to be
+     *  changed, the instance `status` must be `stopping` or `stopped`.
      *  If set, `reservation_affinity.policy` must be `disabled`.
      */
     placementTarget?: InstancePlacementTargetPatch;
@@ -26753,6 +28059,14 @@ namespace VpcV1 {
     instanceGroupManagerId: string;
     /** The instance group manager action identifier. */
     id: string;
+    /** Indicates whether this scheduled action will be automatically deleted after it has completed and
+     *  `auto_delete_timeout` hours have passed.
+     */
+    autoDelete?: boolean;
+    /** If `auto_delete` is `true`, and this scheduled action has finished, the hours after which it will be
+     *  automatically deleted. If the value is `0`, the action will be deleted once it has finished.
+     */
+    autoDeleteTimeout?: number;
     /** The cron specification for a recurring scheduled action. Actions can be applied a maximum of one time within
      *  a 5 min period.
      */
@@ -26886,6 +28200,8 @@ namespace VpcV1 {
     instanceGroupId: string;
     /** The instance group membership identifier. */
     id: string;
+    /** If set to true, when deleting the membership the instance will also be deleted. */
+    deleteInstanceOnMembershipDelete?: boolean;
     /** The name for this instance group membership. The name must not be used by another membership for the
      *  instance group manager.
      */
@@ -27152,10 +28468,7 @@ namespace VpcV1 {
   export interface CreatePlacementGroupParams {
     /** The strategy for this placement group:
      *  - `host_spread`: place on different compute hosts
-     *  - `power_spread`: place on compute hosts that use different power sources
-     *
-     *  The enumerated values for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     *  - `power_spread`: place on compute hosts that use different power sources.
      */
     strategy: CreatePlacementGroupConstants.Strategy | string;
     /** The name for this placement group. The name must not be used by another placement group in the region. If
@@ -27171,7 +28484,7 @@ namespace VpcV1 {
 
   /** Constants for the `createPlacementGroup` operation. */
   export namespace CreatePlacementGroupConstants {
-    /** The strategy for this placement group: - `host_spread`: place on different compute hosts - `power_spread`: place on compute hosts that use different power sources The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+    /** The strategy for this placement group: - `host_spread`: place on different compute hosts - `power_spread`: place on compute hosts that use different power sources. */
     export enum Strategy {
       HOST_SPREAD = 'host_spread',
       POWER_SPREAD = 'power_spread',
@@ -27530,10 +28843,44 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `updateFirmwareForBareMetalServer` operation. */
+  export interface UpdateFirmwareForBareMetalServerParams {
+    /** The bare metal server identifier. */
+    id: string;
+    /** Indicates whether to automatically start the bare metal server after the firmware update is successfully
+     *  completed.
+     */
+    autoStart?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /** Parameters for the `getBareMetalServerInitialization` operation. */
   export interface GetBareMetalServerInitializationParams {
     /** The bare metal server identifier. */
     id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `replaceBareMetalServerInitialization` operation. */
+  export interface ReplaceBareMetalServerInitializationParams {
+    /** The bare metal server identifier. */
+    id: string;
+    /** The image to be used when provisioning the bare metal server. */
+    image: ImageIdentity;
+    /** The public SSH keys to install on the bare metal server. Keys will be made available to the bare metal
+     *  server as cloud-init vendor data. For cloud-init enabled images, these keys will also be added as SSH authorized
+     *  keys for the administrative user.
+     *
+     *  For Windows images, at least one key must be specified, and one will be selected to encrypt the administrator
+     *  password. Keys are optional for other images, but if no keys are specified, the instance will be inaccessible
+     *  unless the specified image provides another means of access.
+     */
+    keys: KeyIdentity[];
+    /** User data to be made available when initializing the bare metal server.
+     *
+     *  If unspecified, no user data will be made available.
+     */
+    userData?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -27665,24 +29012,32 @@ namespace VpcV1 {
   export interface UpdateVolumeParams {
     /** The volume identifier. */
     id: string;
-    /** The capacity to use for the volume (in gigabytes). The volume must be attached to a running virtual server
-     *  instance, and the specified value must not be less than the current capacity. Additionally, if the volume is
-     *  attached as a boot volume, the maximum value is 250 gigabytes.
-     *
-     *  The minimum and maximum limits for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+    /** The capacity to use for the volume (in gigabytes). For the capacity to be changed the volume's current
+     *  `attachment_state` must be one of the values included in
+     *  `adjustable_capacity_states`. If `adjustable_capacity_states` is empty, then the volume capacity cannot be
+     *  changed.  Additionally:
+     *  - The specified value must not be less than the current capacity.
+     *  - If the volume is attached as a boot volume, the specified value must not exceed
+     *    the `boot_capacity.max` of the volume profile.
+     *  - If the volume is attached as a data volume, the specified value must not exceed
+     *    the `capacity.max` of the volume profile.
      */
     capacity?: number;
-    /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
-     *  profile `family` of `custom`. The volume must be attached as a data volume to a running virtual server instance.
+    /** The maximum I/O operations per second (IOPS) to use for this volume.  For the IOPS to be changed the
+     *  volume's current `attachment_state` must be one of the values included in `adjustable_iops_states`. If
+     *  `adjustable_iops_states` is empty, then the IOPS cannot be changed.
      */
     iops?: number;
     /** The name for this volume. The name must not be used by another volume in the region. */
     name?: string;
     /** The profile to use for this volume. The requested profile must be in the same
-     *  `family` as the current profile. The volume must be attached as a data volume to
-     *  a running virtual server instance, and must have a `capacity` within the range
-     *  supported by the specified profile.
+     *  `family` as the current profile.  Additionally:
+     *  - If the volume is a boot volume then the value specified for `capacity` property
+     *  must not be less than the `boot_capacity.min` and must not exceed the
+     *  `boot_capacity.max` of the specified volume profile.
+     *  - If the volume is a data volume then the value specified for `capacity` property
+     *  must not be less than the `capacity.min` and must not exceed the `capacity.max`
+     *  of the specified volume profile.
      */
     profile?: VolumeProfileIdentity;
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume. */
@@ -28185,7 +29540,7 @@ namespace VpcV1 {
   export interface DeleteShareMountTargetParams {
     /** The file share identifier. */
     shareId: string;
-    /** The share mount target identifier. */
+    /** The file share mount target identifier. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -28194,7 +29549,7 @@ namespace VpcV1 {
   export interface GetShareMountTargetParams {
     /** The file share identifier. */
     shareId: string;
-    /** The share mount target identifier. */
+    /** The file share mount target identifier. */
     id: string;
     headers?: OutgoingHttpHeaders;
   }
@@ -28203,7 +29558,7 @@ namespace VpcV1 {
   export interface UpdateShareMountTargetParams {
     /** The file share identifier. */
     shareId: string;
-    /** The share mount target identifier. */
+    /** The file share mount target identifier. */
     id: string;
     /** The name for this share mount target. The name must not be used by another mount target for the file share. */
     name?: string;
@@ -28994,7 +30349,7 @@ namespace VpcV1 {
     direction?: UpdateNetworkAclRuleConstants.Direction | string;
     /** The name for this network ACL rule. The name must not be used by another rule for the network ACL. */
     name?: string;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol?: UpdateNetworkAclRuleConstants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source?: string;
@@ -29022,7 +30377,7 @@ namespace VpcV1 {
       INBOUND = 'inbound',
       OUTBOUND = 'outbound',
     }
-    /** The protocol to enforce. */
+    /** The network protocol. */
     export enum Protocol {
       ALL = 'all',
       ICMP = 'icmp',
@@ -29135,13 +30490,13 @@ namespace VpcV1 {
      *  Specify `null` to remove an existing ICMP traffic code.
      */
     code?: number;
-    /** The direction of traffic to enforce. */
+    /** The direction of traffic to allow. */
     direction?: UpdateSecurityGroupRuleConstants.Direction | string;
-    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+    /** The IP version to allow. The format of `local.address`, `remote.address`,
      *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
      *
-     *  If `remote` references a security group, then this rule only applies to IP addresses
-     *  (network interfaces) in that group matching this IP version.
+     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
+     *  IP version.
      */
     ipVersion?: UpdateSecurityGroupRuleConstants.IpVersion | string;
     /** The local IP address or range of local IP addresses to which this rule will allow inbound
@@ -29180,12 +30535,12 @@ namespace VpcV1 {
 
   /** Constants for the `updateSecurityGroupRule` operation. */
   export namespace UpdateSecurityGroupRuleConstants {
-    /** The direction of traffic to enforce. */
+    /** The direction of traffic to allow. */
     export enum Direction {
       INBOUND = 'inbound',
       OUTBOUND = 'outbound',
     }
-    /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+    /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
     export enum IpVersion {
       IPV4 = 'ipv4',
     }
@@ -29350,18 +30705,24 @@ namespace VpcV1 {
   export interface CreateIpsecPolicyParams {
     /** The authentication algorithm
      *
-     *  Must be `disabled` if and only if the `encryption_algorithm` is
-     *  `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`.
+     *  Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
+     *  `aes192gcm16`, or `aes256gcm16`
+     *
+     *  The `md5` and `sha1` algorithms have been deprecated.
      */
     authenticationAlgorithm: CreateIpsecPolicyConstants.AuthenticationAlgorithm | string;
     /** The encryption algorithm
      *
      *  The `authentication_algorithm` must be `disabled` if and only if
-     *  `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or
-     *  `aes256gcm16`.
+     *  `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`
+     *
+     *  The `triple_des` algorithm has been deprecated.
      */
     encryptionAlgorithm: CreateIpsecPolicyConstants.EncryptionAlgorithm | string;
-    /** Perfect Forward Secrecy. */
+    /** The Perfect Forward Secrecy group.
+     *
+     *  Groups `group_2` and `group_5` have been deprecated.
+     */
     pfs: CreateIpsecPolicyConstants.Pfs | string;
     /** The key lifetime in seconds. */
     keyLifetime?: number;
@@ -29378,14 +30739,14 @@ namespace VpcV1 {
 
   /** Constants for the `createIpsecPolicy` operation. */
   export namespace CreateIpsecPolicyConstants {
-    /** The authentication algorithm Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`. */
+    /** The authentication algorithm Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `md5` and `sha1` algorithms have been deprecated. */
     export enum AuthenticationAlgorithm {
       DISABLED = 'disabled',
       SHA256 = 'sha256',
       SHA384 = 'sha384',
       SHA512 = 'sha512',
     }
-    /** The encryption algorithm The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`. */
+    /** The encryption algorithm The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `triple_des` algorithm has been deprecated. */
     export enum EncryptionAlgorithm {
       AES128 = 'aes128',
       AES128GCM16 = 'aes128gcm16',
@@ -29394,7 +30755,7 @@ namespace VpcV1 {
       AES256 = 'aes256',
       AES256GCM16 = 'aes256gcm16',
     }
-    /** Perfect Forward Secrecy. */
+    /** The Perfect Forward Secrecy group. Groups `group_2` and `group_5` have been deprecated. */
     export enum Pfs {
       DISABLED = 'disabled',
       GROUP_14 = 'group_14',
@@ -29432,36 +30793,42 @@ namespace VpcV1 {
     id: string;
     /** The authentication algorithm
      *
-     *  Must be `disabled` if and only if the `encryption_algorithm` is
-     *  `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`.
+     *  Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
+     *  `aes192gcm16`, or `aes256gcm16`
+     *
+     *  The `md5` and `sha1` algorithms have been deprecated.
      */
     authenticationAlgorithm?: UpdateIpsecPolicyConstants.AuthenticationAlgorithm | string;
     /** The encryption algorithm
      *
      *  The `authentication_algorithm` must be `disabled` if and only if
-     *  `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or
-     *  `aes256gcm16`.
+     *  `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`
+     *
+     *  The `triple_des` algorithm has been deprecated.
      */
     encryptionAlgorithm?: UpdateIpsecPolicyConstants.EncryptionAlgorithm | string;
     /** The key lifetime in seconds. */
     keyLifetime?: number;
     /** The name for this IPsec policy. The name must not be used by another IPsec policy in the region. */
     name?: string;
-    /** Perfect Forward Secrecy. */
+    /** The Perfect Forward Secrecy group.
+     *
+     *  Groups `group_2` and `group_5` have been deprecated.
+     */
     pfs?: UpdateIpsecPolicyConstants.Pfs | string;
     headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateIpsecPolicy` operation. */
   export namespace UpdateIpsecPolicyConstants {
-    /** The authentication algorithm Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`. */
+    /** The authentication algorithm Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `md5` and `sha1` algorithms have been deprecated. */
     export enum AuthenticationAlgorithm {
       DISABLED = 'disabled',
       SHA256 = 'sha256',
       SHA384 = 'sha384',
       SHA512 = 'sha512',
     }
-    /** The encryption algorithm The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`. */
+    /** The encryption algorithm The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `triple_des` algorithm has been deprecated. */
     export enum EncryptionAlgorithm {
       AES128 = 'aes128',
       AES128GCM16 = 'aes128gcm16',
@@ -29470,7 +30837,7 @@ namespace VpcV1 {
       AES256 = 'aes256',
       AES256GCM16 = 'aes256gcm16',
     }
-    /** Perfect Forward Secrecy. */
+    /** The Perfect Forward Secrecy group. Groups `group_2` and `group_5` have been deprecated. */
     export enum Pfs {
       DISABLED = 'disabled',
       GROUP_14 = 'group_14',
@@ -29621,6 +30988,15 @@ namespace VpcV1 {
     adminStateUp?: boolean;
     /** The Dead Peer Detection settings. */
     deadPeerDetection?: VPNGatewayConnectionDPDPatch;
+    /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
+     *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
+     *  the lower `public_ip` address. Before enabling it on VPN connections to on-prem private networks, review
+     *  [distributing traffic
+     *  restrictions](https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-limitations#distributing-traffic-restrictions).
+     *
+     *  If specified, `mode` must be `route`.
+     */
+    distributeTraffic?: boolean;
     /** The establish mode of the VPN gateway connection:
      *  - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol
      *     negotiations or rekeying processes.
@@ -29881,7 +31257,7 @@ namespace VpcV1 {
     name?: string;
     /** The port number used by this VPN server. */
     port?: number;
-    /** The transport protocol used by this VPN server. */
+    /** The transport protocol to use for this VPN server. */
     protocol?: UpdateVpnServerConstants.Protocol | string;
     /** The subnets to provision this VPN server in (replacing the existing subnets). */
     subnets?: SubnetIdentity[];
@@ -29894,7 +31270,7 @@ namespace VpcV1 {
 
   /** Constants for the `updateVpnServer` operation. */
   export namespace UpdateVpnServerConstants {
-    /** The transport protocol used by this VPN server. */
+    /** The transport protocol to use for this VPN server. */
     export enum Protocol {
       TCP = 'tcp',
       UDP = 'udp',
@@ -30075,11 +31451,16 @@ namespace VpcV1 {
   export interface CreateLoadBalancerParams {
     /** Indicates whether this load balancer is public.
      *
-     *  At present, if route mode is enabled, the load balancer must not be public.
+     *  At present,
+     *  - If route mode is enabled, the load balancer must be private.
+     *  - If `is_private_path` is specified, it must be set to `false`.
      */
     isPublic: boolean;
-    /** The subnets to provision this load balancer in. The subnets must be in the same VPC. The load balancer's
-     *  availability will depend on the availability of the zones that the subnets reside in.
+    /** The subnets to provision this load balancer in.  The subnets must be in the same VPC.
+     *  - If 'availability' is specified as `subnet` in the profile, the load balancer's availability will depend on the
+     *  availability of the zones that the subnets reside in.
+     *  - If 'availability' is specified as `region` in the profile, the load balancer remains available as long as any
+     *  zone in the region is available. Only members in healthy zones will be sent new connections.
      *
      *  Load balancers in the `network` family allow only one subnet to be specified.
      */
@@ -30089,8 +31470,12 @@ namespace VpcV1 {
      *  If unspecified, DNS `A` records for this load balancer's `hostname` property will be added
      *  to the public DNS zone `lb.appdomain.cloud`. Otherwise, those DNS `A` records will be
      *  added to the specified `zone`.
+     *
+     *  Not supported by private path load balancers.
      */
     dns?: LoadBalancerDNSPrototype;
+    /** Indicates whether this is a private path load balancer. */
+    isPrivatePath?: boolean;
     /** The listeners of this load balancer. */
     listeners?: LoadBalancerListenerPrototypeLoadBalancerContext[];
     /** The logging configuration to use for this load balancer. See [VPC Datapath
@@ -30155,6 +31540,8 @@ namespace VpcV1 {
      *  Specify `null` to remove the existing DNS configuration, which will remove all DNS `A`
      *  records for this load balancer that had been added to `zone`, and add equivalent `A`
      *  records to the public DNS zone `lb.appdomain.cloud`.
+     *
+     *  Not supported by private path load balancers.
      */
     dns?: LoadBalancerDNSPatch;
     /** The logging configuration to use for this load balancer.
@@ -30258,9 +31645,9 @@ namespace VpcV1 {
     port?: number;
     /** The inclusive upper bound of the range of ports used by this listener. Must not be less than `port_min`.
      *
-     *  At present, only load balancers operating with route mode enabled, and public load balancers in the `network`
-     *  family support different values for `port_min` and
-     *  `port_max`. When route mode is enabled, the value `65535` must be specified.
+     *  Only load balancers with route mode enabled, or network load balancers with
+     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
+     *  route mode is enabled, the value `65535` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
@@ -30268,9 +31655,9 @@ namespace VpcV1 {
     portMax?: number;
     /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
      *
-     *  At present, only load balancers operating with route mode enabled, and public load balancers in the `network`
-     *  family support different values for `port_min` and
-     *  `port_max`. When route mode is enabled, the value `1` must be specified.
+     *  Only load balancers with route mode enabled, or network load balancers with
+     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
+     *  route mode is enabled, the value `1` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
@@ -30358,9 +31745,9 @@ namespace VpcV1 {
     port?: number;
     /** The inclusive upper bound of the range of ports used by this listener. Must not be less than `port_min`.
      *
-     *  At present, only load balancers operating with route mode enabled, and public load balancers in the `network`
-     *  family support different values for `port_min` and
-     *  `port_max`. When route mode is enabled, the value `65535` must be specified.
+     *  Only load balancers with route mode enabled, or network load balancers with
+     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
+     *  route mode is enabled, the value `65535` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
@@ -30368,9 +31755,9 @@ namespace VpcV1 {
     portMax?: number;
     /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
      *
-     *  At present, only load balancers operating with route mode enabled, and public load balancers in the `network`
-     *  family support different values for `port_min` and
-     *  `port_max`. When route mode is enabled, the value `1` must be specified.
+     *  Only load balancers with route mode enabled, or network load balancers with
+     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
+     *  route mode is enabled, the value `1` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
@@ -30419,17 +31806,13 @@ namespace VpcV1 {
     loadBalancerId: string;
     /** The listener identifier. */
     listenerId: string;
-    /** The policy action.
-     *
+    /** The policy action:
      *  - `forward`: Requests will be forwarded to the specified `target` pool
      *  - `https_redirect`: Requests will be redirected to the specified target listener. The
      *    listener must have a `protocol` of `http`, and the target listener must have a
      *    `protocol` of `https`
      *  - `redirect`: Requests will be redirected to the specified `target.url`
-     *  - `reject`: Requests will be rejected with a `403` status code
-     *
-     *  The enumerated values for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     *  - `reject`: Requests will be rejected with a `403` status code.
      */
     action: CreateLoadBalancerListenerPolicyConstants.Action | string;
     /** Priority of the policy. The priority is unique across all policies for this load balancer listener. Lower
@@ -30453,7 +31836,7 @@ namespace VpcV1 {
 
   /** Constants for the `createLoadBalancerListenerPolicy` operation. */
   export namespace CreateLoadBalancerListenerPolicyConstants {
-    /** The policy action. - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+    /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code. */
     export enum Action {
       FORWARD = 'forward',
       HTTPS_REDIRECT = 'https_redirect',
@@ -30526,26 +31909,20 @@ namespace VpcV1 {
     listenerId: string;
     /** The policy identifier. */
     policyId: string;
-    /** The condition of the rule. */
+    /** The condition for the rule. */
     condition: CreateLoadBalancerListenerPolicyRuleConstants.Condition | string;
-    /** The type of the rule.
-     *
-     *  Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
-     */
+    /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
     type: CreateLoadBalancerListenerPolicyRuleConstants.Type | string;
-    /** Value to be matched for rule condition.
+    /** The value to be matched for the rule condition.
      *
      *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     value: string;
-    /** The field. This is applicable to `header`, `query`, and `body` rule types.
+    /** The field to match for this rule. This property must be specified if the rule type is
+     *  `header`, may be specified if the rule type is `body` or `query`, and must not be specified if the rule type is
+     *  `hostname` or `path`.
      *
-     *  If the rule type is `header`, this property is required.
-     *
-     *  If the rule type is `query`, this is optional. If specified and the rule condition is not
-     *  `matches_regex`, the value must be percent-encoded.
-     *
-     *  If the rule type is `body`, this is optional.
+     *  If the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     field?: string;
     headers?: OutgoingHttpHeaders;
@@ -30553,7 +31930,7 @@ namespace VpcV1 {
 
   /** Constants for the `createLoadBalancerListenerPolicyRule` operation. */
   export namespace CreateLoadBalancerListenerPolicyRuleConstants {
-    /** The condition of the rule. */
+    /** The condition for the rule. */
     export enum Condition {
       CONTAINS = 'contains',
       EQUALS = 'equals',
@@ -30605,24 +31982,18 @@ namespace VpcV1 {
     policyId: string;
     /** The rule identifier. */
     id: string;
-    /** The condition of the rule. */
+    /** The condition for the rule. */
     condition?: UpdateLoadBalancerListenerPolicyRuleConstants.Condition | string;
-    /** The field. This is applicable to `header`, `query`, and `body` rule types.
+    /** The field to match for this rule. This property must be specified if the rule type is
+     *  `header`, may be specified if the rule type is `body` or `query`, and must not be specified if the rule type is
+     *  `hostname` or `path`.
      *
-     *  If the rule type is `header`, this property is required.
-     *
-     *  If the rule type is `query`, this is optional. If specified and the rule condition is not
-     *  `matches_regex`, the value must be percent-encoded.
-     *
-     *  If the rule type is `body`, this is optional.
+     *  If the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     field?: string;
-    /** The type of the rule.
-     *
-     *  Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
-     */
+    /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
     type?: UpdateLoadBalancerListenerPolicyRuleConstants.Type | string;
-    /** Value to be matched for rule condition.
+    /** The value to be matched for the rule condition.
      *
      *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
@@ -30632,7 +32003,7 @@ namespace VpcV1 {
 
   /** Constants for the `updateLoadBalancerListenerPolicyRule` operation. */
   export namespace UpdateLoadBalancerListenerPolicyRuleConstants {
-    /** The condition of the rule. */
+    /** The condition for the rule. */
     export enum Condition {
       CONTAINS = 'contains',
       EQUALS = 'equals',
@@ -30659,7 +32030,9 @@ namespace VpcV1 {
   export interface CreateLoadBalancerPoolParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
-    /** The load balancing algorithm. */
+    /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that
+     *  have `availability` with value `subnet` in the profile.
+     */
     algorithm: CreateLoadBalancerPoolConstants.Algorithm | string;
     /** The health monitor of this pool. */
     healthMonitor: LoadBalancerPoolHealthMonitorPrototype;
@@ -30681,12 +32054,13 @@ namespace VpcV1 {
      *  - `v2`: Enabled with version 2 (binary header format)
      *  - `disabled`: Disabled
      *
-     *  Supported by load balancers in the `application` family (otherwise always `disabled`).
+     *  For load balancers in the `network` family, this property must be `disabled`.
      */
     proxyProtocol?: CreateLoadBalancerPoolConstants.ProxyProtocol | string;
-    /** The session persistence of this pool. If unspecified, session persistence will be
-     *  disabled, and traffic will be distributed across backend server members of the
-     *  pool.
+    /** The session persistence of this pool. If specified, the load balancer must have
+     *  `source_ip_session_persistence_supported` set to `true` in its profile. If
+     *  unspecified, session persistence will be disabled, and traffic will be distributed
+     *  across backend server members of the pool.
      */
     sessionPersistence?: LoadBalancerPoolSessionPersistencePrototype;
     headers?: OutgoingHttpHeaders;
@@ -30694,7 +32068,7 @@ namespace VpcV1 {
 
   /** Constants for the `createLoadBalancerPool` operation. */
   export namespace CreateLoadBalancerPoolConstants {
-    /** The load balancing algorithm. */
+    /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that have `availability` with value `subnet` in the profile. */
     export enum Algorithm {
       LEAST_CONNECTIONS = 'least_connections',
       ROUND_ROBIN = 'round_robin',
@@ -30707,7 +32081,7 @@ namespace VpcV1 {
       TCP = 'tcp',
       UDP = 'udp',
     }
-    /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled Supported by load balancers in the `application` family (otherwise always `disabled`). */
+    /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled For load balancers in the `network` family, this property must be `disabled`. */
     export enum ProxyProtocol {
       DISABLED = 'disabled',
       V1 = 'v1',
@@ -30760,7 +32134,7 @@ namespace VpcV1 {
      *  - `v2`: Enabled with version 2 (binary header format)
      *  - `disabled`: Disabled
      *
-     *  Supported by load balancers in the `application` family (otherwise always `disabled`).
+     *  For load balancers in the `network` family, this property must be `disabled`.
      */
     proxyProtocol?: UpdateLoadBalancerPoolConstants.ProxyProtocol | string;
     /** The session persistence of this pool. */
@@ -30783,7 +32157,7 @@ namespace VpcV1 {
       TCP = 'tcp',
       UDP = 'udp',
     }
-    /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled Supported by load balancers in the `application` family (otherwise always `disabled`). */
+    /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled For load balancers in the `network` family, this property must be `disabled`. */
     export enum ProxyProtocol {
       DISABLED = 'disabled',
       V1 = 'v1',
@@ -30822,7 +32196,10 @@ namespace VpcV1 {
      *  subnet in.
      */
     target: LoadBalancerPoolMemberTargetPrototype;
-    /** Weight of the server member. Applicable only if the pool algorithm is `weighted_round_robin`. */
+    /** The weight of the server member.
+     *
+     *  If specified, the pool algorithm must be `weighted_round_robin`.
+     */
     weight?: number;
     headers?: OutgoingHttpHeaders;
   }
@@ -30884,7 +32261,10 @@ namespace VpcV1 {
      *  subnet in.
      */
     target?: LoadBalancerPoolMemberTargetPrototype;
-    /** Weight of the server member. Applicable only if the pool algorithm is `weighted_round_robin`. */
+    /** The weight of the server member.
+     *
+     *  If specified, the pool algorithm must be `weighted_round_robin`.
+     */
     weight?: number;
     headers?: OutgoingHttpHeaders;
   }
@@ -30899,6 +32279,10 @@ namespace VpcV1 {
     limit?: number;
     /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
     resourceGroupId?: string;
+    /** Filters the collection to resources with a `lifecycle_state` property matching one of the specified
+     *  comma-separated values.
+     */
+    lifecycleState?: ListEndpointGatewaysConstants.LifecycleState[] | string[];
     /** Filters the collection to resources with a `vpc.id` property matching the specified identifier. */
     vpcId?: string;
     /** Filters the collection to resources with a `vpc.crn` property matching the specified CRN. */
@@ -30912,10 +32296,26 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Constants for the `listEndpointGateways` operation. */
+  export namespace ListEndpointGatewaysConstants {
+    /** Filters the collection to resources with a `lifecycle_state` property matching one of the specified comma-separated values. */
+    export enum LifecycleState {
+      DELETING = 'deleting',
+      FAILED = 'failed',
+      PENDING = 'pending',
+      STABLE = 'stable',
+      SUSPENDED = 'suspended',
+      UPDATING = 'updating',
+      WAITING = 'waiting',
+    }
+  }
+
   /** Parameters for the `createEndpointGateway` operation. */
   export interface CreateEndpointGatewayParams {
-    /** The target to use for this endpoint gateway. Must not already be the target of another
-     *  endpoint gateway in the VPC.
+    /** The target to use for this endpoint gateway. The target:
+     *  - Must not already be the target of another endpoint gateway in the VPC
+     *  - Must not have a service endpoint that duplicates or overlaps with any `service_endpoints`
+     *    of another endpoint gateway in the VPC.
      */
     target: EndpointGatewayTargetPrototype;
     /** The VPC this endpoint gateway will reside in. */
@@ -31110,9 +32510,321 @@ namespace VpcV1 {
     headers?: OutgoingHttpHeaders;
   }
 
+  /** Parameters for the `listPrivatePathServiceGateways` operation. */
+  export interface ListPrivatePathServiceGatewaysParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
+    resourceGroupId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createPrivatePathServiceGateway` operation. */
+  export interface CreatePrivatePathServiceGatewayParams {
+    /** The load balancer for this private path service gateway. The load balancer must
+     *  have `is_private_path` set to `true`.
+     *
+     *  The private path service gateway will reside in the same VPC as the specified load
+     *  balancer.
+     */
+    loadBalancer: LoadBalancerIdentity;
+    /** The fully qualified domain names for this private path service gateway. Any uppercase letters will be
+     *  converted to lowercase.
+     */
+    serviceEndpoints: string[];
+    /** The policy to use for bindings from accounts without an explicit account policy. */
+    defaultAccessPolicy?: CreatePrivatePathServiceGatewayConstants.DefaultAccessPolicy | string;
+    /** The name for this private path service gateway. The name must not be used by another private path service
+     *  gateway in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+     */
+    resourceGroup?: ResourceGroupIdentity;
+    /** Indicates whether this private path service gateway has zonal affinity.
+     *  - `true`:  Traffic to the service from a zone the service resides in will remain in
+     *             that zone.
+     *  - `false`: Traffic to the service from a zone will be load balanced across all zones
+     *             in the region the service resides in.
+     */
+    zonalAffinity?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createPrivatePathServiceGateway` operation. */
+  export namespace CreatePrivatePathServiceGatewayConstants {
+    /** The policy to use for bindings from accounts without an explicit account policy. */
+    export enum DefaultAccessPolicy {
+      DENY = 'deny',
+      PERMIT = 'permit',
+      REVIEW = 'review',
+    }
+  }
+
+  /** Parameters for the `deletePrivatePathServiceGateway` operation. */
+  export interface DeletePrivatePathServiceGatewayParams {
+    /** The private path service gateway identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getPrivatePathServiceGateway` operation. */
+  export interface GetPrivatePathServiceGatewayParams {
+    /** The private path service gateway identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updatePrivatePathServiceGateway` operation. */
+  export interface UpdatePrivatePathServiceGatewayParams {
+    /** The private path service gateway identifier. */
+    id: string;
+    /** The policy to use for bindings from accounts without an explicit account policy. */
+    defaultAccessPolicy?: UpdatePrivatePathServiceGatewayConstants.DefaultAccessPolicy | string;
+    /** The load balancer for this private path service gateway. The load balancer must
+     *  have `is_private_path` set to `true`, and must be in the same VPC as the private
+     *  path service gateway.
+     */
+    loadBalancer?: LoadBalancerIdentity;
+    /** The name for this private path service gateway. The name must not be used by another private path service
+     *  gateway in the VPC.
+     */
+    name?: string;
+    /** Updating the value of `zonal_affinity` changes how traffic for existing and future endpoint gateway bindings
+     *  will be routed:
+     *  - `true`:  Traffic to the service from a zone the service resides in will remain in
+     *             that zone.
+     *  - `false`: Traffic to the service from a zone will be load balanced across all zones
+     *             in the region the service resides in.
+     */
+    zonalAffinity?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `updatePrivatePathServiceGateway` operation. */
+  export namespace UpdatePrivatePathServiceGatewayConstants {
+    /** The policy to use for bindings from accounts without an explicit account policy. */
+    export enum DefaultAccessPolicy {
+      DENY = 'deny',
+      PERMIT = 'permit',
+      REVIEW = 'review',
+    }
+  }
+
+  /** Parameters for the `listPrivatePathServiceGatewayAccountPolicies` operation. */
+  export interface ListPrivatePathServiceGatewayAccountPoliciesParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with an `account.id` property matching the specified identifier. */
+    accountId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createPrivatePathServiceGatewayAccountPolicy` operation. */
+  export interface CreatePrivatePathServiceGatewayAccountPolicyParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    /** The access policy for the account. Updating the access policy only affects pending and future endpoint
+     *  gateway bindings.
+     *  - permit: access will be permitted
+     *  - deny: access will be denied
+     *  - review: access will be manually reviewed
+     *
+     *  - Updating to `review` sets the status of future endpoint gateway bindings from
+     *     this account to `pending`.
+     *  - Updating to `permit` updates both the status of any `pending` and future endpoint
+     *    gateway bindings from this account to `permitted`.
+     *  - Updating to `deny` updates both the status of any `pending` and future endpoint
+     *    gateway bindings from this account to `denied`.
+     */
+    accessPolicy: CreatePrivatePathServiceGatewayAccountPolicyConstants.AccessPolicy | string;
+    /** The account for this access policy. The account must be unique across all account
+     *  policies for this private path service gateway.
+     */
+    account: AccountIdentity;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `createPrivatePathServiceGatewayAccountPolicy` operation. */
+  export namespace CreatePrivatePathServiceGatewayAccountPolicyConstants {
+    /** The access policy for the account. Updating the access policy only affects pending and future endpoint gateway bindings. - permit: access will be permitted - deny: access will be denied - review: access will be manually reviewed - Updating to `review` sets the status of future endpoint gateway bindings from this account to `pending`. - Updating to `permit` updates both the status of any `pending` and future endpoint gateway bindings from this account to `permitted`. - Updating to `deny` updates both the status of any `pending` and future endpoint gateway bindings from this account to `denied`. */
+    export enum AccessPolicy {
+      DENY = 'deny',
+      PERMIT = 'permit',
+      REVIEW = 'review',
+    }
+  }
+
+  /** Parameters for the `deletePrivatePathServiceGatewayAccountPolicy` operation. */
+  export interface DeletePrivatePathServiceGatewayAccountPolicyParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    /** The account policy identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getPrivatePathServiceGatewayAccountPolicy` operation. */
+  export interface GetPrivatePathServiceGatewayAccountPolicyParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    /** The account policy identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updatePrivatePathServiceGatewayAccountPolicy` operation. */
+  export interface UpdatePrivatePathServiceGatewayAccountPolicyParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    /** The account policy identifier. */
+    id: string;
+    /** The access policy for the account. Updating the access policy only affects pending and future endpoint
+     *  gateway bindings.
+     *  - permit: access will be permitted
+     *  - deny: access will be denied
+     *  - review: access will be manually reviewed
+     *
+     *  - Updating to `review` sets the status of future endpoint gateway bindings from
+     *     this account to `pending`.
+     *  - Updating to `permit` updates both the status of any `pending` and future endpoint
+     *    gateway bindings from this account to `permitted`.
+     *  - Updating to `deny` updates both the status of any `pending` and future endpoint
+     *    gateway bindings from this account to `denied`.
+     */
+    accessPolicy?: UpdatePrivatePathServiceGatewayAccountPolicyConstants.AccessPolicy | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `updatePrivatePathServiceGatewayAccountPolicy` operation. */
+  export namespace UpdatePrivatePathServiceGatewayAccountPolicyConstants {
+    /** The access policy for the account. Updating the access policy only affects pending and future endpoint gateway bindings. - permit: access will be permitted - deny: access will be denied - review: access will be manually reviewed - Updating to `review` sets the status of future endpoint gateway bindings from this account to `pending`. - Updating to `permit` updates both the status of any `pending` and future endpoint gateway bindings from this account to `permitted`. - Updating to `deny` updates both the status of any `pending` and future endpoint gateway bindings from this account to `denied`. */
+    export enum AccessPolicy {
+      DENY = 'deny',
+      PERMIT = 'permit',
+      REVIEW = 'review',
+    }
+  }
+
+  /** Parameters for the `listPrivatePathServiceGatewayEndpointGatewayBindings` operation. */
+  export interface ListPrivatePathServiceGatewayEndpointGatewayBindingsParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to endpoint gateway bindings with a `status` property matching the specified value. */
+    status?: ListPrivatePathServiceGatewayEndpointGatewayBindingsConstants.Status | string;
+    /** Filters the collection to resources with an `account.id` property matching the specified identifier. */
+    accountId?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listPrivatePathServiceGatewayEndpointGatewayBindings` operation. */
+  export namespace ListPrivatePathServiceGatewayEndpointGatewayBindingsConstants {
+    /** Filters the collection to endpoint gateway bindings with a `status` property matching the specified value. */
+    export enum Status {
+      ABANDONED = 'abandoned',
+      DENIED = 'denied',
+      EXPIRED = 'expired',
+      PENDING = 'pending',
+      PERMITTED = 'permitted',
+    }
+  }
+
+  /** Parameters for the `getPrivatePathServiceGatewayEndpointGatewayBinding` operation. */
+  export interface GetPrivatePathServiceGatewayEndpointGatewayBindingParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    /** The endpoint gateway binding identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `denyPrivatePathServiceGatewayEndpointGatewayBinding` operation. */
+  export interface DenyPrivatePathServiceGatewayEndpointGatewayBindingParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    /** The endpoint gateway binding identifier. */
+    id: string;
+    /** Indicates whether this will become the access policy for any `pending` and future endpoint gateway bindings
+     *  from the same account.
+     *
+     *  If set to `true`:
+     *  - If the account has an existing access policy, that policy will be updated to `deny`.
+     *    Otherwise, a new `deny` access policy will be created for the account.
+     *  - All `pending` endpoint gateway bindings for the account will be denied.
+     *
+     *  If set to `false`:
+     *  - No access policies will be created or updated
+     *  - All `pending` endpoint gateway bindings for the account will remain `pending`.
+     */
+    setAccountPolicy?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `permitPrivatePathServiceGatewayEndpointGatewayBinding` operation. */
+  export interface PermitPrivatePathServiceGatewayEndpointGatewayBindingParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    /** The endpoint gateway binding identifier. */
+    id: string;
+    /** Indicates whether this will become the access policy for any `pending` and future endpoint gateway bindings
+     *  from the same account.
+     *
+     *  If set to `true`:
+     *
+     *  - If the account has an existing access policy, that policy will be updated to
+     *    `permit`. Otherwise, a new `permit` access policy will be created for the account.
+     *  - All `pending` endpoint gateway bindings for the account will be permitted.
+     *
+     *  If set to `false`:
+     *
+     *  - No access policies will be created or updated
+     *  - All `pending` endpoint gateway bindings for the account will remain `pending`.
+     */
+    setAccountPolicy?: boolean;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `publishPrivatePathServiceGateway` operation. */
+  export interface PublishPrivatePathServiceGatewayParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `revokeAccountForPrivatePathServiceGateway` operation. */
+  export interface RevokeAccountForPrivatePathServiceGatewayParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    /** The account that will be revoked access to the private path service gateway. */
+    account: AccountIdentity;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `unpublishPrivatePathServiceGateway` operation. */
+  export interface UnpublishPrivatePathServiceGatewayParams {
+    /** The private path service gateway identifier. */
+    privatePathServiceGatewayId: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
   /*************************
    * model interfaces
    ************************/
+
+  /** Identifies an account by a unique property. */
+  export interface AccountIdentity {
+  }
 
   /** AccountReference. */
   export interface AccountReference {
@@ -31155,7 +32867,7 @@ namespace VpcV1 {
 
   /** AddressPrefixCollection. */
   export interface AddressPrefixCollection {
-    /** Collection of address prefixes. */
+    /** A page of address prefixes for the VPC. */
     address_prefixes: AddressPrefix[];
     /** A link to the first page of resources. */
     first: AddressPrefixCollectionFirst;
@@ -31262,7 +32974,7 @@ namespace VpcV1 {
 
   /** BackupPolicyCollection. */
   export interface BackupPolicyCollection {
-    /** Collection of backup policies. */
+    /** A page of backup policies. */
     backup_policies: BackupPolicy[];
     /** A link to the first page of resources. */
     first: BackupPolicyCollectionFirst;
@@ -31378,7 +33090,7 @@ namespace VpcV1 {
   export interface BackupPolicyJobCollection {
     /** A link to the first page of resources. */
     first: BackupPolicyJobCollectionFirst;
-    /** Collection of backup policy jobs. */
+    /** A page of jobs for the backup policy. */
     jobs: BackupPolicyJob[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -31408,9 +33120,13 @@ namespace VpcV1 {
   export interface BackupPolicyJobStatusReason {
     /** A reason code for the status:
      *  - `internal_error`: Internal error (contact IBM support)
+     *  - `snapshot_encryption_key_invalid`: The provided encryption key is unavailable
      *  - `snapshot_pending`: Cannot delete backup (snapshot) in the `pending` lifecycle state
      *  - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached
      *  - `source_volume_busy`: The source volume has `busy` set (after multiple retries)
+     *  - `source_volume_too_large`: The source volume exceeds the [maximum supported
+     *    size](https://cloud.ibm.com/docs/vpc?topic=vpc-snapshots-vpc-about&interface=api#snapshots-vpc-limitations)
+     *  - `source_volume_unavailable`: The source volume is not attached to a running instance
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
@@ -31423,12 +33139,15 @@ namespace VpcV1 {
   }
   export namespace BackupPolicyJobStatusReason {
     export namespace Constants {
-      /** A reason code for the status: - `internal_error`: Internal error (contact IBM support) - `snapshot_pending`: Cannot delete backup (snapshot) in the `pending` lifecycle state - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached - `source_volume_busy`: The source volume has `busy` set (after multiple retries) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** A reason code for the status: - `internal_error`: Internal error (contact IBM support) - `snapshot_encryption_key_invalid`: The provided encryption key is unavailable - `snapshot_pending`: Cannot delete backup (snapshot) in the `pending` lifecycle state - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached - `source_volume_busy`: The source volume has `busy` set (after multiple retries) - `source_volume_too_large`: The source volume exceeds the [maximum supported size](https://cloud.ibm.com/docs/vpc?topic=vpc-snapshots-vpc-about&interface=api#snapshots-vpc-limitations) - `source_volume_unavailable`: The source volume is not attached to a running instance The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         INTERNAL_ERROR = 'internal_error',
+        SNAPSHOT_ENCRYPTION_KEY_INVALID = 'snapshot_encryption_key_invalid',
         SNAPSHOT_PENDING = 'snapshot_pending',
         SNAPSHOT_VOLUME_LIMIT = 'snapshot_volume_limit',
         SOURCE_VOLUME_BUSY = 'source_volume_busy',
+        SOURCE_VOLUME_TOO_LARGE = 'source_volume_too_large',
+        SOURCE_VOLUME_UNAVAILABLE = 'source_volume_unavailable',
       }
     }
   }
@@ -31518,7 +33237,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: BackupPolicyPlanCollectionNext;
-    /** Collection of backup policy plans. */
+    /** A page of plans for the backup policy. */
     plans: BackupPolicyPlan[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -31592,7 +33311,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: BackupPolicyPlanReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this backup policy plan. */
     href: string;
     /** The unique identifier for this backup policy plan. */
@@ -31613,12 +33332,6 @@ namespace VpcV1 {
         BACKUP_POLICY_PLAN = 'backup_policy_plan',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface BackupPolicyPlanReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
@@ -31721,6 +33434,8 @@ namespace VpcV1 {
      *  fail to boot.
      */
     enable_secure_boot: boolean;
+    /** Firmware information for the bare metal server. */
+    firmware: BareMetalServerFirmware;
     /** The URL for this bare metal server. */
     href: string;
     /** The unique identifier for this bare metal server. */
@@ -31765,6 +33480,7 @@ namespace VpcV1 {
      *  - `failed`: server is failed and not usable (see `status_reasons`)
      *  - `maintenance`: server is undergoing maintenance (not usable)
      *  - `pending`: server is being provisioned and not yet usable
+     *  - `reinitializing`: server is reinitializing and not yet usable
      *  - `restarting`: server is restarting and not yet usable
      *  - `running`: server is powered on
      *  - `starting`: server is starting and not yet usable
@@ -31798,12 +33514,13 @@ namespace VpcV1 {
       export enum ResourceType {
         BARE_METAL_SERVER = 'bare_metal_server',
       }
-      /** The status of this bare metal server: - `deleting`: server is undergoing deletion - `failed`: server is failed and not usable (see `status_reasons`) - `maintenance`: server is undergoing maintenance (not usable) - `pending`: server is being provisioned and not yet usable - `restarting`: server is restarting and not yet usable - `running`: server is powered on - `starting`: server is starting and not yet usable - `stopped`: server is powered off The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The status of this bare metal server: - `deleting`: server is undergoing deletion - `failed`: server is failed and not usable (see `status_reasons`) - `maintenance`: server is undergoing maintenance (not usable) - `pending`: server is being provisioned and not yet usable - `reinitializing`: server is reinitializing and not yet usable - `restarting`: server is restarting and not yet usable - `running`: server is powered on - `starting`: server is starting and not yet usable - `stopped`: server is powered off The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         DELETING = 'deleting',
         FAILED = 'failed',
         MAINTENANCE = 'maintenance',
         PENDING = 'pending',
+        REINITIALIZING = 'reinitializing',
         RESTARTING = 'restarting',
         RUNNING = 'running',
         STARTING = 'starting',
@@ -31830,7 +33547,7 @@ namespace VpcV1 {
 
   /** BareMetalServerCollection. */
   export interface BareMetalServerCollection {
-    /** Collection of bare metal servers. */
+    /** A page of bare metal servers. */
     bare_metal_servers: BareMetalServer[];
     /** A link to the first page of resources. */
     first: BareMetalServerCollectionFirst;
@@ -31889,10 +33606,10 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this bare metal server disk. */
     id: string;
-    /** The disk interface used for attaching the disk:
-     *  - `fcp`: Attached using Fiber Channel Protocol
-     *  - `sata`: Attached using Serial Advanced Technology Attachment
-     *  - `nvme`: Attached using Non-Volatile Memory Express
+    /** The disk attachment interface used:
+     *  - `fcp`: Fiber Channel Protocol
+     *  - `sata`: Serial Advanced Technology Attachment
+     *  - `nvme`: Non-Volatile Memory Express
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
@@ -31907,7 +33624,7 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerDisk {
     export namespace Constants {
-      /** The disk interface used for attaching the disk: - `fcp`: Attached using Fiber Channel Protocol - `sata`: Attached using Serial Advanced Technology Attachment - `nvme`: Attached using Non-Volatile Memory Express The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The disk attachment interface used: - `fcp`: Fiber Channel Protocol - `sata`: Serial Advanced Technology Attachment - `nvme`: Non-Volatile Memory Express The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum InterfaceType {
         FCP = 'fcp',
         NVME = 'nvme',
@@ -31922,14 +33639,28 @@ namespace VpcV1 {
 
   /** BareMetalServerDiskCollection. */
   export interface BareMetalServerDiskCollection {
-    /** Collection of the bare metal server's disks. */
+    /** The disks for the bare metal server. */
     disks: BareMetalServerDisk[];
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface BareMetalServerDiskReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
+  /** Firmware information for the bare metal server. */
+  export interface BareMetalServerFirmware {
+    /** The type of update available.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    update: BareMetalServerFirmware.Constants.Update | string;
+  }
+  export namespace BareMetalServerFirmware {
+    export namespace Constants {
+      /** The type of update available. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Update {
+        NONE = 'none',
+        OPTIONAL = 'optional',
+        REQUIRED = 'required',
+      }
+    }
   }
 
   /** BareMetalServerInitialization. */
@@ -32030,7 +33761,11 @@ namespace VpcV1 {
     resource_type: BareMetalServerNetworkAttachment.Constants.ResourceType | string;
     /** The subnet of the virtual network interface for the bare metal server network attachment. */
     subnet: SubnetReference;
-    /** The bare metal server network attachment type. */
+    /** The bare metal server network attachment type.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     type: BareMetalServerNetworkAttachment.Constants.Type | string;
     /** The virtual network interface for this bare metal server network attachment. */
     virtual_network_interface: VirtualNetworkInterfaceReferenceAttachmentContext;
@@ -32056,7 +33791,7 @@ namespace VpcV1 {
       export enum ResourceType {
         BARE_METAL_SERVER_NETWORK_ATTACHMENT = 'bare_metal_server_network_attachment',
       }
-      /** The bare metal server network attachment type. */
+      /** The bare metal server network attachment type. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         PRIMARY = 'primary',
         SECONDARY = 'secondary',
@@ -32070,7 +33805,7 @@ namespace VpcV1 {
     first: BareMetalServerNetworkAttachmentCollectionFirst;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
-    /** Collection of bare metal server network attachments. */
+    /** The network attachments for the bare metal server. */
     network_attachments: BareMetalServerNetworkAttachment[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: BareMetalServerNetworkAttachmentCollectionNext;
@@ -32138,7 +33873,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: BareMetalServerNetworkAttachmentReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this bare metal server network attachment. */
     href: string;
     /** The unique identifier for this bare metal server network attachment. */
@@ -32153,6 +33888,8 @@ namespace VpcV1 {
     resource_type: BareMetalServerNetworkAttachmentReference.Constants.ResourceType | string;
     /** The subnet of the virtual network interface for the bare metal server network attachment. */
     subnet: SubnetReference;
+    /** The virtual network interface for this bare metal server network attachment. */
+    virtual_network_interface: VirtualNetworkInterfaceReferenceAttachmentContext;
   }
   export namespace BareMetalServerNetworkAttachmentReference {
     export namespace Constants {
@@ -32161,12 +33898,6 @@ namespace VpcV1 {
         BARE_METAL_SERVER_NETWORK_ATTACHMENT = 'bare_metal_server_network_attachment',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface BareMetalServerNetworkAttachmentReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** BareMetalServerNetworkInterface. */
@@ -32249,7 +33980,7 @@ namespace VpcV1 {
      */
     interface_type: BareMetalServerNetworkInterface.Constants.InterfaceType | string;
     /** The MAC address of this bare metal server network interface. If the MAC address has not yet been selected,
-     *  the value will be an empty string.
+     *  the value will be empty.
      *
      *  If this bare metal server has network attachments, this network interface is a
      *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
@@ -32335,7 +34066,7 @@ namespace VpcV1 {
     first: BareMetalServerNetworkInterfaceCollectionFirst;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
-    /** Collection of bare metal server network interfaces. */
+    /** The network interfaces for the bare metal server. */
     network_interfaces: BareMetalServerNetworkInterface[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: BareMetalServerNetworkInterfaceCollectionNext;
@@ -32428,18 +34159,6 @@ namespace VpcV1 {
         VLAN = 'vlan',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface BareMetalServerNetworkInterfaceReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface BareMetalServerNetworkInterfaceReferenceTargetContextDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** BareMetalServerPrimaryNetworkAttachmentPrototype. */
@@ -32560,7 +34279,7 @@ namespace VpcV1 {
     cpu_architecture: BareMetalServerProfileCPUArchitecture;
     cpu_core_count: BareMetalServerProfileCPUCoreCount;
     cpu_socket_count: BareMetalServerProfileCPUSocketCount;
-    /** Collection of the bare metal server profile's disks. */
+    /** The disks for a bare metal server with this profile. */
     disks: BareMetalServerProfileDisk[];
     /** The product family this bare metal server profile belongs to. */
     family: string;
@@ -32626,7 +34345,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: BareMetalServerProfileCollectionNext;
-    /** Collection of bare metal server profiles. */
+    /** A page of bare metal server profiles. */
     profiles: BareMetalServerProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -32682,14 +34401,7 @@ namespace VpcV1 {
 
   /** BareMetalServerProfileDiskSupportedInterfaces. */
   export interface BareMetalServerProfileDiskSupportedInterfaces {
-    /** The disk interface used for attaching the disk:
-     *  - `fcp`: Attached using Fiber Channel Protocol
-     *  - `sata`: Attached using Serial Advanced Technology Attachment
-     *  - `nvme`: Attached using Non-Volatile Memory Express
-     *
-     *  The enumerated values for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
-     */
+    /** The default value for this profile field. */
     default: BareMetalServerProfileDiskSupportedInterfaces.Constants.Default | string;
     /** The type for this profile field. */
     type: BareMetalServerProfileDiskSupportedInterfaces.Constants.Type | string;
@@ -32698,7 +34410,7 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerProfileDiskSupportedInterfaces {
     export namespace Constants {
-      /** The disk interface used for attaching the disk: - `fcp`: Attached using Fiber Channel Protocol - `sata`: Attached using Serial Advanced Technology Attachment - `nvme`: Attached using Non-Volatile Memory Express The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The default value for this profile field. */
       export enum Default {
         FCP = 'fcp',
         NVME = 'nvme',
@@ -32858,6 +34570,7 @@ namespace VpcV1 {
      *  - `cannot_start_compute`: An error occurred while allocating compute resources
      *  - `cannot_start_ip_address`: An error occurred while allocating an IP address
      *  - `cannot_start_network`: An error occurred while allocating network resources
+     *  - `cannot_update_firmware`: An error occurred while updating bare metal server firmware
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
@@ -32870,13 +34583,15 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerStatusReason {
     export namespace Constants {
-      /** The status reason code: - `cannot_start`: Failed to start due to an internal error - `cannot_start_capacity`: Insufficient capacity within the selected zone - `cannot_start_compute`: An error occurred while allocating compute resources - `cannot_start_ip_address`: An error occurred while allocating an IP address - `cannot_start_network`: An error occurred while allocating network resources The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The status reason code: - `cannot_start`: Failed to start due to an internal error - `cannot_start_capacity`: Insufficient capacity within the selected zone - `cannot_start_compute`: An error occurred while allocating compute resources - `cannot_start_ip_address`: An error occurred while allocating an IP address - `cannot_start_network`: An error occurred while allocating network resources - `cannot_update_firmware`: An error occurred while updating bare metal server firmware The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
+        CANNOT_REINITIALIZE = 'cannot_reinitialize',
         CANNOT_START = 'cannot_start',
         CANNOT_START_CAPACITY = 'cannot_start_capacity',
         CANNOT_START_COMPUTE = 'cannot_start_compute',
         CANNOT_START_IP_ADDRESS = 'cannot_start_ip_address',
         CANNOT_START_NETWORK = 'cannot_start_network',
+        CANNOT_UPDATE_FIRMWARE = 'cannot_update_firmware',
       }
     }
   }
@@ -32970,13 +34685,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: CatalogOfferingVersionPlanReferenceDeleted;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface CatalogOfferingVersionPlanReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
+    deleted?: Deleted;
   }
 
   /** CatalogOfferingVersionReference. */
@@ -33039,12 +34748,8 @@ namespace VpcV1 {
 
   /** DNSServerPrototype. */
   export interface DNSServerPrototype {
-    /** The IP address.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
-     *  in the future.
-     */
-    address: string;
+    /** The DNS server IPv4 address. */
+    address?: string;
     /** DHCP configuration for the specified zone will have this DNS server listed first. */
     zone_affinity?: ZoneIdentity;
   }
@@ -33068,7 +34773,7 @@ namespace VpcV1 {
     created_at: string;
     /** The CRN for this dedicated host. */
     crn: string;
-    /** Collection of the dedicated host's disks. */
+    /** The disks for the dedicated host. */
     disks: DedicatedHostDisk[];
     /** The dedicated host group this dedicated host is in. */
     group: DedicatedHostGroupReference;
@@ -33139,7 +34844,7 @@ namespace VpcV1 {
 
   /** DedicatedHostCollection. */
   export interface DedicatedHostCollection {
-    /** Collection of dedicated hosts. */
+    /** A page of dedicated hosts. */
     dedicated_hosts: DedicatedHost[];
     /** A link to the first page of resources. */
     first: DedicatedHostCollectionFirst;
@@ -33175,11 +34880,7 @@ namespace VpcV1 {
     id: string;
     /** Instance disks that are on this dedicated host disk. */
     instance_disks: InstanceDiskReference[];
-    /** The disk interface used for attaching the disk
-     *
-     *  The enumerated values for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
-     */
+    /** The disk interface used for attaching the disk. */
     interface_type: DedicatedHostDisk.Constants.InterfaceType | string;
     /** The lifecycle state of this dedicated host disk. */
     lifecycle_state?: DedicatedHostDisk.Constants.LifecycleState | string;
@@ -33191,12 +34892,16 @@ namespace VpcV1 {
     resource_type: DedicatedHostDisk.Constants.ResourceType | string;
     /** The size of the disk in GB (gigabytes). */
     size: number;
-    /** The instance disk interfaces supported for this dedicated host disk. */
+    /** The instance disk interfaces supported for this dedicated host disk.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     supported_instance_interface_types: DedicatedHostDisk.Constants.SupportedInstanceInterfaceTypes[] | string[];
   }
   export namespace DedicatedHostDisk {
     export namespace Constants {
-      /** The disk interface used for attaching the disk The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The disk interface used for attaching the disk. */
       export enum InterfaceType {
         NVME = 'nvme',
       }
@@ -33214,7 +34919,7 @@ namespace VpcV1 {
       export enum ResourceType {
         DEDICATED_HOST_DISK = 'dedicated_host_disk',
       }
-      /** The instance disk interfaces supported for this dedicated host disk. */
+      /** The instance disk interfaces supported for this dedicated host disk. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum SupportedInstanceInterfaceTypes {
         NVME = 'nvme',
         VIRTIO_BLK = 'virtio_blk',
@@ -33224,7 +34929,7 @@ namespace VpcV1 {
 
   /** DedicatedHostDiskCollection. */
   export interface DedicatedHostDiskCollection {
-    /** Collection of the dedicated host's disks. */
+    /** The disks for the dedicated host. */
     disks: DedicatedHostDisk[];
   }
 
@@ -33274,7 +34979,7 @@ namespace VpcV1 {
   export interface DedicatedHostGroupCollection {
     /** A link to the first page of resources. */
     first: DedicatedHostGroupCollectionFirst;
-    /** Collection of dedicated host groups. */
+    /** A page of dedicated host groups. */
     groups: DedicatedHostGroup[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -33317,7 +35022,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: DedicatedHostGroupReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this dedicated host group. */
     href: string;
     /** The unique identifier for this dedicated host group. */
@@ -33334,12 +35039,6 @@ namespace VpcV1 {
         DEDICATED_HOST_GROUP = 'dedicated_host_group',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface DedicatedHostGroupReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** The dedicated host NUMA configuration. */
@@ -33362,7 +35061,7 @@ namespace VpcV1 {
   export interface DedicatedHostProfile {
     /** The product class this dedicated host profile belongs to. */
     class: string;
-    /** Collection of the dedicated host profile's disks. */
+    /** The disks for a dedicated host with this profile. */
     disks: DedicatedHostProfileDisk[];
     /** The product family this dedicated host profile belongs to
      *
@@ -33381,9 +35080,9 @@ namespace VpcV1 {
      *    and usable.
      *  - `current`: This dedicated host profile is the latest revision.
      *
-     *  Revisions are indicated by the generation of a dedicated host profile. Refer to the [profile naming conventions]
-     *  (https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles&interface=ui#profiles-naming-rule) for information on how
-     *  generations are defined within a dedicated host profile.
+     *  Revisions are indicated by the generation of a dedicated host profile. Refer to the [profile naming
+     *  conventions](https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles&interface=ui#profiles-naming-rule) for
+     *  information on how generations are defined within a dedicated host profile.
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
@@ -33403,7 +35102,7 @@ namespace VpcV1 {
         COMPUTE = 'compute',
         MEMORY = 'memory',
       }
-      /** The status of the dedicated host profile: - `previous`: This dedicated host profile is an older revision, but remains provisionable and usable. - `current`: This dedicated host profile is the latest revision. Revisions are indicated by the generation of a dedicated host profile. Refer to the [profile naming conventions] (https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within a dedicated host profile. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The status of the dedicated host profile: - `previous`: This dedicated host profile is an older revision, but remains provisionable and usable. - `current`: This dedicated host profile is the latest revision. Revisions are indicated by the generation of a dedicated host profile. Refer to the [profile naming conventions](https://cloud.ibm.com/docs/vpc?topic=vpc-dh-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within a dedicated host profile. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         CURRENT = 'current',
         PREVIOUS = 'previous',
@@ -33419,7 +35118,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: DedicatedHostProfileCollectionNext;
-    /** Collection of dedicated host profiles. */
+    /** A page of dedicated host profiles. */
     profiles: DedicatedHostProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -33603,7 +35302,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: DedicatedHostReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this dedicated host. */
     href: string;
     /** The unique identifier for this dedicated host. */
@@ -33620,12 +35319,6 @@ namespace VpcV1 {
         DEDICATED_HOST = 'dedicated_host',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface DedicatedHostReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** DefaultNetworkACL. */
@@ -33671,6 +35364,8 @@ namespace VpcV1 {
     advertise_routes_to: DefaultRoutingTable.Constants.AdvertiseRoutesTo[] | string[];
     /** The date and time that this routing table was created. */
     created_at: string;
+    /** The CRN for this VPC routing table. */
+    crn: string;
     /** The URL for this routing table. */
     href: string;
     /** The unique identifier for this routing table. */
@@ -33683,6 +35378,8 @@ namespace VpcV1 {
      *  randomly-selected words at creation, but may be changed.
      */
     name: string;
+    /** The resource group for this routing table. */
+    resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: DefaultRoutingTable.Constants.ResourceType | string;
     /** Indicates whether this routing table is used to route traffic that originates from
@@ -33758,9 +35455,9 @@ namespace VpcV1 {
   export interface DefaultSecurityGroup {
     /** The date and time that this security group was created. */
     created_at: string;
-    /** The security group's CRN. */
+    /** The CRN for this security group. */
     crn: string;
-    /** The security group's canonical URL. */
+    /** The URL for this security group. */
     href: string;
     /** The unique identifier for this security group. */
     id: string;
@@ -33779,6 +35476,12 @@ namespace VpcV1 {
     targets: SecurityGroupTargetReference[];
     /** The VPC this security group resides in. */
     vpc: VPCReference;
+  }
+
+  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  export interface Deleted {
+    /** Link to documentation about deleted resources. */
+    more_info: string;
   }
 
   /** Identifies an encryption key by a unique property. */
@@ -33868,7 +35571,7 @@ namespace VpcV1 {
 
   /** EndpointGatewayCollection. */
   export interface EndpointGatewayCollection {
-    /** Collection of endpoint gateways. */
+    /** A page of endpoint gateways. */
     endpoint_gateways: EndpointGateway[];
     /** A link to the first page of resources. */
     first: EndpointGatewayCollectionFirst;
@@ -33895,6 +35598,9 @@ namespace VpcV1 {
   /** EndpointGatewayLifecycleReason. */
   export interface EndpointGatewayLifecycleReason {
     /** A reason code for this lifecycle state:
+     *  - `access_denied`: endpoint gateway access was denied
+     *  - `access_expired`: endpoint gateway access has expired
+     *  - `access_pending`: endpoint gateway access is pending
      *  - `dns_resolution_binding_pending`: the DNS resolution binding is being set up
      *  - `internal_error`: internal error (contact IBM support)
      *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
@@ -33911,19 +35617,16 @@ namespace VpcV1 {
   }
   export namespace EndpointGatewayLifecycleReason {
     export namespace Constants {
-      /** A reason code for this lifecycle state: - `dns_resolution_binding_pending`: the DNS resolution binding is being set up - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** A reason code for this lifecycle state: - `access_denied`: endpoint gateway access was denied - `access_expired`: endpoint gateway access has expired - `access_pending`: endpoint gateway access is pending - `dns_resolution_binding_pending`: the DNS resolution binding is being set up - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
+        ACCESS_DENIED = 'access_denied',
+        ACCESS_EXPIRED = 'access_expired',
+        ACCESS_PENDING = 'access_pending',
         DNS_RESOLUTION_BINDING_PENDING = 'dns_resolution_binding_pending',
         INTERNAL_ERROR = 'internal_error',
         RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface EndpointGatewayReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** EndpointGatewayReferenceRemote. */
@@ -33972,7 +35675,7 @@ namespace VpcV1 {
   export interface EndpointGatewayTarget {
   }
 
-  /** The target to use for this endpoint gateway. Must not already be the target of another endpoint gateway in the VPC. */
+  /** The target to use for this endpoint gateway. The target: - Must not already be the target of another endpoint gateway in the VPC - Must not have a service endpoint that duplicates or overlaps with any `service_endpoints` of another endpoint gateway in the VPC. */
   export interface EndpointGatewayTargetPrototype {
     /** The type of target for this endpoint gateway. */
     resource_type: EndpointGatewayTargetPrototype.Constants.ResourceType | string;
@@ -33981,6 +35684,7 @@ namespace VpcV1 {
     export namespace Constants {
       /** The type of target for this endpoint gateway. */
       export enum ResourceType {
+        PRIVATE_PATH_SERVICE_GATEWAY = 'private_path_service_gateway',
         PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
         PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
       }
@@ -34003,7 +35707,11 @@ namespace VpcV1 {
     name: string;
     /** The resource group for this floating IP. */
     resource_group: ResourceGroupReference;
-    /** The status of the floating IP. */
+    /** The status of the floating IP.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     status: FloatingIP.Constants.Status | string;
     /** The target of this floating IP. */
     target?: FloatingIPTarget;
@@ -34012,7 +35720,7 @@ namespace VpcV1 {
   }
   export namespace FloatingIP {
     export namespace Constants {
-      /** The status of the floating IP. */
+      /** The status of the floating IP. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         AVAILABLE = 'available',
         DELETING = 'deleting',
@@ -34026,7 +35734,7 @@ namespace VpcV1 {
   export interface FloatingIPCollection {
     /** A link to the first page of resources. */
     first: FloatingIPCollectionFirst;
-    /** Collection of floating IPs. */
+    /** A page of floating IPs. */
     floating_ips: FloatingIP[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -34052,7 +35760,7 @@ namespace VpcV1 {
   export interface FloatingIPCollectionVirtualNetworkInterfaceContext {
     /** A link to the first page of resources. */
     first: FloatingIPCollectionVirtualNetworkInterfaceContextFirst;
-    /** Collection of floating IPs bound to the virtual network interface specified by the identifier in the URL. */
+    /** A page of floating IPs bound to the virtual network interface specified by the identifier in the URL. */
     floating_ips: FloatingIPReference[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -34095,19 +35803,13 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: FloatingIPReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this floating IP. */
     href: string;
     /** The unique identifier for this floating IP. */
     id: string;
     /** The name for this floating IP. The name is unique across all floating IPs in the region. */
     name: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface FloatingIPReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** The target of this floating IP. */
@@ -34124,7 +35826,7 @@ namespace VpcV1 {
 
   /** FloatingIPUnpaginatedCollection. */
   export interface FloatingIPUnpaginatedCollection {
-    /** Collection of floating IPs. */
+    /** The floating IPs. */
     floating_ips: FloatingIP[];
   }
 
@@ -34199,7 +35901,7 @@ namespace VpcV1 {
   export interface FlowLogCollectorCollection {
     /** A link to the first page of resources. */
     first: FlowLogCollectorCollectionFirst;
-    /** Collection of flow log collectors. */
+    /** A page of flow log collectors. */
     flow_log_collectors: FlowLogCollector[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -34229,17 +35931,14 @@ namespace VpcV1 {
   export interface FlowLogCollectorTargetPrototype {
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface GenericResourceReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** IKEPolicy. */
   export interface IKEPolicy {
-    /** The authentication algorithm
+    /** The authentication algorithm.
      *
      *  The `md5` and `sha1` algorithms have been deprecated.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     authentication_algorithm: IKEPolicy.Constants.AuthenticationAlgorithm | string;
     /** The VPN gateway connections that use this IKE policy. */
@@ -34251,12 +35950,15 @@ namespace VpcV1 {
      *  Groups `2` and `5` have been deprecated.
      */
     dh_group: number;
-    /** The encryption algorithm
+    /** The encryption algorithm.
      *
      *  The `triple_des` algorithm has been deprecated.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     encryption_algorithm: IKEPolicy.Constants.EncryptionAlgorithm | string;
-    /** The IKE policy's canonical URL. */
+    /** The URL for this IKE policy. */
     href: string;
     /** The unique identifier for this IKE policy. */
     id: string;
@@ -34266,7 +35968,11 @@ namespace VpcV1 {
     key_lifetime: number;
     /** The name for this IKE policy. The name is unique across all IKE policies in the region. */
     name: string;
-    /** The IKE negotiation mode. Only `main` is supported. */
+    /** The IKE negotiation mode.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     negotiation_mode: IKEPolicy.Constants.NegotiationMode | string;
     /** The resource group for this IKE policy. */
     resource_group: ResourceGroupReference;
@@ -34275,7 +35981,7 @@ namespace VpcV1 {
   }
   export namespace IKEPolicy {
     export namespace Constants {
-      /** The authentication algorithm The `md5` and `sha1` algorithms have been deprecated. */
+      /** The authentication algorithm. The `md5` and `sha1` algorithms have been deprecated. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AuthenticationAlgorithm {
         MD5 = 'md5',
         SHA1 = 'sha1',
@@ -34283,14 +35989,14 @@ namespace VpcV1 {
         SHA384 = 'sha384',
         SHA512 = 'sha512',
       }
-      /** The encryption algorithm The `triple_des` algorithm has been deprecated. */
+      /** The encryption algorithm. The `triple_des` algorithm has been deprecated. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum EncryptionAlgorithm {
         AES128 = 'aes128',
         AES192 = 'aes192',
         AES256 = 'aes256',
         TRIPLE_DES = 'triple_des',
       }
-      /** The IKE negotiation mode. Only `main` is supported. */
+      /** The IKE negotiation mode. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum NegotiationMode {
         MAIN = 'main',
       }
@@ -34305,7 +36011,7 @@ namespace VpcV1 {
   export interface IKEPolicyCollection {
     /** A link to the first page of resources. */
     first: IKEPolicyCollectionFirst;
-    /** Collection of IKE policies. */
+    /** A page of IKE policies. */
     ike_policies: IKEPolicy[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -34329,9 +36035,7 @@ namespace VpcV1 {
 
   /** IKEPolicyConnectionCollection. */
   export interface IKEPolicyConnectionCollection {
-    /** Collection of VPN gateway connections that use a specified IKE policy specified by the identifier in the
-     *  URL.
-     */
+    /** A page of VPN gateway connections that use the IKE policy specified by the identifier in the URL. */
     connections: VPNGatewayConnection[];
     /** A link to the first page of resources. */
     first: IKEPolicyConnectionCollectionFirst;
@@ -34360,8 +36064,8 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: IKEPolicyReferenceDeleted;
-    /** The IKE policy's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this IKE policy. */
     href: string;
     /** The unique identifier for this IKE policy. */
     id: string;
@@ -34377,12 +36081,6 @@ namespace VpcV1 {
         IKE_POLICY = 'ike_policy',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface IKEPolicyReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** IP. */
@@ -34401,26 +36099,29 @@ namespace VpcV1 {
      *
      *  The `md5` and `sha1` algorithms have been deprecated
      *
-     *  Must be `disabled` if and only if the `encryption_algorithm` is
-     *  `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     authentication_algorithm: IPsecPolicy.Constants.AuthenticationAlgorithm | string;
     /** The VPN gateway connections that use this IPsec policy. */
     connections: VPNGatewayConnectionReference[];
     /** The date and time that this IPsec policy was created. */
     created_at: string;
-    /** The encapsulation mode used. Only `tunnel` is supported. */
+    /** The encapsulation mode used.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     encapsulation_mode: IPsecPolicy.Constants.EncapsulationMode | string;
     /** The encryption algorithm
      *
      *  The `triple_des` algorithm has been deprecated
      *
-     *  The `authentication_algorithm` must be `disabled` if and only if
-     *  `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or
-     *  `aes256gcm16`.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     encryption_algorithm: IPsecPolicy.Constants.EncryptionAlgorithm | string;
-    /** The IPsec policy's canonical URL. */
+    /** The URL for this IPsec policy. */
     href: string;
     /** The unique identifier for this IPsec policy. */
     id: string;
@@ -34428,21 +36129,28 @@ namespace VpcV1 {
     key_lifetime: number;
     /** The name for this IPsec policy. The name is unique across all IPsec policies in the region. */
     name: string;
-    /** Perfect Forward Secrecy
+    /** The Perfect Forward Secrecy group
      *
-     *  Groups `group_2` and `group_5` have been deprecated.
+     *  Groups `group_2` and `group_5` have been deprecated
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     pfs: IPsecPolicy.Constants.Pfs | string;
     /** The resource group for this IPsec policy. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: IPsecPolicy.Constants.ResourceType | string;
-    /** The transform protocol used. Only `esp` is supported. */
+    /** The transform protocol used.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     transform_protocol: IPsecPolicy.Constants.TransformProtocol | string;
   }
   export namespace IPsecPolicy {
     export namespace Constants {
-      /** The authentication algorithm The `md5` and `sha1` algorithms have been deprecated Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`. */
+      /** The authentication algorithm The `md5` and `sha1` algorithms have been deprecated The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AuthenticationAlgorithm {
         DISABLED = 'disabled',
         MD5 = 'md5',
@@ -34451,11 +36159,11 @@ namespace VpcV1 {
         SHA384 = 'sha384',
         SHA512 = 'sha512',
       }
-      /** The encapsulation mode used. Only `tunnel` is supported. */
+      /** The encapsulation mode used. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum EncapsulationMode {
         TUNNEL = 'tunnel',
       }
-      /** The encryption algorithm The `triple_des` algorithm has been deprecated The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`. */
+      /** The encryption algorithm The `triple_des` algorithm has been deprecated The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum EncryptionAlgorithm {
         AES128 = 'aes128',
         AES128GCM16 = 'aes128gcm16',
@@ -34465,7 +36173,7 @@ namespace VpcV1 {
         AES256GCM16 = 'aes256gcm16',
         TRIPLE_DES = 'triple_des',
       }
-      /** Perfect Forward Secrecy Groups `group_2` and `group_5` have been deprecated. */
+      /** The Perfect Forward Secrecy group Groups `group_2` and `group_5` have been deprecated The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Pfs {
         DISABLED = 'disabled',
         GROUP_14 = 'group_14',
@@ -34487,7 +36195,7 @@ namespace VpcV1 {
       export enum ResourceType {
         IPSEC_POLICY = 'ipsec_policy',
       }
-      /** The transform protocol used. Only `esp` is supported. */
+      /** The transform protocol used. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum TransformProtocol {
         ESP = 'esp',
       }
@@ -34498,7 +36206,7 @@ namespace VpcV1 {
   export interface IPsecPolicyCollection {
     /** A link to the first page of resources. */
     first: IPsecPolicyCollectionFirst;
-    /** Collection of IPsec policies. */
+    /** A page of IPsec policies. */
     ipsec_policies: IPsecPolicy[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -34522,9 +36230,7 @@ namespace VpcV1 {
 
   /** IPsecPolicyConnectionCollection. */
   export interface IPsecPolicyConnectionCollection {
-    /** Collection of VPN gateway connections that use a specified IPsec policy specified by the identifier in the
-     *  URL.
-     */
+    /** A page of VPN gateway connections that use the IPsec policy specified by the identifier in the URL. */
     connections: VPNGatewayConnection[];
     /** A link to the first page of resources. */
     first: IPsecPolicyConnectionCollectionFirst;
@@ -34553,8 +36259,8 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: IPsecPolicyReferenceDeleted;
-    /** The IPsec policy's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this IPsec policy. */
     href: string;
     /** The unique identifier for this IPsec policy. */
     id: string;
@@ -34570,12 +36276,6 @@ namespace VpcV1 {
         IPSEC_POLICY = 'ipsec_policy',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface IPsecPolicyReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** Image. */
@@ -34709,7 +36409,7 @@ namespace VpcV1 {
   export interface ImageCollection {
     /** A link to the first page of resources. */
     first: ImageCollectionFirst;
-    /** Collection of images. */
+    /** A page of images. */
     images: Image[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -34758,7 +36458,7 @@ namespace VpcV1 {
      *  `storage_object.name`, or `storage_href` values.
      */
     name: string;
-    /** The type of resource referenced. */
+    /** The resource type. */
     resource_type: ImageExportJob.Constants.ResourceType | string;
     /** The date and time that the image export job started running.
      *
@@ -34773,6 +36473,9 @@ namespace VpcV1 {
      *  - `succeeded`: Export job was completed successfully
      *
      *  The exported image object is automatically deleted for `failed` jobs.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: ImageExportJob.Constants.Status | string;
     /** The reasons for the current status (if any). */
@@ -34799,11 +36502,11 @@ namespace VpcV1 {
         QCOW2 = 'qcow2',
         VHD = 'vhd',
       }
-      /** The type of resource referenced. */
+      /** The resource type. */
       export enum ResourceType {
         IMAGE_EXPORT_JOB = 'image_export_job',
       }
-      /** The status of this image export job: - `deleting`: Export job is being deleted - `failed`: Export job could not be completed successfully - `queued`: Export job is queued - `running`: Export job is in progress - `succeeded`: Export job was completed successfully The exported image object is automatically deleted for `failed` jobs. */
+      /** The status of this image export job: - `deleting`: Export job is being deleted - `failed`: Export job could not be completed successfully - `queued`: Export job is queued - `running`: Export job is in progress - `succeeded`: Export job was completed successfully The exported image object is automatically deleted for `failed` jobs. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         DELETING = 'deleting',
         FAILED = 'failed',
@@ -34839,7 +36542,7 @@ namespace VpcV1 {
 
   /** ImageExportJobUnpaginatedCollection. */
   export interface ImageExportJobUnpaginatedCollection {
-    /** Collection of image export jobs. */
+    /** The export jobs for the image. */
     export_jobs: ImageExportJob[];
   }
 
@@ -34861,7 +36564,7 @@ namespace VpcV1 {
 
   /** ImageFileChecksums. */
   export interface ImageFileChecksums {
-    /** The SHA256 fingerprint of the image file. */
+    /** The SHA256 fingerprint of the image file, in hexadecimal. */
     sha256?: string;
   }
 
@@ -34922,7 +36625,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: ImageReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this image. */
     href: string;
     /** The unique identifier for this image. */
@@ -34943,12 +36646,6 @@ namespace VpcV1 {
         IMAGE = 'image',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface ImageReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
@@ -35051,7 +36748,11 @@ namespace VpcV1 {
     lifecycle_reasons: InstanceLifecycleReason[];
     /** The lifecycle state of the virtual server instance. */
     lifecycle_state: Instance.Constants.LifecycleState | string;
-    /** The amount of memory, truncated to whole gibibytes. */
+    /** The amount of memory, truncated to whole gibibytes.
+     *
+     *  The maximum limit for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     memory: number;
     /** The metadata service configuration. */
     metadata_service: InstanceMetadataService;
@@ -35293,7 +36994,7 @@ namespace VpcV1 {
   export interface InstanceCollection {
     /** A link to the first page of resources. */
     first: InstanceCollectionFirst;
-    /** Collection of virtual server instances. */
+    /** A page of virtual server instances. */
     instances: Instance[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -35390,7 +37091,7 @@ namespace VpcV1 {
 
   /** InstanceDiskCollection. */
   export interface InstanceDiskCollection {
-    /** Collection of the instance's disks. */
+    /** The disks for the instance. */
     disks: InstanceDisk[];
   }
 
@@ -35399,7 +37100,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceDiskReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance disk. */
     href: string;
     /** The unique identifier for this instance disk. */
@@ -35416,12 +37117,6 @@ namespace VpcV1 {
         INSTANCE_DISK = 'instance_disk',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface InstanceDiskReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** The virtual server instance GPU configuration. */
@@ -35473,7 +37168,10 @@ namespace VpcV1 {
      *  - `healthy`: Group has `membership_count` instances
      *  - `scaling`: Instances in the group are being created or deleted to reach
      *               `membership_count`
-     *  - `unhealthy`: Group is unable to reach `membership_count` instances.
+     *  - `unhealthy`: Group is unable to reach `membership_count` instances
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: InstanceGroup.Constants.Status | string;
     /** The subnets to use when creating new instances. */
@@ -35495,7 +37193,7 @@ namespace VpcV1 {
         UPDATING = 'updating',
         WAITING = 'waiting',
       }
-      /** The status of the instance group - `deleting`: Group is being deleted - `healthy`: Group has `membership_count` instances - `scaling`: Instances in the group are being created or deleted to reach `membership_count` - `unhealthy`: Group is unable to reach `membership_count` instances. */
+      /** The status of the instance group - `deleting`: Group is being deleted - `healthy`: Group has `membership_count` instances - `scaling`: Instances in the group are being created or deleted to reach `membership_count` - `unhealthy`: Group is unable to reach `membership_count` instances The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         DELETING = 'deleting',
         HEALTHY = 'healthy',
@@ -35509,7 +37207,7 @@ namespace VpcV1 {
   export interface InstanceGroupCollection {
     /** A link to the first page of resources. */
     first: InstanceGroupCollectionFirst;
-    /** Collection of instance groups. */
+    /** A page of instance groups. */
     instance_groups: InstanceGroup[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -35576,13 +37274,11 @@ namespace VpcV1 {
   /** InstanceGroupManagerAction. */
   export interface InstanceGroupManagerAction {
     /** Indicates whether this scheduled action will be automatically deleted after it has completed and
-     *  `auto_delete_timeout` hours have passed. At present, this is always
-     *  `true`, but may be modifiable in the future.
+     *  `auto_delete_timeout` hours have passed.
      */
     auto_delete: boolean;
     /** If `auto_delete` is `true`, and this scheduled action has finished, the hours after which it will be
-     *  automatically deleted. If the value is `0`, the action will be deleted once it has finished. This value may be
-     *  modifiable in the future.
+     *  automatically deleted. If the value is `0`, the action will be deleted once it has finished.
      */
     auto_delete_timeout: number;
     /** The date and time that the instance group manager action was created. */
@@ -35602,7 +37298,10 @@ namespace VpcV1 {
      *  - `completed`: Action was completed successfully
      *  - `failed`: Action could not be completed successfully
      *  - `incompatible`: Action parameters are not compatible with the group or manager
-     *  - `omitted`: Action was not applied because this action's manager was disabled.
+     *  - `omitted`: Action was not applied because this action's manager was disabled
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: InstanceGroupManagerAction.Constants.Status | string;
     /** The date and time that the instance group manager action was updated. */
@@ -35614,7 +37313,7 @@ namespace VpcV1 {
       export enum ResourceType {
         INSTANCE_GROUP_MANAGER_ACTION = 'instance_group_manager_action',
       }
-      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled. */
+      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         ACTIVE = 'active',
         COMPLETED = 'completed',
@@ -35652,7 +37351,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceGroupManagerActionReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance group manager action. */
     href: string;
     /** The unique identifier for this instance group manager action. */
@@ -35673,15 +37372,9 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface InstanceGroupManagerActionReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** InstanceGroupManagerActionsCollection. */
   export interface InstanceGroupManagerActionsCollection {
-    /** Collection of instance group manager actions. */
+    /** A page of actions for the instance group manager. */
     actions: InstanceGroupManagerAction[];
     /** A link to the first page of resources. */
     first: InstanceGroupManagerActionsCollectionFirst;
@@ -35711,7 +37404,7 @@ namespace VpcV1 {
     first: InstanceGroupManagerCollectionFirst;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
-    /** Collection of instance group managers. */
+    /** A page of managers for the instance group. */
     managers: InstanceGroupManager[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: InstanceGroupManagerCollectionNext;
@@ -35755,7 +37448,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: InstanceGroupManagerPolicyCollectionNext;
-    /** Collection of instance group manager policies. */
+    /** A page of policies for the instance group manager. */
     policies: InstanceGroupManagerPolicy[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -35786,7 +37479,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceGroupManagerPolicyReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance group manager policy. */
     href: string;
     /** The unique identifier for this instance group manager policy. */
@@ -35795,12 +37488,6 @@ namespace VpcV1 {
      *  group manager.
      */
     name: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface InstanceGroupManagerPolicyReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** InstanceGroupManagerPrototype. */
@@ -35818,19 +37505,13 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceGroupManagerReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance group manager. */
     href: string;
     /** The unique identifier for this instance group manager. */
     id: string;
     /** The name for this instance group manager. The name is unique across all managers for the instance group. */
     name: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface InstanceGroupManagerReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** InstanceGroupManagerScheduledActionGroup. */
@@ -35875,7 +37556,10 @@ namespace VpcV1 {
      *  - `failed`: Membership was unable to maintain dependent resources
      *  - `healthy`: Membership is active and serving in the group
      *  - `pending`: Membership is waiting for dependent resources
-     *  - `unhealthy`: Membership has unhealthy dependent resources.
+     *  - `unhealthy`: Membership has unhealthy dependent resources
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: InstanceGroupMembership.Constants.Status | string;
     /** The date and time that the instance group membership was updated. */
@@ -35883,7 +37567,7 @@ namespace VpcV1 {
   }
   export namespace InstanceGroupMembership {
     export namespace Constants {
-      /** The status of the instance group membership - `deleting`: Membership is deleting dependent resources - `failed`: Membership was unable to maintain dependent resources - `healthy`: Membership is active and serving in the group - `pending`: Membership is waiting for dependent resources - `unhealthy`: Membership has unhealthy dependent resources. */
+      /** The status of the instance group membership - `deleting`: Membership is deleting dependent resources - `failed`: Membership was unable to maintain dependent resources - `healthy`: Membership is active and serving in the group - `pending`: Membership is waiting for dependent resources - `unhealthy`: Membership has unhealthy dependent resources The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         DELETING = 'deleting',
         FAILED = 'failed',
@@ -35900,7 +37584,7 @@ namespace VpcV1 {
     first: InstanceGroupMembershipCollectionFirst;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
-    /** Collection of instance group memberships. */
+    /** A page of memberships for the instance group. */
     memberships: InstanceGroupMembership[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: InstanceGroupMembershipCollectionNext;
@@ -35927,19 +37611,13 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceGroupReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance group. */
     href: string;
     /** The unique identifier for this instance group. */
     id: string;
     /** The name for this instance group. The name is unique across all instance groups in the region. */
     name: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface InstanceGroupReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** InstanceHealthReason. */
@@ -36163,7 +37841,7 @@ namespace VpcV1 {
 
   /** InstanceNetworkAttachmentCollection. */
   export interface InstanceNetworkAttachmentCollection {
-    /** Collection of instance network attachments. */
+    /** The network attachments for the instance. */
     network_attachments: InstanceNetworkAttachment[];
   }
 
@@ -36192,7 +37870,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceNetworkAttachmentReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance network attachment. */
     href: string;
     /** The unique identifier for this instance network attachment. */
@@ -36207,6 +37885,8 @@ namespace VpcV1 {
     resource_type: InstanceNetworkAttachmentReference.Constants.ResourceType | string;
     /** The subnet of the virtual network interface for the instance network attachment. */
     subnet: SubnetReference;
+    /** The virtual network interface for this instance network attachment. */
+    virtual_network_interface: VirtualNetworkInterfaceReferenceAttachmentContext;
   }
   export namespace InstanceNetworkAttachmentReference {
     export namespace Constants {
@@ -36215,12 +37895,6 @@ namespace VpcV1 {
         INSTANCE_NETWORK_ATTACHMENT = 'instance_network_attachment',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface InstanceNetworkAttachmentReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. - Have the same `vcpu.architecture`. - Support the number of network attachments or network interfaces the instance currently has. */
@@ -36243,7 +37917,7 @@ namespace VpcV1 {
   export interface InstanceProfile {
     bandwidth: InstanceProfileBandwidth;
     confidential_compute_modes: InstanceProfileSupportedConfidentialComputeModes;
-    /** Collection of the instance profile's disks. */
+    /** The disks for an instance with this profile. */
     disks: InstanceProfileDisk[];
     /** The product family this virtual server instance profile belongs to. */
     family: string;
@@ -36270,9 +37944,9 @@ namespace VpcV1 {
      *    usable.
      *  - `current`:  This profile is the latest revision.
      *
-     *  Revisions are indicated by the generation of an instance profile. Refer to the [profile naming conventions]
-     *  (https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui#profiles-naming-rule) for information on how
-     *  generations are defined within an instance profile.
+     *  Revisions are indicated by the generation of an instance profile. Refer to the [profile naming
+     *  conventions](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui#profiles-naming-rule) for
+     *  information on how generations are defined within an instance profile.
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
@@ -36289,7 +37963,7 @@ namespace VpcV1 {
       export enum ResourceType {
         INSTANCE_PROFILE = 'instance_profile',
       }
-      /** The status of the instance profile: - `previous`:  This instance profile is an older revision, but remains provisionable and usable. - `current`:  This profile is the latest revision. Revisions are indicated by the generation of an instance profile. Refer to the [profile naming conventions] (https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within an instance profile. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The status of the instance profile: - `previous`:  This instance profile is an older revision, but remains provisionable and usable. - `current`:  This profile is the latest revision. Revisions are indicated by the generation of an instance profile. Refer to the [profile naming conventions](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles&interface=ui#profiles-naming-rule) for information on how generations are defined within an instance profile. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         CURRENT = 'current',
         PREVIOUS = 'previous',
@@ -36303,7 +37977,7 @@ namespace VpcV1 {
 
   /** InstanceProfileCollection. */
   export interface InstanceProfileCollection {
-    /** Collection of virtual server instance profiles. */
+    /** A page of virtual server instance profiles. */
     profiles: InstanceProfile[];
   }
 
@@ -36661,7 +38335,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this virtual server instance. */
     href: string;
     /** The unique identifier for this virtual server instance. */
@@ -36670,12 +38344,6 @@ namespace VpcV1 {
      *  region.
      */
     name: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface InstanceReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** InstanceReservationAffinity. */
@@ -36888,7 +38556,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: InstanceTemplateCollectionNext;
-    /** Collection of instance templates. */
+    /** A page of instance templates. */
     templates: InstanceTemplate[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -37004,19 +38672,13 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceTemplateReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance template. */
     href: string;
     /** The unique identifier for this instance template. */
     id: string;
     /** The name for this instance template. The name is unique across all instance templates in the region. */
     name: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface InstanceTemplateReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** The virtual server instance VCPU configuration. */
@@ -37055,12 +38717,16 @@ namespace VpcV1 {
     public_key: string;
     /** The resource group for this key. */
     resource_group: ResourceGroupReference;
-    /** The crypto-system used by this key. */
+    /** The crypto-system for this key.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     type: Key.Constants.Type | string;
   }
   export namespace Key {
     export namespace Constants {
-      /** The crypto-system used by this key. */
+      /** The crypto-system for this key. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         ED25519 = 'ed25519',
         RSA = 'rsa',
@@ -37072,7 +38738,7 @@ namespace VpcV1 {
   export interface KeyCollection {
     /** A link to the first page of resources. */
     first: KeyCollectionFirst;
-    /** Collection of keys. */
+    /** A page of keys. */
     keys: Key[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -37105,7 +38771,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: KeyReferenceDeleted;
+    deleted?: Deleted;
     /** The fingerprint for this key.  The value is returned base64-encoded and prefixed with the hash algorithm
      *  (always `SHA256`).
      */
@@ -37116,12 +38782,6 @@ namespace VpcV1 {
     id: string;
     /** The name for this key. The name is unique across all keys in the region. */
     name: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface KeyReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** Identifies a Cloud Object Storage bucket by a unique property. */
@@ -37136,24 +38796,46 @@ namespace VpcV1 {
 
   /** LoadBalancer. */
   export interface LoadBalancer {
+    /** The access mode for this load balancer:
+     *  - `private`: reachable from within its VPC, at IP addresses in `private_ips`
+     *  - `private_path`: reachable through an endpoint gateway
+     *  - `public`: reachable from the internet at the IP addresses in `public_ips`.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    access_mode: LoadBalancer.Constants.AccessMode | string;
+    /** The availability of this load balancer:
+     *  - `subnet`: remains available if at least one zone that the load balancer's subnets reside
+     *    in is available
+     *  - `region`: remains available if at least one zone in the region is available.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    availability: LoadBalancer.Constants.Availability | string;
     /** The date and time that this load balancer was created. */
     created_at: string;
-    /** The load balancer's CRN. */
+    /** The CRN for this load balancer. */
     crn: string;
     /** The DNS configuration for this load balancer.
      *
      *  If absent, DNS `A` records for this load balancer's `hostname` property will be added to
      *  the public DNS zone `lb.appdomain.cloud`.
+     *
+     *  Not supported by private path load balancers.
      */
     dns?: LoadBalancerDNS;
     /** Fully qualified domain name assigned to this load balancer. */
     hostname: string;
-    /** The load balancer's canonical URL. */
+    /** The URL for this load balancer. */
     href: string;
     /** The unique identifier for this load balancer. */
     id: string;
     /** Indicates whether this load balancer supports instance groups. */
     instance_groups_supported: boolean;
+    /** Indicates whether this is a private path load balancer. */
+    is_private_path: boolean;
     /** The type of this load balancer, public or private. */
     is_public: boolean;
     /** The listeners of this load balancer. */
@@ -37162,12 +38844,19 @@ namespace VpcV1 {
     logging: LoadBalancerLogging;
     /** The name for this load balancer. The name is unique across all load balancers in the VPC. */
     name: string;
-    /** The operating status of this load balancer. */
+    /** The operating status of this load balancer.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     operating_status: LoadBalancer.Constants.OperatingStatus | string;
     /** The pools of this load balancer. */
     pools: LoadBalancerPoolReference[];
-    /** The private IP addresses assigned to this load balancer. */
-    private_ips: LoadBalancerPrivateIpsItem[];
+    /** The private IP addresses assigned to this load balancer.
+     *
+     *  Will be empty if `is_private` is `false`.
+     */
+    private_ips: ReservedIPReference[];
     /** The profile for this load balancer. */
     profile: LoadBalancerProfileReference;
     /** The provisioning status of this load balancer:
@@ -37187,7 +38876,7 @@ namespace VpcV1 {
     provisioning_status: LoadBalancer.Constants.ProvisioningStatus | string;
     /** The public IP addresses assigned to this load balancer.
      *
-     *  Applicable only for public load balancers.
+     *  Will be empty if `is_public` is `false`.
      */
     public_ips: IP[];
     /** The resource group for this load balancer. */
@@ -37202,14 +38891,13 @@ namespace VpcV1 {
     /** The security groups targeting this load balancer.
      *
      *  If empty, all inbound and outbound traffic is allowed.
-     *
-     *  Applicable only for load balancers that support security groups.
      */
     security_groups: SecurityGroupReference[];
     /** Indicates whether this load balancer supports security groups. */
     security_groups_supported: boolean;
-    /** The subnets this load balancer is provisioned in.  The load balancer's availability depends on the
-     *  availability of the zones that the subnets reside in.
+    /** Indicates whether this load balancer supports source IP session persistence. */
+    source_ip_session_persistence_supported: boolean;
+    /** The subnets this load balancer is provisioned in.
      *
      *  All subnets will be in the same VPC.
      */
@@ -37219,7 +38907,18 @@ namespace VpcV1 {
   }
   export namespace LoadBalancer {
     export namespace Constants {
-      /** The operating status of this load balancer. */
+      /** The access mode for this load balancer: - `private`: reachable from within its VPC, at IP addresses in `private_ips` - `private_path`: reachable through an endpoint gateway - `public`: reachable from the internet at the IP addresses in `public_ips`. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum AccessMode {
+        PRIVATE = 'private',
+        PRIVATE_PATH = 'private_path',
+        PUBLIC = 'public',
+      }
+      /** The availability of this load balancer: - `subnet`: remains available if at least one zone that the load balancer's subnets reside in is available - `region`: remains available if at least one zone in the region is available. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Availability {
+        REGION = 'region',
+        SUBNET = 'subnet',
+      }
+      /** The operating status of this load balancer. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum OperatingStatus {
         OFFLINE = 'offline',
         ONLINE = 'online',
@@ -37247,7 +38946,7 @@ namespace VpcV1 {
     first: LoadBalancerCollectionFirst;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
-    /** Collection of load balancers. */
+    /** A page of load balancers. */
     load_balancers: LoadBalancer[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: LoadBalancerCollectionNext;
@@ -37267,7 +38966,7 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** The DNS configuration for this load balancer. If absent, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone `lb.appdomain.cloud`. */
+  /** The DNS configuration for this load balancer. If absent, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone `lb.appdomain.cloud`. Not supported by private path load balancers. */
   export interface LoadBalancerDNS {
     /** The DNS instance associated with this load balancer. */
     instance: DNSInstanceReferenceLoadBalancerDNSContext;
@@ -37275,7 +38974,7 @@ namespace VpcV1 {
     zone: DNSZoneReference;
   }
 
-  /** The DNS configuration for this load balancer. Specify `null` to remove the existing DNS configuration, which will remove all DNS `A` records for this load balancer that had been added to `zone`, and add equivalent `A` records to the public DNS zone `lb.appdomain.cloud`. */
+  /** The DNS configuration for this load balancer. Specify `null` to remove the existing DNS configuration, which will remove all DNS `A` records for this load balancer that had been added to `zone`, and add equivalent `A` records to the public DNS zone `lb.appdomain.cloud`. Not supported by private path load balancers. */
   export interface LoadBalancerDNSPatch {
     /** The DNS instance to associate with this load balancer.
      *
@@ -37290,7 +38989,7 @@ namespace VpcV1 {
     zone?: DNSZoneIdentity;
   }
 
-  /** The DNS configuration for this load balancer. If unspecified, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone `lb.appdomain.cloud`. Otherwise, those DNS `A` records will be added to the specified `zone`. */
+  /** The DNS configuration for this load balancer. If unspecified, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone `lb.appdomain.cloud`. Otherwise, those DNS `A` records will be added to the specified `zone`. Not supported by private path load balancers. */
   export interface LoadBalancerDNSPrototype {
     /** The DNS instance to associate with this load balancer.
      *
@@ -37333,7 +39032,7 @@ namespace VpcV1 {
      *  If `https_redirect` is set, the default pool will not be used.
      */
     default_pool?: LoadBalancerPoolReference;
-    /** The listener's canonical URL. */
+    /** The URL for this load balancer listener. */
     href: string;
     /** If present, the target listener that requests are redirected to if none of the listener's `policies` match. */
     https_redirect?: LoadBalancerListenerHTTPSRedirect;
@@ -37392,7 +39091,7 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerCollection. */
   export interface LoadBalancerListenerCollection {
-    /** Collection of listeners. */
+    /** The listeners for the load balancer. */
     listeners: LoadBalancerListener[];
   }
 
@@ -37435,8 +39134,7 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerPolicy. */
   export interface LoadBalancerListenerPolicy {
-    /** The policy action.
-     *
+    /** The policy action:
      *  - `forward`: Requests will be forwarded to the specified `target` pool
      *  - `https_redirect`: Requests will be redirected to the specified target listener. The
      *    listener must have a `protocol` of `http`, and the target listener must have a
@@ -37450,9 +39148,9 @@ namespace VpcV1 {
     action: LoadBalancerListenerPolicy.Constants.Action | string;
     /** The date and time that this policy was created. */
     created_at: string;
-    /** The listener policy's canonical URL. */
+    /** The URL for this load balancer policy. */
     href: string;
-    /** The policy's unique identifier. */
+    /** The unique identifier for this load balancer policy. */
     id: string;
     /** The name for this load balancer listener policy. The name is unique across all policies for the load
      *  balancer listener.
@@ -37479,7 +39177,7 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerListenerPolicy {
     export namespace Constants {
-      /** The policy action. - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Action {
         FORWARD = 'forward',
         HTTPS_REDIRECT = 'https_redirect',
@@ -37499,23 +39197,19 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerPolicyCollection. */
   export interface LoadBalancerListenerPolicyCollection {
-    /** Collection of policies. */
+    /** The policies for the load balancer listener. */
     policies: LoadBalancerListenerPolicy[];
   }
 
   /** LoadBalancerListenerPolicyPrototype. */
   export interface LoadBalancerListenerPolicyPrototype {
-    /** The policy action.
-     *
+    /** The policy action:
      *  - `forward`: Requests will be forwarded to the specified `target` pool
      *  - `https_redirect`: Requests will be redirected to the specified target listener. The
      *    listener must have a `protocol` of `http`, and the target listener must have a
      *    `protocol` of `https`
      *  - `redirect`: Requests will be redirected to the specified `target.url`
-     *  - `reject`: Requests will be rejected with a `403` status code
-     *
-     *  The enumerated values for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     *  - `reject`: Requests will be rejected with a `403` status code.
      */
     action: LoadBalancerListenerPolicyPrototype.Constants.Action | string;
     /** The name for this policy. The name must not be used by another policy for the load balancer listener. If
@@ -37537,7 +39231,7 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerListenerPolicyPrototype {
     export namespace Constants {
-      /** The policy action. - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code. */
       export enum Action {
         FORWARD = 'forward',
         HTTPS_REDIRECT = 'https_redirect',
@@ -37552,10 +39246,10 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: LoadBalancerListenerPolicyReferenceDeleted;
-    /** The listener policy's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this load balancer policy. */
     href: string;
-    /** The policy's unique identifier. */
+    /** The unique identifier for this load balancer policy. */
     id: string;
     /** The name for this load balancer listener policy. The name is unique across all policies for the load
      *  balancer listener.
@@ -37563,31 +39257,21 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface LoadBalancerListenerPolicyReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** LoadBalancerListenerPolicyRule. */
   export interface LoadBalancerListenerPolicyRule {
-    /** The condition of the rule. */
+    /** The condition for the rule.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     condition: LoadBalancerListenerPolicyRule.Constants.Condition | string;
     /** The date and time that this rule was created. */
     created_at: string;
-    /** The field. This is applicable to `header`, `query`, and `body` rule types.
-     *
-     *  If the rule type is `header`, this property is required.
-     *
-     *  If the rule type is `query`, this is optional. If specified and the rule condition is not
-     *  `matches_regex`, the value must be percent-encoded.
-     *
-     *  If the rule type is `body`, this is optional.
-     */
+    /** The field to match for this rule. If `condition` is not `matches_regex`, the value is percent-encoded. */
     field?: string;
-    /** The rule's canonical URL. */
+    /** The URL for this load balancer listener policy rule. */
     href: string;
-    /** The rule's unique identifier. */
+    /** The unique identifier for this load balancer listener policy rule. */
     id: string;
     /** The provisioning status of this rule
      *
@@ -37595,12 +39279,14 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     provisioning_status: LoadBalancerListenerPolicyRule.Constants.ProvisioningStatus | string;
-    /** The type of the rule.
+    /** The type of the rule. Body rules are applied to form-encoded request bodies using the
+     *  `UTF-8` character set.
      *
-     *  Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     type: LoadBalancerListenerPolicyRule.Constants.Type | string;
-    /** Value to be matched for rule condition.
+    /** The value to be matched for the rule condition.
      *
      *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
@@ -37608,7 +39294,7 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerListenerPolicyRule {
     export namespace Constants {
-      /** The condition of the rule. */
+      /** The condition for the rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Condition {
         CONTAINS = 'contains',
         EQUALS = 'equals',
@@ -37622,7 +39308,7 @@ namespace VpcV1 {
         FAILED = 'failed',
         UPDATE_PENDING = 'update_pending',
       }
-      /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
+      /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         BODY = 'body',
         HEADER = 'header',
@@ -37635,30 +39321,24 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerPolicyRuleCollection. */
   export interface LoadBalancerListenerPolicyRuleCollection {
-    /** Collection of rules. */
+    /** The rules for the load balancer listener policy. */
     rules: LoadBalancerListenerPolicyRule[];
   }
 
   /** LoadBalancerListenerPolicyRulePrototype. */
   export interface LoadBalancerListenerPolicyRulePrototype {
-    /** The condition of the rule. */
+    /** The condition for the rule. */
     condition: LoadBalancerListenerPolicyRulePrototype.Constants.Condition | string;
-    /** The field. This is applicable to `header`, `query`, and `body` rule types.
+    /** The field to match for this rule. This property must be specified if the rule type is
+     *  `header`, may be specified if the rule type is `body` or `query`, and must not be specified if the rule type is
+     *  `hostname` or `path`.
      *
-     *  If the rule type is `header`, this property is required.
-     *
-     *  If the rule type is `query`, this is optional. If specified and the rule condition is not
-     *  `matches_regex`, the value must be percent-encoded.
-     *
-     *  If the rule type is `body`, this is optional.
+     *  If the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     field?: string;
-    /** The type of the rule.
-     *
-     *  Body rules are applied to form-encoded request bodies using the `UTF-8` character set.
-     */
+    /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
     type: LoadBalancerListenerPolicyRulePrototype.Constants.Type | string;
-    /** Value to be matched for rule condition.
+    /** The value to be matched for the rule condition.
      *
      *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
@@ -37666,7 +39346,7 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerListenerPolicyRulePrototype {
     export namespace Constants {
-      /** The condition of the rule. */
+      /** The condition for the rule. */
       export enum Condition {
         CONTAINS = 'contains',
         EQUALS = 'equals',
@@ -37688,17 +39368,11 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: LoadBalancerListenerPolicyRuleReferenceDeleted;
-    /** The rule's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this load balancer listener policy rule. */
     href: string;
-    /** The rule's unique identifier. */
+    /** The unique identifier for this load balancer listener policy rule. */
     id: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface LoadBalancerListenerPolicyRuleReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference` - If `action` is `https_redirect`, the response is a `LoadBalancerListenerPolicyHTTPSRedirect` - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`. */
@@ -37758,9 +39432,9 @@ namespace VpcV1 {
     port?: number;
     /** The inclusive upper bound of the range of ports used by this listener. Must not be less than `port_min`.
      *
-     *  At present, only load balancers operating with route mode enabled, and public load balancers in the `network`
-     *  family support different values for `port_min` and
-     *  `port_max`. When route mode is enabled, the value `65535` must be specified.
+     *  Only load balancers with route mode enabled, or network load balancers with
+     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
+     *  route mode is enabled, the value `65535` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
@@ -37768,9 +39442,9 @@ namespace VpcV1 {
     port_max?: number;
     /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
      *
-     *  At present, only load balancers operating with route mode enabled, and public load balancers in the `network`
-     *  family support different values for `port_min` and
-     *  `port_max`. When route mode is enabled, the value `1` must be specified.
+     *  Only load balancers with route mode enabled, or network load balancers with
+     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
+     *  route mode is enabled, the value `1` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
@@ -37808,17 +39482,11 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: LoadBalancerListenerReferenceDeleted;
-    /** The listener's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this load balancer listener. */
     href: string;
     /** The unique identifier for this load balancer listener. */
     id: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface LoadBalancerListenerReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** LoadBalancerLogging. */
@@ -37859,13 +39527,17 @@ namespace VpcV1 {
 
   /** LoadBalancerPool. */
   export interface LoadBalancerPool {
-    /** The load balancing algorithm. */
+    /** The load balancing algorithm.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     algorithm: LoadBalancerPool.Constants.Algorithm | string;
     /** The date and time that this pool was created. */
     created_at: string;
     /** The health monitor of this pool. */
     health_monitor: LoadBalancerPoolHealthMonitor;
-    /** The pool's canonical URL. */
+    /** The URL for this load balancer pool. */
     href: string;
     /** The unique identifier for this load balancer pool. */
     id: string;
@@ -37892,7 +39564,8 @@ namespace VpcV1 {
      *  - `v2`: Enabled with version 2 (binary header format)
      *  - `disabled`: Disabled
      *
-     *  Supported by load balancers in the `application` family (otherwise always `disabled`).
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     proxy_protocol: LoadBalancerPool.Constants.ProxyProtocol | string;
     /** The session persistence of this pool.
@@ -37904,7 +39577,7 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerPool {
     export namespace Constants {
-      /** The load balancing algorithm. */
+      /** The load balancing algorithm. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Algorithm {
         LEAST_CONNECTIONS = 'least_connections',
         ROUND_ROBIN = 'round_robin',
@@ -37925,7 +39598,7 @@ namespace VpcV1 {
         FAILED = 'failed',
         UPDATE_PENDING = 'update_pending',
       }
-      /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled Supported by load balancers in the `application` family (otherwise always `disabled`). */
+      /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ProxyProtocol {
         DISABLED = 'disabled',
         V1 = 'v1',
@@ -37936,7 +39609,7 @@ namespace VpcV1 {
 
   /** LoadBalancerPoolCollection. */
   export interface LoadBalancerPoolCollection {
-    /** Collection of pools. */
+    /** The pools for the load balancer. */
     pools: LoadBalancerPool[];
   }
 
@@ -37959,7 +39632,13 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     type: LoadBalancerPoolHealthMonitor.Constants.Type | string;
-    /** The health check URL path. Applicable when `type` is `http` or `https`.
+    /** The health check URL path, in the format of an [origin-form request
+     *  target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
+     *
+     *  If `type` is `tcp`, this property will be absent.
+     */
+    url?: any;
+    /** The health check URL path.  If specified, `type` must be `http` or `https`.
      *
      *  Must be in the format of an [origin-form request target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
      */
@@ -37993,7 +39672,7 @@ namespace VpcV1 {
     timeout: number;
     /** The protocol type to use for health checks. */
     type: LoadBalancerPoolHealthMonitorPatch.Constants.Type | string;
-    /** The health check URL path. Applicable when `type` is `http` or `https`.
+    /** The health check URL path.  If specified, `type` must be `http` or `https`.
      *
      *  Must be in the format of an [origin-form request target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
      */
@@ -38025,7 +39704,7 @@ namespace VpcV1 {
     timeout: number;
     /** The protocol type to use for health checks. */
     type: LoadBalancerPoolHealthMonitorPrototype.Constants.Type | string;
-    /** The health check URL path. Applicable when `type` is `http` or `https`.
+    /** The health check URL path.  If specified, `type` must be `http` or `https`.
      *
      *  Must be in the format of an [origin-form request target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
      */
@@ -38056,9 +39735,13 @@ namespace VpcV1 {
   export interface LoadBalancerPoolMember {
     /** The date and time that this member was created. */
     created_at: string;
-    /** Health of the server member in the pool. */
+    /** Health of the server member in the pool.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     health: LoadBalancerPoolMember.Constants.Health | string;
-    /** The member's canonical URL. */
+    /** The URL for this load balancer pool member. */
     href: string;
     /** The unique identifier for this load balancer pool member. */
     id: string;
@@ -38082,12 +39765,15 @@ namespace VpcV1 {
      *  subnet in.
      */
     target: LoadBalancerPoolMemberTarget;
-    /** Weight of the server member. Applicable only if the pool algorithm is `weighted_round_robin`. */
+    /** The weight of the server member.
+     *
+     *  This property will be present if the pool algorithm is `weighted_round_robin`.
+     */
     weight?: number;
   }
   export namespace LoadBalancerPoolMember {
     export namespace Constants {
-      /** Health of the server member in the pool. */
+      /** Health of the server member in the pool. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Health {
         FAULTED = 'faulted',
         OK = 'ok',
@@ -38106,7 +39792,7 @@ namespace VpcV1 {
 
   /** LoadBalancerPoolMemberCollection. */
   export interface LoadBalancerPoolMemberCollection {
-    /** Collection of members. */
+    /** The members for the load balancer pool. */
     members: LoadBalancerPoolMember[];
   }
 
@@ -38128,7 +39814,10 @@ namespace VpcV1 {
      *  subnet in.
      */
     target: LoadBalancerPoolMemberTargetPrototype;
-    /** Weight of the server member. Applicable only if the pool algorithm is `weighted_round_robin`. */
+    /** The weight of the server member.
+     *
+     *  If specified, the pool algorithm must be `weighted_round_robin`.
+     */
     weight?: number;
   }
 
@@ -38137,17 +39826,11 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: LoadBalancerPoolMemberReferenceDeleted;
-    /** The member's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this load balancer pool member. */
     href: string;
     /** The unique identifier for this load balancer pool member. */
     id: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface LoadBalancerPoolMemberReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in the `application` family support IP addresses. If the load balancer has route mode enabled, the member must be in a zone the load balancer has a subnet in. */
@@ -38160,7 +39843,9 @@ namespace VpcV1 {
 
   /** LoadBalancerPoolPrototype. */
   export interface LoadBalancerPoolPrototype {
-    /** The load balancing algorithm. */
+    /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that
+     *  have `availability` with value `subnet` in the profile.
+     */
     algorithm: LoadBalancerPoolPrototype.Constants.Algorithm | string;
     /** The health monitor of this pool. */
     health_monitor: LoadBalancerPoolHealthMonitorPrototype;
@@ -38182,18 +39867,19 @@ namespace VpcV1 {
      *  - `v2`: Enabled with version 2 (binary header format)
      *  - `disabled`: Disabled
      *
-     *  Supported by load balancers in the `application` family (otherwise always `disabled`).
+     *  For load balancers in the `network` family, this property must be `disabled`.
      */
     proxy_protocol?: LoadBalancerPoolPrototype.Constants.ProxyProtocol | string;
-    /** The session persistence of this pool. If unspecified, session persistence will be
-     *  disabled, and traffic will be distributed across backend server members of the
-     *  pool.
+    /** The session persistence of this pool. If specified, the load balancer must have
+     *  `source_ip_session_persistence_supported` set to `true` in its profile. If
+     *  unspecified, session persistence will be disabled, and traffic will be distributed
+     *  across backend server members of the pool.
      */
     session_persistence?: LoadBalancerPoolSessionPersistencePrototype;
   }
   export namespace LoadBalancerPoolPrototype {
     export namespace Constants {
-      /** The load balancing algorithm. */
+      /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that have `availability` with value `subnet` in the profile. */
       export enum Algorithm {
         LEAST_CONNECTIONS = 'least_connections',
         ROUND_ROBIN = 'round_robin',
@@ -38206,7 +39892,7 @@ namespace VpcV1 {
         TCP = 'tcp',
         UDP = 'udp',
       }
-      /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled Supported by load balancers in the `application` family (otherwise always `disabled`). */
+      /** The PROXY protocol setting for this pool: - `v1`: Enabled with version 1 (human-readable header format) - `v2`: Enabled with version 2 (binary header format) - `disabled`: Disabled For load balancers in the `network` family, this property must be `disabled`. */
       export enum ProxyProtocol {
         DISABLED = 'disabled',
         V1 = 'v1',
@@ -38220,8 +39906,8 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: LoadBalancerPoolReferenceDeleted;
-    /** The pool's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this load balancer pool. */
     href: string;
     /** The unique identifier for this load balancer pool. */
     id: string;
@@ -38229,20 +39915,11 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface LoadBalancerPoolReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** LoadBalancerPoolSessionPersistence. */
   export interface LoadBalancerPoolSessionPersistence {
-    /** The session persistence cookie name. Applicable only for type `app_cookie`. Names starting with `IBM` are
-     *  not allowed.
-     */
+    /** The session persistence cookie name. */
     cookie_name?: string;
-    /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and
-     *  `https` protocols.
+    /** The session persistence type.
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
@@ -38251,7 +39928,7 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerPoolSessionPersistence {
     export namespace Constants {
-      /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and `https` protocols. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The session persistence type. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         APP_COOKIE = 'app_cookie',
         HTTP_COOKIE = 'http_cookie',
@@ -38262,18 +39939,21 @@ namespace VpcV1 {
 
   /** The session persistence configuration. Specify `null` to remove any existing session persistence configuration. */
   export interface LoadBalancerPoolSessionPersistencePatch {
-    /** The session persistence cookie name. Applicable only for type `app_cookie`. Names starting with `IBM` are
-     *  not allowed.
+    /** The session persistence cookie name. Names starting with `IBM` are not allowed.
+     *
+     *  If specified, the session persistence type must be `app_cookie`.
      */
     cookie_name?: string;
-    /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and
-     *  `https` protocols.
+    /** The session persistence type.
+     *
+     *  If `http_cookie` or `app_cookie` is specified, the pool protocol must be `http` or
+     *  `https`.
      */
     type?: LoadBalancerPoolSessionPersistencePatch.Constants.Type | string;
   }
   export namespace LoadBalancerPoolSessionPersistencePatch {
     export namespace Constants {
-      /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and `https` protocols. */
+      /** The session persistence type. If `http_cookie` or `app_cookie` is specified, the pool protocol must be `http` or `https`. */
       export enum Type {
         APP_COOKIE = 'app_cookie',
         HTTP_COOKIE = 'http_cookie',
@@ -38284,18 +39964,21 @@ namespace VpcV1 {
 
   /** LoadBalancerPoolSessionPersistencePrototype. */
   export interface LoadBalancerPoolSessionPersistencePrototype {
-    /** The session persistence cookie name. Applicable only for type `app_cookie`. Names starting with `IBM` are
-     *  not allowed.
+    /** The session persistence cookie name. Names starting with `IBM` are not allowed.
+     *
+     *  If specified, the session persistence type must be `app_cookie`.
      */
     cookie_name?: string;
-    /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and
-     *  `https` protocols.
+    /** The session persistence type.
+     *
+     *  If `http_cookie` or `app_cookie` is specified, the pool protocol must be `http` or
+     *  `https`.
      */
     type: LoadBalancerPoolSessionPersistencePrototype.Constants.Type | string;
   }
   export namespace LoadBalancerPoolSessionPersistencePrototype {
     export namespace Constants {
-      /** The session persistence type. The `http_cookie` and `app_cookie` types are applicable only to the `http` and `https` protocols. */
+      /** The session persistence type. If `http_cookie` or `app_cookie` is specified, the pool protocol must be `http` or `https`. */
       export enum Type {
         APP_COOKIE = 'app_cookie',
         HTTP_COOKIE = 'http_cookie',
@@ -38304,40 +39987,10 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerPrivateIpsItem. */
-  export interface LoadBalancerPrivateIpsItem {
-    /** The IP address.
-     *
-     *  If the address has not yet been selected, the value will be `0.0.0.0`.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
-     *  in the future.
-     */
-    address: string;
-    /** If present, this property indicates the referenced resource has been deleted, and provides
-     *  some supplementary information.
-     */
-    deleted?: ReservedIPReferenceDeleted;
-    /** The URL for this reserved IP. */
-    href: string;
-    /** The unique identifier for this reserved IP. */
-    id: string;
-    /** The name for this reserved IP. The name is unique across all reserved IPs in a subnet. */
-    name: string;
-    /** The resource type. */
-    resource_type: LoadBalancerPrivateIpsItem.Constants.ResourceType | string;
-  }
-  export namespace LoadBalancerPrivateIpsItem {
-    export namespace Constants {
-      /** The resource type. */
-      export enum ResourceType {
-        SUBNET_RESERVED_IP = 'subnet_reserved_ip',
-      }
-    }
-  }
-
   /** LoadBalancerProfile. */
   export interface LoadBalancerProfile {
+    access_modes: LoadBalancerProfileAccessModes;
+    availability: LoadBalancerProfileAvailability;
     /** The product family this load balancer profile belongs to.
      *
      *  The enumerated values for this property may
@@ -38353,6 +40006,7 @@ namespace VpcV1 {
     name: string;
     route_mode_supported: LoadBalancerProfileRouteModeSupported;
     security_groups_supported: LoadBalancerProfileSecurityGroupsSupported;
+    source_ip_session_persistence_supported: LoadBalancerProfileSourceIPSessionPersistenceSupported;
     udp_supported: LoadBalancerProfileUDPSupported;
   }
   export namespace LoadBalancerProfile {
@@ -38365,6 +40019,32 @@ namespace VpcV1 {
     }
   }
 
+  /** LoadBalancerProfileAccessModes. */
+  export interface LoadBalancerProfileAccessModes {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileAccessModes.Constants.Type | string;
+    /** The access modes supported by load balancers with this profile. */
+    values: LoadBalancerProfileAccessModes.Constants.Values[] | string[];
+  }
+  export namespace LoadBalancerProfileAccessModes {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The access modes supported by load balancers with this profile. */
+      export enum Values {
+        PRIVATE = 'private',
+        PRIVATE_PATH = 'private_path',
+        PUBLIC = 'public',
+      }
+    }
+  }
+
+  /** LoadBalancerProfileAvailability. */
+  export interface LoadBalancerProfileAvailability {
+  }
+
   /** LoadBalancerProfileCollection. */
   export interface LoadBalancerProfileCollection {
     /** A link to the first page of resources. */
@@ -38373,7 +40053,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: LoadBalancerProfileCollectionNext;
-    /** Collection of load balancer profiles. */
+    /** A page of load balancer profiles. */
     profiles: LoadBalancerProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -38446,14 +40126,38 @@ namespace VpcV1 {
   export interface LoadBalancerProfileSecurityGroupsSupported {
   }
 
+  /** LoadBalancerProfileSourceIPSessionPersistenceSupported. */
+  export interface LoadBalancerProfileSourceIPSessionPersistenceSupported {
+  }
+
   /** LoadBalancerProfileUDPSupported. */
   export interface LoadBalancerProfileUDPSupported {
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface LoadBalancerReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
+  /** LoadBalancerReference. */
+  export interface LoadBalancerReference {
+    /** The CRN for this load balancer. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this load balancer. */
+    href: string;
+    /** The unique identifier for this load balancer. */
+    id: string;
+    /** The name for this load balancer. The name is unique across all load balancers in the VPC. */
+    name: string;
+    /** The resource type. */
+    resource_type: LoadBalancerReference.Constants.ResourceType | string;
+  }
+  export namespace LoadBalancerReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        LOAD_BALANCER = 'load_balancer',
+      }
+    }
   }
 
   /** LoadBalancerStatistics. */
@@ -38496,7 +40200,7 @@ namespace VpcV1 {
     first: NetworkACLCollectionFirst;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
-    /** Collection of network ACLs. */
+    /** A page of network ACLs. */
     network_acls: NetworkACL[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: NetworkACLCollectionNext;
@@ -38541,19 +40245,13 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: NetworkACLReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this network ACL. */
     href: string;
     /** The unique identifier for this network ACL. */
     id: string;
     /** The name for this network ACL. The name is unique across all network ACLs for the VPC. */
     name: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface NetworkACLReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** NetworkACLRule. */
@@ -38578,7 +40276,7 @@ namespace VpcV1 {
     ip_version: NetworkACLRule.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name is unique across all rules for the network ACL. */
     name: string;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRule.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
@@ -38599,7 +40297,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -38625,7 +40323,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: NetworkACLRuleCollectionNext;
-    /** Ordered collection of network ACL rules. */
+    /** A page of ordered rules (sorted based on the `before` property) for the network ACL. */
     rules: NetworkACLRuleItem[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -38667,7 +40365,7 @@ namespace VpcV1 {
     ip_version: NetworkACLRuleItem.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name is unique across all rules for the network ACL. */
     name: string;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRuleItem.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
@@ -38688,7 +40386,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -38719,7 +40417,7 @@ namespace VpcV1 {
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRulePrototype.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
@@ -38740,7 +40438,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -38766,7 +40464,7 @@ namespace VpcV1 {
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLContext.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
@@ -38787,7 +40485,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -38802,19 +40500,13 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: NetworkACLRuleReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this network ACL rule. */
     href: string;
     /** The unique identifier for this network ACL rule. */
     id: string;
     /** The name for this network ACL rule. The name is unique across all rules for the network ACL. */
     name: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface NetworkACLRuleReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** NetworkInterface. */
@@ -38928,7 +40620,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: NetworkInterfaceBareMetalServerContextReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this bare metal server network interface.
      *
      *  If this bare metal server has network attachments, this network interface is a
@@ -38961,12 +40653,6 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface NetworkInterfaceBareMetalServerContextReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** NetworkInterfaceIPPrototype. */
   export interface NetworkInterfaceIPPrototype {
   }
@@ -38976,7 +40662,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: NetworkInterfaceInstanceContextReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance network interface.
      *
      *  If this instance has network attachments, this network interface is a
@@ -39009,12 +40695,6 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface NetworkInterfaceInstanceContextReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** NetworkInterfacePrototype. */
   export interface NetworkInterfacePrototype {
     /** Indicates whether source IP spoofing is allowed on this instance network interface.
@@ -39045,21 +40725,9 @@ namespace VpcV1 {
     subnet: SubnetIdentity;
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface NetworkInterfaceReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface NetworkInterfaceReferenceTargetContextDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** NetworkInterfaceUnpaginatedCollection. */
   export interface NetworkInterfaceUnpaginatedCollection {
-    /** Collection of instance network interfaces. */
+    /** The network interfaces for the instance. */
     network_interfaces: NetworkInterface[];
   }
 
@@ -39110,7 +40778,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: OperatingSystemCollectionNext;
-    /** Collection of operating systems. */
+    /** A page of operating systems. */
     operating_systems: OperatingSystem[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -39191,7 +40859,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: PlacementGroupCollectionNext;
-    /** Collection of placement groups. */
+    /** A page of placement groups. */
     placement_groups: PlacementGroup[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -39209,10 +40877,273 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface PlacementGroupReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
+  /** PrivatePathServiceGateway. */
+  export interface PrivatePathServiceGateway {
+    /** The date and time that the private path service gateway was created. */
+    created_at: string;
+    /** The CRN for this private path service gateway. */
+    crn: string;
+    /** The policy to use for bindings from accounts without an explicit account policy. */
+    default_access_policy: PrivatePathServiceGateway.Constants.DefaultAccessPolicy | string;
+    /** Indicates whether endpoint gateway bindings will be automatically deleted after
+     *  `endpoint_gateway_binding_auto_delete_timeout` hours have passed. At present, this is always `true`, but may be
+     *  modifiable in the future.
+     */
+    endpoint_gateway_binding_auto_delete: boolean;
+    /** If `endpoint_gateway_binding_auto_delete` is `true`, the hours after which endpoint gateway bindings will be
+     *  automatically deleted. If the value is `0`, `abandoned` endpoint gateway bindings will be deleted immediately.
+     *  At present, this is always set to `0`. This value may be modifiable in the future.
+     */
+    endpoint_gateway_binding_auto_delete_timeout: number;
+    /** The number of active endpoint gateways using this private path service gateway. */
+    endpoint_gateway_count: number;
+    /** The URL for this private path service gateway. */
+    href: string;
+    /** The unique identifier for this private path service gateway. */
+    id: string;
+    /** The lifecycle state of the private path service gateway. */
+    lifecycle_state: PrivatePathServiceGateway.Constants.LifecycleState | string;
+    /** The load balancer for this private path service gateway. */
+    load_balancer: LoadBalancerReference;
+    /** The name for this private path service gateway. The name is unique across all private path service gateways
+     *  in the VPC.
+     */
+    name: string;
+    /** Indicates the availability of this private path service gateway
+     *  - `true`: Any account can request access to this private path service gateway.
+     *  - `false`: Access is restricted to the account that created this private path service gateway.
+     */
+    published: boolean;
+    /** The resource group for this private path service gateway. */
+    resource_group: ResourceGroupReference;
+    /** The resource type. */
+    resource_type: PrivatePathServiceGateway.Constants.ResourceType | string;
+    /** The fully qualified domain names for this private path service gateway. The domains are used for endpoint
+     *  gateways to connect to the service and are configured in the VPC for each endpoint gateway.
+     */
+    service_endpoints: string[];
+    /** The VPC this private path service gateway resides in. */
+    vpc: VPCReference;
+    /** Indicates whether this private path service gateway has zonal affinity.
+     *  - `true`:  Traffic to the service from a zone the service resides in will remain in
+     *             that zone.
+     *  - `false`: Traffic to the service from a zone will be load balanced across all zones
+     *             in the region the service resides in.
+     */
+    zonal_affinity: boolean;
+  }
+  export namespace PrivatePathServiceGateway {
+    export namespace Constants {
+      /** The policy to use for bindings from accounts without an explicit account policy. */
+      export enum DefaultAccessPolicy {
+        DENY = 'deny',
+        PERMIT = 'permit',
+        REVIEW = 'review',
+      }
+      /** The lifecycle state of the private path service gateway. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        PRIVATE_PATH_SERVICE_GATEWAY = 'private_path_service_gateway',
+      }
+    }
+  }
+
+  /** PrivatePathServiceGatewayAccountPolicy. */
+  export interface PrivatePathServiceGatewayAccountPolicy {
+    /** The access policy for the account:
+     *  - permit: access will be permitted
+     *  - deny:  access will be denied
+     *  - review: access will be manually reviewed
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    access_policy: PrivatePathServiceGatewayAccountPolicy.Constants.AccessPolicy | string;
+    /** The account for this access policy. */
+    account: AccountReference;
+    /** The date and time that the account policy was created. */
+    created_at: string;
+    /** The URL for this account policy. */
+    href: string;
+    /** The unique identifier for this account policy. */
+    id: string;
+    /** The resource type. */
+    resource_type: PrivatePathServiceGatewayAccountPolicy.Constants.ResourceType | string;
+  }
+  export namespace PrivatePathServiceGatewayAccountPolicy {
+    export namespace Constants {
+      /** The access policy for the account: - permit: access will be permitted - deny:  access will be denied - review: access will be manually reviewed The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum AccessPolicy {
+        DENY = 'deny',
+        PERMIT = 'permit',
+        REVIEW = 'review',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        PRIVATE_PATH_SERVICE_GATEWAY_ACCOUNT_POLICY = 'private_path_service_gateway_account_policy',
+      }
+    }
+  }
+
+  /** PrivatePathServiceGatewayAccountPolicyCollection. */
+  export interface PrivatePathServiceGatewayAccountPolicyCollection {
+    /** A page of account policies for the private path service gateway. */
+    account_policies: PrivatePathServiceGatewayAccountPolicy[];
+    /** A link to the first page of resources. */
+    first: PrivatePathServiceGatewayAccountPolicyCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PrivatePathServiceGatewayAccountPolicyCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface PrivatePathServiceGatewayAccountPolicyCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface PrivatePathServiceGatewayAccountPolicyCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** PrivatePathServiceGatewayCollection. */
+  export interface PrivatePathServiceGatewayCollection {
+    /** A link to the first page of resources. */
+    first: PrivatePathServiceGatewayCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PrivatePathServiceGatewayCollectionNext;
+    /** A page of private path service gateways. */
+    private_path_service_gateways: PrivatePathServiceGateway[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface PrivatePathServiceGatewayCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface PrivatePathServiceGatewayCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** PrivatePathServiceGatewayEndpointGatewayBinding. */
+  export interface PrivatePathServiceGatewayEndpointGatewayBinding {
+    /** The account that created the endpoint gateway. */
+    account: AccountReference;
+    /** The date and time that the endpoint gateway binding was created. */
+    created_at: string;
+    /** The expiration date and time for the endpoint gateway binding. At binding creation, this property will be
+     *  set to 14 days after the creation time, and will remain while the `status` of the binding is `pending`. If the
+     *  date and time are reached while the binding is still `pending`, the binding will transition to `expired`.
+     *
+     *  This property will be present if the `status` is `pending` or `expired`.
+     */
+    expiration_at?: string;
+    /** The URL for this endpoint gateway binding. */
+    href: string;
+    /** The unique identifier for this endpoint gateway binding. */
+    id: string;
+    /** The lifecycle state of the endpoint gateway binding. */
+    lifecycle_state: PrivatePathServiceGatewayEndpointGatewayBinding.Constants.LifecycleState | string;
+    /** The resource type. */
+    resource_type: PrivatePathServiceGatewayEndpointGatewayBinding.Constants.ResourceType | string;
+    /** The status of the endpoint gateway binding:
+     *  - `abandoned`: endpoint gateway binding is inactive, awaiting deletion.
+     *  - `denied`: endpoint gateway binding was denied
+     *  - `expired`: endpoint gateway binding has expired
+     *  - `pending`: endpoint gateway binding is awaiting review
+     *  - `permitted`: endpoint gateway binding was permitted
+     *
+     *  An endpoint gateway binding will be automatically deleted when its associated endpoint gateway is deleted.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    status: PrivatePathServiceGatewayEndpointGatewayBinding.Constants.Status | string;
+  }
+  export namespace PrivatePathServiceGatewayEndpointGatewayBinding {
+    export namespace Constants {
+      /** The lifecycle state of the endpoint gateway binding. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        PRIVATE_PATH_SERVICE_GATEWAY_ENDPOINT_GATEWAY_BINDING = 'private_path_service_gateway_endpoint_gateway_binding',
+      }
+      /** The status of the endpoint gateway binding: - `abandoned`: endpoint gateway binding is inactive, awaiting deletion. - `denied`: endpoint gateway binding was denied - `expired`: endpoint gateway binding has expired - `pending`: endpoint gateway binding is awaiting review - `permitted`: endpoint gateway binding was permitted An endpoint gateway binding will be automatically deleted when its associated endpoint gateway is deleted. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Status {
+        ABANDONED = 'abandoned',
+        DENIED = 'denied',
+        EXPIRED = 'expired',
+        PENDING = 'pending',
+        PERMITTED = 'permitted',
+      }
+    }
+  }
+
+  /** PrivatePathServiceGatewayEndpointGatewayBindingCollection. */
+  export interface PrivatePathServiceGatewayEndpointGatewayBindingCollection {
+    /** A page of endpoint gateway bindings for the private path service gateway. */
+    endpoint_gateway_bindings: PrivatePathServiceGatewayEndpointGatewayBinding[];
+    /** A link to the first page of resources. */
+    first: PrivatePathServiceGatewayEndpointGatewayBindingCollectionFirst;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PrivatePathServiceGatewayEndpointGatewayBindingCollectionNext;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /** A link to the first page of resources. */
+  export interface PrivatePathServiceGatewayEndpointGatewayBindingCollectionFirst {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** A link to the next page of resources. This property is present for all pages except the last page. */
+  export interface PrivatePathServiceGatewayEndpointGatewayBindingCollectionNext {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  export interface PrivatePathServiceGatewayRemote {
+    /** If present, this property indicates that the referenced resource is remote to this
+     *  account, and identifies the owning account.
+     */
+    account?: AccountReference;
+    /** If present, this property indicates that the referenced resource is remote to this
+     *  region, and identifies the native region.
+     */
+    region?: RegionReference;
   }
 
   /** PublicGateway. */
@@ -39264,7 +41195,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: PublicGatewayCollectionNext;
-    /** Collection of public gateways. */
+    /** A page of public gateways. */
     public_gateways: PublicGateway[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -39295,7 +41226,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: FloatingIPReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this floating IP. */
     href: string;
     /** The unique identifier for this floating IP. */
@@ -39315,7 +41246,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: PublicGatewayReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this public gateway. */
     href: string;
     /** The unique identifier for this public gateway. */
@@ -39334,12 +41265,6 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface PublicGatewayReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** Region. */
   export interface Region {
     /** The API endpoint for this region. */
@@ -39348,12 +41273,16 @@ namespace VpcV1 {
     href: string;
     /** The globally unique name for this region. */
     name: string;
-    /** The availability status of this region. */
+    /** The availability status of this region.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     status: Region.Constants.Status | string;
   }
   export namespace Region {
     export namespace Constants {
-      /** The availability status of this region. */
+      /** The availability status of this region. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         AVAILABLE = 'available',
         UNAVAILABLE = 'unavailable',
@@ -39363,7 +41292,7 @@ namespace VpcV1 {
 
   /** RegionCollection. */
   export interface RegionCollection {
-    /** Collection of regions. */
+    /** The regions for the account. */
     regions: Region[];
   }
 
@@ -39514,7 +41443,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: ReservationCollectionNext;
-    /** Collection of reservations. */
+    /** A page of reservations. */
     reservations: Reservation[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -39534,8 +41463,11 @@ namespace VpcV1 {
 
   /** The committed use reservation configuration. */
   export interface ReservationCommittedUse {
-    /** The expiration date and time for this committed use reservation. */
-    expiration_at: string;
+    /** The expiration date and time for this committed use reservation.
+     *
+     *  This property will be absent if the reservation has a `status` of `inactive`.
+     */
+    expiration_at?: string;
     /** The policy to apply when the committed use term expires:
      *  - `release`: Release any available capacity and let the reservation expire.
      *  - `renew`: Renew for another term, provided the term remains listed in the
@@ -39570,9 +41502,6 @@ namespace VpcV1 {
      *  - `release`: Release any available capacity and let the reservation expire.
      *  - `renew`: Renew for another term, provided the term remains listed in the
      *    `reservation_terms` for the profile. Otherwise, let the reservation expire.
-     *
-     *  The enumerated values for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     expiration_policy?: ReservationCommittedUsePatch.Constants.ExpirationPolicy | string;
     /** The term for this committed use reservation:
@@ -39587,7 +41516,7 @@ namespace VpcV1 {
   }
   export namespace ReservationCommittedUsePatch {
     export namespace Constants {
-      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. */
       export enum ExpirationPolicy {
         RELEASE = 'release',
         RENEW = 'renew',
@@ -39601,9 +41530,6 @@ namespace VpcV1 {
      *  - `release`: Release any available capacity and let the reservation expire.
      *  - `renew`: Renew for another term, provided the term remains listed in the
      *    `reservation_terms` for the profile. Otherwise, let the reservation expire.
-     *
-     *  The enumerated values for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     expiration_policy?: ReservationCommittedUsePrototype.Constants.ExpirationPolicy | string;
     /** The term for this committed use reservation:
@@ -39616,7 +41542,7 @@ namespace VpcV1 {
   }
   export namespace ReservationCommittedUsePrototype {
     export namespace Constants {
-      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The policy to apply when the committed use term expires: - `release`: Release any available capacity and let the reservation expire. - `renew`: Renew for another term, provided the term remains listed in the `reservation_terms` for the profile. Otherwise, let the reservation expire. */
       export enum ExpirationPolicy {
         RELEASE = 'release',
         RENEW = 'renew',
@@ -39685,7 +41611,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: ReservationReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this reservation. */
     href: string;
     /** The unique identifier for this reservation. */
@@ -39702,12 +41628,6 @@ namespace VpcV1 {
         RESERVATION = 'reservation',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface ReservationReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** ReservationStatusReason. */
@@ -39757,7 +41677,11 @@ namespace VpcV1 {
     lifecycle_state: ReservedIP.Constants.LifecycleState | string;
     /** The name for this reserved IP. The name is unique across all reserved IPs in a subnet. */
     name: string;
-    /** The owner of the reserved IP. */
+    /** The owner of the reserved IP.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     owner: ReservedIP.Constants.Owner | string;
     /** The resource type. */
     resource_type: ReservedIP.Constants.ResourceType | string;
@@ -39779,7 +41703,7 @@ namespace VpcV1 {
         UPDATING = 'updating',
         WAITING = 'waiting',
       }
-      /** The owner of the reserved IP. */
+      /** The owner of the reserved IP. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Owner {
         PROVIDER = 'provider',
         USER = 'user',
@@ -39799,7 +41723,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: ReservedIPCollectionNext;
-    /** Collection of reserved IPs in this subnet. */
+    /** A page of reserved IPs in the subnet. */
     reserved_ips: ReservedIP[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -39809,7 +41733,7 @@ namespace VpcV1 {
   export interface ReservedIPCollectionBareMetalServerNetworkInterfaceContext {
     /** A link to the first page of resources. */
     first: ReservedIPCollectionBareMetalServerNetworkInterfaceContextFirst;
-    /** Collection of reserved IPs bound to a bare metal server network interface. */
+    /** A page of reserved IPs bound to the bare metal server network interface. */
     ips: ReservedIP[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -39835,7 +41759,7 @@ namespace VpcV1 {
   export interface ReservedIPCollectionEndpointGatewayContext {
     /** A link to the first page of resources. */
     first: ReservedIPCollectionEndpointGatewayContextFirst;
-    /** Collection of reserved IPs bound to an endpoint gateway. */
+    /** A page of reserved IPs bound to the endpoint gateway. */
     ips: ReservedIP[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -39867,7 +41791,7 @@ namespace VpcV1 {
   export interface ReservedIPCollectionInstanceNetworkInterfaceContext {
     /** A link to the first page of resources. */
     first: ReservedIPCollectionInstanceNetworkInterfaceContextFirst;
-    /** Collection of reserved IPs bound to an instance network interface. */
+    /** A page of reserved IPs bound to the instance network interface. */
     ips: ReservedIP[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -39899,7 +41823,7 @@ namespace VpcV1 {
   export interface ReservedIPCollectionVirtualNetworkInterfaceContext {
     /** A link to the first page of resources. */
     first: ReservedIPCollectionVirtualNetworkInterfaceContextFirst;
-    /** Collection of reserved IPs bound to the virtual network interface specified by the identifier in the URL. */
+    /** A page of reserved IPs bound to the virtual network interface specified by the identifier in the URL. */
     ips: ReservedIPReference[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
@@ -39934,7 +41858,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: ReservedIPReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this reserved IP. */
     href: string;
     /** The unique identifier for this reserved IP. */
@@ -39951,12 +41875,6 @@ namespace VpcV1 {
         SUBNET_RESERVED_IP = 'subnet_reserved_ip',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface ReservedIPReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** The target this reserved IP is bound to. If absent, this reserved IP is provider-owned or unbound. */
@@ -39993,7 +41911,10 @@ namespace VpcV1 {
      *  - `delegate`: delegate to system-provided routes
      *  - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes
      *  - `deliver`: deliver the packet to the specified `next_hop`
-     *  - `drop`: drop the packet.
+     *  - `drop`: drop the packet
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     action: Route.Constants.Action | string;
     /** Indicates whether this route will be advertised to the ingress sources specified by the
@@ -40028,7 +41949,7 @@ namespace VpcV1 {
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
-    origin?: Route.Constants.Origin | string;
+    origin: Route.Constants.Origin | string;
     /** The priority of this route. Smaller values have higher priority.
      *
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
@@ -40048,7 +41969,7 @@ namespace VpcV1 {
   }
   export namespace Route {
     export namespace Constants {
-      /** The action to perform with a packet matching the route: - `delegate`: delegate to system-provided routes - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet. */
+      /** The action to perform with a packet matching the route: - `delegate`: delegate to system-provided routes - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Action {
         DELEGATE = 'delegate',
         DELEGATE_VPC = 'delegate_vpc',
@@ -40081,7 +42002,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: RouteCollectionNext;
-    /** Collection of routes. */
+    /** A page of routes in the routing table. */
     routes: Route[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -40107,7 +42028,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: RouteCollectionVPCContextNext;
-    /** Collection of routes. */
+    /** A page of routes in the routing table. */
     routes: RouteCollectionVPCContextRoutesItem[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -40131,7 +42052,10 @@ namespace VpcV1 {
      *  - `delegate`: delegate to system-provided routes
      *  - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes
      *  - `deliver`: deliver the packet to the specified `next_hop`
-     *  - `drop`: drop the packet.
+     *  - `drop`: drop the packet
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     action: RouteCollectionVPCContextRoutesItem.Constants.Action | string;
     /** Indicates whether this route will be advertised to the ingress sources specified by the
@@ -40166,7 +42090,7 @@ namespace VpcV1 {
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
-    origin?: RouteCollectionVPCContextRoutesItem.Constants.Origin | string;
+    origin: RouteCollectionVPCContextRoutesItem.Constants.Origin | string;
     /** The priority of this route. Smaller values have higher priority.
      *
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
@@ -40186,7 +42110,7 @@ namespace VpcV1 {
   }
   export namespace RouteCollectionVPCContextRoutesItem {
     export namespace Constants {
-      /** The action to perform with a packet matching the route: - `delegate`: delegate to system-provided routes - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet. */
+      /** The action to perform with a packet matching the route: - `delegate`: delegate to system-provided routes - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Action {
         DELEGATE = 'delegate',
         DELEGATE_VPC = 'delegate_vpc',
@@ -40219,8 +42143,12 @@ namespace VpcV1 {
   export interface RouteNextHop {
   }
 
-  /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action` values, specify `0.0.0.0` or remove it by specifying `null`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route has an `action` of `deliver` and `next_hop` is an IP address. */
+  /** If `action` is `deliver`, the next hop that packets will be delivered to (must not be `0.0.0.0`). For other `action` values, specify `0.0.0.0` or remove it by specifying `null`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route has an `action` of `deliver` and `next_hop` is an IP address. */
   export interface RouteNextHopPatch {
+  }
+
+  /** If `action` is `deliver`, the next hop that packets will be delivered to (must not be `0.0.0.0`). For other `action` values, it must be omitted or specified as `0.0.0.0`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route has an `action` of `deliver` and `next_hop` is an IP address. */
+  export interface RouteNextHopPrototype {
   }
 
   /** RoutePrototype. */
@@ -40250,13 +42178,13 @@ namespace VpcV1 {
      *  hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to. For other
-     *  `action` values, it must be omitted or specified as `0.0.0.0`.
+    /** If `action` is `deliver`, the next hop that packets will be delivered to (must not be
+     *  `0.0.0.0`). For other `action` values, it must be omitted or specified as `0.0.0.0`.
      *
      *  At most two routes per `zone` in a table can have the same `destination` and `priority`,
      *  and only when each route has an `action` of `deliver` and `next_hop` is an IP address.
      */
-    next_hop?: RoutePrototypeNextHop;
+    next_hop?: RouteNextHopPrototype;
     /** The priority of this route. Smaller values have higher priority.
      *
      *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
@@ -40286,28 +42214,18 @@ namespace VpcV1 {
     }
   }
 
-  /** If `action` is `deliver`, the next hop that packets will be delivered to. For other `action` values, it must be omitted or specified as `0.0.0.0`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route has an `action` of `deliver` and `next_hop` is an IP address. */
-  export interface RoutePrototypeNextHop {
-  }
-
   /** RouteReference. */
   export interface RouteReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: RouteReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this route. */
     href: string;
     /** The unique identifier for this route. */
     id: string;
     /** The name for this route. The name is unique across all routes in the routing table. */
     name: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface RouteReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** RoutingTable. */
@@ -40327,6 +42245,8 @@ namespace VpcV1 {
     advertise_routes_to: RoutingTable.Constants.AdvertiseRoutesTo[] | string[];
     /** The date and time that this routing table was created. */
     created_at: string;
+    /** The CRN for this VPC routing table. */
+    crn: string;
     /** The URL for this routing table. */
     href: string;
     /** The unique identifier for this routing table. */
@@ -40337,6 +42257,8 @@ namespace VpcV1 {
     lifecycle_state: RoutingTable.Constants.LifecycleState | string;
     /** The name for this routing table. The name is unique across all routing tables for the VPC. */
     name: string;
+    /** The resource group for this routing table. */
+    resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: RoutingTable.Constants.ResourceType | string;
     /** Indicates whether this routing table is used to route traffic that originates from
@@ -40414,7 +42336,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: RoutingTableCollectionNext;
-    /** Collection of routing tables. */
+    /** A page of routing tables. */
     routing_tables: RoutingTable[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -40438,10 +42360,12 @@ namespace VpcV1 {
 
   /** RoutingTableReference. */
   export interface RoutingTableReference {
+    /** The CRN for this VPC routing table. */
+    crn: string;
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: RoutingTableReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this routing table. */
     href: string;
     /** The unique identifier for this routing table. */
@@ -40460,19 +42384,13 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface RoutingTableReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** SecurityGroup. */
   export interface SecurityGroup {
     /** The date and time that this security group was created. */
     created_at: string;
-    /** The security group's CRN. */
+    /** The CRN for this security group. */
     crn: string;
-    /** The security group's canonical URL. */
+    /** The URL for this security group. */
     href: string;
     /** The unique identifier for this security group. */
     id: string;
@@ -40496,7 +42414,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: SecurityGroupCollectionNext;
-    /** Collection of security groups. */
+    /** A page of security groups. */
     security_groups: SecurityGroup[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -40520,13 +42438,13 @@ namespace VpcV1 {
 
   /** SecurityGroupReference. */
   export interface SecurityGroupReference {
-    /** The security group's CRN. */
+    /** The CRN for this security group. */
     crn: string;
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: SecurityGroupReferenceDeleted;
-    /** The security group's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this security group. */
     href: string;
     /** The unique identifier for this security group. */
     id: string;
@@ -40534,25 +42452,19 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface SecurityGroupReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** SecurityGroupRule. */
   export interface SecurityGroupRule {
-    /** The direction of traffic to enforce. */
+    /** The direction of traffic to allow. */
     direction: SecurityGroupRule.Constants.Direction | string;
     /** The URL for this security group rule. */
     href: string;
     /** The unique identifier for this security group rule. */
     id: string;
-    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+    /** The IP version to allow. The format of `local.address`, `remote.address`,
      *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
      *
-     *  If `remote` references a security group, then this rule only applies to IP addresses
-     *  (network interfaces) in that group matching this IP version.
+     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
+     *  IP version.
      */
     ip_version: SecurityGroupRule.Constants.IpVersion | string;
     /** The local IP address or range of local IP addresses to which this rule will allow inbound
@@ -40560,7 +42472,11 @@ namespace VpcV1 {
      *  to all local IP addresses (or from all local IP addresses, for outbound rules).
      */
     local: SecurityGroupRuleLocal;
-    /** The protocol to enforce. */
+    /** The protocol to allow.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     protocol: SecurityGroupRule.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule allows traffic (or to
      *  which, for outbound rules). A CIDR block of `0.0.0.0/0` allows traffic from any source
@@ -40570,16 +42486,16 @@ namespace VpcV1 {
   }
   export namespace SecurityGroupRule {
     export namespace Constants {
-      /** The direction of traffic to enforce. */
+      /** The direction of traffic to allow. */
       export enum Direction {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The protocol to allow. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -40589,9 +42505,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Collection of rules in a security group. */
+  /** SecurityGroupRuleCollection. */
   export interface SecurityGroupRuleCollection {
-    /** Array of rules. */
+    /** The rules for the security group. */
     rules: SecurityGroupRule[];
   }
 
@@ -40609,13 +42525,13 @@ namespace VpcV1 {
 
   /** SecurityGroupRulePrototype. */
   export interface SecurityGroupRulePrototype {
-    /** The direction of traffic to enforce. */
+    /** The direction of traffic to allow. */
     direction: SecurityGroupRulePrototype.Constants.Direction | string;
-    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+    /** The IP version to allow. The format of `local.address`, `remote.address`,
      *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
      *
-     *  If `remote` references a security group, then this rule only applies to IP addresses
-     *  (network interfaces) in that group matching this IP version.
+     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
+     *  IP version.
      */
     ip_version?: SecurityGroupRulePrototype.Constants.IpVersion | string;
     /** The local IP address or range of local IP addresses to which this rule will allow inbound
@@ -40625,7 +42541,7 @@ namespace VpcV1 {
      *  addresses (or from all local IP addresses, for outbound rules).
      */
     local?: SecurityGroupRuleLocalPrototype;
-    /** The protocol to enforce. */
+    /** The protocol to allow. */
     protocol: SecurityGroupRulePrototype.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
@@ -40638,16 +42554,16 @@ namespace VpcV1 {
   }
   export namespace SecurityGroupRulePrototype {
     export namespace Constants {
-      /** The direction of traffic to enforce. */
+      /** The direction of traffic to allow. */
       export enum Direction {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The protocol to allow. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -40677,7 +42593,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: SecurityGroupTargetCollectionNext;
-    /** Collection of targets for this security group. */
+    /** A page of targets for the security group. */
     targets: SecurityGroupTargetReference[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -40925,7 +42841,7 @@ namespace VpcV1 {
 
   /** ShareAccessorBindingCollection. */
   export interface ShareAccessorBindingCollection {
-    /** Collection of share accessor bindings. */
+    /** A page of accessor bindings for the share. */
     accessor_bindings: ShareAccessorBinding[];
     /** A link to the first page of resources. */
     first: ShareAccessorBindingCollectionFirst;
@@ -40975,7 +42891,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: ShareCollectionNext;
-    /** Collection of file shares. */
+    /** A page of file shares. */
     shares: Share[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -41216,7 +43132,7 @@ namespace VpcV1 {
     first: ShareMountTargetCollectionFirst;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
-    /** Collection of share mount targets. */
+    /** A page of mount targets for the share. */
     mount_targets: ShareMountTarget[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: ShareMountTargetCollectionNext;
@@ -41265,7 +43181,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: ShareMountTargetReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this share mount target. */
     href: string;
     /** The unique identifier for this share mount target. */
@@ -41284,12 +43200,6 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface ShareMountTargetReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** ShareMountTargetVirtualNetworkInterfacePrototype. */
   export interface ShareMountTargetVirtualNetworkInterfacePrototype {
   }
@@ -41298,7 +43208,11 @@ namespace VpcV1 {
   export interface ShareProfile {
     /** The permitted capacity range (in gigabytes) for a share with this profile. */
     capacity: ShareProfileCapacity;
-    /** The product family this share profile belongs to. */
+    /** The product family this share profile belongs to.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     family: ShareProfile.Constants.Family | string;
     /** The URL for this share profile. */
     href: string;
@@ -41311,7 +43225,7 @@ namespace VpcV1 {
   }
   export namespace ShareProfile {
     export namespace Constants {
-      /** The product family this share profile belongs to. */
+      /** The product family this share profile belongs to. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Family {
         DEFINED_PERFORMANCE = 'defined_performance',
       }
@@ -41334,7 +43248,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: ShareProfileCollectionNext;
-    /** Collection of share profiles. */
+    /** A page of share profiles. */
     profiles: ShareProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -41447,9 +43361,8 @@ namespace VpcV1 {
     resource_group?: ResourceGroupIdentity;
     /** Tags for this resource. */
     user_tags?: string[];
-    /** The zone this replica file share will reside in.
-     *
-     *  Must be a different zone in the same region as the source share.
+    /** The zone this replica file share will reside in. For a replica share in the same
+     *  region as the source share, this must be a different zone from the source share.
      */
     zone: ZoneIdentity;
   }
@@ -41470,7 +43383,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: ShareReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this file share. */
     href: string;
     /** The unique identifier for this file share. */
@@ -41491,12 +43404,6 @@ namespace VpcV1 {
         SHARE = 'share',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface ShareReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
@@ -41660,7 +43567,7 @@ namespace VpcV1 {
 
   /** SnapshotCloneCollection. */
   export interface SnapshotCloneCollection {
-    /** Collection of snapshot clones. */
+    /** The clones for the snapshot. */
     clones: SnapshotClone[];
   }
 
@@ -41678,7 +43585,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: SnapshotCollectionNext;
-    /** Collection of snapshots. */
+    /** A page of snapshots. */
     snapshots: Snapshot[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -41757,7 +43664,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: SnapshotConsistencyGroupCollectionNext;
-    /** Collection of snapshot consistency groups. */
+    /** A page of snapshot consistency groups. */
     snapshot_consistency_groups: SnapshotConsistencyGroup[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -41798,7 +43705,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: SnapshotConsistencyGroupReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this snapshot consistency group. */
     href: string;
     /** The unique identifier for this snapshot consistency group. */
@@ -41819,12 +43726,6 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface SnapshotConsistencyGroupReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** SnapshotCopiesItem. */
   export interface SnapshotCopiesItem {
     /** The CRN for the copied snapshot. */
@@ -41832,7 +43733,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: SnapshotReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for the copied snapshot. */
     href: string;
     /** The unique identifier for the copied snapshot. */
@@ -41894,7 +43795,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: SnapshotReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this snapshot. */
     href: string;
     /** The unique identifier for this snapshot. */
@@ -41917,14 +43818,12 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface SnapshotReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
   export interface SnapshotRemote {
+    /** If present, this property indicates that the referenced resource is remote to this
+     *  account, and identifies the owning account.
+     */
+    account?: AccountReference;
     /** If present, this property indicates that the referenced resource is remote to this
      *  region, and identifies the native region.
      */
@@ -41938,7 +43837,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: SnapshotReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for the source snapshot. */
     href: string;
     /** The unique identifier for the source snapshot. */
@@ -41993,7 +43892,11 @@ namespace VpcV1 {
     resource_type: Subnet.Constants.ResourceType | string;
     /** The routing table for this subnet. */
     routing_table: RoutingTableReference;
-    /** The status of the subnet. */
+    /** The status of the subnet.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     status: Subnet.Constants.Status | string;
     /** The total number of IPv4 addresses in this subnet.
      *
@@ -42016,7 +43919,7 @@ namespace VpcV1 {
       export enum ResourceType {
         SUBNET = 'subnet',
       }
-      /** The status of the subnet. */
+      /** The status of the subnet. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         AVAILABLE = 'available',
         DELETING = 'deleting',
@@ -42034,7 +43937,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: SubnetCollectionNext;
-    /** Collection of subnets. */
+    /** A page of subnets. */
     subnets: Subnet[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -42103,7 +44006,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: SubnetReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this subnet. */
     href: string;
     /** The unique identifier for this subnet. */
@@ -42120,12 +44023,6 @@ namespace VpcV1 {
         SUBNET = 'subnet',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface SubnetReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** Identifies a trusted profile by a unique property. */
@@ -42207,7 +44104,11 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: VPC.Constants.ResourceType | string;
-    /** The status of this VPC. */
+    /** The status of this VPC.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     status: VPC.Constants.Status | string;
   }
   export namespace VPC {
@@ -42223,7 +44124,7 @@ namespace VpcV1 {
       export enum ResourceType {
         VPC = 'vpc',
       }
-      /** The status of this VPC. */
+      /** The status of this VPC. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         AVAILABLE = 'available',
         DELETING = 'deleting',
@@ -42251,7 +44152,7 @@ namespace VpcV1 {
     next?: VPCCollectionNext;
     /** The total number of resources across all pages. */
     total_count: number;
-    /** Collection of VPCs. */
+    /** A page of VPCs. */
     vpcs: VPC[];
   }
 
@@ -42362,7 +44263,7 @@ namespace VpcV1 {
 
   /** VPCDNSResolutionBindingCollection. */
   export interface VPCDNSResolutionBindingCollection {
-    /** Collection of DNS resolution bindings for this VPC. */
+    /** A page of DNS resolution bindings for the VPC. */
     dns_resolution_bindings: VPCDNSResolutionBinding[];
     /** A link to the first page of resources. */
     first: VPCDNSResolutionBindingCollectionFirst;
@@ -42550,7 +44451,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VPCReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this VPC. */
     href: string;
     /** The unique identifier for this VPC. */
@@ -42576,7 +44477,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VPCReferenceDNSResolverContextDeleted;
+    deleted?: Deleted;
     /** The URL for this VPC. */
     href: string;
     /** The unique identifier for this VPC. */
@@ -42597,18 +44498,6 @@ namespace VpcV1 {
         VPC = 'vpc',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VPCReferenceDNSResolverContextDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VPCReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** VPCReferenceRemote. */
@@ -42655,7 +44544,7 @@ namespace VpcV1 {
     connections: VPNGatewayConnectionReference[];
     /** The date and time that this VPN gateway was created. */
     created_at: string;
-    /** The VPN gateway's CRN. */
+    /** The CRN for this VPN gateway. */
     crn: string;
     /** The reasons for the current `health_state` (if any). */
     health_reasons: VPNGatewayHealthReason[];
@@ -42668,7 +44557,7 @@ namespace VpcV1 {
      *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: VPNGateway.Constants.HealthState | string;
-    /** The VPN gateway's canonical URL. */
+    /** The URL for this VPN gateway. */
     href: string;
     /** The unique identifier for this VPN gateway. */
     id: string;
@@ -42676,7 +44565,7 @@ namespace VpcV1 {
     lifecycle_reasons: VPNGatewayLifecycleReason[];
     /** The lifecycle state of the VPN gateway. */
     lifecycle_state: VPNGateway.Constants.LifecycleState | string;
-    /** Collection of VPN gateway members. */
+    /** The members for the VPN gateway. */
     members: VPNGatewayMember[];
     /** The name for this VPN gateway. The name is unique across all VPN gateways in the VPC. */
     name: string;
@@ -42724,7 +44613,7 @@ namespace VpcV1 {
     next?: VPNGatewayCollectionNext;
     /** The total number of resources across all pages. */
     total_count: number;
-    /** Collection of VPN gateways. */
+    /** A page of VPN gateways. */
     vpn_gateways: VPNGateway[];
   }
 
@@ -42744,7 +44633,11 @@ namespace VpcV1 {
   export interface VPNGatewayConnection {
     /** If set to false, the VPN gateway connection is shut down. */
     admin_state_up: boolean;
-    /** The authentication mode. Only `psk` is currently supported. */
+    /** The authentication mode.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     authentication_mode: VPNGatewayConnection.Constants.AuthenticationMode | string;
     /** The date and time that this VPN gateway connection was created. */
     created_at: string;
@@ -42759,7 +44652,7 @@ namespace VpcV1 {
      *     connection will be brought down after its lifetime expires.
      */
     establish_mode: VPNGatewayConnection.Constants.EstablishMode | string;
-    /** The VPN connection's canonical URL. */
+    /** The URL for this VPN gateway connection. */
     href: string;
     /** The unique identifier for this VPN gateway connection. */
     id: string;
@@ -42771,7 +44664,11 @@ namespace VpcV1 {
      *  used](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ipsec-auto-negotiation-phase-2).
      */
     ipsec_policy?: IPsecPolicyReference;
-    /** The mode of the VPN gateway. */
+    /** The mode of the VPN gateway.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     mode: VPNGatewayConnection.Constants.Mode | string;
     /** The name for this VPN gateway connection. The name is unique across all connections for the VPN gateway. */
     name: string;
@@ -42786,7 +44683,7 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayConnection {
     export namespace Constants {
-      /** The authentication mode. Only `psk` is currently supported. */
+      /** The authentication mode. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AuthenticationMode {
         PSK = 'psk',
       }
@@ -42795,7 +44692,7 @@ namespace VpcV1 {
         BIDIRECTIONAL = 'bidirectional',
         PEER_ONLY = 'peer_only',
       }
-      /** The mode of the VPN gateway. */
+      /** The mode of the VPN gateway. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Mode {
         POLICY = 'policy',
         ROUTE = 'route',
@@ -42820,7 +44717,7 @@ namespace VpcV1 {
 
   /** VPNGatewayConnectionCollection. */
   export interface VPNGatewayConnectionCollection {
-    /** Collection of VPN gateway connections in a VPN gateway. */
+    /** A page of connections for the VPN gateway. */
     connections: VPNGatewayConnection[];
     /** A link to the first page of resources. */
     first: VPNGatewayConnectionCollectionFirst;
@@ -43070,8 +44967,8 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VPNGatewayConnectionReferenceDeleted;
-    /** The VPN connection's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this VPN gateway connection. */
     href: string;
     /** The unique identifier for this VPN gateway connection. */
     id: string;
@@ -43087,12 +44984,6 @@ namespace VpcV1 {
         VPN_GATEWAY_CONNECTION = 'vpn_gateway_connection',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VPNGatewayConnectionReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** VPNGatewayConnectionStaticRouteModeLocal. */
@@ -43152,14 +45043,18 @@ namespace VpcV1 {
   export interface VPNGatewayConnectionStaticRouteModeTunnel {
     /** The IP address of the VPN gateway member in which the tunnel resides. */
     public_ip: IP;
-    /** The status of the VPN Tunnel. */
+    /** The status of the VPN Tunnel.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     status: VPNGatewayConnectionStaticRouteModeTunnel.Constants.Status | string;
     /** The reasons for the current status (if any). */
     status_reasons: VPNGatewayConnectionTunnelStatusReason[];
   }
   export namespace VPNGatewayConnectionStaticRouteModeTunnel {
     export namespace Constants {
-      /** The status of the VPN Tunnel. */
+      /** The status of the VPN Tunnel. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         DOWN = 'down',
         UP = 'up',
@@ -43315,7 +45210,11 @@ namespace VpcV1 {
     private_ip: ReservedIPReference;
     /** The public IP address assigned to the VPN gateway member. */
     public_ip: IP;
-    /** The high availability role assigned to the VPN gateway member. */
+    /** The high availability role assigned to the VPN gateway member.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     role: VPNGatewayMember.Constants.Role | string;
   }
   export namespace VPNGatewayMember {
@@ -43337,7 +45236,7 @@ namespace VpcV1 {
         UPDATING = 'updating',
         WAITING = 'waiting',
       }
-      /** The high availability role assigned to the VPN gateway member. */
+      /** The high availability role assigned to the VPN gateway member. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Role {
         ACTIVE = 'active',
         STANDBY = 'standby',
@@ -43411,12 +45310,6 @@ namespace VpcV1 {
     subnet: SubnetIdentity;
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VPNGatewayReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** VPNServer. */
   export interface VPNServer {
     /** The certificate instance for this VPN server. */
@@ -43476,7 +45369,11 @@ namespace VpcV1 {
     port: number;
     /** The reserved IPs bound to this VPN server. */
     private_ips: ReservedIPReference[];
-    /** The transport protocol used by this VPN server. */
+    /** The transport protocol to use for this VPN server.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     protocol: VPNServer.Constants.Protocol | string;
     /** The resource group for this VPN server. */
     resource_group: ResourceGroupReference;
@@ -43508,7 +45405,7 @@ namespace VpcV1 {
         UPDATING = 'updating',
         WAITING = 'waiting',
       }
-      /** The transport protocol used by this VPN server. */
+      /** The transport protocol to use for this VPN server. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -43522,12 +45419,16 @@ namespace VpcV1 {
 
   /** An authentication method for this VPN server. */
   export interface VPNServerAuthentication {
-    /** The type of authentication. */
+    /** The type of authentication.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     method: VPNServerAuthentication.Constants.Method | string;
   }
   export namespace VPNServerAuthentication {
     export namespace Constants {
-      /** The type of authentication. */
+      /** The type of authentication. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Method {
         CERTIFICATE = 'certificate',
         USERNAME = 'username',
@@ -43612,7 +45513,7 @@ namespace VpcV1 {
 
   /** VPNServerClientCollection. */
   export interface VPNServerClientCollection {
-    /** Collection of VPN clients. */
+    /** A page of clients of the VPN server. */
     clients: VPNServerClient[];
     /** A link to the first page of resources. */
     first: VPNServerClientCollectionFirst;
@@ -43646,7 +45547,7 @@ namespace VpcV1 {
     next?: VPNServerCollectionNext;
     /** The total number of resources across all pages. */
     total_count: number;
-    /** Collection of VPN servers. */
+    /** A page of VPN servers. */
     vpn_servers: VPNServer[];
   }
 
@@ -43722,12 +45623,6 @@ namespace VpcV1 {
         RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VPNServerReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** VPNServerRoute. */
@@ -43812,7 +45707,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: VPNServerRouteCollectionNext;
-    /** Collection of VPN routes. */
+    /** A page of routes for the VPN server. */
     routes: VPNServerRoute[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -43987,7 +45882,7 @@ namespace VpcV1 {
     next?: VirtualNetworkInterfaceCollectionNext;
     /** The total number of resources across all pages. */
     total_count: number;
-    /** Collection of virtual network interfaces. */
+    /** A page of virtual network interfaces. */
     virtual_network_interfaces: VirtualNetworkInterface[];
   }
 
@@ -44035,12 +45930,6 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VirtualNetworkInterfaceReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** A virtual network interface target. The resources supported by this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
   export interface VirtualNetworkInterfaceTarget {
   }
@@ -44049,6 +45938,10 @@ namespace VpcV1 {
   export interface Volume {
     /** Indicates whether a running virtual server instance has an attachment to this volume. */
     active: boolean;
+    /** The attachment states that support adjustable capacity for this volume. */
+    adjustable_capacity_states: Volume.Constants.AdjustableCapacityStates[] | string[];
+    /** The attachment states that support adjustable IOPS for this volume. */
+    adjustable_iops_states: Volume.Constants.AdjustableIopsStates[] | string[];
     /** The attachment state of the volume
      *  - `unattached`: Not attached to any virtual server instances
      *  - `attached`: Attached to a virtual server instance (even if the instance is stopped)
@@ -44140,6 +46033,18 @@ namespace VpcV1 {
   }
   export namespace Volume {
     export namespace Constants {
+      /** The attachment states that support adjustable capacity for this volume. */
+      export enum AdjustableCapacityStates {
+        ATTACHED = 'attached',
+        UNATTACHED = 'unattached',
+        UNUSABLE = 'unusable',
+      }
+      /** The attachment states that support adjustable IOPS for this volume. */
+      export enum AdjustableIopsStates {
+        ATTACHED = 'attached',
+        UNATTACHED = 'unattached',
+        UNUSABLE = 'unusable',
+      }
       /** The attachment state of the volume - `unattached`: Not attached to any virtual server instances - `attached`: Attached to a virtual server instance (even if the instance is stopped) - `unusable`: Not able to be attached to any virtual server instances. */
       export enum AttachmentState {
         ATTACHED = 'attached',
@@ -44195,9 +46100,17 @@ namespace VpcV1 {
     id: string;
     /** The name for this volume attachment. The name is unique across all volume attachments on the instance. */
     name: string;
-    /** The status of this volume attachment. */
+    /** The status of this volume attachment.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     status: VolumeAttachment.Constants.Status | string;
-    /** The type of volume attachment. */
+    /** The type of volume attachment.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     type: VolumeAttachment.Constants.Type | string;
     /** The attached volume.
      *
@@ -44207,14 +46120,14 @@ namespace VpcV1 {
   }
   export namespace VolumeAttachment {
     export namespace Constants {
-      /** The status of this volume attachment. */
+      /** The status of this volume attachment. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         ATTACHED = 'attached',
         ATTACHING = 'attaching',
         DELETING = 'deleting',
         DETACHING = 'detaching',
       }
-      /** The type of volume attachment. */
+      /** The type of volume attachment. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         BOOT = 'boot',
         DATA = 'data',
@@ -44224,7 +46137,7 @@ namespace VpcV1 {
 
   /** VolumeAttachmentCollection. */
   export interface VolumeAttachmentCollection {
-    /** Collection of volume attachments. */
+    /** The volume attachments for the instance. */
     volume_attachments: VolumeAttachment[];
   }
 
@@ -44291,7 +46204,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VolumeAttachmentReferenceInstanceContextDeleted;
+    deleted?: Deleted;
     /** Information about how the volume is exposed to the instance operating system.
      *
      *  This property may be absent if the volume attachment's `status` is not `attached`.
@@ -44310,12 +46223,6 @@ namespace VpcV1 {
     volume?: VolumeReferenceVolumeAttachmentContext;
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VolumeAttachmentReferenceInstanceContextDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** VolumeAttachmentReferenceVolumeContext. */
   export interface VolumeAttachmentReferenceVolumeContext {
     /** Indicates whether deleting the instance will also delete the attached volume. */
@@ -44323,7 +46230,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VolumeAttachmentReferenceVolumeContextDeleted;
+    deleted?: Deleted;
     /** Information about how the volume is exposed to the instance operating system.
      *
      *  This property may be absent if the volume attachment's `status` is not `attached`.
@@ -44337,23 +46244,21 @@ namespace VpcV1 {
     instance: InstanceReference;
     /** The name for this volume attachment. The name is unique across all volume attachments on the instance. */
     name: string;
-    /** The type of volume attachment. */
+    /** The type of volume attachment.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     type: VolumeAttachmentReferenceVolumeContext.Constants.Type | string;
   }
   export namespace VolumeAttachmentReferenceVolumeContext {
     export namespace Constants {
-      /** The type of volume attachment. */
+      /** The type of volume attachment. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         BOOT = 'boot',
         DATA = 'data',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VolumeAttachmentReferenceVolumeContextDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** VolumeCatalogOffering. */
@@ -44380,7 +46285,7 @@ namespace VpcV1 {
     next?: VolumeCollectionNext;
     /** The total number of resources across all pages. */
     total_count: number;
-    /** Collection of volumes. */
+    /** A page of volumes. */
     volumes: Volume[];
   }
 
@@ -44410,6 +46315,7 @@ namespace VpcV1 {
       /** A reason code for this health state. */
       export enum Code {
         INITIALIZING_FROM_SNAPSHOT = 'initializing_from_snapshot',
+        THROTTLED_BY_INSUFFICIENT_INSTANCE_BANDWIDTH = 'throttled_by_insufficient_instance_bandwidth',
       }
     }
   }
@@ -44420,6 +46326,10 @@ namespace VpcV1 {
 
   /** VolumeProfile. */
   export interface VolumeProfile {
+    adjustable_capacity_states: VolumeProfileAdjustableCapacityStates;
+    adjustable_iops_states: VolumeProfileAdjustableIOPSStates;
+    boot_capacity: VolumeProfileBootCapacity;
+    capacity: VolumeProfileCapacity;
     /** The product family this volume profile belongs to.
      *
      *  The enumerated values for this property may
@@ -44428,6 +46338,7 @@ namespace VpcV1 {
     family: VolumeProfile.Constants.Family | string;
     /** The URL for this volume profile. */
     href: string;
+    iops: VolumeProfileIOPS;
     /** The globally unique name for this volume profile. */
     name: string;
   }
@@ -44436,9 +46347,62 @@ namespace VpcV1 {
       /** The product family this volume profile belongs to. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Family {
         CUSTOM = 'custom',
+        DEFINED_PERFORMANCE = 'defined_performance',
         TIERED = 'tiered',
       }
     }
+  }
+
+  /** VolumeProfileAdjustableCapacityStates. */
+  export interface VolumeProfileAdjustableCapacityStates {
+    /** The type for this profile field. */
+    type: VolumeProfileAdjustableCapacityStates.Constants.Type | string;
+    /** The attachment states that support adjustable capacity for a volume with this profile. */
+    values: VolumeProfileAdjustableCapacityStates.Constants.Values[] | string[];
+  }
+  export namespace VolumeProfileAdjustableCapacityStates {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The attachment states that support adjustable capacity for a volume with this profile. */
+      export enum Values {
+        ATTACHED = 'attached',
+        UNATTACHED = 'unattached',
+        UNUSABLE = 'unusable',
+      }
+    }
+  }
+
+  /** VolumeProfileAdjustableIOPSStates. */
+  export interface VolumeProfileAdjustableIOPSStates {
+    /** The type for this profile field. */
+    type: VolumeProfileAdjustableIOPSStates.Constants.Type | string;
+    /** The attachment states that support adjustable IOPS for a volume with this profile. */
+    values: VolumeProfileAdjustableIOPSStates.Constants.Values[] | string[];
+  }
+  export namespace VolumeProfileAdjustableIOPSStates {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The attachment states that support adjustable IOPS for a volume with this profile. */
+      export enum Values {
+        ATTACHED = 'attached',
+        UNATTACHED = 'unattached',
+        UNUSABLE = 'unusable',
+      }
+    }
+  }
+
+  /** VolumeProfileBootCapacity. */
+  export interface VolumeProfileBootCapacity {
+  }
+
+  /** VolumeProfileCapacity. */
+  export interface VolumeProfileCapacity {
   }
 
   /** VolumeProfileCollection. */
@@ -44449,7 +46413,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: VolumeProfileCollectionNext;
-    /** Collection of volume profiles. */
+    /** A page of volume profiles. */
     profiles: VolumeProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -44467,6 +46431,10 @@ namespace VpcV1 {
     href: string;
   }
 
+  /** VolumeProfileIOPS. */
+  export interface VolumeProfileIOPS {
+  }
+
   /** Identifies a volume profile by a unique property. */
   export interface VolumeProfileIdentity {
   }
@@ -44481,8 +46449,8 @@ namespace VpcV1 {
 
   /** VolumePrototype. */
   export interface VolumePrototype {
-    /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
-     *  profile `family` of `custom`.
+    /** The maximum I/O operations per second (IOPS) to use for this volume. If specified, the `family` of the
+     *  volume profile must be `custom` or `defined_performance`.
      */
     iops?: number;
     /** The name for this volume. The name must not be used by another volume in the region. If unspecified, the
@@ -44503,8 +46471,9 @@ namespace VpcV1 {
 
   /** VolumePrototypeInstanceByImageContext. */
   export interface VolumePrototypeInstanceByImageContext {
-    /** The capacity to use for the volume (in gigabytes). Must be at least the image's
-     *  `minimum_provisioned_size`. The maximum value may increase in the future.
+    /** The capacity to use for the volume (in gigabytes). The specified value must be at least the image's
+     *  `minimum_provisioned_size`, at most 250 gigabytes, and within the
+     *  `boot_capacity` range of the volume's profile.
      *
      *  If unspecified, the capacity will be the image's `minimum_provisioned_size`.
      */
@@ -44514,8 +46483,8 @@ namespace VpcV1 {
      *  If unspecified, the `encryption` type for the volume will be `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
-     *  profile `family` of `custom`.
+    /** The maximum I/O operations per second (IOPS) to use for this volume. If specified, the `family` of the
+     *  volume profile must be `custom` or `defined_performance`.
      */
     iops?: number;
     /** The name for this volume. The name must not be used by another volume in the region. If unspecified, the
@@ -44532,10 +46501,8 @@ namespace VpcV1 {
 
   /** VolumePrototypeInstanceBySourceSnapshotContext. */
   export interface VolumePrototypeInstanceBySourceSnapshotContext {
-    /** The capacity to use for the volume (in gigabytes). Must be at least the snapshot's
-     *  `minimum_capacity`. The maximum value may increase in the future.
-     *
-     *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
+    /** The capacity to use for the volume (in gigabytes). The specified value must be at least the snapshot's
+     *  `minimum_capacity`, at most 250 gigabytes, and within the `boot_capacity` range of the volume's profile.
      */
     capacity?: number;
     /** The root key to use to wrap the data encryption key for the volume.
@@ -44543,8 +46510,8 @@ namespace VpcV1 {
      *  If unspecified, the `encryption` type for the volume will be `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
-     *  profile `family` of `custom`.
+    /** The maximum I/O operations per second (IOPS) to use for this volume. If specified, the `family` of the
+     *  volume profile must be `custom` or `defined_performance`.
      */
     iops?: number;
     /** The name for this volume. The name must not be used by another volume in the region. If unspecified, the
@@ -44555,7 +46522,10 @@ namespace VpcV1 {
     profile: VolumeProfileIdentity;
     /** The resource group to use for this volume. If unspecified, the instance's resource group will be used. */
     resource_group?: ResourceGroupIdentity;
-    /** The snapshot from which to clone the volume. */
+    /** The snapshot to use as a source for the volume's data.
+     *
+     *  The specified snapshot may be in a different account, subject to IAM policies.
+     */
     source_snapshot: SnapshotIdentity;
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume. */
     user_tags?: string[];
@@ -44568,7 +46538,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VolumeReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this volume. */
     href: string;
     /** The unique identifier for this volume. */
@@ -44591,12 +46561,6 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VolumeReferenceDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
-  }
-
   /** VolumeReferenceVolumeAttachmentContext. */
   export interface VolumeReferenceVolumeAttachmentContext {
     /** The CRN for this volume. */
@@ -44604,7 +46568,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VolumeReferenceVolumeAttachmentContextDeleted;
+    deleted?: Deleted;
     /** The URL for this volume. */
     href: string;
     /** The unique identifier for this volume. */
@@ -44621,12 +46585,6 @@ namespace VpcV1 {
         VOLUME = 'volume',
       }
     }
-  }
-
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
-  export interface VolumeReferenceVolumeAttachmentContextDeleted {
-    /** Link to documentation about deleted resources. */
-    more_info: string;
   }
 
   /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
@@ -44661,21 +46619,41 @@ namespace VpcV1 {
 
   /** Zone. */
   export interface Zone {
+    /** The physical data center assigned to this logical zone.
+     *
+     *  If absent, no physical data center has been assigned.
+     */
+    data_center?: string;
     /** The URL for this zone. */
     href: string;
     /** The globally unique name for this zone. */
     name: string;
     /** The region this zone resides in. */
     region: RegionReference;
-    /** The availability status of this zone. */
+    /** The status of the zone.
+     *
+     *  - `available`: The zone is available to create and manage resources.
+     *  - `impaired`: The zone's availability and performance to create and manage resources
+     *    may be impaired.
+     *  - `unavailable`: The zone is unavailable to create and manage resources.
+     *  - `unassigned`: The zone has not been assigned to a physical zone.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     status: Zone.Constants.Status | string;
+    /** The [universal name](https://cloud.ibm.com/docs/overview?topic=overview-locations#zone-mapping) for this
+     *  zone. Will be absent if this zone has a `status` of `unassigned`.
+     */
+    universal_name?: string;
   }
   export namespace Zone {
     export namespace Constants {
-      /** The availability status of this zone. */
+      /** The status of the zone. - `available`: The zone is available to create and manage resources. - `impaired`: The zone's availability and performance to create and manage resources may be impaired. - `unavailable`: The zone is unavailable to create and manage resources. - `unassigned`: The zone has not been assigned to a physical zone. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         AVAILABLE = 'available',
         IMPAIRED = 'impaired',
+        UNASSIGNED = 'unassigned',
         UNAVAILABLE = 'unavailable',
       }
     }
@@ -44683,7 +46661,7 @@ namespace VpcV1 {
 
   /** ZoneCollection. */
   export interface ZoneCollection {
-    /** Collection of zones. */
+    /** The zones for the region. */
     zones: Zone[];
   }
 
@@ -44699,6 +46677,12 @@ namespace VpcV1 {
     name: string;
   }
 
+  /** AccountIdentityById. */
+  export interface AccountIdentityById extends AccountIdentity {
+    /** The unique identifier for this account. */
+    id: string;
+  }
+
   /** BackupPolicyJobSourceInstanceReference. */
   export interface BackupPolicyJobSourceInstanceReference extends BackupPolicyJobSource {
     /** The CRN for this virtual server instance. */
@@ -44706,7 +46690,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this virtual server instance. */
     href: string;
     /** The unique identifier for this virtual server instance. */
@@ -44724,7 +46708,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VolumeReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this volume. */
     href: string;
     /** The unique identifier for this volume. */
@@ -44925,7 +46909,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: BareMetalServerDiskReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this bare metal server disk. */
     href: string;
     /** The unique identifier for this bare metal server disk. */
@@ -44992,7 +46976,7 @@ namespace VpcV1 {
       export enum ResourceType {
         BARE_METAL_SERVER_NETWORK_ATTACHMENT = 'bare_metal_server_network_attachment',
       }
-      /** The bare metal server network attachment type. */
+      /** The bare metal server network attachment type. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         PRIMARY = 'primary',
         SECONDARY = 'secondary',
@@ -45043,7 +47027,7 @@ namespace VpcV1 {
       export enum ResourceType {
         BARE_METAL_SERVER_NETWORK_ATTACHMENT = 'bare_metal_server_network_attachment',
       }
-      /** The bare metal server network attachment type. */
+      /** The bare metal server network attachment type. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         PRIMARY = 'primary',
         SECONDARY = 'secondary',
@@ -46285,28 +48269,84 @@ namespace VpcV1 {
     subnet: SubnetIdentity;
   }
 
-  /** EndpointGatewayTargetPrototypeProviderCloudServiceIdentity. */
-  export interface EndpointGatewayTargetPrototypeProviderCloudServiceIdentity extends EndpointGatewayTargetPrototype {
+  /** EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypePrivatePathServiceGatewayPrototype. */
+  export interface EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypePrivatePathServiceGatewayPrototype extends EndpointGatewayTargetPrototype {
+    /** The CRN for this private path service gateway. */
+    crn: string;
+    /** The target resource type for this endpoint gateway. */
+    resource_type: EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypePrivatePathServiceGatewayPrototype.Constants.ResourceType | string;
   }
-  export namespace EndpointGatewayTargetPrototypeProviderCloudServiceIdentity {
+  export namespace EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypePrivatePathServiceGatewayPrototype {
     export namespace Constants {
-      /** The type of target for this endpoint gateway. */
+      /** The target resource type for this endpoint gateway. */
+      export enum ResourceType {
+        PRIVATE_PATH_SERVICE_GATEWAY = 'private_path_service_gateway',
+      }
+    }
+  }
+
+  /** EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderCloudServicePrototype. */
+  export interface EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderCloudServicePrototype extends EndpointGatewayTargetPrototype {
+    /** The CRN for this provider cloud service, or the CRN for the user's instance of a provider cloud service. */
+    crn: string;
+    /** The target resource type for this endpoint gateway. */
+    resource_type: EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderCloudServicePrototype.Constants.ResourceType | string;
+  }
+  export namespace EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderCloudServicePrototype {
+    export namespace Constants {
+      /** The target resource type for this endpoint gateway. */
       export enum ResourceType {
         PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
+      }
+    }
+  }
+
+  /** The name of this provider infrastructure service. */
+  export interface EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderInfrastructureServicePrototype extends EndpointGatewayTargetPrototype {
+    /** The name of a provider infrastructure service. Must be:
+     *  - `ibm-ntp-server`: An NTP (Network Time Protocol) server provided by IBM.
+     */
+    name: string;
+    /** The target resource type for this endpoint gateway. */
+    resource_type: EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderInfrastructureServicePrototype.Constants.ResourceType | string;
+  }
+  export namespace EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderInfrastructureServicePrototype {
+    export namespace Constants {
+      /** The target resource type for this endpoint gateway. */
+      export enum ResourceType {
         PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
       }
     }
   }
 
-  /** EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentity. */
-  export interface EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentity extends EndpointGatewayTargetPrototype {
+  /** EndpointGatewayTargetPrivatePathServiceGatewayReference. */
+  export interface EndpointGatewayTargetPrivatePathServiceGatewayReference extends EndpointGatewayTarget {
+    /** The CRN for this private path service gateway. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this private path service gateway. */
+    href: string;
+    /** The unique identifier for this private path service gateway. */
+    id: string;
+    /** The name for this private path service gateway. The name is unique across all private path service gateways
+     *  in the VPC.
+     */
+    name: string;
+    /** If present, this property indicates that the resource associated with this reference
+     *  is remote and therefore may not be directly retrievable.
+     */
+    remote?: PrivatePathServiceGatewayRemote;
+    /** The resource type. */
+    resource_type: EndpointGatewayTargetPrivatePathServiceGatewayReference.Constants.ResourceType | string;
   }
-  export namespace EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentity {
+  export namespace EndpointGatewayTargetPrivatePathServiceGatewayReference {
     export namespace Constants {
-      /** The type of target for this endpoint gateway. */
+      /** The resource type. */
       export enum ResourceType {
-        PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
-        PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
+        PRIVATE_PATH_SERVICE_GATEWAY = 'private_path_service_gateway',
       }
     }
   }
@@ -46394,7 +48434,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: BareMetalServerNetworkInterfaceReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this bare metal server network interface.
      *
      *  If this bare metal server has network attachments, this network interface is a
@@ -46430,7 +48470,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: NetworkInterfaceReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance network interface.
      *
      *  If this instance has network attachments, this network interface is a
@@ -46468,7 +48508,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: PublicGatewayReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this public gateway. */
     href: string;
     /** The unique identifier for this public gateway. */
@@ -46494,7 +48534,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VirtualNetworkInterfaceReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this virtual network interface. */
     href: string;
     /** The unique identifier for this virtual network interface. */
@@ -46548,7 +48588,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceNetworkAttachmentReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance network attachment. */
     href: string;
     /** The unique identifier for this instance network attachment. */
@@ -46563,6 +48603,8 @@ namespace VpcV1 {
     resource_type: FlowLogCollectorTargetInstanceNetworkAttachmentReference.Constants.ResourceType | string;
     /** The subnet of the virtual network interface for the instance network attachment. */
     subnet: SubnetReference;
+    /** The virtual network interface for this instance network attachment. */
+    virtual_network_interface: VirtualNetworkInterfaceReferenceAttachmentContext;
   }
   export namespace FlowLogCollectorTargetInstanceNetworkAttachmentReference {
     export namespace Constants {
@@ -46580,7 +48622,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this virtual server instance. */
     href: string;
     /** The unique identifier for this virtual server instance. */
@@ -46596,7 +48638,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: NetworkInterfaceReferenceTargetContextDeleted;
+    deleted?: Deleted;
     /** The URL for this instance network interface.
      *
      *  If this instance has network attachments, this network interface is a
@@ -46633,7 +48675,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: SubnetReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this subnet. */
     href: string;
     /** The unique identifier for this subnet. */
@@ -46659,7 +48701,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VPCReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this VPC. */
     href: string;
     /** The unique identifier for this VPC. */
@@ -46808,7 +48850,7 @@ namespace VpcV1 {
       export enum ResourceType {
         INSTANCE_GROUP_MANAGER_ACTION = 'instance_group_manager_action',
       }
-      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled. */
+      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         ACTIVE = 'active',
         COMPLETED = 'completed',
@@ -46874,23 +48916,31 @@ namespace VpcV1 {
 
   /** InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy. */
   export interface InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy extends InstanceGroupManagerPolicy {
-    /** The type of metric to be evaluated. */
+    /** The type of metric to be evaluated
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     metric_type: InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy.Constants.MetricType | string;
     /** The metric value to be evaluated. */
     metric_value: number;
-    /** The type of policy for the instance group. */
+    /** The type of policy for the instance group
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     policy_type: InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy.Constants.PolicyType | string;
   }
   export namespace InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy {
     export namespace Constants {
-      /** The type of metric to be evaluated. */
+      /** The type of metric to be evaluated The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum MetricType {
         CPU = 'cpu',
         MEMORY = 'memory',
         NETWORK_IN = 'network_in',
         NETWORK_OUT = 'network_out',
       }
-      /** The type of policy for the instance group. */
+      /** The type of policy for the instance group The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum PolicyType {
         TARGET = 'target',
       }
@@ -46954,7 +49004,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceGroupManagerReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this instance group manager. */
     href: string;
     /** The unique identifier for this instance group manager. */
@@ -47100,7 +49150,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: DedicatedHostGroupReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this dedicated host group. */
     href: string;
     /** The unique identifier for this dedicated host group. */
@@ -47126,7 +49176,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: DedicatedHostReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this dedicated host. */
     href: string;
     /** The unique identifier for this dedicated host. */
@@ -47152,7 +49202,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: PlacementGroupReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this placement group. */
     href: string;
     /** The unique identifier for this placement group. */
@@ -48208,13 +50258,13 @@ namespace VpcV1 {
 
   /** LoadBalancerIdentityByCRN. */
   export interface LoadBalancerIdentityByCRN extends LoadBalancerIdentity {
-    /** The load balancer's CRN. */
+    /** The CRN for this load balancer. */
     crn: string;
   }
 
   /** LoadBalancerIdentityByHref. */
   export interface LoadBalancerIdentityByHref extends LoadBalancerIdentity {
-    /** The load balancer's canonical URL. */
+    /** The URL for this load balancer. */
     href: string;
   }
 
@@ -48226,7 +50276,7 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityByHref. */
   export interface LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityByHref extends LoadBalancerListenerDefaultPoolPatch {
-    /** The pool's canonical URL. */
+    /** The URL for this load balancer pool. */
     href: string;
   }
 
@@ -48238,7 +50288,7 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerIdentityByHref. */
   export interface LoadBalancerListenerIdentityByHref extends LoadBalancerListenerIdentity {
-    /** The listener's canonical URL. */
+    /** The URL for this load balancer listener. */
     href: string;
   }
 
@@ -48262,7 +50312,24 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyRedirectURLPatch extends LoadBalancerListenerPolicyTargetPatch {
     /** The HTTP status code for this redirect. */
     http_status_code?: number;
-    /** The redirect target URL. */
+    /** The redirect target URL. The URL supports [RFC 6570 level 1
+     *  expressions](https://datatracker.ietf.org/doc/html/rfc6570#section-1.2) for the following variables which expand
+     *  to values from the originally requested URL (or the indicated defaults if the request did not include them):
+     *
+     *  - `protocol`
+     *  - `host`
+     *  - `port`  (default: `80` for HTTP requests, `443` for HTTPS requests)
+     *  - `path`  (default: '/')
+     *  - `query` (default: '')
+     *
+     *  The protocol, host, and port segments of the URL, must only contain at most one instance of the `protocol`,
+     *  `host`, and `port` variables, respectively. The path and query segments of the URL may contain any combination
+     *  of variables. If the substitution of `path` results in consecutive leading slashes, the leading slash from the
+     *  substitution will be removed. Additional examples:
+     *  - `https://{host}:8080/{port}/{host}/{path}`
+     *  - `https://www.example.com`
+     *  - `{protocol}://test.{host}:80/{path}`.
+     */
     url?: string;
   }
 
@@ -48284,7 +50351,24 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyRedirectURLPrototype extends LoadBalancerListenerPolicyTargetPrototype {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
-    /** The redirect target URL. */
+    /** The redirect target URL. The URL supports [RFC 6570 level 1
+     *  expressions](https://datatracker.ietf.org/doc/html/rfc6570#section-1.2) for the following variables which expand
+     *  to values from the originally requested URL (or the indicated defaults if the request did not include them):
+     *
+     *  - `protocol`
+     *  - `host`
+     *  - `port`  (default: `80` for HTTP requests, `443` for HTTPS requests)
+     *  - `path`  (default: '/')
+     *  - `query` (default: '')
+     *
+     *  The protocol, host, and port segments of the URL, must only contain at most one instance of the `protocol`,
+     *  `host`, and `port` variables, respectively. The path and query segments of the URL may contain any combination
+     *  of variables. If the substitution of `path` results in consecutive leading slashes, the leading slash from the
+     *  substitution will be removed. Additional examples:
+     *  - `https://{host}:8080/{port}/{host}/{path}`
+     *  - `https://www.example.com`
+     *  - `{protocol}://test.{host}:80/{path}`.
+     */
     url: string;
   }
 
@@ -48305,7 +50389,24 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyRedirectURL extends LoadBalancerListenerPolicyTarget {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
-    /** The redirect target URL. */
+    /** The redirect target URL. The URL supports [RFC 6570 level 1
+     *  expressions](https://datatracker.ietf.org/doc/html/rfc6570#section-1.2) for the following variables which expand
+     *  to values from the originally requested URL (or the indicated defaults if the request did not include them):
+     *
+     *  - `protocol`
+     *  - `host`
+     *  - `port`  (default: `80` for HTTP requests, `443` for HTTPS requests)
+     *  - `path`  (default: '/')
+     *  - `query` (default: '')
+     *
+     *  The protocol, host, and port segments of the URL, must only contain at most one instance of the `protocol`,
+     *  `host`, and `port` variables, respectively. The path and query segments of the URL may contain any combination
+     *  of variables. If the substitution of `path` results in consecutive leading slashes, the leading slash from the
+     *  substitution will be removed. Additional examples:
+     *  - `https://{host}:8080/{port}/{host}/{path}`
+     *  - `https://www.example.com`
+     *  - `{protocol}://test.{host}:80/{path}`.
+     */
     url: string;
   }
 
@@ -48314,8 +50415,8 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: LoadBalancerPoolReferenceDeleted;
-    /** The pool's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this load balancer pool. */
     href: string;
     /** The unique identifier for this load balancer pool. */
     id: string;
@@ -48325,7 +50426,7 @@ namespace VpcV1 {
 
   /** LoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
   export interface LoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerPoolIdentity {
-    /** The pool's canonical URL. */
+    /** The URL for this load balancer pool. */
     href: string;
   }
 
@@ -48366,7 +50467,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: InstanceReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this virtual server instance. */
     href: string;
     /** The unique identifier for this virtual server instance. */
@@ -48375,6 +50476,48 @@ namespace VpcV1 {
      *  region.
      */
     name: string;
+  }
+
+  /** The availability mode for a load balancer with this profile depends on its configuration. */
+  export interface LoadBalancerProfileAvailabilityDependent extends LoadBalancerProfileAvailability {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileAvailabilityDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileAvailabilityDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /** The availability mode for a load balancer with this profile. */
+  export interface LoadBalancerProfileAvailabilityFixed extends LoadBalancerProfileAvailability {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileAvailabilityFixed.Constants.Type | string;
+    /** The availability of this load balancer:
+     *  - `subnet`: remains available if at least one zone that the load balancer's subnets reside
+     *    in is available
+     *  - `region`: remains available if at least one zone in the region is available.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    value: LoadBalancerProfileAvailabilityFixed.Constants.Value | string;
+  }
+  export namespace LoadBalancerProfileAvailabilityFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+      /** The availability of this load balancer: - `subnet`: remains available if at least one zone that the load balancer's subnets reside in is available - `region`: remains available if at least one zone in the region is available. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Value {
+        REGION = 'region',
+        SUBNET = 'subnet',
+      }
+    }
   }
 
   /** LoadBalancerProfileIdentityByHref. */
@@ -48479,6 +50622,36 @@ namespace VpcV1 {
     }
   }
 
+  /** The source IP session persistence support for a load balancer with this profile depends on its configuration. */
+  export interface LoadBalancerProfileSourceIPSessionPersistenceSupportedDependent extends LoadBalancerProfileSourceIPSessionPersistenceSupported {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileSourceIPSessionPersistenceSupportedDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileSourceIPSessionPersistenceSupportedDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /** The source IP session persistence support for a load balancer with this profile. */
+  export interface LoadBalancerProfileSourceIPSessionPersistenceSupportedFixed extends LoadBalancerProfileSourceIPSessionPersistenceSupported {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileSourceIPSessionPersistenceSupportedFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: boolean;
+  }
+  export namespace LoadBalancerProfileSourceIPSessionPersistenceSupportedFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
   /** The UDP support for a load balancer with this profile depends on its configuration. */
   export interface LoadBalancerProfileUDPSupportedDependent extends LoadBalancerProfileUDPSupported {
     /** The type for this profile field. */
@@ -48567,7 +50740,7 @@ namespace VpcV1 {
 
   /** NetworkACLRuleItemNetworkACLRuleProtocolAll. */
   export interface NetworkACLRuleItemNetworkACLRuleProtocolAll extends NetworkACLRuleItem {
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRuleItemNetworkACLRuleProtocolAll.Constants.Protocol | string;
   }
   export namespace NetworkACLRuleItemNetworkACLRuleProtocolAll {
@@ -48586,7 +50759,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -48600,7 +50773,7 @@ namespace VpcV1 {
      *  If absent, all codes are matched.
      */
     code?: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRuleItemNetworkACLRuleProtocolICMP.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
@@ -48624,7 +50797,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -48637,7 +50810,7 @@ namespace VpcV1 {
     destination_port_max: number;
     /** The inclusive lower bound of TCP/UDP destination port range. */
     destination_port_min: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP.Constants.Protocol | string;
     /** The inclusive upper bound of TCP/UDP source port range. */
     source_port_max: number;
@@ -48660,7 +50833,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -48670,7 +50843,7 @@ namespace VpcV1 {
 
   /** NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype. */
   export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototypeNetworkACLContext {
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype.Constants.Protocol | string;
   }
   export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype {
@@ -48689,7 +50862,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -48703,7 +50876,7 @@ namespace VpcV1 {
      *  If specified, `type` must also be specified.  If unspecified, all codes are matched.
      */
     code?: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
@@ -48727,7 +50900,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -48740,7 +50913,7 @@ namespace VpcV1 {
     destination_port_max?: number;
     /** The inclusive lower bound of TCP/UDP destination port range. */
     destination_port_min?: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype.Constants.Protocol | string;
     /** The inclusive upper bound of TCP/UDP source port range. */
     source_port_max?: number;
@@ -48763,7 +50936,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -48773,7 +50946,7 @@ namespace VpcV1 {
 
   /** NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype. */
   export interface NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototype {
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype.Constants.Protocol | string;
   }
   export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype {
@@ -48792,7 +50965,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -48806,7 +50979,7 @@ namespace VpcV1 {
      *  If specified, `type` must also be specified.  If unspecified, all codes are matched.
      */
     code?: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
@@ -48830,7 +51003,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -48843,7 +51016,7 @@ namespace VpcV1 {
     destination_port_max?: number;
     /** The inclusive lower bound of TCP/UDP destination port range. */
     destination_port_min?: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype.Constants.Protocol | string;
     /** The inclusive upper bound of TCP/UDP source port range. */
     source_port_max?: number;
@@ -48866,7 +51039,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -48876,7 +51049,7 @@ namespace VpcV1 {
 
   /** NetworkACLRuleNetworkACLRuleProtocolAll. */
   export interface NetworkACLRuleNetworkACLRuleProtocolAll extends NetworkACLRule {
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRuleNetworkACLRuleProtocolAll.Constants.Protocol | string;
   }
   export namespace NetworkACLRuleNetworkACLRuleProtocolAll {
@@ -48895,7 +51068,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -48909,7 +51082,7 @@ namespace VpcV1 {
      *  If absent, all codes are matched.
      */
     code?: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRuleNetworkACLRuleProtocolICMP.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
@@ -48933,7 +51106,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -48946,7 +51119,7 @@ namespace VpcV1 {
     destination_port_max: number;
     /** The inclusive lower bound of TCP/UDP destination port range. */
     destination_port_min: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: NetworkACLRuleNetworkACLRuleProtocolTCPUDP.Constants.Protocol | string;
     /** The inclusive upper bound of TCP/UDP source port range. */
     source_port_max: number;
@@ -48969,7 +51142,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -49088,7 +51261,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: BareMetalServerNetworkInterfaceReferenceTargetContextDeleted;
+    deleted?: Deleted;
     /** The URL for this bare metal server network interface.
      *
      *  If this bare metal server has network attachments, this network interface is a
@@ -49125,7 +51298,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: EndpointGatewayReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this endpoint gateway. */
     href: string;
     /** The unique identifier for this endpoint gateway. */
@@ -49151,7 +51324,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: GenericResourceReferenceDeleted;
+    deleted?: Deleted;
     /** The resource type. */
     resource_type: ReservedIPTargetGenericResourceReference.Constants.ResourceType | string;
   }
@@ -49166,13 +51339,13 @@ namespace VpcV1 {
 
   /** ReservedIPTargetLoadBalancerReference. */
   export interface ReservedIPTargetLoadBalancerReference extends ReservedIPTarget {
-    /** The load balancer's CRN. */
+    /** The CRN for this load balancer. */
     crn: string;
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: LoadBalancerReferenceDeleted;
-    /** The load balancer's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this load balancer. */
     href: string;
     /** The unique identifier for this load balancer. */
     id: string;
@@ -49195,7 +51368,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: NetworkInterfaceReferenceTargetContextDeleted;
+    deleted?: Deleted;
     /** The URL for this instance network interface.
      *
      *  If this instance has network attachments, this network interface is a
@@ -49227,13 +51400,13 @@ namespace VpcV1 {
 
   /** ReservedIPTargetVPNGatewayReference. */
   export interface ReservedIPTargetVPNGatewayReference extends ReservedIPTarget {
-    /** The VPN gateway's CRN. */
+    /** The CRN for this VPN gateway. */
     crn: string;
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VPNGatewayReferenceDeleted;
-    /** The VPN gateway's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this VPN gateway. */
     href: string;
     /** The unique identifier for this VPN gateway. */
     id: string;
@@ -49258,7 +51431,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VPNServerReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this VPN server. */
     href: string;
     /** The unique identifier for this VPN server. */
@@ -49309,13 +51482,13 @@ namespace VpcV1 {
 
   /** RouteCreatorVPNGatewayReference. */
   export interface RouteCreatorVPNGatewayReference extends RouteCreator {
-    /** The VPN gateway's CRN. */
+    /** The CRN for this VPN gateway. */
     crn: string;
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VPNGatewayReferenceDeleted;
-    /** The VPN gateway's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this VPN gateway. */
     href: string;
     /** The unique identifier for this VPN gateway. */
     id: string;
@@ -49340,7 +51513,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VPNServerReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this VPN server. */
     href: string;
     /** The unique identifier for this VPN server. */
@@ -49377,13 +51550,21 @@ namespace VpcV1 {
   export interface RouteNextHopPatchVPNGatewayConnectionIdentity extends RouteNextHopPatch {
   }
 
+  /** RouteNextHopPrototypeRouteNextHopIP. */
+  export interface RouteNextHopPrototypeRouteNextHopIP extends RouteNextHopPrototype {
+  }
+
+  /** Identifies a VPN gateway connection by a unique property. */
+  export interface RouteNextHopPrototypeVPNGatewayConnectionIdentity extends RouteNextHopPrototype {
+  }
+
   /** RouteNextHopVPNGatewayConnectionReference. */
   export interface RouteNextHopVPNGatewayConnectionReference extends RouteNextHop {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VPNGatewayConnectionReferenceDeleted;
-    /** The VPN connection's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this VPN gateway connection. */
     href: string;
     /** The unique identifier for this VPN gateway connection. */
     id: string;
@@ -49401,12 +51582,10 @@ namespace VpcV1 {
     }
   }
 
-  /** RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP. */
-  export interface RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP extends RoutePrototypeNextHop {
-  }
-
-  /** Identifies a VPN gateway connection by a unique property. */
-  export interface RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentity extends RoutePrototypeNextHop {
+  /** RoutingTableIdentityByCRN. */
+  export interface RoutingTableIdentityByCRN extends RoutingTableIdentity {
+    /** The CRN for this VPC routing table. */
+    crn: string;
   }
 
   /** RoutingTableIdentityByHref. */
@@ -49423,13 +51602,13 @@ namespace VpcV1 {
 
   /** SecurityGroupIdentityByCRN. */
   export interface SecurityGroupIdentityByCRN extends SecurityGroupIdentity {
-    /** The security group's CRN. */
+    /** The CRN for this security group. */
     crn: string;
   }
 
   /** SecurityGroupIdentityByHref. */
   export interface SecurityGroupIdentityByHref extends SecurityGroupIdentity {
-    /** The security group's canonical URL. */
+    /** The URL for this security group. */
     href: string;
   }
 
@@ -49501,13 +51680,13 @@ namespace VpcV1 {
 
   /** A rule allowing traffic for all supported protocols. */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll extends SecurityGroupRulePrototype {
-    /** The direction of traffic to enforce. */
+    /** The direction of traffic to allow. */
     direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.Direction | string;
-    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+    /** The IP version to allow. The format of `local.address`, `remote.address`,
      *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
      *
-     *  If `remote` references a security group, then this rule only applies to IP addresses
-     *  (network interfaces) in that group matching this IP version.
+     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
+     *  IP version.
      */
     ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.IpVersion | string;
     /** The local IP address or range of local IP addresses to which this rule will allow inbound
@@ -49517,7 +51696,7 @@ namespace VpcV1 {
      *  addresses (or from all local IP addresses, for outbound rules).
      */
     local?: SecurityGroupRuleLocalPrototype;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
@@ -49530,16 +51709,16 @@ namespace VpcV1 {
   }
   export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll {
     export namespace Constants {
-      /** The direction of traffic to enforce. */
+      /** The direction of traffic to allow. */
       export enum Direction {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -49553,13 +51732,13 @@ namespace VpcV1 {
      *  If specified, `type` must also be specified.  If unspecified, all codes are allowed.
      */
     code?: number;
-    /** The direction of traffic to enforce. */
+    /** The direction of traffic to allow. */
     direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.Direction | string;
-    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+    /** The IP version to allow. The format of `local.address`, `remote.address`,
      *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
      *
-     *  If `remote` references a security group, then this rule only applies to IP addresses
-     *  (network interfaces) in that group matching this IP version.
+     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
+     *  IP version.
      */
     ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.IpVersion | string;
     /** The local IP address or range of local IP addresses to which this rule will allow inbound
@@ -49569,7 +51748,7 @@ namespace VpcV1 {
      *  addresses (or from all local IP addresses, for outbound rules).
      */
     local?: SecurityGroupRuleLocalPrototype;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
@@ -49587,16 +51766,16 @@ namespace VpcV1 {
   }
   export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP {
     export namespace Constants {
-      /** The direction of traffic to enforce. */
+      /** The direction of traffic to allow. */
       export enum Direction {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -49605,13 +51784,13 @@ namespace VpcV1 {
 
   /** A rule specifying the TCP or UDP traffic to allow. Either both `port_min` and `port_max` will be present, or neither. When neither is present, all destination ports are allowed for the protocol. When both have the same value, that single destination port is allowed. */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP extends SecurityGroupRulePrototype {
-    /** The direction of traffic to enforce. */
+    /** The direction of traffic to allow. */
     direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.Direction | string;
-    /** The IP version to enforce. The format of `local.address`, `remote.address`,
+    /** The IP version to allow. The format of `local.address`, `remote.address`,
      *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
      *
-     *  If `remote` references a security group, then this rule only applies to IP addresses
-     *  (network interfaces) in that group matching this IP version.
+     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
+     *  IP version.
      */
     ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.IpVersion | string;
     /** The local IP address or range of local IP addresses to which this rule will allow inbound
@@ -49633,7 +51812,7 @@ namespace VpcV1 {
      *  be unspecified, allowing traffic on all destination ports.
      */
     port_min?: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
@@ -49646,16 +51825,16 @@ namespace VpcV1 {
   }
   export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP {
     export namespace Constants {
-      /** The direction of traffic to enforce. */
+      /** The direction of traffic to allow. */
       export enum Direction {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -49733,13 +51912,13 @@ namespace VpcV1 {
 
   /** SecurityGroupRuleRemoteSecurityGroupReference. */
   export interface SecurityGroupRuleRemoteSecurityGroupReference extends SecurityGroupRuleRemote {
-    /** The security group's CRN. */
+    /** The CRN for this security group. */
     crn: string;
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: SecurityGroupReferenceDeleted;
-    /** The security group's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this security group. */
     href: string;
     /** The unique identifier for this security group. */
     id: string;
@@ -49749,21 +51928,21 @@ namespace VpcV1 {
 
   /** A rule allowing traffic for all supported protocols. */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolAll extends SecurityGroupRule {
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: SecurityGroupRuleSecurityGroupRuleProtocolAll.Constants.Protocol | string;
   }
   export namespace SecurityGroupRuleSecurityGroupRuleProtocolAll {
     export namespace Constants {
-      /** The direction of traffic to enforce. */
+      /** The direction of traffic to allow. */
       export enum Direction {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -49774,23 +51953,23 @@ namespace VpcV1 {
   export interface SecurityGroupRuleSecurityGroupRuleProtocolICMP extends SecurityGroupRule {
     /** The ICMP traffic code to allow. If absent, all codes are allowed. */
     code?: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: SecurityGroupRuleSecurityGroupRuleProtocolICMP.Constants.Protocol | string;
     /** The ICMP traffic type to allow. If absent, all types are allowed. */
     type?: number;
   }
   export namespace SecurityGroupRuleSecurityGroupRuleProtocolICMP {
     export namespace Constants {
-      /** The direction of traffic to enforce. */
+      /** The direction of traffic to allow. */
       export enum Direction {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -49803,21 +51982,21 @@ namespace VpcV1 {
     port_max?: number;
     /** The inclusive lower bound of TCP/UDP destination port range. */
     port_min?: number;
-    /** The protocol to enforce. */
+    /** The network protocol. */
     protocol: SecurityGroupRuleSecurityGroupRuleProtocolTCPUDP.Constants.Protocol | string;
   }
   export namespace SecurityGroupRuleSecurityGroupRuleProtocolTCPUDP {
     export namespace Constants {
-      /** The direction of traffic to enforce. */
+      /** The direction of traffic to allow. */
       export enum Direction {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to enforce. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses (network interfaces) in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to enforce. */
+      /** The network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -49830,7 +52009,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: BareMetalServerNetworkInterfaceReferenceTargetContextDeleted;
+    deleted?: Deleted;
     /** The URL for this bare metal server network interface.
      *
      *  If this bare metal server has network attachments, this network interface is a
@@ -49867,7 +52046,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: EndpointGatewayReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this endpoint gateway. */
     href: string;
     /** The unique identifier for this endpoint gateway. */
@@ -49888,13 +52067,13 @@ namespace VpcV1 {
 
   /** SecurityGroupTargetReferenceLoadBalancerReference. */
   export interface SecurityGroupTargetReferenceLoadBalancerReference extends SecurityGroupTargetReference {
-    /** The load balancer's CRN. */
+    /** The CRN for this load balancer. */
     crn: string;
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: LoadBalancerReferenceDeleted;
-    /** The load balancer's canonical URL. */
+    deleted?: Deleted;
+    /** The URL for this load balancer. */
     href: string;
     /** The unique identifier for this load balancer. */
     id: string;
@@ -49917,7 +52096,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: NetworkInterfaceReferenceTargetContextDeleted;
+    deleted?: Deleted;
     /** The URL for this instance network interface.
      *
      *  If this instance has network attachments, this network interface is a
@@ -49954,7 +52133,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VPNServerReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this VPN server. */
     href: string;
     /** The unique identifier for this VPN server. */
@@ -49980,7 +52159,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: VirtualNetworkInterfaceReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this virtual network interface. */
     href: string;
     /** The unique identifier for this virtual network interface. */
@@ -50012,7 +52191,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: ShareReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this file share. */
     href: string;
     /** The unique identifier for this file share. */
@@ -50199,7 +52378,6 @@ namespace VpcV1 {
     export namespace Constants {
       /** The type for this profile field. */
       export enum Type {
-        DEPENDENT = 'dependent',
         DEPENDENT_RANGE = 'dependent_range',
       }
     }
@@ -50208,7 +52386,7 @@ namespace VpcV1 {
   /** The permitted total capacities (in gigabytes) of a share with this profile. */
   export interface ShareProfileCapacityEnum extends ShareProfileCapacity {
     /** The default value for this profile field. */
-    default: number;
+    default: any;
     /** The type for this profile field. */
     type: ShareProfileCapacityEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
@@ -50276,7 +52454,6 @@ namespace VpcV1 {
     export namespace Constants {
       /** The type for this profile field. */
       export enum Type {
-        DEPENDENT = 'dependent',
         DEPENDENT_RANGE = 'dependent_range',
       }
     }
@@ -50412,8 +52589,8 @@ namespace VpcV1 {
      *  The maximum size for a share may increase in the future.
      */
     size: number;
-    /** The zone this file share will reside in. For a replica share, this must be a different
-     *  zone in the same region as the source share.
+    /** The zone this file share will reside in. For a replica share in the same region as
+     *  the source share, this must be a different zone from the source share.
      */
     zone: ZoneIdentity;
   }
@@ -50455,6 +52632,9 @@ namespace VpcV1 {
     /** The cron specification for the file share replication schedule.
      *
      *  Replication of a share can be scheduled to occur at most once per hour.
+     *
+     *  The scheduling frequency for this property may
+     *  [increase](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     replication_cron_spec: string;
     /** The resource group to use. If unspecified, the resource group from the source share will be used. */
@@ -50465,8 +52645,8 @@ namespace VpcV1 {
      *  region](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-replication).
      */
     source_share: ShareIdentity;
-    /** The zone this file share will reside in. For a replica share, this must be a different
-     *  zone in the same region as the source share.
+    /** The zone this file share will reside in. For a replica share in the same region as
+     *  the source share, this must be a different zone from the source share.
      */
     zone: ZoneIdentity;
   }
@@ -50714,7 +52894,7 @@ namespace VpcV1 {
      *
      *  - `custom_resolver`: A custom DNS resolver is configured for this VPC.
      *
-     *  - `private_resolver`: A private DNS resolver is configured for this VPC. Applicable when
+     *  - `private_resolver`: A private DNS resolver is configured for this VPC. Applies when
      *    the VPC has either or both of the following:
      *
      *      - at least one endpoint gateway residing in it
@@ -50734,7 +52914,7 @@ namespace VpcV1 {
   }
   export namespace VPCDNSResolverTypeSystem {
     export namespace Constants {
-      /** The configuration of the system DNS resolver for this VPC. - `custom_resolver`: A custom DNS resolver is configured for this VPC. - `private_resolver`: A private DNS resolver is configured for this VPC. Applicable when the VPC has either or both of the following: - at least one endpoint gateway residing in it - a [DNS Services](https://cloud.ibm.com/docs/dns-svcs) private zone configured for it - `default`: The provider default DNS resolvers are configured for this VPC. This system DNS resolver configuration is used when the VPC has: - no custom DNS resolver configured for it, and - no endpoint gateways residing in it, and - no [DNS Services](https://cloud.ibm.com/docs/dns-svcs) private zone configured for it. */
+      /** The configuration of the system DNS resolver for this VPC. - `custom_resolver`: A custom DNS resolver is configured for this VPC. - `private_resolver`: A private DNS resolver is configured for this VPC. Applies when the VPC has either or both of the following: - at least one endpoint gateway residing in it - a [DNS Services](https://cloud.ibm.com/docs/dns-svcs) private zone configured for it - `default`: The provider default DNS resolvers are configured for this VPC. This system DNS resolver configuration is used when the VPC has: - no custom DNS resolver configured for it, and - no endpoint gateways residing in it, and - no [DNS Services](https://cloud.ibm.com/docs/dns-svcs) private zone configured for it. */
       export enum Configuration {
         CUSTOM_RESOLVER = 'custom_resolver',
         DEFAULT = 'default',
@@ -50921,7 +53101,7 @@ namespace VpcV1 {
 
   /** VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityByHref. */
   export interface VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityByHref extends VPNGatewayConnectionIKEPolicyPatch {
-    /** The IKE policy's canonical URL. */
+    /** The URL for this IKE policy. */
     href: string;
   }
 
@@ -50933,7 +53113,7 @@ namespace VpcV1 {
 
   /** VPNGatewayConnectionIKEPolicyPrototypeIKEPolicyIdentityByHref. */
   export interface VPNGatewayConnectionIKEPolicyPrototypeIKEPolicyIdentityByHref extends VPNGatewayConnectionIKEPolicyPrototype {
-    /** The IKE policy's canonical URL. */
+    /** The URL for this IKE policy. */
     href: string;
   }
 
@@ -50945,7 +53125,7 @@ namespace VpcV1 {
 
   /** VPNGatewayConnectionIPsecPolicyPatchIPsecPolicyIdentityByHref. */
   export interface VPNGatewayConnectionIPsecPolicyPatchIPsecPolicyIdentityByHref extends VPNGatewayConnectionIPsecPolicyPatch {
-    /** The IPsec policy's canonical URL. */
+    /** The URL for this IPsec policy. */
     href: string;
   }
 
@@ -50957,7 +53137,7 @@ namespace VpcV1 {
 
   /** VPNGatewayConnectionIPsecPolicyPrototypeIPsecPolicyIdentityByHref. */
   export interface VPNGatewayConnectionIPsecPolicyPrototypeIPsecPolicyIdentityByHref extends VPNGatewayConnectionIPsecPolicyPrototype {
-    /** The IPsec policy's canonical URL. */
+    /** The URL for this IPsec policy. */
     href: string;
   }
 
@@ -50982,7 +53162,7 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayConnectionPolicyMode {
     export namespace Constants {
-      /** The authentication mode. Only `psk` is currently supported. */
+      /** The authentication mode. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AuthenticationMode {
         PSK = 'psk',
       }
@@ -50991,7 +53171,7 @@ namespace VpcV1 {
         BIDIRECTIONAL = 'bidirectional',
         PEER_ONLY = 'peer_only',
       }
-      /** The mode of the VPN gateway. */
+      /** The mode of the VPN gateway. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Mode {
         POLICY = 'policy',
         ROUTE = 'route',
@@ -51067,6 +53247,13 @@ namespace VpcV1 {
 
   /** VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype. */
   export interface VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype extends VPNGatewayConnectionPrototype {
+    /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
+     *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
+     *  the lower `public_ip` address. Before enabling it on VPN connections to on-prem private networks, review
+     *  [distributing traffic
+     *  restrictions](https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-limitations#distributing-traffic-restrictions).
+     */
+    distribute_traffic?: boolean;
     local?: VPNGatewayConnectionStaticRouteModeLocalPrototype;
     peer: VPNGatewayConnectionStaticRouteModePeerPrototype;
     /** Routing protocols are disabled for this VPN gateway connection. */
@@ -51091,7 +53278,7 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayConnectionRouteMode {
     export namespace Constants {
-      /** The authentication mode. Only `psk` is currently supported. */
+      /** The authentication mode. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AuthenticationMode {
         PSK = 'psk',
       }
@@ -51100,7 +53287,7 @@ namespace VpcV1 {
         BIDIRECTIONAL = 'bidirectional',
         PEER_ONLY = 'peer_only',
       }
-      /** The mode of the VPN gateway. */
+      /** The mode of the VPN gateway. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Mode {
         POLICY = 'policy',
         ROUTE = 'route',
@@ -51266,7 +53453,7 @@ namespace VpcV1 {
   }
   export namespace VPNServerAuthenticationByCertificate {
     export namespace Constants {
-      /** The type of authentication. */
+      /** The type of authentication. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Method {
         CERTIFICATE = 'certificate',
         USERNAME = 'username',
@@ -51281,7 +53468,7 @@ namespace VpcV1 {
   }
   export namespace VPNServerAuthenticationByUsername {
     export namespace Constants {
-      /** The type of authentication. */
+      /** The type of authentication. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Method {
         CERTIFICATE = 'certificate',
         USERNAME = 'username',
@@ -51433,7 +53620,7 @@ namespace VpcV1 {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
-    deleted?: ShareMountTargetReferenceDeleted;
+    deleted?: Deleted;
     /** The URL for this share mount target. */
     href: string;
     /** The unique identifier for this share mount target. */
@@ -51458,8 +53645,8 @@ namespace VpcV1 {
 
   /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext. */
   export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext extends VolumeAttachmentPrototypeVolume {
-    /** The maximum I/O operations per second (IOPS) to use for this volume. Applicable only to volumes using a
-     *  profile `family` of `custom`.
+    /** The maximum I/O operations per second (IOPS) to use for this volume. If specified, the `family` of the
+     *  volume profile must be `custom` or `defined_performance`.
      */
     iops?: number;
     /** The name for this volume. The name must not be used by another volume in the region. If unspecified, the
@@ -51492,6 +53679,234 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** The permitted total capacity (in gigabytes) of a boot volume with this profile depends on its configuration. */
+  export interface VolumeProfileBootCapacityDependentRange extends VolumeProfileBootCapacity {
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: VolumeProfileBootCapacityDependentRange.Constants.Type | string;
+  }
+  export namespace VolumeProfileBootCapacityDependentRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT_RANGE = 'dependent_range',
+      }
+    }
+  }
+
+  /** The permitted total capacities (in gigabytes) of a boot volume with this profile. */
+  export interface VolumeProfileBootCapacityEnum extends VolumeProfileBootCapacity {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: VolumeProfileBootCapacityEnum.Constants.Type | string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+  export namespace VolumeProfileBootCapacityEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
+  }
+
+  /** The permitted total capacity (in gigabytes) of a boot volume with this profile is fixed. */
+  export interface VolumeProfileBootCapacityFixed extends VolumeProfileBootCapacity {
+    /** The type for this profile field. */
+    type: VolumeProfileBootCapacityFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: number;
+  }
+  export namespace VolumeProfileBootCapacityFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
+  /** The permitted total capacity range (in gigabytes) of a boot volume with this profile. */
+  export interface VolumeProfileBootCapacityRange extends VolumeProfileBootCapacity {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: VolumeProfileBootCapacityRange.Constants.Type | string;
+  }
+  export namespace VolumeProfileBootCapacityRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
+  }
+
+  /** The permitted total capacity (in gigabytes) of a data volume with this profile depends on its configuration. */
+  export interface VolumeProfileCapacityDependentRange extends VolumeProfileCapacity {
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: VolumeProfileCapacityDependentRange.Constants.Type | string;
+  }
+  export namespace VolumeProfileCapacityDependentRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT_RANGE = 'dependent_range',
+      }
+    }
+  }
+
+  /** The permitted total capacities (in gigabytes) of a data volume with this profile. */
+  export interface VolumeProfileCapacityEnum extends VolumeProfileCapacity {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: VolumeProfileCapacityEnum.Constants.Type | string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+  export namespace VolumeProfileCapacityEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
+  }
+
+  /** The permitted total capacity (in gigabytes) of a data volume with this profile is fixed. */
+  export interface VolumeProfileCapacityFixed extends VolumeProfileCapacity {
+    /** The type for this profile field. */
+    type: VolumeProfileCapacityFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: number;
+  }
+  export namespace VolumeProfileCapacityFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
+  /** The permitted total capacity range (in gigabytes) of a data volume with this profile. */
+  export interface VolumeProfileCapacityRange extends VolumeProfileCapacity {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: VolumeProfileCapacityRange.Constants.Type | string;
+  }
+  export namespace VolumeProfileCapacityRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
+  }
+
+  /** The permitted IOPS range of a volume with this profile depends on its configuration. */
+  export interface VolumeProfileIOPSDependentRange extends VolumeProfileIOPS {
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: VolumeProfileIOPSDependentRange.Constants.Type | string;
+  }
+  export namespace VolumeProfileIOPSDependentRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT_RANGE = 'dependent_range',
+      }
+    }
+  }
+
+  /** The permitted IOPS values of a volume with this profile. */
+  export interface VolumeProfileIOPSEnum extends VolumeProfileIOPS {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: VolumeProfileIOPSEnum.Constants.Type | string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+  export namespace VolumeProfileIOPSEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
+  }
+
+  /** The permitted IOPS of a volume with this profile is fixed. */
+  export interface VolumeProfileIOPSFixed extends VolumeProfileIOPS {
+    /** The type for this profile field. */
+    type: VolumeProfileIOPSFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: number;
+  }
+  export namespace VolumeProfileIOPSFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
+  /** The permitted IOPS range of a volume with this profile. */
+  export interface VolumeProfileIOPSRange extends VolumeProfileIOPS {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: VolumeProfileIOPSRange.Constants.Type | string;
+  }
+  export namespace VolumeProfileIOPSRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
+  }
+
   /** VolumeProfileIdentityByHref. */
   export interface VolumeProfileIdentityByHref extends VolumeProfileIdentity {
     /** The URL for this volume profile. */
@@ -51506,10 +53921,8 @@ namespace VpcV1 {
 
   /** VolumePrototypeVolumeByCapacity. */
   export interface VolumePrototypeVolumeByCapacity extends VolumePrototype {
-    /** The capacity to use for the volume (in gigabytes).
-     *
-     *  The minimum and maximum limits for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+    /** The capacity to use for the volume (in gigabytes). The specified value must be within the `capacity` range
+     *  of the volume's profile.
      */
     capacity: number;
     /** The root key to use to wrap the data encryption key for the volume.
@@ -51521,8 +53934,8 @@ namespace VpcV1 {
 
   /** VolumePrototypeVolumeBySourceSnapshot. */
   export interface VolumePrototypeVolumeBySourceSnapshot extends VolumePrototype {
-    /** The capacity to use for the volume (in gigabytes). Must be at least the snapshot's
-     *  `minimum_capacity`. The maximum value may increase in the future.
+    /** The capacity to use for the volume (in gigabytes). The specified value must be at least the snapshot's
+     *  `minimum_capacity`, and must be within the `capacity` range of the volume's profile.
      *
      *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
      */
@@ -51532,7 +53945,10 @@ namespace VpcV1 {
      *  If unspecified, the `encryption` type for the volume will be `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The snapshot from which to clone the volume. */
+    /** The snapshot to use as a source for the volume's data.
+     *
+     *  The specified snapshot may be in a different account, subject to IAM policies.
+     */
     source_snapshot: SnapshotIdentity;
   }
 
@@ -51582,38 +53998,6 @@ namespace VpcV1 {
   export interface EndpointGatewayReservedIPReservedIPIdentityById extends EndpointGatewayReservedIPReservedIPIdentity {
     /** The unique identifier for this reserved IP. */
     id: string;
-  }
-
-  /** EndpointGatewayTargetPrototypeProviderCloudServiceIdentityProviderCloudServiceIdentityByCRN. */
-  export interface EndpointGatewayTargetPrototypeProviderCloudServiceIdentityProviderCloudServiceIdentityByCRN extends EndpointGatewayTargetPrototypeProviderCloudServiceIdentity {
-    /** The CRN for this provider cloud service, or the CRN for the user's instance of a provider cloud service. */
-    crn: string;
-  }
-  export namespace EndpointGatewayTargetPrototypeProviderCloudServiceIdentityProviderCloudServiceIdentityByCRN {
-    export namespace Constants {
-      /** The type of target for this endpoint gateway. */
-      export enum ResourceType {
-        PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
-        PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
-      }
-    }
-  }
-
-  /** The name of this provider infrastructure service. */
-  export interface EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentityProviderInfrastructureServiceIdentityByName extends EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentity {
-    /** The name of a provider infrastructure service. Must be:
-     *  - `ibm-ntp-server`: An NTP (Network Time Protocol) server provided by IBM.
-     */
-    name: string;
-  }
-  export namespace EndpointGatewayTargetPrototypeProviderInfrastructureServiceIdentityProviderInfrastructureServiceIdentityByName {
-    export namespace Constants {
-      /** The type of target for this endpoint gateway. */
-      export enum ResourceType {
-        PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
-        PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
-      }
-    }
   }
 
   /** FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref. */
@@ -51875,7 +54259,7 @@ namespace VpcV1 {
       export enum ResourceType {
         INSTANCE_GROUP_MANAGER_ACTION = 'instance_group_manager_action',
       }
-      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled. */
+      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         ACTIVE = 'active',
         COMPLETED = 'completed',
@@ -51900,7 +54284,7 @@ namespace VpcV1 {
       export enum ResourceType {
         INSTANCE_GROUP_MANAGER_ACTION = 'instance_group_manager_action',
       }
-      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled. */
+      /** The status of the instance group action - `active`: Action is ready to be run - `completed`: Action was completed successfully - `failed`: Action could not be completed successfully - `incompatible`: Action parameters are not compatible with the group or manager - `omitted`: Action was not applied because this action's manager was disabled The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         ACTIVE = 'active',
         COMPLETED = 'completed',
@@ -52377,7 +54761,7 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity {
-    /** The pool's canonical URL. */
+    /** The URL for this load balancer pool. */
     href: string;
   }
 
@@ -52389,7 +54773,7 @@ namespace VpcV1 {
 
   /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentity {
-    /** The pool's canonical URL. */
+    /** The URL for this load balancer pool. */
     href: string;
   }
 
@@ -52515,7 +54899,7 @@ namespace VpcV1 {
 
   /** RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
   export interface RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref extends RouteNextHopPatchVPNGatewayConnectionIdentity {
-    /** The VPN connection's canonical URL. */
+    /** The URL for this VPN gateway connection. */
     href: string;
   }
 
@@ -52525,8 +54909,8 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIPRouteNextHopPrototypeRouteNextHopIPRouteNextHopIPSentinelIP. */
-  export interface RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIPRouteNextHopPrototypeRouteNextHopIPRouteNextHopIPSentinelIP extends RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP {
+  /** RouteNextHopPrototypeRouteNextHopIPRouteNextHopIPSentinelIP. */
+  export interface RouteNextHopPrototypeRouteNextHopIPRouteNextHopIPSentinelIP extends RouteNextHopPrototypeRouteNextHopIP {
     /** The sentinel IP address (`0.0.0.0`).
      *
      *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
@@ -52535,8 +54919,8 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIPRouteNextHopPrototypeRouteNextHopIPRouteNextHopIPUnicastIP. */
-  export interface RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIPRouteNextHopPrototypeRouteNextHopIPRouteNextHopIPUnicastIP extends RoutePrototypeNextHopRouteNextHopPrototypeRouteNextHopIP {
+  /** RouteNextHopPrototypeRouteNextHopIPRouteNextHopIPUnicastIP. */
+  export interface RouteNextHopPrototypeRouteNextHopIPRouteNextHopIPUnicastIP extends RouteNextHopPrototypeRouteNextHopIP {
     /** A unicast IP address, which must not be any of the following values:
      *
      *  - `0.0.0.0` (the sentinel IP address)
@@ -52549,27 +54933,27 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentityRouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
-  export interface RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentityRouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref extends RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentity {
-    /** The VPN connection's canonical URL. */
+  /** RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
+  export interface RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref extends RouteNextHopPrototypeVPNGatewayConnectionIdentity {
+    /** The URL for this VPN gateway connection. */
     href: string;
   }
 
-  /** RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentityRouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById. */
-  export interface RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentityRouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById extends RoutePrototypeNextHopRouteNextHopPrototypeVPNGatewayConnectionIdentity {
+  /** RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById. */
+  export interface RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById extends RouteNextHopPrototypeVPNGatewayConnectionIdentity {
     /** The unique identifier for this VPN gateway connection. */
     id: string;
   }
 
   /** SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityByCRN. */
   export interface SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityByCRN extends SecurityGroupRuleRemotePatchSecurityGroupIdentity {
-    /** The security group's CRN. */
+    /** The CRN for this security group. */
     crn: string;
   }
 
   /** SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityByHref. */
   export interface SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityByHref extends SecurityGroupRuleRemotePatchSecurityGroupIdentity {
-    /** The security group's canonical URL. */
+    /** The URL for this security group. */
     href: string;
   }
 
@@ -52581,13 +54965,13 @@ namespace VpcV1 {
 
   /** SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityByCRN. */
   export interface SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityByCRN extends SecurityGroupRuleRemotePrototypeSecurityGroupIdentity {
-    /** The security group's CRN. */
+    /** The CRN for this security group. */
     crn: string;
   }
 
   /** SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityByHref. */
   export interface SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityByHref extends SecurityGroupRuleRemotePrototypeSecurityGroupIdentity {
-    /** The security group's canonical URL. */
+    /** The URL for this security group. */
     href: string;
   }
 
@@ -52641,6 +55025,11 @@ namespace VpcV1 {
 
   /** VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode. */
   export interface VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode extends VPNGatewayConnectionRouteMode {
+    /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
+     *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
+     *  the lower `public_ip` address.
+     */
+    distribute_traffic: boolean;
     local: VPNGatewayConnectionStaticRouteModeLocal;
     peer: VPNGatewayConnectionStaticRouteModePeer;
     /** Routing protocols are disabled for this VPN gateway connection. */
@@ -52650,7 +55039,7 @@ namespace VpcV1 {
   }
   export namespace VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode {
     export namespace Constants {
-      /** The authentication mode. Only `psk` is currently supported. */
+      /** The authentication mode. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AuthenticationMode {
         PSK = 'psk',
       }
@@ -52659,7 +55048,7 @@ namespace VpcV1 {
         BIDIRECTIONAL = 'bidirectional',
         PEER_ONLY = 'peer_only',
       }
-      /** The mode of the VPN gateway. */
+      /** The mode of the VPN gateway. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Mode {
         POLICY = 'policy',
         ROUTE = 'route',
@@ -52724,10 +55113,8 @@ namespace VpcV1 {
 
   /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity. */
   export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity extends VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext {
-    /** The capacity to use for the volume (in gigabytes).
-     *
-     *  The minimum and maximum limits for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+    /** The capacity to use for the volume (in gigabytes). The specified value must be within the `capacity` range
+     *  of the volume's profile.
      */
     capacity: number;
     /** The root key to use to wrap the data encryption key for the volume.
@@ -52739,8 +55126,8 @@ namespace VpcV1 {
 
   /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot. */
   export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot extends VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext {
-    /** The capacity to use for the volume (in gigabytes). Must be at least the snapshot's
-     *  `minimum_capacity`. The maximum value may increase in the future.
+    /** The capacity to use for the volume (in gigabytes). The specified value must be at least the snapshot's
+     *  `minimum_capacity`, and must be within the `capacity` range of the volume's profile.
      *
      *  If unspecified, the capacity will be the source snapshot's `minimum_capacity`.
      */
@@ -52750,7 +55137,10 @@ namespace VpcV1 {
      *  If unspecified, the `encryption` type for the volume will be `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The snapshot from which to clone the volume. */
+    /** The snapshot to use as a source for the volume's data.
+     *
+     *  The specified snapshot may be in a different account, subject to IAM policies.
+     */
     source_snapshot: SnapshotIdentity;
   }
 
@@ -57630,6 +60020,249 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.FlowLogCollector[]> {
       const results: FlowLogCollector[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * PrivatePathServiceGatewaysPager can be used to simplify the use of listPrivatePathServiceGateways().
+   */
+  export class PrivatePathServiceGatewaysPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListPrivatePathServiceGatewaysParams;
+
+    /**
+     * Construct a PrivatePathServiceGatewaysPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listPrivatePathServiceGateways()
+     * @param {Object} [params] - The parameters to be passed to listPrivatePathServiceGateways()
+     * @constructor
+     * @returns {PrivatePathServiceGatewaysPager}
+     */
+    constructor(client: VpcV1, params?: VpcV1.ListPrivatePathServiceGatewaysParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listPrivatePathServiceGateways().
+     * @returns {Promise<VpcV1.PrivatePathServiceGateway[]>}
+     */
+    public async getNext(): Promise<VpcV1.PrivatePathServiceGateway[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listPrivatePathServiceGateways(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.private_path_service_gateways;
+    }
+
+    /**
+     * Returns all results by invoking listPrivatePathServiceGateways() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.PrivatePathServiceGateway[]>}
+     */
+    public async getAll(): Promise<VpcV1.PrivatePathServiceGateway[]> {
+      const results: PrivatePathServiceGateway[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * PrivatePathServiceGatewayAccountPoliciesPager can be used to simplify the use of listPrivatePathServiceGatewayAccountPolicies().
+   */
+  export class PrivatePathServiceGatewayAccountPoliciesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListPrivatePathServiceGatewayAccountPoliciesParams;
+
+    /**
+     * Construct a PrivatePathServiceGatewayAccountPoliciesPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listPrivatePathServiceGatewayAccountPolicies()
+     * @param {Object} params - The parameters to be passed to listPrivatePathServiceGatewayAccountPolicies()
+     * @constructor
+     * @returns {PrivatePathServiceGatewayAccountPoliciesPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListPrivatePathServiceGatewayAccountPoliciesParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listPrivatePathServiceGatewayAccountPolicies().
+     * @returns {Promise<VpcV1.PrivatePathServiceGatewayAccountPolicy[]>}
+     */
+    public async getNext(): Promise<VpcV1.PrivatePathServiceGatewayAccountPolicy[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listPrivatePathServiceGatewayAccountPolicies(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.account_policies;
+    }
+
+    /**
+     * Returns all results by invoking listPrivatePathServiceGatewayAccountPolicies() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.PrivatePathServiceGatewayAccountPolicy[]>}
+     */
+    public async getAll(): Promise<VpcV1.PrivatePathServiceGatewayAccountPolicy[]> {
+      const results: PrivatePathServiceGatewayAccountPolicy[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * PrivatePathServiceGatewayEndpointGatewayBindingsPager can be used to simplify the use of listPrivatePathServiceGatewayEndpointGatewayBindings().
+   */
+  export class PrivatePathServiceGatewayEndpointGatewayBindingsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListPrivatePathServiceGatewayEndpointGatewayBindingsParams;
+
+    /**
+     * Construct a PrivatePathServiceGatewayEndpointGatewayBindingsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listPrivatePathServiceGatewayEndpointGatewayBindings()
+     * @param {Object} params - The parameters to be passed to listPrivatePathServiceGatewayEndpointGatewayBindings()
+     * @constructor
+     * @returns {PrivatePathServiceGatewayEndpointGatewayBindingsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListPrivatePathServiceGatewayEndpointGatewayBindingsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listPrivatePathServiceGatewayEndpointGatewayBindings().
+     * @returns {Promise<VpcV1.PrivatePathServiceGatewayEndpointGatewayBinding[]>}
+     */
+    public async getNext(): Promise<VpcV1.PrivatePathServiceGatewayEndpointGatewayBinding[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listPrivatePathServiceGatewayEndpointGatewayBindings(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.endpoint_gateway_bindings;
+    }
+
+    /**
+     * Returns all results by invoking listPrivatePathServiceGatewayEndpointGatewayBindings() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.PrivatePathServiceGatewayEndpointGatewayBinding[]>}
+     */
+    public async getAll(): Promise<VpcV1.PrivatePathServiceGatewayEndpointGatewayBinding[]> {
+      const results: PrivatePathServiceGatewayEndpointGatewayBinding[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);

@@ -2,9 +2,11 @@ language: node_js
 
 sudo: false
 
+dist: jammy
+
 node_js:
-- 14
-- 16
+- 18
+- 20
 
 script:
 - npm run build
@@ -17,5 +19,5 @@ deploy:
   skip_cleanup: true
   script: npx semantic-release
   on:
-    node: 14
+    node: 18
     branch: master
