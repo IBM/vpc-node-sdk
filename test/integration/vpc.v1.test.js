@@ -215,7 +215,7 @@ describe('VpcV1_integration', () => {
     };
 
     const floatingIpPrototypeModel = {
-      name: generateName('my-floating-ip1'),
+      name: generateName('my-floating-ip'),
       zone: zoneIdentityModel,
     };
 
@@ -1188,28 +1188,6 @@ describe('VpcV1_integration', () => {
     expect(res).toBeDefined();
     expect(res.status).toBe(201);
     expect(res.result).toBeDefined();
-
-    // share replica
-    const shareIdentity = {
-      id: dict.shareId,
-    };
-    const shareReplicaPrototypeModel = {
-      profile: shareProfileIdentityModel,
-      zone: zoneIdentityModel,
-      source_share: shareIdentity,
-      replication_cron_spec: '0 */5 * * *',
-      name: 'my-replica-share',
-    };
-
-    const replicaParams = {
-      sharePrototype: shareReplicaPrototypeModel,
-    };
-
-    const replicaRes = await vpcService.createShare(replicaParams);
-    dict.shareReplicaId = replicaRes.result.id;
-    expect(res).toBeDefined();
-    expect(res.status).toBe(201);
-    expect(res.result).toBeDefined();
   });
 
   test('createAccessorShare()', async () => {
@@ -1253,7 +1231,6 @@ describe('VpcV1_integration', () => {
 
     // ShareProfileIdentityByName
     const params = {
-      id: dict.shareId,
       name: 'my-share-updated',
       ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
     };
@@ -1303,7 +1280,7 @@ describe('VpcV1_integration', () => {
 
   test('failoverShare()', async () => {
     const params = {
-      shareId: dict.shareReplicaId,
+      shareId: dict.shareId,
     };
 
     const res = await vpcService.failoverShare(params);
@@ -1413,7 +1390,7 @@ describe('VpcV1_integration', () => {
     expect(res.result).toBeDefined();
   });
 
-  test.skip('getShareSource()', async () => {
+  test('getShareSource()', async () => {
     const params = {
       shareId: dict.shareId,
     };
@@ -1651,6 +1628,105 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+
+  test('listInstanceClusterNetworkAttachments()', async () => {
+    const params = {
+      instanceId: dict.createdInstance,
+      limit: 50,
+    };
+
+    const res = await vpcService.listInstanceClusterNetworkAttachments(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listInstanceClusterNetworkAttachments() via InstanceClusterNetworkAttachmentsPager', async () => {
+    const params = {
+      instanceId: dict.createdInstance,
+      limit: 10,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new VpcV1.InstanceClusterNetworkAttachmentsPager(vpcService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new VpcV1.InstanceClusterNetworkAttachmentsPager(vpcService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('createClusterNetworkAttachment()', async () => {
+    // Request models needed by this operation.
+
+    // ClusterNetworkInterfacePrimaryIPPrototypeClusterNetworkSubnetReservedIPPrototypeClusterNetworkInterfacePrimaryIPContext
+    const clusterNetworkInterfacePrimaryIpPrototypeModel = {
+      address: '10.0.0.5',
+      auto_delete: false,
+      name: 'my-cluster-network-subnet-reserved-ip',
+    };
+
+    // ClusterNetworkSubnetIdentityById
+    const clusterNetworkSubnetIdentityModel = {
+      id: '7ec86020-1c6e-4889-b3f0-a15f2e50f87e',
+    };
+
+    // InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceInstanceClusterNetworkInterfacePrototypeInstanceClusterNetworkAttachment
+    const instanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceModel = {
+      auto_delete: false,
+      name: 'my-cluster-network-interface',
+      primary_ip: clusterNetworkInterfacePrimaryIpPrototypeModel,
+      subnet: clusterNetworkSubnetIdentityModel,
+    };
+
+    const params = {
+      instanceId: dict.createdInstance,
+      clusterNetworkInterface:
+        instanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceModel,
+      name: 'my-instance-network-attachment',
+    };
+
+    const res = await vpcService.createClusterNetworkAttachment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    dict.createdClusterNetworkAttachment = res.result.id;
+  });
+
+  test('getInstanceClusterNetworkAttachment()', async () => {
+    const params = {
+      instanceId: dict.createdInstance,
+      id: dict.createdClusterNetworkAttachment,
+    };
+
+    const res = await vpcService.getInstanceClusterNetworkAttachment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateInstanceClusterNetworkAttachment()', async () => {
+    const params = {
+      instanceId: dict.createdInstance,
+      id: dict.createdClusterNetworkAttachment,
+      name: 'my-instance-network-attachment-updated',
+    };
+
+    const res = await vpcService.updateInstanceClusterNetworkAttachment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   test('listBackupPolicies()', (done) => {
     const params = {
       limit: 1,
@@ -1668,14 +1744,9 @@ describe('VpcV1_integration', () => {
       });
   });
   test('createBackupPolicy()', (done) => {
-    const backupPolicyPrototype = {
-      match_resource_type: `volume`,
+    const params = {
       matchUserTags: ['tag1', 'tag2'],
       name: 'my-backup-policy',
-    };
-
-    const params = {
-      backupPolicyPrototype: backupPolicyPrototype,
     };
 
     vpcService
@@ -2226,7 +2297,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test.skip('deleteReservation()', (done) => {
+  test('deleteReservation()', (done) => {
     const params = {
       id: dict.reservationId,
     };
@@ -2291,6 +2362,11 @@ describe('VpcV1_integration', () => {
 
     // BareMetalServerPrimaryNetworkInterfacePrototype
     const bareMetalServerPrimaryNetworkInterfacePrototypeModel = {
+      allow_ip_spoofing: true,
+      allowed_vlans: [4],
+      enable_infrastructure_nat: true,
+      interface_type: 'pci',
+      name: 'my-network-interface',
       subnet: subnetIdentityModel,
     };
 
@@ -2304,16 +2380,21 @@ describe('VpcV1_integration', () => {
       name: dict.zoneName,
     };
 
-    const bareMetalServerPrototype = {
-      initialization: bareMetalServerInitializationPrototypeModel,
-      primary_network_interface: bareMetalServerPrimaryNetworkInterfacePrototypeModel,
-      profile: bareMetalServerProfileIdentityModel,
-      zone: zoneIdentityModel,
-      name: 'my-bare-metal-server2',
+    // VPCIdentityById
+    const vpcIdentityModel = {
+      id: dict.createdVpc,
     };
 
     const params = {
-      bareMetalServerPrototype: bareMetalServerPrototype,
+      initialization: bareMetalServerInitializationPrototypeModel,
+      primaryNetworkInterface: bareMetalServerPrimaryNetworkInterfacePrototypeModel,
+      profile: bareMetalServerProfileIdentityModel,
+      zone: zoneIdentityModel,
+      name: 'my-bare-metal-server2',
+      // networkInterfaces: [bareMetalServerNetworkInterfacePrototypeModel],
+      // resourceGroup: resourceGroupIdentityModel,
+      // trustedPlatformModule: bareMetalServerTrustedPlatformModulePrototypeModel,
+      vpc: vpcIdentityModel,
     };
 
     const res = await vpcService.createBareMetalServer(params);
@@ -3117,6 +3198,420 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+
+  // cluster networks
+
+  test('listClusterNetworkProfiles()', async () => {
+    const params = {
+      start: 'testString',
+      limit: 50,
+    };
+
+    const res = await vpcService.listClusterNetworkProfiles(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listClusterNetworkProfiles() via ClusterNetworkProfilesPager', async () => {
+    const params = {
+      limit: 10,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new VpcV1.ClusterNetworkProfilesPager(vpcService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new VpcV1.ClusterNetworkProfilesPager(vpcService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+    dict.clusterNetworProfileName = allItems[0].name;
+  });
+
+  test('getClusterNetworkProfile()', async () => {
+    const params = {
+      name: dict.clusterNetworProfileName,
+    };
+
+    const res = await vpcService.getClusterNetworkProfile(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listClusterNetworks()', async () => {
+    const params = {
+      limit: 50,
+      sort: 'name',
+      vpcId: dict.createdVpc,
+    };
+
+    const res = await vpcService.listClusterNetworks(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listClusterNetworks() via ClusterNetworksPager', async () => {
+    const params = {
+      limit: 10,
+      sort: 'name',
+      vpcId: dict.createdVpc,
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new VpcV1.ClusterNetworksPager(vpcService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new VpcV1.ClusterNetworksPager(vpcService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('createClusterNetwork()', async () => {
+    // Request models needed by this operation.
+
+    // ClusterNetworkProfileIdentityByName
+    const clusterNetworkProfileIdentityModel = {
+      name: dict.clusterNetworProfileName,
+    };
+
+    // VPCIdentityById
+    const vpcIdentityModel = {
+      id: dict.createdVpc,
+    };
+
+    // ZoneIdentityByName
+    const zoneIdentityModel = {
+      name: dict.zone,
+    };
+
+    // ClusterNetworkSubnetPrefixPrototype
+    const clusterNetworkSubnetPrefixPrototypeModel = {
+      cidr: '10.0.0.0/24',
+    };
+
+    const params = {
+      profile: clusterNetworkProfileIdentityModel,
+      vpc: vpcIdentityModel,
+      zone: zoneIdentityModel,
+      name: 'my-cluster-network',
+      subnetPrefixes: [clusterNetworkSubnetPrefixPrototypeModel],
+    };
+
+    const res = await vpcService.createClusterNetwork(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    dict.createdClusterNetwork = res.result.id;
+  });
+
+  test('listClusterNetworkInterfaces()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      limit: 50,
+      sort: 'name',
+    };
+
+    const res = await vpcService.listClusterNetworkInterfaces(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listClusterNetworkInterfaces() via ClusterNetworkInterfacesPager', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      limit: 10,
+      sort: 'name',
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new VpcV1.ClusterNetworkInterfacesPager(vpcService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new VpcV1.ClusterNetworkInterfacesPager(vpcService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('createClusterNetworkInterface()', async () => {
+    // Request models needed by this operation.
+
+    // ClusterNetworkInterfacePrimaryIPPrototypeClusterNetworkSubnetReservedIPPrototypeClusterNetworkInterfacePrimaryIPContext
+    const clusterNetworkInterfacePrimaryIpPrototypeModel = {
+      address: '10.0.0.5',
+      auto_delete: false,
+      name: 'my-cluster-network-subnet-reserved-ip',
+    };
+
+    // ClusterNetworkSubnetIdentityById
+    const clusterNetworkSubnetIdentityModel = {
+      id: dict.createdClusterNetworkSubnet,
+    };
+
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      name: 'my-cluster-network-interface',
+      primaryIp: clusterNetworkInterfacePrimaryIpPrototypeModel,
+      subnet: clusterNetworkSubnetIdentityModel,
+    };
+
+    const res = await vpcService.createClusterNetworkInterface(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    dict.createdClusterNetworkInterface = res.result.id;
+  });
+
+  test('getClusterNetworkInterface()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      id: dict.createdClusterNetworkInterface,
+    };
+
+    const res = await vpcService.getClusterNetworkInterface(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateClusterNetworkInterface()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      id: dict.createdClusterNetworkInterface,
+      autoDelete: false,
+      name: 'my-cluster-network-interface-updated',
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    const res = await vpcService.updateClusterNetworkInterface(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listClusterNetworkSubnets()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      limit: 50,
+      sort: 'name',
+    };
+
+    const res = await vpcService.listClusterNetworkSubnets(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listClusterNetworkSubnets() via ClusterNetworkSubnetsPager', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      limit: 10,
+      sort: 'name',
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new VpcV1.ClusterNetworkSubnetsPager(vpcService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new VpcV1.ClusterNetworkSubnetsPager(vpcService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('createClusterNetworkSubnet()', async () => {
+    // Request models needed by this operation.
+
+    // ClusterNetworkSubnetPrototypeClusterNetworkSubnetByTotalCountPrototype
+    const clusterNetworkSubnetPrototypeModel = {
+      ip_version: 'ipv4',
+      name: 'my-cluster-network-subnet',
+      total_ipv4_address_count: 256,
+    };
+
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      clusterNetworkSubnetPrototype: clusterNetworkSubnetPrototypeModel,
+    };
+
+    const res = await vpcService.createClusterNetworkSubnet(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    dict.createdClusterNetworkSubnet = res.result.id;
+  });
+
+  test('listClusterNetworkSubnetReservedIps()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      clusterNetworkSubnetId: dict.createdClusterNetworkSubnet,
+      limit: 50,
+      sort: 'name',
+    };
+
+    const res = await vpcService.listClusterNetworkSubnetReservedIps(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('listClusterNetworkSubnetReservedIps() via ClusterNetworkSubnetReservedIpsPager', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      clusterNetworkSubnetId: dict.createdClusterNetworkSubnet,
+      limit: 10,
+      sort: 'name',
+    };
+
+    const allResults = [];
+
+    // Test getNext().
+    let pager = new VpcV1.ClusterNetworkSubnetReservedIpsPager(vpcService, params);
+    while (pager.hasNext()) {
+      const nextPage = await pager.getNext();
+      expect(nextPage).not.toBeNull();
+      allResults.push(...nextPage);
+    }
+
+    // Test getAll().
+    pager = new VpcV1.ClusterNetworkSubnetReservedIpsPager(vpcService, params);
+    const allItems = await pager.getAll();
+    expect(allItems).not.toBeNull();
+    expect(allItems).toHaveLength(allResults.length);
+    console.log(`Retrieved a total of ${allResults.length} items(s) with pagination.`);
+  });
+
+  test('createClusterNetworkSubnetReservedIp()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      clusterNetworkSubnetId: dict.createdClusterNetworkSubnet,
+      address: '192.168.3.4',
+      name: 'my-cluster-network-subnet-reserved-ip',
+    };
+
+    const res = await vpcService.createClusterNetworkSubnetReservedIp(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(201);
+    expect(res.result).toBeDefined();
+    dict.createdClusterNetworkSubnetReservedIp = res.result.id;
+  });
+
+  test('getClusterNetworkSubnetReservedIp()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      clusterNetworkSubnetId: dict.createdClusterNetworkSubnet,
+      id: dict.createdClusterNetworkSubnetReservedIp,
+    };
+
+    const res = await vpcService.getClusterNetworkSubnetReservedIp(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateClusterNetworkSubnetReservedIp()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      clusterNetworkSubnetId: dict.createdClusterNetworkSubnet,
+      id: dict.createdClusterNetworkSubnetReservedIp,
+      autoDelete: false,
+      name: 'my-cluster-network-subnet-reserved-ip-updated',
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    const res = await vpcService.updateClusterNetworkSubnetReservedIp(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getClusterNetworkSubnet()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      id: dict.createdClusterNetworkSubnet,
+    };
+
+    const res = await vpcService.getClusterNetworkSubnet(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateClusterNetworkSubnet()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      id: dict.createdClusterNetworkSubnet,
+      name: 'my-cluster-network-subnet-updated',
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    const res = await vpcService.updateClusterNetworkSubnet(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('getClusterNetwork()', async () => {
+    const params = {
+      id: dict.createdClusterNetwork,
+    };
+
+    const res = await vpcService.getClusterNetwork(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
+  test('updateClusterNetwork()', async () => {
+    const params = {
+      id: dict.createdClusterNetwork,
+      name: 'my-cluster-network-updated',
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    const res = await vpcService.updateClusterNetwork(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(200);
+    expect(res.result).toBeDefined();
+  });
+
   // Public Gateways
   test('listPublicGateways()', (done) => {
     const params = {
@@ -5588,7 +6083,6 @@ describe('VpcV1_integration', () => {
       name: 'my-host',
       profile: dedicatedHostProfileIdentityModel,
       group: dedicatedHostGroupIdentityModel,
-      instance_placement_enabled: false,
     };
 
     const params = {
@@ -5984,6 +6478,19 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+
+  test('deleteInstanceClusterNetworkAttachment()', async () => {
+    const params = {
+      instanceId: dict.createdInstance,
+      id: dict.createdClusterNetworkAttachment,
+    };
+
+    const res = await vpcService.deleteInstanceClusterNetworkAttachment(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
   test('deleteInstanceNetworkInterface()', (done) => {
     const params = {
       instanceId: dict.createdInstance,
@@ -6115,7 +6622,7 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
-  test.skip('deleteShareSource()', async () => {
+  test('deleteShareSource()', async () => {
     const params = {
       shareId: dict.shareId,
     };
@@ -6163,6 +6670,59 @@ describe('VpcV1_integration', () => {
         done(err);
       });
   });
+
+  test('deleteClusterNetworkInterface()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      id: dict.createdClusterNetworkInterface,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    const res = await vpcService.deleteClusterNetworkInterface(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteClusterNetworkSubnetReservedIp()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      clusterNetworkSubnetId: dict.createdClusterNetworkSubnet,
+      id: dict.createdClusterNetworkSubnetReservedIp,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    const res = await vpcService.deleteClusterNetworkSubnetReservedIp(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteClusterNetworkSubnet()', async () => {
+    const params = {
+      clusterNetworkId: dict.createdClusterNetwork,
+      id: dict.createdClusterNetworkSubnet,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    const res = await vpcService.deleteClusterNetworkSubnet(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
+  test('deleteClusterNetwork()', async () => {
+    const params = {
+      id: dict.createdClusterNetwork,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    const res = await vpcService.deleteClusterNetwork(params);
+    expect(res).toBeDefined();
+    expect(res.status).toBe(202);
+    expect(res.result).toBeDefined();
+  });
+
   test('deletePublicGateway()', (done) => {
     const params = {
       id: dict.createdPgw,
