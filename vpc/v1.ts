@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.92.2-3f2a0533-20240712-183330
+ * IBM OpenAPI SDK Code Generator Version: 3.96.1-5136e54a-20241108-203028
  */
 
 /* eslint-disable max-classes-per-file */
@@ -39,7 +39,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: 2024-10-17
+ * API Version: 2024-11-13
  */
 
 class VpcV1 extends BaseService {
@@ -84,7 +84,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2024-04-30` and `2024-10-17`.
+   *  `2024-04-30` and `2024-11-14`.
    */
   version: string;
 
@@ -95,7 +95,7 @@ class VpcV1 extends BaseService {
    * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
    * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2024-04-30` and `2024-10-17`.
+   * specify any date between `2024-04-30` and `2024-11-14`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -120,7 +120,7 @@ class VpcV1 extends BaseService {
     if (!('generation' in options)) {
       this.generation = 2;
     }
-    this.version = options.version || '2024-10-15';
+    this.version = options.version || '2024-11-12';
   }
 
   /*************************
@@ -200,10 +200,14 @@ class VpcV1 extends BaseService {
    *
    * Since address prefixes are managed identically regardless of whether they were automatically created, the value is
    * not preserved as a VPC property.
-   * @param {boolean} [params.classicAccess] - Indicates whether this VPC will be connected to Classic Infrastructure.
-   * If true, this VPC's resources will have private network connectivity to the account's Classic Infrastructure
-   * resources. Only one VPC, per region, may be connected in this way. This value is set at creation and subsequently
-   * immutable.
+   * @param {boolean} [params.classicAccess] - Deprecated: Indicates whether this VPC will be connected to Classic
+   * Infrastructure. If true, this VPC's resources will have private network connectivity to the account's Classic
+   * Infrastructure resources. Only one VPC, per region, may be connected in this way. This value is set at creation and
+   * subsequently immutable.
+   *
+   * This property has been deprecated. Instead, use a [Transit Gateway](https://cloud.ibm.com/docs/transit-gateway) to
+   * connect this VPC to Classic Infrastructure. For more information, see [upcoming
+   * changes](https://cloud.ibm.com/docs/vpc?topic=vpc-api-change-log#upcoming-changes).
    * @param {VPCDNSPrototype} [params.dns] - The DNS configuration for this VPC.
    *
    * If unspecified, the system will assign DNS servers capable of resolving hosts and endpoint
@@ -1734,6 +1738,8 @@ class VpcV1 extends BaseService {
    * @param {string} params.vpcId - The VPC identifier.
    * @param {ResourceFilter[]} [params.acceptRoutesFrom] - The filters specifying the resources that may create routes
    * in this routing table.
+   *
+   * If specified, `resource_type` must be `vpn_gateway` or `vpn_server`.
    * @param {string[]} [params.advertiseRoutesTo] - The ingress sources to advertise routes to. Routes in the table with
    * `advertise` enabled will be advertised to these sources.
    * @param {string} [params.name] - The name for this routing table. The name must not be used by another routing table
@@ -1968,6 +1974,8 @@ class VpcV1 extends BaseService {
    * (replacing any existing filters). All routes created by resources that match a given filter will be removed when an
    * existing filter is removed. Therefore, if an empty array is specified, all filters will be removed, resulting in
    * all routes not directly created by the user being removed.
+   *
+   * If specified, `resource_type` must be `vpn_gateway` or `vpn_server`.
    * @param {string[]} [params.advertiseRoutesTo] - The ingress sources to advertise routes to, replacing any existing
    * sources to advertise to. Routes in the table with `advertise` enabled will be advertised to these sources.
    * @param {string} [params.name] - The name for this routing table. The name must not be used by another routing table
@@ -4402,6 +4410,8 @@ class VpcV1 extends BaseService {
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
    * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
+   * matching the specified identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.KeyCollection>>}
    */
@@ -4410,7 +4420,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.KeyCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4421,6 +4431,7 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
       'start': _params.start,
       'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listKeys');
@@ -5078,6 +5089,12 @@ class VpcV1 extends BaseService {
    * matching the specified identifier.
    * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
    * specified name.
+   * @param {string} [params.clusterNetworkId] - Filters the collection to instances with a `cluster_network.id`
+   * property matching the specified identifier.
+   * @param {string} [params.clusterNetworkCrn] - Filters the collection to instances with a `cluster_network.crn`
+   * property matching the specified CRN.
+   * @param {string} [params.clusterNetworkName] - Filters the collection to resources with a `cluster_network.name`
+   * property matching the exact specified name.
    * @param {string} [params.dedicatedHostId] - Filters the collection to resources with a `dedicated_host.id` property
    * matching the specified identifier.
    * @param {string} [params.dedicatedHostCrn] - Filters the collection to resources with a `dedicated_host.crn`
@@ -5110,7 +5127,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'clusterNetworkId', 'clusterNetworkCrn', 'clusterNetworkName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5123,6 +5140,9 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
       'name': _params.name,
+      'cluster_network.id': _params.clusterNetworkId,
+      'cluster_network.crn': _params.clusterNetworkCrn,
+      'cluster_network.name': _params.clusterNetworkName,
       'dedicated_host.id': _params.dedicatedHostId,
       'dedicated_host.crn': _params.dedicatedHostCrn,
       'dedicated_host.name': _params.dedicatedHostName,
@@ -5355,13 +5375,13 @@ class VpcV1 extends BaseService {
    * server instance. For the placement restrictions to be changed, the instance `status` must be `stopping` or
    * `stopped`.
    * If set, `reservation_affinity.policy` must be `disabled`.
-   * @param {InstancePatchProfile} [params.profile] - The profile to use for this virtual server instance. For the
-   * profile to be changed,
-   * the instance `status` must be `stopping` or `stopped`. In addition, the requested
-   * profile must:
-   * - Have matching instance disk support. Any disks associated with the current profile
-   *   will be deleted, and any disks associated with the requested profile will be
-   *   created.
+   * @param {InstancePatchProfile} [params.profile] - The profile to use for this virtual server instance. Any disks
+   * associated with the
+   * current profile will be deleted, and any disks associated with the requested profile
+   * will be created.
+   *
+   * For the profile to be changed, the instance `status` must be `stopping` or `stopped`.
+   * In addition, the requested profile must:
    * - Be compatible with any `placement_target` constraints. For example, if the
    *   instance is placed on a dedicated host, the requested profile `family` must be
    *   the same as the dedicated host `family`.
@@ -5547,6 +5567,330 @@ class VpcV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List cluster network attachments on an instance.
+   *
+   * This request lists cluster network attachments on an instance. A cluster network attachment represents a device on
+   * the instance to which a cluster network interface is attached.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachmentCollection>>}
+   */
+  public listInstanceClusterNetworkAttachments(
+    params: VpcV1.ListInstanceClusterNetworkAttachmentsParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachmentCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId'];
+    const _validParams = ['instanceId', 'start', 'limit', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceClusterNetworkAttachments');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/cluster_network_attachments',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a cluster network attachment.
+   *
+   * This request creates a cluster network attachment from an instance cluster network attachment prototype object. A
+   * cluster network attachment will attach the instance to a cluster network. The cluster network attachment prototype
+   * must specify a cluster network interface identity or a cluster network interface prototype.
+   *
+   * The instance must be in a `stopped` or `stopping` state to create an instance cluster network attachment.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterface} params.clusterNetworkInterface - A
+   * cluster network interface for the instance cluster network attachment. This can be
+   * specified using an existing cluster network interface that does not already have a `target`,
+   * or a prototype object for a new cluster network interface.
+   *
+   * This instance must reside in the same VPC as the specified cluster network interface. The
+   * cluster network interface must reside in the same cluster network as the
+   * `cluster_network_interface` of any other `cluster_network_attachments` for this instance.
+   * @param {InstanceClusterNetworkAttachmentBeforePrototype} [params.before] - The instance cluster network attachment
+   * to insert this instance cluster network attachment
+   * immediately before.
+   *
+   * If unspecified, this instance cluster network attachment will be inserted after all
+   * existing instance cluster network attachments.
+   * @param {string} [params.name] - The name for this cluster network attachment. Names must be unique within the
+   * instance the cluster network attachment resides in. If unspecified, the name will be a hyphenated list of
+   * randomly-selected words. Names starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>>}
+   */
+  public createClusterNetworkAttachment(
+    params: VpcV1.CreateClusterNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId', 'clusterNetworkInterface'];
+    const _validParams = ['instanceId', 'clusterNetworkInterface', 'before', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'cluster_network_interface': _params.clusterNetworkInterface,
+      'before': _params.before,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createClusterNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/cluster_network_attachments',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete an instance cluster network attachment.
+   *
+   * This request deletes an instance cluster network attachment. The instance must be in a
+   * `stopped` or `stopping` state to delete an instance cluster network attachment.
+   *
+   * This operation cannot be reversed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {string} params.id - The instance cluster network attachment identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>>}
+   */
+  public deleteInstanceClusterNetworkAttachment(
+    params: VpcV1.DeleteInstanceClusterNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId', 'id'];
+    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteInstanceClusterNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/cluster_network_attachments/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve an instance cluster network attachment.
+   *
+   * This request retrieves a single instance cluster network attachment specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {string} params.id - The instance cluster network attachment identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>>}
+   */
+  public getInstanceClusterNetworkAttachment(
+    params: VpcV1.GetInstanceClusterNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId', 'id'];
+    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceClusterNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/cluster_network_attachments/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update an instance cluster network attachment.
+   *
+   * This request updates an instance cluster network attachment with the information provided in an instance network
+   * interface patch object. The instance cluster network attachment patch object is structured in the same way as a
+   * retrieved instance cluster network attachment and needs to contain only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {string} params.id - The instance cluster network attachment identifier.
+   * @param {string} [params.name] - The name for this network attachment. The name must not be used by another network
+   * attachment for the instance. Names starting with `ibm-` are reserved for provider-owned resources, and are not
+   * allowed.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>>}
+   */
+  public updateInstanceClusterNetworkAttachment(
+    params: VpcV1.UpdateInstanceClusterNetworkAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId', 'id'];
+    const _validParams = ['instanceId', 'id', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceClusterNetworkAttachment');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/cluster_network_attachments/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
@@ -14091,7 +14435,7 @@ class VpcV1 extends BaseService {
    * The requested profile must be in the same `family`.
    * @param {string} [params.replicationCronSpec] - The cron specification for the file share replication schedule.
    *
-   * Replication of a share can be scheduled to occur at most once per hour.
+   * Replication of a share can be scheduled to occur at most once every 15 minutes.
    *
    * For this property to be changed, the share `replication_role` must be `replica`.
    * @param {number} [params.size] - The size of the file share rounded up to the next gigabyte. The value must not be
@@ -16172,17 +16516,21 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this virtual network interface. The name must not be used by another
    * virtual network interface in the region. Names beginning with `ibm-` are reserved for provider-owned resources, and
    * are not allowed.
-   * @param {string} [params.protocolStateFilteringMode] - The protocol state filtering mode used for this virtual
-   * network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network
-   * interface's `target` resource type:
+   * @param {string} [params.protocolStateFilteringMode] - The protocol state filtering mode to use for this virtual
+   * network interface. If
+   * `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target`
+   * resource type:
    *
    * - `bare_metal_server_network_attachment`: disabled
    * - `instance_network_attachment`: enabled
    * - `share_mount_target`: enabled
    *
+   * Must not be `disabled` if the virtual network interface's `target` resource type is
+   * `share_mount_target`.
+   *
    * Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
    * any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
-   * mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering)) for more information.
+   * mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>>}
    */
@@ -16714,6 +17062,1437 @@ class VpcV1 extends BaseService {
           sdkHeaders,
           {
             'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+  /*************************
+   * clusterNetworks
+   ************************/
+
+  /**
+   * List cluster network profiles.
+   *
+   * This request lists cluster network profiles available in the region. A cluster network profile specifies the
+   * performance characteristics and capabilities for a cluster network.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkProfileCollection>>}
+   */
+  public listClusterNetworkProfiles(
+    params?: VpcV1.ListClusterNetworkProfilesParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkProfileCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['start', 'limit', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listClusterNetworkProfiles');
+
+    const parameters = {
+      options: {
+        url: '/cluster_network/profiles',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a cluster network profile.
+   *
+   * This request retrieves a single cluster network profile specified by the name in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.name - The cluster network profile name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkProfile>>}
+   */
+  public getClusterNetworkProfile(
+    params: VpcV1.GetClusterNetworkProfileParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkProfile>> {
+    const _params = { ...params };
+    const _requiredParams = ['name'];
+    const _validParams = ['name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'name': _params.name,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getClusterNetworkProfile');
+
+    const parameters = {
+      options: {
+        url: '/cluster_network/profiles/{name}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List cluster networks.
+   *
+   * This request lists [cluster networks](https://cloud.ibm.com/docs/vpc?topic=vpc-about-cluster-network) in the
+   * region. A cluster network is a grouping of resources in a separate networking space for high performance computing
+   * and networking.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
+   * matching the specified identifier.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {string} [params.vpcId] - Filters the collection to cluster networks with a `vpc.id` property matching the
+   * specified id.
+   * @param {string} [params.vpcCrn] - Filters the collection to cluster networks with a `vpc.crn` property matching the
+   * specified CRN.
+   * @param {string} [params.vpcName] - Filters the collection to cluster networks with a `vpc.name` property matching
+   * the specified name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkCollection>>}
+   */
+  public listClusterNetworks(
+    params?: VpcV1.ListClusterNetworksParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'resource_group.id': _params.resourceGroupId,
+      'name': _params.name,
+      'sort': _params.sort,
+      'vpc.id': _params.vpcId,
+      'vpc.crn': _params.vpcCrn,
+      'vpc.name': _params.vpcName,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listClusterNetworks');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a cluster network.
+   *
+   * This request creates a new cluster network from a cluster network prototype object. The prototype object is
+   * structured in the same way as a retrieved cluster network, and contains the information necessary to create the new
+   * cluster network.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {ClusterNetworkProfileIdentity} params.profile - The profile to use for this cluster network.
+   * @param {VPCIdentity} params.vpc - The VPC this cluster network will reside in.
+   * @param {ZoneIdentity} params.zone - The zone this cluster network will reside in. The zone must be listed
+   * as supported on the specified cluster network profile.
+   * @param {string} [params.name] - The name for this cluster network. The name must not be used by another cluster
+   * network in the region. Names starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
+   * If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
+   * [default resource
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+   * @param {ClusterNetworkSubnetPrefixPrototype[]} [params.subnetPrefixes] -
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetwork>>}
+   */
+  public createClusterNetwork(
+    params: VpcV1.CreateClusterNetworkParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetwork>> {
+    const _params = { ...params };
+    const _requiredParams = ['profile', 'vpc', 'zone'];
+    const _validParams = ['profile', 'vpc', 'zone', 'name', 'resourceGroup', 'subnetPrefixes', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'profile': _params.profile,
+      'vpc': _params.vpc,
+      'zone': _params.zone,
+      'name': _params.name,
+      'resource_group': _params.resourceGroup,
+      'subnet_prefixes': _params.subnetPrefixes,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createClusterNetwork');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks',
+        method: 'POST',
+        body,
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List cluster network interfaces.
+   *
+   * This request lists cluster network interfaces in the region. A cluster network interface is a logical abstraction
+   * of a cluster network interface in a subnet, and may be attached to a target resource.
+   *
+   * The cluster network interfaces will be sorted by their `created_at` property values, with newest cluster network
+   * interfaces first. Cluster network interfaces with identical
+   * `created_at` property values will in turn be sorted by ascending `name` property values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkInterfaceCollection>>}
+   */
+  public listClusterNetworkInterfaces(
+    params: VpcV1.ListClusterNetworkInterfacesParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkInterfaceCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId'];
+    const _validParams = ['clusterNetworkId', 'start', 'limit', 'name', 'sort', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'name': _params.name,
+      'sort': _params.sort,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listClusterNetworkInterfaces');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/interfaces',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a cluster network interface.
+   *
+   * This request creates a new cluster network interface from a cluster network interface prototype object. The
+   * prototype object is structured in the same way as a retrieved cluster network interface, and contains the
+   * information necessary to create the new cluster network interface.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} [params.name] - The name for this cluster network interface. The name must not be used by another
+   * interface in the cluster network. Names beginning with `ibm-` are reserved for provider-owned resources, and are
+   * not allowed. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * @param {ClusterNetworkInterfacePrimaryIPPrototype} [params.primaryIp] - The primary IP address to bind to the
+   * cluster network interface. May be either
+   * a cluster network subnet reserved IP identity, or a cluster network subnet reserved IP
+   * prototype object which will be used to create a new cluster network subnet reserved IP.
+   *
+   * If a cluster network subnet reserved IP identity is provided, the specified cluster
+   * network subnet reserved IP must be unbound.
+   *
+   * If a cluster network subnet reserved IP prototype object with an address is provided,
+   * the address must be available on the cluster network interface's cluster network
+   * subnet. If no address is specified, an available address on the cluster network subnet
+   * will be automatically selected and reserved.
+   * @param {ClusterNetworkSubnetIdentity} [params.subnet] - The associated cluster network subnet. Required if
+   * `primary_ip` does not specify a cluster
+   * network subnet reserved IP identity.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>>}
+   */
+  public createClusterNetworkInterface(
+    params: VpcV1.CreateClusterNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId'];
+    const _validParams = ['clusterNetworkId', 'name', 'primaryIp', 'subnet', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+      'primary_ip': _params.primaryIp,
+      'subnet': _params.subnet,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createClusterNetworkInterface');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/interfaces',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a cluster network interface.
+   *
+   * This request deletes a cluster network interface. This operation cannot be reversed. For this request to succeed,
+   * the cluster network interface must not be required by another resource, such as a cluster network attachment for a
+   * virtual server instance.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.id - The cluster network interface identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>>}
+   */
+  public deleteClusterNetworkInterface(
+    params: VpcV1.DeleteClusterNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'id'];
+    const _validParams = ['clusterNetworkId', 'id', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteClusterNetworkInterface');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/interfaces/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a cluster network interface.
+   *
+   * This request retrieves a single cluster network interface specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.id - The cluster network interface identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>>}
+   */
+  public getClusterNetworkInterface(
+    params: VpcV1.GetClusterNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'id'];
+    const _validParams = ['clusterNetworkId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getClusterNetworkInterface');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/interfaces/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a cluster network interface.
+   *
+   * This request updates a cluster network interface with the information provided in a cluster network interface patch
+   * object. The patch object is structured in the same way as a retrieved cluster network interface and needs to
+   * contain only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.id - The cluster network interface identifier.
+   * @param {boolean} [params.autoDelete] - Indicates whether this cluster network interface will be automatically
+   * deleted when `target` is deleted. Must be `false` if the cluster network interface is unbound.
+   * @param {string} [params.name] - The name for this cluster network interface. The name must not be used by another
+   * interface in the cluster network. Names beginning with `ibm-` are reserved for provider-owned resources, and are
+   * not allowed.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>>}
+   */
+  public updateClusterNetworkInterface(
+    params: VpcV1.UpdateClusterNetworkInterfaceParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'id'];
+    const _validParams = ['clusterNetworkId', 'id', 'autoDelete', 'name', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'auto_delete': _params.autoDelete,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateClusterNetworkInterface');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/interfaces/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List cluster network subnets.
+   *
+   * This request lists cluster network subnets in the cluster network. A cluster network subnet provides network
+   * routing between other cluster network subnets within a cluster network.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetCollection>>}
+   */
+  public listClusterNetworkSubnets(
+    params: VpcV1.ListClusterNetworkSubnetsParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId'];
+    const _validParams = ['clusterNetworkId', 'start', 'limit', 'name', 'sort', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'name': _params.name,
+      'sort': _params.sort,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listClusterNetworkSubnets');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/subnets',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a cluster network subnet.
+   *
+   * This request creates a new cluster network subnet from a cluster network subnet prototype object. The prototype
+   * object is structured in the same way as a retrieved cluster network subnet, and contains the information necessary
+   * to create the new cluster network subnet.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {ClusterNetworkSubnetPrototype} params.clusterNetworkSubnetPrototype - The cluster network subnet prototype
+   * object.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>>}
+   */
+  public createClusterNetworkSubnet(
+    params: VpcV1.CreateClusterNetworkSubnetParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetPrototype'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetPrototype', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = _params.clusterNetworkSubnetPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createClusterNetworkSubnet');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/subnets',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List cluster network subnet reserved IPs.
+   *
+   * This request lists cluster network subnet reserved IPs in the cluster network.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.clusterNetworkSubnetId - The cluster network subnet identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIPCollection>>}
+   */
+  public listClusterNetworkSubnetReservedIps(
+    params: VpcV1.ListClusterNetworkSubnetReservedIpsParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIPCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetId'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'start', 'limit', 'name', 'sort', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'name': _params.name,
+      'sort': _params.sort,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'cluster_network_subnet_id': _params.clusterNetworkSubnetId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listClusterNetworkSubnetReservedIps');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/subnets/{cluster_network_subnet_id}/reserved_ips',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a cluster network subnet reserved IP.
+   *
+   * This request creates a new cluster network subnet reserved IP from a cluster network subnet reserved IP prototype
+   * object. The prototype object is structured in the same way as a retrieved cluster network subnet reserved IP, and
+   * contains the information necessary to create the new cluster network subnet reserved IP.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.clusterNetworkSubnetId - The cluster network subnet identifier.
+   * @param {string} [params.address] - The IP address to reserve, which must not already be reserved on the subnet.
+   *
+   * If unspecified, an available address on the subnet will automatically be selected.
+   * @param {string} [params.name] - The name for this cluster network subnet reserved IP. The name must not be used by
+   * another reserved IP in the cluster network subnet. Names starting with `ibm-` are reserved for provider-owned
+   * resources, and are not allowed. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>>}
+   */
+  public createClusterNetworkSubnetReservedIp(
+    params: VpcV1.CreateClusterNetworkSubnetReservedIpParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetId'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'address', 'name', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'address': _params.address,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'cluster_network_subnet_id': _params.clusterNetworkSubnetId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createClusterNetworkSubnetReservedIp');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/subnets/{cluster_network_subnet_id}/reserved_ips',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a cluster network subnet reserved IP.
+   *
+   * This request deletes a cluster network subnet reserved IP. This operation cannot be reversed.
+   *
+   * For this request to succeed, the reserved IP must be unbound. A provider-owned reserved IP is not allowed to be
+   * deleted.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.clusterNetworkSubnetId - The cluster network subnet identifier.
+   * @param {string} params.id - The cluster network subnet reserved IP identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>>}
+   */
+  public deleteClusterNetworkSubnetReservedIp(
+    params: VpcV1.DeleteClusterNetworkSubnetReservedIpParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'cluster_network_subnet_id': _params.clusterNetworkSubnetId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteClusterNetworkSubnetReservedIp');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/subnets/{cluster_network_subnet_id}/reserved_ips/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a cluster network subnet reserved IP.
+   *
+   * This request retrieves a single cluster network subnet reserved IP specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.clusterNetworkSubnetId - The cluster network subnet identifier.
+   * @param {string} params.id - The cluster network subnet reserved IP identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>>}
+   */
+  public getClusterNetworkSubnetReservedIp(
+    params: VpcV1.GetClusterNetworkSubnetReservedIpParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'cluster_network_subnet_id': _params.clusterNetworkSubnetId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getClusterNetworkSubnetReservedIp');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/subnets/{cluster_network_subnet_id}/reserved_ips/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a cluster network subnet reserved IP.
+   *
+   * This request updates a cluster network subnet reserved IP with the information provided in a cluster network subnet
+   * reserved IP patch object. The patch object is structured in the same way as a retrieved cluster network subnet
+   * reserved IP and needs to contain only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.clusterNetworkSubnetId - The cluster network subnet identifier.
+   * @param {string} params.id - The cluster network subnet reserved IP identifier.
+   * @param {boolean} [params.autoDelete] - Indicates whether this cluster network subnet reserved IP member will be
+   * automatically deleted when either `target` is deleted, or the cluster network subnet reserved IP is unbound. Must
+   * be `false` if the cluster network subnet reserved IP is unbound.
+   * @param {string} [params.name] - The name for this cluster network subnet reserved IP. The name must not be used by
+   * another reserved IP in the cluster network subnet. Names starting with `ibm-` are reserved for provider-owned
+   * resources, and are not allowed.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>>}
+   */
+  public updateClusterNetworkSubnetReservedIp(
+    params: VpcV1.UpdateClusterNetworkSubnetReservedIpParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id', 'autoDelete', 'name', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'auto_delete': _params.autoDelete,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'cluster_network_subnet_id': _params.clusterNetworkSubnetId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateClusterNetworkSubnetReservedIp');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/subnets/{cluster_network_subnet_id}/reserved_ips/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a cluster network subnet.
+   *
+   * This request deletes a cluster network subnet. This operation cannot be reversed.
+   *
+   * For this request to succeed, this cluster subnet must not be attached to a cluster network interface.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.id - The cluster network subnet identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>>}
+   */
+  public deleteClusterNetworkSubnet(
+    params: VpcV1.DeleteClusterNetworkSubnetParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'id'];
+    const _validParams = ['clusterNetworkId', 'id', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteClusterNetworkSubnet');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/subnets/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a cluster network subnet.
+   *
+   * This request retrieves a single cluster network subnet specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.id - The cluster network subnet identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>>}
+   */
+  public getClusterNetworkSubnet(
+    params: VpcV1.GetClusterNetworkSubnetParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'id'];
+    const _validParams = ['clusterNetworkId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getClusterNetworkSubnet');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/subnets/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a cluster network subnet.
+   *
+   * This request updates a cluster network subnet with the information provided in a cluster network subnet patch
+   * object. The patch object is structured in the same way as a retrieved cluster network subnet and needs to contain
+   * only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.clusterNetworkId - The cluster network identifier.
+   * @param {string} params.id - The cluster network subnet identifier.
+   * @param {string} [params.name] - The name for this cluster network subnet. The name must not be used by another
+   * cluster network subnet in the cluster network. Names starting with `ibm-` are reserved for provider-owned
+   * resources, and are not allowed.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>>}
+   */
+  public updateClusterNetworkSubnet(
+    params: VpcV1.UpdateClusterNetworkSubnetParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>> {
+    const _params = { ...params };
+    const _requiredParams = ['clusterNetworkId', 'id'];
+    const _validParams = ['clusterNetworkId', 'id', 'name', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'cluster_network_id': _params.clusterNetworkId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateClusterNetworkSubnet');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{cluster_network_id}/subnets/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a cluster network.
+   *
+   * This request deletes a cluster network. This operation cannot be reversed.
+   *
+   * For this request to succeed, virtual server instances must not reside in this cluster network.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The cluster network identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetwork>>}
+   */
+  public deleteClusterNetwork(
+    params: VpcV1.DeleteClusterNetworkParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetwork>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteClusterNetwork');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'If-Match': _params.ifMatch,
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a cluster network.
+   *
+   * This request retrieves a single cluster network specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The cluster network identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetwork>>}
+   */
+  public getClusterNetwork(
+    params: VpcV1.GetClusterNetworkParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetwork>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getClusterNetwork');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a cluster.
+   *
+   * This request updates a cluster network with the information provided in a cluster network patch object. The patch
+   * object is structured in the same way as a retrieved cluster network and needs to contain only the information to be
+   * updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The cluster network identifier.
+   * @param {string} [params.name] - The name for this cluster network. The name must not be used by another cluster
+   * network in the region. Names starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ClusterNetwork>>}
+   */
+  public updateClusterNetwork(
+    params: VpcV1.UpdateClusterNetworkParams
+  ): Promise<VpcV1.Response<VpcV1.ClusterNetwork>> {
+    const _params = { ...params };
+    const _requiredParams = ['id'];
+    const _validParams = ['id', 'name', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateClusterNetwork');
+
+    const parameters = {
+      options: {
+        url: '/cluster_networks/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -22254,7 +24033,10 @@ class VpcV1 extends BaseService {
    * @param {CertificateInstanceIdentity} [params.certificateInstance] - The certificate instance to use for SSL
    * termination. The listener must have a
    * `protocol` of `https`.
-   * @param {number} [params.connectionLimit] - The connection limit of the listener.
+   * @param {number} [params.connectionLimit] - The concurrent connection limit for the listener. If reached, incoming
+   * connections may be queued or rejected.
+   *
+   * This property will be present for load balancers in the `application` family.
    * @param {LoadBalancerPoolIdentity} [params.defaultPool] - The default pool for this listener. If `https_redirect` is
    * specified, the
    * default pool will not be used.
@@ -22273,8 +24055,9 @@ class VpcV1 extends BaseService {
    *
    * If specified, this listener must have a `protocol` of `http`, and the target
    * listener must have a `protocol` of `https`.
-   * @param {number} [params.idleConnectionTimeout] - The idle connection timeout of the listener in seconds. Supported
-   * for load balancers in the `application` family.
+   * @param {number} [params.idleConnectionTimeout] - The idle connection timeout of the listener in seconds.
+   *
+   * Supported for load balancers in the `application` family.
    * @param {LoadBalancerListenerPolicyPrototype[]} [params.policies] - The policy prototype objects for this listener.
    * The load balancer must be in the
    * `application` family.
@@ -22493,7 +24276,10 @@ class VpcV1 extends BaseService {
    * @param {CertificateInstanceIdentity} [params.certificateInstance] - The certificate instance to use for SSL
    * termination. The listener must have a
    * `protocol` of `https`.
-   * @param {number} [params.connectionLimit] - The connection limit of the listener.
+   * @param {number} [params.connectionLimit] - The concurrent connection limit for the listener. If reached, incoming
+   * connections may be queued or rejected.
+   *
+   * Supported for load balancers in the `application` family.
    * @param {LoadBalancerListenerDefaultPoolPatch} [params.defaultPool] - The default pool for this listener. If
    * `https_redirect` is set, the default pool will not
    * be used. The specified pool must:
@@ -22512,8 +24298,9 @@ class VpcV1 extends BaseService {
    * must have a `protocol` of `https`.
    *
    * Specify `null` to remove any existing https redirect.
-   * @param {number} [params.idleConnectionTimeout] - The idle connection timeout of the listener in seconds. Supported
-   * for load balancers in the `application` family.
+   * @param {number} [params.idleConnectionTimeout] - The idle connection timeout of the listener in seconds.
+   *
+   * Supported for load balancers in the `application` family.
    * @param {number} [params.port] - The listener port number, or the inclusive lower bound of the port range. Each
    * listener in the load balancer must have a unique `port` and `protocol` combination.
    *
@@ -22680,9 +24467,9 @@ class VpcV1 extends BaseService {
    * @param {string} params.listenerId - The listener identifier.
    * @param {string} params.action - The policy action:
    * - `forward`: Requests will be forwarded to the specified `target` pool
-   * - `https_redirect`: Requests will be redirected to the specified target listener. The
-   *   listener must have a `protocol` of `http`, and the target listener must have a
-   *   `protocol` of `https`
+   * - `https_redirect`: Requests will be redirected to the specified `target.listener`.
+   *    This listener must have a `protocol` of `http`, and the target listener must
+   *    have a `protocol` of `https`.
    * - `redirect`: Requests will be redirected to the specified `target.url`
    * - `reject`: Requests will be rejected with a `403` status code.
    * @param {number} params.priority - Priority of the policy. The priority is unique across all policies for this load
@@ -22690,11 +24477,14 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this policy. The name must not be used by another policy for the load
    * balancer listener. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {LoadBalancerListenerPolicyRulePrototype[]} [params.rules] - The rule prototype objects for this policy.
-   * @param {LoadBalancerListenerPolicyTargetPrototype} [params.target] - - If `action` is `forward`, specify a
-   * `LoadBalancerPoolIdentity`.
-   * - If `action` is `https_redirect`, specify a
-   * `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
-   * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
+   * @param {LoadBalancerListenerPolicyTargetPrototype} [params.target] - - If `action` is `forward`, use
+   * `LoadBalancerPoolIdentity` to specify a pool in this
+   *   load balancer to forward to.
+   * - If `action` is `https_redirect`, use
+   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
+   *   load balancer to redirect to.
+   * - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
+   *   specify a URL to redirect to.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>>}
    */
@@ -23544,7 +25334,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
    * @param {string} params.id - The pool identifier.
-   * @param {string} [params.algorithm] - The load balancing algorithm.
+   * @param {string} [params.algorithm] - The load balancing algorithm. The `least_connections` algorithm is only
+   * supported for load balancers that have `availability` with value `subnet` in the profile.
    * @param {LoadBalancerPoolHealthMonitorPatch} [params.healthMonitor] - The health monitor of this pool.
    * @param {string} [params.name] - The name for this load balancer pool. The name must not be used by another pool for
    * the load balancer.
@@ -26051,7 +27842,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2024-04-30` and `2024-10-17`.
+     *  `2024-04-30` and `2024-11-14`.
      */
     version: string;
   }
@@ -26102,9 +27893,13 @@ namespace VpcV1 {
      *  is not preserved as a VPC property.
      */
     addressPrefixManagement?: CreateVpcConstants.AddressPrefixManagement | string;
-    /** Indicates whether this VPC will be connected to Classic Infrastructure. If true, this VPC's resources will
-     *  have private network connectivity to the account's Classic Infrastructure resources. Only one VPC, per region,
-     *  may be connected in this way. This value is set at creation and subsequently immutable.
+    /** Deprecated: Indicates whether this VPC will be connected to Classic Infrastructure. If true, this VPC's
+     *  resources will have private network connectivity to the account's Classic Infrastructure resources. Only one
+     *  VPC, per region, may be connected in this way. This value is set at creation and subsequently immutable.
+     *
+     *  This property has been deprecated. Instead, use a [Transit Gateway](https://cloud.ibm.com/docs/transit-gateway)
+     *  to connect this VPC to Classic Infrastructure. For more information, see [upcoming
+     *  changes](https://cloud.ibm.com/docs/vpc?topic=vpc-api-change-log#upcoming-changes).
      */
     classicAccess?: boolean;
     /** The DNS configuration for this VPC.
@@ -26499,7 +28294,10 @@ namespace VpcV1 {
   export interface CreateVpcRoutingTableParams {
     /** The VPC identifier. */
     vpcId: string;
-    /** The filters specifying the resources that may create routes in this routing table. */
+    /** The filters specifying the resources that may create routes in this routing table.
+     *
+     *  If specified, `resource_type` must be `vpn_gateway` or `vpn_server`.
+     */
     acceptRoutesFrom?: ResourceFilter[];
     /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised
      *  to these sources.
@@ -26602,6 +28400,8 @@ namespace VpcV1 {
      *  (replacing any existing filters). All routes created by resources that match a given filter will be removed when
      *  an existing filter is removed. Therefore, if an empty array is specified, all filters will be removed, resulting
      *  in all routes not directly created by the user being removed.
+     *
+     *  If specified, `resource_type` must be `vpn_gateway` or `vpn_server`.
      */
     acceptRoutesFrom?: ResourceFilter[];
     /** The ingress sources to advertise routes to, replacing any existing sources to advertise to. Routes in the
@@ -27259,6 +29059,8 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
+    /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
+    resourceGroupId?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -27374,6 +29176,14 @@ namespace VpcV1 {
     resourceGroupId?: string;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
+    /** Filters the collection to instances with a `cluster_network.id` property matching the specified identifier. */
+    clusterNetworkId?: string;
+    /** Filters the collection to instances with a `cluster_network.crn` property matching the specified CRN. */
+    clusterNetworkCrn?: string;
+    /** Filters the collection to resources with a `cluster_network.name` property matching the exact specified
+     *  name.
+     */
+    clusterNetworkName?: string;
     /** Filters the collection to resources with a `dedicated_host.id` property matching the specified identifier. */
     dedicatedHostId?: string;
     /** Filters the collection to resources with a `dedicated_host.crn` property matching the specified CRN. */
@@ -27461,12 +29271,12 @@ namespace VpcV1 {
      *  If set, `reservation_affinity.policy` must be `disabled`.
      */
     placementTarget?: InstancePlacementTargetPatch;
-    /** The profile to use for this virtual server instance. For the profile to be changed,
-     *  the instance `status` must be `stopping` or `stopped`. In addition, the requested
-     *  profile must:
-     *  - Have matching instance disk support. Any disks associated with the current profile
-     *    will be deleted, and any disks associated with the requested profile will be
-     *    created.
+    /** The profile to use for this virtual server instance. Any disks associated with the
+     *  current profile will be deleted, and any disks associated with the requested profile
+     *  will be created.
+     *
+     *  For the profile to be changed, the instance `status` must be `stopping` or `stopped`.
+     *  In addition, the requested profile must:
      *  - Be compatible with any `placement_target` constraints. For example, if the
      *    instance is placed on a dedicated host, the requested profile `family` must be
      *    the same as the dedicated host `family`.
@@ -27525,6 +29335,76 @@ namespace VpcV1 {
       START = 'start',
       STOP = 'stop',
     }
+  }
+
+  /** Parameters for the `listInstanceClusterNetworkAttachments` operation. */
+  export interface ListInstanceClusterNetworkAttachmentsParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `createClusterNetworkAttachment` operation. */
+  export interface CreateClusterNetworkAttachmentParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** A cluster network interface for the instance cluster network attachment. This can be
+     *  specified using an existing cluster network interface that does not already have a `target`,
+     *  or a prototype object for a new cluster network interface.
+     *
+     *  This instance must reside in the same VPC as the specified cluster network interface. The
+     *  cluster network interface must reside in the same cluster network as the
+     *  `cluster_network_interface` of any other `cluster_network_attachments` for this instance.
+     */
+    clusterNetworkInterface: InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterface;
+    /** The instance cluster network attachment to insert this instance cluster network attachment
+     *  immediately before.
+     *
+     *  If unspecified, this instance cluster network attachment will be inserted after all
+     *  existing instance cluster network attachments.
+     */
+    before?: InstanceClusterNetworkAttachmentBeforePrototype;
+    /** The name for this cluster network attachment. Names must be unique within the instance the cluster network
+     *  attachment resides in. If unspecified, the name will be a hyphenated list of randomly-selected words. Names
+     *  starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
+     */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteInstanceClusterNetworkAttachment` operation. */
+  export interface DeleteInstanceClusterNetworkAttachmentParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** The instance cluster network attachment identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getInstanceClusterNetworkAttachment` operation. */
+  export interface GetInstanceClusterNetworkAttachmentParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** The instance cluster network attachment identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateInstanceClusterNetworkAttachment` operation. */
+  export interface UpdateInstanceClusterNetworkAttachmentParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** The instance cluster network attachment identifier. */
+    id: string;
+    /** The name for this network attachment. The name must not be used by another network attachment for the
+     *  instance. Names starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
+     */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceConsoleAccessToken` operation. */
@@ -29419,7 +31299,7 @@ namespace VpcV1 {
     profile?: ShareProfileIdentity;
     /** The cron specification for the file share replication schedule.
      *
-     *  Replication of a share can be scheduled to occur at most once per hour.
+     *  Replication of a share can be scheduled to occur at most once every 15 minutes.
      *
      *  For this property to be changed, the share `replication_role` must be `replica`.
      */
@@ -29969,16 +31849,20 @@ namespace VpcV1 {
      *  in the region. Names beginning with `ibm-` are reserved for provider-owned resources, and are not allowed.
      */
     name?: string;
-    /** The protocol state filtering mode used for this virtual network interface. If `auto`, protocol state packet
-     *  filtering is enabled or disabled based on the virtual network interface's `target` resource type:
+    /** The protocol state filtering mode to use for this virtual network interface. If
+     *  `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target`
+     *  resource type:
      *
      *  - `bare_metal_server_network_attachment`: disabled
      *  - `instance_network_attachment`: enabled
      *  - `share_mount_target`: enabled
      *
+     *  Must not be `disabled` if the virtual network interface's `target` resource type is
+     *  `share_mount_target`.
+     *
      *  Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
      *  any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
-     *  mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering)) for more information.
+     *  mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information.
      */
     protocolStateFilteringMode?: UpdateVirtualNetworkInterfaceConstants.ProtocolStateFilteringMode | string;
     headers?: OutgoingHttpHeaders;
@@ -29986,7 +31870,7 @@ namespace VpcV1 {
 
   /** Constants for the `updateVirtualNetworkInterface` operation. */
   export namespace UpdateVirtualNetworkInterfaceConstants {
-    /** The protocol state filtering mode used for this virtual network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target` resource type: - `bare_metal_server_network_attachment`: disabled - `instance_network_attachment`: enabled - `share_mount_target`: enabled Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering)) for more information. */
+    /** The protocol state filtering mode to use for this virtual network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target` resource type: - `bare_metal_server_network_attachment`: disabled - `instance_network_attachment`: enabled - `share_mount_target`: enabled Must not be `disabled` if the virtual network interface's `target` resource type is `share_mount_target`. Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information. */
     export enum ProtocolStateFilteringMode {
       AUTO = 'auto',
       DISABLED = 'disabled',
@@ -30097,6 +31981,389 @@ namespace VpcV1 {
     virtualNetworkInterfaceId: string;
     /** The reserved IP identifier. */
     id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listClusterNetworkProfiles` operation. */
+  export interface ListClusterNetworkProfilesParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getClusterNetworkProfile` operation. */
+  export interface GetClusterNetworkProfileParams {
+    /** The cluster network profile name. */
+    name: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listClusterNetworks` operation. */
+  export interface ListClusterNetworksParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
+    resourceGroupId?: string;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListClusterNetworksConstants.Sort | string;
+    /** Filters the collection to cluster networks with a `vpc.id` property matching the specified id. */
+    vpcId?: string;
+    /** Filters the collection to cluster networks with a `vpc.crn` property matching the specified CRN. */
+    vpcCrn?: string;
+    /** Filters the collection to cluster networks with a `vpc.name` property matching the specified name. */
+    vpcName?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listClusterNetworks` operation. */
+  export namespace ListClusterNetworksConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `createClusterNetwork` operation. */
+  export interface CreateClusterNetworkParams {
+    /** The profile to use for this cluster network. */
+    profile: ClusterNetworkProfileIdentity;
+    /** The VPC this cluster network will reside in. */
+    vpc: VPCIdentity;
+    /** The zone this cluster network will reside in. The zone must be listed
+     *  as supported on the specified cluster network profile.
+     */
+    zone: ZoneIdentity;
+    /** The name for this cluster network. The name must not be used by another cluster network in the region. Names
+     *  starting with `ibm-` are reserved for provider-owned resources, and are not allowed. If unspecified, the name
+     *  will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+     */
+    resourceGroup?: ResourceGroupIdentity;
+    subnetPrefixes?: ClusterNetworkSubnetPrefixPrototype[];
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listClusterNetworkInterfaces` operation. */
+  export interface ListClusterNetworkInterfacesParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListClusterNetworkInterfacesConstants.Sort | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listClusterNetworkInterfaces` operation. */
+  export namespace ListClusterNetworkInterfacesConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `createClusterNetworkInterface` operation. */
+  export interface CreateClusterNetworkInterfaceParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The name for this cluster network interface. The name must not be used by another interface in the cluster
+     *  network. Names beginning with `ibm-` are reserved for provider-owned resources, and are not allowed. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The primary IP address to bind to the cluster network interface. May be either
+     *  a cluster network subnet reserved IP identity, or a cluster network subnet reserved IP
+     *  prototype object which will be used to create a new cluster network subnet reserved IP.
+     *
+     *  If a cluster network subnet reserved IP identity is provided, the specified cluster
+     *  network subnet reserved IP must be unbound.
+     *
+     *  If a cluster network subnet reserved IP prototype object with an address is provided,
+     *  the address must be available on the cluster network interface's cluster network
+     *  subnet. If no address is specified, an available address on the cluster network subnet
+     *  will be automatically selected and reserved.
+     */
+    primaryIp?: ClusterNetworkInterfacePrimaryIPPrototype;
+    /** The associated cluster network subnet. Required if `primary_ip` does not specify a cluster
+     *  network subnet reserved IP identity.
+     */
+    subnet?: ClusterNetworkSubnetIdentity;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteClusterNetworkInterface` operation. */
+  export interface DeleteClusterNetworkInterfaceParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network interface identifier. */
+    id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getClusterNetworkInterface` operation. */
+  export interface GetClusterNetworkInterfaceParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network interface identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateClusterNetworkInterface` operation. */
+  export interface UpdateClusterNetworkInterfaceParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network interface identifier. */
+    id: string;
+    /** Indicates whether this cluster network interface will be automatically deleted when `target` is deleted.
+     *  Must be `false` if the cluster network interface is unbound.
+     */
+    autoDelete?: boolean;
+    /** The name for this cluster network interface. The name must not be used by another interface in the cluster
+     *  network. Names beginning with `ibm-` are reserved for provider-owned resources, and are not allowed.
+     */
+    name?: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listClusterNetworkSubnets` operation. */
+  export interface ListClusterNetworkSubnetsParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListClusterNetworkSubnetsConstants.Sort | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listClusterNetworkSubnets` operation. */
+  export namespace ListClusterNetworkSubnetsConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `createClusterNetworkSubnet` operation. */
+  export interface CreateClusterNetworkSubnetParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network subnet prototype object. */
+    clusterNetworkSubnetPrototype: ClusterNetworkSubnetPrototype;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listClusterNetworkSubnetReservedIps` operation. */
+  export interface ListClusterNetworkSubnetReservedIpsParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network subnet identifier. */
+    clusterNetworkSubnetId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListClusterNetworkSubnetReservedIpsConstants.Sort | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listClusterNetworkSubnetReservedIps` operation. */
+  export namespace ListClusterNetworkSubnetReservedIpsConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      ADDRESS = 'address',
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `createClusterNetworkSubnetReservedIp` operation. */
+  export interface CreateClusterNetworkSubnetReservedIpParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network subnet identifier. */
+    clusterNetworkSubnetId: string;
+    /** The IP address to reserve, which must not already be reserved on the subnet.
+     *
+     *  If unspecified, an available address on the subnet will automatically be selected.
+     */
+    address?: string;
+    /** The name for this cluster network subnet reserved IP. The name must not be used by another reserved IP in
+     *  the cluster network subnet. Names starting with `ibm-` are reserved for provider-owned resources, and are not
+     *  allowed. If unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteClusterNetworkSubnetReservedIp` operation. */
+  export interface DeleteClusterNetworkSubnetReservedIpParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network subnet identifier. */
+    clusterNetworkSubnetId: string;
+    /** The cluster network subnet reserved IP identifier. */
+    id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getClusterNetworkSubnetReservedIp` operation. */
+  export interface GetClusterNetworkSubnetReservedIpParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network subnet identifier. */
+    clusterNetworkSubnetId: string;
+    /** The cluster network subnet reserved IP identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateClusterNetworkSubnetReservedIp` operation. */
+  export interface UpdateClusterNetworkSubnetReservedIpParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network subnet identifier. */
+    clusterNetworkSubnetId: string;
+    /** The cluster network subnet reserved IP identifier. */
+    id: string;
+    /** Indicates whether this cluster network subnet reserved IP member will be automatically deleted when either
+     *  `target` is deleted, or the cluster network subnet reserved IP is unbound. Must be `false` if the cluster
+     *  network subnet reserved IP is unbound.
+     */
+    autoDelete?: boolean;
+    /** The name for this cluster network subnet reserved IP. The name must not be used by another reserved IP in
+     *  the cluster network subnet. Names starting with `ibm-` are reserved for provider-owned resources, and are not
+     *  allowed.
+     */
+    name?: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteClusterNetworkSubnet` operation. */
+  export interface DeleteClusterNetworkSubnetParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network subnet identifier. */
+    id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getClusterNetworkSubnet` operation. */
+  export interface GetClusterNetworkSubnetParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network subnet identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateClusterNetworkSubnet` operation. */
+  export interface UpdateClusterNetworkSubnetParams {
+    /** The cluster network identifier. */
+    clusterNetworkId: string;
+    /** The cluster network subnet identifier. */
+    id: string;
+    /** The name for this cluster network subnet. The name must not be used by another cluster network subnet in the
+     *  cluster network. Names starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
+     */
+    name?: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteClusterNetwork` operation. */
+  export interface DeleteClusterNetworkParams {
+    /** The cluster network identifier. */
+    id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getClusterNetwork` operation. */
+  export interface GetClusterNetworkParams {
+    /** The cluster network identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateClusterNetwork` operation. */
+  export interface UpdateClusterNetworkParams {
+    /** The cluster network identifier. */
+    id: string;
+    /** The name for this cluster network. The name must not be used by another cluster network in the region. Names
+     *  starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
+     */
+    name?: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -31609,7 +33876,11 @@ namespace VpcV1 {
     acceptProxyProtocol?: boolean;
     /** The certificate instance to use for SSL termination. The listener must have a `protocol` of `https`. */
     certificateInstance?: CertificateInstanceIdentity;
-    /** The connection limit of the listener. */
+    /** The concurrent connection limit for the listener. If reached, incoming connections may be queued or
+     *  rejected.
+     *
+     *  This property will be present for load balancers in the `application` family.
+     */
     connectionLimit?: number;
     /** The default pool for this listener. If `https_redirect` is specified, the
      *  default pool will not be used.
@@ -31631,8 +33902,9 @@ namespace VpcV1 {
      *  listener must have a `protocol` of `https`.
      */
     httpsRedirect?: LoadBalancerListenerHTTPSRedirectPrototype;
-    /** The idle connection timeout of the listener in seconds. Supported for load balancers in the `application`
-     *  family.
+    /** The idle connection timeout of the listener in seconds.
+     *
+     *  Supported for load balancers in the `application` family.
      */
     idleConnectionTimeout?: number;
     /** The policy prototype objects for this listener. The load balancer must be in the `application` family. */
@@ -31711,7 +33983,11 @@ namespace VpcV1 {
     acceptProxyProtocol?: boolean;
     /** The certificate instance to use for SSL termination. The listener must have a `protocol` of `https`. */
     certificateInstance?: CertificateInstanceIdentity;
-    /** The connection limit of the listener. */
+    /** The concurrent connection limit for the listener. If reached, incoming connections may be queued or
+     *  rejected.
+     *
+     *  Supported for load balancers in the `application` family.
+     */
     connectionLimit?: number;
     /** The default pool for this listener. If `https_redirect` is set, the default pool will not
      *  be used. The specified pool must:
@@ -31733,8 +34009,9 @@ namespace VpcV1 {
      *  Specify `null` to remove any existing https redirect.
      */
     httpsRedirect?: LoadBalancerListenerHTTPSRedirectPatch;
-    /** The idle connection timeout of the listener in seconds. Supported for load balancers in the `application`
-     *  family.
+    /** The idle connection timeout of the listener in seconds.
+     *
+     *  Supported for load balancers in the `application` family.
      */
     idleConnectionTimeout?: number;
     /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
@@ -31808,9 +34085,9 @@ namespace VpcV1 {
     listenerId: string;
     /** The policy action:
      *  - `forward`: Requests will be forwarded to the specified `target` pool
-     *  - `https_redirect`: Requests will be redirected to the specified target listener. The
-     *    listener must have a `protocol` of `http`, and the target listener must have a
-     *    `protocol` of `https`
+     *  - `https_redirect`: Requests will be redirected to the specified `target.listener`.
+     *     This listener must have a `protocol` of `http`, and the target listener must
+     *     have a `protocol` of `https`.
      *  - `redirect`: Requests will be redirected to the specified `target.url`
      *  - `reject`: Requests will be rejected with a `403` status code.
      */
@@ -31825,10 +34102,13 @@ namespace VpcV1 {
     name?: string;
     /** The rule prototype objects for this policy. */
     rules?: LoadBalancerListenerPolicyRulePrototype[];
-    /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
-     *  - If `action` is `https_redirect`, specify a
-     *  `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
-     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
+    /** - If `action` is `forward`, use `LoadBalancerPoolIdentity` to specify a pool in this
+     *    load balancer to forward to.
+     *  - If `action` is `https_redirect`, use
+     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
+     *    load balancer to redirect to.
+     *  - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
+     *    specify a URL to redirect to.
      */
     target?: LoadBalancerListenerPolicyTargetPrototype;
     headers?: OutgoingHttpHeaders;
@@ -31836,7 +34116,7 @@ namespace VpcV1 {
 
   /** Constants for the `createLoadBalancerListenerPolicy` operation. */
   export namespace CreateLoadBalancerListenerPolicyConstants {
-    /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code. */
+    /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified `target.listener`. This listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https`. - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code. */
     export enum Action {
       FORWARD = 'forward',
       HTTPS_REDIRECT = 'https_redirect',
@@ -32113,7 +34393,9 @@ namespace VpcV1 {
     loadBalancerId: string;
     /** The pool identifier. */
     id: string;
-    /** The load balancing algorithm. */
+    /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that
+     *  have `availability` with value `subnet` in the profile.
+     */
     algorithm?: UpdateLoadBalancerPoolConstants.Algorithm | string;
     /** The health monitor of this pool. */
     healthMonitor?: LoadBalancerPoolHealthMonitorPatch;
@@ -32144,7 +34426,7 @@ namespace VpcV1 {
 
   /** Constants for the `updateLoadBalancerPool` operation. */
   export namespace UpdateLoadBalancerPoolConstants {
-    /** The load balancing algorithm. */
+    /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that have `availability` with value `subnet` in the profile. */
     export enum Algorithm {
       LEAST_CONNECTIONS = 'least_connections',
       ROUND_ROBIN = 'round_robin',
@@ -32822,11 +35104,15 @@ namespace VpcV1 {
    * model interfaces
    ************************/
 
-  /** Identifies an account by a unique property. */
+  /**
+   * Identifies an account by a unique property.
+   */
   export interface AccountIdentity {
   }
 
-  /** AccountReference. */
+  /**
+   * AccountReference.
+   */
   export interface AccountReference {
     /** The unique identifier for this account. */
     id: string;
@@ -32842,7 +35128,9 @@ namespace VpcV1 {
     }
   }
 
-  /** AddressPrefix. */
+  /**
+   * AddressPrefix.
+   */
   export interface AddressPrefix {
     /** The CIDR block for this prefix. */
     cidr: string;
@@ -32865,33 +35153,25 @@ namespace VpcV1 {
     zone: ZoneReference;
   }
 
-  /** AddressPrefixCollection. */
+  /**
+   * AddressPrefixCollection.
+   */
   export interface AddressPrefixCollection {
     /** A page of address prefixes for the VPC. */
     address_prefixes: AddressPrefix[];
     /** A link to the first page of resources. */
-    first: AddressPrefixCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: AddressPrefixCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface AddressPrefixCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface AddressPrefixCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** BackupPolicy. */
+  /**
+   * BackupPolicy.
+   */
   export interface BackupPolicy {
     /** The date and time that the backup policy was created. */
     created_at: string;
@@ -32972,33 +35252,25 @@ namespace VpcV1 {
     }
   }
 
-  /** BackupPolicyCollection. */
+  /**
+   * BackupPolicyCollection.
+   */
   export interface BackupPolicyCollection {
     /** A page of backup policies. */
     backup_policies: BackupPolicy[];
     /** A link to the first page of resources. */
-    first: BackupPolicyCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: BackupPolicyCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface BackupPolicyCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface BackupPolicyCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** BackupPolicyHealthReason. */
+  /**
+   * BackupPolicyHealthReason.
+   */
   export interface BackupPolicyHealthReason {
     /** A reason code for this health state. */
     code: BackupPolicyHealthReason.Constants.Code | string;
@@ -33016,7 +35288,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BackupPolicyJob. */
+  /**
+   * BackupPolicyJob.
+   */
   export interface BackupPolicyJob {
     /** Indicates whether this backup policy job will be automatically deleted after it completes. At present, this
      *  is always `true`, but may be modifiable in the future.
@@ -33086,37 +35360,32 @@ namespace VpcV1 {
     }
   }
 
-  /** BackupPolicyJobCollection. */
+  /**
+   * BackupPolicyJobCollection.
+   */
   export interface BackupPolicyJobCollection {
     /** A link to the first page of resources. */
-    first: BackupPolicyJobCollectionFirst;
+    first: PageLink;
     /** A page of jobs for the backup policy. */
     jobs: BackupPolicyJob[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: BackupPolicyJobCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface BackupPolicyJobCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface BackupPolicyJobCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** The source this backup was created from (may be [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)). */
+  /**
+   * The source this backup was created from (may be
+   * [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
+   */
   export interface BackupPolicyJobSource {
   }
 
-  /** BackupPolicyJobStatusReason. */
+  /**
+   * BackupPolicyJobStatusReason.
+   */
   export interface BackupPolicyJobStatusReason {
     /** A reason code for the status:
      *  - `internal_error`: Internal error (contact IBM support)
@@ -33152,7 +35421,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BackupPolicyPlan. */
+  /**
+   * BackupPolicyPlan.
+   */
   export interface BackupPolicyPlan {
     /** Indicates whether the plan is active. */
     active: boolean;
@@ -33203,7 +35474,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BackupPolicyPlanClonePolicy. */
+  /**
+   * BackupPolicyPlanClonePolicy.
+   */
   export interface BackupPolicyPlanClonePolicy {
     /** The maximum number of recent snapshots (per source) that will keep clones. */
     max_snapshots: number;
@@ -33211,7 +35484,9 @@ namespace VpcV1 {
     zones: ZoneReference[];
   }
 
-  /** BackupPolicyPlanClonePolicyPatch. */
+  /**
+   * BackupPolicyPlanClonePolicyPatch.
+   */
   export interface BackupPolicyPlanClonePolicyPatch {
     /** The maximum number of recent snapshots (per source) that will keep clones. */
     max_snapshots?: number;
@@ -33221,7 +35496,9 @@ namespace VpcV1 {
     zones?: ZoneIdentity[];
   }
 
-  /** BackupPolicyPlanClonePolicyPrototype. */
+  /**
+   * BackupPolicyPlanClonePolicyPrototype.
+   */
   export interface BackupPolicyPlanClonePolicyPrototype {
     /** The maximum number of recent snapshots (per source) that will keep clones. */
     max_snapshots?: number;
@@ -33229,33 +35506,25 @@ namespace VpcV1 {
     zones: ZoneIdentity[];
   }
 
-  /** BackupPolicyPlanCollection. */
+  /**
+   * BackupPolicyPlanCollection.
+   */
   export interface BackupPolicyPlanCollection {
     /** A link to the first page of resources. */
-    first: BackupPolicyPlanCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: BackupPolicyPlanCollectionNext;
+    next?: PageLink;
     /** A page of plans for the backup policy. */
     plans: BackupPolicyPlan[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface BackupPolicyPlanCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface BackupPolicyPlanCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** BackupPolicyPlanDeletionTrigger. */
+  /**
+   * BackupPolicyPlanDeletionTrigger.
+   */
   export interface BackupPolicyPlanDeletionTrigger {
     /** The maximum number of days to keep each backup after creation. */
     delete_after: number;
@@ -33263,7 +35532,9 @@ namespace VpcV1 {
     delete_over_count?: number;
   }
 
-  /** BackupPolicyPlanDeletionTriggerPatch. */
+  /**
+   * BackupPolicyPlanDeletionTriggerPatch.
+   */
   export interface BackupPolicyPlanDeletionTriggerPatch {
     /** The maximum number of days to keep each backup after creation. */
     delete_after?: number;
@@ -33271,7 +35542,9 @@ namespace VpcV1 {
     delete_over_count?: number;
   }
 
-  /** BackupPolicyPlanDeletionTriggerPrototype. */
+  /**
+   * BackupPolicyPlanDeletionTriggerPrototype.
+   */
   export interface BackupPolicyPlanDeletionTriggerPrototype {
     /** The maximum number of days to keep each backup after creation. */
     delete_after?: number;
@@ -33279,7 +35552,9 @@ namespace VpcV1 {
     delete_over_count?: number;
   }
 
-  /** BackupPolicyPlanPrototype. */
+  /**
+   * BackupPolicyPlanPrototype.
+   */
   export interface BackupPolicyPlanPrototype {
     /** Indicates whether the plan is active. */
     active?: boolean;
@@ -33306,7 +35581,9 @@ namespace VpcV1 {
     remote_region_policies?: BackupPolicyPlanRemoteRegionPolicyPrototype[];
   }
 
-  /** BackupPolicyPlanReference. */
+  /**
+   * BackupPolicyPlanReference.
+   */
   export interface BackupPolicyPlanReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -33334,7 +35611,10 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  /**
+   * If present, this property indicates that the resource associated with this reference is remote and therefore may
+   * not be directly retrievable.
+   */
   export interface BackupPolicyPlanRemote {
     /** If present, this property indicates that the referenced resource is remote to this
      *  region, and identifies the native region.
@@ -33342,7 +35622,9 @@ namespace VpcV1 {
     region?: RegionReference;
   }
 
-  /** BackupPolicyPlanRemoteRegionPolicy. */
+  /**
+   * BackupPolicyPlanRemoteRegionPolicy.
+   */
   export interface BackupPolicyPlanRemoteRegionPolicy {
     /** The region this backup policy plan will create backups in. */
     delete_over_count: number;
@@ -33352,7 +35634,9 @@ namespace VpcV1 {
     region: RegionReference;
   }
 
-  /** BackupPolicyPlanRemoteRegionPolicyPrototype. */
+  /**
+   * BackupPolicyPlanRemoteRegionPolicyPrototype.
+   */
   export interface BackupPolicyPlanRemoteRegionPolicyPrototype {
     /** The region this backup policy plan will create backups in. */
     delete_over_count?: number;
@@ -33366,7 +35650,9 @@ namespace VpcV1 {
     region: RegionIdentity;
   }
 
-  /** BackupPolicyPrototype. */
+  /**
+   * BackupPolicyPrototype.
+   */
   export interface BackupPolicyPrototype {
     /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching
      *  user tag will be subject to the backup policy.
@@ -33402,15 +35688,23 @@ namespace VpcV1 {
     }
   }
 
-  /** The scope for this backup policy. */
+  /**
+   * The scope for this backup policy.
+   */
   export interface BackupPolicyScope {
   }
 
-  /** The scope to use for this backup policy. If unspecified, the policy will be scoped to the account. */
+  /**
+   * The scope to use for this backup policy.
+   *
+   * If unspecified, the policy will be scoped to the account.
+   */
   export interface BackupPolicyScopePrototype {
   }
 
-  /** BareMetalServer. */
+  /**
+   * BareMetalServer.
+   */
   export interface BareMetalServer {
     /** The total bandwidth (in megabits per second) shared across the bare metal server network attachments or bare
      *  metal server network interfaces.
@@ -33529,11 +35823,18 @@ namespace VpcV1 {
     }
   }
 
-  /** The resource from which this bare metal server is booted. The resources supported by this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+  /**
+   * The resource from which this bare metal server is booted.
+   *
+   * The resources supported by this property may
+   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+   */
   export interface BareMetalServerBootTarget {
   }
 
-  /** The bare metal server CPU configuration. */
+  /**
+   * The bare metal server CPU configuration.
+   */
   export interface BareMetalServerCPU {
     /** The CPU architecture. */
     architecture: string;
@@ -33545,33 +35846,25 @@ namespace VpcV1 {
     threads_per_core: number;
   }
 
-  /** BareMetalServerCollection. */
+  /**
+   * BareMetalServerCollection.
+   */
   export interface BareMetalServerCollection {
     /** A page of bare metal servers. */
     bare_metal_servers: BareMetalServer[];
     /** A link to the first page of resources. */
-    first: BareMetalServerCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: BareMetalServerCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface BareMetalServerCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface BareMetalServerCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** The bare metal server console access token information. */
+  /**
+   * The bare metal server console access token information.
+   */
   export interface BareMetalServerConsoleAccessToken {
     /** A URL safe single-use token used to access the console WebSocket. */
     access_token: string;
@@ -33598,7 +35891,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerDisk. */
+  /**
+   * BareMetalServerDisk.
+   */
   export interface BareMetalServerDisk {
     /** The date and time that the disk was created. */
     created_at: string;
@@ -33637,13 +35932,17 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerDiskCollection. */
+  /**
+   * BareMetalServerDiskCollection.
+   */
   export interface BareMetalServerDiskCollection {
     /** The disks for the bare metal server. */
     disks: BareMetalServerDisk[];
   }
 
-  /** Firmware information for the bare metal server. */
+  /**
+   * Firmware information for the bare metal server.
+   */
   export interface BareMetalServerFirmware {
     /** The type of update available.
      *
@@ -33663,7 +35962,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerInitialization. */
+  /**
+   * BareMetalServerInitialization.
+   */
   export interface BareMetalServerInitialization {
     /** The image the bare metal server was provisioned from. */
     image: ImageReference;
@@ -33675,7 +35976,9 @@ namespace VpcV1 {
     user_accounts: BareMetalServerInitializationUserAccount[];
   }
 
-  /** BareMetalServerInitializationPrototype. */
+  /**
+   * BareMetalServerInitializationPrototype.
+   */
   export interface BareMetalServerInitializationPrototype {
     /** The image to be used when provisioning the bare metal server. */
     image: ImageIdentity;
@@ -33695,11 +35998,15 @@ namespace VpcV1 {
     user_data?: string;
   }
 
-  /** BareMetalServerInitializationUserAccount. */
+  /**
+   * BareMetalServerInitializationUserAccount.
+   */
   export interface BareMetalServerInitializationUserAccount {
   }
 
-  /** BareMetalServerLifecycleReason. */
+  /**
+   * BareMetalServerLifecycleReason.
+   */
   export interface BareMetalServerLifecycleReason {
     /** A reason code for this lifecycle state:
      *  - `internal_error`: internal error (contact IBM support)
@@ -33725,7 +36032,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkAttachment. */
+  /**
+   * BareMetalServerNetworkAttachment.
+   */
   export interface BareMetalServerNetworkAttachment {
     /** The date and time that the bare metal server network attachment was created. */
     created_at: string;
@@ -33799,33 +36108,25 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkAttachmentCollection. */
+  /**
+   * BareMetalServerNetworkAttachmentCollection.
+   */
   export interface BareMetalServerNetworkAttachmentCollection {
     /** A link to the first page of resources. */
-    first: BareMetalServerNetworkAttachmentCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** The network attachments for the bare metal server. */
     network_attachments: BareMetalServerNetworkAttachment[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: BareMetalServerNetworkAttachmentCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface BareMetalServerNetworkAttachmentCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface BareMetalServerNetworkAttachmentCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** BareMetalServerNetworkAttachmentPrototype. */
+  /**
+   * BareMetalServerNetworkAttachmentPrototype.
+   */
   export interface BareMetalServerNetworkAttachmentPrototype {
     /** The network attachment's interface type:
      *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
@@ -33864,11 +36165,18 @@ namespace VpcV1 {
     }
   }
 
-  /** A virtual network interface for the bare metal server network attachment. This can be specified using an existing virtual network interface, or a prototype object for a new virtual network interface. If an existing virtual network interface is specified, it must not be the target of a flow log collector. */
+  /**
+   * A virtual network interface for the bare metal server network attachment. This can be specified using an existing
+   * virtual network interface, or a prototype object for a new virtual network interface.
+   *
+   * If an existing virtual network interface is specified, it must not be the target of a flow log collector.
+   */
   export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterface {
   }
 
-  /** BareMetalServerNetworkAttachmentReference. */
+  /**
+   * BareMetalServerNetworkAttachmentReference.
+   */
   export interface BareMetalServerNetworkAttachmentReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -33900,7 +36208,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkInterface. */
+  /**
+   * BareMetalServerNetworkInterface.
+   */
   export interface BareMetalServerNetworkInterface {
     /** Indicates whether source IP spoofing is allowed on this bare metal server network interface.
      *
@@ -34060,33 +36370,25 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkInterfaceCollection. */
+  /**
+   * BareMetalServerNetworkInterfaceCollection.
+   */
   export interface BareMetalServerNetworkInterfaceCollection {
     /** A link to the first page of resources. */
-    first: BareMetalServerNetworkInterfaceCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** The network interfaces for the bare metal server. */
     network_interfaces: BareMetalServerNetworkInterface[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: BareMetalServerNetworkInterfaceCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface BareMetalServerNetworkInterfaceCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface BareMetalServerNetworkInterfaceCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** BareMetalServerNetworkInterfacePrototype. */
+  /**
+   * BareMetalServerNetworkInterfacePrototype.
+   */
   export interface BareMetalServerNetworkInterfacePrototype {
     /** Indicates whether source IP spoofing is allowed on this bare metal server network interface.
      *
@@ -34161,7 +36463,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerPrimaryNetworkAttachmentPrototype. */
+  /**
+   * BareMetalServerPrimaryNetworkAttachmentPrototype.
+   */
   export interface BareMetalServerPrimaryNetworkAttachmentPrototype {
     /** The network attachment's interface type:
      *  - `pci`: a physical PCI device which can only be created or deleted when the bare metal
@@ -34195,7 +36499,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerPrimaryNetworkInterfacePrototype. */
+  /**
+   * BareMetalServerPrimaryNetworkInterfacePrototype.
+   */
   export interface BareMetalServerPrimaryNetworkInterfacePrototype {
     /** Indicates whether source IP spoofing is allowed on this bare metal server network interface.
      *
@@ -34271,7 +36577,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerProfile. */
+  /**
+   * BareMetalServerProfile.
+   */
   export interface BareMetalServerProfile {
     bandwidth: BareMetalServerProfileBandwidth;
     /** The console type configuration for a bare metal server with this profile. */
@@ -34307,11 +36615,15 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerProfileBandwidth. */
+  /**
+   * BareMetalServerProfileBandwidth.
+   */
   export interface BareMetalServerProfileBandwidth {
   }
 
-  /** BareMetalServerProfileCPUArchitecture. */
+  /**
+   * BareMetalServerProfileCPUArchitecture.
+   */
   export interface BareMetalServerProfileCPUArchitecture {
     /** The default CPU architecture for a bare metal server with this profile. */
     default?: string;
@@ -34329,41 +36641,37 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerProfileCPUCoreCount. */
+  /**
+   * BareMetalServerProfileCPUCoreCount.
+   */
   export interface BareMetalServerProfileCPUCoreCount {
   }
 
-  /** BareMetalServerProfileCPUSocketCount. */
+  /**
+   * BareMetalServerProfileCPUSocketCount.
+   */
   export interface BareMetalServerProfileCPUSocketCount {
   }
 
-  /** BareMetalServerProfileCollection. */
+  /**
+   * BareMetalServerProfileCollection.
+   */
   export interface BareMetalServerProfileCollection {
     /** A link to the first page of resources. */
-    first: BareMetalServerProfileCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: BareMetalServerProfileCollectionNext;
+    next?: PageLink;
     /** A page of bare metal server profiles. */
     profiles: BareMetalServerProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface BareMetalServerProfileCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface BareMetalServerProfileCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** The console type configuration for a bare metal server with this profile. */
+  /**
+   * The console type configuration for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileConsoleTypes {
     /** The type for this profile field. */
     type: BareMetalServerProfileConsoleTypes.Constants.Type | string;
@@ -34384,22 +36692,30 @@ namespace VpcV1 {
     }
   }
 
-  /** Disks provided by this profile. */
+  /**
+   * Disks provided by this profile.
+   */
   export interface BareMetalServerProfileDisk {
     quantity: BareMetalServerProfileDiskQuantity;
     size: BareMetalServerProfileDiskSize;
     supported_interface_types: BareMetalServerProfileDiskSupportedInterfaces;
   }
 
-  /** BareMetalServerProfileDiskQuantity. */
+  /**
+   * BareMetalServerProfileDiskQuantity.
+   */
   export interface BareMetalServerProfileDiskQuantity {
   }
 
-  /** BareMetalServerProfileDiskSize. */
+  /**
+   * BareMetalServerProfileDiskSize.
+   */
   export interface BareMetalServerProfileDiskSize {
   }
 
-  /** BareMetalServerProfileDiskSupportedInterfaces. */
+  /**
+   * BareMetalServerProfileDiskSupportedInterfaces.
+   */
   export interface BareMetalServerProfileDiskSupportedInterfaces {
     /** The default value for this profile field. */
     default: BareMetalServerProfileDiskSupportedInterfaces.Constants.Default | string;
@@ -34429,23 +36745,33 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a bare metal server profile by a unique property. */
+  /**
+   * Identifies a bare metal server profile by a unique property.
+   */
   export interface BareMetalServerProfileIdentity {
   }
 
-  /** BareMetalServerProfileMemory. */
+  /**
+   * BareMetalServerProfileMemory.
+   */
   export interface BareMetalServerProfileMemory {
   }
 
-  /** BareMetalServerProfileNetworkAttachmentCount. */
+  /**
+   * BareMetalServerProfileNetworkAttachmentCount.
+   */
   export interface BareMetalServerProfileNetworkAttachmentCount {
   }
 
-  /** BareMetalServerProfileNetworkInterfaceCount. */
+  /**
+   * BareMetalServerProfileNetworkInterfaceCount.
+   */
   export interface BareMetalServerProfileNetworkInterfaceCount {
   }
 
-  /** BareMetalServerProfileOSArchitecture. */
+  /**
+   * BareMetalServerProfileOSArchitecture.
+   */
   export interface BareMetalServerProfileOSArchitecture {
     /** The default OS architecture for a bare metal server with this profile. */
     default: string;
@@ -34463,7 +36789,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerProfileReference. */
+  /**
+   * BareMetalServerProfileReference.
+   */
   export interface BareMetalServerProfileReference {
     /** The URL for this bare metal server profile. */
     href: string;
@@ -34481,7 +36809,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The supported trusted platform module modes for this bare metal server profile. */
+  /**
+   * The supported trusted platform module modes for this bare metal server profile.
+   */
   export interface BareMetalServerProfileSupportedTrustedPlatformModuleModes {
     /** The default trusted platform module for a bare metal server with this profile. */
     default?: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Default | string;
@@ -34509,7 +36839,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Indicates whether this profile supports virtual network interfaces. */
+  /**
+   * Indicates whether this profile supports virtual network interfaces.
+   */
   export interface BareMetalServerProfileVirtualNetworkInterfacesSupported {
     /** The type for this profile field. */
     type: BareMetalServerProfileVirtualNetworkInterfacesSupported.Constants.Type | string;
@@ -34525,7 +36857,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerPrototype. */
+  /**
+   * BareMetalServerPrototype.
+   */
   export interface BareMetalServerPrototype {
     /** The total bandwidth (in megabits per second) shared across the bare metal server's network interfaces. The
      *  specified value must match one of the bandwidth values in the bare metal server's profile. If unspecified, the
@@ -34562,7 +36896,9 @@ namespace VpcV1 {
     zone: ZoneIdentity;
   }
 
-  /** BareMetalServerStatusReason. */
+  /**
+   * BareMetalServerStatusReason.
+   */
   export interface BareMetalServerStatusReason {
     /** The status reason code:
      *  - `cannot_start`: Failed to start due to an internal error
@@ -34596,7 +36932,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerTrustedPlatformModule. */
+  /**
+   * BareMetalServerTrustedPlatformModule.
+   */
   export interface BareMetalServerTrustedPlatformModule {
     /** Indicates whether the trusted platform module is enabled. */
     enabled: boolean;
@@ -34626,7 +36964,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerTrustedPlatformModulePatch. */
+  /**
+   * BareMetalServerTrustedPlatformModulePatch.
+   */
   export interface BareMetalServerTrustedPlatformModulePatch {
     /** The trusted platform module mode to use. The specified value must be listed in the bare metal server's
      *  `supported_modes`.
@@ -34645,7 +36985,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerTrustedPlatformModulePrototype. */
+  /**
+   * BareMetalServerTrustedPlatformModulePrototype.
+   */
   export interface BareMetalServerTrustedPlatformModulePrototype {
     /** The trusted platform module mode to use. The specified value must be listed in the bare metal server
      *  profile's `supported_trusted_platform_module_modes`.
@@ -34664,19 +37006,29 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering by a unique property. */
+  /**
+   * Identifies a [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering by a unique
+   * property.
+   */
   export interface CatalogOfferingIdentity {
   }
 
-  /** Identifies a version of a [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering by a unique property. */
+  /**
+   * Identifies a version of a
+   * [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering by a unique property.
+   */
   export interface CatalogOfferingVersionIdentity {
   }
 
-  /** Identifies a catalog offering version's billing plan by a unique property. */
+  /**
+   * Identifies a catalog offering version's billing plan by a unique property.
+   */
   export interface CatalogOfferingVersionPlanIdentity {
   }
 
-  /** CatalogOfferingVersionPlanReference. */
+  /**
+   * CatalogOfferingVersionPlanReference.
+   */
   export interface CatalogOfferingVersionPlanReference {
     /** The CRN for this
      *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering version's billing plan.
@@ -34688,7 +37040,9 @@ namespace VpcV1 {
     deleted?: Deleted;
   }
 
-  /** CatalogOfferingVersionReference. */
+  /**
+   * CatalogOfferingVersionReference.
+   */
   export interface CatalogOfferingVersionReference {
     /** The CRN for this version of a
      *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering.
@@ -34696,21 +37050,29 @@ namespace VpcV1 {
     crn: string;
   }
 
-  /** Identifies a certificate instance by a unique property. */
+  /**
+   * Identifies a certificate instance by a unique property.
+   */
   export interface CertificateInstanceIdentity {
   }
 
-  /** CertificateInstanceReference. */
+  /**
+   * CertificateInstanceReference.
+   */
   export interface CertificateInstanceReference {
     /** The CRN for this certificate instance. */
     crn: string;
   }
 
-  /** Identifies a Cloud Object Storage bucket by a unique property. */
+  /**
+   * Identifies a Cloud Object Storage bucket by a unique property.
+   */
   export interface CloudObjectStorageBucketIdentity {
   }
 
-  /** CloudObjectStorageBucketReference. */
+  /**
+   * CloudObjectStorageBucketReference.
+   */
   export interface CloudObjectStorageBucketReference {
     /** The CRN of this Cloud Object Storage bucket. */
     crn: string;
@@ -34718,23 +37080,746 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** CloudObjectStorageObjectReference. */
+  /**
+   * CloudObjectStorageObjectReference.
+   */
   export interface CloudObjectStorageObjectReference {
     /** The name of this Cloud Object Storage object. Names are unique within a Cloud Object Storage bucket. */
     name: string;
   }
 
-  /** Identifies a DNS instance by a unique property. */
+  /**
+   * ClusterNetwork.
+   */
+  export interface ClusterNetwork {
+    /** The date and time that the cluster network was created. */
+    created_at: string;
+    /** The CRN for this cluster network. */
+    crn: string;
+    /** The URL for this cluster network. */
+    href: string;
+    /** The unique identifier for this cluster network. */
+    id: string;
+    /** The reasons for the current `lifecycle_state` (if any). */
+    lifecycle_reasons: ClusterNetworkLifecycleReason[];
+    /** The lifecycle state of the cluster network. */
+    lifecycle_state: ClusterNetwork.Constants.LifecycleState | string;
+    /** The name for this cluster network. The name must not be used by another cluster network in the region. */
+    name: string;
+    /** The profile for this cluster network. */
+    profile: ClusterNetworkProfileReference;
+    /** The resource group for this cluster network. */
+    resource_group: ResourceGroupReference;
+    /** The resource type. */
+    resource_type: ClusterNetwork.Constants.ResourceType | string;
+    /** The IP address ranges available for subnets for this cluster network. */
+    subnet_prefixes: ClusterNetworkSubnetPrefix[];
+    /** The VPC this cluster network resides in. */
+    vpc: VPCReference;
+    /** The zone this cluster network resides in. */
+    zone: ZoneReference;
+  }
+  export namespace ClusterNetwork {
+    export namespace Constants {
+      /** The lifecycle state of the cluster network. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK = 'cluster_network',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkCollection.
+   */
+  export interface ClusterNetworkCollection {
+    /** A page of cluster networks. */
+    cluster_networks: ClusterNetwork[];
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
+   * The associated cluster network subnet.
+   */
+  export interface ClusterNetworkInterface {
+    /** Indicates whether source IP spoofing is allowed on this cluster network interface. If `false`, source IP
+     *  spoofing is prevented on this cluster network interface. If `true`, source IP spoofing is allowed on this
+     *  cluster network interface.
+     */
+    allow_ip_spoofing: boolean;
+    /** Indicates whether this cluster network interface will be automatically deleted when `target` is deleted. */
+    auto_delete: boolean;
+    /** The date and time that the cluster network interface was created. */
+    created_at: string;
+    /** If `true`:
+     *  - The VPC infrastructure performs any needed NAT operations.
+     *  - `floating_ips` must not have more than one floating IP.
+     *
+     *  If `false`:
+     *  - Packets are passed unchanged to/from the virtual network interface,
+     *    allowing the workload to perform any needed NAT operations.
+     */
+    enable_infrastructure_nat: boolean;
+    /** The URL for this cluster network interface. */
+    href: string;
+    /** The unique identifier for this cluster network interface. */
+    id: string;
+    /** The reasons for the current `lifecycle_state` (if any). */
+    lifecycle_reasons: ClusterNetworkInterfaceLifecycleReason[];
+    /** The lifecycle state of the cluster network interface. */
+    lifecycle_state: ClusterNetworkInterface.Constants.LifecycleState | string;
+    /** The MAC address of the cluster network interface. May be absent if `lifecycle_state` is `pending`. */
+    mac_address?: string;
+    /** The name for this cluster network interface. The name is unique across all interfaces in the cluster
+     *  network.
+     */
+    name: string;
+    /** The cluster network subnet reserved IP for this cluster network interface. */
+    primary_ip: ClusterNetworkSubnetReservedIPReference;
+    /** The resource type. */
+    resource_type: ClusterNetworkInterface.Constants.ResourceType | string;
+    subnet?: ClusterNetworkSubnetReference;
+    /** The target of this cluster network interface.
+     *
+     *  If absent, this cluster network interface is not attached to a target.
+     *
+     *  The resources supported by this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    target?: ClusterNetworkInterfaceTarget;
+    /** The VPC this cluster network interface resides in. */
+    vpc: VPCReference;
+    /** The zone this cluster network interface resides in. */
+    zone: ZoneReference;
+  }
+  export namespace ClusterNetworkInterface {
+    export namespace Constants {
+      /** The lifecycle state of the cluster network interface. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK_INTERFACE = 'cluster_network_interface',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkInterfaceCollection.
+   */
+  export interface ClusterNetworkInterfaceCollection {
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** A page of cluster network interfaces. */
+    interfaces: ClusterNetworkInterface[];
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
+   * ClusterNetworkInterfaceLifecycleReason.
+   */
+  export interface ClusterNetworkInterfaceLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: ClusterNetworkInterfaceLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace ClusterNetworkInterfaceLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkInterfacePrimaryIPPrototype.
+   */
+  export interface ClusterNetworkInterfacePrimaryIPPrototype {
+  }
+
+  /**
+   * The associated cluster network subnet.
+   */
+  export interface ClusterNetworkInterfaceReference {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this cluster network interface. */
+    href: string;
+    /** The unique identifier for this cluster network interface. */
+    id: string;
+    /** The name for this cluster network interface. The name is unique across all interfaces in the cluster
+     *  network.
+     */
+    name: string;
+    /** The primary IP for this cluster network interface. */
+    primary_ip: ClusterNetworkSubnetReservedIPReference;
+    /** The resource type. */
+    resource_type: ClusterNetworkInterfaceReference.Constants.ResourceType | string;
+    subnet: ClusterNetworkSubnetReference;
+  }
+  export namespace ClusterNetworkInterfaceReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK_INTERFACE = 'cluster_network_interface',
+      }
+    }
+  }
+
+  /**
+   * The target of this cluster network interface.
+   *
+   * If absent, this cluster network interface is not attached to a target.
+   *
+   * The resources supported by this property may
+   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+   */
+  export interface ClusterNetworkInterfaceTarget {
+  }
+
+  /**
+   * ClusterNetworkLifecycleReason.
+   */
+  export interface ClusterNetworkLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: ClusterNetworkLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace ClusterNetworkLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkProfile.
+   */
+  export interface ClusterNetworkProfile {
+    /** The product family this cluster network profile belongs to.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    family: ClusterNetworkProfile.Constants.Family | string;
+    /** The URL for this cluster network profile. */
+    href: string;
+    /** The globally unique name for this cluster network profile. */
+    name: string;
+    /** The resource type. */
+    resource_type: ClusterNetworkProfile.Constants.ResourceType | string;
+    /** The instance profiles that support this cluster network profile. */
+    supported_instance_profiles: InstanceProfileReference[];
+    /** Zones in this region that support this cluster network profile. */
+    zones: ZoneReference[];
+  }
+  export namespace ClusterNetworkProfile {
+    export namespace Constants {
+      /** The product family this cluster network profile belongs to. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Family {
+        VELA = 'vela',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK_PROFILE = 'cluster_network_profile',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkProfileCollection.
+   */
+  export interface ClusterNetworkProfileCollection {
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** A page of cluster network profiles. */
+    profiles: ClusterNetworkProfile[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
+   * Identifies an cluster network profile by a unique property.
+   */
+  export interface ClusterNetworkProfileIdentity {
+  }
+
+  /**
+   * ClusterNetworkProfileReference.
+   */
+  export interface ClusterNetworkProfileReference {
+    /** The URL for this cluster network profile. */
+    href: string;
+    /** The globally unique name for this cluster network profile. */
+    name: string;
+    /** The resource type. */
+    resource_type: ClusterNetworkProfileReference.Constants.ResourceType | string;
+  }
+  export namespace ClusterNetworkProfileReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK_PROFILE = 'cluster_network_profile',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkReference.
+   */
+  export interface ClusterNetworkReference {
+    /** The CRN for this cluster network. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this cluster network. */
+    href: string;
+    /** The unique identifier for this cluster network. */
+    id: string;
+    /** The name for this cluster network. The name must not be used by another cluster network in the region. */
+    name: string;
+    /** The resource type. */
+    resource_type: ClusterNetworkReference.Constants.ResourceType | string;
+  }
+  export namespace ClusterNetworkReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK = 'cluster_network',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnet.
+   */
+  export interface ClusterNetworkSubnet {
+    /** The number of IPv4 addresses in this cluster network subnet that are not in use, and have not been reserved
+     *  by the user or the provider.
+     */
+    available_ipv4_address_count: number;
+    /** The date and time that the cluster network subnet was created. */
+    created_at: string;
+    /** The URL for this cluster network subnet. */
+    href: string;
+    /** The unique identifier for this cluster network subnet. */
+    id: string;
+    /** The IP version for this cluster network subnet.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    ip_version: ClusterNetworkSubnet.Constants.IpVersion | string;
+    /** The IPv4 range of this cluster network subnet, expressed in CIDR format. */
+    ipv4_cidr_block: string;
+    /** The reasons for the current `lifecycle_state` (if any). */
+    lifecycle_reasons: ClusterNetworkSubnetLifecycleReason[];
+    /** The lifecycle state of the cluster network subnet. */
+    lifecycle_state: ClusterNetworkSubnet.Constants.LifecycleState | string;
+    /** The name for this cluster network subnet. The name is unique across all cluster network subnets in the
+     *  cluster network.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: ClusterNetworkSubnet.Constants.ResourceType | string;
+    /** The total number of IPv4 addresses in this cluster network subnet.
+     *
+     *  Note: This is calculated as 2<sup>(32 - prefix length)</sup>. For example, the prefix length `/24` gives:<br>
+     *  2<sup>(32 - 24)</sup> = 2<sup>8</sup> = 256 addresses.
+     */
+    total_ipv4_address_count: number;
+  }
+  export namespace ClusterNetworkSubnet {
+    export namespace Constants {
+      /** The IP version for this cluster network subnet. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The lifecycle state of the cluster network subnet. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK_SUBNET = 'cluster_network_subnet',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnetCollection.
+   */
+  export interface ClusterNetworkSubnetCollection {
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** A page of subnets for the cluster network. */
+    subnets: ClusterNetworkSubnet[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
+   * Identifies a cluster network subnet by a unique property.
+   */
+  export interface ClusterNetworkSubnetIdentity {
+  }
+
+  /**
+   * ClusterNetworkSubnetLifecycleReason.
+   */
+  export interface ClusterNetworkSubnetLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: ClusterNetworkSubnetLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace ClusterNetworkSubnetLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
+  }
+
+  /**
+   * A range of addresses available for subnets for this cluster network.
+   */
+  export interface ClusterNetworkSubnetPrefix {
+    /** The allocation policy for this subnet prefix:
+     *  - `auto`: Subnets created by total count in this cluster network can use this prefix.
+     */
+    allocation_policy: ClusterNetworkSubnetPrefix.Constants.AllocationPolicy | string;
+    /** The CIDR block for this prefix. */
+    cidr: string;
+  }
+  export namespace ClusterNetworkSubnetPrefix {
+    export namespace Constants {
+      /** The allocation policy for this subnet prefix: - `auto`: Subnets created by total count in this cluster network can use this prefix. */
+      export enum AllocationPolicy {
+        AUTO = 'auto',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnetPrefixPrototype.
+   */
+  export interface ClusterNetworkSubnetPrefixPrototype {
+    /** The IPv4 range of the cluster network's subnet prefix, expressed in CIDR format.
+     *
+     *  The CIDR prefix length must be less than `/29` (at least 8 addresses).
+     *
+     *  If a range is specified that overlaps with address prefixes in the cluster network's VPC, the operating systems
+     *  of any virtual server instances attaching to this cluster network must be [configured to avoid
+     *  conflicts](https://cloud.ibm.com/docs/vpc?topic=vpc-planning-cluster-network#advanced-consideration).
+     */
+    cidr?: string;
+  }
+
+  /**
+   * ClusterNetworkSubnetPrototype.
+   */
+  export interface ClusterNetworkSubnetPrototype {
+    /** The IP version(s) to support for this cluster network subnet. */
+    ip_version?: ClusterNetworkSubnetPrototype.Constants.IpVersion | string;
+    /** The name for this cluster network subnet. The name must not be used by another cluster network subnet in the
+     *  cluster network. Names starting with `ibm-` are reserved for provider-owned resources, and are not allowed. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+  }
+  export namespace ClusterNetworkSubnetPrototype {
+    export namespace Constants {
+      /** The IP version(s) to support for this cluster network subnet. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnetReference.
+   */
+  export interface ClusterNetworkSubnetReference {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this cluster network subnet. */
+    href: string;
+    /** The unique identifier for this cluster network subnet. */
+    id: string;
+    /** The name for this cluster network subnet. The name is unique across all cluster network subnets in the
+     *  cluster network.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: ClusterNetworkSubnetReference.Constants.ResourceType | string;
+  }
+  export namespace ClusterNetworkSubnetReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK_SUBNET = 'cluster_network_subnet',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnetReservedIP.
+   */
+  export interface ClusterNetworkSubnetReservedIP {
+    /** The IP address.
+     *
+     *  If the address is pending allocation, the value will be `0.0.0.0`.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
+     */
+    address: string;
+    /** Indicates whether this cluster network subnet reserved IP member will be automatically deleted when either
+     *  `target` is deleted, or the cluster network subnet reserved IP is unbound.
+     */
+    auto_delete: boolean;
+    /** The date and time that the cluster network subnet reserved IP was created. */
+    created_at: string;
+    /** The URL for this cluster network subnet reserved IP. */
+    href: string;
+    /** The unique identifier for this cluster network subnet reserved IP. */
+    id: string;
+    /** The reasons for the current `lifecycle_state` (if any). */
+    lifecycle_reasons: ClusterNetworkSubnetReservedIPLifecycleReason[];
+    /** The lifecycle state of the cluster network subnet reserved IP. */
+    lifecycle_state: ClusterNetworkSubnetReservedIP.Constants.LifecycleState | string;
+    /** The name for this cluster network subnet reserved IP. The name is unique across all reserved IPs in a
+     *  cluster network subnet.
+     */
+    name: string;
+    /** The owner of the cluster network subnet reserved IP
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    owner: ClusterNetworkSubnetReservedIP.Constants.Owner | string;
+    /** The resource type. */
+    resource_type: ClusterNetworkSubnetReservedIP.Constants.ResourceType | string;
+    /** The target this cluster network subnet reserved IP is bound to.
+     *
+     *  If absent, this cluster network subnet reserved IP is provider-owned or unbound.
+     */
+    target?: ClusterNetworkSubnetReservedIPTarget;
+  }
+  export namespace ClusterNetworkSubnetReservedIP {
+    export namespace Constants {
+      /** The lifecycle state of the cluster network subnet reserved IP. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The owner of the cluster network subnet reserved IP The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Owner {
+        PROVIDER = 'provider',
+        USER = 'user',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK_SUBNET_RESERVED_IP = 'cluster_network_subnet_reserved_ip',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnetReservedIPCollection.
+   */
+  export interface ClusterNetworkSubnetReservedIPCollection {
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** A page of reserved IPs for the cluster network subnet. */
+    reserved_ips: ClusterNetworkSubnetReservedIP[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
+   * ClusterNetworkSubnetReservedIPLifecycleReason.
+   */
+  export interface ClusterNetworkSubnetReservedIPLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: ClusterNetworkSubnetReservedIPLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace ClusterNetworkSubnetReservedIPLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnetReservedIPReference.
+   */
+  export interface ClusterNetworkSubnetReservedIPReference {
+    /** The IP address.
+     *
+     *  If the address is pending allocation, the value will be `0.0.0.0`.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
+     */
+    address: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this cluster network subnet reserved IP. */
+    href: string;
+    /** The unique identifier for this cluster network subnet reserved IP. */
+    id: string;
+    /** The name for this cluster network subnet reserved IP. The name is unique across all reserved IPs in a
+     *  cluster network subnet.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: ClusterNetworkSubnetReservedIPReference.Constants.ResourceType | string;
+  }
+  export namespace ClusterNetworkSubnetReservedIPReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK_SUBNET_RESERVED_IP = 'cluster_network_subnet_reserved_ip',
+      }
+    }
+  }
+
+  /**
+   * The target this cluster network subnet reserved IP is bound to.
+   *
+   * If absent, this cluster network subnet reserved IP is provider-owned or unbound.
+   */
+  export interface ClusterNetworkSubnetReservedIPTarget {
+  }
+
+  /**
+   * Identifies a DNS instance by a unique property.
+   */
   export interface DNSInstanceIdentity {
   }
 
-  /** DNSInstanceReferenceLoadBalancerDNSContext. */
+  /**
+   * DNSInstanceReferenceLoadBalancerDNSContext.
+   */
   export interface DNSInstanceReferenceLoadBalancerDNSContext {
     /** The CRN for this DNS instance. */
     crn: string;
   }
 
-  /** A DNS server. */
+  /**
+   * A DNS server.
+   */
   export interface DNSServer {
     /** The IP address.
      *
@@ -34746,7 +37831,9 @@ namespace VpcV1 {
     zone_affinity?: ZoneReference;
   }
 
-  /** DNSServerPrototype. */
+  /**
+   * DNSServerPrototype.
+   */
   export interface DNSServerPrototype {
     /** The DNS server IPv4 address. */
     address?: string;
@@ -34754,16 +37841,22 @@ namespace VpcV1 {
     zone_affinity?: ZoneIdentity;
   }
 
-  /** Identifies a DNS zone by a unique property. */
+  /**
+   * Identifies a DNS zone by a unique property.
+   */
   export interface DNSZoneIdentity {
   }
 
-  /** DNSZoneReference. */
+  /**
+   * DNSZoneReference.
+   */
   export interface DNSZoneReference {
     id: string;
   }
 
-  /** DedicatedHost. */
+  /**
+   * DedicatedHost.
+   */
   export interface DedicatedHost {
     /** The amount of memory in gibibytes that is currently available for instances. */
     available_memory: number;
@@ -34842,33 +37935,25 @@ namespace VpcV1 {
     }
   }
 
-  /** DedicatedHostCollection. */
+  /**
+   * DedicatedHostCollection.
+   */
   export interface DedicatedHostCollection {
     /** A page of dedicated hosts. */
     dedicated_hosts: DedicatedHost[];
     /** A link to the first page of resources. */
-    first: DedicatedHostCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: DedicatedHostCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface DedicatedHostCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface DedicatedHostCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** DedicatedHostDisk. */
+  /**
+   * DedicatedHostDisk.
+   */
   export interface DedicatedHostDisk {
     /** The remaining space left for instance placement in GB (gigabytes). */
     available: number;
@@ -34927,13 +38012,17 @@ namespace VpcV1 {
     }
   }
 
-  /** DedicatedHostDiskCollection. */
+  /**
+   * DedicatedHostDiskCollection.
+   */
   export interface DedicatedHostDiskCollection {
     /** The disks for the dedicated host. */
     disks: DedicatedHostDisk[];
   }
 
-  /** DedicatedHostGroup. */
+  /**
+   * DedicatedHostGroup.
+   */
   export interface DedicatedHostGroup {
     /** The dedicated host profile class for hosts in this group. */
     class: string;
@@ -34975,37 +38064,31 @@ namespace VpcV1 {
     }
   }
 
-  /** DedicatedHostGroupCollection. */
+  /**
+   * DedicatedHostGroupCollection.
+   */
   export interface DedicatedHostGroupCollection {
     /** A link to the first page of resources. */
-    first: DedicatedHostGroupCollectionFirst;
+    first: PageLink;
     /** A page of dedicated host groups. */
     groups: DedicatedHostGroup[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: DedicatedHostGroupCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface DedicatedHostGroupCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface DedicatedHostGroupCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Identifies a dedicated host group by a unique property. */
+  /**
+   * Identifies a dedicated host group by a unique property.
+   */
   export interface DedicatedHostGroupIdentity {
   }
 
-  /** DedicatedHostGroupPrototypeDedicatedHostByZoneContext. */
+  /**
+   * DedicatedHostGroupPrototypeDedicatedHostByZoneContext.
+   */
   export interface DedicatedHostGroupPrototypeDedicatedHostByZoneContext {
     /** The name for this dedicated host group. The name must not be used by another dedicated host group in the
      *  region. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -35015,7 +38098,9 @@ namespace VpcV1 {
     resource_group?: ResourceGroupIdentity;
   }
 
-  /** DedicatedHostGroupReference. */
+  /**
+   * DedicatedHostGroupReference.
+   */
   export interface DedicatedHostGroupReference {
     /** The CRN for this dedicated host group. */
     crn: string;
@@ -35041,7 +38126,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The dedicated host NUMA configuration. */
+  /**
+   * The dedicated host NUMA configuration.
+   */
   export interface DedicatedHostNUMA {
     /** The total number of NUMA nodes for this dedicated host. */
     count: number;
@@ -35049,7 +38136,9 @@ namespace VpcV1 {
     nodes: DedicatedHostNUMANode[];
   }
 
-  /** The dedicated host NUMA node configuration. */
+  /**
+   * The dedicated host NUMA node configuration.
+   */
   export interface DedicatedHostNUMANode {
     /** The available VCPU for this NUMA node. */
     available_vcpu: number;
@@ -35057,7 +38146,9 @@ namespace VpcV1 {
     vcpu: number;
   }
 
-  /** DedicatedHostProfile. */
+  /**
+   * DedicatedHostProfile.
+   */
   export interface DedicatedHostProfile {
     /** The product class this dedicated host profile belongs to. */
     class: string;
@@ -35110,33 +38201,25 @@ namespace VpcV1 {
     }
   }
 
-  /** DedicatedHostProfileCollection. */
+  /**
+   * DedicatedHostProfileCollection.
+   */
   export interface DedicatedHostProfileCollection {
     /** A link to the first page of resources. */
-    first: DedicatedHostProfileCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: DedicatedHostProfileCollectionNext;
+    next?: PageLink;
     /** A page of dedicated host profiles. */
     profiles: DedicatedHostProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface DedicatedHostProfileCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface DedicatedHostProfileCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Disks provided by this profile. */
+  /**
+   * Disks provided by this profile.
+   */
   export interface DedicatedHostProfileDisk {
     interface_type: DedicatedHostProfileDiskInterface;
     /** The number of disks of this type for a dedicated host with this profile. */
@@ -35146,7 +38229,9 @@ namespace VpcV1 {
     supported_instance_interface_types: DedicatedHostProfileDiskSupportedInterfaces;
   }
 
-  /** DedicatedHostProfileDiskInterface. */
+  /**
+   * DedicatedHostProfileDiskInterface.
+   */
   export interface DedicatedHostProfileDiskInterface {
     /** The type for this profile field. */
     type: DedicatedHostProfileDiskInterface.Constants.Type | string;
@@ -35170,7 +38255,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of disks of this type for a dedicated host with this profile. */
+  /**
+   * The number of disks of this type for a dedicated host with this profile.
+   */
   export interface DedicatedHostProfileDiskQuantity {
     /** The type for this profile field. */
     type: DedicatedHostProfileDiskQuantity.Constants.Type | string;
@@ -35186,7 +38273,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The size of the disk in GB (gigabytes). */
+  /**
+   * The size of the disk in GB (gigabytes).
+   */
   export interface DedicatedHostProfileDiskSize {
     /** The type for this profile field. */
     type: DedicatedHostProfileDiskSize.Constants.Type | string;
@@ -35202,7 +38291,9 @@ namespace VpcV1 {
     }
   }
 
-  /** DedicatedHostProfileDiskSupportedInterfaces. */
+  /**
+   * DedicatedHostProfileDiskSupportedInterfaces.
+   */
   export interface DedicatedHostProfileDiskSupportedInterfaces {
     /** The type for this profile field. */
     type: DedicatedHostProfileDiskSupportedInterfaces.Constants.Type | string;
@@ -35223,15 +38314,21 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a dedicated host profile by a unique property. */
+  /**
+   * Identifies a dedicated host profile by a unique property.
+   */
   export interface DedicatedHostProfileIdentity {
   }
 
-  /** DedicatedHostProfileMemory. */
+  /**
+   * DedicatedHostProfileMemory.
+   */
   export interface DedicatedHostProfileMemory {
   }
 
-  /** DedicatedHostProfileReference. */
+  /**
+   * DedicatedHostProfileReference.
+   */
   export interface DedicatedHostProfileReference {
     /** The URL for this dedicated host. */
     href: string;
@@ -35239,15 +38336,21 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** DedicatedHostProfileSocket. */
+  /**
+   * DedicatedHostProfileSocket.
+   */
   export interface DedicatedHostProfileSocket {
   }
 
-  /** DedicatedHostProfileVCPU. */
+  /**
+   * DedicatedHostProfileVCPU.
+   */
   export interface DedicatedHostProfileVCPU {
   }
 
-  /** DedicatedHostProfileVCPUArchitecture. */
+  /**
+   * DedicatedHostProfileVCPUArchitecture.
+   */
   export interface DedicatedHostProfileVCPUArchitecture {
     /** The type for this profile field. */
     type: DedicatedHostProfileVCPUArchitecture.Constants.Type | string;
@@ -35263,7 +38366,9 @@ namespace VpcV1 {
     }
   }
 
-  /** DedicatedHostProfileVCPUManufacturer. */
+  /**
+   * DedicatedHostProfileVCPUManufacturer.
+   */
   export interface DedicatedHostProfileVCPUManufacturer {
     /** The type for this profile field. */
     type: DedicatedHostProfileVCPUManufacturer.Constants.Type | string;
@@ -35279,7 +38384,9 @@ namespace VpcV1 {
     }
   }
 
-  /** DedicatedHostPrototype. */
+  /**
+   * DedicatedHostPrototype.
+   */
   export interface DedicatedHostPrototype {
     /** If set to true, instances can be placed on this dedicated host. */
     instance_placement_enabled?: boolean;
@@ -35295,7 +38402,9 @@ namespace VpcV1 {
     resource_group?: ResourceGroupIdentity;
   }
 
-  /** DedicatedHostReference. */
+  /**
+   * DedicatedHostReference.
+   */
   export interface DedicatedHostReference {
     /** The CRN for this dedicated host. */
     crn: string;
@@ -35321,7 +38430,9 @@ namespace VpcV1 {
     }
   }
 
-  /** DefaultNetworkACL. */
+  /**
+   * DefaultNetworkACL.
+   */
   export interface DefaultNetworkACL {
     /** The date and time that the network ACL was created. */
     created_at: string;
@@ -35347,12 +38458,14 @@ namespace VpcV1 {
     vpc: VPCReference;
   }
 
-  /** DefaultRoutingTable. */
+  /**
+   * DefaultRoutingTable.
+   */
   export interface DefaultRoutingTable {
     /** The filters specifying the resources that may create routes in this routing table.
      *
-     *  At present, only the `resource_type` filter is permitted, and only the values
-     *  `vpn_gateway` and `vpn_server` are supported, but filter support is expected to expand in the future.
+     *  The resources and types of filters supported by this property is expected to
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     accept_routes_from: ResourceFilter[];
     /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised
@@ -35451,7 +38564,9 @@ namespace VpcV1 {
     }
   }
 
-  /** DefaultSecurityGroup. */
+  /**
+   * DefaultSecurityGroup.
+   */
   export interface DefaultSecurityGroup {
     /** The date and time that this security group was created. */
     created_at: string;
@@ -35478,17 +38593,24 @@ namespace VpcV1 {
     vpc: VPCReference;
   }
 
-  /** If present, this property indicates the referenced resource has been deleted, and provides some supplementary information. */
+  /**
+   * If present, this property indicates the referenced resource has been deleted, and provides some supplementary
+   * information.
+   */
   export interface Deleted {
     /** Link to documentation about deleted resources. */
     more_info: string;
   }
 
-  /** Identifies an encryption key by a unique property. */
+  /**
+   * Identifies an encryption key by a unique property.
+   */
   export interface EncryptionKeyIdentity {
   }
 
-  /** EncryptionKeyReference. */
+  /**
+   * EncryptionKeyReference.
+   */
   export interface EncryptionKeyReference {
     /** The CRN of the [Key Protect Root
      *  Key](https://cloud.ibm.com/docs/key-protect?topic=key-protect-getting-started-tutorial) or [Hyper Protect Crypto
@@ -35497,7 +38619,9 @@ namespace VpcV1 {
     crn: string;
   }
 
-  /** EndpointGateway. */
+  /**
+   * EndpointGateway.
+   */
   export interface EndpointGateway {
     /** Indicates whether to allow DNS resolution for this endpoint gateway when the VPC this endpoint gateway
      *  resides in has a DNS resolution binding to a VPC with `dns.enable_hub` set to `true`.
@@ -35569,33 +38693,25 @@ namespace VpcV1 {
     }
   }
 
-  /** EndpointGatewayCollection. */
+  /**
+   * EndpointGatewayCollection.
+   */
   export interface EndpointGatewayCollection {
     /** A page of endpoint gateways. */
     endpoint_gateways: EndpointGateway[];
     /** A link to the first page of resources. */
-    first: EndpointGatewayCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: EndpointGatewayCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface EndpointGatewayCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface EndpointGatewayCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** EndpointGatewayLifecycleReason. */
+  /**
+   * EndpointGatewayLifecycleReason.
+   */
   export interface EndpointGatewayLifecycleReason {
     /** A reason code for this lifecycle state:
      *  - `access_denied`: endpoint gateway access was denied
@@ -35629,7 +38745,9 @@ namespace VpcV1 {
     }
   }
 
-  /** EndpointGatewayReferenceRemote. */
+  /**
+   * EndpointGatewayReferenceRemote.
+   */
   export interface EndpointGatewayReferenceRemote {
     /** The CRN for this endpoint gateway. */
     crn: string;
@@ -35655,7 +38773,10 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  /**
+   * If present, this property indicates that the resource associated with this reference is remote and therefore may
+   * not be directly retrievable.
+   */
   export interface EndpointGatewayRemote {
     /** If present, this property indicates that the referenced resource is remote to this
      *  account, and identifies the owning account.
@@ -35667,22 +38788,24 @@ namespace VpcV1 {
     region?: RegionReference;
   }
 
-  /** A reserved IP to bind to the endpoint gateway. This can be specified using an existing reserved IP, or a prototype object for a new reserved IP. The reserved IP will be bound to the endpoint gateway to function as a virtual private endpoint for the service. */
+  /**
+   * A reserved IP to bind to the endpoint gateway. This can be specified using an existing reserved IP, or a prototype
+   * object for a new reserved IP. The reserved IP will be bound to the endpoint gateway to function as a virtual
+   * private endpoint for the service.
+   */
   export interface EndpointGatewayReservedIP {
   }
 
-  /** The target for this endpoint gateway. */
+  /**
+   * The target for this endpoint gateway.
+   */
   export interface EndpointGatewayTarget {
+    /** The target resource type for this endpoint gateway. */
+    resource_type: EndpointGatewayTarget.Constants.ResourceType | string;
   }
-
-  /** The target to use for this endpoint gateway. The target: - Must not already be the target of another endpoint gateway in the VPC - Must not have a service endpoint that duplicates or overlaps with any `service_endpoints` of another endpoint gateway in the VPC. */
-  export interface EndpointGatewayTargetPrototype {
-    /** The type of target for this endpoint gateway. */
-    resource_type: EndpointGatewayTargetPrototype.Constants.ResourceType | string;
-  }
-  export namespace EndpointGatewayTargetPrototype {
+  export namespace EndpointGatewayTarget {
     export namespace Constants {
-      /** The type of target for this endpoint gateway. */
+      /** The target resource type for this endpoint gateway. */
       export enum ResourceType {
         PRIVATE_PATH_SERVICE_GATEWAY = 'private_path_service_gateway',
         PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
@@ -35691,7 +38814,30 @@ namespace VpcV1 {
     }
   }
 
-  /** FloatingIP. */
+  /**
+   * The target to use for this endpoint gateway. The target:
+   * - Must not already be the target of another endpoint gateway in the VPC
+   * - Must not have a service endpoint that duplicates or overlaps with any `service_endpoints`
+   *   of another endpoint gateway in the VPC.
+   */
+  export interface EndpointGatewayTargetPrototype {
+    /** The target resource type for this endpoint gateway. */
+    resource_type?: EndpointGatewayTargetPrototype.Constants.ResourceType | string;
+  }
+  export namespace EndpointGatewayTargetPrototype {
+    export namespace Constants {
+      /** The target resource type for this endpoint gateway. */
+      export enum ResourceType {
+        PRIVATE_PATH_SERVICE_GATEWAY = 'private_path_service_gateway',
+        PROVIDER_CLOUD_SERVICE = 'provider_cloud_service',
+        PROVIDER_INFRASTRUCTURE_SERVICE = 'provider_infrastructure_service',
+      }
+    }
+  }
+
+  /**
+   * FloatingIP.
+   */
   export interface FloatingIP {
     /** The globally unique IP address. */
     address: string;
@@ -35730,59 +38876,41 @@ namespace VpcV1 {
     }
   }
 
-  /** FloatingIPCollection. */
+  /**
+   * FloatingIPCollection.
+   */
   export interface FloatingIPCollection {
     /** A link to the first page of resources. */
-    first: FloatingIPCollectionFirst;
+    first: PageLink;
     /** A page of floating IPs. */
     floating_ips: FloatingIP[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: FloatingIPCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface FloatingIPCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface FloatingIPCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** FloatingIPCollectionVirtualNetworkInterfaceContext. */
+  /**
+   * FloatingIPCollectionVirtualNetworkInterfaceContext.
+   */
   export interface FloatingIPCollectionVirtualNetworkInterfaceContext {
     /** A link to the first page of resources. */
-    first: FloatingIPCollectionVirtualNetworkInterfaceContextFirst;
+    first: PageLink;
     /** A page of floating IPs bound to the virtual network interface specified by the identifier in the URL. */
     floating_ips: FloatingIPReference[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: FloatingIPCollectionVirtualNetworkInterfaceContextNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface FloatingIPCollectionVirtualNetworkInterfaceContextFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface FloatingIPCollectionVirtualNetworkInterfaceContextNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** FloatingIPPrototype. */
+  /**
+   * FloatingIPPrototype.
+   */
   export interface FloatingIPPrototype {
     /** The name for this floating IP. The name must not be used by another floating IP in the region. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -35794,7 +38922,9 @@ namespace VpcV1 {
     resource_group?: ResourceGroupIdentity;
   }
 
-  /** FloatingIPReference. */
+  /**
+   * FloatingIPReference.
+   */
   export interface FloatingIPReference {
     /** The globally unique IP address. */
     address: string;
@@ -35812,25 +38942,50 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** The target of this floating IP. */
+  /**
+   * The target of this floating IP.
+   */
   export interface FloatingIPTarget {
   }
 
-  /** The target resource to bind this floating IP to, replacing any existing binding. The floating IP must not be required by another resource, such as a public gateway. The target resource must not already have a floating IP bound to it if the target resource is: - an instance network interface - a bare metal server network interface with `enable_infrastructure_nat` set to `true` - a virtual network interface with `enable_infrastructure_nat` set to `true` Specify `null` to remove an existing binding. */
+  /**
+   * The target resource to bind this floating IP to, replacing any existing binding. The floating IP must not be
+   * required by another resource, such as a public gateway.
+   *
+   * The target resource must not already have a floating IP bound to it if the target resource is:
+   *
+   * - an instance network interface
+   * - a bare metal server network interface with `enable_infrastructure_nat` set to `true`
+   * - a virtual network interface with `enable_infrastructure_nat` set to `true`
+   *
+   * Specify `null` to remove an existing binding.
+   */
   export interface FloatingIPTargetPatch {
   }
 
-  /** The target resource to bind this floating IP to. The target resource must not already have a floating IP bound to it if the target resource is: - an instance network interface - a bare metal server network interface with `enable_infrastructure_nat` set to `true` - a virtual network interface with `enable_infrastructure_nat` set to `true`. */
+  /**
+   * The target resource to bind this floating IP to.
+   *
+   * The target resource must not already have a floating IP bound to it if the target resource is:
+   *
+   * - an instance network interface
+   * - a bare metal server network interface with `enable_infrastructure_nat` set to `true`
+   * - a virtual network interface with `enable_infrastructure_nat` set to `true`.
+   */
   export interface FloatingIPTargetPrototype {
   }
 
-  /** FloatingIPUnpaginatedCollection. */
+  /**
+   * FloatingIPUnpaginatedCollection.
+   */
   export interface FloatingIPUnpaginatedCollection {
     /** The floating IPs. */
     floating_ips: FloatingIP[];
   }
 
-  /** FlowLogCollector. */
+  /**
+   * FlowLogCollector.
+   */
   export interface FlowLogCollector {
     /** Indicates whether this collector is active. */
     active: boolean;
@@ -35897,41 +39052,63 @@ namespace VpcV1 {
     }
   }
 
-  /** FlowLogCollectorCollection. */
+  /**
+   * FlowLogCollectorCollection.
+   */
   export interface FlowLogCollectorCollection {
     /** A link to the first page of resources. */
-    first: FlowLogCollectorCollectionFirst;
+    first: PageLink;
     /** A page of flow log collectors. */
     flow_log_collectors: FlowLogCollector[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: FlowLogCollectorCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface FlowLogCollectorCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface FlowLogCollectorCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** The target this collector is collecting flow logs for. - If the target is an instance network attachment, flow logs will be collected for that instance network attachment. - If the target is an instance network interface, flow logs will be collected for that instance network interface. - If the target is a virtual network interface, flow logs will be collected for the virtual network interface's `target` resource if the resource is an instance network attachment, unless the target resource is itself the target of a flow log collector. - If the target is a virtual server instance, flow logs will be collected for all network attachments or network interfaces on that instance. - If the target is a subnet, flow logs will be collected for all instance network interfaces and virtual network interfaces attached to that subnet. - If the target is a VPC, flow logs will be collected for all instance network interfaces and virtual network interfaces  attached to all subnets within that VPC. If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network attachments or instance network interfaces within the target that are themselves the target of a more specific flow log collector. */
+  /**
+   * The target this collector is collecting flow logs for.
+   *
+   * - If the target is an instance network attachment, flow logs will be collected
+   *   for that instance network attachment.
+   * - If the target is an instance network interface, flow logs will be collected
+   *   for that instance network interface.
+   * - If the target is a virtual network interface, flow logs will be collected for the
+   *   virtual network interface's `target` resource if the resource is an instance network
+   *   attachment, unless the target resource is itself the target of a flow log collector.
+   * - If the target is a virtual server instance, flow logs will be collected
+   *   for all network attachments or network interfaces on that instance.
+   * - If the target is a subnet, flow logs will be collected
+   *   for all instance network interfaces and virtual network interfaces
+   *   attached to that subnet.
+   * - If the target is a VPC, flow logs will be collected for all instance network
+   *   interfaces and virtual network interfaces  attached to all subnets within that VPC.
+   *
+   * If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network attachments
+   * or instance network interfaces within the target that are themselves the target of a more specific flow log
+   * collector.
+   */
   export interface FlowLogCollectorTarget {
   }
 
-  /** The target this collector will collect flow logs for. If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network attachments, virtual network interfaces or instance network interfaces within the target that are themselves the target of a more specific flow log collector. The target must not be a virtual network interface that is attached to a bare metal server network attachment or to a file share mount target. */
+  /**
+   * The target this collector will collect flow logs for.
+   *
+   * If the target is an instance, subnet, or VPC, flow logs will not be collected for any instance network attachments,
+   * virtual network interfaces or instance network interfaces within the target that are themselves the target of a
+   * more specific flow log collector.
+   *
+   * The target must not be a virtual network interface that is attached to a bare metal server network attachment or to
+   * a file share mount target.
+   */
   export interface FlowLogCollectorTargetPrototype {
   }
 
-  /** IKEPolicy. */
+  /**
+   * IKEPolicy.
+   */
   export interface IKEPolicy {
     /** The authentication algorithm.
      *
@@ -36007,59 +39184,41 @@ namespace VpcV1 {
     }
   }
 
-  /** IKEPolicyCollection. */
+  /**
+   * IKEPolicyCollection.
+   */
   export interface IKEPolicyCollection {
     /** A link to the first page of resources. */
-    first: IKEPolicyCollectionFirst;
+    first: PageLink;
     /** A page of IKE policies. */
     ike_policies: IKEPolicy[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: IKEPolicyCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface IKEPolicyCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface IKEPolicyCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** IKEPolicyConnectionCollection. */
+  /**
+   * IKEPolicyConnectionCollection.
+   */
   export interface IKEPolicyConnectionCollection {
     /** A page of VPN gateway connections that use the IKE policy specified by the identifier in the URL. */
     connections: VPNGatewayConnection[];
     /** A link to the first page of resources. */
-    first: IKEPolicyConnectionCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: IKEPolicyConnectionCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface IKEPolicyConnectionCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface IKEPolicyConnectionCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** IKEPolicyReference. */
+  /**
+   * IKEPolicyReference.
+   */
   export interface IKEPolicyReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -36083,7 +39242,9 @@ namespace VpcV1 {
     }
   }
 
-  /** IP. */
+  /**
+   * IP.
+   */
   export interface IP {
     /** The IP address.
      *
@@ -36093,7 +39254,9 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** IPsecPolicy. */
+  /**
+   * IPsecPolicy.
+   */
   export interface IPsecPolicy {
     /** The authentication algorithm
      *
@@ -36202,59 +39365,41 @@ namespace VpcV1 {
     }
   }
 
-  /** IPsecPolicyCollection. */
+  /**
+   * IPsecPolicyCollection.
+   */
   export interface IPsecPolicyCollection {
     /** A link to the first page of resources. */
-    first: IPsecPolicyCollectionFirst;
+    first: PageLink;
     /** A page of IPsec policies. */
     ipsec_policies: IPsecPolicy[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: IPsecPolicyCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface IPsecPolicyCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface IPsecPolicyCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** IPsecPolicyConnectionCollection. */
+  /**
+   * IPsecPolicyConnectionCollection.
+   */
   export interface IPsecPolicyConnectionCollection {
     /** A page of VPN gateway connections that use the IPsec policy specified by the identifier in the URL. */
     connections: VPNGatewayConnection[];
     /** A link to the first page of resources. */
-    first: IPsecPolicyConnectionCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: IPsecPolicyConnectionCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface IPsecPolicyConnectionCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface IPsecPolicyConnectionCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** IPsecPolicyReference. */
+  /**
+   * IPsecPolicyReference.
+   */
   export interface IPsecPolicyReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -36278,7 +39423,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Image. */
+  /**
+   * Image.
+   */
   export interface Image {
     catalog_offering: ImageCatalogOffering;
     /** The date and time that the image was created. */
@@ -36389,7 +39536,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ImageCatalogOffering. */
+  /**
+   * ImageCatalogOffering.
+   */
   export interface ImageCatalogOffering {
     /** Indicates whether this image is managed as part of a
      *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering. If an image is managed,
@@ -36405,33 +39554,25 @@ namespace VpcV1 {
     version?: CatalogOfferingVersionReference;
   }
 
-  /** ImageCollection. */
+  /**
+   * ImageCollection.
+   */
   export interface ImageCollection {
     /** A link to the first page of resources. */
-    first: ImageCollectionFirst;
+    first: PageLink;
     /** A page of images. */
     images: Image[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ImageCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface ImageCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ImageCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** ImageExportJob. */
+  /**
+   * ImageExportJob.
+   */
   export interface ImageExportJob {
     /** The date and time that the image export job was completed.
      *
@@ -36517,7 +39658,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ImageExportJobStatusReason. */
+  /**
+   * ImageExportJobStatusReason.
+   */
   export interface ImageExportJobStatusReason {
     /** A snake case string succinctly identifying the status reason.
      *
@@ -36540,13 +39683,17 @@ namespace VpcV1 {
     }
   }
 
-  /** ImageExportJobUnpaginatedCollection. */
+  /**
+   * ImageExportJobUnpaginatedCollection.
+   */
   export interface ImageExportJobUnpaginatedCollection {
     /** The export jobs for the image. */
     export_jobs: ImageExportJob[];
   }
 
-  /** ImageFile. */
+  /**
+   * ImageFile.
+   */
   export interface ImageFile {
     /** Checksums for this image file.
      *
@@ -36562,13 +39709,17 @@ namespace VpcV1 {
     size?: number;
   }
 
-  /** ImageFileChecksums. */
+  /**
+   * ImageFileChecksums.
+   */
   export interface ImageFileChecksums {
     /** The SHA256 fingerprint of the image file, in hexadecimal. */
     sha256?: string;
   }
 
-  /** ImageFilePrototype. */
+  /**
+   * ImageFilePrototype.
+   */
   export interface ImageFilePrototype {
     /** The Cloud Object Storage location of the image file.
      *
@@ -36578,11 +39729,15 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** Identifies an image by a unique property. */
+  /**
+   * Identifies an image by a unique property.
+   */
   export interface ImageIdentity {
   }
 
-  /** ImagePrototype. */
+  /**
+   * ImagePrototype.
+   */
   export interface ImagePrototype {
     /** The deprecation date and time to set for this image.
      *
@@ -36618,7 +39773,9 @@ namespace VpcV1 {
     resource_group?: ResourceGroupIdentity;
   }
 
-  /** ImageReference. */
+  /**
+   * ImageReference.
+   */
   export interface ImageReference {
     /** The CRN for this image. */
     crn: string;
@@ -36648,7 +39805,10 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  /**
+   * If present, this property indicates that the resource associated with this reference is remote and therefore may
+   * not be directly retrievable.
+   */
   export interface ImageRemote {
     /** If present, this property indicates that the referenced resource is remote to this
      *  account, and identifies the owning account.
@@ -36660,7 +39820,9 @@ namespace VpcV1 {
     region?: RegionReference;
   }
 
-  /** ImageStatusReason. */
+  /**
+   * ImageStatusReason.
+   */
   export interface ImageStatusReason {
     /** A reason code for the status:
      *  - `encrypted_data_key_invalid`: image cannot be decrypted with the specified
@@ -36699,7 +39861,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Instance. */
+  /**
+   * Instance.
+   */
   export interface Instance {
     /** The availability policy for this virtual server instance. */
     availability_policy: InstanceAvailabilityPolicy;
@@ -36713,6 +39877,13 @@ namespace VpcV1 {
      *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user).
      */
     catalog_offering?: InstanceCatalogOffering;
+    /** If present, the cluster network that this virtual server instance resides in. */
+    cluster_network?: ClusterNetworkReference;
+    /** The cluster network attachments for this virtual server instance.
+     *
+     *  The cluster network attachments are ordered for consistent instance configuration.
+     */
+    cluster_network_attachments: InstanceClusterNetworkAttachmentReference[];
     /** The confidential compute mode for this virtual server instance. */
     confidential_compute_mode: Instance.Constants.ConfidentialComputeMode | string;
     /** The date and time that the virtual server instance was created. */
@@ -36868,7 +40039,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceAction. */
+  /**
+   * InstanceAction.
+   */
   export interface InstanceAction {
     /** Deprecated: The date and time that the action was completed. */
     completed_at?: string;
@@ -36907,7 +40080,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceAvailabilityPolicy. */
+  /**
+   * InstanceAvailabilityPolicy.
+   */
   export interface InstanceAvailabilityPolicy {
     /** The action to perform if the compute host experiences a failure:
      *  - `restart`: Automatically restart the virtual server instance after host failure
@@ -36928,7 +40103,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceAvailabilityPolicyPatch. */
+  /**
+   * InstanceAvailabilityPolicyPatch.
+   */
   export interface InstanceAvailabilityPolicyPatch {
     /** The action to perform if the compute host experiences a failure.
      *  - `restart`: Automatically restart the virtual server instance after host failure
@@ -36946,7 +40123,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceAvailabilityPolicyPrototype. */
+  /**
+   * InstanceAvailabilityPolicyPrototype.
+   */
   export interface InstanceAvailabilityPolicyPrototype {
     /** The action to perform if the compute host experiences a failure.
      *  - `restart`: Automatically restart the virtual server instance after host failure
@@ -36964,7 +40143,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceCatalogOffering. */
+  /**
+   * InstanceCatalogOffering.
+   */
   export interface InstanceCatalogOffering {
     /** The billing plan used for the catalog offering version.
      *
@@ -36981,7 +40162,14 @@ namespace VpcV1 {
     version: CatalogOfferingVersionReference;
   }
 
-  /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering or offering version to use when provisioning this virtual server instance. If an offering is specified, the latest version of that offering will be used. The specified offering or offering version may be in a different account, subject to IAM policies. */
+  /**
+   * The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering or offering version to
+   * use when provisioning this virtual server instance.
+   *
+   * If an offering is specified, the latest version of that offering will be used.
+   *
+   * The specified offering or offering version may be in a different account, subject to IAM policies.
+   */
   export interface InstanceCatalogOfferingPrototype {
     /** The billing plan to use for the catalog offering version. If unspecified, no billing
      *  plan will be used (free). Must be specified for catalog offering versions that require
@@ -36990,33 +40178,205 @@ namespace VpcV1 {
     plan?: CatalogOfferingVersionPlanIdentity;
   }
 
-  /** InstanceCollection. */
+  /**
+   * InstanceClusterNetworkAttachment.
+   */
+  export interface InstanceClusterNetworkAttachment {
+    /** The instance cluster network attachment that is immediately before. If absent, this is the
+     *  last instance cluster network attachment.
+     */
+    before?: InstanceClusterNetworkAttachmentBefore;
+    /** The cluster network interface for this instance cluster network attachment. */
+    cluster_network_interface: ClusterNetworkInterfaceReference;
+    /** The URL for this instance cluster network attachment. */
+    href: string;
+    /** The unique identifier for this instance cluster network attachment. */
+    id: string;
+    /** The reasons for the current `lifecycle_state` (if any). */
+    lifecycle_reasons: InstanceClusterNetworkAttachmentLifecycleReason[];
+    /** The lifecycle state of the instance cluster network attachment. */
+    lifecycle_state: InstanceClusterNetworkAttachment.Constants.LifecycleState | string;
+    /** The name for this instance cluster network attachment. The name is unique across all network attachments for
+     *  the instance.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: InstanceClusterNetworkAttachment.Constants.ResourceType | string;
+  }
+  export namespace InstanceClusterNetworkAttachment {
+    export namespace Constants {
+      /** The lifecycle state of the instance cluster network attachment. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_CLUSTER_NETWORK_ATTACHMENT = 'instance_cluster_network_attachment',
+      }
+    }
+  }
+
+  /**
+   * The instance cluster network attachment that is immediately before. If absent, this is the last instance cluster
+   * network attachment.
+   */
+  export interface InstanceClusterNetworkAttachmentBefore {
+    /** The URL for this instance cluster network attachment. */
+    href: string;
+    /** The unique identifier for this instance cluster network attachment. */
+    id: string;
+    /** The name for this instance cluster network attachment. The name is unique across all network attachments for
+     *  the instance.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: InstanceClusterNetworkAttachmentBefore.Constants.ResourceType | string;
+  }
+  export namespace InstanceClusterNetworkAttachmentBefore {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_CLUSTER_NETWORK_ATTACHMENT = 'instance_cluster_network_attachment',
+      }
+    }
+  }
+
+  /**
+   * The instance cluster network attachment to insert this instance cluster network attachment immediately before.
+   *
+   * If unspecified, this instance cluster network attachment will be inserted after all existing instance cluster
+   * network attachments.
+   */
+  export interface InstanceClusterNetworkAttachmentBeforePrototype {
+  }
+
+  /**
+   * InstanceClusterNetworkAttachmentCollection.
+   */
+  export interface InstanceClusterNetworkAttachmentCollection {
+    /** A page of ordered cluster network attachments (sorted based on the `before` property) for the instance. A
+     *  cluster network attachment represents a device to which a cluster network interface is attached.
+     */
+    cluster_network_attachments: InstanceClusterNetworkAttachment[];
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
+   * InstanceClusterNetworkAttachmentLifecycleReason.
+   */
+  export interface InstanceClusterNetworkAttachmentLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: InstanceClusterNetworkAttachmentLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace InstanceClusterNetworkAttachmentLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
+  }
+
+  /**
+   * A cluster network interface for the instance cluster network attachment. This can be specified using an existing
+   * cluster network interface that does not already have a `target`, or a prototype object for a new cluster network
+   * interface.
+   *
+   * This instance must reside in the same VPC as the specified cluster network interface. The cluster network interface
+   * must reside in the same cluster network as the
+   * `cluster_network_interface` of any other `cluster_network_attachments` for this instance.
+   */
+  export interface InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterface {
+  }
+
+  /**
+   * InstanceClusterNetworkAttachmentPrototypeInstanceContext.
+   */
+  export interface InstanceClusterNetworkAttachmentPrototypeInstanceContext {
+    /** A cluster network interface for the instance cluster network attachment. This can be
+     *  specified using an existing cluster network interface that does not already have a `target`,
+     *  or a prototype object for a new cluster network interface.
+     *
+     *  This instance must reside in the same VPC as the specified cluster network interface. The
+     *  cluster network interface must reside in the same cluster network as the
+     *  `cluster_network_interface` of any other `cluster_network_attachments` for this instance.
+     */
+    cluster_network_interface: InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterface;
+    /** The name for this cluster network attachment. Names must be unique within the instance the cluster network
+     *  attachment resides in. If unspecified, the name will be a hyphenated list of randomly-selected words. Names
+     *  starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
+     */
+    name?: string;
+  }
+
+  /**
+   * InstanceClusterNetworkAttachmentReference.
+   */
+  export interface InstanceClusterNetworkAttachmentReference {
+    /** The URL for this instance cluster network attachment. */
+    href: string;
+    /** The unique identifier for this instance cluster network attachment. */
+    id: string;
+    /** The name for this instance cluster network attachment. The name is unique across all network attachments for
+     *  the instance.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: InstanceClusterNetworkAttachmentReference.Constants.ResourceType | string;
+  }
+  export namespace InstanceClusterNetworkAttachmentReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_CLUSTER_NETWORK_ATTACHMENT = 'instance_cluster_network_attachment',
+      }
+    }
+  }
+
+  /**
+   * InstanceCollection.
+   */
   export interface InstanceCollection {
     /** A link to the first page of resources. */
-    first: InstanceCollectionFirst;
+    first: PageLink;
     /** A page of virtual server instances. */
     instances: Instance[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: InstanceCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface InstanceCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface InstanceCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** The instance console access token information. */
+  /**
+   * The instance console access token information.
+   */
   export interface InstanceConsoleAccessToken {
     /** A URL safe single-use token used to access the console WebSocket. */
     access_token: string;
@@ -37043,7 +40403,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceDefaultTrustedProfilePrototype. */
+  /**
+   * InstanceDefaultTrustedProfilePrototype.
+   */
   export interface InstanceDefaultTrustedProfilePrototype {
     /** If set to `true`, the system will create a link to the specified `target` trusted profile during instance
      *  creation. Regardless of whether a link is created by the system or manually using the IAM Identity service, it
@@ -37054,7 +40416,9 @@ namespace VpcV1 {
     target: TrustedProfileIdentity;
   }
 
-  /** InstanceDisk. */
+  /**
+   * InstanceDisk.
+   */
   export interface InstanceDisk {
     /** The date and time that the disk was created. */
     created_at: string;
@@ -37089,13 +40453,17 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceDiskCollection. */
+  /**
+   * InstanceDiskCollection.
+   */
   export interface InstanceDiskCollection {
     /** The disks for the instance. */
     disks: InstanceDisk[];
   }
 
-  /** InstanceDiskReference. */
+  /**
+   * InstanceDiskReference.
+   */
   export interface InstanceDiskReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -37119,7 +40487,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The virtual server instance GPU configuration. */
+  /**
+   * The virtual server instance GPU configuration.
+   */
   export interface InstanceGPU {
     /** The number of GPUs assigned to the instance. */
     count: number;
@@ -37131,7 +40501,9 @@ namespace VpcV1 {
     model: string;
   }
 
-  /** InstanceGroup. */
+  /**
+   * InstanceGroup.
+   */
   export interface InstanceGroup {
     /** The port used for new load balancer pool members created by this instance group.
      *
@@ -37203,33 +40575,25 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupCollection. */
+  /**
+   * InstanceGroupCollection.
+   */
   export interface InstanceGroupCollection {
     /** A link to the first page of resources. */
-    first: InstanceGroupCollectionFirst;
+    first: PageLink;
     /** A page of instance groups. */
     instance_groups: InstanceGroup[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: InstanceGroupCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface InstanceGroupCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface InstanceGroupCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** InstanceGroupLifecycleReason. */
+  /**
+   * InstanceGroupLifecycleReason.
+   */
   export interface InstanceGroupLifecycleReason {
     /** A reason code for this lifecycle state:
      *  - `internal_error`: internal error (contact IBM support)
@@ -37255,7 +40619,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManager. */
+  /**
+   * InstanceGroupManager.
+   */
   export interface InstanceGroupManager {
     /** The date and time that the instance group manager was created. */
     created_at: string;
@@ -37271,7 +40637,9 @@ namespace VpcV1 {
     updated_at: string;
   }
 
-  /** InstanceGroupManagerAction. */
+  /**
+   * InstanceGroupManagerAction.
+   */
   export interface InstanceGroupManagerAction {
     /** Indicates whether this scheduled action will be automatically deleted after it has completed and
      *  `auto_delete_timeout` hours have passed.
@@ -37324,13 +40692,17 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerActionGroupPatch. */
+  /**
+   * InstanceGroupManagerActionGroupPatch.
+   */
   export interface InstanceGroupManagerActionGroupPatch {
     /** The desired number of instance group members at the scheduled time. */
     membership_count?: number;
   }
 
-  /** InstanceGroupManagerActionManagerPatch. */
+  /**
+   * InstanceGroupManagerActionManagerPatch.
+   */
   export interface InstanceGroupManagerActionManagerPatch {
     /** The desired maximum number of instance group members at the scheduled time. */
     max_membership_count?: number;
@@ -37338,7 +40710,9 @@ namespace VpcV1 {
     min_membership_count?: number;
   }
 
-  /** InstanceGroupManagerActionPrototype. */
+  /**
+   * InstanceGroupManagerActionPrototype.
+   */
   export interface InstanceGroupManagerActionPrototype {
     /** The name for this instance group manager action. The name must not be used by another action for the
      *  instance group manager. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -37346,7 +40720,9 @@ namespace VpcV1 {
     name?: string;
   }
 
-  /** InstanceGroupManagerActionReference. */
+  /**
+   * InstanceGroupManagerActionReference.
+   */
   export interface InstanceGroupManagerActionReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -37372,59 +40748,41 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerActionsCollection. */
+  /**
+   * InstanceGroupManagerActionsCollection.
+   */
   export interface InstanceGroupManagerActionsCollection {
     /** A page of actions for the instance group manager. */
     actions: InstanceGroupManagerAction[];
     /** A link to the first page of resources. */
-    first: InstanceGroupManagerActionsCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: InstanceGroupManagerActionsCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface InstanceGroupManagerActionsCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface InstanceGroupManagerActionsCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** InstanceGroupManagerCollection. */
+  /**
+   * InstanceGroupManagerCollection.
+   */
   export interface InstanceGroupManagerCollection {
     /** A link to the first page of resources. */
-    first: InstanceGroupManagerCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A page of managers for the instance group. */
     managers: InstanceGroupManager[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: InstanceGroupManagerCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface InstanceGroupManagerCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface InstanceGroupManagerCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** InstanceGroupManagerPolicy. */
+  /**
+   * InstanceGroupManagerPolicy.
+   */
   export interface InstanceGroupManagerPolicy {
     /** The date and time that the instance group manager policy was created. */
     created_at: string;
@@ -37440,33 +40798,25 @@ namespace VpcV1 {
     updated_at: string;
   }
 
-  /** InstanceGroupManagerPolicyCollection. */
+  /**
+   * InstanceGroupManagerPolicyCollection.
+   */
   export interface InstanceGroupManagerPolicyCollection {
     /** A link to the first page of resources. */
-    first: InstanceGroupManagerPolicyCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: InstanceGroupManagerPolicyCollectionNext;
+    next?: PageLink;
     /** A page of policies for the instance group manager. */
     policies: InstanceGroupManagerPolicy[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface InstanceGroupManagerPolicyCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface InstanceGroupManagerPolicyCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** InstanceGroupManagerPolicyPrototype. */
+  /**
+   * InstanceGroupManagerPolicyPrototype.
+   */
   export interface InstanceGroupManagerPolicyPrototype {
     /** The name for this instance group manager policy. The name must not be used by another policy for the
      *  instance group manager. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -37474,7 +40824,9 @@ namespace VpcV1 {
     name?: string;
   }
 
-  /** InstanceGroupManagerPolicyReference. */
+  /**
+   * InstanceGroupManagerPolicyReference.
+   */
   export interface InstanceGroupManagerPolicyReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -37490,7 +40842,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** InstanceGroupManagerPrototype. */
+  /**
+   * InstanceGroupManagerPrototype.
+   */
   export interface InstanceGroupManagerPrototype {
     /** Indicates whether this manager will control the instance group. */
     management_enabled?: boolean;
@@ -37500,7 +40854,9 @@ namespace VpcV1 {
     name?: string;
   }
 
-  /** InstanceGroupManagerReference. */
+  /**
+   * InstanceGroupManagerReference.
+   */
   export interface InstanceGroupManagerReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -37514,27 +40870,37 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** InstanceGroupManagerScheduledActionGroup. */
+  /**
+   * InstanceGroupManagerScheduledActionGroup.
+   */
   export interface InstanceGroupManagerScheduledActionGroup {
     /** The desired number of instance group members at the scheduled time. */
     membership_count: number;
   }
 
-  /** InstanceGroupManagerScheduledActionGroupPrototype. */
+  /**
+   * InstanceGroupManagerScheduledActionGroupPrototype.
+   */
   export interface InstanceGroupManagerScheduledActionGroupPrototype {
     /** The desired number of instance group members at the scheduled time. */
     membership_count: number;
   }
 
-  /** InstanceGroupManagerScheduledActionManager. */
+  /**
+   * InstanceGroupManagerScheduledActionManager.
+   */
   export interface InstanceGroupManagerScheduledActionManager {
   }
 
-  /** InstanceGroupManagerScheduledActionManagerPrototype. */
+  /**
+   * InstanceGroupManagerScheduledActionManagerPrototype.
+   */
   export interface InstanceGroupManagerScheduledActionManagerPrototype {
   }
 
-  /** InstanceGroupMembership. */
+  /**
+   * InstanceGroupMembership.
+   */
   export interface InstanceGroupMembership {
     /** The date and time that the instance group manager policy was created. */
     created_at: string;
@@ -37578,33 +40944,25 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupMembershipCollection. */
+  /**
+   * InstanceGroupMembershipCollection.
+   */
   export interface InstanceGroupMembershipCollection {
     /** A link to the first page of resources. */
-    first: InstanceGroupMembershipCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A page of memberships for the instance group. */
     memberships: InstanceGroupMembership[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: InstanceGroupMembershipCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface InstanceGroupMembershipCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface InstanceGroupMembershipCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** InstanceGroupReference. */
+  /**
+   * InstanceGroupReference.
+   */
   export interface InstanceGroupReference {
     /** The CRN for this instance group. */
     crn: string;
@@ -37620,7 +40978,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** InstanceHealthReason. */
+  /**
+   * InstanceHealthReason.
+   */
   export interface InstanceHealthReason {
     /** A reason code for this health state:
      *  - `reservation_capacity_unavailable`: The reservation affinity pool has no
@@ -37650,7 +41010,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceInitialization. */
+  /**
+   * InstanceInitialization.
+   */
   export interface InstanceInitialization {
     /** The default trusted profile configuration specified at virtual server instance
      *  creation. If absent, no default trusted profile was specified.
@@ -37661,7 +41023,9 @@ namespace VpcV1 {
     password?: InstanceInitializationPassword;
   }
 
-  /** InstanceInitializationDefaultTrustedProfile. */
+  /**
+   * InstanceInitializationDefaultTrustedProfile.
+   */
   export interface InstanceInitializationDefaultTrustedProfile {
     /** If set to `true`, the system created a link to the specified `target` trusted profile during instance
      *  creation. Regardless of whether a link was created by the system or manually using the IAM Identity service, it
@@ -37672,7 +41036,9 @@ namespace VpcV1 {
     target: TrustedProfileReference;
   }
 
-  /** InstanceInitializationPassword. */
+  /**
+   * InstanceInitializationPassword.
+   */
   export interface InstanceInitializationPassword {
     /** The administrator password at initialization, encrypted using `encryption_key`, and returned base64-encoded. */
     encrypted_password: string;
@@ -37680,7 +41046,9 @@ namespace VpcV1 {
     encryption_key: KeyIdentityByFingerprint;
   }
 
-  /** InstanceLifecycleReason. */
+  /**
+   * InstanceLifecycleReason.
+   */
   export interface InstanceLifecycleReason {
     /** A reason code for this lifecycle state:
      *  - `failed_registration`: the instance's registration to Resource Controller has
@@ -37713,7 +41081,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The metadata service configuration. */
+  /**
+   * The metadata service configuration.
+   */
   export interface InstanceMetadataService {
     /** Indicates whether the metadata service endpoint is available to the virtual server instance. */
     enabled: boolean;
@@ -37738,7 +41108,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The metadata service configuration. */
+  /**
+   * The metadata service configuration.
+   */
   export interface InstanceMetadataServicePatch {
     /** Indicates whether the metadata service endpoint will be available to the virtual server instance. */
     enabled?: boolean;
@@ -37763,7 +41135,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The metadata service configuration. */
+  /**
+   * The metadata service configuration.
+   */
   export interface InstanceMetadataServicePrototype {
     /** Indicates whether the metadata service endpoint will be available to the virtual server instance. */
     enabled?: boolean;
@@ -37788,7 +41162,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceNetworkAttachment. */
+  /**
+   * InstanceNetworkAttachment.
+   */
   export interface InstanceNetworkAttachment {
     /** The date and time that the instance network attachment was created. */
     created_at: string;
@@ -37839,13 +41215,17 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceNetworkAttachmentCollection. */
+  /**
+   * InstanceNetworkAttachmentCollection.
+   */
   export interface InstanceNetworkAttachmentCollection {
     /** The network attachments for the instance. */
     network_attachments: InstanceNetworkAttachment[];
   }
 
-  /** InstanceNetworkAttachmentPrototype. */
+  /**
+   * InstanceNetworkAttachmentPrototype.
+   */
   export interface InstanceNetworkAttachmentPrototype {
     /** The name for this network attachment. Names must be unique within the instance the network attachment
      *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -37861,11 +41241,19 @@ namespace VpcV1 {
     virtual_network_interface: InstanceNetworkAttachmentPrototypeVirtualNetworkInterface;
   }
 
-  /** A virtual network interface for the instance network attachment. This can be specified using an existing virtual network interface, or a prototype object for a new virtual network interface. If an existing virtual network interface is specified, `enable_infrastructure_nat` must be `true`. */
+  /**
+   * A virtual network interface for the instance network attachment. This can be specified using an existing virtual
+   * network interface, or a prototype object for a new virtual network interface.
+   *
+   * If an existing virtual network interface is specified, `enable_infrastructure_nat` must be
+   * `true`.
+   */
   export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterface {
   }
 
-  /** InstanceNetworkAttachmentReference. */
+  /**
+   * InstanceNetworkAttachmentReference.
+   */
   export interface InstanceNetworkAttachmentReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -37897,25 +41285,46 @@ namespace VpcV1 {
     }
   }
 
-  /** The profile to use for this virtual server instance. For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested profile must: - Have matching instance disk support. Any disks associated with the current profile will be deleted, and any disks associated with the requested profile will be created. - Be compatible with any `placement_target` constraints. For example, if the instance is placed on a dedicated host, the requested profile `family` must be the same as the dedicated host `family`. - Have the same `vcpu.architecture`. - Support the number of network attachments or network interfaces the instance currently has. */
+  /**
+   * The profile to use for this virtual server instance. Any disks associated with the current profile will be deleted,
+   * and any disks associated with the requested profile will be created.
+   *
+   * For the profile to be changed, the instance `status` must be `stopping` or `stopped`. In addition, the requested
+   * profile must:
+   * - Be compatible with any `placement_target` constraints. For example, if the
+   *   instance is placed on a dedicated host, the requested profile `family` must be
+   *   the same as the dedicated host `family`.
+   * - Have the same `vcpu.architecture`.
+   * - Support the number of network attachments or network interfaces the instance
+   *   currently has.
+   */
   export interface InstancePatchProfile {
   }
 
-  /** InstancePlacementTarget. */
+  /**
+   * InstancePlacementTarget.
+   */
   export interface InstancePlacementTarget {
   }
 
-  /** InstancePlacementTargetPatch. */
+  /**
+   * InstancePlacementTargetPatch.
+   */
   export interface InstancePlacementTargetPatch {
   }
 
-  /** InstancePlacementTargetPrototype. */
+  /**
+   * InstancePlacementTargetPrototype.
+   */
   export interface InstancePlacementTargetPrototype {
   }
 
-  /** InstanceProfile. */
+  /**
+   * InstanceProfile.
+   */
   export interface InstanceProfile {
     bandwidth: InstanceProfileBandwidth;
+    cluster_network_attachment_count: InstanceProfileClusterNetworkAttachmentCount;
     confidential_compute_modes: InstanceProfileSupportedConfidentialComputeModes;
     /** The disks for an instance with this profile. */
     disks: InstanceProfileDisk[];
@@ -37952,6 +41361,8 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     status: InstanceProfile.Constants.Status | string;
+    /** The cluster network profiles that support this instance profile. */
+    supported_cluster_network_profiles: ClusterNetworkProfileReference[];
     total_volume_bandwidth: InstanceProfileVolumeBandwidth;
     vcpu_architecture: InstanceProfileVCPUArchitecture;
     vcpu_count: InstanceProfileVCPU;
@@ -37971,32 +41382,50 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfileBandwidth. */
+  /**
+   * InstanceProfileBandwidth.
+   */
   export interface InstanceProfileBandwidth {
   }
 
-  /** InstanceProfileCollection. */
+  /**
+   * InstanceProfileClusterNetworkAttachmentCount.
+   */
+  export interface InstanceProfileClusterNetworkAttachmentCount {
+  }
+
+  /**
+   * InstanceProfileCollection.
+   */
   export interface InstanceProfileCollection {
     /** A page of virtual server instance profiles. */
     profiles: InstanceProfile[];
   }
 
-  /** Disks provided by this profile. */
+  /**
+   * Disks provided by this profile.
+   */
   export interface InstanceProfileDisk {
     quantity: InstanceProfileDiskQuantity;
     size: InstanceProfileDiskSize;
     supported_interface_types: InstanceProfileDiskSupportedInterfaces;
   }
 
-  /** InstanceProfileDiskQuantity. */
+  /**
+   * InstanceProfileDiskQuantity.
+   */
   export interface InstanceProfileDiskQuantity {
   }
 
-  /** InstanceProfileDiskSize. */
+  /**
+   * InstanceProfileDiskSize.
+   */
   export interface InstanceProfileDiskSize {
   }
 
-  /** InstanceProfileDiskSupportedInterfaces. */
+  /**
+   * InstanceProfileDiskSupportedInterfaces.
+   */
   export interface InstanceProfileDiskSupportedInterfaces {
     /** The disk interface used for attaching the disk.
      *
@@ -38028,11 +41457,15 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfileGPU. */
+  /**
+   * InstanceProfileGPU.
+   */
   export interface InstanceProfileGPU {
   }
 
-  /** InstanceProfileGPUManufacturer. */
+  /**
+   * InstanceProfileGPUManufacturer.
+   */
   export interface InstanceProfileGPUManufacturer {
     /** The type for this profile field. */
     type: InstanceProfileGPUManufacturer.Constants.Type | string;
@@ -38048,11 +41481,15 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfileGPUMemory. */
+  /**
+   * InstanceProfileGPUMemory.
+   */
   export interface InstanceProfileGPUMemory {
   }
 
-  /** InstanceProfileGPUModel. */
+  /**
+   * InstanceProfileGPUModel.
+   */
   export interface InstanceProfileGPUModel {
     /** The type for this profile field. */
     type: InstanceProfileGPUModel.Constants.Type | string;
@@ -38068,27 +41505,39 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies an instance profile by a unique property. */
+  /**
+   * Identifies an instance profile by a unique property.
+   */
   export interface InstanceProfileIdentity {
   }
 
-  /** InstanceProfileMemory. */
+  /**
+   * InstanceProfileMemory.
+   */
   export interface InstanceProfileMemory {
   }
 
-  /** InstanceProfileNUMACount. */
+  /**
+   * InstanceProfileNUMACount.
+   */
   export interface InstanceProfileNUMACount {
   }
 
-  /** InstanceProfileNetworkAttachmentCount. */
+  /**
+   * InstanceProfileNetworkAttachmentCount.
+   */
   export interface InstanceProfileNetworkAttachmentCount {
   }
 
-  /** InstanceProfileNetworkInterfaceCount. */
+  /**
+   * InstanceProfileNetworkInterfaceCount.
+   */
   export interface InstanceProfileNetworkInterfaceCount {
   }
 
-  /** InstanceProfileOSArchitecture. */
+  /**
+   * InstanceProfileOSArchitecture.
+   */
   export interface InstanceProfileOSArchitecture {
     /** The default OS architecture for an instance with this profile. */
     default: string;
@@ -38106,11 +41555,15 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfilePortSpeed. */
+  /**
+   * InstanceProfilePortSpeed.
+   */
   export interface InstanceProfilePortSpeed {
   }
 
-  /** InstanceProfileReference. */
+  /**
+   * InstanceProfileReference.
+   */
   export interface InstanceProfileReference {
     /** The URL for this virtual server instance profile. */
     href: string;
@@ -38128,7 +41581,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfileReservationTerms. */
+  /**
+   * InstanceProfileReservationTerms.
+   */
   export interface InstanceProfileReservationTerms {
     /** The type for this profile field. */
     type: InstanceProfileReservationTerms.Constants.Type | string;
@@ -38149,7 +41604,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfileSupportedConfidentialComputeModes. */
+  /**
+   * InstanceProfileSupportedConfidentialComputeModes.
+   */
   export interface InstanceProfileSupportedConfidentialComputeModes {
     /** The default confidential compute mode for this profile. */
     default: InstanceProfileSupportedConfidentialComputeModes.Constants.Default | string;
@@ -38177,7 +41634,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfileSupportedSecureBootModes. */
+  /**
+   * InstanceProfileSupportedSecureBootModes.
+   */
   export interface InstanceProfileSupportedSecureBootModes {
     /** The default secure boot mode for this profile. */
     default: boolean;
@@ -38195,11 +41654,15 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfileVCPU. */
+  /**
+   * InstanceProfileVCPU.
+   */
   export interface InstanceProfileVCPU {
   }
 
-  /** InstanceProfileVCPUArchitecture. */
+  /**
+   * InstanceProfileVCPUArchitecture.
+   */
   export interface InstanceProfileVCPUArchitecture {
     /** The default VCPU architecture for an instance with this profile. */
     default?: string;
@@ -38217,7 +41680,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfileVCPUManufacturer. */
+  /**
+   * InstanceProfileVCPUManufacturer.
+   */
   export interface InstanceProfileVCPUManufacturer {
     /** The default VCPU manufacturer for an instance with this profile. */
     default?: string;
@@ -38235,14 +41700,23 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfileVolumeBandwidth. */
+  /**
+   * InstanceProfileVolumeBandwidth.
+   */
   export interface InstanceProfileVolumeBandwidth {
   }
 
-  /** InstancePrototype. */
+  /**
+   * InstancePrototype.
+   */
   export interface InstancePrototype {
     /** The availability policy to use for this virtual server instance. */
     availability_policy?: InstanceAvailabilityPolicyPrototype;
+    /** The cluster network attachments to create for this virtual server instance. A cluster network attachment
+     *  represents a device that is connected to a cluster network. The number of network attachments must match one of
+     *  the values from the instance profile's `cluster_network_attachment_count` before the instance can be started.
+     */
+    cluster_network_attachments?: InstanceClusterNetworkAttachmentPrototypeInstanceContext[];
     /** The confidential compute mode to use for this virtual server instance.
      *
      *  If unspecified, the default confidential compute mode from the profile will be used.
@@ -38328,7 +41802,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceReference. */
+  /**
+   * InstanceReference.
+   */
   export interface InstanceReference {
     /** The CRN for this virtual server instance. */
     crn: string;
@@ -38346,7 +41822,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** InstanceReservationAffinity. */
+  /**
+   * InstanceReservationAffinity.
+   */
   export interface InstanceReservationAffinity {
     /** The reservation affinity policy to use for this virtual server instance:
      *  - `disabled`: Reservations will not be used
@@ -38366,7 +41844,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceReservationAffinityPatch. */
+  /**
+   * InstanceReservationAffinityPatch.
+   */
   export interface InstanceReservationAffinityPatch {
     /** The reservation affinity policy to use for this virtual server instance:
      *  - `disabled`: Reservations will not be used
@@ -38395,7 +41875,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceReservationAffinityPrototype. */
+  /**
+   * InstanceReservationAffinityPrototype.
+   */
   export interface InstanceReservationAffinityPrototype {
     /** The reservation affinity policy to use for this virtual server instance:
      *  - `disabled`: Reservations will not be used
@@ -38424,7 +41906,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceStatusReason. */
+  /**
+   * InstanceStatusReason.
+   */
   export interface InstanceStatusReason {
     /** A snake case string succinctly identifying the status reason.
      *
@@ -38457,10 +41941,17 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplate. */
+  /**
+   * InstanceTemplate.
+   */
   export interface InstanceTemplate {
     /** The availability policy to use for this virtual server instance. */
     availability_policy?: InstanceAvailabilityPolicyPrototype;
+    /** The cluster network attachments to create for this virtual server instance. A cluster network attachment
+     *  represents a device that is connected to a cluster network. The number of network attachments must match one of
+     *  the values from the instance profile's `cluster_network_attachment_count` before the instance can be started.
+     */
+    cluster_network_attachments?: InstanceClusterNetworkAttachmentPrototypeInstanceContext[];
     /** The confidential compute mode to use for this virtual server instance.
      *
      *  If unspecified, the default confidential compute mode from the profile will be used.
@@ -38548,40 +42039,39 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplateCollection. */
+  /**
+   * InstanceTemplateCollection.
+   */
   export interface InstanceTemplateCollection {
     /** A link to the first page of resources. */
-    first: InstanceTemplateCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: InstanceTemplateCollectionNext;
+    next?: PageLink;
     /** A page of instance templates. */
     templates: InstanceTemplate[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface InstanceTemplateCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface InstanceTemplateCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Identifies an instance template by a unique property. */
+  /**
+   * Identifies an instance template by a unique property.
+   */
   export interface InstanceTemplateIdentity {
   }
 
-  /** InstanceTemplatePrototype. */
+  /**
+   * InstanceTemplatePrototype.
+   */
   export interface InstanceTemplatePrototype {
     /** The availability policy to use for this virtual server instance. */
     availability_policy?: InstanceAvailabilityPolicyPrototype;
+    /** The cluster network attachments to create for this virtual server instance. A cluster network attachment
+     *  represents a device that is connected to a cluster network. The number of network attachments must match one of
+     *  the values from the instance profile's `cluster_network_attachment_count` before the instance can be started.
+     */
+    cluster_network_attachments?: InstanceClusterNetworkAttachmentPrototypeInstanceContext[];
     /** The confidential compute mode to use for this virtual server instance.
      *
      *  If unspecified, the default confidential compute mode from the profile will be used.
@@ -38665,7 +42155,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplateReference. */
+  /**
+   * InstanceTemplateReference.
+   */
   export interface InstanceTemplateReference {
     /** The CRN for this instance template. */
     crn: string;
@@ -38681,7 +42173,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** The virtual server instance VCPU configuration. */
+  /**
+   * The virtual server instance VCPU configuration.
+   */
   export interface InstanceVCPU {
     /** The VCPU architecture. */
     architecture: string;
@@ -38691,7 +42185,9 @@ namespace VpcV1 {
     manufacturer: string;
   }
 
-  /** Key. */
+  /**
+   * Key.
+   */
   export interface Key {
     /** The date and time that the key was created. */
     created_at: string;
@@ -38734,37 +42230,31 @@ namespace VpcV1 {
     }
   }
 
-  /** KeyCollection. */
+  /**
+   * KeyCollection.
+   */
   export interface KeyCollection {
     /** A link to the first page of resources. */
-    first: KeyCollectionFirst;
+    first: PageLink;
     /** A page of keys. */
     keys: Key[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: KeyCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface KeyCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface KeyCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Identifies a key by a unique property. */
+  /**
+   * Identifies a key by a unique property.
+   */
   export interface KeyIdentity {
   }
 
-  /** KeyReference. */
+  /**
+   * KeyReference.
+   */
   export interface KeyReference {
     /** The CRN for this key. */
     crn: string;
@@ -38784,17 +42274,23 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** Identifies a Cloud Object Storage bucket by a unique property. */
+  /**
+   * Identifies a Cloud Object Storage bucket by a unique property.
+   */
   export interface LegacyCloudObjectStorageBucketIdentity {
   }
 
-  /** LegacyCloudObjectStorageBucketReference. */
+  /**
+   * LegacyCloudObjectStorageBucketReference.
+   */
   export interface LegacyCloudObjectStorageBucketReference {
     /** The globally unique name of this Cloud Object Storage bucket. */
     name: string;
   }
 
-  /** LoadBalancer. */
+  /**
+   * LoadBalancer.
+   */
   export interface LoadBalancer {
     /** The access mode for this load balancer:
      *  - `private`: reachable from within its VPC, at IP addresses in `private_ips`
@@ -38940,33 +42436,30 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerCollection. */
+  /**
+   * LoadBalancerCollection.
+   */
   export interface LoadBalancerCollection {
     /** A link to the first page of resources. */
-    first: LoadBalancerCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A page of load balancers. */
     load_balancers: LoadBalancer[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: LoadBalancerCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface LoadBalancerCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface LoadBalancerCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** The DNS configuration for this load balancer. If absent, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone `lb.appdomain.cloud`. Not supported by private path load balancers. */
+  /**
+   * The DNS configuration for this load balancer.
+   *
+   * If absent, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone
+   * `lb.appdomain.cloud`.
+   *
+   * Not supported by private path load balancers.
+   */
   export interface LoadBalancerDNS {
     /** The DNS instance associated with this load balancer. */
     instance: DNSInstanceReferenceLoadBalancerDNSContext;
@@ -38974,7 +42467,14 @@ namespace VpcV1 {
     zone: DNSZoneReference;
   }
 
-  /** The DNS configuration for this load balancer. Specify `null` to remove the existing DNS configuration, which will remove all DNS `A` records for this load balancer that had been added to `zone`, and add equivalent `A` records to the public DNS zone `lb.appdomain.cloud`. Not supported by private path load balancers. */
+  /**
+   * The DNS configuration for this load balancer.
+   *
+   * Specify `null` to remove the existing DNS configuration, which will remove all DNS `A` records for this load
+   * balancer that had been added to `zone`, and add equivalent `A` records to the public DNS zone `lb.appdomain.cloud`.
+   *
+   * Not supported by private path load balancers.
+   */
   export interface LoadBalancerDNSPatch {
     /** The DNS instance to associate with this load balancer.
      *
@@ -38989,7 +42489,14 @@ namespace VpcV1 {
     zone?: DNSZoneIdentity;
   }
 
-  /** The DNS configuration for this load balancer. If unspecified, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone `lb.appdomain.cloud`. Otherwise, those DNS `A` records will be added to the specified `zone`. Not supported by private path load balancers. */
+  /**
+   * The DNS configuration for this load balancer.
+   *
+   * If unspecified, DNS `A` records for this load balancer's `hostname` property will be added to the public DNS zone
+   * `lb.appdomain.cloud`. Otherwise, those DNS `A` records will be added to the specified `zone`.
+   *
+   * Not supported by private path load balancers.
+   */
   export interface LoadBalancerDNSPrototype {
     /** The DNS instance to associate with this load balancer.
      *
@@ -39004,11 +42511,15 @@ namespace VpcV1 {
     zone: DNSZoneIdentity;
   }
 
-  /** Identifies a load balancer by a unique property. */
+  /**
+   * Identifies a load balancer by a unique property.
+   */
   export interface LoadBalancerIdentity {
   }
 
-  /** LoadBalancerListener. */
+  /**
+   * LoadBalancerListener.
+   */
   export interface LoadBalancerListener {
     /** If set to `true`, this listener will accept and forward PROXY protocol information. Supported by load
      *  balancers in the `application` family (otherwise always `false`). Additional restrictions:
@@ -39023,8 +42534,12 @@ namespace VpcV1 {
      *  If absent, this listener is not using a certificate instance.
      */
     certificate_instance?: CertificateInstanceReference;
-    /** The connection limit of the listener. */
-    connection_limit: number;
+    /** The concurrent connection limit for the listener. If reached, incoming connections may be queued or
+     *  rejected.
+     *
+     *  This property will be present for load balancers in the `application` family.
+     */
+    connection_limit?: number;
     /** The date and time that this listener was created. */
     created_at: string;
     /** The default pool for this listener. If absent, this listener has no default pool.
@@ -39038,8 +42553,9 @@ namespace VpcV1 {
     https_redirect?: LoadBalancerListenerHTTPSRedirect;
     /** The unique identifier for this load balancer listener. */
     id: string;
-    /** The idle connection timeout of the listener in seconds. This property will be present for load balancers in
-     *  the `application` family.
+    /** The idle connection timeout of the listener in seconds.
+     *
+     *  This property will be present for load balancers in the `application` family.
      */
     idle_connection_timeout?: number;
     /** The policies for this listener. */
@@ -39089,17 +42605,31 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerListenerCollection. */
+  /**
+   * LoadBalancerListenerCollection.
+   */
   export interface LoadBalancerListenerCollection {
     /** The listeners for the load balancer. */
     listeners: LoadBalancerListener[];
   }
 
-  /** The default pool for this listener. If `https_redirect` is set, the default pool will not be used. The specified pool must: - Belong to this load balancer - Have the same `protocol` as this listener, or have a compatible protocol. At present, the compatible protocols are `http` and `https`. - Not already be the `default_pool` for another listener Specify `null` to remove an existing default pool. */
+  /**
+   * The default pool for this listener. If `https_redirect` is set, the default pool will not be used. The specified
+   * pool must:
+   *
+   * - Belong to this load balancer
+   * - Have the same `protocol` as this listener, or have a compatible protocol.
+   *   At present, the compatible protocols are `http` and `https`.
+   * - Not already be the `default_pool` for another listener
+   *
+   * Specify `null` to remove an existing default pool.
+   */
   export interface LoadBalancerListenerDefaultPoolPatch {
   }
 
-  /** LoadBalancerListenerHTTPSRedirect. */
+  /**
+   * LoadBalancerListenerHTTPSRedirect.
+   */
   export interface LoadBalancerListenerHTTPSRedirect {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
@@ -39108,7 +42638,9 @@ namespace VpcV1 {
     uri?: string;
   }
 
-  /** LoadBalancerListenerHTTPSRedirectPatch. */
+  /**
+   * LoadBalancerListenerHTTPSRedirectPatch.
+   */
   export interface LoadBalancerListenerHTTPSRedirectPatch {
     /** The HTTP status code for this redirect. */
     http_status_code?: number;
@@ -39118,7 +42650,9 @@ namespace VpcV1 {
     uri?: string;
   }
 
-  /** LoadBalancerListenerHTTPSRedirectPrototype. */
+  /**
+   * LoadBalancerListenerHTTPSRedirectPrototype.
+   */
   export interface LoadBalancerListenerHTTPSRedirectPrototype {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
@@ -39128,11 +42662,15 @@ namespace VpcV1 {
     uri?: string;
   }
 
-  /** Identifies a load balancer listener by a unique property. */
+  /**
+   * Identifies a load balancer listener by a unique property.
+   */
   export interface LoadBalancerListenerIdentity {
   }
 
-  /** LoadBalancerListenerPolicy. */
+  /**
+   * LoadBalancerListenerPolicy.
+   */
   export interface LoadBalancerListenerPolicy {
     /** The policy action:
      *  - `forward`: Requests will be forwarded to the specified `target` pool
@@ -39195,19 +42733,23 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerListenerPolicyCollection. */
+  /**
+   * LoadBalancerListenerPolicyCollection.
+   */
   export interface LoadBalancerListenerPolicyCollection {
     /** The policies for the load balancer listener. */
     policies: LoadBalancerListenerPolicy[];
   }
 
-  /** LoadBalancerListenerPolicyPrototype. */
+  /**
+   * LoadBalancerListenerPolicyPrototype.
+   */
   export interface LoadBalancerListenerPolicyPrototype {
     /** The policy action:
      *  - `forward`: Requests will be forwarded to the specified `target` pool
-     *  - `https_redirect`: Requests will be redirected to the specified target listener. The
-     *    listener must have a `protocol` of `http`, and the target listener must have a
-     *    `protocol` of `https`
+     *  - `https_redirect`: Requests will be redirected to the specified `target.listener`.
+     *     This listener must have a `protocol` of `http`, and the target listener must
+     *     have a `protocol` of `https`.
      *  - `redirect`: Requests will be redirected to the specified `target.url`
      *  - `reject`: Requests will be rejected with a `403` status code.
      */
@@ -39222,16 +42764,19 @@ namespace VpcV1 {
     priority: number;
     /** The rule prototype objects for this policy. */
     rules?: LoadBalancerListenerPolicyRulePrototype[];
-    /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
-     *  - If `action` is `https_redirect`, specify a
-     *  `LoadBalancerListenerPolicyHTTPSRedirectPrototype`.
-     *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`.
+    /** - If `action` is `forward`, use `LoadBalancerPoolIdentity` to specify a pool in this
+     *    load balancer to forward to.
+     *  - If `action` is `https_redirect`, use
+     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
+     *    load balancer to redirect to.
+     *  - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
+     *    specify a URL to redirect to.
      */
     target?: LoadBalancerListenerPolicyTargetPrototype;
   }
   export namespace LoadBalancerListenerPolicyPrototype {
     export namespace Constants {
-      /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code. */
+      /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified `target.listener`. This listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https`. - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code. */
       export enum Action {
         FORWARD = 'forward',
         HTTPS_REDIRECT = 'https_redirect',
@@ -39241,7 +42786,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerListenerPolicyReference. */
+  /**
+   * LoadBalancerListenerPolicyReference.
+   */
   export interface LoadBalancerListenerPolicyReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -39257,7 +42804,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** LoadBalancerListenerPolicyRule. */
+  /**
+   * LoadBalancerListenerPolicyRule.
+   */
   export interface LoadBalancerListenerPolicyRule {
     /** The condition for the rule.
      *
@@ -39319,13 +42868,17 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerListenerPolicyRuleCollection. */
+  /**
+   * LoadBalancerListenerPolicyRuleCollection.
+   */
   export interface LoadBalancerListenerPolicyRuleCollection {
     /** The rules for the load balancer listener policy. */
     rules: LoadBalancerListenerPolicyRule[];
   }
 
-  /** LoadBalancerListenerPolicyRulePrototype. */
+  /**
+   * LoadBalancerListenerPolicyRulePrototype.
+   */
   export interface LoadBalancerListenerPolicyRulePrototype {
     /** The condition for the rule. */
     condition: LoadBalancerListenerPolicyRulePrototype.Constants.Condition | string;
@@ -39363,7 +42916,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerListenerPolicyRuleReference. */
+  /**
+   * LoadBalancerListenerPolicyRuleReference.
+   */
   export interface LoadBalancerListenerPolicyRuleReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -39375,19 +42930,39 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference` - If `action` is `https_redirect`, the response is a `LoadBalancerListenerPolicyHTTPSRedirect` - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`. */
+  /**
+   * - If `action` is `forward`, the response is a `LoadBalancerPoolReference`
+   * - If `action` is `https_redirect`, the response is a
+   * `LoadBalancerListenerPolicyHTTPSRedirect`
+   * - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`.
+   */
   export interface LoadBalancerListenerPolicyTarget {
   }
 
-  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `https_redirect`, specify a `LoadBalancerListenerPolicyHTTPSRedirectPatch`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`. */
+  /**
+   * - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
+   * - If `action` is `https_redirect`, specify a
+   * `LoadBalancerListenerPolicyHTTPSRedirectPatch`.
+   * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
+   */
   export interface LoadBalancerListenerPolicyTargetPatch {
   }
 
-  /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`. - If `action` is `https_redirect`, specify a `LoadBalancerListenerPolicyHTTPSRedirectPrototype`. - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPrototype`. */
+  /**
+   * - If `action` is `forward`, use `LoadBalancerPoolIdentity` to specify a pool in this
+   *   load balancer to forward to.
+   * - If `action` is `https_redirect`, use
+   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
+   *   load balancer to redirect to.
+   * - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
+   *   specify a URL to redirect to.
+   */
   export interface LoadBalancerListenerPolicyTargetPrototype {
   }
 
-  /** LoadBalancerListenerPrototypeLoadBalancerContext. */
+  /**
+   * LoadBalancerListenerPrototypeLoadBalancerContext.
+   */
   export interface LoadBalancerListenerPrototypeLoadBalancerContext {
     /** If set to `true`, this listener will accept and forward PROXY protocol information. Supported by load
      *  balancers in the `application` family (otherwise always `false`). Additional restrictions:
@@ -39399,7 +42974,11 @@ namespace VpcV1 {
     accept_proxy_protocol?: boolean;
     /** The certificate instance to use for SSL termination. The listener must have a `protocol` of `https`. */
     certificate_instance?: CertificateInstanceIdentity;
-    /** The connection limit of the listener. */
+    /** The concurrent connection limit for the listener. If reached, incoming connections may be queued or
+     *  rejected.
+     *
+     *  This property will be present for load balancers in the `application` family.
+     */
     connection_limit?: number;
     /** The default pool for this listener.  If `https_redirect` is specified,
      *  the default pool will not be used. If specified, the pool must:
@@ -39420,8 +42999,9 @@ namespace VpcV1 {
      *  listener must have a `protocol` of `https`.
      */
     https_redirect?: LoadBalancerListenerHTTPSRedirectPrototype;
-    /** The idle connection timeout of the listener in seconds. Supported for load balancers in the `application`
-     *  family.
+    /** The idle connection timeout of the listener in seconds.
+     *
+     *  Supported for load balancers in the `application` family.
      */
     idle_connection_timeout?: number;
     /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
@@ -39477,7 +43057,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerListenerReference. */
+  /**
+   * LoadBalancerListenerReference.
+   */
   export interface LoadBalancerListenerReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -39489,43 +43071,57 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** LoadBalancerLogging. */
+  /**
+   * LoadBalancerLogging.
+   */
   export interface LoadBalancerLogging {
     /** The datapath logging configuration for this load balancer. */
     datapath: LoadBalancerLoggingDatapath;
   }
 
-  /** The datapath logging configuration for this load balancer. */
+  /**
+   * The datapath logging configuration for this load balancer.
+   */
   export interface LoadBalancerLoggingDatapath {
     /** Indicates whether datapath logging is active for this load balancer. */
     active: boolean;
   }
 
-  /** The datapath logging configuration for this load balancer. */
+  /**
+   * The datapath logging configuration for this load balancer.
+   */
   export interface LoadBalancerLoggingDatapathPatch {
     /** Indicates whether datapath logging will be active for this load balancer. */
     active?: boolean;
   }
 
-  /** The datapath logging configuration for this load balancer. */
+  /**
+   * The datapath logging configuration for this load balancer.
+   */
   export interface LoadBalancerLoggingDatapathPrototype {
     /** Indicates whether datapath logging will be active for this load balancer. */
     active?: boolean;
   }
 
-  /** LoadBalancerLoggingPatch. */
+  /**
+   * LoadBalancerLoggingPatch.
+   */
   export interface LoadBalancerLoggingPatch {
     /** The datapath logging configuration for this load balancer. */
     datapath?: LoadBalancerLoggingDatapathPatch;
   }
 
-  /** LoadBalancerLoggingPrototype. */
+  /**
+   * LoadBalancerLoggingPrototype.
+   */
   export interface LoadBalancerLoggingPrototype {
     /** The datapath logging configuration for this load balancer. */
     datapath?: LoadBalancerLoggingDatapathPrototype;
   }
 
-  /** LoadBalancerPool. */
+  /**
+   * LoadBalancerPool.
+   */
   export interface LoadBalancerPool {
     /** The load balancing algorithm.
      *
@@ -39607,13 +43203,17 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerPoolCollection. */
+  /**
+   * LoadBalancerPoolCollection.
+   */
   export interface LoadBalancerPoolCollection {
     /** The pools for the load balancer. */
     pools: LoadBalancerPool[];
   }
 
-  /** LoadBalancerPoolHealthMonitor. */
+  /**
+   * LoadBalancerPoolHealthMonitor.
+   */
   export interface LoadBalancerPoolHealthMonitor {
     /** The seconds to wait between health checks. */
     delay: number;
@@ -39637,11 +43237,6 @@ namespace VpcV1 {
      *
      *  If `type` is `tcp`, this property will be absent.
      */
-    url?: any;
-    /** The health check URL path.  If specified, `type` must be `http` or `https`.
-     *
-     *  Must be in the format of an [origin-form request target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
-     */
     url_path?: string;
   }
   export namespace LoadBalancerPoolHealthMonitor {
@@ -39655,7 +43250,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerPoolHealthMonitorPatch. */
+  /**
+   * LoadBalancerPoolHealthMonitorPatch.
+   */
   export interface LoadBalancerPoolHealthMonitorPatch {
     /** The seconds to wait between health checks.  Must be greater than `timeout`. */
     delay: number;
@@ -39689,7 +43286,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerPoolHealthMonitorPrototype. */
+  /**
+   * LoadBalancerPoolHealthMonitorPrototype.
+   */
   export interface LoadBalancerPoolHealthMonitorPrototype {
     /** The seconds to wait between health checks.  Must be greater than `timeout`. */
     delay: number;
@@ -39721,17 +43320,23 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a load balancer pool by a unique property. */
+  /**
+   * Identifies a load balancer pool by a unique property.
+   */
   export interface LoadBalancerPoolIdentity {
   }
 
-  /** LoadBalancerPoolIdentityByName. */
+  /**
+   * LoadBalancerPoolIdentityByName.
+   */
   export interface LoadBalancerPoolIdentityByName {
     /** The name for this load balancer pool. The name is unique across all pools for the load balancer. */
     name: string;
   }
 
-  /** LoadBalancerPoolMember. */
+  /**
+   * LoadBalancerPoolMember.
+   */
   export interface LoadBalancerPoolMember {
     /** The date and time that this member was created. */
     created_at: string;
@@ -39790,13 +43395,17 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerPoolMemberCollection. */
+  /**
+   * LoadBalancerPoolMemberCollection.
+   */
   export interface LoadBalancerPoolMemberCollection {
     /** The members for the load balancer pool. */
     members: LoadBalancerPoolMember[];
   }
 
-  /** LoadBalancerPoolMemberPrototype. */
+  /**
+   * LoadBalancerPoolMemberPrototype.
+   */
   export interface LoadBalancerPoolMemberPrototype {
     /** The port the member will receive load balancer traffic on. Applies only to load balancer traffic received on
      *  a listener with a single port. (If the traffic is received on a listener with a port range, the member will
@@ -39821,7 +43430,9 @@ namespace VpcV1 {
     weight?: number;
   }
 
-  /** LoadBalancerPoolMemberReference. */
+  /**
+   * LoadBalancerPoolMemberReference.
+   */
   export interface LoadBalancerPoolMemberReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -39833,15 +43444,25 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in the `application` family support IP addresses. If the load balancer has route mode enabled, the member must be in a zone the load balancer has a subnet in. */
+  /**
+   * The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in
+   * the `application` family support IP addresses. If the load balancer has route mode enabled, the member must be in a
+   * zone the load balancer has a subnet in.
+   */
   export interface LoadBalancerPoolMemberTarget {
   }
 
-  /** The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in the `application` family support IP addresses. If the load balancer has route mode enabled, the member must be in a zone the load balancer has a subnet in. */
+  /**
+   * The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in
+   * the `application` family support IP addresses. If the load balancer has route mode enabled, the member must be in a
+   * zone the load balancer has a subnet in.
+   */
   export interface LoadBalancerPoolMemberTargetPrototype {
   }
 
-  /** LoadBalancerPoolPrototype. */
+  /**
+   * LoadBalancerPoolPrototype.
+   */
   export interface LoadBalancerPoolPrototype {
     /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that
      *  have `availability` with value `subnet` in the profile.
@@ -39901,7 +43522,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerPoolReference. */
+  /**
+   * LoadBalancerPoolReference.
+   */
   export interface LoadBalancerPoolReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -39915,7 +43538,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** LoadBalancerPoolSessionPersistence. */
+  /**
+   * LoadBalancerPoolSessionPersistence.
+   */
   export interface LoadBalancerPoolSessionPersistence {
     /** The session persistence cookie name. */
     cookie_name?: string;
@@ -39937,7 +43562,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The session persistence configuration. Specify `null` to remove any existing session persistence configuration. */
+  /**
+   * The session persistence configuration. Specify `null` to remove any existing session persistence configuration.
+   */
   export interface LoadBalancerPoolSessionPersistencePatch {
     /** The session persistence cookie name. Names starting with `IBM` are not allowed.
      *
@@ -39962,7 +43589,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerPoolSessionPersistencePrototype. */
+  /**
+   * LoadBalancerPoolSessionPersistencePrototype.
+   */
   export interface LoadBalancerPoolSessionPersistencePrototype {
     /** The session persistence cookie name. Names starting with `IBM` are not allowed.
      *
@@ -39987,7 +43616,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerProfile. */
+  /**
+   * LoadBalancerProfile.
+   */
   export interface LoadBalancerProfile {
     access_modes: LoadBalancerProfileAccessModes;
     availability: LoadBalancerProfileAvailability;
@@ -40019,7 +43650,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerProfileAccessModes. */
+  /**
+   * LoadBalancerProfileAccessModes.
+   */
   export interface LoadBalancerProfileAccessModes {
     /** The type for this profile field. */
     type: LoadBalancerProfileAccessModes.Constants.Type | string;
@@ -40041,45 +43674,43 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerProfileAvailability. */
+  /**
+   * LoadBalancerProfileAvailability.
+   */
   export interface LoadBalancerProfileAvailability {
   }
 
-  /** LoadBalancerProfileCollection. */
+  /**
+   * LoadBalancerProfileCollection.
+   */
   export interface LoadBalancerProfileCollection {
     /** A link to the first page of resources. */
-    first: LoadBalancerProfileCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: LoadBalancerProfileCollectionNext;
+    next?: PageLink;
     /** A page of load balancer profiles. */
     profiles: LoadBalancerProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface LoadBalancerProfileCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface LoadBalancerProfileCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Identifies a load balancer profile by a unique property. */
+  /**
+   * Identifies a load balancer profile by a unique property.
+   */
   export interface LoadBalancerProfileIdentity {
   }
 
-  /** LoadBalancerProfileInstanceGroupsSupported. */
+  /**
+   * LoadBalancerProfileInstanceGroupsSupported.
+   */
   export interface LoadBalancerProfileInstanceGroupsSupported {
   }
 
-  /** Indicates which logging type(s) are supported for a load balancer with this profile. */
+  /**
+   * Indicates which logging type(s) are supported for a load balancer with this profile.
+   */
   export interface LoadBalancerProfileLoggingSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileLoggingSupported.Constants.Type | string;
@@ -40095,7 +43726,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerProfileReference. */
+  /**
+   * LoadBalancerProfileReference.
+   */
   export interface LoadBalancerProfileReference {
     /** The product family this load balancer profile belongs to.
      *
@@ -40118,23 +43751,33 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerProfileRouteModeSupported. */
+  /**
+   * LoadBalancerProfileRouteModeSupported.
+   */
   export interface LoadBalancerProfileRouteModeSupported {
   }
 
-  /** LoadBalancerProfileSecurityGroupsSupported. */
+  /**
+   * LoadBalancerProfileSecurityGroupsSupported.
+   */
   export interface LoadBalancerProfileSecurityGroupsSupported {
   }
 
-  /** LoadBalancerProfileSourceIPSessionPersistenceSupported. */
+  /**
+   * LoadBalancerProfileSourceIPSessionPersistenceSupported.
+   */
   export interface LoadBalancerProfileSourceIPSessionPersistenceSupported {
   }
 
-  /** LoadBalancerProfileUDPSupported. */
+  /**
+   * LoadBalancerProfileUDPSupported.
+   */
   export interface LoadBalancerProfileUDPSupported {
   }
 
-  /** LoadBalancerReference. */
+  /**
+   * LoadBalancerReference.
+   */
   export interface LoadBalancerReference {
     /** The CRN for this load balancer. */
     crn: string;
@@ -40160,7 +43803,9 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerStatistics. */
+  /**
+   * LoadBalancerStatistics.
+   */
   export interface LoadBalancerStatistics {
     /** Number of active connections of this load balancer. */
     active_connections: number;
@@ -40172,7 +43817,9 @@ namespace VpcV1 {
     throughput: number;
   }
 
-  /** NetworkACL. */
+  /**
+   * NetworkACL.
+   */
   export interface NetworkACL {
     /** The date and time that the network ACL was created. */
     created_at: string;
@@ -40194,37 +43841,31 @@ namespace VpcV1 {
     vpc: VPCReference;
   }
 
-  /** NetworkACLCollection. */
+  /**
+   * NetworkACLCollection.
+   */
   export interface NetworkACLCollection {
     /** A link to the first page of resources. */
-    first: NetworkACLCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A page of network ACLs. */
     network_acls: NetworkACL[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: NetworkACLCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface NetworkACLCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface NetworkACLCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Identifies a network ACL by a unique property. */
+  /**
+   * Identifies a network ACL by a unique property.
+   */
   export interface NetworkACLIdentity {
   }
 
-  /** NetworkACLPrototype. */
+  /**
+   * NetworkACLPrototype.
+   */
   export interface NetworkACLPrototype {
     /** The name for this network ACL. The name must not be used by another network ACL for the VPC. If unspecified,
      *  the name will be a hyphenated list of randomly-selected words.
@@ -40238,7 +43879,9 @@ namespace VpcV1 {
     vpc: VPCIdentity;
   }
 
-  /** NetworkACLReference. */
+  /**
+   * NetworkACLReference.
+   */
   export interface NetworkACLReference {
     /** The CRN for this network ACL. */
     crn: string;
@@ -40254,7 +43897,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** NetworkACLRule. */
+  /**
+   * NetworkACLRule.
+   */
   export interface NetworkACLRule {
     /** The action to perform for a packet matching the rule. */
     action: NetworkACLRule.Constants.Action | string;
@@ -40307,41 +43952,41 @@ namespace VpcV1 {
     }
   }
 
-  /** The rule to move this rule immediately before. Specify `null` to move this rule after all existing rules. */
+  /**
+   * The rule to move this rule immediately before.
+   *
+   * Specify `null` to move this rule after all existing rules.
+   */
   export interface NetworkACLRuleBeforePatch {
   }
 
-  /** The rule to insert this rule immediately before. If unspecified, this rule will be inserted after all existing rules. */
+  /**
+   * The rule to insert this rule immediately before.
+   *
+   * If unspecified, this rule will be inserted after all existing rules.
+   */
   export interface NetworkACLRuleBeforePrototype {
   }
 
-  /** NetworkACLRuleCollection. */
+  /**
+   * NetworkACLRuleCollection.
+   */
   export interface NetworkACLRuleCollection {
     /** A link to the first page of resources. */
-    first: NetworkACLRuleCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: NetworkACLRuleCollectionNext;
+    next?: PageLink;
     /** A page of ordered rules (sorted based on the `before` property) for the network ACL. */
     rules: NetworkACLRuleItem[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface NetworkACLRuleCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface NetworkACLRuleCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** NetworkACLRuleItem. */
+  /**
+   * NetworkACLRuleItem.
+   */
   export interface NetworkACLRuleItem {
     /** The action to perform for a packet matching the rule. */
     action: NetworkACLRuleItem.Constants.Action | string;
@@ -40396,7 +44041,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRulePrototype. */
+  /**
+   * NetworkACLRulePrototype.
+   */
   export interface NetworkACLRulePrototype {
     /** The action to perform for a packet matching the rule. */
     action: NetworkACLRulePrototype.Constants.Action | string;
@@ -40448,7 +44095,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRulePrototypeNetworkACLContext. */
+  /**
+   * NetworkACLRulePrototypeNetworkACLContext.
+   */
   export interface NetworkACLRulePrototypeNetworkACLContext {
     /** The action to perform for a packet matching the rule. */
     action: NetworkACLRulePrototypeNetworkACLContext.Constants.Action | string;
@@ -40495,7 +44144,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRuleReference. */
+  /**
+   * NetworkACLRuleReference.
+   */
   export interface NetworkACLRuleReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -40509,7 +44160,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** NetworkInterface. */
+  /**
+   * NetworkInterface.
+   */
   export interface NetworkInterface {
     /** Indicates whether source IP spoofing is allowed on this instance network interface.
      *
@@ -40615,7 +44268,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkInterfaceBareMetalServerContextReference. */
+  /**
+   * NetworkInterfaceBareMetalServerContextReference.
+   */
   export interface NetworkInterfaceBareMetalServerContextReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -40653,11 +44308,15 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkInterfaceIPPrototype. */
+  /**
+   * NetworkInterfaceIPPrototype.
+   */
   export interface NetworkInterfaceIPPrototype {
   }
 
-  /** NetworkInterfaceInstanceContextReference. */
+  /**
+   * NetworkInterfaceInstanceContextReference.
+   */
   export interface NetworkInterfaceInstanceContextReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -40695,7 +44354,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkInterfacePrototype. */
+  /**
+   * NetworkInterfacePrototype.
+   */
   export interface NetworkInterfacePrototype {
     /** Indicates whether source IP spoofing is allowed on this instance network interface.
      *
@@ -40725,13 +44386,17 @@ namespace VpcV1 {
     subnet: SubnetIdentity;
   }
 
-  /** NetworkInterfaceUnpaginatedCollection. */
+  /**
+   * NetworkInterfaceUnpaginatedCollection.
+   */
   export interface NetworkInterfaceUnpaginatedCollection {
     /** The network interfaces for the instance. */
     network_interfaces: NetworkInterface[];
   }
 
-  /** OperatingSystem. */
+  /**
+   * OperatingSystem.
+   */
   export interface OperatingSystem {
     /** Users may create new images with this operating system. */
     allow_user_image_creation: boolean;
@@ -40770,37 +44435,39 @@ namespace VpcV1 {
     }
   }
 
-  /** OperatingSystemCollection. */
+  /**
+   * OperatingSystemCollection.
+   */
   export interface OperatingSystemCollection {
     /** A link to the first page of resources. */
-    first: OperatingSystemCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: OperatingSystemCollectionNext;
+    next?: PageLink;
     /** A page of operating systems. */
     operating_systems: OperatingSystem[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface OperatingSystemCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface OperatingSystemCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Identifies an operating system by a unique property. */
+  /**
+   * Identifies an operating system by a unique property.
+   */
   export interface OperatingSystemIdentity {
   }
 
-  /** PlacementGroup. */
+  /**
+   * PageLink.
+   */
+  export interface PageLink {
+    /** The URL for a page of resources. */
+    href: string;
+  }
+
+  /**
+   * PlacementGroup.
+   */
   export interface PlacementGroup {
     /** The date and time that the placement group was created. */
     created_at: string;
@@ -40851,33 +44518,25 @@ namespace VpcV1 {
     }
   }
 
-  /** PlacementGroupCollection. */
+  /**
+   * PlacementGroupCollection.
+   */
   export interface PlacementGroupCollection {
     /** A link to the first page of resources. */
-    first: PlacementGroupCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: PlacementGroupCollectionNext;
+    next?: PageLink;
     /** A page of placement groups. */
     placement_groups: PlacementGroup[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface PlacementGroupCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface PlacementGroupCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** PrivatePathServiceGateway. */
+  /**
+   * PrivatePathServiceGateway.
+   */
   export interface PrivatePathServiceGateway {
     /** The date and time that the private path service gateway was created. */
     created_at: string;
@@ -40957,7 +44616,9 @@ namespace VpcV1 {
     }
   }
 
-  /** PrivatePathServiceGatewayAccountPolicy. */
+  /**
+   * PrivatePathServiceGatewayAccountPolicy.
+   */
   export interface PrivatePathServiceGatewayAccountPolicy {
     /** The access policy for the account:
      *  - permit: access will be permitted
@@ -40994,59 +44655,41 @@ namespace VpcV1 {
     }
   }
 
-  /** PrivatePathServiceGatewayAccountPolicyCollection. */
+  /**
+   * PrivatePathServiceGatewayAccountPolicyCollection.
+   */
   export interface PrivatePathServiceGatewayAccountPolicyCollection {
     /** A page of account policies for the private path service gateway. */
     account_policies: PrivatePathServiceGatewayAccountPolicy[];
     /** A link to the first page of resources. */
-    first: PrivatePathServiceGatewayAccountPolicyCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: PrivatePathServiceGatewayAccountPolicyCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface PrivatePathServiceGatewayAccountPolicyCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface PrivatePathServiceGatewayAccountPolicyCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** PrivatePathServiceGatewayCollection. */
+  /**
+   * PrivatePathServiceGatewayCollection.
+   */
   export interface PrivatePathServiceGatewayCollection {
     /** A link to the first page of resources. */
-    first: PrivatePathServiceGatewayCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: PrivatePathServiceGatewayCollectionNext;
+    next?: PageLink;
     /** A page of private path service gateways. */
     private_path_service_gateways: PrivatePathServiceGateway[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface PrivatePathServiceGatewayCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface PrivatePathServiceGatewayCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** PrivatePathServiceGatewayEndpointGatewayBinding. */
+  /**
+   * PrivatePathServiceGatewayEndpointGatewayBinding.
+   */
   export interface PrivatePathServiceGatewayEndpointGatewayBinding {
     /** The account that created the endpoint gateway. */
     account: AccountReference;
@@ -41108,33 +44751,26 @@ namespace VpcV1 {
     }
   }
 
-  /** PrivatePathServiceGatewayEndpointGatewayBindingCollection. */
+  /**
+   * PrivatePathServiceGatewayEndpointGatewayBindingCollection.
+   */
   export interface PrivatePathServiceGatewayEndpointGatewayBindingCollection {
     /** A page of endpoint gateway bindings for the private path service gateway. */
     endpoint_gateway_bindings: PrivatePathServiceGatewayEndpointGatewayBinding[];
     /** A link to the first page of resources. */
-    first: PrivatePathServiceGatewayEndpointGatewayBindingCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: PrivatePathServiceGatewayEndpointGatewayBindingCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface PrivatePathServiceGatewayEndpointGatewayBindingCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface PrivatePathServiceGatewayEndpointGatewayBindingCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  /**
+   * If present, this property indicates that the resource associated with this reference is remote and therefore may
+   * not be directly retrievable.
+   */
   export interface PrivatePathServiceGatewayRemote {
     /** If present, this property indicates that the referenced resource is remote to this
      *  account, and identifies the owning account.
@@ -41146,7 +44782,9 @@ namespace VpcV1 {
     region?: RegionReference;
   }
 
-  /** PublicGateway. */
+  /**
+   * PublicGateway.
+   */
   export interface PublicGateway {
     /** The date and time that the public gateway was created. */
     created_at: string;
@@ -41187,37 +44825,31 @@ namespace VpcV1 {
     }
   }
 
-  /** PublicGatewayCollection. */
+  /**
+   * PublicGatewayCollection.
+   */
   export interface PublicGatewayCollection {
     /** A link to the first page of resources. */
-    first: PublicGatewayCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: PublicGatewayCollectionNext;
+    next?: PageLink;
     /** A page of public gateways. */
     public_gateways: PublicGateway[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface PublicGatewayCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface PublicGatewayCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** PublicGatewayFloatingIPPrototype. */
+  /**
+   * PublicGatewayFloatingIPPrototype.
+   */
   export interface PublicGatewayFloatingIPPrototype {
   }
 
-  /** The floating IP bound to this public gateway. */
+  /**
+   * The floating IP bound to this public gateway.
+   */
   export interface PublicGatewayFloatingIp {
     /** The globally unique IP address. */
     address: string;
@@ -41235,11 +44867,15 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** Identifies a public gateway by a unique property. */
+  /**
+   * Identifies a public gateway by a unique property.
+   */
   export interface PublicGatewayIdentity {
   }
 
-  /** PublicGatewayReference. */
+  /**
+   * PublicGatewayReference.
+   */
   export interface PublicGatewayReference {
     /** The CRN for this public gateway. */
     crn: string;
@@ -41265,7 +44901,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Region. */
+  /**
+   * Region.
+   */
   export interface Region {
     /** The API endpoint for this region. */
     endpoint: string;
@@ -41290,17 +44928,23 @@ namespace VpcV1 {
     }
   }
 
-  /** RegionCollection. */
+  /**
+   * RegionCollection.
+   */
   export interface RegionCollection {
     /** The regions for the account. */
     regions: Region[];
   }
 
-  /** Identifies a region by a unique property. */
+  /**
+   * Identifies a region by a unique property.
+   */
   export interface RegionIdentity {
   }
 
-  /** RegionReference. */
+  /**
+   * RegionReference.
+   */
   export interface RegionReference {
     /** The URL for this region. */
     href: string;
@@ -41308,7 +44952,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** Reservation. */
+  /**
+   * Reservation.
+   */
   export interface Reservation {
     /** The affinity policy to use for this reservation:
      *  - `restricted`: The reservation must be manually requested
@@ -41388,7 +45034,11 @@ namespace VpcV1 {
     }
   }
 
-  /** The capacity configuration for this reservation If absent, this reservation has no assigned capacity. */
+  /**
+   * The capacity configuration for this reservation
+   *
+   * If absent, this reservation has no assigned capacity.
+   */
   export interface ReservationCapacity {
     /** The amount allocated to this capacity reservation. */
     allocated: number;
@@ -41398,8 +45048,9 @@ namespace VpcV1 {
      *  - `allocating`: The capacity reservation is being allocated for use
      *  - `allocated`: The total capacity of the reservation has been allocated for use
      *  - `degraded`: The capacity reservation has been allocated for use, but some of the
-     *    capacity is not available.
-     *    See https://cloud.ibm.com/docs/vpc?topic=vpc-capacity-status for more information.
+     *    capacity is not available. See [capacity status
+     *    reasons](https://cloud.ibm.com/docs/vpc?topic=vpc-reserved-capacity-status-reasons)
+     *    for more information.
      *  - `unallocated`: The capacity reservation is not allocated for use
      *
      *  The enumerated values for this property may
@@ -41413,7 +45064,7 @@ namespace VpcV1 {
   }
   export namespace ReservationCapacity {
     export namespace Constants {
-      /** The status of the capacity reservation: - `allocating`: The capacity reservation is being allocated for use - `allocated`: The total capacity of the reservation has been allocated for use - `degraded`: The capacity reservation has been allocated for use, but some of the capacity is not available. See https://cloud.ibm.com/docs/vpc?topic=vpc-capacity-status for more information. - `unallocated`: The capacity reservation is not allocated for use The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The status of the capacity reservation: - `allocating`: The capacity reservation is being allocated for use - `allocated`: The total capacity of the reservation has been allocated for use - `degraded`: The capacity reservation has been allocated for use, but some of the capacity is not available. See [capacity status reasons](https://cloud.ibm.com/docs/vpc?topic=vpc-reserved-capacity-status-reasons) for more information. - `unallocated`: The capacity reservation is not allocated for use The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         ALLOCATED = 'allocated',
         ALLOCATING = 'allocating',
@@ -41423,45 +45074,43 @@ namespace VpcV1 {
     }
   }
 
-  /** The capacity reservation configuration to use. The configuration can only be changed for reservations with a `status` of `inactive`. */
+  /**
+   * The capacity reservation configuration to use.
+   *
+   * The configuration can only be changed for reservations with a `status` of `inactive`.
+   */
   export interface ReservationCapacityPatch {
     /** The total amount to use for this capacity reservation. */
     total?: number;
   }
 
-  /** The capacity reservation configuration to use. */
+  /**
+   * The capacity reservation configuration to use.
+   */
   export interface ReservationCapacityPrototype {
     /** The total amount to use for this capacity reservation. */
     total: number;
   }
 
-  /** ReservationCollection. */
+  /**
+   * ReservationCollection.
+   */
   export interface ReservationCollection {
     /** A link to the first page of resources. */
-    first: ReservationCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ReservationCollectionNext;
+    next?: PageLink;
     /** A page of reservations. */
     reservations: Reservation[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface ReservationCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ReservationCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** The committed use reservation configuration. */
+  /**
+   * The committed use reservation configuration.
+   */
   export interface ReservationCommittedUse {
     /** The expiration date and time for this committed use reservation.
      *
@@ -41496,7 +45145,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservationCommittedUsePatch. */
+  /**
+   * ReservationCommittedUsePatch.
+   */
   export interface ReservationCommittedUsePatch {
     /** The policy to apply when the committed use term expires:
      *  - `release`: Release any available capacity and let the reservation expire.
@@ -41524,7 +45175,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservationCommittedUsePrototype. */
+  /**
+   * ReservationCommittedUsePrototype.
+   */
   export interface ReservationCommittedUsePrototype {
     /** The policy to apply when the committed use term expires:
      *  - `release`: Release any available capacity and let the reservation expire.
@@ -41550,11 +45203,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a reservation by a unique property. */
+  /**
+   * Identifies a reservation by a unique property.
+   */
   export interface ReservationIdentity {
   }
 
-  /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) for this reservation. */
+  /**
+   * The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) for this reservation.
+   */
   export interface ReservationProfile {
     /** The URL for this virtual server instance profile. */
     href: string;
@@ -41572,7 +45229,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation. */
+  /**
+   * The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation.
+   */
   export interface ReservationProfilePatch {
     /** The globally unique name of the profile. */
     name?: string;
@@ -41588,7 +45247,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation. */
+  /**
+   * The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation.
+   */
   export interface ReservationProfilePrototype {
     /** The globally unique name of the profile. */
     name: string;
@@ -41604,7 +45265,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservationReference. */
+  /**
+   * ReservationReference.
+   */
   export interface ReservationReference {
     /** The CRN for this reservation. */
     crn: string;
@@ -41630,7 +45293,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservationStatusReason. */
+  /**
+   * ReservationStatusReason.
+   */
   export interface ReservationStatusReason {
     /** A snake case string succinctly identifying the status reason.
      *
@@ -41653,7 +45318,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservedIP. */
+  /**
+   * ReservedIP.
+   */
   export interface ReservedIP {
     /** The IP address.
      *
@@ -41688,6 +45355,9 @@ namespace VpcV1 {
     /** The target this reserved IP is bound to.
      *
      *  If absent, this reserved IP is provider-owned or unbound.
+     *
+     *  The resources supported by this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     target?: ReservedIPTarget;
   }
@@ -41715,137 +45385,89 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservedIPCollection. */
+  /**
+   * ReservedIPCollection.
+   */
   export interface ReservedIPCollection {
     /** A link to the first page of resources. */
-    first: ReservedIPCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ReservedIPCollectionNext;
+    next?: PageLink;
     /** A page of reserved IPs in the subnet. */
     reserved_ips: ReservedIP[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** ReservedIPCollectionBareMetalServerNetworkInterfaceContext. */
+  /**
+   * ReservedIPCollectionBareMetalServerNetworkInterfaceContext.
+   */
   export interface ReservedIPCollectionBareMetalServerNetworkInterfaceContext {
     /** A link to the first page of resources. */
-    first: ReservedIPCollectionBareMetalServerNetworkInterfaceContextFirst;
+    first: PageLink;
     /** A page of reserved IPs bound to the bare metal server network interface. */
     ips: ReservedIP[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ReservedIPCollectionBareMetalServerNetworkInterfaceContextNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface ReservedIPCollectionBareMetalServerNetworkInterfaceContextFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ReservedIPCollectionBareMetalServerNetworkInterfaceContextNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** ReservedIPCollectionEndpointGatewayContext. */
+  /**
+   * ReservedIPCollectionEndpointGatewayContext.
+   */
   export interface ReservedIPCollectionEndpointGatewayContext {
     /** A link to the first page of resources. */
-    first: ReservedIPCollectionEndpointGatewayContextFirst;
+    first: PageLink;
     /** A page of reserved IPs bound to the endpoint gateway. */
     ips: ReservedIP[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ReservedIPCollectionEndpointGatewayContextNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface ReservedIPCollectionEndpointGatewayContextFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ReservedIPCollectionEndpointGatewayContextNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the first page of resources. */
-  export interface ReservedIPCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** ReservedIPCollectionInstanceNetworkInterfaceContext. */
+  /**
+   * ReservedIPCollectionInstanceNetworkInterfaceContext.
+   */
   export interface ReservedIPCollectionInstanceNetworkInterfaceContext {
     /** A link to the first page of resources. */
-    first: ReservedIPCollectionInstanceNetworkInterfaceContextFirst;
+    first: PageLink;
     /** A page of reserved IPs bound to the instance network interface. */
     ips: ReservedIP[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ReservedIPCollectionInstanceNetworkInterfaceContextNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface ReservedIPCollectionInstanceNetworkInterfaceContextFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ReservedIPCollectionInstanceNetworkInterfaceContextNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ReservedIPCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** ReservedIPCollectionVirtualNetworkInterfaceContext. */
+  /**
+   * ReservedIPCollectionVirtualNetworkInterfaceContext.
+   */
   export interface ReservedIPCollectionVirtualNetworkInterfaceContext {
     /** A link to the first page of resources. */
-    first: ReservedIPCollectionVirtualNetworkInterfaceContextFirst;
+    first: PageLink;
     /** A page of reserved IPs bound to the virtual network interface specified by the identifier in the URL. */
     ips: ReservedIPReference[];
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ReservedIPCollectionVirtualNetworkInterfaceContextNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface ReservedIPCollectionVirtualNetworkInterfaceContextFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ReservedIPCollectionVirtualNetworkInterfaceContextNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** ReservedIPReference. */
+  /**
+   * ReservedIPReference.
+   */
   export interface ReservedIPReference {
     /** The IP address.
      *
@@ -41877,25 +45499,47 @@ namespace VpcV1 {
     }
   }
 
-  /** The target this reserved IP is bound to. If absent, this reserved IP is provider-owned or unbound. */
+  /**
+   * The target this reserved IP is bound to.
+   *
+   * If absent, this reserved IP is provider-owned or unbound.
+   *
+   * The resources supported by this property may
+   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+   */
   export interface ReservedIPTarget {
   }
 
-  /** The target to bind this reserved IP to.  The target must be in the same VPC. The following targets are supported: - An endpoint gateway not already bound to a reserved IP in the subnet's zone. - A virtual network interface. If unspecified, the reserved IP will be created unbound. */
+  /**
+   * The target to bind this reserved IP to.  The target must be in the same VPC.
+   *
+   * The following targets are supported:
+   * - An endpoint gateway not already bound to a reserved IP in the subnet's zone.
+   * - A virtual network interface.
+   *
+   * If unspecified, the reserved IP will be created unbound.
+   */
   export interface ReservedIPTargetPrototype {
   }
 
-  /** Identifies one or more resources according to the specified filter property. */
+  /**
+   * Identifies one or more resources according to the specified filter property.
+   */
   export interface ResourceFilter {
     /** The resource type. */
     resource_type?: string;
   }
 
-  /** The resource group to use. If unspecified, the account's [default resource group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used. */
+  /**
+   * The resource group to use. If unspecified, the account's [default resource
+   * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+   */
   export interface ResourceGroupIdentity {
   }
 
-  /** ResourceGroupReference. */
+  /**
+   * ResourceGroupReference.
+   */
   export interface ResourceGroupReference {
     /** The URL for this resource group. */
     href: string;
@@ -41905,7 +45549,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** Route. */
+  /**
+   * Route.
+   */
   export interface Route {
     /** The action to perform with a packet matching the route:
      *  - `delegate`: delegate to system-provided routes
@@ -41994,164 +45640,76 @@ namespace VpcV1 {
     }
   }
 
-  /** RouteCollection. */
+  /**
+   * RouteCollection.
+   */
   export interface RouteCollection {
     /** A link to the first page of resources. */
-    first: RouteCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: RouteCollectionNext;
+    next?: PageLink;
     /** A page of routes in the routing table. */
     routes: Route[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface RouteCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface RouteCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** RouteCollectionVPCContext. */
+  /**
+   * RouteCollectionVPCContext.
+   */
   export interface RouteCollectionVPCContext {
     /** A link to the first page of resources. */
-    first: RouteCollectionVPCContextFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: RouteCollectionVPCContextNext;
+    next?: PageLink;
     /** A page of routes in the routing table. */
-    routes: RouteCollectionVPCContextRoutesItem[];
+    routes: Route[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface RouteCollectionVPCContextFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface RouteCollectionVPCContextNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** RouteCollectionVPCContextRoutesItem. */
-  export interface RouteCollectionVPCContextRoutesItem {
-    /** The action to perform with a packet matching the route:
-     *  - `delegate`: delegate to system-provided routes
-     *  - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes
-     *  - `deliver`: deliver the packet to the specified `next_hop`
-     *  - `drop`: drop the packet
-     *
-     *  The enumerated values for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
-     */
-    action: RouteCollectionVPCContextRoutesItem.Constants.Action | string;
-    /** Indicates whether this route will be advertised to the ingress sources specified by the
-     *  `advertise_routes_to` routing table property.
-     */
-    advertise: boolean;
-    /** The date and time that the route was created. */
-    created_at: string;
-    /** If present, the resource that created the route. Routes with this property present cannot
-     *  be directly deleted. All routes with an `origin` of `service` will have this property set,
-     *  and future `origin` values may also have this property set.
-     */
-    creator?: RouteCreator;
-    /** The destination CIDR of the route. */
-    destination: string;
-    /** The URL for this route. */
-    href: string;
-    /** The unique identifier for this route. */
-    id: string;
-    /** The lifecycle state of the route. */
-    lifecycle_state: RouteCollectionVPCContextRoutesItem.Constants.LifecycleState | string;
-    /** The name for this route. The name is unique across all routes in the routing table. */
-    name: string;
-    /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
-     *  other `action` values, its `address` will be `0.0.0.0`.
-     */
-    next_hop: RouteNextHop;
-    /** The origin of this route:
-     *  - `service`: route was directly created by a service
-     *  - `user`: route was directly created by a user
-     *
-     *  The enumerated values for this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
-     */
-    origin: RouteCollectionVPCContextRoutesItem.Constants.Origin | string;
-    /** The priority of this route. Smaller values have higher priority.
-     *
-     *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
-     *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
-     *  distributed between them.
-     */
-    priority: number;
-    /** The zone the route applies to.
-     *
-     *  If subnets are attached to the route's routing table, egress traffic from those
-     *  subnets in this zone will be subject to this route. If this route's routing table
-     *  has any of `route_direct_link_ingress`, `route_internet_ingress`,
-     *  `route_transit_gateway_ingress` or `route_vpc_zone_ingress`  set to`true`, traffic
-     *  from those ingress sources arriving in this zone will be subject to this route.
-     */
-    zone: ZoneReference;
-  }
-  export namespace RouteCollectionVPCContextRoutesItem {
-    export namespace Constants {
-      /** The action to perform with a packet matching the route: - `delegate`: delegate to system-provided routes - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
-      export enum Action {
-        DELEGATE = 'delegate',
-        DELEGATE_VPC = 'delegate_vpc',
-        DELIVER = 'deliver',
-        DROP = 'drop',
-      }
-      /** The lifecycle state of the route. */
-      export enum LifecycleState {
-        DELETING = 'deleting',
-        FAILED = 'failed',
-        PENDING = 'pending',
-        STABLE = 'stable',
-        SUSPENDED = 'suspended',
-        UPDATING = 'updating',
-        WAITING = 'waiting',
-      }
-      /** The origin of this route: - `service`: route was directly created by a service - `user`: route was directly created by a user The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
-      export enum Origin {
-        SERVICE = 'service',
-        USER = 'user',
-      }
-    }
-  }
-
-  /** If present, the resource that created the route. Routes with this property present cannot be directly deleted. All routes with an `origin` of `service` will have this property set, and future `origin` values may also have this property set. */
+  /**
+   * If present, the resource that created the route. Routes with this property present cannot be directly deleted. All
+   * routes with an `origin` of `service` will have this property set, and future `origin` values may also have this
+   * property set.
+   */
   export interface RouteCreator {
   }
 
-  /** RouteNextHop. */
+  /**
+   * RouteNextHop.
+   */
   export interface RouteNextHop {
   }
 
-  /** If `action` is `deliver`, the next hop that packets will be delivered to (must not be `0.0.0.0`). For other `action` values, specify `0.0.0.0` or remove it by specifying `null`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route has an `action` of `deliver` and `next_hop` is an IP address. */
+  /**
+   * If `action` is `deliver`, the next hop that packets will be delivered to (must not be
+   * `0.0.0.0`). For other `action` values, specify `0.0.0.0` or remove it by specifying
+   * `null`.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route
+   * has an `action` of `deliver` and `next_hop` is an IP address.
+   */
   export interface RouteNextHopPatch {
   }
 
-  /** If `action` is `deliver`, the next hop that packets will be delivered to (must not be `0.0.0.0`). For other `action` values, it must be omitted or specified as `0.0.0.0`. At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route has an `action` of `deliver` and `next_hop` is an IP address. */
+  /**
+   * If `action` is `deliver`, the next hop that packets will be delivered to (must not be
+   * `0.0.0.0`). For other `action` values, it must be omitted or specified as `0.0.0.0`.
+   *
+   * At most two routes per `zone` in a table can have the same `destination` and `priority`, and only when each route
+   * has an `action` of `deliver` and `next_hop` is an IP address.
+   */
   export interface RouteNextHopPrototype {
   }
 
-  /** RoutePrototype. */
+  /**
+   * RoutePrototype.
+   */
   export interface RoutePrototype {
     /** The action to perform with a packet matching the route:
      *  - `delegate`: delegate to system-provided routes
@@ -42214,7 +45772,9 @@ namespace VpcV1 {
     }
   }
 
-  /** RouteReference. */
+  /**
+   * RouteReference.
+   */
   export interface RouteReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -42228,12 +45788,14 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** RoutingTable. */
+  /**
+   * RoutingTable.
+   */
   export interface RoutingTable {
     /** The filters specifying the resources that may create routes in this routing table.
      *
-     *  At present, only the `resource_type` filter is permitted, and only the values
-     *  `vpn_gateway` and `vpn_server` are supported, but filter support is expected to expand in the future.
+     *  The resources and types of filters supported by this property is expected to
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     accept_routes_from: ResourceFilter[];
     /** The ingress sources to advertise routes to. Routes in the table with `advertise` enabled will be advertised
@@ -42328,37 +45890,31 @@ namespace VpcV1 {
     }
   }
 
-  /** RoutingTableCollection. */
+  /**
+   * RoutingTableCollection.
+   */
   export interface RoutingTableCollection {
     /** A link to the first page of resources. */
-    first: RoutingTableCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: RoutingTableCollectionNext;
+    next?: PageLink;
     /** A page of routing tables. */
     routing_tables: RoutingTable[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface RoutingTableCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface RoutingTableCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Identifies a routing table by a unique property. */
+  /**
+   * Identifies a routing table by a unique property.
+   */
   export interface RoutingTableIdentity {
   }
 
-  /** RoutingTableReference. */
+  /**
+   * RoutingTableReference.
+   */
   export interface RoutingTableReference {
     /** The CRN for this VPC routing table. */
     crn: string;
@@ -42384,7 +45940,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SecurityGroup. */
+  /**
+   * SecurityGroup.
+   */
   export interface SecurityGroup {
     /** The date and time that this security group was created. */
     created_at: string;
@@ -42406,37 +45964,31 @@ namespace VpcV1 {
     vpc: VPCReference;
   }
 
-  /** SecurityGroupCollection. */
+  /**
+   * SecurityGroupCollection.
+   */
   export interface SecurityGroupCollection {
     /** A link to the first page of resources. */
-    first: SecurityGroupCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: SecurityGroupCollectionNext;
+    next?: PageLink;
     /** A page of security groups. */
     security_groups: SecurityGroup[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface SecurityGroupCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface SecurityGroupCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Identifies a security group by a unique property. */
+  /**
+   * Identifies a security group by a unique property.
+   */
   export interface SecurityGroupIdentity {
   }
 
-  /** SecurityGroupReference. */
+  /**
+   * SecurityGroupReference.
+   */
   export interface SecurityGroupReference {
     /** The CRN for this security group. */
     crn: string;
@@ -42452,7 +46004,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** SecurityGroupRule. */
+  /**
+   * SecurityGroupRule.
+   */
   export interface SecurityGroupRule {
     /** The direction of traffic to allow. */
     direction: SecurityGroupRule.Constants.Direction | string;
@@ -42505,25 +46059,45 @@ namespace VpcV1 {
     }
   }
 
-  /** SecurityGroupRuleCollection. */
+  /**
+   * SecurityGroupRuleCollection.
+   */
   export interface SecurityGroupRuleCollection {
     /** The rules for the security group. */
     rules: SecurityGroupRule[];
   }
 
-  /** The local IP address or range of local IP addresses to which this rule will allow inbound traffic (or from which, for outbound traffic). A CIDR block of `0.0.0.0/0` allows traffic to all local IP addresses (or from all local IP addresses, for outbound rules). */
+  /**
+   * The local IP address or range of local IP addresses to which this rule will allow inbound traffic (or from which,
+   * for outbound traffic). A CIDR block of `0.0.0.0/0` allows traffic to all local IP addresses (or from all local IP
+   * addresses, for outbound rules).
+   */
   export interface SecurityGroupRuleLocal {
   }
 
-  /** The local IP address or range of local IP addresses to which this rule will allow inbound traffic (or from which, for outbound traffic). Can be specified as an IP address or a CIDR block. Specify a CIDR block of `0.0.0.0/0` to allow traffic to all local IP addresses (or from all local IP addresses, for outbound rules). */
+  /**
+   * The local IP address or range of local IP addresses to which this rule will allow inbound traffic (or from which,
+   * for outbound traffic). Can be specified as an IP address or a CIDR block.
+   *
+   * Specify a CIDR block of `0.0.0.0/0` to allow traffic to all local IP addresses (or from all local IP addresses, for
+   * outbound rules).
+   */
   export interface SecurityGroupRuleLocalPatch {
   }
 
-  /** The local IP address or range of local IP addresses to which this rule will allow inbound traffic (or from which, for outbound traffic) If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP addresses (or from all local IP addresses, for outbound rules). */
+  /**
+   * The local IP address or range of local IP addresses to which this rule will allow inbound traffic (or from which,
+   * for outbound traffic)
+   *
+   * If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP addresses (or from all
+   * local IP addresses, for outbound rules).
+   */
   export interface SecurityGroupRuleLocalPrototype {
   }
 
-  /** SecurityGroupRulePrototype. */
+  /**
+   * SecurityGroupRulePrototype.
+   */
   export interface SecurityGroupRulePrototype {
     /** The direction of traffic to allow. */
     direction: SecurityGroupRulePrototype.Constants.Direction | string;
@@ -42573,49 +46147,60 @@ namespace VpcV1 {
     }
   }
 
-  /** The remote IP addresses or security groups from which this rule allows traffic (or to which, for outbound rules). A CIDR block of `0.0.0.0/0` allows traffic from any source (or to any destination, for outbound rules). */
+  /**
+   * The remote IP addresses or security groups from which this rule allows traffic (or to which, for outbound rules). A
+   * CIDR block of `0.0.0.0/0` allows traffic from any source
+   * (or to any destination, for outbound rules).
+   */
   export interface SecurityGroupRuleRemote {
   }
 
-  /** The remote IP addresses or security groups from which this rule will allow traffic (or to which, for outbound rules). Can be specified as an IP address, a CIDR block, or a security group. A CIDR block of `0.0.0.0/0` will allow traffic from any source (or to any destination, for outbound rules). */
+  /**
+   * The remote IP addresses or security groups from which this rule will allow traffic (or to which, for outbound
+   * rules). Can be specified as an IP address, a CIDR block, or a security group. A CIDR block of `0.0.0.0/0` will
+   * allow traffic from any source (or to any destination, for outbound rules).
+   */
   export interface SecurityGroupRuleRemotePatch {
   }
 
-  /** The remote IP addresses or security groups from which this rule will allow traffic (or to which, for outbound rules). Can be specified as an IP address, a CIDR block, or a security group within the VPC. If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source (or to any destination, for outbound rules). */
+  /**
+   * The remote IP addresses or security groups from which this rule will allow traffic (or to which, for outbound
+   * rules). Can be specified as an IP address, a CIDR block, or a security group within the VPC.
+   *
+   * If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source
+   * (or to any destination, for outbound rules).
+   */
   export interface SecurityGroupRuleRemotePrototype {
   }
 
-  /** SecurityGroupTargetCollection. */
+  /**
+   * SecurityGroupTargetCollection.
+   */
   export interface SecurityGroupTargetCollection {
     /** A link to the first page of resources. */
-    first: SecurityGroupTargetCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: SecurityGroupTargetCollectionNext;
+    next?: PageLink;
     /** A page of targets for the security group. */
     targets: SecurityGroupTargetReference[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface SecurityGroupTargetCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface SecurityGroupTargetCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A target of this security group. The resources supported by this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+  /**
+   * A target of this security group.
+   *
+   * The resources supported by this property may
+   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+   */
   export interface SecurityGroupTargetReference {
   }
 
-  /** Share. */
+  /**
+   * Share.
+   */
   export interface Share {
     /** The access control mode for the share:
      *
@@ -42797,7 +46382,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareAccessorBinding. */
+  /**
+   * ShareAccessorBinding.
+   */
   export interface ShareAccessorBinding {
     /** The accessor for this share accessor binding.
      *
@@ -42835,37 +46422,34 @@ namespace VpcV1 {
     }
   }
 
-  /** The accessor for this share accessor binding. The resources supported by this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+  /**
+   * The accessor for this share accessor binding.
+   *
+   * The resources supported by this property may
+   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+   */
   export interface ShareAccessorBindingAccessor {
   }
 
-  /** ShareAccessorBindingCollection. */
+  /**
+   * ShareAccessorBindingCollection.
+   */
   export interface ShareAccessorBindingCollection {
     /** A page of accessor bindings for the share. */
     accessor_bindings: ShareAccessorBinding[];
     /** A link to the first page of resources. */
-    first: ShareAccessorBindingCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ShareAccessorBindingCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface ShareAccessorBindingCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ShareAccessorBindingCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** ShareAccessorBindingReference. */
+  /**
+   * ShareAccessorBindingReference.
+   */
   export interface ShareAccessorBindingReference {
     /** The URL for this share accessor binding. */
     href: string;
@@ -42883,37 +46467,31 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareCollection. */
+  /**
+   * ShareCollection.
+   */
   export interface ShareCollection {
     /** A link to the first page of resources. */
-    first: ShareCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ShareCollectionNext;
+    next?: PageLink;
     /** A page of file shares. */
     shares: Share[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface ShareCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ShareCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Identifies a file share by a unique property. */
+  /**
+   * Identifies a file share by a unique property.
+   */
   export interface ShareIdentity {
   }
 
-  /** ShareInitialOwner. */
+  /**
+   * ShareInitialOwner.
+   */
   export interface ShareInitialOwner {
     /** The initial group identifier for the file share. */
     gid?: number;
@@ -42921,7 +46499,9 @@ namespace VpcV1 {
     uid?: number;
   }
 
-  /** ShareJob. */
+  /**
+   * ShareJob.
+   */
   export interface ShareJob {
     /** The status of the file share job:
      *  - `cancelled`: This job has been cancelled.
@@ -42965,7 +46545,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareJobStatusReason. */
+  /**
+   * ShareJobStatusReason.
+   */
   export interface ShareJobStatusReason {
     /** A snake case string succinctly identifying the status reason.
      *
@@ -42989,7 +46571,12 @@ namespace VpcV1 {
     }
   }
 
-  /** Information about the latest synchronization for this file share. This property will be present when the `replication_role` is `replica` and at least one replication sync has been completed. */
+  /**
+   * Information about the latest synchronization for this file share.
+   *
+   * This property will be present when the `replication_role` is `replica` and at least one replication sync has been
+   * completed.
+   */
   export interface ShareLatestSync {
     /** The completed date and time of last synchronization between the replica share and its source. */
     completed_at: string;
@@ -42999,7 +46586,9 @@ namespace VpcV1 {
     started_at: string;
   }
 
-  /** ShareLifecycleReason. */
+  /**
+   * ShareLifecycleReason.
+   */
   export interface ShareLifecycleReason {
     /** A reason code for this lifecycle state:
      *  - `origin_share_access_revoked`: The resource has been revoked by the share owner
@@ -43027,7 +46616,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareMountTarget. */
+  /**
+   * ShareMountTarget.
+   */
   export interface ShareMountTarget {
     /** The access control mode for the share:
      *
@@ -43126,33 +46717,25 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareMountTargetCollection. */
+  /**
+   * ShareMountTargetCollection.
+   */
   export interface ShareMountTargetCollection {
     /** A link to the first page of resources. */
-    first: ShareMountTargetCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A page of mount targets for the share. */
     mount_targets: ShareMountTarget[];
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ShareMountTargetCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface ShareMountTargetCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ShareMountTargetCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** ShareMountTargetPrototype. */
+  /**
+   * ShareMountTargetPrototype.
+   */
   export interface ShareMountTargetPrototype {
     /** The name for this share mount target. The name must not be used by another mount target for the file share. */
     name?: string;
@@ -43176,7 +46759,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareMountTargetReference. */
+  /**
+   * ShareMountTargetReference.
+   */
   export interface ShareMountTargetReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -43200,11 +46785,15 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareMountTargetVirtualNetworkInterfacePrototype. */
+  /**
+   * ShareMountTargetVirtualNetworkInterfacePrototype.
+   */
   export interface ShareMountTargetVirtualNetworkInterfacePrototype {
   }
 
-  /** ShareProfile. */
+  /**
+   * ShareProfile.
+   */
   export interface ShareProfile {
     /** The permitted capacity range (in gigabytes) for a share with this profile. */
     capacity: ShareProfileCapacity;
@@ -43236,45 +46825,43 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareProfileCapacity. */
+  /**
+   * ShareProfileCapacity.
+   */
   export interface ShareProfileCapacity {
   }
 
-  /** ShareProfileCollection. */
+  /**
+   * ShareProfileCollection.
+   */
   export interface ShareProfileCollection {
     /** A link to the first page of resources. */
-    first: ShareProfileCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: ShareProfileCollectionNext;
+    next?: PageLink;
     /** A page of share profiles. */
     profiles: ShareProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface ShareProfileCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface ShareProfileCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** ShareProfileIOPS. */
+  /**
+   * ShareProfileIOPS.
+   */
   export interface ShareProfileIOPS {
   }
 
-  /** Identifies a share profile by a unique property. */
+  /**
+   * Identifies a share profile by a unique property.
+   */
   export interface ShareProfileIdentity {
   }
 
-  /** ShareProfileReference. */
+  /**
+   * ShareProfileReference.
+   */
   export interface ShareProfileReference {
     /** The URL for this share profile. */
     href: string;
@@ -43292,7 +46879,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SharePrototype. */
+  /**
+   * SharePrototype.
+   */
   export interface SharePrototype {
     /** The transit encryption modes to allow for this share. If unspecified:
      *  - If share mount targets are specified, and those share mount targets all specify a
@@ -43324,7 +46913,11 @@ namespace VpcV1 {
     }
   }
 
-  /** Configuration for a replica file share to create and associate with this file share. If unspecified, a replica may be subsequently added by creating a new file share with a `source_share` referencing this file share. */
+  /**
+   * Configuration for a replica file share to create and associate with this file share. If unspecified, a replica may
+   * be subsequently added by creating a new file share with a
+   * `source_share` referencing this file share.
+   */
   export interface SharePrototypeShareContext {
     /** The transit encryption modes to allow for this share. If unspecified:
      *  - If share mount targets are specified, and those share mount targets all specify a
@@ -43354,7 +46947,7 @@ namespace VpcV1 {
     profile: ShareProfileIdentity;
     /** The cron specification for the file share replication schedule.
      *
-     *  Replication of a share can be scheduled to occur at most once per hour.
+     *  Replication of a share can be scheduled to occur at most once every 15 minutes.
      */
     replication_cron_spec: string;
     /** The resource group to use. If unspecified, the resource group from the source share will be used. */
@@ -43376,7 +46969,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareReference. */
+  /**
+   * ShareReference.
+   */
   export interface ShareReference {
     /** The CRN for this file share. */
     crn: string;
@@ -43406,7 +47001,10 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  /**
+   * If present, this property indicates that the resource associated with this reference is remote and therefore may
+   * not be directly retrievable.
+   */
   export interface ShareRemote {
     /** If present, this property indicates that the referenced resource is remote to this
      *  account, and identifies the owning account.
@@ -43418,7 +47016,9 @@ namespace VpcV1 {
     region?: RegionReference;
   }
 
-  /** ShareReplicationStatusReason. */
+  /**
+   * ShareReplicationStatusReason.
+   */
   export interface ShareReplicationStatusReason {
     /** A snake case string succinctly identifying the status reason.
      *
@@ -43442,7 +47042,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Snapshot. */
+  /**
+   * Snapshot.
+   */
   export interface Snapshot {
     /** If present, the backup policy plan which created this snapshot. */
     backup_policy_plan?: BackupPolicyPlanReference;
@@ -43494,6 +47096,10 @@ namespace VpcV1 {
     name: string;
     /** The operating system included in this snapshot. */
     operating_system?: OperatingSystem;
+    /** Indicates the progress (as a percentage) of storing this snapshot. Only stored snapshots can be used for
+     *  restoration.
+     */
+    progress: number;
     /** The resource group for this snapshot. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
@@ -43541,7 +47147,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SnapshotCatalogOffering. */
+  /**
+   * SnapshotCatalogOffering.
+   */
   export interface SnapshotCatalogOffering {
     /** The billing plan associated with the catalog offering version.
      *
@@ -43555,7 +47163,9 @@ namespace VpcV1 {
     version: CatalogOfferingVersionReference;
   }
 
-  /** SnapshotClone. */
+  /**
+   * SnapshotClone.
+   */
   export interface SnapshotClone {
     /** Indicates whether this snapshot clone is available for use. */
     available: boolean;
@@ -43565,45 +47175,41 @@ namespace VpcV1 {
     zone: ZoneReference;
   }
 
-  /** SnapshotCloneCollection. */
+  /**
+   * SnapshotCloneCollection.
+   */
   export interface SnapshotCloneCollection {
     /** The clones for the snapshot. */
     clones: SnapshotClone[];
   }
 
-  /** SnapshotClonePrototype. */
+  /**
+   * SnapshotClonePrototype.
+   */
   export interface SnapshotClonePrototype {
     /** The zone this snapshot clone will reside in. Must be in the same region as the snapshot. */
     zone: ZoneIdentity;
   }
 
-  /** SnapshotCollection. */
+  /**
+   * SnapshotCollection.
+   */
   export interface SnapshotCollection {
     /** A link to the first page of resources. */
-    first: SnapshotCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: SnapshotCollectionNext;
+    next?: PageLink;
     /** A page of snapshots. */
     snapshots: Snapshot[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface SnapshotCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface SnapshotCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** SnapshotConsistencyGroup. */
+  /**
+   * SnapshotConsistencyGroup.
+   */
   export interface SnapshotConsistencyGroup {
     /** If present, the backup policy plan which created this snapshot consistency group. */
     backup_policy_plan?: BackupPolicyPlanReference;
@@ -43656,33 +47262,25 @@ namespace VpcV1 {
     }
   }
 
-  /** SnapshotConsistencyGroupCollection. */
+  /**
+   * SnapshotConsistencyGroupCollection.
+   */
   export interface SnapshotConsistencyGroupCollection {
     /** A link to the first page of resources. */
-    first: SnapshotConsistencyGroupCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: SnapshotConsistencyGroupCollectionNext;
+    next?: PageLink;
     /** A page of snapshot consistency groups. */
     snapshot_consistency_groups: SnapshotConsistencyGroup[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface SnapshotConsistencyGroupCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface SnapshotConsistencyGroupCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** SnapshotConsistencyGroupPrototype. */
+  /**
+   * SnapshotConsistencyGroupPrototype.
+   */
   export interface SnapshotConsistencyGroupPrototype {
     /** Indicates whether deleting the snapshot consistency group will also delete the snapshots in the group. */
     delete_snapshots_on_delete?: boolean;
@@ -43698,7 +47296,9 @@ namespace VpcV1 {
     resource_group?: ResourceGroupIdentity;
   }
 
-  /** SnapshotConsistencyGroupReference. */
+  /**
+   * SnapshotConsistencyGroupReference.
+   */
   export interface SnapshotConsistencyGroupReference {
     /** The CRN of this snapshot consistency group. */
     crn: string;
@@ -43726,7 +47326,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SnapshotCopiesItem. */
+  /**
+   * SnapshotCopiesItem.
+   */
   export interface SnapshotCopiesItem {
     /** The CRN for the copied snapshot. */
     crn: string;
@@ -43756,11 +47358,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a snapshot by a unique property. */
+  /**
+   * Identifies a snapshot by a unique property.
+   */
   export interface SnapshotIdentity {
   }
 
-  /** SnapshotPrototype. */
+  /**
+   * SnapshotPrototype.
+   */
   export interface SnapshotPrototype {
     /** Clones to create for this snapshot. */
     clones?: SnapshotClonePrototype[];
@@ -43776,7 +47382,9 @@ namespace VpcV1 {
     user_tags?: string[];
   }
 
-  /** SnapshotPrototypeSnapshotConsistencyGroupContext. */
+  /**
+   * SnapshotPrototypeSnapshotConsistencyGroupContext.
+   */
   export interface SnapshotPrototypeSnapshotConsistencyGroupContext {
     /** The name for this snapshot. The name must not be used by another snapshot in the region. If unspecified, the
      *  name will be a hyphenated list of randomly-selected words.
@@ -43788,7 +47396,9 @@ namespace VpcV1 {
     user_tags?: string[];
   }
 
-  /** SnapshotReference. */
+  /**
+   * SnapshotReference.
+   */
   export interface SnapshotReference {
     /** The CRN of this snapshot. */
     crn: string;
@@ -43818,7 +47428,10 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  /**
+   * If present, this property indicates that the resource associated with this reference is remote and therefore may
+   * not be directly retrievable.
+   */
   export interface SnapshotRemote {
     /** If present, this property indicates that the referenced resource is remote to this
      *  account, and identifies the owning account.
@@ -43830,7 +47443,9 @@ namespace VpcV1 {
     region?: RegionReference;
   }
 
-  /** If present, the source snapshot this snapshot was created from. */
+  /**
+   * If present, the source snapshot this snapshot was created from.
+   */
   export interface SnapshotSourceSnapshot {
     /** The CRN of the source snapshot. */
     crn: string;
@@ -43862,7 +47477,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Subnet. */
+  /**
+   * Subnet.
+   */
   export interface Subnet {
     /** The number of IPv4 addresses in this subnet that are not in-use, and have not been reserved by the user or
      *  the provider.
@@ -43929,37 +47546,31 @@ namespace VpcV1 {
     }
   }
 
-  /** SubnetCollection. */
+  /**
+   * SubnetCollection.
+   */
   export interface SubnetCollection {
     /** A link to the first page of resources. */
-    first: SubnetCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: SubnetCollectionNext;
+    next?: PageLink;
     /** A page of subnets. */
     subnets: Subnet[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface SubnetCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface SubnetCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** Identifies a subnet by a unique property. */
+  /**
+   * Identifies a subnet by a unique property.
+   */
   export interface SubnetIdentity {
   }
 
-  /** SubnetPrototype. */
+  /**
+   * SubnetPrototype.
+   */
   export interface SubnetPrototype {
     /** The IP version(s) to support for this subnet. */
     ip_version?: SubnetPrototype.Constants.IpVersion | string;
@@ -43995,11 +47606,15 @@ namespace VpcV1 {
     }
   }
 
-  /** The public gateway to use for internet-bound traffic for this subnet. */
+  /**
+   * The public gateway to use for internet-bound traffic for this subnet.
+   */
   export interface SubnetPublicGatewayPatch {
   }
 
-  /** SubnetReference. */
+  /**
+   * SubnetReference.
+   */
   export interface SubnetReference {
     /** The CRN for this subnet. */
     crn: string;
@@ -44025,11 +47640,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a trusted profile by a unique property. */
+  /**
+   * Identifies a trusted profile by a unique property.
+   */
   export interface TrustedProfileIdentity {
   }
 
-  /** TrustedProfileReference. */
+  /**
+   * TrustedProfileReference.
+   */
   export interface TrustedProfileReference {
     /** The CRN for this trusted profile. */
     crn: string;
@@ -44047,7 +47666,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The VCPU configuration. */
+  /**
+   * The VCPU configuration.
+   */
   export interface VCPU {
     /** The VCPU architecture. */
     architecture: string;
@@ -44057,7 +47678,9 @@ namespace VpcV1 {
     manufacturer: string;
   }
 
-  /** VPC. */
+  /**
+   * VPC.
+   */
   export interface VPC {
     /** Indicates whether this VPC is connected to Classic Infrastructure. If true, this VPC's resources have
      *  private network connectivity to the account's Classic Infrastructure resources. Only one VPC, per region, may be
@@ -44134,7 +47757,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPCCSESourceIP. */
+  /**
+   * VPCCSESourceIP.
+   */
   export interface VPCCSESourceIP {
     /** The cloud service endpoint source IP address for this zone. */
     ip: IP;
@@ -44142,33 +47767,25 @@ namespace VpcV1 {
     zone: ZoneReference;
   }
 
-  /** VPCCollection. */
+  /**
+   * VPCCollection.
+   */
   export interface VPCCollection {
     /** A link to the first page of resources. */
-    first: VPCCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: VPCCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
     /** A page of VPCs. */
     vpcs: VPC[];
   }
 
-  /** A link to the first page of resources. */
-  export interface VPCCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface VPCCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** The DNS configuration for this VPC. */
+  /**
+   * The DNS configuration for this VPC.
+   */
   export interface VPCDNS {
     /** Indicates whether this VPC is enabled as a DNS name resolution hub. */
     enable_hub: boolean;
@@ -44178,7 +47795,9 @@ namespace VpcV1 {
     resolver: VPCDNSResolver;
   }
 
-  /** The DNS configuration for this VPC. */
+  /**
+   * The DNS configuration for this VPC.
+   */
   export interface VPCDNSPatch {
     /** Indicates whether this VPC is enabled as a DNS name resolution hub.
      *
@@ -44191,14 +47810,21 @@ namespace VpcV1 {
     resolver?: VPCDNSResolverPatch;
   }
 
-  /** The DNS configuration for this VPC. If unspecified, the system will assign DNS servers capable of resolving hosts and endpoint gateways within this VPC, and hosts on the internet. */
+  /**
+   * The DNS configuration for this VPC.
+   *
+   * If unspecified, the system will assign DNS servers capable of resolving hosts and endpoint gateways within this
+   * VPC, and hosts on the internet.
+   */
   export interface VPCDNSPrototype {
     /** Indicates whether this VPC is enabled as a DNS name resolution hub. */
     enable_hub?: boolean;
     resolver?: VPCDNSResolverPrototype;
   }
 
-  /** VPCDNSResolutionBinding. */
+  /**
+   * VPCDNSResolutionBinding.
+   */
   export interface VPCDNSResolutionBinding {
     /** The date and time that the DNS resolution binding was created. */
     created_at: string;
@@ -44261,33 +47887,25 @@ namespace VpcV1 {
     }
   }
 
-  /** VPCDNSResolutionBindingCollection. */
+  /**
+   * VPCDNSResolutionBindingCollection.
+   */
   export interface VPCDNSResolutionBindingCollection {
     /** A page of DNS resolution bindings for the VPC. */
     dns_resolution_bindings: VPCDNSResolutionBinding[];
     /** A link to the first page of resources. */
-    first: VPCDNSResolutionBindingCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: VPCDNSResolutionBindingCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface VPCDNSResolutionBindingCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface VPCDNSResolutionBindingCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** VPCDNSResolutionBindingHealthReason. */
+  /**
+   * VPCDNSResolutionBindingHealthReason.
+   */
   export interface VPCDNSResolutionBindingHealthReason {
     /** A reason code for this health state. */
     code: VPCDNSResolutionBindingHealthReason.Constants.Code | string;
@@ -44306,7 +47924,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPCDNSResolver. */
+  /**
+   * VPCDNSResolver.
+   */
   export interface VPCDNSResolver {
     /** The DNS servers for this VPC. The servers are populated:
      *
@@ -44341,7 +47961,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPCDNSResolverPatch. */
+  /**
+   * VPCDNSResolverPatch.
+   */
   export interface VPCDNSResolverPatch {
     /** The DNS servers to use for this VPC, replacing any existing servers. All the DNS servers must either:
      *
@@ -44397,7 +48019,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPCDNSResolverPrototype. */
+  /**
+   * VPCDNSResolverPrototype.
+   */
   export interface VPCDNSResolverPrototype {
     /** The type of the DNS resolver to use.
      *
@@ -44417,11 +48041,21 @@ namespace VpcV1 {
     }
   }
 
-  /** The VPC to provide DNS server addresses for this VPC.  The specified VPC must be configured with a [DNS Services](https://cloud.ibm.com/docs/dns-svcs) custom resolver and must be in one of this VPC's DNS resolution bindings. Specify `null` to remove an existing VPC. This property must be set if and only if `dns.resolver.type` is `delegated`. */
+  /**
+   * The VPC to provide DNS server addresses for this VPC.  The specified VPC must be configured with a [DNS
+   * Services](https://cloud.ibm.com/docs/dns-svcs) custom resolver and must be in one of this VPC's DNS resolution
+   * bindings.
+   *
+   * Specify `null` to remove an existing VPC.
+   *
+   * This property must be set if and only if `dns.resolver.type` is `delegated`.
+   */
   export interface VPCDNSResolverVPCPatch {
   }
 
-  /** VPCHealthReason. */
+  /**
+   * VPCHealthReason.
+   */
   export interface VPCHealthReason {
     /** A reason code for this health state. */
     code: VPCHealthReason.Constants.Code | string;
@@ -44440,11 +48074,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a VPC by a unique property. */
+  /**
+   * Identifies a VPC by a unique property.
+   */
   export interface VPCIdentity {
   }
 
-  /** VPCReference. */
+  /**
+   * VPCReference.
+   */
   export interface VPCReference {
     /** The CRN for this VPC. */
     crn: string;
@@ -44470,7 +48108,11 @@ namespace VpcV1 {
     }
   }
 
-  /** A VPC whose DNS resolver is delegated to provide DNS servers for this VPC. The VPC may be remote and therefore may not be directly retrievable. */
+  /**
+   * A VPC whose DNS resolver is delegated to provide DNS servers for this VPC.
+   *
+   * The VPC may be remote and therefore may not be directly retrievable.
+   */
   export interface VPCReferenceDNSResolverContext {
     /** The CRN for this VPC. */
     crn: string;
@@ -44500,7 +48142,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPCReferenceRemote. */
+  /**
+   * VPCReferenceRemote.
+   */
   export interface VPCReferenceRemote {
     /** The CRN for this VPC. */
     crn: string;
@@ -44526,7 +48170,10 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  /**
+   * If present, this property indicates that the resource associated with this reference is remote and therefore may
+   * not be directly retrievable.
+   */
   export interface VPCRemote {
     /** If present, this property indicates that the referenced resource is remote to this
      *  account, and identifies the owning account.
@@ -44538,7 +48185,9 @@ namespace VpcV1 {
     region?: RegionReference;
   }
 
-  /** VPNGateway. */
+  /**
+   * VPNGateway.
+   */
   export interface VPNGateway {
     /** Connections for this VPN gateway. */
     connections: VPNGatewayConnectionReference[];
@@ -44603,33 +48252,25 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayCollection. */
+  /**
+   * VPNGatewayCollection.
+   */
   export interface VPNGatewayCollection {
     /** A link to the first page of resources. */
-    first: VPNGatewayCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: VPNGatewayCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
     /** A page of VPN gateways. */
     vpn_gateways: VPNGateway[];
   }
 
-  /** A link to the first page of resources. */
-  export interface VPNGatewayCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface VPNGatewayCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** VPNGatewayConnection. */
+  /**
+   * VPNGatewayConnection.
+   */
   export interface VPNGatewayConnection {
     /** If set to false, the VPN gateway connection is shut down. */
     admin_state_up: boolean;
@@ -44709,39 +48350,33 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionCIDRs. */
+  /**
+   * VPNGatewayConnectionCIDRs.
+   */
   export interface VPNGatewayConnectionCIDRs {
     /** The CIDRs for this resource. */
     cidrs: string[];
   }
 
-  /** VPNGatewayConnectionCollection. */
+  /**
+   * VPNGatewayConnectionCollection.
+   */
   export interface VPNGatewayConnectionCollection {
     /** A page of connections for the VPN gateway. */
     connections: VPNGatewayConnection[];
     /** A link to the first page of resources. */
-    first: VPNGatewayConnectionCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: VPNGatewayConnectionCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface VPNGatewayConnectionCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface VPNGatewayConnectionCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** The Dead Peer Detection settings. */
+  /**
+   * The Dead Peer Detection settings.
+   */
   export interface VPNGatewayConnectionDPD {
     /** Dead Peer Detection actions. */
     action: VPNGatewayConnectionDPD.Constants.Action | string;
@@ -44762,7 +48397,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The Dead Peer Detection settings. */
+  /**
+   * The Dead Peer Detection settings.
+   */
   export interface VPNGatewayConnectionDPDPatch {
     /** Dead Peer Detection actions. */
     action?: VPNGatewayConnectionDPDPatch.Constants.Action | string;
@@ -44783,7 +48420,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The Dead Peer Detection settings. */
+  /**
+   * The Dead Peer Detection settings.
+   */
   export interface VPNGatewayConnectionDPDPrototype {
     /** Dead Peer Detection actions. */
     action?: VPNGatewayConnectionDPDPrototype.Constants.Action | string;
@@ -44804,7 +48443,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionIKEIdentity. */
+  /**
+   * VPNGatewayConnectionIKEIdentity.
+   */
   export interface VPNGatewayConnectionIKEIdentity {
     /** The IKE identity type.
      *
@@ -44825,7 +48466,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionIKEIdentityPrototype. */
+  /**
+   * VPNGatewayConnectionIKEIdentityPrototype.
+   */
   export interface VPNGatewayConnectionIKEIdentityPrototype {
     /** The IKE identity type. */
     type: VPNGatewayConnectionIKEIdentityPrototype.Constants.Type | string;
@@ -44842,27 +48485,43 @@ namespace VpcV1 {
     }
   }
 
-  /** The IKE policy to use. Specify `null` to remove any existing policy, [resulting in auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1). */
+  /**
+   * The IKE policy to use. Specify `null` to remove any existing policy, [resulting in
+   * auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1).
+   */
   export interface VPNGatewayConnectionIKEPolicyPatch {
   }
 
-  /** The IKE policy to use. If unspecified, [auto-negotiation will be used](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1). */
+  /**
+   * The IKE policy to use. If unspecified, [auto-negotiation will be
+   * used](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ike-auto-negotiation-phase-1).
+   */
   export interface VPNGatewayConnectionIKEPolicyPrototype {
   }
 
-  /** The IPsec policy to use. Specify `null` to remove any existing policy, [resulting in auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ipsec-auto-negotiation-phase-2). */
+  /**
+   * The IPsec policy to use. Specify `null` to remove any existing policy, [resulting in
+   * auto-negotiation](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ipsec-auto-negotiation-phase-2).
+   */
   export interface VPNGatewayConnectionIPsecPolicyPatch {
   }
 
-  /** The IPsec policy to use. If unspecified, [auto-negotiation will be used](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ipsec-auto-negotiation-phase-2). */
+  /**
+   * The IPsec policy to use. If unspecified, [auto-negotiation will be
+   * used](https://cloud.ibm.com/docs/vpc?topic=vpc-using-vpn&interface=ui#ipsec-auto-negotiation-phase-2).
+   */
   export interface VPNGatewayConnectionIPsecPolicyPrototype {
   }
 
-  /** VPNGatewayConnectionPeerPatch. */
+  /**
+   * VPNGatewayConnectionPeerPatch.
+   */
   export interface VPNGatewayConnectionPeerPatch {
   }
 
-  /** VPNGatewayConnectionPolicyModeLocal. */
+  /**
+   * VPNGatewayConnectionPolicyModeLocal.
+   */
   export interface VPNGatewayConnectionPolicyModeLocal {
     /** The local CIDRs for this VPN gateway connection. */
     cidrs: string[];
@@ -44874,7 +48533,9 @@ namespace VpcV1 {
     ike_identities: VPNGatewayConnectionIKEIdentity[];
   }
 
-  /** VPNGatewayConnectionPolicyModeLocalPrototype. */
+  /**
+   * VPNGatewayConnectionPolicyModeLocalPrototype.
+   */
   export interface VPNGatewayConnectionPolicyModeLocalPrototype {
     /** The local CIDRs for this VPN gateway connection. */
     cidrs: string[];
@@ -44888,7 +48549,9 @@ namespace VpcV1 {
     ike_identities?: VPNGatewayConnectionIKEIdentityPrototype[];
   }
 
-  /** VPNGatewayConnectionPolicyModePeer. */
+  /**
+   * VPNGatewayConnectionPolicyModePeer.
+   */
   export interface VPNGatewayConnectionPolicyModePeer {
     /** The peer CIDRs for this VPN gateway connection. */
     cidrs: string[];
@@ -44907,7 +48570,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionPolicyModePeerPrototype. */
+  /**
+   * VPNGatewayConnectionPolicyModePeerPrototype.
+   */
   export interface VPNGatewayConnectionPolicyModePeerPrototype {
     /** The peer CIDRs for this VPN gateway connection. */
     cidrs: string[];
@@ -44922,7 +48587,9 @@ namespace VpcV1 {
     ike_identity?: VPNGatewayConnectionIKEIdentityPrototype;
   }
 
-  /** VPNGatewayConnectionPrototype. */
+  /**
+   * VPNGatewayConnectionPrototype.
+   */
   export interface VPNGatewayConnectionPrototype {
     /** If set to false, the VPN gateway connection is shut down. */
     admin_state_up?: boolean;
@@ -44962,7 +48629,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionReference. */
+  /**
+   * VPNGatewayConnectionReference.
+   */
   export interface VPNGatewayConnectionReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -44986,7 +48655,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionStaticRouteModeLocal. */
+  /**
+   * VPNGatewayConnectionStaticRouteModeLocal.
+   */
   export interface VPNGatewayConnectionStaticRouteModeLocal {
     /** The local IKE identities.
      *
@@ -44996,7 +48667,9 @@ namespace VpcV1 {
     ike_identities: VPNGatewayConnectionIKEIdentity[];
   }
 
-  /** VPNGatewayConnectionStaticRouteModeLocalPrototype. */
+  /**
+   * VPNGatewayConnectionStaticRouteModeLocalPrototype.
+   */
   export interface VPNGatewayConnectionStaticRouteModeLocalPrototype {
     /** The local IKE identities to use.
      *
@@ -45009,7 +48682,9 @@ namespace VpcV1 {
     ike_identities?: VPNGatewayConnectionIKEIdentityPrototype[];
   }
 
-  /** VPNGatewayConnectionStaticRouteModePeer. */
+  /**
+   * VPNGatewayConnectionStaticRouteModePeer.
+   */
   export interface VPNGatewayConnectionStaticRouteModePeer {
     /** The peer IKE identity. */
     ike_identity: VPNGatewayConnectionIKEIdentity;
@@ -45026,7 +48701,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionStaticRouteModePeerPrototype. */
+  /**
+   * VPNGatewayConnectionStaticRouteModePeerPrototype.
+   */
   export interface VPNGatewayConnectionStaticRouteModePeerPrototype {
     /** The peer IKE identity to use.
      *
@@ -45039,7 +48716,9 @@ namespace VpcV1 {
     ike_identity?: VPNGatewayConnectionIKEIdentityPrototype;
   }
 
-  /** VPNGatewayConnectionStaticRouteModeTunnel. */
+  /**
+   * VPNGatewayConnectionStaticRouteModeTunnel.
+   */
   export interface VPNGatewayConnectionStaticRouteModeTunnel {
     /** The IP address of the VPN gateway member in which the tunnel resides. */
     public_ip: IP;
@@ -45062,7 +48741,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionStatusReason. */
+  /**
+   * VPNGatewayConnectionStatusReason.
+   */
   export interface VPNGatewayConnectionStatusReason {
     /** A snake case string succinctly identifying the status reason.
      *
@@ -45090,7 +48771,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionTunnelStatusReason. */
+  /**
+   * VPNGatewayConnectionTunnelStatusReason.
+   */
   export interface VPNGatewayConnectionTunnelStatusReason {
     /** A reason code for this status:
      *  - `cannot_authenticate_connection`: Failed to authenticate a connection because of
@@ -45132,7 +48815,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayHealthReason. */
+  /**
+   * VPNGatewayHealthReason.
+   */
   export interface VPNGatewayHealthReason {
     /** A reason code for this health state:
      *  - `cannot_create_vpc_route`: VPN cannot create route (check for conflict)
@@ -45160,7 +48845,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayLifecycleReason. */
+  /**
+   * VPNGatewayLifecycleReason.
+   */
   export interface VPNGatewayLifecycleReason {
     /** A reason code for this lifecycle state:
      *  - `internal_error`: internal error (contact IBM support)
@@ -45186,7 +48873,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayMember. */
+  /**
+   * VPNGatewayMember.
+   */
   export interface VPNGatewayMember {
     /** The reasons for the current `health_state` (if any). */
     health_reasons: VPNGatewayMemberHealthReason[];
@@ -45244,7 +48933,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayMemberHealthReason. */
+  /**
+   * VPNGatewayMemberHealthReason.
+   */
   export interface VPNGatewayMemberHealthReason {
     /** A reason code for this health state:
      *  - `cannot_reserve_ip_address`: IP address exhaustion (release addresses on the VPN's
@@ -45270,7 +48961,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayMemberLifecycleReason. */
+  /**
+   * VPNGatewayMemberLifecycleReason.
+   */
   export interface VPNGatewayMemberLifecycleReason {
     /** A reason code for this lifecycle state:
      *  - `internal_error`: internal error (contact IBM support)
@@ -45296,7 +48989,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayPrototype. */
+  /**
+   * VPNGatewayPrototype.
+   */
   export interface VPNGatewayPrototype {
     /** The name for this VPN gateway. The name must not be used by another VPN gateway in the VPC. If unspecified,
      *  the name will be a hyphenated list of randomly-selected words.
@@ -45310,7 +49005,9 @@ namespace VpcV1 {
     subnet: SubnetIdentity;
   }
 
-  /** VPNServer. */
+  /**
+   * VPNServer.
+   */
   export interface VPNServer {
     /** The certificate instance for this VPN server. */
     certificate: CertificateInstanceReference;
@@ -45417,7 +49114,9 @@ namespace VpcV1 {
     }
   }
 
-  /** An authentication method for this VPN server. */
+  /**
+   * An authentication method for this VPN server.
+   */
   export interface VPNServerAuthentication {
     /** The type of authentication.
      *
@@ -45436,11 +49135,15 @@ namespace VpcV1 {
     }
   }
 
-  /** The type of identity provider to be used by VPN client. */
+  /**
+   * The type of identity provider to be used by VPN client.
+   */
   export interface VPNServerAuthenticationByUsernameIdProvider {
   }
 
-  /** An authentication method for this VPN server. */
+  /**
+   * An authentication method for this VPN server.
+   */
   export interface VPNServerAuthenticationPrototype {
     /** The type of authentication. */
     method: VPNServerAuthenticationPrototype.Constants.Method | string;
@@ -45455,7 +49158,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerClient. */
+  /**
+   * VPNServerClient.
+   */
   export interface VPNServerClient {
     /** The IP address assigned to this VPN client from `client_ip_pool`. */
     client_ip: IP;
@@ -45511,59 +49216,41 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerClientCollection. */
+  /**
+   * VPNServerClientCollection.
+   */
   export interface VPNServerClientCollection {
     /** A page of clients of the VPN server. */
     clients: VPNServerClient[];
     /** A link to the first page of resources. */
-    first: VPNServerClientCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: VPNServerClientCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface VPNServerClientCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface VPNServerClientCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** VPNServerCollection. */
+  /**
+   * VPNServerCollection.
+   */
   export interface VPNServerCollection {
     /** A link to the first page of resources. */
-    first: VPNServerCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: VPNServerCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
     /** A page of VPN servers. */
     vpn_servers: VPNServer[];
   }
 
-  /** A link to the first page of resources. */
-  export interface VPNServerCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface VPNServerCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** VPNServerHealthReason. */
+  /**
+   * VPNServerHealthReason.
+   */
   export interface VPNServerHealthReason {
     /** A reason code for this health state:
      *  - `cannot_access_client_certificate`: VPN server's client certificate is inaccessible
@@ -45599,7 +49286,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerLifecycleReason. */
+  /**
+   * VPNServerLifecycleReason.
+   */
   export interface VPNServerLifecycleReason {
     /** A reason code for this lifecycle state:
      *  - `internal_error`: internal error (contact IBM support)
@@ -45625,7 +49314,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerRoute. */
+  /**
+   * VPNServerRoute.
+   */
   export interface VPNServerRoute {
     /** The action to perform with a packet matching the VPN route:
      *  - `translate`: translate the source IP address to one of the private IP addresses of
@@ -45699,33 +49390,25 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerRouteCollection. */
+  /**
+   * VPNServerRouteCollection.
+   */
   export interface VPNServerRouteCollection {
     /** A link to the first page of resources. */
-    first: VPNServerRouteCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: VPNServerRouteCollectionNext;
+    next?: PageLink;
     /** A page of routes for the VPN server. */
     routes: VPNServerRoute[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface VPNServerRouteCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface VPNServerRouteCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** VPNServerRouteHealthReason. */
+  /**
+   * VPNServerRouteHealthReason.
+   */
   export interface VPNServerRouteHealthReason {
     /** A reason code for this health state:
      *  - `internal_error`: Internal error (contact IBM support)
@@ -45748,7 +49431,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerRouteLifecycleReason. */
+  /**
+   * VPNServerRouteLifecycleReason.
+   */
   export interface VPNServerRouteLifecycleReason {
     /** A reason code for this lifecycle state:
      *  - `internal_error`: internal error (contact IBM support)
@@ -45774,7 +49459,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VirtualNetworkInterface. */
+  /**
+   * VirtualNetworkInterface.
+   */
   export interface VirtualNetworkInterface {
     /** Indicates whether source IP spoofing is allowed on this interface. If `false`, source IP spoofing is
      *  prevented on this interface. If `true`, source IP spoofing is allowed on this interface.
@@ -45872,41 +49559,37 @@ namespace VpcV1 {
     }
   }
 
-  /** VirtualNetworkInterfaceCollection. */
+  /**
+   * VirtualNetworkInterfaceCollection.
+   */
   export interface VirtualNetworkInterfaceCollection {
     /** A link to the first page of resources. */
-    first: VirtualNetworkInterfaceCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: VirtualNetworkInterfaceCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
     /** A page of virtual network interfaces. */
     virtual_network_interfaces: VirtualNetworkInterface[];
   }
 
-  /** A link to the first page of resources. */
-  export interface VirtualNetworkInterfaceCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface VirtualNetworkInterfaceCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** VirtualNetworkInterfaceIPPrototype. */
+  /**
+   * VirtualNetworkInterfaceIPPrototype.
+   */
   export interface VirtualNetworkInterfaceIPPrototype {
   }
 
-  /** VirtualNetworkInterfacePrimaryIPPrototype. */
+  /**
+   * VirtualNetworkInterfacePrimaryIPPrototype.
+   */
   export interface VirtualNetworkInterfacePrimaryIPPrototype {
   }
 
-  /** VirtualNetworkInterfaceReferenceAttachmentContext. */
+  /**
+   * VirtualNetworkInterfaceReferenceAttachmentContext.
+   */
   export interface VirtualNetworkInterfaceReferenceAttachmentContext {
     /** The CRN for this virtual network interface. */
     crn: string;
@@ -45930,11 +49613,18 @@ namespace VpcV1 {
     }
   }
 
-  /** A virtual network interface target. The resources supported by this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+  /**
+   * A virtual network interface target.
+   *
+   * The resources supported by this property may
+   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+   */
   export interface VirtualNetworkInterfaceTarget {
   }
 
-  /** Volume. */
+  /**
+   * Volume.
+   */
   export interface Volume {
     /** Indicates whether a running virtual server instance has an attachment to this volume. */
     active: boolean;
@@ -46079,7 +49769,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VolumeAttachment. */
+  /**
+   * VolumeAttachment.
+   */
   export interface VolumeAttachment {
     /** The maximum bandwidth (in megabits per second) for the volume when attached to this instance. This may be
      *  lower than the volume bandwidth depending on the configuration of the instance.
@@ -46135,19 +49827,25 @@ namespace VpcV1 {
     }
   }
 
-  /** VolumeAttachmentCollection. */
+  /**
+   * VolumeAttachmentCollection.
+   */
   export interface VolumeAttachmentCollection {
     /** The volume attachments for the instance. */
     volume_attachments: VolumeAttachment[];
   }
 
-  /** VolumeAttachmentDevice. */
+  /**
+   * VolumeAttachmentDevice.
+   */
   export interface VolumeAttachmentDevice {
     /** A unique identifier for the device which is exposed to the instance operating system. */
-    id?: string;
+    id: string;
   }
 
-  /** VolumeAttachmentPrototype. */
+  /**
+   * VolumeAttachmentPrototype.
+   */
   export interface VolumeAttachmentPrototype {
     /** Indicates whether deleting the instance will also delete the attached volume. */
     delete_volume_on_instance_delete?: boolean;
@@ -46159,7 +49857,9 @@ namespace VpcV1 {
     volume: VolumeAttachmentPrototypeVolume;
   }
 
-  /** VolumeAttachmentPrototypeInstanceByImageContext. */
+  /**
+   * VolumeAttachmentPrototypeInstanceByImageContext.
+   */
   export interface VolumeAttachmentPrototypeInstanceByImageContext {
     /** Indicates whether deleting the instance will also delete the attached volume. */
     delete_volume_on_instance_delete?: boolean;
@@ -46171,7 +49871,9 @@ namespace VpcV1 {
     volume: VolumePrototypeInstanceByImageContext;
   }
 
-  /** VolumeAttachmentPrototypeInstanceBySourceSnapshotContext. */
+  /**
+   * VolumeAttachmentPrototypeInstanceBySourceSnapshotContext.
+   */
   export interface VolumeAttachmentPrototypeInstanceBySourceSnapshotContext {
     /** Indicates whether deleting the instance will also delete the attached volume. */
     delete_volume_on_instance_delete?: boolean;
@@ -46183,7 +49885,9 @@ namespace VpcV1 {
     volume: VolumePrototypeInstanceBySourceSnapshotContext;
   }
 
-  /** VolumeAttachmentPrototypeInstanceByVolumeContext. */
+  /**
+   * VolumeAttachmentPrototypeInstanceByVolumeContext.
+   */
   export interface VolumeAttachmentPrototypeInstanceByVolumeContext {
     /** Indicates whether deleting the instance will also delete the attached volume. */
     delete_volume_on_instance_delete?: boolean;
@@ -46195,11 +49899,15 @@ namespace VpcV1 {
     volume: VolumeIdentity;
   }
 
-  /** An existing volume to attach to the instance, or a prototype object for a new volume. */
+  /**
+   * An existing volume to attach to the instance, or a prototype object for a new volume.
+   */
   export interface VolumeAttachmentPrototypeVolume {
   }
 
-  /** VolumeAttachmentReferenceInstanceContext. */
+  /**
+   * VolumeAttachmentReferenceInstanceContext.
+   */
   export interface VolumeAttachmentReferenceInstanceContext {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -46223,7 +49931,9 @@ namespace VpcV1 {
     volume?: VolumeReferenceVolumeAttachmentContext;
   }
 
-  /** VolumeAttachmentReferenceVolumeContext. */
+  /**
+   * VolumeAttachmentReferenceVolumeContext.
+   */
   export interface VolumeAttachmentReferenceVolumeContext {
     /** Indicates whether deleting the instance will also delete the attached volume. */
     delete_volume_on_instance_delete: boolean;
@@ -46261,7 +49971,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VolumeCatalogOffering. */
+  /**
+   * VolumeCatalogOffering.
+   */
   export interface VolumeCatalogOffering {
     /** The billing plan associated with the catalog offering version.
      *
@@ -46275,33 +49987,25 @@ namespace VpcV1 {
     version: CatalogOfferingVersionReference;
   }
 
-  /** VolumeCollection. */
+  /**
+   * VolumeCollection.
+   */
   export interface VolumeCollection {
     /** A link to the first page of resources. */
-    first: VolumeCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: VolumeCollectionNext;
+    next?: PageLink;
     /** The total number of resources across all pages. */
     total_count: number;
     /** A page of volumes. */
     volumes: Volume[];
   }
 
-  /** A link to the first page of resources. */
-  export interface VolumeCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface VolumeCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** VolumeHealthReason. */
+  /**
+   * VolumeHealthReason.
+   */
   export interface VolumeHealthReason {
     /** A reason code for this health state. */
     code: VolumeHealthReason.Constants.Code | string;
@@ -46320,11 +50024,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a volume by a unique property. */
+  /**
+   * Identifies a volume by a unique property.
+   */
   export interface VolumeIdentity {
   }
 
-  /** VolumeProfile. */
+  /**
+   * VolumeProfile.
+   */
   export interface VolumeProfile {
     adjustable_capacity_states: VolumeProfileAdjustableCapacityStates;
     adjustable_iops_states: VolumeProfileAdjustableIOPSStates;
@@ -46353,7 +50061,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VolumeProfileAdjustableCapacityStates. */
+  /**
+   * VolumeProfileAdjustableCapacityStates.
+   */
   export interface VolumeProfileAdjustableCapacityStates {
     /** The type for this profile field. */
     type: VolumeProfileAdjustableCapacityStates.Constants.Type | string;
@@ -46375,7 +50085,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VolumeProfileAdjustableIOPSStates. */
+  /**
+   * VolumeProfileAdjustableIOPSStates.
+   */
   export interface VolumeProfileAdjustableIOPSStates {
     /** The type for this profile field. */
     type: VolumeProfileAdjustableIOPSStates.Constants.Type | string;
@@ -46397,49 +50109,49 @@ namespace VpcV1 {
     }
   }
 
-  /** VolumeProfileBootCapacity. */
+  /**
+   * VolumeProfileBootCapacity.
+   */
   export interface VolumeProfileBootCapacity {
   }
 
-  /** VolumeProfileCapacity. */
+  /**
+   * VolumeProfileCapacity.
+   */
   export interface VolumeProfileCapacity {
   }
 
-  /** VolumeProfileCollection. */
+  /**
+   * VolumeProfileCollection.
+   */
   export interface VolumeProfileCollection {
     /** A link to the first page of resources. */
-    first: VolumeProfileCollectionFirst;
+    first: PageLink;
     /** The maximum number of resources that can be returned by the request. */
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
-    next?: VolumeProfileCollectionNext;
+    next?: PageLink;
     /** A page of volume profiles. */
     profiles: VolumeProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
   }
 
-  /** A link to the first page of resources. */
-  export interface VolumeProfileCollectionFirst {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** A link to the next page of resources. This property is present for all pages except the last page. */
-  export interface VolumeProfileCollectionNext {
-    /** The URL for a page of resources. */
-    href: string;
-  }
-
-  /** VolumeProfileIOPS. */
+  /**
+   * VolumeProfileIOPS.
+   */
   export interface VolumeProfileIOPS {
   }
 
-  /** Identifies a volume profile by a unique property. */
+  /**
+   * Identifies a volume profile by a unique property.
+   */
   export interface VolumeProfileIdentity {
   }
 
-  /** VolumeProfileReference. */
+  /**
+   * VolumeProfileReference.
+   */
   export interface VolumeProfileReference {
     /** The URL for this volume profile. */
     href: string;
@@ -46447,7 +50159,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** VolumePrototype. */
+  /**
+   * VolumePrototype.
+   */
   export interface VolumePrototype {
     /** The maximum I/O operations per second (IOPS) to use for this volume. If specified, the `family` of the
      *  volume profile must be `custom` or `defined_performance`.
@@ -46469,7 +50183,9 @@ namespace VpcV1 {
     zone: ZoneIdentity;
   }
 
-  /** VolumePrototypeInstanceByImageContext. */
+  /**
+   * VolumePrototypeInstanceByImageContext.
+   */
   export interface VolumePrototypeInstanceByImageContext {
     /** The capacity to use for the volume (in gigabytes). The specified value must be at least the image's
      *  `minimum_provisioned_size`, at most 250 gigabytes, and within the
@@ -46499,7 +50215,9 @@ namespace VpcV1 {
     user_tags?: string[];
   }
 
-  /** VolumePrototypeInstanceBySourceSnapshotContext. */
+  /**
+   * VolumePrototypeInstanceBySourceSnapshotContext.
+   */
   export interface VolumePrototypeInstanceBySourceSnapshotContext {
     /** The capacity to use for the volume (in gigabytes). The specified value must be at least the snapshot's
      *  `minimum_capacity`, at most 250 gigabytes, and within the `boot_capacity` range of the volume's profile.
@@ -46531,7 +50249,9 @@ namespace VpcV1 {
     user_tags?: string[];
   }
 
-  /** VolumeReference. */
+  /**
+   * VolumeReference.
+   */
   export interface VolumeReference {
     /** The CRN for this volume. */
     crn: string;
@@ -46561,7 +50281,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VolumeReferenceVolumeAttachmentContext. */
+  /**
+   * VolumeReferenceVolumeAttachmentContext.
+   */
   export interface VolumeReferenceVolumeAttachmentContext {
     /** The CRN for this volume. */
     crn: string;
@@ -46587,7 +50309,10 @@ namespace VpcV1 {
     }
   }
 
-  /** If present, this property indicates that the resource associated with this reference is remote and therefore may not be directly retrievable. */
+  /**
+   * If present, this property indicates that the resource associated with this reference is remote and therefore may
+   * not be directly retrievable.
+   */
   export interface VolumeRemote {
     /** If present, this property indicates that the referenced resource is remote to this
      *  region, and identifies the native region.
@@ -46595,7 +50320,9 @@ namespace VpcV1 {
     region?: RegionReference;
   }
 
-  /** VolumeStatusReason. */
+  /**
+   * VolumeStatusReason.
+   */
   export interface VolumeStatusReason {
     /** A snake case string succinctly identifying the status reason.
      *
@@ -46617,7 +50344,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Zone. */
+  /**
+   * Zone.
+   */
   export interface Zone {
     /** The physical data center assigned to this logical zone.
      *
@@ -46659,17 +50388,23 @@ namespace VpcV1 {
     }
   }
 
-  /** ZoneCollection. */
+  /**
+   * ZoneCollection.
+   */
   export interface ZoneCollection {
     /** The zones for the region. */
     zones: Zone[];
   }
 
-  /** Identifies a zone by a unique property. */
+  /**
+   * Identifies a zone by a unique property.
+   */
   export interface ZoneIdentity {
   }
 
-  /** ZoneReference. */
+  /**
+   * ZoneReference.
+   */
   export interface ZoneReference {
     /** The URL for this zone. */
     href: string;
@@ -46677,13 +50412,17 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** AccountIdentityById. */
+  /**
+   * AccountIdentityById.
+   */
   export interface AccountIdentityById extends AccountIdentity {
     /** The unique identifier for this account. */
     id: string;
   }
 
-  /** BackupPolicyJobSourceInstanceReference. */
+  /**
+   * BackupPolicyJobSourceInstanceReference.
+   */
   export interface BackupPolicyJobSourceInstanceReference extends BackupPolicyJobSource {
     /** The CRN for this virtual server instance. */
     crn: string;
@@ -46701,7 +50440,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** BackupPolicyJobSourceVolumeReference. */
+  /**
+   * BackupPolicyJobSourceVolumeReference.
+   */
   export interface BackupPolicyJobSourceVolumeReference extends BackupPolicyJobSource {
     /** The CRN for this volume. */
     crn: string;
@@ -46731,7 +50472,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BackupPolicyMatchResourceTypeInstance. */
+  /**
+   * BackupPolicyMatchResourceTypeInstance.
+   */
   export interface BackupPolicyMatchResourceTypeInstance extends BackupPolicy {
     /** The included content for backups created using this policy:
      *  - `boot_volume`: Include the instance's boot volume.
@@ -46784,7 +50527,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BackupPolicyMatchResourceTypeVolume. */
+  /**
+   * BackupPolicyMatchResourceTypeVolume.
+   */
   export interface BackupPolicyMatchResourceTypeVolume extends BackupPolicy {
     /** The resource type this backup policy applies to. Resources that have both a matching type and a matching
      *  user tag will be subject to the backup policy.
@@ -46824,7 +50569,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BackupPolicyPrototypeBackupPolicyMatchResourceTypeInstancePrototype. */
+  /**
+   * BackupPolicyPrototypeBackupPolicyMatchResourceTypeInstancePrototype.
+   */
   export interface BackupPolicyPrototypeBackupPolicyMatchResourceTypeInstancePrototype extends BackupPolicyPrototype {
     /** The included content for backups created using this policy:
      *  - `boot_volume`: Include the instance's boot volume.
@@ -46850,7 +50597,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BackupPolicyPrototypeBackupPolicyMatchResourceTypeVolumePrototype. */
+  /**
+   * BackupPolicyPrototypeBackupPolicyMatchResourceTypeVolumePrototype.
+   */
   export interface BackupPolicyPrototypeBackupPolicyMatchResourceTypeVolumePrototype extends BackupPolicyPrototype {
     /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching
      *  user tag will be subject to the backup policy.
@@ -46866,11 +50615,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies an enterprise by a unique property. */
+  /**
+   * Identifies an enterprise by a unique property.
+   */
   export interface BackupPolicyScopePrototypeEnterpriseIdentity extends BackupPolicyScopePrototype {
   }
 
-  /** BackupPolicyScopeAccountReference. */
+  /**
+   * BackupPolicyScopeAccountReference.
+   */
   export interface BackupPolicyScopeAccountReference extends BackupPolicyScope {
     /** The unique identifier for this account. */
     id: string;
@@ -46886,7 +50639,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BackupPolicyScopeEnterpriseReference. */
+  /**
+   * BackupPolicyScopeEnterpriseReference.
+   */
   export interface BackupPolicyScopeEnterpriseReference extends BackupPolicyScope {
     /** The CRN for this enterprise. */
     crn: string;
@@ -46904,7 +50659,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerBootTargetBareMetalServerDiskReference. */
+  /**
+   * BareMetalServerBootTargetBareMetalServerDiskReference.
+   */
   export interface BareMetalServerBootTargetBareMetalServerDiskReference extends BareMetalServerBootTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -46928,7 +50685,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerInitializationUserAccountBareMetalServerInitializationHostUserAccount. */
+  /**
+   * BareMetalServerInitializationUserAccountBareMetalServerInitializationHostUserAccount.
+   */
   export interface BareMetalServerInitializationUserAccountBareMetalServerInitializationHostUserAccount extends BareMetalServerInitializationUserAccount {
     /** The password at initialization, encrypted using `encryption_key`, and returned base64-encoded. */
     encrypted_password: string;
@@ -46948,7 +50707,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkAttachmentByPCI. */
+  /**
+   * BareMetalServerNetworkAttachmentByPCI.
+   */
   export interface BareMetalServerNetworkAttachmentByPCI extends BareMetalServerNetworkAttachment {
     /** The VLAN IDs allowed for `vlan` attachments using this PCI attachment. */
     allowed_vlans: number[];
@@ -46988,7 +50749,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkAttachmentByVLAN. */
+  /**
+   * BareMetalServerNetworkAttachmentByVLAN.
+   */
   export interface BareMetalServerNetworkAttachmentByVLAN extends BareMetalServerNetworkAttachment {
     /** Indicates if the data path for the network attachment can float to another bare metal server. Can only be
      *  `true` for network attachments with an `interface_type` of `vlan`.
@@ -47039,11 +50802,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a virtual network interface by a unique property. */
+  /**
+   * Identifies a virtual network interface by a unique property.
+   */
   export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity extends BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterface {
   }
 
-  /** The virtual network interface for this target. */
+  /**
+   * The virtual network interface for this target.
+   */
   export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeBareMetalServerNetworkAttachmentContext extends BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterface {
     /** Indicates whether source IP spoofing is allowed on this interface. If `false`, source IP spoofing is
      *  prevented on this interface. If `true`, source IP spoofing is allowed on this interface.
@@ -47125,7 +50892,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByPCIPrototype. */
+  /**
+   * BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByPCIPrototype.
+   */
   export interface BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByPCIPrototype extends BareMetalServerNetworkAttachmentPrototype {
     /** The VLAN IDs to allow for `vlan` attachments using this PCI attachment. */
     allowed_vlans?: number[];
@@ -47147,7 +50916,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByVLANPrototype. */
+  /**
+   * BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByVLANPrototype.
+   */
   export interface BareMetalServerNetworkAttachmentPrototypeBareMetalServerNetworkAttachmentByVLANPrototype extends BareMetalServerNetworkAttachmentPrototype {
     /** Indicates if the data path for the network attachment can float to another bare metal server. Can only be
      *  `true` for network attachments with an `interface_type` of `vlan`.
@@ -47179,7 +50950,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkInterfaceByHiperSocket. */
+  /**
+   * BareMetalServerNetworkInterfaceByHiperSocket.
+   */
   export interface BareMetalServerNetworkInterfaceByHiperSocket extends BareMetalServerNetworkInterface {
     /** - `hipersocket`: a virtual network device that provides high-speed TCP/IP connectivity
      *    within a `s390x` based system.
@@ -47211,7 +50984,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkInterfaceByPCI. */
+  /**
+   * BareMetalServerNetworkInterfaceByPCI.
+   */
   export interface BareMetalServerNetworkInterfaceByPCI extends BareMetalServerNetworkInterface {
     /** The VLAN IDs allowed for `vlan` interfaces using this PCI interface.
      *
@@ -47254,7 +51029,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkInterfaceByVLAN. */
+  /**
+   * BareMetalServerNetworkInterfaceByVLAN.
+   */
   export interface BareMetalServerNetworkInterfaceByVLAN extends BareMetalServerNetworkInterface {
     /** Indicates if the data path for the network interface can float to another bare metal server. Can only be
      *  `true` for network interfaces with an `interface_type` of `vlan`.
@@ -47314,7 +51091,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByHiperSocketPrototype. */
+  /**
+   * BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByHiperSocketPrototype.
+   */
   export interface BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByHiperSocketPrototype extends BareMetalServerNetworkInterfacePrototype {
     /** - `hipersocket`: a virtual network device that provides high-speed TCP/IP connectivity
      *    within a `s390x` based system.
@@ -47331,7 +51110,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByPCIPrototype. */
+  /**
+   * BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByPCIPrototype.
+   */
   export interface BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByPCIPrototype extends BareMetalServerNetworkInterfacePrototype {
     /** The VLAN IDs to allow for `vlan` interfaces using this PCI interface. */
     allowed_vlans?: number[];
@@ -47353,7 +51134,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype. */
+  /**
+   * BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype.
+   */
   export interface BareMetalServerNetworkInterfacePrototypeBareMetalServerNetworkInterfaceByVLANPrototype extends BareMetalServerNetworkInterfacePrototype {
     /** Indicates if the data path for the network interface can float to another bare metal server. Can only be
      *  `true` for network interfaces with an `interface_type` of `vlan`.
@@ -47398,7 +51181,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerPrimaryNetworkAttachmentPrototypeBareMetalServerPrimaryNetworkAttachmentByPCIPrototype. */
+  /**
+   * BareMetalServerPrimaryNetworkAttachmentPrototypeBareMetalServerPrimaryNetworkAttachmentByPCIPrototype.
+   */
   export interface BareMetalServerPrimaryNetworkAttachmentPrototypeBareMetalServerPrimaryNetworkAttachmentByPCIPrototype extends BareMetalServerPrimaryNetworkAttachmentPrototype {
     /** The VLAN IDs to allow for `vlan` attachments using this PCI attachment. */
     allowed_vlans?: number[];
@@ -47420,7 +51205,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The total bandwidth shared across the bare metal server network attachments or bare metal server network interfaces of a bare metal server with this profile depends on its configuration. */
+  /**
+   * The total bandwidth shared across the bare metal server network attachments or bare metal server network interfaces
+   * of a bare metal server with this profile depends on its configuration.
+   */
   export interface BareMetalServerProfileBandwidthDependent extends BareMetalServerProfileBandwidth {
     /** The type for this profile field. */
     type: BareMetalServerProfileBandwidthDependent.Constants.Type | string;
@@ -47434,7 +51222,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total bandwidth values (in megabits per second) shared across the bare metal server network attachments or bare metal server network interfaces of a bare metal server with this profile. */
+  /**
+   * The permitted total bandwidth values (in megabits per second) shared across the bare metal server network
+   * attachments or bare metal server network interfaces of a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileBandwidthEnum extends BareMetalServerProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -47452,7 +51243,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The total bandwidth (in megabits per second) shared across the bare metal server network attachments or bare metal server network interfaces of a bare metal server with this profile. */
+  /**
+   * The total bandwidth (in megabits per second) shared across the bare metal server network attachments or bare metal
+   * server network interfaces of a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileBandwidthFixed extends BareMetalServerProfileBandwidth {
     /** The type for this profile field. */
     type: BareMetalServerProfileBandwidthFixed.Constants.Type | string;
@@ -47468,7 +51262,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total bandwidth range (in megabits per second) shared across the network attachments or network interfaces of a bare metal server with this profile. */
+  /**
+   * The permitted total bandwidth range (in megabits per second) shared across the network attachments or network
+   * interfaces of a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileBandwidthRange extends BareMetalServerProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -47490,7 +51287,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The CPU core count for a bare metal server with this profile depends on its configuration. */
+  /**
+   * The CPU core count for a bare metal server with this profile depends on its configuration.
+   */
   export interface BareMetalServerProfileCPUCoreCountDependent extends BareMetalServerProfileCPUCoreCount {
     /** The type for this profile field. */
     type: BareMetalServerProfileCPUCoreCountDependent.Constants.Type | string;
@@ -47504,7 +51303,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted values for CPU cores for a bare metal server with this profile. */
+  /**
+   * The permitted values for CPU cores for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileCPUCoreCountEnum extends BareMetalServerProfileCPUCoreCount {
     /** The default value for this profile field. */
     default: number;
@@ -47522,7 +51323,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The CPU core count for a bare metal server with this profile. */
+  /**
+   * The CPU core count for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileCPUCoreCountFixed extends BareMetalServerProfileCPUCoreCount {
     /** The type for this profile field. */
     type: BareMetalServerProfileCPUCoreCountFixed.Constants.Type | string;
@@ -47538,7 +51341,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted range for the number of CPU cores for a bare metal server with this profile. */
+  /**
+   * The permitted range for the number of CPU cores for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileCPUCoreCountRange extends BareMetalServerProfileCPUCoreCount {
     /** The default value for this profile field. */
     default: number;
@@ -47560,7 +51365,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The CPU socket count for a bare metal server with this profile depends on its configuration. */
+  /**
+   * The CPU socket count for a bare metal server with this profile depends on its configuration.
+   */
   export interface BareMetalServerProfileCPUSocketCountDependent extends BareMetalServerProfileCPUSocketCount {
     /** The type for this profile field. */
     type: BareMetalServerProfileCPUSocketCountDependent.Constants.Type | string;
@@ -47574,7 +51381,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted values for CPU sockets for a bare metal server with this profile. */
+  /**
+   * The permitted values for CPU sockets for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileCPUSocketCountEnum extends BareMetalServerProfileCPUSocketCount {
     /** The default value for this profile field. */
     default: number;
@@ -47592,7 +51401,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of CPU sockets for a bare metal server with this profile. */
+  /**
+   * The number of CPU sockets for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileCPUSocketCountFixed extends BareMetalServerProfileCPUSocketCount {
     /** The type for this profile field. */
     type: BareMetalServerProfileCPUSocketCountFixed.Constants.Type | string;
@@ -47608,7 +51419,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted range for the number of CPU sockets for a bare metal server with this profile. */
+  /**
+   * The permitted range for the number of CPU sockets for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileCPUSocketCountRange extends BareMetalServerProfileCPUSocketCount {
     /** The default value for this profile field. */
     default: number;
@@ -47630,7 +51443,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of disks of this configuration for a bare metal server with this profile depends on its bare metal server configuration. */
+  /**
+   * The number of disks of this configuration for a bare metal server with this profile depends on its bare metal
+   * server configuration.
+   */
   export interface BareMetalServerProfileDiskQuantityDependent extends BareMetalServerProfileDiskQuantity {
     /** The type for this profile field. */
     type: BareMetalServerProfileDiskQuantityDependent.Constants.Type | string;
@@ -47644,7 +51460,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted the number of disks of this configuration for a bare metal server with this profile. */
+  /**
+   * The permitted the number of disks of this configuration for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileDiskQuantityEnum extends BareMetalServerProfileDiskQuantity {
     /** The default value for this profile field. */
     default: number;
@@ -47662,7 +51480,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of disks of this configuration for a bare metal server with this profile. */
+  /**
+   * The number of disks of this configuration for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileDiskQuantityFixed extends BareMetalServerProfileDiskQuantity {
     /** The type for this profile field. */
     type: BareMetalServerProfileDiskQuantityFixed.Constants.Type | string;
@@ -47678,7 +51498,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted range for the number of disks of this configuration for a bare metal server with this profile. */
+  /**
+   * The permitted range for the number of disks of this configuration for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileDiskQuantityRange extends BareMetalServerProfileDiskQuantity {
     /** The default value for this profile field. */
     default: number;
@@ -47700,7 +51522,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The disk size in GB (gigabytes) of this configuration for a bare metal server with this profile depends on its bare metal server configuration. */
+  /**
+   * The disk size in GB (gigabytes) of this configuration for a bare metal server with this profile depends on its bare
+   * metal server configuration.
+   */
   export interface BareMetalServerProfileDiskSizeDependent extends BareMetalServerProfileDiskSize {
     /** The type for this profile field. */
     type: BareMetalServerProfileDiskSizeDependent.Constants.Type | string;
@@ -47714,7 +51539,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted disk size in GB (gigabytes) of this configuration for a bare metal server with this profile. */
+  /**
+   * The permitted disk size in GB (gigabytes) of this configuration for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileDiskSizeEnum extends BareMetalServerProfileDiskSize {
     /** The default value for this profile field. */
     default: number;
@@ -47732,7 +51559,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The size of the disk in GB (gigabytes). */
+  /**
+   * The size of the disk in GB (gigabytes).
+   */
   export interface BareMetalServerProfileDiskSizeFixed extends BareMetalServerProfileDiskSize {
     /** The type for this profile field. */
     type: BareMetalServerProfileDiskSizeFixed.Constants.Type | string;
@@ -47748,7 +51577,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted range for the disk size of this configuration in GB (gigabytes) for a bare metal server with this profile. */
+  /**
+   * The permitted range for the disk size of this configuration in GB (gigabytes) for a bare metal server with this
+   * profile.
+   */
   export interface BareMetalServerProfileDiskSizeRange extends BareMetalServerProfileDiskSize {
     /** The default value for this profile field. */
     default: number;
@@ -47770,19 +51602,25 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerProfileIdentityByHref. */
+  /**
+   * BareMetalServerProfileIdentityByHref.
+   */
   export interface BareMetalServerProfileIdentityByHref extends BareMetalServerProfileIdentity {
     /** The URL for this bare metal server profile. */
     href: string;
   }
 
-  /** BareMetalServerProfileIdentityByName. */
+  /**
+   * BareMetalServerProfileIdentityByName.
+   */
   export interface BareMetalServerProfileIdentityByName extends BareMetalServerProfileIdentity {
     /** The name for this bare metal server profile. */
     name: string;
   }
 
-  /** The memory value for a bare metal server with this profile depends on its configuration. */
+  /**
+   * The memory value for a bare metal server with this profile depends on its configuration.
+   */
   export interface BareMetalServerProfileMemoryDependent extends BareMetalServerProfileMemory {
     /** The type for this profile field. */
     type: BareMetalServerProfileMemoryDependent.Constants.Type | string;
@@ -47796,7 +51634,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted memory values (in gibibytes) for a bare metal server with this profile. */
+  /**
+   * The permitted memory values (in gibibytes) for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileMemoryEnum extends BareMetalServerProfileMemory {
     /** The default value for this profile field. */
     default: number;
@@ -47814,7 +51654,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The memory (in gibibytes) for a bare metal server with this profile. */
+  /**
+   * The memory (in gibibytes) for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileMemoryFixed extends BareMetalServerProfileMemory {
     /** The type for this profile field. */
     type: BareMetalServerProfileMemoryFixed.Constants.Type | string;
@@ -47830,7 +51672,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted memory range (in gibibytes) for a bare metal server with this profile. */
+  /**
+   * The permitted memory range (in gibibytes) for a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileMemoryRange extends BareMetalServerProfileMemory {
     /** The default value for this profile field. */
     default: number;
@@ -47852,7 +51696,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of network attachments supported on a bare metal server with this profile is dependent on its configuration. */
+  /**
+   * The number of network attachments supported on a bare metal server with this profile is dependent on its
+   * configuration.
+   */
   export interface BareMetalServerProfileNetworkAttachmentCountDependent extends BareMetalServerProfileNetworkAttachmentCount {
     /** The type for this profile field. */
     type: BareMetalServerProfileNetworkAttachmentCountDependent.Constants.Type | string;
@@ -47866,7 +51713,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of network attachments supported on a bare metal server with this profile. */
+  /**
+   * The number of network attachments supported on a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileNetworkAttachmentCountRange extends BareMetalServerProfileNetworkAttachmentCount {
     /** The maximum value for this profile field. */
     max?: number;
@@ -47884,7 +51733,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of bare metal server network interfaces supported on a bare metal server with this profile is dependent on its configuration. */
+  /**
+   * The number of bare metal server network interfaces supported on a bare metal server with this profile is dependent
+   * on its configuration.
+   */
   export interface BareMetalServerProfileNetworkInterfaceCountDependent extends BareMetalServerProfileNetworkInterfaceCount {
     /** The type for this profile field. */
     type: BareMetalServerProfileNetworkInterfaceCountDependent.Constants.Type | string;
@@ -47898,7 +51750,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of bare metal server network interfaces supported on a bare metal server with this profile. */
+  /**
+   * The number of bare metal server network interfaces supported on a bare metal server with this profile.
+   */
   export interface BareMetalServerProfileNetworkInterfaceCountRange extends BareMetalServerProfileNetworkInterfaceCount {
     /** The maximum value for this profile field. */
     max?: number;
@@ -47916,7 +51770,9 @@ namespace VpcV1 {
     }
   }
 
-  /** BareMetalServerPrototypeBareMetalServerByNetworkAttachment. */
+  /**
+   * BareMetalServerPrototypeBareMetalServerByNetworkAttachment.
+   */
   export interface BareMetalServerPrototypeBareMetalServerByNetworkAttachment extends BareMetalServerPrototype {
     /** The additional network attachments to create for the bare metal server. */
     network_attachments?: BareMetalServerNetworkAttachmentPrototype[];
@@ -47924,7 +51780,9 @@ namespace VpcV1 {
     primary_network_attachment: BareMetalServerPrimaryNetworkAttachmentPrototype;
   }
 
-  /** BareMetalServerPrototypeBareMetalServerByNetworkInterface. */
+  /**
+   * BareMetalServerPrototypeBareMetalServerByNetworkInterface.
+   */
   export interface BareMetalServerPrototypeBareMetalServerByNetworkInterface extends BareMetalServerPrototype {
     /** The additional bare metal server network interfaces to create. */
     network_interfaces?: BareMetalServerNetworkInterfacePrototype[];
@@ -47932,13 +51790,17 @@ namespace VpcV1 {
     primary_network_interface: BareMetalServerPrimaryNetworkInterfacePrototype;
   }
 
-  /** CatalogOfferingIdentityCatalogOfferingByCRN. */
+  /**
+   * CatalogOfferingIdentityCatalogOfferingByCRN.
+   */
   export interface CatalogOfferingIdentityCatalogOfferingByCRN extends CatalogOfferingIdentity {
     /** The CRN for this [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering. */
     crn: string;
   }
 
-  /** CatalogOfferingVersionIdentityCatalogOfferingVersionByCRN. */
+  /**
+   * CatalogOfferingVersionIdentityCatalogOfferingVersionByCRN.
+   */
   export interface CatalogOfferingVersionIdentityCatalogOfferingVersionByCRN extends CatalogOfferingVersionIdentity {
     /** The CRN for this version of a
      *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering.
@@ -47946,7 +51808,9 @@ namespace VpcV1 {
     crn: string;
   }
 
-  /** CatalogOfferingVersionPlanIdentityCatalogOfferingVersionPlanByCRN. */
+  /**
+   * CatalogOfferingVersionPlanIdentityCatalogOfferingVersionPlanByCRN.
+   */
   export interface CatalogOfferingVersionPlanIdentityCatalogOfferingVersionPlanByCRN extends CatalogOfferingVersionPlanIdentity {
     /** The CRN for this
      *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering version's billing plan.
@@ -47954,66 +51818,246 @@ namespace VpcV1 {
     crn: string;
   }
 
-  /** CertificateInstanceIdentityByCRN. */
+  /**
+   * CertificateInstanceIdentityByCRN.
+   */
   export interface CertificateInstanceIdentityByCRN extends CertificateInstanceIdentity {
     /** The CRN for this certificate instance. */
     crn: string;
   }
 
-  /** CloudObjectStorageBucketIdentityByCRN. */
+  /**
+   * CloudObjectStorageBucketIdentityByCRN.
+   */
   export interface CloudObjectStorageBucketIdentityByCRN extends CloudObjectStorageBucketIdentity {
     /** The CRN of this Cloud Object Storage bucket. */
     crn: string;
   }
 
-  /** CloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName. */
+  /**
+   * CloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName.
+   */
   export interface CloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName extends CloudObjectStorageBucketIdentity {
     /** The globally unique name of this Cloud Object Storage bucket. */
     name: string;
   }
 
-  /** DNSInstanceIdentityByCRN. */
+  /**
+   * Identifies a cluster network subnet reserved IP by a unique property. Required if `subnet` is not specified. The
+   * cluster network subnet reserved IP must be currently unbound.
+   */
+  export interface ClusterNetworkInterfacePrimaryIPPrototypeClusterNetworkSubnetReservedIPIdentityClusterNetworkInterfacePrimaryIPContext extends ClusterNetworkInterfacePrimaryIPPrototype {
+  }
+
+  /**
+   * The prototype for a new cluster network subnet reserved IP. Requires `subnet` to be specified.
+   */
+  export interface ClusterNetworkInterfacePrimaryIPPrototypeClusterNetworkSubnetReservedIPPrototypeClusterNetworkInterfacePrimaryIPContext extends ClusterNetworkInterfacePrimaryIPPrototype {
+    /** The IP address to reserve, which must not already be reserved on the subnet.
+     *
+     *  If unspecified, an available address on the subnet will automatically be selected.
+     */
+    address?: string;
+    /** Indicates whether this cluster network subnet reserved IP member will be automatically deleted when either
+     *  `target` is deleted, or the cluster network subnet reserved IP is unbound.
+     */
+    auto_delete?: boolean;
+    /** The name for this cluster network subnet reserved IP. The name must not be used by another reserved IP in
+     *  the cluster network subnet. Names starting with `ibm-` are reserved for provider-owned resources, and are not
+     *  allowed. If unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+  }
+
+  /**
+   * ClusterNetworkInterfaceTargetInstanceClusterNetworkAttachmentReferenceClusterNetworkInterfaceContext.
+   */
+  export interface ClusterNetworkInterfaceTargetInstanceClusterNetworkAttachmentReferenceClusterNetworkInterfaceContext extends ClusterNetworkInterfaceTarget {
+    /** The URL for this instance cluster network attachment. */
+    href: string;
+    /** The unique identifier for this instance cluster network attachment. */
+    id: string;
+    /** The name for this instance cluster network attachment. The name is unique across all network attachments for
+     *  the instance.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: ClusterNetworkInterfaceTargetInstanceClusterNetworkAttachmentReferenceClusterNetworkInterfaceContext.Constants.ResourceType | string;
+  }
+  export namespace ClusterNetworkInterfaceTargetInstanceClusterNetworkAttachmentReferenceClusterNetworkInterfaceContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_CLUSTER_NETWORK_ATTACHMENT = 'instance_cluster_network_attachment',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkProfileIdentityByHref.
+   */
+  export interface ClusterNetworkProfileIdentityByHref extends ClusterNetworkProfileIdentity {
+    /** The URL for this cluster network profile. */
+    href: string;
+  }
+
+  /**
+   * ClusterNetworkProfileIdentityByName.
+   */
+  export interface ClusterNetworkProfileIdentityByName extends ClusterNetworkProfileIdentity {
+    /** The globally unique name for this cluster network profile. */
+    name: string;
+  }
+
+  /**
+   * ClusterNetworkSubnetIdentityByHref.
+   */
+  export interface ClusterNetworkSubnetIdentityByHref extends ClusterNetworkSubnetIdentity {
+    /** The URL for this cluster network subnet. */
+    href: string;
+  }
+
+  /**
+   * ClusterNetworkSubnetIdentityById.
+   */
+  export interface ClusterNetworkSubnetIdentityById extends ClusterNetworkSubnetIdentity {
+    /** The unique identifier for this cluster network subnet. */
+    id: string;
+  }
+
+  /**
+   * ClusterNetworkSubnetPrototypeClusterNetworkSubnetByIPv4CIDRBlockPrototype.
+   */
+  export interface ClusterNetworkSubnetPrototypeClusterNetworkSubnetByIPv4CIDRBlockPrototype extends ClusterNetworkSubnetPrototype {
+    /** The IPv4 range of the cluster network subnet, expressed in CIDR format. The prefix length of the cluster
+     *  network subnet's CIDR must be between `/8` (16,777,216 addresses) and `/29`
+     *  (8 addresses). The IPv4 range of the cluster network subnet's CIDR must be within the cluster network's
+     *  `subnet_prefixes`.
+     *
+     *  The range must not overlap with any of the following reserved address ranges:
+     *
+     *    - `127.0.0.0/8` (IPv4 loopback addresses)
+     *    - `169.254.0.0/16` (IPv4 link-local addresses)
+     *    - `224.0.0.0/4` (IPv4 multicast addresses).
+     */
+    ipv4_cidr_block: string;
+  }
+  export namespace ClusterNetworkSubnetPrototypeClusterNetworkSubnetByIPv4CIDRBlockPrototype {
+    export namespace Constants {
+      /** The IP version(s) to support for this cluster network subnet. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnetPrototypeClusterNetworkSubnetByTotalCountPrototype.
+   */
+  export interface ClusterNetworkSubnetPrototypeClusterNetworkSubnetByTotalCountPrototype extends ClusterNetworkSubnetPrototype {
+    /** The total number of IPv4 addresses required. Must be a power of 2.
+     *
+     *  A CIDR will be allocated from a subnet prefix in the cluster network that has an
+     *  `allocation_policy` of `auto`. There must be a subnet prefix that has a free CIDR range with at least this
+     *  number of addresses.
+     */
+    total_ipv4_address_count: number;
+  }
+  export namespace ClusterNetworkSubnetPrototypeClusterNetworkSubnetByTotalCountPrototype {
+    export namespace Constants {
+      /** The IP version(s) to support for this cluster network subnet. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnetReservedIPTargetClusterNetworkInterfaceReferenceClusterNetworkSubnetReservedIPTargetContext.
+   */
+  export interface ClusterNetworkSubnetReservedIPTargetClusterNetworkInterfaceReferenceClusterNetworkSubnetReservedIPTargetContext extends ClusterNetworkSubnetReservedIPTarget {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this cluster network interface. */
+    href: string;
+    /** The unique identifier for this cluster network interface. */
+    id: string;
+    /** The name for this cluster network interface. The name is unique across all interfaces in the cluster
+     *  network.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: ClusterNetworkSubnetReservedIPTargetClusterNetworkInterfaceReferenceClusterNetworkSubnetReservedIPTargetContext.Constants.ResourceType | string;
+  }
+  export namespace ClusterNetworkSubnetReservedIPTargetClusterNetworkInterfaceReferenceClusterNetworkSubnetReservedIPTargetContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        CLUSTER_NETWORK_INTERFACE = 'cluster_network_interface',
+      }
+    }
+  }
+
+  /**
+   * DNSInstanceIdentityByCRN.
+   */
   export interface DNSInstanceIdentityByCRN extends DNSInstanceIdentity {
     /** The CRN for this DNS instance. */
     crn: string;
   }
 
-  /** DNSZoneIdentityById. */
+  /**
+   * DNSZoneIdentityById.
+   */
   export interface DNSZoneIdentityById extends DNSZoneIdentity {
     id: string;
   }
 
-  /** DedicatedHostGroupIdentityByCRN. */
+  /**
+   * DedicatedHostGroupIdentityByCRN.
+   */
   export interface DedicatedHostGroupIdentityByCRN extends DedicatedHostGroupIdentity {
     /** The CRN for this dedicated host group. */
     crn: string;
   }
 
-  /** DedicatedHostGroupIdentityByHref. */
+  /**
+   * DedicatedHostGroupIdentityByHref.
+   */
   export interface DedicatedHostGroupIdentityByHref extends DedicatedHostGroupIdentity {
     /** The URL for this dedicated host group. */
     href: string;
   }
 
-  /** DedicatedHostGroupIdentityById. */
+  /**
+   * DedicatedHostGroupIdentityById.
+   */
   export interface DedicatedHostGroupIdentityById extends DedicatedHostGroupIdentity {
     /** The unique identifier for this dedicated host group. */
     id: string;
   }
 
-  /** DedicatedHostProfileIdentityByHref. */
+  /**
+   * DedicatedHostProfileIdentityByHref.
+   */
   export interface DedicatedHostProfileIdentityByHref extends DedicatedHostProfileIdentity {
     /** The URL for this dedicated host profile. */
     href: string;
   }
 
-  /** DedicatedHostProfileIdentityByName. */
+  /**
+   * DedicatedHostProfileIdentityByName.
+   */
   export interface DedicatedHostProfileIdentityByName extends DedicatedHostProfileIdentity {
     /** The globally unique name for this dedicated host profile. */
     name: string;
   }
 
-  /** The memory value for a dedicated host with this profile depends on its configuration. */
+  /**
+   * The memory value for a dedicated host with this profile depends on its configuration.
+   */
   export interface DedicatedHostProfileMemoryDependent extends DedicatedHostProfileMemory {
     /** The type for this profile field. */
     type: DedicatedHostProfileMemoryDependent.Constants.Type | string;
@@ -48027,7 +52071,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted memory values (in gibibytes) for a dedicated host with this profile. */
+  /**
+   * The permitted memory values (in gibibytes) for a dedicated host with this profile.
+   */
   export interface DedicatedHostProfileMemoryEnum extends DedicatedHostProfileMemory {
     /** The default value for this profile field. */
     default: number;
@@ -48045,7 +52091,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The memory (in gibibytes) for a dedicated host with this profile. */
+  /**
+   * The memory (in gibibytes) for a dedicated host with this profile.
+   */
   export interface DedicatedHostProfileMemoryFixed extends DedicatedHostProfileMemory {
     /** The type for this profile field. */
     type: DedicatedHostProfileMemoryFixed.Constants.Type | string;
@@ -48061,7 +52109,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted memory range (in gibibytes) for a dedicated host with this profile. */
+  /**
+   * The permitted memory range (in gibibytes) for a dedicated host with this profile.
+   */
   export interface DedicatedHostProfileMemoryRange extends DedicatedHostProfileMemory {
     /** The default value for this profile field. */
     default: number;
@@ -48083,7 +52133,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The CPU socket count for a dedicated host with this profile depends on its configuration. */
+  /**
+   * The CPU socket count for a dedicated host with this profile depends on its configuration.
+   */
   export interface DedicatedHostProfileSocketDependent extends DedicatedHostProfileSocket {
     /** The type for this profile field. */
     type: DedicatedHostProfileSocketDependent.Constants.Type | string;
@@ -48097,7 +52149,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted values for CPU socket count for a dedicated host with this profile. */
+  /**
+   * The permitted values for CPU socket count for a dedicated host with this profile.
+   */
   export interface DedicatedHostProfileSocketEnum extends DedicatedHostProfileSocket {
     /** The default value for this profile field. */
     default: number;
@@ -48115,7 +52169,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The CPU socket count for a dedicated host with this profile. */
+  /**
+   * The CPU socket count for a dedicated host with this profile.
+   */
   export interface DedicatedHostProfileSocketFixed extends DedicatedHostProfileSocket {
     /** The type for this profile field. */
     type: DedicatedHostProfileSocketFixed.Constants.Type | string;
@@ -48131,7 +52187,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted range for CPU socket count for a dedicated host with this profile. */
+  /**
+   * The permitted range for CPU socket count for a dedicated host with this profile.
+   */
   export interface DedicatedHostProfileSocketRange extends DedicatedHostProfileSocket {
     /** The default value for this profile field. */
     default: number;
@@ -48153,7 +52211,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The VCPU count for a dedicated host with this profile depends on its configuration. */
+  /**
+   * The VCPU count for a dedicated host with this profile depends on its configuration.
+   */
   export interface DedicatedHostProfileVCPUDependent extends DedicatedHostProfileVCPU {
     /** The type for this profile field. */
     type: DedicatedHostProfileVCPUDependent.Constants.Type | string;
@@ -48167,7 +52227,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted values for VCPU count for a dedicated host with this profile. */
+  /**
+   * The permitted values for VCPU count for a dedicated host with this profile.
+   */
   export interface DedicatedHostProfileVCPUEnum extends DedicatedHostProfileVCPU {
     /** The default value for this profile field. */
     default: number;
@@ -48185,7 +52247,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The VCPU count for a dedicated host with this profile. */
+  /**
+   * The VCPU count for a dedicated host with this profile.
+   */
   export interface DedicatedHostProfileVCPUFixed extends DedicatedHostProfileVCPU {
     /** The type for this profile field. */
     type: DedicatedHostProfileVCPUFixed.Constants.Type | string;
@@ -48201,7 +52265,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted range for VCPU count for a dedicated host with this profile. */
+  /**
+   * The permitted range for VCPU count for a dedicated host with this profile.
+   */
   export interface DedicatedHostProfileVCPURange extends DedicatedHostProfileVCPU {
     /** The default value for this profile field. */
     default: number;
@@ -48223,20 +52289,26 @@ namespace VpcV1 {
     }
   }
 
-  /** DedicatedHostPrototypeDedicatedHostByGroup. */
+  /**
+   * DedicatedHostPrototypeDedicatedHostByGroup.
+   */
   export interface DedicatedHostPrototypeDedicatedHostByGroup extends DedicatedHostPrototype {
     /** The dedicated host group for this dedicated host. */
     group: DedicatedHostGroupIdentity;
   }
 
-  /** DedicatedHostPrototypeDedicatedHostByZone. */
+  /**
+   * DedicatedHostPrototypeDedicatedHostByZone.
+   */
   export interface DedicatedHostPrototypeDedicatedHostByZone extends DedicatedHostPrototype {
     group?: DedicatedHostGroupPrototypeDedicatedHostByZoneContext;
     /** The zone this dedicated host will reside in. */
     zone: ZoneIdentity;
   }
 
-  /** EncryptionKeyIdentityByCRN. */
+  /**
+   * EncryptionKeyIdentityByCRN.
+   */
   export interface EncryptionKeyIdentityByCRN extends EncryptionKeyIdentity {
     /** The CRN of the [Key Protect Root
      *  Key](https://cloud.ibm.com/docs/key-protect?topic=key-protect-getting-started-tutorial) or [Hyper Protect Crypto
@@ -48245,11 +52317,15 @@ namespace VpcV1 {
     crn: string;
   }
 
-  /** Identifies a reserved IP by a unique property. */
+  /**
+   * Identifies a reserved IP by a unique property.
+   */
   export interface EndpointGatewayReservedIPReservedIPIdentity extends EndpointGatewayReservedIP {
   }
 
-  /** EndpointGatewayReservedIPReservedIPPrototypeTargetContext. */
+  /**
+   * EndpointGatewayReservedIPReservedIPPrototypeTargetContext.
+   */
   export interface EndpointGatewayReservedIPReservedIPPrototypeTargetContext extends EndpointGatewayReservedIP {
     /** The IP address to reserve, which must not already be reserved on the subnet.
      *
@@ -48269,7 +52345,9 @@ namespace VpcV1 {
     subnet: SubnetIdentity;
   }
 
-  /** EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypePrivatePathServiceGatewayPrototype. */
+  /**
+   * EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypePrivatePathServiceGatewayPrototype.
+   */
   export interface EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypePrivatePathServiceGatewayPrototype extends EndpointGatewayTargetPrototype {
     /** The CRN for this private path service gateway. */
     crn: string;
@@ -48285,7 +52363,9 @@ namespace VpcV1 {
     }
   }
 
-  /** EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderCloudServicePrototype. */
+  /**
+   * EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderCloudServicePrototype.
+   */
   export interface EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderCloudServicePrototype extends EndpointGatewayTargetPrototype {
     /** The CRN for this provider cloud service, or the CRN for the user's instance of a provider cloud service. */
     crn: string;
@@ -48301,7 +52381,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The name of this provider infrastructure service. */
+  /**
+   * The name of this provider infrastructure service.
+   */
   export interface EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypeProviderInfrastructureServicePrototype extends EndpointGatewayTargetPrototype {
     /** The name of a provider infrastructure service. Must be:
      *  - `ibm-ntp-server`: An NTP (Network Time Protocol) server provided by IBM.
@@ -48319,7 +52401,9 @@ namespace VpcV1 {
     }
   }
 
-  /** EndpointGatewayTargetPrivatePathServiceGatewayReference. */
+  /**
+   * EndpointGatewayTargetPrivatePathServiceGatewayReference.
+   */
   export interface EndpointGatewayTargetPrivatePathServiceGatewayReference extends EndpointGatewayTarget {
     /** The CRN for this private path service gateway. */
     crn: string;
@@ -48351,7 +52435,9 @@ namespace VpcV1 {
     }
   }
 
-  /** EndpointGatewayTargetProviderCloudServiceReference. */
+  /**
+   * EndpointGatewayTargetProviderCloudServiceReference.
+   */
   export interface EndpointGatewayTargetProviderCloudServiceReference extends EndpointGatewayTarget {
     /** The CRN for this provider cloud service, or the CRN for the user's instance of a provider cloud service. */
     crn: string;
@@ -48367,7 +52453,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The name of this provider infrastructure service. */
+  /**
+   * The name of this provider infrastructure service.
+   */
   export interface EndpointGatewayTargetProviderInfrastructureServiceReference extends EndpointGatewayTarget {
     /** The name of a provider infrastructure service. Must be:
      *  - `ibm-ntp-server`: An NTP (Network Time Protocol) server provided by IBM.
@@ -48385,7 +52473,9 @@ namespace VpcV1 {
     }
   }
 
-  /** FloatingIPPrototypeFloatingIPByTarget. */
+  /**
+   * FloatingIPPrototypeFloatingIPByTarget.
+   */
   export interface FloatingIPPrototypeFloatingIPByTarget extends FloatingIPPrototype {
     /** The target resource to bind this floating IP to.
      *
@@ -48399,37 +52489,53 @@ namespace VpcV1 {
     target: FloatingIPTargetPrototype;
   }
 
-  /** FloatingIPPrototypeFloatingIPByZone. */
+  /**
+   * FloatingIPPrototypeFloatingIPByZone.
+   */
   export interface FloatingIPPrototypeFloatingIPByZone extends FloatingIPPrototype {
     /** The zone this floating IP will reside in. */
     zone: ZoneIdentity;
   }
 
-  /** Identifies a bare metal server network interface by a unique property. */
+  /**
+   * Identifies a bare metal server network interface by a unique property.
+   */
   export interface FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentity extends FloatingIPTargetPatch {
   }
 
-  /** Identifies an instance network interface by a unique property. */
+  /**
+   * Identifies an instance network interface by a unique property.
+   */
   export interface FloatingIPTargetPatchNetworkInterfaceIdentity extends FloatingIPTargetPatch {
   }
 
-  /** Identifies a virtual network interface by a unique property. */
+  /**
+   * Identifies a virtual network interface by a unique property.
+   */
   export interface FloatingIPTargetPatchVirtualNetworkInterfaceIdentity extends FloatingIPTargetPatch {
   }
 
-  /** Identifies a bare metal server network interface by a unique property. */
+  /**
+   * Identifies a bare metal server network interface by a unique property.
+   */
   export interface FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentity extends FloatingIPTargetPrototype {
   }
 
-  /** Identifies an instance network interface by a unique property. */
+  /**
+   * Identifies an instance network interface by a unique property.
+   */
   export interface FloatingIPTargetPrototypeNetworkInterfaceIdentity extends FloatingIPTargetPrototype {
   }
 
-  /** Identifies a virtual network interface by a unique property. */
+  /**
+   * Identifies a virtual network interface by a unique property.
+   */
   export interface FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentity extends FloatingIPTargetPrototype {
   }
 
-  /** FloatingIPTargetBareMetalServerNetworkInterfaceReference. */
+  /**
+   * FloatingIPTargetBareMetalServerNetworkInterfaceReference.
+   */
   export interface FloatingIPTargetBareMetalServerNetworkInterfaceReference extends FloatingIPTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -48465,7 +52571,9 @@ namespace VpcV1 {
     }
   }
 
-  /** FloatingIPTargetNetworkInterfaceReference. */
+  /**
+   * FloatingIPTargetNetworkInterfaceReference.
+   */
   export interface FloatingIPTargetNetworkInterfaceReference extends FloatingIPTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -48501,7 +52609,9 @@ namespace VpcV1 {
     }
   }
 
-  /** FloatingIPTargetPublicGatewayReference. */
+  /**
+   * FloatingIPTargetPublicGatewayReference.
+   */
   export interface FloatingIPTargetPublicGatewayReference extends FloatingIPTarget {
     /** The CRN for this public gateway. */
     crn: string;
@@ -48527,7 +52637,9 @@ namespace VpcV1 {
     }
   }
 
-  /** FloatingIPTargetVirtualNetworkInterfaceReference. */
+  /**
+   * FloatingIPTargetVirtualNetworkInterfaceReference.
+   */
   export interface FloatingIPTargetVirtualNetworkInterfaceReference extends FloatingIPTarget {
     /** The CRN for this virtual network interface. */
     crn: string;
@@ -48559,31 +52671,45 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a virtual server instance by a unique property. */
+  /**
+   * Identifies a virtual server instance by a unique property.
+   */
   export interface FlowLogCollectorTargetPrototypeInstanceIdentity extends FlowLogCollectorTargetPrototype {
   }
 
-  /** Identifies an instance network attachment by a unique property. */
+  /**
+   * Identifies an instance network attachment by a unique property.
+   */
   export interface FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentity extends FlowLogCollectorTargetPrototype {
   }
 
-  /** Identifies an instance network interface by a unique property. */
+  /**
+   * Identifies an instance network interface by a unique property.
+   */
   export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity extends FlowLogCollectorTargetPrototype {
   }
 
-  /** Identifies a subnet by a unique property. */
+  /**
+   * Identifies a subnet by a unique property.
+   */
   export interface FlowLogCollectorTargetPrototypeSubnetIdentity extends FlowLogCollectorTargetPrototype {
   }
 
-  /** Identifies a VPC by a unique property. */
+  /**
+   * Identifies a VPC by a unique property.
+   */
   export interface FlowLogCollectorTargetPrototypeVPCIdentity extends FlowLogCollectorTargetPrototype {
   }
 
-  /** Identifies a virtual network interface by a unique property. */
+  /**
+   * Identifies a virtual network interface by a unique property.
+   */
   export interface FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentity extends FlowLogCollectorTargetPrototype {
   }
 
-  /** FlowLogCollectorTargetInstanceNetworkAttachmentReference. */
+  /**
+   * FlowLogCollectorTargetInstanceNetworkAttachmentReference.
+   */
   export interface FlowLogCollectorTargetInstanceNetworkAttachmentReference extends FlowLogCollectorTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -48615,7 +52741,9 @@ namespace VpcV1 {
     }
   }
 
-  /** FlowLogCollectorTargetInstanceReference. */
+  /**
+   * FlowLogCollectorTargetInstanceReference.
+   */
   export interface FlowLogCollectorTargetInstanceReference extends FlowLogCollectorTarget {
     /** The CRN for this virtual server instance. */
     crn: string;
@@ -48633,7 +52761,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** FlowLogCollectorTargetNetworkInterfaceReferenceTargetContext. */
+  /**
+   * FlowLogCollectorTargetNetworkInterfaceReferenceTargetContext.
+   */
   export interface FlowLogCollectorTargetNetworkInterfaceReferenceTargetContext extends FlowLogCollectorTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -48668,7 +52798,9 @@ namespace VpcV1 {
     }
   }
 
-  /** FlowLogCollectorTargetSubnetReference. */
+  /**
+   * FlowLogCollectorTargetSubnetReference.
+   */
   export interface FlowLogCollectorTargetSubnetReference extends FlowLogCollectorTarget {
     /** The CRN for this subnet. */
     crn: string;
@@ -48694,7 +52826,9 @@ namespace VpcV1 {
     }
   }
 
-  /** FlowLogCollectorTargetVPCReference. */
+  /**
+   * FlowLogCollectorTargetVPCReference.
+   */
   export interface FlowLogCollectorTargetVPCReference extends FlowLogCollectorTarget {
     /** The CRN for this VPC. */
     crn: string;
@@ -48720,7 +52854,9 @@ namespace VpcV1 {
     }
   }
 
-  /** FlowLogCollectorTargetVirtualNetworkInterfaceReferenceAttachmentContext. */
+  /**
+   * FlowLogCollectorTargetVirtualNetworkInterfaceReferenceAttachmentContext.
+   */
   export interface FlowLogCollectorTargetVirtualNetworkInterfaceReferenceAttachmentContext extends FlowLogCollectorTarget {
     /** The CRN for this virtual network interface. */
     crn: string;
@@ -48744,25 +52880,33 @@ namespace VpcV1 {
     }
   }
 
-  /** ImageIdentityByCRN. */
+  /**
+   * ImageIdentityByCRN.
+   */
   export interface ImageIdentityByCRN extends ImageIdentity {
     /** The CRN for this image. */
     crn: string;
   }
 
-  /** ImageIdentityByHref. */
+  /**
+   * ImageIdentityByHref.
+   */
   export interface ImageIdentityByHref extends ImageIdentity {
     /** The URL for this image. */
     href: string;
   }
 
-  /** ImageIdentityById. */
+  /**
+   * ImageIdentityById.
+   */
   export interface ImageIdentityById extends ImageIdentity {
     /** The unique identifier for this image. */
     id: string;
   }
 
-  /** ImagePrototypeImageByFile. */
+  /**
+   * ImagePrototypeImageByFile.
+   */
   export interface ImagePrototypeImageByFile extends ImagePrototype {
     /** A base64-encoded, encrypted representation of the key that was used to encrypt the data for this image.
      *
@@ -48791,7 +52935,9 @@ namespace VpcV1 {
     operating_system: OperatingSystemIdentity;
   }
 
-  /** ImagePrototypeImageBySourceVolume. */
+  /**
+   * ImagePrototypeImageBySourceVolume.
+   */
   export interface ImagePrototypeImageBySourceVolume extends ImagePrototype {
     /** The root key used to wrap the system-generated data encryption key for the image.
      *
@@ -48808,7 +52954,9 @@ namespace VpcV1 {
     source_volume: VolumeIdentity;
   }
 
-  /** InstanceCatalogOfferingPrototypeCatalogOfferingByOffering. */
+  /**
+   * InstanceCatalogOfferingPrototypeCatalogOfferingByOffering.
+   */
   export interface InstanceCatalogOfferingPrototypeCatalogOfferingByOffering extends InstanceCatalogOfferingPrototype {
     /** Identifies a [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
      *  offering by a unique property.
@@ -48816,7 +52964,9 @@ namespace VpcV1 {
     offering: CatalogOfferingIdentity;
   }
 
-  /** InstanceCatalogOfferingPrototypeCatalogOfferingByVersion. */
+  /**
+   * InstanceCatalogOfferingPrototypeCatalogOfferingByVersion.
+   */
   export interface InstanceCatalogOfferingPrototypeCatalogOfferingByVersion extends InstanceCatalogOfferingPrototype {
     /** Identifies a version of a
      *  [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering by a
@@ -48825,11 +52975,67 @@ namespace VpcV1 {
     version: CatalogOfferingVersionIdentity;
   }
 
-  /** InstanceGroupManagerActionPrototypeScheduledActionPrototype. */
+  /**
+   * InstanceClusterNetworkAttachmentBeforePrototypeInstanceClusterNetworkAttachmentIdentityByHref.
+   */
+  export interface InstanceClusterNetworkAttachmentBeforePrototypeInstanceClusterNetworkAttachmentIdentityByHref extends InstanceClusterNetworkAttachmentBeforePrototype {
+    /** The URL for this instance cluster network attachment. */
+    href: string;
+  }
+
+  /**
+   * InstanceClusterNetworkAttachmentBeforePrototypeInstanceClusterNetworkAttachmentIdentityById.
+   */
+  export interface InstanceClusterNetworkAttachmentBeforePrototypeInstanceClusterNetworkAttachmentIdentityById extends InstanceClusterNetworkAttachmentBeforePrototype {
+    /** The unique identifier for this instance cluster network attachment. */
+    id: string;
+  }
+
+  /**
+   * Identifies a cluster network interface by a unique property.
+   */
+  export interface InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceClusterNetworkInterfaceIdentity extends InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterface {
+  }
+
+  /**
+   * The cluster network interface for this target.
+   */
+  export interface InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceInstanceClusterNetworkInterfacePrototypeInstanceClusterNetworkAttachment extends InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterface {
+    /** Indicates whether this cluster network interface will be automatically deleted when `target` is deleted. */
+    auto_delete?: boolean;
+    /** The name for this cluster network interface. The name must not be used by another interface in the cluster
+     *  network. Names beginning with `ibm-` are reserved for provider-owned resources, and are not allowed. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The primary IP address to bind to the cluster network interface. May be either
+     *  a cluster network subnet reserved IP identity, or a cluster network subnet reserved IP
+     *  prototype object which will be used to create a new cluster network subnet reserved IP.
+     *
+     *  If a cluster network subnet reserved IP identity is provided, the specified cluster
+     *  network subnet reserved IP must be unbound.
+     *
+     *  If a cluster network subnet reserved IP prototype object with an address is provided,
+     *  the address must be available on the cluster network interface's cluster network
+     *  subnet. If no address is specified, an available address on the cluster network subnet
+     *  will be automatically selected and reserved.
+     */
+    primary_ip?: ClusterNetworkInterfacePrimaryIPPrototype;
+    /** The associated cluster network subnet. Required if `primary_ip` does not specify a
+     *  cluster network subnet reserved IP identity.
+     */
+    subnet?: ClusterNetworkSubnetIdentity;
+  }
+
+  /**
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototype.
+   */
   export interface InstanceGroupManagerActionPrototypeScheduledActionPrototype extends InstanceGroupManagerActionPrototype {
   }
 
-  /** InstanceGroupManagerActionScheduledAction. */
+  /**
+   * InstanceGroupManagerActionScheduledAction.
+   */
   export interface InstanceGroupManagerActionScheduledAction extends InstanceGroupManagerAction {
     /** The type of action for the instance group. */
     action_type: InstanceGroupManagerActionScheduledAction.Constants.ActionType | string;
@@ -48865,7 +53071,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerAutoScale. */
+  /**
+   * InstanceGroupManagerAutoScale.
+   */
   export interface InstanceGroupManagerAutoScale extends InstanceGroupManager {
     /** The time window in seconds to aggregate metrics prior to evaluation. */
     aggregation_window: number;
@@ -48889,7 +53097,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype. */
+  /**
+   * InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype.
+   */
   export interface InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype extends InstanceGroupManagerPolicyPrototype {
     /** The type of metric to be evaluated. */
     metric_type: InstanceGroupManagerPolicyPrototypeInstanceGroupManagerTargetPolicyPrototype.Constants.MetricType | string;
@@ -48914,7 +53124,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy. */
+  /**
+   * InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy.
+   */
   export interface InstanceGroupManagerPolicyInstanceGroupManagerTargetPolicy extends InstanceGroupManagerPolicy {
     /** The type of metric to be evaluated
      *
@@ -48947,7 +53159,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerPrototypeInstanceGroupManagerAutoScalePrototype. */
+  /**
+   * InstanceGroupManagerPrototypeInstanceGroupManagerAutoScalePrototype.
+   */
   export interface InstanceGroupManagerPrototypeInstanceGroupManagerAutoScalePrototype extends InstanceGroupManagerPrototype {
     /** The time window in seconds to aggregate metrics prior to evaluation. */
     aggregation_window?: number;
@@ -48969,7 +53183,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerPrototypeInstanceGroupManagerScheduledPrototype. */
+  /**
+   * InstanceGroupManagerPrototypeInstanceGroupManagerScheduledPrototype.
+   */
   export interface InstanceGroupManagerPrototypeInstanceGroupManagerScheduledPrototype extends InstanceGroupManagerPrototype {
     /** The type of instance group manager. */
     manager_type: InstanceGroupManagerPrototypeInstanceGroupManagerScheduledPrototype.Constants.ManagerType | string;
@@ -48983,7 +53199,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerScheduled. */
+  /**
+   * InstanceGroupManagerScheduled.
+   */
   export interface InstanceGroupManagerScheduled extends InstanceGroupManager {
     /** The actions of the instance group manager. */
     actions: InstanceGroupManagerActionReference[];
@@ -48999,7 +53217,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerScheduledActionManagerAutoScale. */
+  /**
+   * InstanceGroupManagerScheduledActionManagerAutoScale.
+   */
   export interface InstanceGroupManagerScheduledActionManagerAutoScale extends InstanceGroupManagerScheduledActionManager {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -49017,7 +53237,11 @@ namespace VpcV1 {
     min_membership_count?: number;
   }
 
-  /** The auto scale manager to update, and one or more properties to be updated. Either `id` or `href` must be specified, in addition to at least one of `min_membership_count` and `max_membership_count`. */
+  /**
+   * The auto scale manager to update, and one or more properties to be updated. Either `id` or `href` must be
+   * specified, in addition to at least one of `min_membership_count` and
+   * `max_membership_count`.
+   */
   export interface InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototype extends InstanceGroupManagerScheduledActionManagerPrototype {
     /** The desired maximum number of instance group members at the scheduled time. */
     max_membership_count?: number;
@@ -49025,11 +53249,15 @@ namespace VpcV1 {
     min_membership_count?: number;
   }
 
-  /** Identifies a virtual network interface by a unique property. */
+  /**
+   * Identifies a virtual network interface by a unique property.
+   */
   export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity extends InstanceNetworkAttachmentPrototypeVirtualNetworkInterface {
   }
 
-  /** The virtual network interface for this target. */
+  /**
+   * The virtual network interface for this target.
+   */
   export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfacePrototypeInstanceNetworkAttachmentContext extends InstanceNetworkAttachmentPrototypeVirtualNetworkInterface {
     /** Indicates whether source IP spoofing is allowed on this interface. If `false`, source IP spoofing is
      *  prevented on this interface. If `true`, source IP spoofing is allowed on this interface.
@@ -49111,39 +53339,55 @@ namespace VpcV1 {
     }
   }
 
-  /** InstancePatchProfileInstanceProfileIdentityByHref. */
+  /**
+   * InstancePatchProfileInstanceProfileIdentityByHref.
+   */
   export interface InstancePatchProfileInstanceProfileIdentityByHref extends InstancePatchProfile {
     /** The URL for this virtual server instance profile. */
     href: string;
   }
 
-  /** InstancePatchProfileInstanceProfileIdentityByName. */
+  /**
+   * InstancePatchProfileInstanceProfileIdentityByName.
+   */
   export interface InstancePatchProfileInstanceProfileIdentityByName extends InstancePatchProfile {
     /** The globally unique name for this virtual server instance profile. */
     name: string;
   }
 
-  /** Identifies a dedicated host group by a unique property. */
+  /**
+   * Identifies a dedicated host group by a unique property.
+   */
   export interface InstancePlacementTargetPatchDedicatedHostGroupIdentity extends InstancePlacementTargetPatch {
   }
 
-  /** Identifies a dedicated host by a unique property. */
+  /**
+   * Identifies a dedicated host by a unique property.
+   */
   export interface InstancePlacementTargetPatchDedicatedHostIdentity extends InstancePlacementTargetPatch {
   }
 
-  /** Identifies a dedicated host group by a unique property. */
+  /**
+   * Identifies a dedicated host group by a unique property.
+   */
   export interface InstancePlacementTargetPrototypeDedicatedHostGroupIdentity extends InstancePlacementTargetPrototype {
   }
 
-  /** Identifies a dedicated host by a unique property. */
+  /**
+   * Identifies a dedicated host by a unique property.
+   */
   export interface InstancePlacementTargetPrototypeDedicatedHostIdentity extends InstancePlacementTargetPrototype {
   }
 
-  /** Identifies a placement group by a unique property. */
+  /**
+   * Identifies a placement group by a unique property.
+   */
   export interface InstancePlacementTargetPrototypePlacementGroupIdentity extends InstancePlacementTargetPrototype {
   }
 
-  /** InstancePlacementTargetDedicatedHostGroupReference. */
+  /**
+   * InstancePlacementTargetDedicatedHostGroupReference.
+   */
   export interface InstancePlacementTargetDedicatedHostGroupReference extends InstancePlacementTarget {
     /** The CRN for this dedicated host group. */
     crn: string;
@@ -49169,7 +53413,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstancePlacementTargetDedicatedHostReference. */
+  /**
+   * InstancePlacementTargetDedicatedHostReference.
+   */
   export interface InstancePlacementTargetDedicatedHostReference extends InstancePlacementTarget {
     /** The CRN for this dedicated host. */
     crn: string;
@@ -49195,7 +53441,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstancePlacementTargetPlacementGroupReference. */
+  /**
+   * InstancePlacementTargetPlacementGroupReference.
+   */
   export interface InstancePlacementTargetPlacementGroupReference extends InstancePlacementTarget {
     /** The CRN for this placement group. */
     crn: string;
@@ -49221,7 +53469,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The total bandwidth shared across the network attachments or network interfaces and storage volumes of an instance with this profile depends on its configuration. */
+  /**
+   * The total bandwidth shared across the network attachments or network interfaces and storage volumes of an instance
+   * with this profile depends on its configuration.
+   */
   export interface InstanceProfileBandwidthDependent extends InstanceProfileBandwidth {
     /** The type for this profile field. */
     type: InstanceProfileBandwidthDependent.Constants.Type | string;
@@ -49235,7 +53486,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total bandwidth values (in megabits per second) shared across the network attachments or network interfaces and storage volumes of an instance with this profile. */
+  /**
+   * The permitted total bandwidth values (in megabits per second) shared across the network attachments or network
+   * interfaces and storage volumes of an instance with this profile.
+   */
   export interface InstanceProfileBandwidthEnum extends InstanceProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -49253,7 +53507,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The total bandwidth (in megabits per second) shared across the network attachments or network interfaces and storage volumes of an instance with this profile. */
+  /**
+   * The total bandwidth (in megabits per second) shared across the network attachments or network interfaces and
+   * storage volumes of an instance with this profile.
+   */
   export interface InstanceProfileBandwidthFixed extends InstanceProfileBandwidth {
     /** The type for this profile field. */
     type: InstanceProfileBandwidthFixed.Constants.Type | string;
@@ -49269,7 +53526,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total bandwidth range (in megabits per second) shared across the network attachments or network interfaces and storage volumes of an instance with this profile. */
+  /**
+   * The permitted total bandwidth range (in megabits per second) shared across the network attachments or network
+   * interfaces and storage volumes of an instance with this profile.
+   */
   export interface InstanceProfileBandwidthRange extends InstanceProfileBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -49291,7 +53551,66 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of disks of this configuration for an instance with this profile depends on its instance configuration. */
+  /**
+   * The number of cluster network attachments supported on an instance with this profile is dependent on its
+   * configuration.
+   */
+  export interface InstanceProfileClusterNetworkAttachmentCountDependent extends InstanceProfileClusterNetworkAttachmentCount {
+    /** The type for this profile field. */
+    type: InstanceProfileClusterNetworkAttachmentCountDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileClusterNetworkAttachmentCountDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /**
+   * The permitted values for cluster network attachment count for an instance with this profile.
+   */
+  export interface InstanceProfileClusterNetworkAttachmentCountEnum extends InstanceProfileClusterNetworkAttachmentCount {
+    default?: number;
+    /** The type for this profile field. */
+    type: InstanceProfileClusterNetworkAttachmentCountEnum.Constants.Type | string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+  export namespace InstanceProfileClusterNetworkAttachmentCountEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
+  }
+
+  /**
+   * The number of network attachments supported on an instance with this profile.
+   */
+  export interface InstanceProfileClusterNetworkAttachmentCountRange extends InstanceProfileClusterNetworkAttachmentCount {
+    /** The maximum value for this profile field. */
+    max?: number;
+    /** The minimum value for this profile field. */
+    min?: number;
+    step?: number;
+    /** The type for this profile field. */
+    type: InstanceProfileClusterNetworkAttachmentCountRange.Constants.Type | string;
+  }
+  export namespace InstanceProfileClusterNetworkAttachmentCountRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
+  }
+
+  /**
+   * The number of disks of this configuration for an instance with this profile depends on its instance configuration.
+   */
   export interface InstanceProfileDiskQuantityDependent extends InstanceProfileDiskQuantity {
     /** The type for this profile field. */
     type: InstanceProfileDiskQuantityDependent.Constants.Type | string;
@@ -49305,7 +53624,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted the number of disks of this configuration for an instance with this profile. */
+  /**
+   * The permitted the number of disks of this configuration for an instance with this profile.
+   */
   export interface InstanceProfileDiskQuantityEnum extends InstanceProfileDiskQuantity {
     /** The default value for this profile field. */
     default: number;
@@ -49323,7 +53644,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of disks of this configuration for an instance with this profile. */
+  /**
+   * The number of disks of this configuration for an instance with this profile.
+   */
   export interface InstanceProfileDiskQuantityFixed extends InstanceProfileDiskQuantity {
     /** The type for this profile field. */
     type: InstanceProfileDiskQuantityFixed.Constants.Type | string;
@@ -49339,7 +53662,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted range for the number of disks of this configuration for an instance with this profile. */
+  /**
+   * The permitted range for the number of disks of this configuration for an instance with this profile.
+   */
   export interface InstanceProfileDiskQuantityRange extends InstanceProfileDiskQuantity {
     /** The default value for this profile field. */
     default: number;
@@ -49361,7 +53686,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The disk size in GB (gigabytes) of this configuration for an instance with this profile depends on its instance configuration. */
+  /**
+   * The disk size in GB (gigabytes) of this configuration for an instance with this profile depends on its instance
+   * configuration.
+   */
   export interface InstanceProfileDiskSizeDependent extends InstanceProfileDiskSize {
     /** The type for this profile field. */
     type: InstanceProfileDiskSizeDependent.Constants.Type | string;
@@ -49375,7 +53703,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted disk size in GB (gigabytes) of this configuration for an instance with this profile. */
+  /**
+   * The permitted disk size in GB (gigabytes) of this configuration for an instance with this profile.
+   */
   export interface InstanceProfileDiskSizeEnum extends InstanceProfileDiskSize {
     /** The default value for this profile field. */
     default: number;
@@ -49393,7 +53723,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The size of the disk in GB (gigabytes). */
+  /**
+   * The size of the disk in GB (gigabytes).
+   */
   export interface InstanceProfileDiskSizeFixed extends InstanceProfileDiskSize {
     /** The type for this profile field. */
     type: InstanceProfileDiskSizeFixed.Constants.Type | string;
@@ -49409,7 +53741,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted range for the disk size of this configuration in GB (gigabytes) for an instance with this profile. */
+  /**
+   * The permitted range for the disk size of this configuration in GB (gigabytes) for an instance with this profile.
+   */
   export interface InstanceProfileDiskSizeRange extends InstanceProfileDiskSize {
     /** The default value for this profile field. */
     default: number;
@@ -49431,7 +53765,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The GPU count for an instance with this profile depends on its configuration. */
+  /**
+   * The GPU count for an instance with this profile depends on its configuration.
+   */
   export interface InstanceProfileGPUDependent extends InstanceProfileGPU {
     /** The type for this profile field. */
     type: InstanceProfileGPUDependent.Constants.Type | string;
@@ -49445,7 +53781,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted GPU count values for an instance with this profile. */
+  /**
+   * The permitted GPU count values for an instance with this profile.
+   */
   export interface InstanceProfileGPUEnum extends InstanceProfileGPU {
     /** The default value for this profile field. */
     default: number;
@@ -49463,7 +53801,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The GPU count for an instance with this profile. */
+  /**
+   * The GPU count for an instance with this profile.
+   */
   export interface InstanceProfileGPUFixed extends InstanceProfileGPU {
     /** The type for this profile field. */
     type: InstanceProfileGPUFixed.Constants.Type | string;
@@ -49479,7 +53819,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The overall GPU memory value for an instance with this profile depends on its configuration. */
+  /**
+   * The overall GPU memory value for an instance with this profile depends on its configuration.
+   */
   export interface InstanceProfileGPUMemoryDependent extends InstanceProfileGPUMemory {
     /** The type for this profile field. */
     type: InstanceProfileGPUMemoryDependent.Constants.Type | string;
@@ -49493,7 +53835,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted overall GPU memory values in GiB (gibibytes) for an instance with this profile. */
+  /**
+   * The permitted overall GPU memory values in GiB (gibibytes) for an instance with this profile.
+   */
   export interface InstanceProfileGPUMemoryEnum extends InstanceProfileGPUMemory {
     /** The default value for this profile field. */
     default: number;
@@ -49511,7 +53855,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The overall GPU memory in GiB (gibibytes) for an instance with this profile. */
+  /**
+   * The overall GPU memory in GiB (gibibytes) for an instance with this profile.
+   */
   export interface InstanceProfileGPUMemoryFixed extends InstanceProfileGPUMemory {
     /** The type for this profile field. */
     type: InstanceProfileGPUMemoryFixed.Constants.Type | string;
@@ -49527,7 +53873,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted overall GPU memory range in GiB (gibibytes) for an instance with this profile. */
+  /**
+   * The permitted overall GPU memory range in GiB (gibibytes) for an instance with this profile.
+   */
   export interface InstanceProfileGPUMemoryRange extends InstanceProfileGPUMemory {
     /** The default value for this profile field. */
     default: number;
@@ -49549,7 +53897,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted GPU count range for an instance with this profile. */
+  /**
+   * The permitted GPU count range for an instance with this profile.
+   */
   export interface InstanceProfileGPURange extends InstanceProfileGPU {
     /** The default value for this profile field. */
     default: number;
@@ -49571,19 +53921,25 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceProfileIdentityByHref. */
+  /**
+   * InstanceProfileIdentityByHref.
+   */
   export interface InstanceProfileIdentityByHref extends InstanceProfileIdentity {
     /** The URL for this virtual server instance profile. */
     href: string;
   }
 
-  /** InstanceProfileIdentityByName. */
+  /**
+   * InstanceProfileIdentityByName.
+   */
   export interface InstanceProfileIdentityByName extends InstanceProfileIdentity {
     /** The globally unique name for this virtual server instance profile. */
     name: string;
   }
 
-  /** The memory value for an instance with this profile depends on its configuration. */
+  /**
+   * The memory value for an instance with this profile depends on its configuration.
+   */
   export interface InstanceProfileMemoryDependent extends InstanceProfileMemory {
     /** The type for this profile field. */
     type: InstanceProfileMemoryDependent.Constants.Type | string;
@@ -49597,7 +53953,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted memory values (in gibibytes) for an instance with this profile. */
+  /**
+   * The permitted memory values (in gibibytes) for an instance with this profile.
+   */
   export interface InstanceProfileMemoryEnum extends InstanceProfileMemory {
     /** The default value for this profile field. */
     default: number;
@@ -49615,7 +53973,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The memory (in gibibytes) for an instance with this profile. */
+  /**
+   * The memory (in gibibytes) for an instance with this profile.
+   */
   export interface InstanceProfileMemoryFixed extends InstanceProfileMemory {
     /** The type for this profile field. */
     type: InstanceProfileMemoryFixed.Constants.Type | string;
@@ -49631,7 +53991,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted memory range (in gibibytes) for an instance with this profile. */
+  /**
+   * The permitted memory range (in gibibytes) for an instance with this profile.
+   */
   export interface InstanceProfileMemoryRange extends InstanceProfileMemory {
     /** The default value for this profile field. */
     default: number;
@@ -49653,7 +54015,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The total number of NUMA nodes for an instance with this profile depends on its configuration and the capacity constraints within the zone. */
+  /**
+   * The total number of NUMA nodes for an instance with this profile depends on its configuration and the capacity
+   * constraints within the zone.
+   */
   export interface InstanceProfileNUMACountDependent extends InstanceProfileNUMACount {
     /** The type for this profile field. */
     type: InstanceProfileNUMACountDependent.Constants.Type | string;
@@ -49667,7 +54032,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The total number of NUMA nodes for an instance with this profile. */
+  /**
+   * The total number of NUMA nodes for an instance with this profile.
+   */
   export interface InstanceProfileNUMACountFixed extends InstanceProfileNUMACount {
     /** The type for this profile field. */
     type: InstanceProfileNUMACountFixed.Constants.Type | string;
@@ -49683,7 +54050,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of network attachments supported on an instance with this profile is dependent on its configuration. */
+  /**
+   * The number of network attachments supported on an instance with this profile is dependent on its configuration.
+   */
   export interface InstanceProfileNetworkAttachmentCountDependent extends InstanceProfileNetworkAttachmentCount {
     /** The type for this profile field. */
     type: InstanceProfileNetworkAttachmentCountDependent.Constants.Type | string;
@@ -49697,7 +54066,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of network attachments supported on an instance with this profile. */
+  /**
+   * The number of network attachments supported on an instance with this profile.
+   */
   export interface InstanceProfileNetworkAttachmentCountRange extends InstanceProfileNetworkAttachmentCount {
     /** The maximum value for this profile field. */
     max?: number;
@@ -49715,7 +54086,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of network interfaces supported on an instance with this profile is dependent on its configuration. */
+  /**
+   * The number of network interfaces supported on an instance with this profile is dependent on its configuration.
+   */
   export interface InstanceProfileNetworkInterfaceCountDependent extends InstanceProfileNetworkInterfaceCount {
     /** The type for this profile field. */
     type: InstanceProfileNetworkInterfaceCountDependent.Constants.Type | string;
@@ -49729,7 +54102,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The number of network interfaces supported on an instance with this profile. */
+  /**
+   * The number of network interfaces supported on an instance with this profile.
+   */
   export interface InstanceProfileNetworkInterfaceCountRange extends InstanceProfileNetworkInterfaceCount {
     /** The maximum value for this profile field. */
     max?: number;
@@ -49747,7 +54122,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The port speed of each network interface of an instance with this profile depends on its configuration. */
+  /**
+   * The port speed of each network interface of an instance with this profile depends on its configuration.
+   */
   export interface InstanceProfilePortSpeedDependent extends InstanceProfilePortSpeed {
     /** The type for this profile field. */
     type: InstanceProfilePortSpeedDependent.Constants.Type | string;
@@ -49761,7 +54138,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The maximum speed (in megabits per second) of each network interface of an instance with this profile. */
+  /**
+   * The maximum speed (in megabits per second) of each network interface of an instance with this profile.
+   */
   export interface InstanceProfilePortSpeedFixed extends InstanceProfilePortSpeed {
     /** The type for this profile field. */
     type: InstanceProfilePortSpeedFixed.Constants.Type | string;
@@ -49777,7 +54156,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The VCPU count for an instance with this profile depends on its configuration. */
+  /**
+   * The VCPU count for an instance with this profile depends on its configuration.
+   */
   export interface InstanceProfileVCPUDependent extends InstanceProfileVCPU {
     /** The type for this profile field. */
     type: InstanceProfileVCPUDependent.Constants.Type | string;
@@ -49791,7 +54172,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted values for VCPU count for an instance with this profile. */
+  /**
+   * The permitted values for VCPU count for an instance with this profile.
+   */
   export interface InstanceProfileVCPUEnum extends InstanceProfileVCPU {
     /** The default value for this profile field. */
     default: number;
@@ -49809,7 +54192,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The VCPU count for an instance with this profile. */
+  /**
+   * The VCPU count for an instance with this profile.
+   */
   export interface InstanceProfileVCPUFixed extends InstanceProfileVCPU {
     /** The type for this profile field. */
     type: InstanceProfileVCPUFixed.Constants.Type | string;
@@ -49825,7 +54210,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted range for VCPU count for an instance with this profile. */
+  /**
+   * The permitted range for VCPU count for an instance with this profile.
+   */
   export interface InstanceProfileVCPURange extends InstanceProfileVCPU {
     /** The default value for this profile field. */
     default: number;
@@ -49847,7 +54234,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The storage bandwidth shared across the storage volumes of an instance with this profile depends on its configuration. */
+  /**
+   * The storage bandwidth shared across the storage volumes of an instance with this profile depends on its
+   * configuration.
+   */
   export interface InstanceProfileVolumeBandwidthDependent extends InstanceProfileVolumeBandwidth {
     /** The type for this profile field. */
     type: InstanceProfileVolumeBandwidthDependent.Constants.Type | string;
@@ -49861,7 +54251,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted storage bandwidth values (in megabits per second) shared across the storage volumes of an instance with this profile. */
+  /**
+   * The permitted storage bandwidth values (in megabits per second) shared across the storage volumes of an instance
+   * with this profile.
+   */
   export interface InstanceProfileVolumeBandwidthEnum extends InstanceProfileVolumeBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -49879,7 +54272,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The storage bandwidth (in megabits per second) shared across the storage volumes of an instance with this profile. */
+  /**
+   * The storage bandwidth (in megabits per second) shared across the storage volumes of an instance with this profile.
+   */
   export interface InstanceProfileVolumeBandwidthFixed extends InstanceProfileVolumeBandwidth {
     /** The type for this profile field. */
     type: InstanceProfileVolumeBandwidthFixed.Constants.Type | string;
@@ -49895,7 +54290,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted storage bandwidth range (in megabits per second) shared across the storage volumes of an instance with this profile. */
+  /**
+   * The permitted storage bandwidth range (in megabits per second) shared across the storage volumes of an instance
+   * with this profile.
+   */
   export interface InstanceProfileVolumeBandwidthRange extends InstanceProfileVolumeBandwidth {
     /** The default value for this profile field. */
     default: number;
@@ -49917,7 +54315,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance by using a catalog offering. */
+  /**
+   * Create an instance by using a catalog offering.
+   */
   export interface InstancePrototypeInstanceByCatalogOffering extends InstancePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -49943,7 +54343,11 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance by using an image. The image's `user_data_format` must be `cloud_init`. */
+  /**
+   * Create an instance by using an image.
+   *
+   * The image's `user_data_format` must be `cloud_init`.
+   */
   export interface InstancePrototypeInstanceByImage extends InstancePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -49962,7 +54366,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance by using a snapshot. */
+  /**
+   * Create an instance by using a snapshot.
+   */
   export interface InstancePrototypeInstanceBySourceSnapshot extends InstancePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
@@ -49979,7 +54385,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance by using an instance template. The `primary_network_attachment` and `network_attachments` properties may only be specified if `primary_network_attachment` is specified in the source template. The `primary_network_interface` and `network_interfaces` properties may only be specified if `primary_network_interface` is specified in the source template. */
+  /**
+   * Create an instance by using an instance template.
+   *
+   * The `primary_network_attachment` and `network_attachments` properties may only be specified if
+   * `primary_network_attachment` is specified in the source template.
+   *
+   * The `primary_network_interface` and `network_interfaces` properties may only be specified if
+   * `primary_network_interface` is specified in the source template.
+   */
   export interface InstancePrototypeInstanceBySourceTemplate extends InstancePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -50019,7 +54433,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance by using a boot volume. */
+  /**
+   * Create an instance by using a boot volume.
+   */
   export interface InstancePrototypeInstanceByVolume extends InstancePrototype {
     /** The boot volume attachment for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
@@ -50036,25 +54452,33 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplateIdentityByCRN. */
+  /**
+   * InstanceTemplateIdentityByCRN.
+   */
   export interface InstanceTemplateIdentityByCRN extends InstanceTemplateIdentity {
     /** The CRN for this instance template. */
     crn: string;
   }
 
-  /** InstanceTemplateIdentityByHref. */
+  /**
+   * InstanceTemplateIdentityByHref.
+   */
   export interface InstanceTemplateIdentityByHref extends InstanceTemplateIdentity {
     /** The URL for this instance template. */
     href: string;
   }
 
-  /** InstanceTemplateIdentityById. */
+  /**
+   * InstanceTemplateIdentityById.
+   */
   export interface InstanceTemplateIdentityById extends InstanceTemplateIdentity {
     /** The unique identifier for this instance template. */
     id: string;
   }
 
-  /** Create an instance template that creates instances by using a catalog offering. */
+  /**
+   * Create an instance template that creates instances by using a catalog offering.
+   */
   export interface InstanceTemplatePrototypeInstanceTemplateByCatalogOffering extends InstanceTemplatePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -50080,7 +54504,11 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance template that creates instances by using an image. The image's `user_data_format` must be `cloud_init`. */
+  /**
+   * Create an instance template that creates instances by using an image.
+   *
+   * The image's `user_data_format` must be `cloud_init`.
+   */
   export interface InstanceTemplatePrototypeInstanceTemplateByImage extends InstanceTemplatePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -50099,7 +54527,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance template that creates instances by using a snapshot. */
+  /**
+   * Create an instance template that creates instances by using a snapshot.
+   */
   export interface InstanceTemplatePrototypeInstanceTemplateBySourceSnapshot extends InstanceTemplatePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
@@ -50116,7 +54546,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance template from an existing source instance template. The `primary_network_attachment` and `network_attachments` properties may only be specified if `primary_network_attachment` is specified in the source template. The `primary_network_interface` and `network_interfaces` properties may only be specified if `primary_network_interface` is specified in the source template. */
+  /**
+   * Create an instance template from an existing source instance template.
+   *
+   * The `primary_network_attachment` and `network_attachments` properties may only be specified if
+   * `primary_network_attachment` is specified in the source template.
+   *
+   * The `primary_network_interface` and `network_interfaces` properties may only be specified if
+   * `primary_network_interface` is specified in the source template.
+   */
   export interface InstanceTemplatePrototypeInstanceTemplateBySourceTemplate extends InstanceTemplatePrototype {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -50156,7 +54594,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance by using a catalog offering. */
+  /**
+   * Create an instance by using a catalog offering.
+   */
   export interface InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext extends InstanceTemplate {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -50182,7 +54622,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance by using an image. */
+  /**
+   * Create an instance by using an image.
+   */
   export interface InstanceTemplateInstanceByImageInstanceTemplateContext extends InstanceTemplate {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
@@ -50201,7 +54643,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Create an instance by using a snapshot. */
+  /**
+   * Create an instance by using a snapshot.
+   */
   export interface InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext extends InstanceTemplate {
     /** The boot volume attachment to create for the virtual server instance. */
     boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
@@ -50224,13 +54668,17 @@ namespace VpcV1 {
     }
   }
 
-  /** KeyIdentityByCRN. */
+  /**
+   * KeyIdentityByCRN.
+   */
   export interface KeyIdentityByCRN extends KeyIdentity {
     /** The CRN for this key. */
     crn: string;
   }
 
-  /** KeyIdentityByFingerprint. */
+  /**
+   * KeyIdentityByFingerprint.
+   */
   export interface KeyIdentityByFingerprint extends KeyIdentity {
     /** The fingerprint for this key.  The value is returned base64-encoded and prefixed with the hash algorithm
      *  (always `SHA256`).
@@ -50238,67 +54686,89 @@ namespace VpcV1 {
     fingerprint: string;
   }
 
-  /** KeyIdentityByHref. */
+  /**
+   * KeyIdentityByHref.
+   */
   export interface KeyIdentityByHref extends KeyIdentity {
     /** The URL for this key. */
     href: string;
   }
 
-  /** KeyIdentityById. */
+  /**
+   * KeyIdentityById.
+   */
   export interface KeyIdentityById extends KeyIdentity {
     /** The unique identifier for this key. */
     id: string;
   }
 
-  /** LegacyCloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName. */
+  /**
+   * LegacyCloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName.
+   */
   export interface LegacyCloudObjectStorageBucketIdentityCloudObjectStorageBucketIdentityByName extends LegacyCloudObjectStorageBucketIdentity {
     /** The globally unique name of this Cloud Object Storage bucket. */
     name: string;
   }
 
-  /** LoadBalancerIdentityByCRN. */
+  /**
+   * LoadBalancerIdentityByCRN.
+   */
   export interface LoadBalancerIdentityByCRN extends LoadBalancerIdentity {
     /** The CRN for this load balancer. */
     crn: string;
   }
 
-  /** LoadBalancerIdentityByHref. */
+  /**
+   * LoadBalancerIdentityByHref.
+   */
   export interface LoadBalancerIdentityByHref extends LoadBalancerIdentity {
     /** The URL for this load balancer. */
     href: string;
   }
 
-  /** LoadBalancerIdentityById. */
+  /**
+   * LoadBalancerIdentityById.
+   */
   export interface LoadBalancerIdentityById extends LoadBalancerIdentity {
     /** The unique identifier for this load balancer. */
     id: string;
   }
 
-  /** LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityByHref. */
+  /**
+   * LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityByHref.
+   */
   export interface LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityByHref extends LoadBalancerListenerDefaultPoolPatch {
     /** The URL for this load balancer pool. */
     href: string;
   }
 
-  /** LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityById. */
+  /**
+   * LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityById.
+   */
   export interface LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityById extends LoadBalancerListenerDefaultPoolPatch {
     /** The unique identifier for this load balancer pool. */
     id: string;
   }
 
-  /** LoadBalancerListenerIdentityByHref. */
+  /**
+   * LoadBalancerListenerIdentityByHref.
+   */
   export interface LoadBalancerListenerIdentityByHref extends LoadBalancerListenerIdentity {
     /** The URL for this load balancer listener. */
     href: string;
   }
 
-  /** LoadBalancerListenerIdentityById. */
+  /**
+   * LoadBalancerListenerIdentityById.
+   */
   export interface LoadBalancerListenerIdentityById extends LoadBalancerListenerIdentity {
     /** The unique identifier for this load balancer listener. */
     id: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyHTTPSRedirectPatch. */
+  /**
+   * LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyHTTPSRedirectPatch.
+   */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyHTTPSRedirectPatch extends LoadBalancerListenerPolicyTargetPatch {
     /** The HTTP status code for this redirect. */
     http_status_code?: number;
@@ -50308,7 +54778,9 @@ namespace VpcV1 {
     uri?: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyRedirectURLPatch. */
+  /**
+   * LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyRedirectURLPatch.
+   */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyRedirectURLPatch extends LoadBalancerListenerPolicyTargetPatch {
     /** The HTTP status code for this redirect. */
     http_status_code?: number;
@@ -50333,11 +54805,15 @@ namespace VpcV1 {
     url?: string;
   }
 
-  /** Identifies a load balancer pool by a unique property. */
+  /**
+   * Identifies a load balancer pool by a unique property.
+   */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity extends LoadBalancerListenerPolicyTargetPatch {
   }
 
-  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyHTTPSRedirectPrototype. */
+  /**
+   * LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyHTTPSRedirectPrototype.
+   */
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyHTTPSRedirectPrototype extends LoadBalancerListenerPolicyTargetPrototype {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
@@ -50347,7 +54823,9 @@ namespace VpcV1 {
     uri?: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyRedirectURLPrototype. */
+  /**
+   * LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyRedirectURLPrototype.
+   */
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyRedirectURLPrototype extends LoadBalancerListenerPolicyTargetPrototype {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
@@ -50372,11 +54850,15 @@ namespace VpcV1 {
     url: string;
   }
 
-  /** Identifies a load balancer pool by a unique property. */
+  /**
+   * Identifies a load balancer pool by a unique property.
+   */
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentity extends LoadBalancerListenerPolicyTargetPrototype {
   }
 
-  /** LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyHTTPSRedirect. */
+  /**
+   * LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyHTTPSRedirect.
+   */
   export interface LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyHTTPSRedirect extends LoadBalancerListenerPolicyTarget {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
@@ -50385,7 +54867,9 @@ namespace VpcV1 {
     uri?: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyRedirectURL. */
+  /**
+   * LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyRedirectURL.
+   */
   export interface LoadBalancerListenerPolicyTargetLoadBalancerListenerPolicyRedirectURL extends LoadBalancerListenerPolicyTarget {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
@@ -50410,7 +54894,9 @@ namespace VpcV1 {
     url: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetLoadBalancerPoolReference. */
+  /**
+   * LoadBalancerListenerPolicyTargetLoadBalancerPoolReference.
+   */
   export interface LoadBalancerListenerPolicyTargetLoadBalancerPoolReference extends LoadBalancerListenerPolicyTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -50424,19 +54910,25 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** LoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
+  /**
+   * LoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref.
+   */
   export interface LoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerPoolIdentity {
     /** The URL for this load balancer pool. */
     href: string;
   }
 
-  /** LoadBalancerPoolIdentityLoadBalancerPoolIdentityById. */
+  /**
+   * LoadBalancerPoolIdentityLoadBalancerPoolIdentityById.
+   */
   export interface LoadBalancerPoolIdentityLoadBalancerPoolIdentityById extends LoadBalancerPoolIdentity {
     /** The unique identifier for this load balancer pool. */
     id: string;
   }
 
-  /** LoadBalancerPoolMemberTargetPrototypeIP. */
+  /**
+   * LoadBalancerPoolMemberTargetPrototypeIP.
+   */
   export interface LoadBalancerPoolMemberTargetPrototypeIP extends LoadBalancerPoolMemberTargetPrototype {
     /** The IP address.
      *
@@ -50446,11 +54938,15 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** Identifies a virtual server instance by a unique property. */
+  /**
+   * Identifies a virtual server instance by a unique property.
+   */
   export interface LoadBalancerPoolMemberTargetPrototypeInstanceIdentity extends LoadBalancerPoolMemberTargetPrototype {
   }
 
-  /** LoadBalancerPoolMemberTargetIP. */
+  /**
+   * LoadBalancerPoolMemberTargetIP.
+   */
   export interface LoadBalancerPoolMemberTargetIP extends LoadBalancerPoolMemberTarget {
     /** The IP address.
      *
@@ -50460,7 +54956,9 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** LoadBalancerPoolMemberTargetInstanceReference. */
+  /**
+   * LoadBalancerPoolMemberTargetInstanceReference.
+   */
   export interface LoadBalancerPoolMemberTargetInstanceReference extends LoadBalancerPoolMemberTarget {
     /** The CRN for this virtual server instance. */
     crn: string;
@@ -50478,7 +54976,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** The availability mode for a load balancer with this profile depends on its configuration. */
+  /**
+   * The availability mode for a load balancer with this profile depends on its configuration.
+   */
   export interface LoadBalancerProfileAvailabilityDependent extends LoadBalancerProfileAvailability {
     /** The type for this profile field. */
     type: LoadBalancerProfileAvailabilityDependent.Constants.Type | string;
@@ -50492,7 +54992,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The availability mode for a load balancer with this profile. */
+  /**
+   * The availability mode for a load balancer with this profile.
+   */
   export interface LoadBalancerProfileAvailabilityFixed extends LoadBalancerProfileAvailability {
     /** The type for this profile field. */
     type: LoadBalancerProfileAvailabilityFixed.Constants.Type | string;
@@ -50520,19 +55022,25 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerProfileIdentityByHref. */
+  /**
+   * LoadBalancerProfileIdentityByHref.
+   */
   export interface LoadBalancerProfileIdentityByHref extends LoadBalancerProfileIdentity {
     /** The URL for this load balancer profile. */
     href: string;
   }
 
-  /** LoadBalancerProfileIdentityByName. */
+  /**
+   * LoadBalancerProfileIdentityByName.
+   */
   export interface LoadBalancerProfileIdentityByName extends LoadBalancerProfileIdentity {
     /** The globally unique name for this load balancer profile. */
     name: string;
   }
 
-  /** The instance groups support for a load balancer with this profile depends on its configuration. */
+  /**
+   * The instance groups support for a load balancer with this profile depends on its configuration.
+   */
   export interface LoadBalancerProfileInstanceGroupsSupportedDependent extends LoadBalancerProfileInstanceGroupsSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileInstanceGroupsSupportedDependent.Constants.Type | string;
@@ -50546,7 +55054,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The instance groups support for a load balancer with this profile. */
+  /**
+   * The instance groups support for a load balancer with this profile.
+   */
   export interface LoadBalancerProfileInstanceGroupsSupportedFixed extends LoadBalancerProfileInstanceGroupsSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileInstanceGroupsSupportedFixed.Constants.Type | string;
@@ -50562,7 +55072,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The route mode support for a load balancer with this profile depends on its configuration. */
+  /**
+   * The route mode support for a load balancer with this profile depends on its configuration.
+   */
   export interface LoadBalancerProfileRouteModeSupportedDependent extends LoadBalancerProfileRouteModeSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileRouteModeSupportedDependent.Constants.Type | string;
@@ -50576,7 +55088,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The route mode support for a load balancer with this profile. */
+  /**
+   * The route mode support for a load balancer with this profile.
+   */
   export interface LoadBalancerProfileRouteModeSupportedFixed extends LoadBalancerProfileRouteModeSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileRouteModeSupportedFixed.Constants.Type | string;
@@ -50592,7 +55106,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The security group support for a load balancer with this profile depends on its configuration. */
+  /**
+   * The security group support for a load balancer with this profile depends on its configuration.
+   */
   export interface LoadBalancerProfileSecurityGroupsSupportedDependent extends LoadBalancerProfileSecurityGroupsSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileSecurityGroupsSupportedDependent.Constants.Type | string;
@@ -50606,7 +55122,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The security group support for a load balancer with this profile. */
+  /**
+   * The security group support for a load balancer with this profile.
+   */
   export interface LoadBalancerProfileSecurityGroupsSupportedFixed extends LoadBalancerProfileSecurityGroupsSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileSecurityGroupsSupportedFixed.Constants.Type | string;
@@ -50622,7 +55140,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The source IP session persistence support for a load balancer with this profile depends on its configuration. */
+  /**
+   * The source IP session persistence support for a load balancer with this profile depends on its configuration.
+   */
   export interface LoadBalancerProfileSourceIPSessionPersistenceSupportedDependent extends LoadBalancerProfileSourceIPSessionPersistenceSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileSourceIPSessionPersistenceSupportedDependent.Constants.Type | string;
@@ -50636,7 +55156,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The source IP session persistence support for a load balancer with this profile. */
+  /**
+   * The source IP session persistence support for a load balancer with this profile.
+   */
   export interface LoadBalancerProfileSourceIPSessionPersistenceSupportedFixed extends LoadBalancerProfileSourceIPSessionPersistenceSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileSourceIPSessionPersistenceSupportedFixed.Constants.Type | string;
@@ -50652,7 +55174,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The UDP support for a load balancer with this profile depends on its configuration. */
+  /**
+   * The UDP support for a load balancer with this profile depends on its configuration.
+   */
   export interface LoadBalancerProfileUDPSupportedDependent extends LoadBalancerProfileUDPSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileUDPSupportedDependent.Constants.Type | string;
@@ -50666,7 +55190,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The UDP support for a load balancer with this profile. */
+  /**
+   * The UDP support for a load balancer with this profile.
+   */
   export interface LoadBalancerProfileUDPSupportedFixed extends LoadBalancerProfileUDPSupported {
     /** The type for this profile field. */
     type: LoadBalancerProfileUDPSupportedFixed.Constants.Type | string;
@@ -50682,25 +55208,33 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLIdentityByCRN. */
+  /**
+   * NetworkACLIdentityByCRN.
+   */
   export interface NetworkACLIdentityByCRN extends NetworkACLIdentity {
     /** The CRN for this network ACL. */
     crn: string;
   }
 
-  /** NetworkACLIdentityByHref. */
+  /**
+   * NetworkACLIdentityByHref.
+   */
   export interface NetworkACLIdentityByHref extends NetworkACLIdentity {
     /** The URL for this network ACL. */
     href: string;
   }
 
-  /** NetworkACLIdentityById. */
+  /**
+   * NetworkACLIdentityById.
+   */
   export interface NetworkACLIdentityById extends NetworkACLIdentity {
     /** The unique identifier for this network ACL. */
     id: string;
   }
 
-  /** NetworkACLPrototypeNetworkACLByRules. */
+  /**
+   * NetworkACLPrototypeNetworkACLByRules.
+   */
   export interface NetworkACLPrototypeNetworkACLByRules extends NetworkACLPrototype {
     /** The prototype objects for rules to create along with this network ACL. If unspecified, no rules will be
      *  created, resulting in all traffic being denied.
@@ -50708,37 +55242,49 @@ namespace VpcV1 {
     rules?: NetworkACLRulePrototypeNetworkACLContext[];
   }
 
-  /** NetworkACLPrototypeNetworkACLBySourceNetworkACL. */
+  /**
+   * NetworkACLPrototypeNetworkACLBySourceNetworkACL.
+   */
   export interface NetworkACLPrototypeNetworkACLBySourceNetworkACL extends NetworkACLPrototype {
     /** Network ACL to copy rules from. */
     source_network_acl: NetworkACLIdentity;
   }
 
-  /** NetworkACLRuleBeforePatchNetworkACLRuleIdentityByHref. */
+  /**
+   * NetworkACLRuleBeforePatchNetworkACLRuleIdentityByHref.
+   */
   export interface NetworkACLRuleBeforePatchNetworkACLRuleIdentityByHref extends NetworkACLRuleBeforePatch {
     /** The URL for this network ACL rule. */
     href: string;
   }
 
-  /** NetworkACLRuleBeforePatchNetworkACLRuleIdentityById. */
+  /**
+   * NetworkACLRuleBeforePatchNetworkACLRuleIdentityById.
+   */
   export interface NetworkACLRuleBeforePatchNetworkACLRuleIdentityById extends NetworkACLRuleBeforePatch {
     /** The unique identifier for this network ACL rule. */
     id: string;
   }
 
-  /** NetworkACLRuleBeforePrototypeNetworkACLRuleIdentityByHref. */
+  /**
+   * NetworkACLRuleBeforePrototypeNetworkACLRuleIdentityByHref.
+   */
   export interface NetworkACLRuleBeforePrototypeNetworkACLRuleIdentityByHref extends NetworkACLRuleBeforePrototype {
     /** The URL for this network ACL rule. */
     href: string;
   }
 
-  /** NetworkACLRuleBeforePrototypeNetworkACLRuleIdentityById. */
+  /**
+   * NetworkACLRuleBeforePrototypeNetworkACLRuleIdentityById.
+   */
   export interface NetworkACLRuleBeforePrototypeNetworkACLRuleIdentityById extends NetworkACLRuleBeforePrototype {
     /** The unique identifier for this network ACL rule. */
     id: string;
   }
 
-  /** NetworkACLRuleItemNetworkACLRuleProtocolAll. */
+  /**
+   * NetworkACLRuleItemNetworkACLRuleProtocolAll.
+   */
   export interface NetworkACLRuleItemNetworkACLRuleProtocolAll extends NetworkACLRuleItem {
     /** The network protocol. */
     protocol: NetworkACLRuleItemNetworkACLRuleProtocolAll.Constants.Protocol | string;
@@ -50766,7 +55312,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRuleItemNetworkACLRuleProtocolICMP. */
+  /**
+   * NetworkACLRuleItemNetworkACLRuleProtocolICMP.
+   */
   export interface NetworkACLRuleItemNetworkACLRuleProtocolICMP extends NetworkACLRuleItem {
     /** The ICMP traffic code to match.
      *
@@ -50804,7 +55352,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP. */
+  /**
+   * NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP.
+   */
   export interface NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP extends NetworkACLRuleItem {
     /** The inclusive upper bound of TCP/UDP destination port range. */
     destination_port_max: number;
@@ -50841,7 +55391,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype. */
+  /**
+   * NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype.
+   */
   export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototypeNetworkACLContext {
     /** The network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype.Constants.Protocol | string;
@@ -50869,7 +55421,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype. */
+  /**
+   * NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype.
+   */
   export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype extends NetworkACLRulePrototypeNetworkACLContext {
     /** The ICMP traffic code to match.
      *
@@ -50907,7 +55461,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype. */
+  /**
+   * NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype.
+   */
   export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype extends NetworkACLRulePrototypeNetworkACLContext {
     /** The inclusive upper bound of TCP/UDP destination port range. */
     destination_port_max?: number;
@@ -50944,7 +55500,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype. */
+  /**
+   * NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype.
+   */
   export interface NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototype {
     /** The network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype.Constants.Protocol | string;
@@ -50972,7 +55530,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype. */
+  /**
+   * NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype.
+   */
   export interface NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype extends NetworkACLRulePrototype {
     /** The ICMP traffic code to match.
      *
@@ -51010,7 +55570,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype. */
+  /**
+   * NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype.
+   */
   export interface NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype extends NetworkACLRulePrototype {
     /** The inclusive upper bound of TCP/UDP destination port range. */
     destination_port_max?: number;
@@ -51047,7 +55609,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRuleNetworkACLRuleProtocolAll. */
+  /**
+   * NetworkACLRuleNetworkACLRuleProtocolAll.
+   */
   export interface NetworkACLRuleNetworkACLRuleProtocolAll extends NetworkACLRule {
     /** The network protocol. */
     protocol: NetworkACLRuleNetworkACLRuleProtocolAll.Constants.Protocol | string;
@@ -51075,7 +55639,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRuleNetworkACLRuleProtocolICMP. */
+  /**
+   * NetworkACLRuleNetworkACLRuleProtocolICMP.
+   */
   export interface NetworkACLRuleNetworkACLRuleProtocolICMP extends NetworkACLRule {
     /** The ICMP traffic code to match.
      *
@@ -51113,7 +55679,9 @@ namespace VpcV1 {
     }
   }
 
-  /** NetworkACLRuleNetworkACLRuleProtocolTCPUDP. */
+  /**
+   * NetworkACLRuleNetworkACLRuleProtocolTCPUDP.
+   */
   export interface NetworkACLRuleNetworkACLRuleProtocolTCPUDP extends NetworkACLRule {
     /** The inclusive upper bound of TCP/UDP destination port range. */
     destination_port_max: number;
@@ -51150,11 +55718,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a reserved IP by a unique property. */
+  /**
+   * Identifies a reserved IP by a unique property.
+   */
   export interface NetworkInterfaceIPPrototypeReservedIPIdentity extends NetworkInterfaceIPPrototype {
   }
 
-  /** NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext. */
+  /**
+   * NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext.
+   */
   export interface NetworkInterfaceIPPrototypeReservedIPPrototypeNetworkInterfaceContext extends NetworkInterfaceIPPrototype {
     /** The IP address to reserve, which must not already be reserved on the subnet.
      *
@@ -51172,23 +55744,31 @@ namespace VpcV1 {
     name?: string;
   }
 
-  /** OperatingSystemIdentityByHref. */
+  /**
+   * OperatingSystemIdentityByHref.
+   */
   export interface OperatingSystemIdentityByHref extends OperatingSystemIdentity {
     /** The URL for this operating system. */
     href: string;
   }
 
-  /** OperatingSystemIdentityByName. */
+  /**
+   * OperatingSystemIdentityByName.
+   */
   export interface OperatingSystemIdentityByName extends OperatingSystemIdentity {
     /** The globally unique name for this operating system. */
     name: string;
   }
 
-  /** Identifies a floating IP by a unique property. */
+  /**
+   * Identifies a floating IP by a unique property.
+   */
   export interface PublicGatewayFloatingIPPrototypeFloatingIPIdentity extends PublicGatewayFloatingIPPrototype {
   }
 
-  /** PublicGatewayFloatingIPPrototypeFloatingIPPrototypeTargetContext. */
+  /**
+   * PublicGatewayFloatingIPPrototypeFloatingIPPrototypeTargetContext.
+   */
   export interface PublicGatewayFloatingIPPrototypeFloatingIPPrototypeTargetContext extends PublicGatewayFloatingIPPrototype {
     /** The name for this floating IP. The name must not be used by another floating IP in the region. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -51200,63 +55780,85 @@ namespace VpcV1 {
     resource_group?: ResourceGroupIdentity;
   }
 
-  /** PublicGatewayIdentityPublicGatewayIdentityByCRN. */
+  /**
+   * PublicGatewayIdentityPublicGatewayIdentityByCRN.
+   */
   export interface PublicGatewayIdentityPublicGatewayIdentityByCRN extends PublicGatewayIdentity {
     /** The CRN for this public gateway. */
     crn: string;
   }
 
-  /** PublicGatewayIdentityPublicGatewayIdentityByHref. */
+  /**
+   * PublicGatewayIdentityPublicGatewayIdentityByHref.
+   */
   export interface PublicGatewayIdentityPublicGatewayIdentityByHref extends PublicGatewayIdentity {
     /** The URL for this public gateway. */
     href: string;
   }
 
-  /** PublicGatewayIdentityPublicGatewayIdentityById. */
+  /**
+   * PublicGatewayIdentityPublicGatewayIdentityById.
+   */
   export interface PublicGatewayIdentityPublicGatewayIdentityById extends PublicGatewayIdentity {
     /** The unique identifier for this public gateway. */
     id: string;
   }
 
-  /** RegionIdentityByHref. */
+  /**
+   * RegionIdentityByHref.
+   */
   export interface RegionIdentityByHref extends RegionIdentity {
     /** The URL for this region. */
     href: string;
   }
 
-  /** RegionIdentityByName. */
+  /**
+   * RegionIdentityByName.
+   */
   export interface RegionIdentityByName extends RegionIdentity {
     /** The globally unique name for this region. */
     name: string;
   }
 
-  /** ReservationIdentityByCRN. */
+  /**
+   * ReservationIdentityByCRN.
+   */
   export interface ReservationIdentityByCRN extends ReservationIdentity {
     /** The CRN for this reservation. */
     crn: string;
   }
 
-  /** ReservationIdentityByHref. */
+  /**
+   * ReservationIdentityByHref.
+   */
   export interface ReservationIdentityByHref extends ReservationIdentity {
     /** The URL for this reservation. */
     href: string;
   }
 
-  /** ReservationIdentityById. */
+  /**
+   * ReservationIdentityById.
+   */
   export interface ReservationIdentityById extends ReservationIdentity {
     /** The unique identifier for this reservation. */
     id: string;
   }
 
-  /** ReservedIPTargetPrototypeEndpointGatewayIdentity. */
+  /**
+   * ReservedIPTargetPrototypeEndpointGatewayIdentity.
+   */
   export interface ReservedIPTargetPrototypeEndpointGatewayIdentity extends ReservedIPTargetPrototype {
   }
 
-  /** Identifies a virtual network interface by a unique property. */
+  /**
+   * Identifies a virtual network interface by a unique property.
+   */
   export interface ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentity extends ReservedIPTargetPrototype {
   }
 
-  /** ReservedIPTargetBareMetalServerNetworkInterfaceReferenceTargetContext. */
+  /**
+   * ReservedIPTargetBareMetalServerNetworkInterfaceReferenceTargetContext.
+   */
   export interface ReservedIPTargetBareMetalServerNetworkInterfaceReferenceTargetContext extends ReservedIPTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -51291,7 +55893,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservedIPTargetEndpointGatewayReference. */
+  /**
+   * ReservedIPTargetEndpointGatewayReference.
+   */
   export interface ReservedIPTargetEndpointGatewayReference extends ReservedIPTarget {
     /** The CRN for this endpoint gateway. */
     crn: string;
@@ -51317,7 +55921,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifying information for a resource that is not native to the VPC API. */
+  /**
+   * Identifying information for a resource that is not native to the VPC API.
+   */
   export interface ReservedIPTargetGenericResourceReference extends ReservedIPTarget {
     /** The CRN for the resource. */
     crn: string;
@@ -51337,7 +55943,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservedIPTargetLoadBalancerReference. */
+  /**
+   * ReservedIPTargetLoadBalancerReference.
+   */
   export interface ReservedIPTargetLoadBalancerReference extends ReservedIPTarget {
     /** The CRN for this load balancer. */
     crn: string;
@@ -51363,7 +55971,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservedIPTargetNetworkInterfaceReferenceTargetContext. */
+  /**
+   * ReservedIPTargetNetworkInterfaceReferenceTargetContext.
+   */
   export interface ReservedIPTargetNetworkInterfaceReferenceTargetContext extends ReservedIPTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -51398,7 +56008,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservedIPTargetVPNGatewayReference. */
+  /**
+   * ReservedIPTargetVPNGatewayReference.
+   */
   export interface ReservedIPTargetVPNGatewayReference extends ReservedIPTarget {
     /** The CRN for this VPN gateway. */
     crn: string;
@@ -51424,7 +56036,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservedIPTargetVPNServerReference. */
+  /**
+   * ReservedIPTargetVPNServerReference.
+   */
   export interface ReservedIPTargetVPNServerReference extends ReservedIPTarget {
     /** The CRN for this VPN server. */
     crn: string;
@@ -51450,7 +56064,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ReservedIPTargetVirtualNetworkInterfaceReferenceReservedIPTargetContext. */
+  /**
+   * ReservedIPTargetVirtualNetworkInterfaceReferenceReservedIPTargetContext.
+   */
   export interface ReservedIPTargetVirtualNetworkInterfaceReferenceReservedIPTargetContext extends ReservedIPTarget {
     /** The CRN for this virtual network interface. */
     crn: string;
@@ -51474,13 +56090,17 @@ namespace VpcV1 {
     }
   }
 
-  /** ResourceGroupIdentityById. */
+  /**
+   * ResourceGroupIdentityById.
+   */
   export interface ResourceGroupIdentityById extends ResourceGroupIdentity {
     /** The unique identifier for this resource group. */
     id: string;
   }
 
-  /** RouteCreatorVPNGatewayReference. */
+  /**
+   * RouteCreatorVPNGatewayReference.
+   */
   export interface RouteCreatorVPNGatewayReference extends RouteCreator {
     /** The CRN for this VPN gateway. */
     crn: string;
@@ -51506,7 +56126,9 @@ namespace VpcV1 {
     }
   }
 
-  /** RouteCreatorVPNServerReference. */
+  /**
+   * RouteCreatorVPNServerReference.
+   */
   export interface RouteCreatorVPNServerReference extends RouteCreator {
     /** The CRN for this VPN server. */
     crn: string;
@@ -51532,7 +56154,9 @@ namespace VpcV1 {
     }
   }
 
-  /** RouteNextHopIP. */
+  /**
+   * RouteNextHopIP.
+   */
   export interface RouteNextHopIP extends RouteNextHop {
     /** The IP address.
      *
@@ -51542,23 +56166,33 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** RouteNextHopPatchRouteNextHopIP. */
+  /**
+   * RouteNextHopPatchRouteNextHopIP.
+   */
   export interface RouteNextHopPatchRouteNextHopIP extends RouteNextHopPatch {
   }
 
-  /** Identifies a VPN gateway connection by a unique property. */
+  /**
+   * Identifies a VPN gateway connection by a unique property.
+   */
   export interface RouteNextHopPatchVPNGatewayConnectionIdentity extends RouteNextHopPatch {
   }
 
-  /** RouteNextHopPrototypeRouteNextHopIP. */
+  /**
+   * RouteNextHopPrototypeRouteNextHopIP.
+   */
   export interface RouteNextHopPrototypeRouteNextHopIP extends RouteNextHopPrototype {
   }
 
-  /** Identifies a VPN gateway connection by a unique property. */
+  /**
+   * Identifies a VPN gateway connection by a unique property.
+   */
   export interface RouteNextHopPrototypeVPNGatewayConnectionIdentity extends RouteNextHopPrototype {
   }
 
-  /** RouteNextHopVPNGatewayConnectionReference. */
+  /**
+   * RouteNextHopVPNGatewayConnectionReference.
+   */
   export interface RouteNextHopVPNGatewayConnectionReference extends RouteNextHop {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -51582,43 +56216,57 @@ namespace VpcV1 {
     }
   }
 
-  /** RoutingTableIdentityByCRN. */
+  /**
+   * RoutingTableIdentityByCRN.
+   */
   export interface RoutingTableIdentityByCRN extends RoutingTableIdentity {
     /** The CRN for this VPC routing table. */
     crn: string;
   }
 
-  /** RoutingTableIdentityByHref. */
+  /**
+   * RoutingTableIdentityByHref.
+   */
   export interface RoutingTableIdentityByHref extends RoutingTableIdentity {
     /** The URL for this routing table. */
     href: string;
   }
 
-  /** RoutingTableIdentityById. */
+  /**
+   * RoutingTableIdentityById.
+   */
   export interface RoutingTableIdentityById extends RoutingTableIdentity {
     /** The unique identifier for this routing table. */
     id: string;
   }
 
-  /** SecurityGroupIdentityByCRN. */
+  /**
+   * SecurityGroupIdentityByCRN.
+   */
   export interface SecurityGroupIdentityByCRN extends SecurityGroupIdentity {
     /** The CRN for this security group. */
     crn: string;
   }
 
-  /** SecurityGroupIdentityByHref. */
+  /**
+   * SecurityGroupIdentityByHref.
+   */
   export interface SecurityGroupIdentityByHref extends SecurityGroupIdentity {
     /** The URL for this security group. */
     href: string;
   }
 
-  /** SecurityGroupIdentityById. */
+  /**
+   * SecurityGroupIdentityById.
+   */
   export interface SecurityGroupIdentityById extends SecurityGroupIdentity {
     /** The unique identifier for this security group. */
     id: string;
   }
 
-  /** SecurityGroupRuleLocalPatchCIDR. */
+  /**
+   * SecurityGroupRuleLocalPatchCIDR.
+   */
   export interface SecurityGroupRuleLocalPatchCIDR extends SecurityGroupRuleLocalPatch {
     /** The CIDR block.
      *
@@ -51628,7 +56276,9 @@ namespace VpcV1 {
     cidr_block: string;
   }
 
-  /** SecurityGroupRuleLocalPatchIP. */
+  /**
+   * SecurityGroupRuleLocalPatchIP.
+   */
   export interface SecurityGroupRuleLocalPatchIP extends SecurityGroupRuleLocalPatch {
     /** The IP address.
      *
@@ -51638,7 +56288,9 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** SecurityGroupRuleLocalPrototypeCIDR. */
+  /**
+   * SecurityGroupRuleLocalPrototypeCIDR.
+   */
   export interface SecurityGroupRuleLocalPrototypeCIDR extends SecurityGroupRuleLocalPrototype {
     /** The CIDR block.
      *
@@ -51648,7 +56300,9 @@ namespace VpcV1 {
     cidr_block: string;
   }
 
-  /** SecurityGroupRuleLocalPrototypeIP. */
+  /**
+   * SecurityGroupRuleLocalPrototypeIP.
+   */
   export interface SecurityGroupRuleLocalPrototypeIP extends SecurityGroupRuleLocalPrototype {
     /** The IP address.
      *
@@ -51658,7 +56312,9 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** SecurityGroupRuleLocalCIDR. */
+  /**
+   * SecurityGroupRuleLocalCIDR.
+   */
   export interface SecurityGroupRuleLocalCIDR extends SecurityGroupRuleLocal {
     /** The CIDR block.
      *
@@ -51668,7 +56324,9 @@ namespace VpcV1 {
     cidr_block: string;
   }
 
-  /** SecurityGroupRuleLocalIP. */
+  /**
+   * SecurityGroupRuleLocalIP.
+   */
   export interface SecurityGroupRuleLocalIP extends SecurityGroupRuleLocal {
     /** The IP address.
      *
@@ -51678,7 +56336,9 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** A rule allowing traffic for all supported protocols. */
+  /**
+   * A rule allowing traffic for all supported protocols.
+   */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll extends SecurityGroupRulePrototype {
     /** The direction of traffic to allow. */
     direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.Direction | string;
@@ -51725,7 +56385,9 @@ namespace VpcV1 {
     }
   }
 
-  /** A rule specifying the ICMP traffic to allow. */
+  /**
+   * A rule specifying the ICMP traffic to allow.
+   */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP extends SecurityGroupRulePrototype {
     /** The ICMP traffic code to allow.
      *
@@ -51782,7 +56444,12 @@ namespace VpcV1 {
     }
   }
 
-  /** A rule specifying the TCP or UDP traffic to allow. Either both `port_min` and `port_max` will be present, or neither. When neither is present, all destination ports are allowed for the protocol. When both have the same value, that single destination port is allowed. */
+  /**
+   * A rule specifying the TCP or UDP traffic to allow.
+   *
+   * Either both `port_min` and `port_max` will be present, or neither. When neither is present, all destination ports
+   * are allowed for the protocol. When both have the same value, that single destination port is allowed.
+   */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP extends SecurityGroupRulePrototype {
     /** The direction of traffic to allow. */
     direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.Direction | string;
@@ -51842,7 +56509,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SecurityGroupRuleRemotePatchCIDR. */
+  /**
+   * SecurityGroupRuleRemotePatchCIDR.
+   */
   export interface SecurityGroupRuleRemotePatchCIDR extends SecurityGroupRuleRemotePatch {
     /** The CIDR block.
      *
@@ -51852,7 +56521,9 @@ namespace VpcV1 {
     cidr_block: string;
   }
 
-  /** SecurityGroupRuleRemotePatchIP. */
+  /**
+   * SecurityGroupRuleRemotePatchIP.
+   */
   export interface SecurityGroupRuleRemotePatchIP extends SecurityGroupRuleRemotePatch {
     /** The IP address.
      *
@@ -51862,11 +56533,15 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** Identifies a security group by a unique property. */
+  /**
+   * Identifies a security group by a unique property.
+   */
   export interface SecurityGroupRuleRemotePatchSecurityGroupIdentity extends SecurityGroupRuleRemotePatch {
   }
 
-  /** SecurityGroupRuleRemotePrototypeCIDR. */
+  /**
+   * SecurityGroupRuleRemotePrototypeCIDR.
+   */
   export interface SecurityGroupRuleRemotePrototypeCIDR extends SecurityGroupRuleRemotePrototype {
     /** The CIDR block.
      *
@@ -51876,7 +56551,9 @@ namespace VpcV1 {
     cidr_block: string;
   }
 
-  /** SecurityGroupRuleRemotePrototypeIP. */
+  /**
+   * SecurityGroupRuleRemotePrototypeIP.
+   */
   export interface SecurityGroupRuleRemotePrototypeIP extends SecurityGroupRuleRemotePrototype {
     /** The IP address.
      *
@@ -51886,11 +56563,15 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** Identifies a security group by a unique property. */
+  /**
+   * Identifies a security group by a unique property.
+   */
   export interface SecurityGroupRuleRemotePrototypeSecurityGroupIdentity extends SecurityGroupRuleRemotePrototype {
   }
 
-  /** SecurityGroupRuleRemoteCIDR. */
+  /**
+   * SecurityGroupRuleRemoteCIDR.
+   */
   export interface SecurityGroupRuleRemoteCIDR extends SecurityGroupRuleRemote {
     /** The CIDR block.
      *
@@ -51900,7 +56581,9 @@ namespace VpcV1 {
     cidr_block: string;
   }
 
-  /** SecurityGroupRuleRemoteIP. */
+  /**
+   * SecurityGroupRuleRemoteIP.
+   */
   export interface SecurityGroupRuleRemoteIP extends SecurityGroupRuleRemote {
     /** The IP address.
      *
@@ -51910,7 +56593,9 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** SecurityGroupRuleRemoteSecurityGroupReference. */
+  /**
+   * SecurityGroupRuleRemoteSecurityGroupReference.
+   */
   export interface SecurityGroupRuleRemoteSecurityGroupReference extends SecurityGroupRuleRemote {
     /** The CRN for this security group. */
     crn: string;
@@ -51926,7 +56611,9 @@ namespace VpcV1 {
     name: string;
   }
 
-  /** A rule allowing traffic for all supported protocols. */
+  /**
+   * A rule allowing traffic for all supported protocols.
+   */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolAll extends SecurityGroupRule {
     /** The network protocol. */
     protocol: SecurityGroupRuleSecurityGroupRuleProtocolAll.Constants.Protocol | string;
@@ -51949,7 +56636,9 @@ namespace VpcV1 {
     }
   }
 
-  /** A rule specifying the ICMP traffic to allow. */
+  /**
+   * A rule specifying the ICMP traffic to allow.
+   */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolICMP extends SecurityGroupRule {
     /** The ICMP traffic code to allow. If absent, all codes are allowed. */
     code?: number;
@@ -51976,7 +56665,12 @@ namespace VpcV1 {
     }
   }
 
-  /** A rule specifying the TCP or UDP traffic to allow. Either both `port_min` and `port_max` will be present, or neither. When neither is present, all destination ports are allowed for the protocol. When both have the same value, that single destination port is allowed. */
+  /**
+   * A rule specifying the TCP or UDP traffic to allow.
+   *
+   * Either both `port_min` and `port_max` will be present, or neither. When neither is present, all destination ports
+   * are allowed for the protocol. When both have the same value, that single destination port is allowed.
+   */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolTCPUDP extends SecurityGroupRule {
     /** The inclusive upper bound of TCP/UDP destination port range. */
     port_max?: number;
@@ -52004,7 +56698,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SecurityGroupTargetReferenceBareMetalServerNetworkInterfaceReferenceTargetContext. */
+  /**
+   * SecurityGroupTargetReferenceBareMetalServerNetworkInterfaceReferenceTargetContext.
+   */
   export interface SecurityGroupTargetReferenceBareMetalServerNetworkInterfaceReferenceTargetContext extends SecurityGroupTargetReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -52039,7 +56735,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SecurityGroupTargetReferenceEndpointGatewayReference. */
+  /**
+   * SecurityGroupTargetReferenceEndpointGatewayReference.
+   */
   export interface SecurityGroupTargetReferenceEndpointGatewayReference extends SecurityGroupTargetReference {
     /** The CRN for this endpoint gateway. */
     crn: string;
@@ -52065,7 +56763,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SecurityGroupTargetReferenceLoadBalancerReference. */
+  /**
+   * SecurityGroupTargetReferenceLoadBalancerReference.
+   */
   export interface SecurityGroupTargetReferenceLoadBalancerReference extends SecurityGroupTargetReference {
     /** The CRN for this load balancer. */
     crn: string;
@@ -52091,7 +56791,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SecurityGroupTargetReferenceNetworkInterfaceReferenceTargetContext. */
+  /**
+   * SecurityGroupTargetReferenceNetworkInterfaceReferenceTargetContext.
+   */
   export interface SecurityGroupTargetReferenceNetworkInterfaceReferenceTargetContext extends SecurityGroupTargetReference {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -52126,7 +56828,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SecurityGroupTargetReferenceVPNServerReference. */
+  /**
+   * SecurityGroupTargetReferenceVPNServerReference.
+   */
   export interface SecurityGroupTargetReferenceVPNServerReference extends SecurityGroupTargetReference {
     /** The CRN for this VPN server. */
     crn: string;
@@ -52152,7 +56856,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SecurityGroupTargetReferenceVirtualNetworkInterfaceReference. */
+  /**
+   * SecurityGroupTargetReferenceVirtualNetworkInterfaceReference.
+   */
   export interface SecurityGroupTargetReferenceVirtualNetworkInterfaceReference extends SecurityGroupTargetReference {
     /** The CRN for this virtual network interface. */
     crn: string;
@@ -52184,7 +56890,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareAccessorBindingAccessorShareReference. */
+  /**
+   * ShareAccessorBindingAccessorShareReference.
+   */
   export interface ShareAccessorBindingAccessorShareReference extends ShareAccessorBindingAccessor {
     /** The CRN for this file share. */
     crn: string;
@@ -52214,7 +56922,9 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareAccessorBindingAccessorWatsonxMachineLearningReference. */
+  /**
+   * ShareAccessorBindingAccessorWatsonxMachineLearningReference.
+   */
   export interface ShareAccessorBindingAccessorWatsonxMachineLearningReference extends ShareAccessorBindingAccessor {
     /** The CRN for the watsonx machine learning resource. */
     crn: string;
@@ -52230,25 +56940,45 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareIdentityByCRN. */
+  /**
+   * ShareIdentityByCRN.
+   */
   export interface ShareIdentityByCRN extends ShareIdentity {
     /** The CRN for this file share. */
     crn: string;
   }
 
-  /** ShareIdentityByHref. */
+  /**
+   * ShareIdentityByHref.
+   */
   export interface ShareIdentityByHref extends ShareIdentity {
     /** The URL for this file share. */
     href: string;
   }
 
-  /** ShareIdentityById. */
+  /**
+   * ShareIdentityById.
+   */
   export interface ShareIdentityById extends ShareIdentity {
     /** The unique identifier for this file share. */
     id: string;
   }
 
-  /** The virtual network interface for this share mount target. The virtual network interface must: - be in the same `zone` as the share - have `allow_ip_spoofing` set to `false` - have `enable_infrastructure_nat` set to `true` - have `protocol_state_filtering_mode` set to `auto` or `enabled` - not be in the same VPC as an existing mount target for this share - not have `ips` other than the `primary_ip` address If an existing virtual network interface is specified, it must not have a floating IP bound to it, and it must not be the target of a flow log collector. Required if the share's `access_control_mode` is `security_group`. */
+  /**
+   * The virtual network interface for this share mount target. The virtual network interface must:
+   *
+   * - be in the same `zone` as the share
+   * - have `allow_ip_spoofing` set to `false`
+   * - have `enable_infrastructure_nat` set to `true`
+   * - have `protocol_state_filtering_mode` set to `auto` or `enabled`
+   * - not be in the same VPC as an existing mount target for this share
+   * - not have `ips` other than the `primary_ip` address
+   *
+   * If an existing virtual network interface is specified, it must not have a floating IP bound to it, and it must not
+   * be the target of a flow log collector.
+   *
+   * Required if the share's `access_control_mode` is `security_group`.
+   */
   export interface ShareMountTargetPrototypeShareMountTargetByAccessControlModeSecurityGroup extends ShareMountTargetPrototype {
     virtual_network_interface: ShareMountTargetVirtualNetworkInterfacePrototype;
   }
@@ -52262,7 +56992,12 @@ namespace VpcV1 {
     }
   }
 
-  /** The VPC in which clients can mount the file share using this mount target.  The VPC must not be used by another mount target for this share. Required if the share's `access_control_mode` is `vpc`. */
+  /**
+   * The VPC in which clients can mount the file share using this mount target.  The VPC must not be used by another
+   * mount target for this share.
+   *
+   * Required if the share's `access_control_mode` is `vpc`.
+   */
   export interface ShareMountTargetPrototypeShareMountTargetByAccessControlModeVPC extends ShareMountTargetPrototype {
     /** Identifies a VPC by a unique property. */
     vpc: VPCIdentity;
@@ -52277,11 +57012,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a virtual network interface by a unique property. */
+  /**
+   * Identifies a virtual network interface by a unique property.
+   */
   export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentity extends ShareMountTargetVirtualNetworkInterfacePrototype {
   }
 
-  /** The virtual network interface for this target. */
+  /**
+   * The virtual network interface for this target.
+   */
   export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfacePrototypeShareMountTargetContext extends ShareMountTargetVirtualNetworkInterfacePrototype {
     /** Indicates whether source IP spoofing is allowed on this interface. If `false`, source IP spoofing is
      *  prevented on this interface. If `true`, source IP spoofing is allowed on this interface.
@@ -52357,13 +57096,14 @@ namespace VpcV1 {
       /** The protocol state filtering mode to use for this virtual network interface. If `auto`, protocol state packet filtering is enabled or disabled based on the virtual network interface's `target` resource type: - `bare_metal_server_network_attachment`: disabled - `instance_network_attachment`: enabled - `share_mount_target`: enabled Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information. */
       export enum ProtocolStateFilteringMode {
         AUTO = 'auto',
-        DISABLED = 'disabled',
         ENABLED = 'enabled',
       }
     }
   }
 
-  /** The permitted total capacity (in gigabytes) of a share with this profile depends on its configuration. */
+  /**
+   * The permitted total capacity (in gigabytes) of a share with this profile depends on its configuration.
+   */
   export interface ShareProfileCapacityDependentRange extends ShareProfileCapacity {
     /** The maximum value for this profile field. */
     max: number;
@@ -52383,10 +57123,10 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total capacities (in gigabytes) of a share with this profile. */
+  /**
+   * The permitted total capacities (in gigabytes) of a share with this profile.
+   */
   export interface ShareProfileCapacityEnum extends ShareProfileCapacity {
-    /** The default value for this profile field. */
-    default: any;
     /** The type for this profile field. */
     type: ShareProfileCapacityEnum.Constants.Type | string;
     /** The permitted values for this profile field. */
@@ -52401,7 +57141,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total capacity (in gigabytes) of a share with this profile is fixed. */
+  /**
+   * The permitted total capacity (in gigabytes) of a share with this profile is fixed.
+   */
   export interface ShareProfileCapacityFixed extends ShareProfileCapacity {
     /** The type for this profile field. */
     type: ShareProfileCapacityFixed.Constants.Type | string;
@@ -52417,7 +57159,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total capacity range (in gigabytes) of a share with this profile. */
+  /**
+   * The permitted total capacity range (in gigabytes) of a share with this profile.
+   */
   export interface ShareProfileCapacityRange extends ShareProfileCapacity {
     /** The default value for this profile field. */
     default: number;
@@ -52439,7 +57183,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted IOPS range of a share with this profile depends on its configuration. */
+  /**
+   * The permitted IOPS range of a share with this profile depends on its configuration.
+   */
   export interface ShareProfileIOPSDependentRange extends ShareProfileIOPS {
     /** The maximum value for this profile field. */
     max: number;
@@ -52459,7 +57205,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted IOPS values of a share with this profile. */
+  /**
+   * The permitted IOPS values of a share with this profile.
+   */
   export interface ShareProfileIOPSEnum extends ShareProfileIOPS {
     /** The default value for this profile field. */
     default: number;
@@ -52477,7 +57225,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted IOPS of a share with this profile is fixed. */
+  /**
+   * The permitted IOPS of a share with this profile is fixed.
+   */
   export interface ShareProfileIOPSFixed extends ShareProfileIOPS {
     /** The type for this profile field. */
     type: ShareProfileIOPSFixed.Constants.Type | string;
@@ -52493,7 +57243,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted IOPS range of a share with this profile. */
+  /**
+   * The permitted IOPS range of a share with this profile.
+   */
   export interface ShareProfileIOPSRange extends ShareProfileIOPS {
     /** The default value for this profile field. */
     default: number;
@@ -52515,19 +57267,27 @@ namespace VpcV1 {
     }
   }
 
-  /** ShareProfileIdentityByHref. */
+  /**
+   * ShareProfileIdentityByHref.
+   */
   export interface ShareProfileIdentityByHref extends ShareProfileIdentity {
     /** The URL for this share profile. */
     href: string;
   }
 
-  /** ShareProfileIdentityByName. */
+  /**
+   * ShareProfileIdentityByName.
+   */
   export interface ShareProfileIdentityByName extends ShareProfileIdentity {
     /** The globally unique name for this share profile. */
     name: string;
   }
 
-  /** Create an accessor file share for an existing file share. The values for `initial_owner`, `access_control_mode`, `encryption_key`, `zone`, `profile`, `iops` and `size` will be inherited from `origin_share`. */
+  /**
+   * Create an accessor file share for an existing file share. The values for `initial_owner`,
+   * `access_control_mode`, `encryption_key`, `zone`, `profile`, `iops` and `size` will be inherited from
+   * `origin_share`.
+   */
   export interface SharePrototypeShareByOriginShare extends SharePrototype {
     /** The origin share for the accessor share. The origin share must have an
      *  `access_control_mode` of `security_group`, and must not have an
@@ -52547,7 +57307,9 @@ namespace VpcV1 {
     }
   }
 
-  /** Create a file share by size. */
+  /**
+   * Create a file share by size.
+   */
   export interface SharePrototypeShareBySize extends SharePrototype {
     /** The access control mode for the share:
      *
@@ -52609,7 +57371,10 @@ namespace VpcV1 {
     }
   }
 
-  /** Create a replica file share for an existing file share. The values for `initial_owner`, `access_control_mode`, `encryption_key` and `size` will be inherited from `source_share`. */
+  /**
+   * Create a replica file share for an existing file share. The values for `initial_owner`,
+   * `access_control_mode`, `encryption_key` and `size` will be inherited from `source_share`.
+   */
   export interface SharePrototypeShareBySourceShare extends SharePrototype {
     /** The root key to use to wrap the data encryption key for the share.
      *
@@ -52631,7 +57396,7 @@ namespace VpcV1 {
     profile: ShareProfileIdentity;
     /** The cron specification for the file share replication schedule.
      *
-     *  Replication of a share can be scheduled to occur at most once per hour.
+     *  Replication of a share can be scheduled to occur at most once every 15 minutes.
      *
      *  The scheduling frequency for this property may
      *  [increase](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
@@ -52660,7 +57425,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SnapshotConsistencyGroupPrototypeSnapshotConsistencyGroupBySnapshots. */
+  /**
+   * SnapshotConsistencyGroupPrototypeSnapshotConsistencyGroupBySnapshots.
+   */
   export interface SnapshotConsistencyGroupPrototypeSnapshotConsistencyGroupBySnapshots extends SnapshotConsistencyGroupPrototype {
     /** The data-consistent member snapshots to create.  All snapshots must specify a
      *  `source_volume` attached to the same virtual server instance.
@@ -52668,25 +57435,33 @@ namespace VpcV1 {
     snapshots: SnapshotPrototypeSnapshotConsistencyGroupContext[];
   }
 
-  /** SnapshotIdentityByCRN. */
+  /**
+   * SnapshotIdentityByCRN.
+   */
   export interface SnapshotIdentityByCRN extends SnapshotIdentity {
     /** The CRN of this snapshot. */
     crn: string;
   }
 
-  /** SnapshotIdentityByHref. */
+  /**
+   * SnapshotIdentityByHref.
+   */
   export interface SnapshotIdentityByHref extends SnapshotIdentity {
     /** The URL for this snapshot. */
     href: string;
   }
 
-  /** SnapshotIdentityById. */
+  /**
+   * SnapshotIdentityById.
+   */
   export interface SnapshotIdentityById extends SnapshotIdentity {
     /** The unique identifier for this snapshot. */
     id: string;
   }
 
-  /** SnapshotPrototypeSnapshotBySourceSnapshot. */
+  /**
+   * SnapshotPrototypeSnapshotBySourceSnapshot.
+   */
   export interface SnapshotPrototypeSnapshotBySourceSnapshot extends SnapshotPrototype {
     /** The root key to use to wrap the data encryption key for this snapshot.
      *
@@ -52705,31 +57480,41 @@ namespace VpcV1 {
     source_snapshot: SnapshotIdentityByCRN;
   }
 
-  /** SnapshotPrototypeSnapshotBySourceVolume. */
+  /**
+   * SnapshotPrototypeSnapshotBySourceVolume.
+   */
   export interface SnapshotPrototypeSnapshotBySourceVolume extends SnapshotPrototype {
     /** The volume to create this snapshot from. */
     source_volume: VolumeIdentity;
   }
 
-  /** SubnetIdentityByCRN. */
+  /**
+   * SubnetIdentityByCRN.
+   */
   export interface SubnetIdentityByCRN extends SubnetIdentity {
     /** The CRN for this subnet. */
     crn: string;
   }
 
-  /** SubnetIdentityByHref. */
+  /**
+   * SubnetIdentityByHref.
+   */
   export interface SubnetIdentityByHref extends SubnetIdentity {
     /** The URL for this subnet. */
     href: string;
   }
 
-  /** SubnetIdentityById. */
+  /**
+   * SubnetIdentityById.
+   */
   export interface SubnetIdentityById extends SubnetIdentity {
     /** The unique identifier for this subnet. */
     id: string;
   }
 
-  /** SubnetPrototypeSubnetByCIDR. */
+  /**
+   * SubnetPrototypeSubnetByCIDR.
+   */
   export interface SubnetPrototypeSubnetByCIDR extends SubnetPrototype {
     /** The IPv4 range of the subnet, expressed in CIDR format. The prefix length of the subnet's CIDR must be
      *  between `/9` (8,388,608 addresses) and `/29` (8 addresses). The IPv4 range of the subnet's CIDR must fall within
@@ -52750,7 +57535,9 @@ namespace VpcV1 {
     }
   }
 
-  /** SubnetPrototypeSubnetByTotalCount. */
+  /**
+   * SubnetPrototypeSubnetByTotalCount.
+   */
   export interface SubnetPrototypeSubnetByTotalCount extends SubnetPrototype {
     /** The total number of IPv4 addresses required. Must be a power of 2. The VPC must have a default address
      *  prefix in the specified zone, and that prefix must have a free CIDR range with at least this number of
@@ -52769,37 +57556,49 @@ namespace VpcV1 {
     }
   }
 
-  /** SubnetPublicGatewayPatchPublicGatewayIdentityByCRN. */
+  /**
+   * SubnetPublicGatewayPatchPublicGatewayIdentityByCRN.
+   */
   export interface SubnetPublicGatewayPatchPublicGatewayIdentityByCRN extends SubnetPublicGatewayPatch {
     /** The CRN for this public gateway. */
     crn: string;
   }
 
-  /** SubnetPublicGatewayPatchPublicGatewayIdentityByHref. */
+  /**
+   * SubnetPublicGatewayPatchPublicGatewayIdentityByHref.
+   */
   export interface SubnetPublicGatewayPatchPublicGatewayIdentityByHref extends SubnetPublicGatewayPatch {
     /** The URL for this public gateway. */
     href: string;
   }
 
-  /** SubnetPublicGatewayPatchPublicGatewayIdentityById. */
+  /**
+   * SubnetPublicGatewayPatchPublicGatewayIdentityById.
+   */
   export interface SubnetPublicGatewayPatchPublicGatewayIdentityById extends SubnetPublicGatewayPatch {
     /** The unique identifier for this public gateway. */
     id: string;
   }
 
-  /** TrustedProfileIdentityTrustedProfileByCRN. */
-  export interface TrustedProfileIdentityTrustedProfileByCRN extends TrustedProfileIdentity {
+  /**
+   * TrustedProfileIdentityByCRN.
+   */
+  export interface TrustedProfileIdentityByCRN extends TrustedProfileIdentity {
     /** The CRN for this trusted profile. */
     crn: string;
   }
 
-  /** TrustedProfileIdentityTrustedProfileById. */
-  export interface TrustedProfileIdentityTrustedProfileById extends TrustedProfileIdentity {
+  /**
+   * TrustedProfileIdentityById.
+   */
+  export interface TrustedProfileIdentityById extends TrustedProfileIdentity {
     /** The unique identifier for this trusted profile. */
     id: string;
   }
 
-  /** Manually specify the DNS server addresses for this VPC. */
+  /**
+   * Manually specify the DNS server addresses for this VPC.
+   */
   export interface VPCDNSResolverPrototypeVPCDNSResolverTypeManualPrototype extends VPCDNSResolverPrototype {
     /** The DNS servers to use for this VPC. All the DNS servers must either:
      *
@@ -52827,7 +57626,11 @@ namespace VpcV1 {
     }
   }
 
-  /** The system will provide DNS server addresses for this VPC. The system-provided DNS server addresses depend on whether any endpoint gateways reside in the VPC, and whether a [DNS Services](https://cloud.ibm.com/docs/dns-svcs) instance is configured for the VPC. */
+  /**
+   * The system will provide DNS server addresses for this VPC. The system-provided DNS server addresses depend on
+   * whether any endpoint gateways reside in the VPC, and whether a
+   * [DNS Services](https://cloud.ibm.com/docs/dns-svcs) instance is configured for the VPC.
+   */
   export interface VPCDNSResolverPrototypeVPCDNSResolverTypeSystemPrototype extends VPCDNSResolverPrototype {
     /** The type of the DNS resolver to use. */
     type?: VPCDNSResolverPrototypeVPCDNSResolverTypeSystemPrototype.Constants.Type | string;
@@ -52841,7 +57644,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The DNS server addresses are delegated to the DNS resolver of another VPC. */
+  /**
+   * The DNS server addresses are delegated to the DNS resolver of another VPC.
+   */
   export interface VPCDNSResolverTypeDelegated extends VPCDNSResolver {
     /** The type of the DNS resolver used for the VPC. */
     type: VPCDNSResolverTypeDelegated.Constants.Type | string;
@@ -52860,7 +57665,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The DNS server addresses are manually specified. */
+  /**
+   * The DNS server addresses are manually specified.
+   */
   export interface VPCDNSResolverTypeManual extends VPCDNSResolver {
     /** The manually specified DNS servers for this VPC.
      *
@@ -52888,7 +57695,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The DNS server addresses are provided by the system and depend on the configuration. */
+  /**
+   * The DNS server addresses are provided by the system and depend on the configuration.
+   */
   export interface VPCDNSResolverTypeSystem extends VPCDNSResolver {
     /** The configuration of the system DNS resolver for this VPC.
      *
@@ -52927,43 +57736,57 @@ namespace VpcV1 {
     }
   }
 
-  /** VPCDNSResolverVPCPatchVPCIdentityByCRN. */
+  /**
+   * VPCDNSResolverVPCPatchVPCIdentityByCRN.
+   */
   export interface VPCDNSResolverVPCPatchVPCIdentityByCRN extends VPCDNSResolverVPCPatch {
     /** The CRN for this VPC. */
     crn: string;
   }
 
-  /** VPCDNSResolverVPCPatchVPCIdentityByHref. */
+  /**
+   * VPCDNSResolverVPCPatchVPCIdentityByHref.
+   */
   export interface VPCDNSResolverVPCPatchVPCIdentityByHref extends VPCDNSResolverVPCPatch {
     /** The URL for this VPC. */
     href: string;
   }
 
-  /** VPCDNSResolverVPCPatchVPCIdentityById. */
+  /**
+   * VPCDNSResolverVPCPatchVPCIdentityById.
+   */
   export interface VPCDNSResolverVPCPatchVPCIdentityById extends VPCDNSResolverVPCPatch {
     /** The unique identifier for this VPC. */
     id: string;
   }
 
-  /** VPCIdentityByCRN. */
+  /**
+   * VPCIdentityByCRN.
+   */
   export interface VPCIdentityByCRN extends VPCIdentity {
     /** The CRN for this VPC. */
     crn: string;
   }
 
-  /** VPCIdentityByHref. */
+  /**
+   * VPCIdentityByHref.
+   */
   export interface VPCIdentityByHref extends VPCIdentity {
     /** The URL for this VPC. */
     href: string;
   }
 
-  /** VPCIdentityById. */
+  /**
+   * VPCIdentityById.
+   */
   export interface VPCIdentityById extends VPCIdentity {
     /** The unique identifier for this VPC. */
     id: string;
   }
 
-  /** VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityFQDN. */
+  /**
+   * VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityFQDN.
+   */
   export interface VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityFQDN extends VPNGatewayConnectionIKEIdentityPrototype {
     /** The IKE identity FQDN value. */
     value: string;
@@ -52980,7 +57803,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityHostname. */
+  /**
+   * VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityHostname.
+   */
   export interface VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityHostname extends VPNGatewayConnectionIKEIdentityPrototype {
     /** The IKE identity hostname value. */
     value: string;
@@ -52997,7 +57822,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityIPv4. */
+  /**
+   * VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityIPv4.
+   */
   export interface VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityIPv4 extends VPNGatewayConnectionIKEIdentityPrototype {
     /** The IKE identity IPv4 address value. */
     value: string;
@@ -53014,7 +57841,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityKeyID. */
+  /**
+   * VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityKeyID.
+   */
   export interface VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityKeyID extends VPNGatewayConnectionIKEIdentityPrototype {
     /** The base64-encoded IKE identity key ID value. */
     value: string;
@@ -53031,7 +57860,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityFQDN. */
+  /**
+   * VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityFQDN.
+   */
   export interface VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityFQDN extends VPNGatewayConnectionIKEIdentity {
     /** The IKE identity FQDN value. */
     value: string;
@@ -53048,7 +57879,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityHostname. */
+  /**
+   * VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityHostname.
+   */
   export interface VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityHostname extends VPNGatewayConnectionIKEIdentity {
     /** The IKE identity hostname value. */
     value: string;
@@ -53065,7 +57898,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityIPv4. */
+  /**
+   * VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityIPv4.
+   */
   export interface VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityIPv4 extends VPNGatewayConnectionIKEIdentity {
     /** The IKE identity IPv4 address value. */
     value: string;
@@ -53082,7 +57917,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityKeyID. */
+  /**
+   * VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityKeyID.
+   */
   export interface VPNGatewayConnectionIKEIdentityVPNGatewayConnectionIKEIdentityKeyID extends VPNGatewayConnectionIKEIdentity {
     /** The base64-encoded IKE identity key ID value. */
     value: string;
@@ -53099,63 +57936,87 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityByHref. */
+  /**
+   * VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityByHref.
+   */
   export interface VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityByHref extends VPNGatewayConnectionIKEPolicyPatch {
     /** The URL for this IKE policy. */
     href: string;
   }
 
-  /** VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityById. */
+  /**
+   * VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityById.
+   */
   export interface VPNGatewayConnectionIKEPolicyPatchIKEPolicyIdentityById extends VPNGatewayConnectionIKEPolicyPatch {
     /** The unique identifier for this IKE policy. */
     id: string;
   }
 
-  /** VPNGatewayConnectionIKEPolicyPrototypeIKEPolicyIdentityByHref. */
+  /**
+   * VPNGatewayConnectionIKEPolicyPrototypeIKEPolicyIdentityByHref.
+   */
   export interface VPNGatewayConnectionIKEPolicyPrototypeIKEPolicyIdentityByHref extends VPNGatewayConnectionIKEPolicyPrototype {
     /** The URL for this IKE policy. */
     href: string;
   }
 
-  /** VPNGatewayConnectionIKEPolicyPrototypeIKEPolicyIdentityById. */
+  /**
+   * VPNGatewayConnectionIKEPolicyPrototypeIKEPolicyIdentityById.
+   */
   export interface VPNGatewayConnectionIKEPolicyPrototypeIKEPolicyIdentityById extends VPNGatewayConnectionIKEPolicyPrototype {
     /** The unique identifier for this IKE policy. */
     id: string;
   }
 
-  /** VPNGatewayConnectionIPsecPolicyPatchIPsecPolicyIdentityByHref. */
+  /**
+   * VPNGatewayConnectionIPsecPolicyPatchIPsecPolicyIdentityByHref.
+   */
   export interface VPNGatewayConnectionIPsecPolicyPatchIPsecPolicyIdentityByHref extends VPNGatewayConnectionIPsecPolicyPatch {
     /** The URL for this IPsec policy. */
     href: string;
   }
 
-  /** VPNGatewayConnectionIPsecPolicyPatchIPsecPolicyIdentityById. */
+  /**
+   * VPNGatewayConnectionIPsecPolicyPatchIPsecPolicyIdentityById.
+   */
   export interface VPNGatewayConnectionIPsecPolicyPatchIPsecPolicyIdentityById extends VPNGatewayConnectionIPsecPolicyPatch {
     /** The unique identifier for this IPsec policy. */
     id: string;
   }
 
-  /** VPNGatewayConnectionIPsecPolicyPrototypeIPsecPolicyIdentityByHref. */
+  /**
+   * VPNGatewayConnectionIPsecPolicyPrototypeIPsecPolicyIdentityByHref.
+   */
   export interface VPNGatewayConnectionIPsecPolicyPrototypeIPsecPolicyIdentityByHref extends VPNGatewayConnectionIPsecPolicyPrototype {
     /** The URL for this IPsec policy. */
     href: string;
   }
 
-  /** VPNGatewayConnectionIPsecPolicyPrototypeIPsecPolicyIdentityById. */
+  /**
+   * VPNGatewayConnectionIPsecPolicyPrototypeIPsecPolicyIdentityById.
+   */
   export interface VPNGatewayConnectionIPsecPolicyPrototypeIPsecPolicyIdentityById extends VPNGatewayConnectionIPsecPolicyPrototype {
     /** The unique identifier for this IPsec policy. */
     id: string;
   }
 
-  /** The peer VPN gateway for this connection. If `peer.type` is `ipv4_address`, only `peer.address` may be specified. If `peer.type` is fqdn, only `peer.fqdn` may be specified. */
+  /**
+   * The peer VPN gateway for this connection. If `peer.type` is `ipv4_address`, only `peer.address` may be specified.
+   * If `peer.type` is fqdn, only `peer.fqdn` may be specified.
+   */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatch extends VPNGatewayConnectionPeerPatch {
   }
 
-  /** The peer VPN gateway for this connection. If `peer.type` is `ipv4_address`, only `peer.address` may be specified. If `peer.type` is fqdn, only `peer.fqdn` may be specified. */
+  /**
+   * The peer VPN gateway for this connection. If `peer.type` is `ipv4_address`, only `peer.address` may be specified.
+   * If `peer.type` is fqdn, only `peer.fqdn` may be specified.
+   */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatch extends VPNGatewayConnectionPeerPatch {
   }
 
-  /** VPNGatewayConnectionPolicyMode. */
+  /**
+   * VPNGatewayConnectionPolicyMode.
+   */
   export interface VPNGatewayConnectionPolicyMode extends VPNGatewayConnection {
     local: VPNGatewayConnectionPolicyModeLocal;
     peer: VPNGatewayConnectionPolicyModePeer;
@@ -53188,19 +58049,25 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionPolicyModePeerPrototypeVPNGatewayConnectionPeerByAddress. */
+  /**
+   * VPNGatewayConnectionPolicyModePeerPrototypeVPNGatewayConnectionPeerByAddress.
+   */
   export interface VPNGatewayConnectionPolicyModePeerPrototypeVPNGatewayConnectionPeerByAddress extends VPNGatewayConnectionPolicyModePeerPrototype {
     /** The IP address of the peer VPN gateway for this connection. */
     address: string;
   }
 
-  /** VPNGatewayConnectionPolicyModePeerPrototypeVPNGatewayConnectionPeerByFQDN. */
+  /**
+   * VPNGatewayConnectionPolicyModePeerPrototypeVPNGatewayConnectionPeerByFQDN.
+   */
   export interface VPNGatewayConnectionPolicyModePeerPrototypeVPNGatewayConnectionPeerByFQDN extends VPNGatewayConnectionPolicyModePeerPrototype {
     /** The FQDN of the peer VPN gateway for this connection. */
     fqdn: string;
   }
 
-  /** VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByAddress. */
+  /**
+   * VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByAddress.
+   */
   export interface VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByAddress extends VPNGatewayConnectionPolicyModePeer {
     /** The IP address of the peer VPN gateway for this connection. */
     address: string;
@@ -53215,7 +58082,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByFQDN. */
+  /**
+   * VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByFQDN.
+   */
   export interface VPNGatewayConnectionPolicyModePeerVPNGatewayConnectionPeerByFQDN extends VPNGatewayConnectionPolicyModePeer {
     /** The FQDN of the peer VPN gateway for this connection. */
     fqdn: string;
@@ -53230,7 +58099,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionPrototypeVPNGatewayConnectionPolicyModePrototype. */
+  /**
+   * VPNGatewayConnectionPrototypeVPNGatewayConnectionPolicyModePrototype.
+   */
   export interface VPNGatewayConnectionPrototypeVPNGatewayConnectionPolicyModePrototype extends VPNGatewayConnectionPrototype {
     local: VPNGatewayConnectionPolicyModeLocalPrototype;
     peer: VPNGatewayConnectionPolicyModePeerPrototype;
@@ -53245,7 +58116,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype. */
+  /**
+   * VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype.
+   */
   export interface VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype extends VPNGatewayConnectionPrototype {
     /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
      *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
@@ -53273,7 +58146,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionRouteMode. */
+  /**
+   * VPNGatewayConnectionRouteMode.
+   */
   export interface VPNGatewayConnectionRouteMode extends VPNGatewayConnection {
   }
   export namespace VPNGatewayConnectionRouteMode {
@@ -53304,19 +58179,25 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionStaticRouteModePeerPrototypeVPNGatewayConnectionPeerByAddress. */
+  /**
+   * VPNGatewayConnectionStaticRouteModePeerPrototypeVPNGatewayConnectionPeerByAddress.
+   */
   export interface VPNGatewayConnectionStaticRouteModePeerPrototypeVPNGatewayConnectionPeerByAddress extends VPNGatewayConnectionStaticRouteModePeerPrototype {
     /** The IP address of the peer VPN gateway for this connection. */
     address: string;
   }
 
-  /** VPNGatewayConnectionStaticRouteModePeerPrototypeVPNGatewayConnectionPeerByFQDN. */
+  /**
+   * VPNGatewayConnectionStaticRouteModePeerPrototypeVPNGatewayConnectionPeerByFQDN.
+   */
   export interface VPNGatewayConnectionStaticRouteModePeerPrototypeVPNGatewayConnectionPeerByFQDN extends VPNGatewayConnectionStaticRouteModePeerPrototype {
     /** The FQDN of the peer VPN gateway for this connection. */
     fqdn: string;
   }
 
-  /** VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByAddress. */
+  /**
+   * VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByAddress.
+   */
   export interface VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByAddress extends VPNGatewayConnectionStaticRouteModePeer {
     /** The IP address of the peer VPN gateway for this connection. */
     address: string;
@@ -53331,7 +58212,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByFQDN. */
+  /**
+   * VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByFQDN.
+   */
   export interface VPNGatewayConnectionStaticRouteModePeerVPNGatewayConnectionPeerByFQDN extends VPNGatewayConnectionStaticRouteModePeer {
     /** The FQDN of the peer VPN gateway for this connection. */
     fqdn: string;
@@ -53346,7 +58229,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayPolicyMode. */
+  /**
+   * VPNGatewayPolicyMode.
+   */
   export interface VPNGatewayPolicyMode extends VPNGateway {
     /** Policy mode VPN gateway. */
     mode: VPNGatewayPolicyMode.Constants.Mode | string;
@@ -53381,7 +58266,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayPrototypeVPNGatewayPolicyModePrototype. */
+  /**
+   * VPNGatewayPrototypeVPNGatewayPolicyModePrototype.
+   */
   export interface VPNGatewayPrototypeVPNGatewayPolicyModePrototype extends VPNGatewayPrototype {
     /** Policy mode VPN gateway. */
     mode?: VPNGatewayPrototypeVPNGatewayPolicyModePrototype.Constants.Mode | string;
@@ -53395,7 +58282,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayPrototypeVPNGatewayRouteModePrototype. */
+  /**
+   * VPNGatewayPrototypeVPNGatewayRouteModePrototype.
+   */
   export interface VPNGatewayPrototypeVPNGatewayRouteModePrototype extends VPNGatewayPrototype {
     /** Route mode VPN gateway. */
     mode?: VPNGatewayPrototypeVPNGatewayRouteModePrototype.Constants.Mode | string;
@@ -53409,7 +58298,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNGatewayRouteMode. */
+  /**
+   * VPNGatewayRouteMode.
+   */
   export interface VPNGatewayRouteMode extends VPNGateway {
     /** Route mode VPN gateway. */
     mode: VPNGatewayRouteMode.Constants.Mode | string;
@@ -53444,7 +58335,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerAuthenticationByCertificate. */
+  /**
+   * VPNServerAuthenticationByCertificate.
+   */
   export interface VPNServerAuthenticationByCertificate extends VPNServerAuthentication {
     /** The certificate instance used for the VPN client certificate authority (CA). */
     client_ca: CertificateInstanceReference;
@@ -53461,7 +58354,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerAuthenticationByUsername. */
+  /**
+   * VPNServerAuthenticationByUsername.
+   */
   export interface VPNServerAuthenticationByUsername extends VPNServerAuthentication {
     /** The type of identity provider to be used by VPN client. */
     identity_provider: VPNServerAuthenticationByUsernameIdProvider;
@@ -53476,7 +58371,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerAuthenticationByUsernameIdProviderByIAM. */
+  /**
+   * VPNServerAuthenticationByUsernameIdProviderByIAM.
+   */
   export interface VPNServerAuthenticationByUsernameIdProviderByIAM extends VPNServerAuthenticationByUsernameIdProvider {
     /** The type of identity provider to be used by the VPN client:
      *  - `iam`: IBM identity and access management
@@ -53495,7 +58392,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerAuthenticationPrototypeVPNServerAuthenticationByCertificatePrototype. */
+  /**
+   * VPNServerAuthenticationPrototypeVPNServerAuthenticationByCertificatePrototype.
+   */
   export interface VPNServerAuthenticationPrototypeVPNServerAuthenticationByCertificatePrototype extends VPNServerAuthenticationPrototype {
     /** The certificate instance to use for the VPN client certificate authority (CA). */
     client_ca: CertificateInstanceIdentity;
@@ -53512,7 +58411,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype. */
+  /**
+   * VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype.
+   */
   export interface VPNServerAuthenticationPrototypeVPNServerAuthenticationByUsernamePrototype extends VPNServerAuthenticationPrototype {
     /** The type of identity provider to be used by VPN client. */
     identity_provider: VPNServerAuthenticationByUsernameIdProvider;
@@ -53527,11 +58428,16 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a reserved IP by a unique property. The reserved IP must be currently unbound and in the primary IP's subnet. */
+  /**
+   * Identifies a reserved IP by a unique property. The reserved IP must be currently unbound and in the primary IP's
+   * subnet.
+   */
   export interface VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContext extends VirtualNetworkInterfaceIPPrototype {
   }
 
-  /** The prototype for a new reserved IP. Must be in the primary IP's subnet. */
+  /**
+   * The prototype for a new reserved IP. Must be in the primary IP's subnet.
+   */
   export interface VirtualNetworkInterfaceIPPrototypeReservedIPPrototypeVirtualNetworkInterfaceIPsContext extends VirtualNetworkInterfaceIPPrototype {
     /** The IP address to reserve, which must not already be reserved on the subnet.
      *
@@ -53549,11 +58455,16 @@ namespace VpcV1 {
     name?: string;
   }
 
-  /** Identifies a reserved IP by a unique property. Required if `subnet` is not specified. The reserved IP must be currently unbound. */
+  /**
+   * Identifies a reserved IP by a unique property. Required if `subnet` is not specified. The reserved IP must be
+   * currently unbound.
+   */
   export interface VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContext extends VirtualNetworkInterfacePrimaryIPPrototype {
   }
 
-  /** The prototype for a new reserved IP. Requires `subnet` to be specified. */
+  /**
+   * The prototype for a new reserved IP. Requires `subnet` to be specified.
+   */
   export interface VirtualNetworkInterfacePrimaryIPPrototypeReservedIPPrototypeVirtualNetworkInterfacePrimaryIPContext extends VirtualNetworkInterfacePrimaryIPPrototype {
     /** The IP address to reserve, which must not already be reserved on the subnet.
      *
@@ -53571,7 +58482,9 @@ namespace VpcV1 {
     name?: string;
   }
 
-  /** VirtualNetworkInterfaceTargetBareMetalServerNetworkAttachmentReferenceVirtualNetworkInterfaceContext. */
+  /**
+   * VirtualNetworkInterfaceTargetBareMetalServerNetworkAttachmentReferenceVirtualNetworkInterfaceContext.
+   */
   export interface VirtualNetworkInterfaceTargetBareMetalServerNetworkAttachmentReferenceVirtualNetworkInterfaceContext extends VirtualNetworkInterfaceTarget {
     /** The URL for this bare metal server network attachment. */
     href: string;
@@ -53593,7 +58506,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VirtualNetworkInterfaceTargetInstanceNetworkAttachmentReferenceVirtualNetworkInterfaceContext. */
+  /**
+   * VirtualNetworkInterfaceTargetInstanceNetworkAttachmentReferenceVirtualNetworkInterfaceContext.
+   */
   export interface VirtualNetworkInterfaceTargetInstanceNetworkAttachmentReferenceVirtualNetworkInterfaceContext extends VirtualNetworkInterfaceTarget {
     /** The URL for this instance network attachment. */
     href: string;
@@ -53615,7 +58530,9 @@ namespace VpcV1 {
     }
   }
 
-  /** VirtualNetworkInterfaceTargetShareMountTargetReference. */
+  /**
+   * VirtualNetworkInterfaceTargetShareMountTargetReference.
+   */
   export interface VirtualNetworkInterfaceTargetShareMountTargetReference extends VirtualNetworkInterfaceTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
@@ -53639,11 +58556,15 @@ namespace VpcV1 {
     }
   }
 
-  /** Identifies a volume by a unique property. */
+  /**
+   * Identifies a volume by a unique property.
+   */
   export interface VolumeAttachmentPrototypeVolumeVolumeIdentity extends VolumeAttachmentPrototypeVolume {
   }
 
-  /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext. */
+  /**
+   * VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext.
+   */
   export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext extends VolumeAttachmentPrototypeVolume {
     /** The maximum I/O operations per second (IOPS) to use for this volume. If specified, the `family` of the
      *  volume profile must be `custom` or `defined_performance`.
@@ -53661,25 +58582,33 @@ namespace VpcV1 {
     user_tags?: string[];
   }
 
-  /** VolumeIdentityByCRN. */
+  /**
+   * VolumeIdentityByCRN.
+   */
   export interface VolumeIdentityByCRN extends VolumeIdentity {
     /** The CRN for this volume. */
     crn: string;
   }
 
-  /** VolumeIdentityByHref. */
+  /**
+   * VolumeIdentityByHref.
+   */
   export interface VolumeIdentityByHref extends VolumeIdentity {
     /** The URL for this volume. */
     href: string;
   }
 
-  /** VolumeIdentityById. */
+  /**
+   * VolumeIdentityById.
+   */
   export interface VolumeIdentityById extends VolumeIdentity {
     /** The unique identifier for this volume. */
     id: string;
   }
 
-  /** The permitted total capacity (in gigabytes) of a boot volume with this profile depends on its configuration. */
+  /**
+   * The permitted total capacity (in gigabytes) of a boot volume with this profile depends on its configuration.
+   */
   export interface VolumeProfileBootCapacityDependentRange extends VolumeProfileBootCapacity {
     /** The maximum value for this profile field. */
     max: number;
@@ -53699,7 +58628,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total capacities (in gigabytes) of a boot volume with this profile. */
+  /**
+   * The permitted total capacities (in gigabytes) of a boot volume with this profile.
+   */
   export interface VolumeProfileBootCapacityEnum extends VolumeProfileBootCapacity {
     /** The default value for this profile field. */
     default: number;
@@ -53717,7 +58648,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total capacity (in gigabytes) of a boot volume with this profile is fixed. */
+  /**
+   * The permitted total capacity (in gigabytes) of a boot volume with this profile is fixed.
+   */
   export interface VolumeProfileBootCapacityFixed extends VolumeProfileBootCapacity {
     /** The type for this profile field. */
     type: VolumeProfileBootCapacityFixed.Constants.Type | string;
@@ -53733,7 +58666,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total capacity range (in gigabytes) of a boot volume with this profile. */
+  /**
+   * The permitted total capacity range (in gigabytes) of a boot volume with this profile.
+   */
   export interface VolumeProfileBootCapacityRange extends VolumeProfileBootCapacity {
     /** The default value for this profile field. */
     default: number;
@@ -53755,7 +58690,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total capacity (in gigabytes) of a data volume with this profile depends on its configuration. */
+  /**
+   * The permitted total capacity (in gigabytes) of a data volume with this profile depends on its configuration.
+   */
   export interface VolumeProfileCapacityDependentRange extends VolumeProfileCapacity {
     /** The maximum value for this profile field. */
     max: number;
@@ -53775,7 +58712,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total capacities (in gigabytes) of a data volume with this profile. */
+  /**
+   * The permitted total capacities (in gigabytes) of a data volume with this profile.
+   */
   export interface VolumeProfileCapacityEnum extends VolumeProfileCapacity {
     /** The default value for this profile field. */
     default: number;
@@ -53793,7 +58732,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total capacity (in gigabytes) of a data volume with this profile is fixed. */
+  /**
+   * The permitted total capacity (in gigabytes) of a data volume with this profile is fixed.
+   */
   export interface VolumeProfileCapacityFixed extends VolumeProfileCapacity {
     /** The type for this profile field. */
     type: VolumeProfileCapacityFixed.Constants.Type | string;
@@ -53809,7 +58750,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted total capacity range (in gigabytes) of a data volume with this profile. */
+  /**
+   * The permitted total capacity range (in gigabytes) of a data volume with this profile.
+   */
   export interface VolumeProfileCapacityRange extends VolumeProfileCapacity {
     /** The default value for this profile field. */
     default: number;
@@ -53831,7 +58774,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted IOPS range of a volume with this profile depends on its configuration. */
+  /**
+   * The permitted IOPS range of a volume with this profile depends on its configuration.
+   */
   export interface VolumeProfileIOPSDependentRange extends VolumeProfileIOPS {
     /** The maximum value for this profile field. */
     max: number;
@@ -53851,7 +58796,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted IOPS values of a volume with this profile. */
+  /**
+   * The permitted IOPS values of a volume with this profile.
+   */
   export interface VolumeProfileIOPSEnum extends VolumeProfileIOPS {
     /** The default value for this profile field. */
     default: number;
@@ -53869,7 +58816,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted IOPS of a volume with this profile is fixed. */
+  /**
+   * The permitted IOPS of a volume with this profile is fixed.
+   */
   export interface VolumeProfileIOPSFixed extends VolumeProfileIOPS {
     /** The type for this profile field. */
     type: VolumeProfileIOPSFixed.Constants.Type | string;
@@ -53885,7 +58834,9 @@ namespace VpcV1 {
     }
   }
 
-  /** The permitted IOPS range of a volume with this profile. */
+  /**
+   * The permitted IOPS range of a volume with this profile.
+   */
   export interface VolumeProfileIOPSRange extends VolumeProfileIOPS {
     /** The default value for this profile field. */
     default: number;
@@ -53907,19 +58858,25 @@ namespace VpcV1 {
     }
   }
 
-  /** VolumeProfileIdentityByHref. */
+  /**
+   * VolumeProfileIdentityByHref.
+   */
   export interface VolumeProfileIdentityByHref extends VolumeProfileIdentity {
     /** The URL for this volume profile. */
     href: string;
   }
 
-  /** VolumeProfileIdentityByName. */
+  /**
+   * VolumeProfileIdentityByName.
+   */
   export interface VolumeProfileIdentityByName extends VolumeProfileIdentity {
     /** The globally unique name for this volume profile. */
     name: string;
   }
 
-  /** VolumePrototypeVolumeByCapacity. */
+  /**
+   * VolumePrototypeVolumeByCapacity.
+   */
   export interface VolumePrototypeVolumeByCapacity extends VolumePrototype {
     /** The capacity to use for the volume (in gigabytes). The specified value must be within the `capacity` range
      *  of the volume's profile.
@@ -53932,7 +58889,9 @@ namespace VpcV1 {
     encryption_key?: EncryptionKeyIdentity;
   }
 
-  /** VolumePrototypeVolumeBySourceSnapshot. */
+  /**
+   * VolumePrototypeVolumeBySourceSnapshot.
+   */
   export interface VolumePrototypeVolumeBySourceSnapshot extends VolumePrototype {
     /** The capacity to use for the volume (in gigabytes). The specified value must be at least the snapshot's
      *  `minimum_capacity`, and must be within the `capacity` range of the volume's profile.
@@ -53952,55 +58911,89 @@ namespace VpcV1 {
     source_snapshot: SnapshotIdentity;
   }
 
-  /** ZoneIdentityByHref. */
+  /**
+   * ZoneIdentityByHref.
+   */
   export interface ZoneIdentityByHref extends ZoneIdentity {
     /** The URL for this zone. */
     href: string;
   }
 
-  /** ZoneIdentityByName. */
+  /**
+   * ZoneIdentityByName.
+   */
   export interface ZoneIdentityByName extends ZoneIdentity {
     /** The globally unique name for this zone. */
     name: string;
   }
 
-  /** BackupPolicyScopePrototypeEnterpriseIdentityEnterpriseIdentityByCRN. */
+  /**
+   * BackupPolicyScopePrototypeEnterpriseIdentityEnterpriseIdentityByCRN.
+   */
   export interface BackupPolicyScopePrototypeEnterpriseIdentityEnterpriseIdentityByCRN extends BackupPolicyScopePrototypeEnterpriseIdentity {
     /** The CRN for this enterprise. */
     crn: string;
   }
 
-  /** BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  /**
+   * BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN.
+   */
   export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
     /** The CRN for this virtual network interface. */
     crn: string;
   }
 
-  /** BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  /**
+   * BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref.
+   */
   export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
     /** The URL for this virtual network interface. */
     href: string;
   }
 
-  /** BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  /**
+   * BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById.
+   */
   export interface BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends BareMetalServerNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
     /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
-  /** EndpointGatewayReservedIPReservedIPIdentityByHref. */
+  /**
+   * ClusterNetworkInterfacePrimaryIPPrototypeClusterNetworkSubnetReservedIPIdentityClusterNetworkInterfacePrimaryIPContextByHref.
+   */
+  export interface ClusterNetworkInterfacePrimaryIPPrototypeClusterNetworkSubnetReservedIPIdentityClusterNetworkInterfacePrimaryIPContextByHref extends ClusterNetworkInterfacePrimaryIPPrototypeClusterNetworkSubnetReservedIPIdentityClusterNetworkInterfacePrimaryIPContext {
+    /** The URL for this cluster network subnet reserved IP. */
+    href: string;
+  }
+
+  /**
+   * ClusterNetworkInterfacePrimaryIPPrototypeClusterNetworkSubnetReservedIPIdentityClusterNetworkInterfacePrimaryIPContextById.
+   */
+  export interface ClusterNetworkInterfacePrimaryIPPrototypeClusterNetworkSubnetReservedIPIdentityClusterNetworkInterfacePrimaryIPContextById extends ClusterNetworkInterfacePrimaryIPPrototypeClusterNetworkSubnetReservedIPIdentityClusterNetworkInterfacePrimaryIPContext {
+    /** The unique identifier for this cluster network subnet reserved IP. */
+    id: string;
+  }
+
+  /**
+   * EndpointGatewayReservedIPReservedIPIdentityByHref.
+   */
   export interface EndpointGatewayReservedIPReservedIPIdentityByHref extends EndpointGatewayReservedIPReservedIPIdentity {
     /** The URL for this reserved IP. */
     href: string;
   }
 
-  /** EndpointGatewayReservedIPReservedIPIdentityById. */
+  /**
+   * EndpointGatewayReservedIPReservedIPIdentityById.
+   */
   export interface EndpointGatewayReservedIPReservedIPIdentityById extends EndpointGatewayReservedIPReservedIPIdentity {
     /** The unique identifier for this reserved IP. */
     id: string;
   }
 
-  /** FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref. */
+  /**
+   * FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref.
+   */
   export interface FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref extends FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentity {
     /** The URL for this bare metal server network interface.
      *
@@ -54011,7 +59004,9 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById. */
+  /**
+   * FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById.
+   */
   export interface FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById extends FloatingIPTargetPatchBareMetalServerNetworkInterfaceIdentity {
     /** The unique identifier for this bare metal server network interface.
      *
@@ -54023,7 +59018,9 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
+  /**
+   * FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityByHref.
+   */
   export interface FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FloatingIPTargetPatchNetworkInterfaceIdentity {
     /** The URL for this instance network interface.
      *
@@ -54034,7 +59031,9 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
+  /**
+   * FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById.
+   */
   export interface FloatingIPTargetPatchNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FloatingIPTargetPatchNetworkInterfaceIdentity {
     /** The unique identifier for this instance network interface.
      *
@@ -54046,25 +59045,33 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  /**
+   * FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN.
+   */
   export interface FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends FloatingIPTargetPatchVirtualNetworkInterfaceIdentity {
     /** The CRN for this virtual network interface. */
     crn: string;
   }
 
-  /** FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  /**
+   * FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref.
+   */
   export interface FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends FloatingIPTargetPatchVirtualNetworkInterfaceIdentity {
     /** The URL for this virtual network interface. */
     href: string;
   }
 
-  /** FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  /**
+   * FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById.
+   */
   export interface FloatingIPTargetPatchVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends FloatingIPTargetPatchVirtualNetworkInterfaceIdentity {
     /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
-  /** FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref. */
+  /**
+   * FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref.
+   */
   export interface FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityByHref extends FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentity {
     /** The URL for this bare metal server network interface.
      *
@@ -54075,7 +59082,9 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById. */
+  /**
+   * FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById.
+   */
   export interface FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentityBareMetalServerNetworkInterfaceIdentityById extends FloatingIPTargetPrototypeBareMetalServerNetworkInterfaceIdentity {
     /** The unique identifier for this bare metal server network interface.
      *
@@ -54087,7 +59096,9 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
+  /**
+   * FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref.
+   */
   export interface FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FloatingIPTargetPrototypeNetworkInterfaceIdentity {
     /** The URL for this instance network interface.
      *
@@ -54098,7 +59109,9 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
+  /**
+   * FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById.
+   */
   export interface FloatingIPTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FloatingIPTargetPrototypeNetworkInterfaceIdentity {
     /** The unique identifier for this instance network interface.
      *
@@ -54110,55 +59123,73 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  /**
+   * FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN.
+   */
   export interface FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentity {
     /** The CRN for this virtual network interface. */
     crn: string;
   }
 
-  /** FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  /**
+   * FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref.
+   */
   export interface FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentity {
     /** The URL for this virtual network interface. */
     href: string;
   }
 
-  /** FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  /**
+   * FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById.
+   */
   export interface FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends FloatingIPTargetPrototypeVirtualNetworkInterfaceIdentity {
     /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityByCRN. */
+  /**
+   * FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityByCRN.
+   */
   export interface FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityByCRN extends FlowLogCollectorTargetPrototypeInstanceIdentity {
     /** The CRN for this virtual server instance. */
     crn: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityByHref. */
+  /**
+   * FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityByHref.
+   */
   export interface FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityByHref extends FlowLogCollectorTargetPrototypeInstanceIdentity {
     /** The URL for this virtual server instance. */
     href: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityById. */
+  /**
+   * FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityById.
+   */
   export interface FlowLogCollectorTargetPrototypeInstanceIdentityInstanceIdentityById extends FlowLogCollectorTargetPrototypeInstanceIdentity {
     /** The unique identifier for this virtual server instance. */
     id: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentityInstanceNetworkAttachmentIdentityByHref. */
+  /**
+   * FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentityInstanceNetworkAttachmentIdentityByHref.
+   */
   export interface FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentityInstanceNetworkAttachmentIdentityByHref extends FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentity {
     /** The URL for this instance network attachment. */
     href: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentityInstanceNetworkAttachmentIdentityById. */
+  /**
+   * FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentityInstanceNetworkAttachmentIdentityById.
+   */
   export interface FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentityInstanceNetworkAttachmentIdentityById extends FlowLogCollectorTargetPrototypeInstanceNetworkAttachmentIdentity {
     /** The unique identifier for this instance network attachment. */
     id: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref. */
+  /**
+   * FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref.
+   */
   export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityByHref extends FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity {
     /** The URL for this instance network interface.
      *
@@ -54169,7 +59200,9 @@ namespace VpcV1 {
     href: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById. */
+  /**
+   * FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById.
+   */
   export interface FlowLogCollectorTargetPrototypeNetworkInterfaceIdentityNetworkInterfaceIdentityById extends FlowLogCollectorTargetPrototypeNetworkInterfaceIdentity {
     /** The unique identifier for this instance network interface.
      *
@@ -54181,61 +59214,97 @@ namespace VpcV1 {
     id: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeSubnetIdentitySubnetIdentityByCRN. */
+  /**
+   * FlowLogCollectorTargetPrototypeSubnetIdentitySubnetIdentityByCRN.
+   */
   export interface FlowLogCollectorTargetPrototypeSubnetIdentitySubnetIdentityByCRN extends FlowLogCollectorTargetPrototypeSubnetIdentity {
     /** The CRN for this subnet. */
     crn: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeSubnetIdentitySubnetIdentityByHref. */
+  /**
+   * FlowLogCollectorTargetPrototypeSubnetIdentitySubnetIdentityByHref.
+   */
   export interface FlowLogCollectorTargetPrototypeSubnetIdentitySubnetIdentityByHref extends FlowLogCollectorTargetPrototypeSubnetIdentity {
     /** The URL for this subnet. */
     href: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeSubnetIdentitySubnetIdentityById. */
+  /**
+   * FlowLogCollectorTargetPrototypeSubnetIdentitySubnetIdentityById.
+   */
   export interface FlowLogCollectorTargetPrototypeSubnetIdentitySubnetIdentityById extends FlowLogCollectorTargetPrototypeSubnetIdentity {
     /** The unique identifier for this subnet. */
     id: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityByCRN. */
+  /**
+   * FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityByCRN.
+   */
   export interface FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityByCRN extends FlowLogCollectorTargetPrototypeVPCIdentity {
     /** The CRN for this VPC. */
     crn: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityByHref. */
+  /**
+   * FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityByHref.
+   */
   export interface FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityByHref extends FlowLogCollectorTargetPrototypeVPCIdentity {
     /** The URL for this VPC. */
     href: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityById. */
+  /**
+   * FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityById.
+   */
   export interface FlowLogCollectorTargetPrototypeVPCIdentityVPCIdentityById extends FlowLogCollectorTargetPrototypeVPCIdentity {
     /** The unique identifier for this VPC. */
     id: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  /**
+   * FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN.
+   */
   export interface FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentity {
     /** The CRN for this virtual network interface. */
     crn: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  /**
+   * FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref.
+   */
   export interface FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentity {
     /** The URL for this virtual network interface. */
     href: string;
   }
 
-  /** FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  /**
+   * FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById.
+   */
   export interface FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends FlowLogCollectorTargetPrototypeVirtualNetworkInterfaceIdentity {
     /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
-  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec. */
+  /**
+   * InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceClusterNetworkInterfaceIdentityClusterNetworkInterfaceIdentityByHref.
+   */
+  export interface InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceClusterNetworkInterfaceIdentityClusterNetworkInterfaceIdentityByHref extends InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceClusterNetworkInterfaceIdentity {
+    /** The URL for this cluster network interface. */
+    href: string;
+  }
+
+  /**
+   * InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceClusterNetworkInterfaceIdentityClusterNetworkInterfaceIdentityById.
+   */
+  export interface InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceClusterNetworkInterfaceIdentityClusterNetworkInterfaceIdentityById extends InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceClusterNetworkInterfaceIdentity {
+    /** The unique identifier for this cluster network interface. */
+    id: string;
+  }
+
+  /**
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec.
+   */
   export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec extends InstanceGroupManagerActionPrototypeScheduledActionPrototype {
     /** The cron specification for a recurring scheduled action. Actions can be applied a maximum of one time within
      *  a 5 min period.
@@ -54243,13 +59312,17 @@ namespace VpcV1 {
     cron_spec?: string;
   }
 
-  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt. */
+  /**
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt.
+   */
   export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt extends InstanceGroupManagerActionPrototypeScheduledActionPrototype {
     /** The date and time the scheduled action will run. */
     run_at?: string;
   }
 
-  /** InstanceGroupManagerActionScheduledActionGroupTarget. */
+  /**
+   * InstanceGroupManagerActionScheduledActionGroupTarget.
+   */
   export interface InstanceGroupManagerActionScheduledActionGroupTarget extends InstanceGroupManagerActionScheduledAction {
     group: InstanceGroupManagerScheduledActionGroup;
   }
@@ -54274,7 +59347,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerActionScheduledActionManagerTarget. */
+  /**
+   * InstanceGroupManagerActionScheduledActionManagerTarget.
+   */
   export interface InstanceGroupManagerActionScheduledActionManagerTarget extends InstanceGroupManagerActionScheduledAction {
     manager: InstanceGroupManagerScheduledActionManager;
   }
@@ -54299,127 +59374,169 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeByHref. */
+  /**
+   * InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeByHref.
+   */
   export interface InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeByHref extends InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototype {
     /** The URL for this instance group manager. */
     href: string;
   }
 
-  /** InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeById. */
+  /**
+   * InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeById.
+   */
   export interface InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototypeById extends InstanceGroupManagerScheduledActionManagerPrototypeAutoScalePrototype {
     /** The unique identifier for this instance group manager. */
     id: string;
   }
 
-  /** InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  /**
+   * InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN.
+   */
   export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
     /** The CRN for this virtual network interface. */
     crn: string;
   }
 
-  /** InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  /**
+   * InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref.
+   */
   export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
     /** The URL for this virtual network interface. */
     href: string;
   }
 
-  /** InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  /**
+   * InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById.
+   */
   export interface InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends InstanceNetworkAttachmentPrototypeVirtualNetworkInterfaceVirtualNetworkInterfaceIdentity {
     /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
-  /** InstancePlacementTargetPatchDedicatedHostGroupIdentityDedicatedHostGroupIdentityByCRN. */
+  /**
+   * InstancePlacementTargetPatchDedicatedHostGroupIdentityDedicatedHostGroupIdentityByCRN.
+   */
   export interface InstancePlacementTargetPatchDedicatedHostGroupIdentityDedicatedHostGroupIdentityByCRN extends InstancePlacementTargetPatchDedicatedHostGroupIdentity {
     /** The CRN for this dedicated host group. */
     crn: string;
   }
 
-  /** InstancePlacementTargetPatchDedicatedHostGroupIdentityDedicatedHostGroupIdentityByHref. */
+  /**
+   * InstancePlacementTargetPatchDedicatedHostGroupIdentityDedicatedHostGroupIdentityByHref.
+   */
   export interface InstancePlacementTargetPatchDedicatedHostGroupIdentityDedicatedHostGroupIdentityByHref extends InstancePlacementTargetPatchDedicatedHostGroupIdentity {
     /** The URL for this dedicated host group. */
     href: string;
   }
 
-  /** InstancePlacementTargetPatchDedicatedHostGroupIdentityDedicatedHostGroupIdentityById. */
+  /**
+   * InstancePlacementTargetPatchDedicatedHostGroupIdentityDedicatedHostGroupIdentityById.
+   */
   export interface InstancePlacementTargetPatchDedicatedHostGroupIdentityDedicatedHostGroupIdentityById extends InstancePlacementTargetPatchDedicatedHostGroupIdentity {
     /** The unique identifier for this dedicated host group. */
     id: string;
   }
 
-  /** InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityByCRN. */
+  /**
+   * InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityByCRN.
+   */
   export interface InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityByCRN extends InstancePlacementTargetPatchDedicatedHostIdentity {
     /** The CRN for this dedicated host. */
     crn: string;
   }
 
-  /** InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityByHref. */
+  /**
+   * InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityByHref.
+   */
   export interface InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityByHref extends InstancePlacementTargetPatchDedicatedHostIdentity {
     /** The URL for this dedicated host. */
     href: string;
   }
 
-  /** InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityById. */
+  /**
+   * InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityById.
+   */
   export interface InstancePlacementTargetPatchDedicatedHostIdentityDedicatedHostIdentityById extends InstancePlacementTargetPatchDedicatedHostIdentity {
     /** The unique identifier for this dedicated host. */
     id: string;
   }
 
-  /** InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityByCRN. */
+  /**
+   * InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityByCRN.
+   */
   export interface InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityByCRN extends InstancePlacementTargetPrototypeDedicatedHostGroupIdentity {
     /** The CRN for this dedicated host group. */
     crn: string;
   }
 
-  /** InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityByHref. */
+  /**
+   * InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityByHref.
+   */
   export interface InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityByHref extends InstancePlacementTargetPrototypeDedicatedHostGroupIdentity {
     /** The URL for this dedicated host group. */
     href: string;
   }
 
-  /** InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityById. */
+  /**
+   * InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityById.
+   */
   export interface InstancePlacementTargetPrototypeDedicatedHostGroupIdentityDedicatedHostGroupIdentityById extends InstancePlacementTargetPrototypeDedicatedHostGroupIdentity {
     /** The unique identifier for this dedicated host group. */
     id: string;
   }
 
-  /** InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityByCRN. */
+  /**
+   * InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityByCRN.
+   */
   export interface InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityByCRN extends InstancePlacementTargetPrototypeDedicatedHostIdentity {
     /** The CRN for this dedicated host. */
     crn: string;
   }
 
-  /** InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityByHref. */
+  /**
+   * InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityByHref.
+   */
   export interface InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityByHref extends InstancePlacementTargetPrototypeDedicatedHostIdentity {
     /** The URL for this dedicated host. */
     href: string;
   }
 
-  /** InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityById. */
+  /**
+   * InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityById.
+   */
   export interface InstancePlacementTargetPrototypeDedicatedHostIdentityDedicatedHostIdentityById extends InstancePlacementTargetPrototypeDedicatedHostIdentity {
     /** The unique identifier for this dedicated host. */
     id: string;
   }
 
-  /** InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityByCRN. */
+  /**
+   * InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityByCRN.
+   */
   export interface InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityByCRN extends InstancePlacementTargetPrototypePlacementGroupIdentity {
     /** The CRN for this placement group. */
     crn: string;
   }
 
-  /** InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityByHref. */
+  /**
+   * InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityByHref.
+   */
   export interface InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityByHref extends InstancePlacementTargetPrototypePlacementGroupIdentity {
     /** The URL for this placement group. */
     href: string;
   }
 
-  /** InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityById. */
+  /**
+   * InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityById.
+   */
   export interface InstancePlacementTargetPrototypePlacementGroupIdentityPlacementGroupIdentityById extends InstancePlacementTargetPrototypePlacementGroupIdentity {
     /** The unique identifier for this placement group. */
     id: string;
   }
 
-  /** InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkAttachment. */
+  /**
+   * InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkAttachment.
+   */
   export interface InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkAttachment extends InstancePrototypeInstanceByCatalogOffering {
     /** The additional network attachments to create for the virtual server instance. */
     network_attachments?: InstanceNetworkAttachmentPrototype[];
@@ -54436,7 +59553,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkInterface. */
+  /**
+   * InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkInterface.
+   */
   export interface InstancePrototypeInstanceByCatalogOfferingInstanceByCatalogOfferingInstanceByNetworkInterface extends InstancePrototypeInstanceByCatalogOffering {
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
@@ -54453,7 +59572,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkAttachment. */
+  /**
+   * InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkAttachment.
+   */
   export interface InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkAttachment extends InstancePrototypeInstanceByImage {
     /** The additional network attachments to create for the virtual server instance. */
     network_attachments?: InstanceNetworkAttachmentPrototype[];
@@ -54470,7 +59591,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkInterface. */
+  /**
+   * InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkInterface.
+   */
   export interface InstancePrototypeInstanceByImageInstanceByImageInstanceByNetworkInterface extends InstancePrototypeInstanceByImage {
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
@@ -54487,7 +59610,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkAttachment. */
+  /**
+   * InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkAttachment.
+   */
   export interface InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkAttachment extends InstancePrototypeInstanceBySourceSnapshot {
     /** The additional network attachments to create for the virtual server instance. */
     network_attachments?: InstanceNetworkAttachmentPrototype[];
@@ -54504,7 +59629,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkInterface. */
+  /**
+   * InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkInterface.
+   */
   export interface InstancePrototypeInstanceBySourceSnapshotInstanceBySourceSnapshotInstanceByNetworkInterface extends InstancePrototypeInstanceBySourceSnapshot {
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
@@ -54521,7 +59648,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkAttachment. */
+  /**
+   * InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkAttachment.
+   */
   export interface InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkAttachment extends InstancePrototypeInstanceByVolume {
     /** The additional network attachments to create for the virtual server instance. */
     network_attachments?: InstanceNetworkAttachmentPrototype[];
@@ -54538,7 +59667,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkInterface. */
+  /**
+   * InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkInterface.
+   */
   export interface InstancePrototypeInstanceByVolumeInstanceByVolumeInstanceByNetworkInterface extends InstancePrototypeInstanceByVolume {
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
@@ -54555,7 +59686,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkAttachment. */
+  /**
+   * InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkAttachment.
+   */
   export interface InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkAttachment extends InstanceTemplatePrototypeInstanceTemplateByCatalogOffering {
     /** The additional network attachments to create for the virtual server instance. */
     network_attachments?: InstanceNetworkAttachmentPrototype[];
@@ -54572,7 +59705,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkInterface. */
+  /**
+   * InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkInterface.
+   */
   export interface InstanceTemplatePrototypeInstanceTemplateByCatalogOfferingInstanceTemplateByCatalogOfferingInstanceByNetworkInterface extends InstanceTemplatePrototypeInstanceTemplateByCatalogOffering {
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
@@ -54589,7 +59724,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkAttachment. */
+  /**
+   * InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkAttachment.
+   */
   export interface InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkAttachment extends InstanceTemplatePrototypeInstanceTemplateByImage {
     /** The additional network attachments to create for the virtual server instance. */
     network_attachments?: InstanceNetworkAttachmentPrototype[];
@@ -54606,7 +59743,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkInterface. */
+  /**
+   * InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkInterface.
+   */
   export interface InstanceTemplatePrototypeInstanceTemplateByImageInstanceTemplateByImageInstanceByNetworkInterface extends InstanceTemplatePrototypeInstanceTemplateByImage {
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
@@ -54623,7 +59762,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkAttachment. */
+  /**
+   * InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkAttachment.
+   */
   export interface InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkAttachment extends InstanceTemplatePrototypeInstanceTemplateBySourceSnapshot {
     /** The additional network attachments to create for the virtual server instance. */
     network_attachments?: InstanceNetworkAttachmentPrototype[];
@@ -54640,7 +59781,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkInterface. */
+  /**
+   * InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkInterface.
+   */
   export interface InstanceTemplatePrototypeInstanceTemplateBySourceSnapshotInstanceTemplateBySourceSnapshotInstanceByNetworkInterface extends InstanceTemplatePrototypeInstanceTemplateBySourceSnapshot {
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
@@ -54657,7 +59800,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkAttachment. */
+  /**
+   * InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkAttachment.
+   */
   export interface InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkAttachment extends InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext {
     /** The additional network attachments to create for the virtual server instance. */
     network_attachments?: InstanceNetworkAttachmentPrototype[];
@@ -54674,7 +59819,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkInterface. */
+  /**
+   * InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkInterface.
+   */
   export interface InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContextInstanceByCatalogOfferingInstanceTemplateContextInstanceByNetworkInterface extends InstanceTemplateInstanceByCatalogOfferingInstanceTemplateContext {
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
@@ -54691,7 +59838,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkAttachment. */
+  /**
+   * InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkAttachment.
+   */
   export interface InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkAttachment extends InstanceTemplateInstanceByImageInstanceTemplateContext {
     /** The additional network attachments to create for the virtual server instance. */
     network_attachments?: InstanceNetworkAttachmentPrototype[];
@@ -54708,7 +59857,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkInterface. */
+  /**
+   * InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkInterface.
+   */
   export interface InstanceTemplateInstanceByImageInstanceTemplateContextInstanceByImageInstanceTemplateContextInstanceByNetworkInterface extends InstanceTemplateInstanceByImageInstanceTemplateContext {
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
@@ -54725,7 +59876,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkAttachment. */
+  /**
+   * InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkAttachment.
+   */
   export interface InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkAttachment extends InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext {
     /** The additional network attachments to create for the virtual server instance. */
     network_attachments?: InstanceNetworkAttachmentPrototype[];
@@ -54742,7 +59895,9 @@ namespace VpcV1 {
     }
   }
 
-  /** InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkInterface. */
+  /**
+   * InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkInterface.
+   */
   export interface InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContextInstanceBySourceSnapshotInstanceTemplateContextInstanceByNetworkInterface extends InstanceTemplateInstanceBySourceSnapshotInstanceTemplateContext {
     /** The additional instance network interfaces to create. */
     network_interfaces?: NetworkInterfacePrototype[];
@@ -54759,121 +59914,161 @@ namespace VpcV1 {
     }
   }
 
-  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
+  /**
+   * LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref.
+   */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity {
     /** The URL for this load balancer pool. */
     href: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById. */
+  /**
+   * LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById.
+   */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById extends LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity {
     /** The unique identifier for this load balancer pool. */
     id: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref. */
+  /**
+   * LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref.
+   */
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityByHref extends LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentity {
     /** The URL for this load balancer pool. */
     href: string;
   }
 
-  /** LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById. */
+  /**
+   * LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById.
+   */
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById extends LoadBalancerListenerPolicyTargetPrototypeLoadBalancerPoolIdentity {
     /** The unique identifier for this load balancer pool. */
     id: string;
   }
 
-  /** LoadBalancerPoolMemberTargetPrototypeInstanceIdentityInstanceIdentityByCRN. */
+  /**
+   * LoadBalancerPoolMemberTargetPrototypeInstanceIdentityInstanceIdentityByCRN.
+   */
   export interface LoadBalancerPoolMemberTargetPrototypeInstanceIdentityInstanceIdentityByCRN extends LoadBalancerPoolMemberTargetPrototypeInstanceIdentity {
     /** The CRN for this virtual server instance. */
     crn: string;
   }
 
-  /** LoadBalancerPoolMemberTargetPrototypeInstanceIdentityInstanceIdentityByHref. */
+  /**
+   * LoadBalancerPoolMemberTargetPrototypeInstanceIdentityInstanceIdentityByHref.
+   */
   export interface LoadBalancerPoolMemberTargetPrototypeInstanceIdentityInstanceIdentityByHref extends LoadBalancerPoolMemberTargetPrototypeInstanceIdentity {
     /** The URL for this virtual server instance. */
     href: string;
   }
 
-  /** LoadBalancerPoolMemberTargetPrototypeInstanceIdentityInstanceIdentityById. */
+  /**
+   * LoadBalancerPoolMemberTargetPrototypeInstanceIdentityInstanceIdentityById.
+   */
   export interface LoadBalancerPoolMemberTargetPrototypeInstanceIdentityInstanceIdentityById extends LoadBalancerPoolMemberTargetPrototypeInstanceIdentity {
     /** The unique identifier for this virtual server instance. */
     id: string;
   }
 
-  /** NetworkInterfaceIPPrototypeReservedIPIdentityByHref. */
+  /**
+   * NetworkInterfaceIPPrototypeReservedIPIdentityByHref.
+   */
   export interface NetworkInterfaceIPPrototypeReservedIPIdentityByHref extends NetworkInterfaceIPPrototypeReservedIPIdentity {
     /** The URL for this reserved IP. */
     href: string;
   }
 
-  /** NetworkInterfaceIPPrototypeReservedIPIdentityById. */
+  /**
+   * NetworkInterfaceIPPrototypeReservedIPIdentityById.
+   */
   export interface NetworkInterfaceIPPrototypeReservedIPIdentityById extends NetworkInterfaceIPPrototypeReservedIPIdentity {
     /** The unique identifier for this reserved IP. */
     id: string;
   }
 
-  /** PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByAddress. */
+  /**
+   * PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByAddress.
+   */
   export interface PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByAddress extends PublicGatewayFloatingIPPrototypeFloatingIPIdentity {
     /** The globally unique IP address. */
     address: string;
   }
 
-  /** PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByCRN. */
+  /**
+   * PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByCRN.
+   */
   export interface PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByCRN extends PublicGatewayFloatingIPPrototypeFloatingIPIdentity {
     /** The CRN for this floating IP. */
     crn: string;
   }
 
-  /** PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByHref. */
+  /**
+   * PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByHref.
+   */
   export interface PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityByHref extends PublicGatewayFloatingIPPrototypeFloatingIPIdentity {
     /** The URL for this floating IP. */
     href: string;
   }
 
-  /** PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityById. */
+  /**
+   * PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityById.
+   */
   export interface PublicGatewayFloatingIPPrototypeFloatingIPIdentityFloatingIPIdentityById extends PublicGatewayFloatingIPPrototypeFloatingIPIdentity {
     /** The unique identifier for this floating IP. */
     id: string;
   }
 
-  /** ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityByCRN. */
+  /**
+   * ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityByCRN.
+   */
   export interface ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityByCRN extends ReservedIPTargetPrototypeEndpointGatewayIdentity {
     /** The CRN for this endpoint gateway. */
     crn: string;
   }
 
-  /** ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityByHref. */
+  /**
+   * ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityByHref.
+   */
   export interface ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityByHref extends ReservedIPTargetPrototypeEndpointGatewayIdentity {
     /** The URL for this endpoint gateway. */
     href: string;
   }
 
-  /** ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityById. */
+  /**
+   * ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityById.
+   */
   export interface ReservedIPTargetPrototypeEndpointGatewayIdentityEndpointGatewayIdentityById extends ReservedIPTargetPrototypeEndpointGatewayIdentity {
     /** The unique identifier for this endpoint gateway. */
     id: string;
   }
 
-  /** ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  /**
+   * ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN.
+   */
   export interface ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentity {
     /** The CRN for this virtual network interface. */
     crn: string;
   }
 
-  /** ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  /**
+   * ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref.
+   */
   export interface ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentity {
     /** The URL for this virtual network interface. */
     href: string;
   }
 
-  /** ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  /**
+   * ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById.
+   */
   export interface ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends ReservedIPTargetPrototypeVirtualNetworkInterfaceIdentity {
     /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
-  /** RouteNextHopPatchRouteNextHopIPRouteNextHopIPSentinelIP. */
+  /**
+   * RouteNextHopPatchRouteNextHopIPRouteNextHopIPSentinelIP.
+   */
   export interface RouteNextHopPatchRouteNextHopIPRouteNextHopIPSentinelIP extends RouteNextHopPatchRouteNextHopIP {
     /** The sentinel IP address (`0.0.0.0`).
      *
@@ -54883,7 +60078,9 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** RouteNextHopPatchRouteNextHopIPRouteNextHopIPUnicastIP. */
+  /**
+   * RouteNextHopPatchRouteNextHopIPRouteNextHopIPUnicastIP.
+   */
   export interface RouteNextHopPatchRouteNextHopIPRouteNextHopIPUnicastIP extends RouteNextHopPatchRouteNextHopIP {
     /** A unicast IP address, which must not be any of the following values:
      *
@@ -54897,19 +60094,25 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
+  /**
+   * RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref.
+   */
   export interface RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref extends RouteNextHopPatchVPNGatewayConnectionIdentity {
     /** The URL for this VPN gateway connection. */
     href: string;
   }
 
-  /** RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById. */
+  /**
+   * RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById.
+   */
   export interface RouteNextHopPatchVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById extends RouteNextHopPatchVPNGatewayConnectionIdentity {
     /** The unique identifier for this VPN gateway connection. */
     id: string;
   }
 
-  /** RouteNextHopPrototypeRouteNextHopIPRouteNextHopIPSentinelIP. */
+  /**
+   * RouteNextHopPrototypeRouteNextHopIPRouteNextHopIPSentinelIP.
+   */
   export interface RouteNextHopPrototypeRouteNextHopIPRouteNextHopIPSentinelIP extends RouteNextHopPrototypeRouteNextHopIP {
     /** The sentinel IP address (`0.0.0.0`).
      *
@@ -54919,7 +60122,9 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** RouteNextHopPrototypeRouteNextHopIPRouteNextHopIPUnicastIP. */
+  /**
+   * RouteNextHopPrototypeRouteNextHopIPRouteNextHopIPUnicastIP.
+   */
   export interface RouteNextHopPrototypeRouteNextHopIPRouteNextHopIPUnicastIP extends RouteNextHopPrototypeRouteNextHopIP {
     /** A unicast IP address, which must not be any of the following values:
      *
@@ -54933,97 +60138,129 @@ namespace VpcV1 {
     address: string;
   }
 
-  /** RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref. */
+  /**
+   * RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref.
+   */
   export interface RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityByHref extends RouteNextHopPrototypeVPNGatewayConnectionIdentity {
     /** The URL for this VPN gateway connection. */
     href: string;
   }
 
-  /** RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById. */
+  /**
+   * RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById.
+   */
   export interface RouteNextHopPrototypeVPNGatewayConnectionIdentityVPNGatewayConnectionIdentityById extends RouteNextHopPrototypeVPNGatewayConnectionIdentity {
     /** The unique identifier for this VPN gateway connection. */
     id: string;
   }
 
-  /** SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityByCRN. */
+  /**
+   * SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityByCRN.
+   */
   export interface SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityByCRN extends SecurityGroupRuleRemotePatchSecurityGroupIdentity {
     /** The CRN for this security group. */
     crn: string;
   }
 
-  /** SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityByHref. */
+  /**
+   * SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityByHref.
+   */
   export interface SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityByHref extends SecurityGroupRuleRemotePatchSecurityGroupIdentity {
     /** The URL for this security group. */
     href: string;
   }
 
-  /** SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityById. */
+  /**
+   * SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityById.
+   */
   export interface SecurityGroupRuleRemotePatchSecurityGroupIdentitySecurityGroupIdentityById extends SecurityGroupRuleRemotePatchSecurityGroupIdentity {
     /** The unique identifier for this security group. */
     id: string;
   }
 
-  /** SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityByCRN. */
+  /**
+   * SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityByCRN.
+   */
   export interface SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityByCRN extends SecurityGroupRuleRemotePrototypeSecurityGroupIdentity {
     /** The CRN for this security group. */
     crn: string;
   }
 
-  /** SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityByHref. */
+  /**
+   * SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityByHref.
+   */
   export interface SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityByHref extends SecurityGroupRuleRemotePrototypeSecurityGroupIdentity {
     /** The URL for this security group. */
     href: string;
   }
 
-  /** SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityById. */
+  /**
+   * SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityById.
+   */
   export interface SecurityGroupRuleRemotePrototypeSecurityGroupIdentitySecurityGroupIdentityById extends SecurityGroupRuleRemotePrototypeSecurityGroupIdentity {
     /** The unique identifier for this security group. */
     id: string;
   }
 
-  /** ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN. */
+  /**
+   * ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN.
+   */
   export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByCRN extends ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentity {
     /** The CRN for this virtual network interface. */
     crn: string;
   }
 
-  /** ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref. */
+  /**
+   * ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref.
+   */
   export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityByHref extends ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentity {
     /** The URL for this virtual network interface. */
     href: string;
   }
 
-  /** ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById. */
+  /**
+   * ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById.
+   */
   export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentity {
     /** The unique identifier for this virtual network interface. */
     id: string;
   }
 
-  /** VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerAddressPatch. */
+  /**
+   * VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerAddressPatch.
+   */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerAddressPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatch {
     /** The IP address of the peer VPN gateway for this connection. */
     address?: string;
   }
 
-  /** VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerFQDNPatch. */
+  /**
+   * VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerFQDNPatch.
+   */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerFQDNPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatch {
     /** The FQDN of the peer VPN gateway for this connection. */
     fqdn?: string;
   }
 
-  /** VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerAddressPatch. */
+  /**
+   * VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerAddressPatch.
+   */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerAddressPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatch {
     /** The IP address of the peer VPN gateway for this connection. */
     address?: string;
   }
 
-  /** VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch. */
+  /**
+   * VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch.
+   */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatch {
     /** The FQDN of the peer VPN gateway for this connection. */
     fqdn?: string;
   }
 
-  /** VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode. */
+  /**
+   * VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode.
+   */
   export interface VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode extends VPNGatewayConnectionRouteMode {
     /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
      *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
@@ -55069,49 +60306,65 @@ namespace VpcV1 {
     }
   }
 
-  /** VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextByHref. */
+  /**
+   * VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextByHref.
+   */
   export interface VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextByHref extends VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContext {
     /** The URL for this reserved IP. */
     href: string;
   }
 
-  /** VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextById. */
+  /**
+   * VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextById.
+   */
   export interface VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContextById extends VirtualNetworkInterfaceIPPrototypeReservedIPIdentityVirtualNetworkInterfaceIPsContext {
     /** The unique identifier for this reserved IP. */
     id: string;
   }
 
-  /** VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContextByHref. */
+  /**
+   * VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContextByHref.
+   */
   export interface VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContextByHref extends VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContext {
     /** The URL for this reserved IP. */
     href: string;
   }
 
-  /** VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContextById. */
+  /**
+   * VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContextById.
+   */
   export interface VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContextById extends VirtualNetworkInterfacePrimaryIPPrototypeReservedIPIdentityVirtualNetworkInterfacePrimaryIPContext {
     /** The unique identifier for this reserved IP. */
     id: string;
   }
 
-  /** VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityByCRN. */
+  /**
+   * VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityByCRN.
+   */
   export interface VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityByCRN extends VolumeAttachmentPrototypeVolumeVolumeIdentity {
     /** The CRN for this volume. */
     crn: string;
   }
 
-  /** VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityByHref. */
+  /**
+   * VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityByHref.
+   */
   export interface VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityByHref extends VolumeAttachmentPrototypeVolumeVolumeIdentity {
     /** The URL for this volume. */
     href: string;
   }
 
-  /** VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityById. */
+  /**
+   * VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityById.
+   */
   export interface VolumeAttachmentPrototypeVolumeVolumeIdentityVolumeIdentityById extends VolumeAttachmentPrototypeVolumeVolumeIdentity {
     /** The unique identifier for this volume. */
     id: string;
   }
 
-  /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity. */
+  /**
+   * VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity.
+   */
   export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeByCapacity extends VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext {
     /** The capacity to use for the volume (in gigabytes). The specified value must be within the `capacity` range
      *  of the volume's profile.
@@ -55124,7 +60377,9 @@ namespace VpcV1 {
     encryption_key?: EncryptionKeyIdentity;
   }
 
-  /** VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot. */
+  /**
+   * VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot.
+   */
   export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContextVolumePrototypeInstanceContextVolumeBySourceSnapshot extends VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext {
     /** The capacity to use for the volume (in gigabytes). The specified value must be at least the snapshot's
      *  `minimum_capacity`, and must be within the `capacity` range of the volume's profile.
@@ -55144,22 +60399,30 @@ namespace VpcV1 {
     source_snapshot: SnapshotIdentity;
   }
 
-  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByGroup. */
+  /**
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByGroup.
+   */
   export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByGroup extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec {
     group: InstanceGroupManagerScheduledActionGroupPrototype;
   }
 
-  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByManager. */
+  /**
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByManager.
+   */
   export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec {
     manager: InstanceGroupManagerScheduledActionManagerPrototype;
   }
 
-  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByGroup. */
+  /**
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByGroup.
+   */
   export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByGroup extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt {
     group: InstanceGroupManagerScheduledActionGroupPrototype;
   }
 
-  /** InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByManager. */
+  /**
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByManager.
+   */
   export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt {
     manager: InstanceGroupManagerScheduledActionManagerPrototype;
   }
@@ -55452,9 +60715,9 @@ namespace VpcV1 {
 
     /**
      * Returns the next page of results by invoking listVpcRoutes().
-     * @returns {Promise<VpcV1.RouteCollectionVPCContextRoutesItem[]>}
+     * @returns {Promise<VpcV1.Route[]>}
      */
-    public async getNext(): Promise<VpcV1.RouteCollectionVPCContextRoutesItem[]> {
+    public async getNext(): Promise<VpcV1.Route[]> {
       if (!this.hasNext()) {
         throw new Error('No more results available');
       }
@@ -55480,10 +60743,10 @@ namespace VpcV1 {
 
     /**
      * Returns all results by invoking listVpcRoutes() repeatedly until all pages of results have been retrieved.
-     * @returns {Promise<VpcV1.RouteCollectionVPCContextRoutesItem[]>}
+     * @returns {Promise<VpcV1.Route[]>}
      */
-    public async getAll(): Promise<VpcV1.RouteCollectionVPCContextRoutesItem[]> {
-      const results: RouteCollectionVPCContextRoutesItem[] = [];
+    public async getAll(): Promise<VpcV1.Route[]> {
+      const results: Route[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
@@ -56132,6 +61395,87 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.Instance[]> {
       const results: Instance[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * InstanceClusterNetworkAttachmentsPager can be used to simplify the use of listInstanceClusterNetworkAttachments().
+   */
+  export class InstanceClusterNetworkAttachmentsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListInstanceClusterNetworkAttachmentsParams;
+
+    /**
+     * Construct a InstanceClusterNetworkAttachmentsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listInstanceClusterNetworkAttachments()
+     * @param {Object} params - The parameters to be passed to listInstanceClusterNetworkAttachments()
+     * @constructor
+     * @returns {InstanceClusterNetworkAttachmentsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListInstanceClusterNetworkAttachmentsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listInstanceClusterNetworkAttachments().
+     * @returns {Promise<VpcV1.InstanceClusterNetworkAttachment[]>}
+     */
+    public async getNext(): Promise<VpcV1.InstanceClusterNetworkAttachment[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listInstanceClusterNetworkAttachments(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.cluster_network_attachments;
+    }
+
+    /**
+     * Returns all results by invoking listInstanceClusterNetworkAttachments() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.InstanceClusterNetworkAttachment[]>}
+     */
+    public async getAll(): Promise<VpcV1.InstanceClusterNetworkAttachment[]> {
+      const results: InstanceClusterNetworkAttachment[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
@@ -58400,6 +63744,411 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.ReservedIPReference[]> {
       const results: ReservedIPReference[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ClusterNetworkProfilesPager can be used to simplify the use of listClusterNetworkProfiles().
+   */
+  export class ClusterNetworkProfilesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListClusterNetworkProfilesParams;
+
+    /**
+     * Construct a ClusterNetworkProfilesPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listClusterNetworkProfiles()
+     * @param {Object} [params] - The parameters to be passed to listClusterNetworkProfiles()
+     * @constructor
+     * @returns {ClusterNetworkProfilesPager}
+     */
+    constructor(client: VpcV1, params?: VpcV1.ListClusterNetworkProfilesParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listClusterNetworkProfiles().
+     * @returns {Promise<VpcV1.ClusterNetworkProfile[]>}
+     */
+    public async getNext(): Promise<VpcV1.ClusterNetworkProfile[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listClusterNetworkProfiles(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.profiles;
+    }
+
+    /**
+     * Returns all results by invoking listClusterNetworkProfiles() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.ClusterNetworkProfile[]>}
+     */
+    public async getAll(): Promise<VpcV1.ClusterNetworkProfile[]> {
+      const results: ClusterNetworkProfile[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ClusterNetworksPager can be used to simplify the use of listClusterNetworks().
+   */
+  export class ClusterNetworksPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListClusterNetworksParams;
+
+    /**
+     * Construct a ClusterNetworksPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listClusterNetworks()
+     * @param {Object} [params] - The parameters to be passed to listClusterNetworks()
+     * @constructor
+     * @returns {ClusterNetworksPager}
+     */
+    constructor(client: VpcV1, params?: VpcV1.ListClusterNetworksParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listClusterNetworks().
+     * @returns {Promise<VpcV1.ClusterNetwork[]>}
+     */
+    public async getNext(): Promise<VpcV1.ClusterNetwork[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listClusterNetworks(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.cluster_networks;
+    }
+
+    /**
+     * Returns all results by invoking listClusterNetworks() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.ClusterNetwork[]>}
+     */
+    public async getAll(): Promise<VpcV1.ClusterNetwork[]> {
+      const results: ClusterNetwork[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ClusterNetworkInterfacesPager can be used to simplify the use of listClusterNetworkInterfaces().
+   */
+  export class ClusterNetworkInterfacesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListClusterNetworkInterfacesParams;
+
+    /**
+     * Construct a ClusterNetworkInterfacesPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listClusterNetworkInterfaces()
+     * @param {Object} params - The parameters to be passed to listClusterNetworkInterfaces()
+     * @constructor
+     * @returns {ClusterNetworkInterfacesPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListClusterNetworkInterfacesParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listClusterNetworkInterfaces().
+     * @returns {Promise<VpcV1.ClusterNetworkInterface[]>}
+     */
+    public async getNext(): Promise<VpcV1.ClusterNetworkInterface[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listClusterNetworkInterfaces(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.interfaces;
+    }
+
+    /**
+     * Returns all results by invoking listClusterNetworkInterfaces() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.ClusterNetworkInterface[]>}
+     */
+    public async getAll(): Promise<VpcV1.ClusterNetworkInterface[]> {
+      const results: ClusterNetworkInterface[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnetsPager can be used to simplify the use of listClusterNetworkSubnets().
+   */
+  export class ClusterNetworkSubnetsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListClusterNetworkSubnetsParams;
+
+    /**
+     * Construct a ClusterNetworkSubnetsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listClusterNetworkSubnets()
+     * @param {Object} params - The parameters to be passed to listClusterNetworkSubnets()
+     * @constructor
+     * @returns {ClusterNetworkSubnetsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListClusterNetworkSubnetsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listClusterNetworkSubnets().
+     * @returns {Promise<VpcV1.ClusterNetworkSubnet[]>}
+     */
+    public async getNext(): Promise<VpcV1.ClusterNetworkSubnet[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listClusterNetworkSubnets(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.subnets;
+    }
+
+    /**
+     * Returns all results by invoking listClusterNetworkSubnets() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.ClusterNetworkSubnet[]>}
+     */
+    public async getAll(): Promise<VpcV1.ClusterNetworkSubnet[]> {
+      const results: ClusterNetworkSubnet[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ClusterNetworkSubnetReservedIpsPager can be used to simplify the use of listClusterNetworkSubnetReservedIps().
+   */
+  export class ClusterNetworkSubnetReservedIpsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListClusterNetworkSubnetReservedIpsParams;
+
+    /**
+     * Construct a ClusterNetworkSubnetReservedIpsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listClusterNetworkSubnetReservedIps()
+     * @param {Object} params - The parameters to be passed to listClusterNetworkSubnetReservedIps()
+     * @constructor
+     * @returns {ClusterNetworkSubnetReservedIpsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListClusterNetworkSubnetReservedIpsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listClusterNetworkSubnetReservedIps().
+     * @returns {Promise<VpcV1.ClusterNetworkSubnetReservedIP[]>}
+     */
+    public async getNext(): Promise<VpcV1.ClusterNetworkSubnetReservedIP[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listClusterNetworkSubnetReservedIps(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.reserved_ips;
+    }
+
+    /**
+     * Returns all results by invoking listClusterNetworkSubnetReservedIps() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.ClusterNetworkSubnetReservedIP[]>}
+     */
+    public async getAll(): Promise<VpcV1.ClusterNetworkSubnetReservedIP[]> {
+      const results: ClusterNetworkSubnetReservedIP[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);

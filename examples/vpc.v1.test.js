@@ -2299,6 +2299,136 @@ describe('VpcV1', () => {
 
   });
 
+
+  test('listInstanceClusterNetworkAttachments request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listInstanceClusterNetworkAttachments() result:');
+    // begin-list_instance_cluster_network_attachments
+
+    const params = {
+      instanceId: data.instanceId,
+      limit: 10,
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.InstanceClusterNetworkAttachmentsPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_instance_cluster_network_attachments
+  });
+
+  test('createClusterNetworkAttachment request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createClusterNetworkAttachment() result:');
+    // begin-create_cluster_network_attachment
+
+    // Request models needed by this operation.
+
+    // InstanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceInstanceClusterNetworkInterfacePrototypeInstanceClusterNetworkAttachment
+    const instanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceModel = {
+      name: 'my-instance-cluster-network-attachment',
+    };
+
+    const params = {
+      instanceId: data.instanceId,
+      clusterNetworkInterface: instanceClusterNetworkAttachmentPrototypeClusterNetworkInterfaceModel,
+    };
+
+    let res;
+    try {
+      res = await vpcService.createClusterNetworkAttachment(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    expect(res.result).not.toBeNull();
+    data.clusterNetworkAttachmentId = res.result.id;
+    // end-create_cluster_network_attachment
+  });
+
+  test('getInstanceClusterNetworkAttachment request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getInstanceClusterNetworkAttachment() result:');
+    // begin-get_instance_cluster_network_attachment
+
+    const params = {
+      instanceId: data.instanceId,
+      id: data.clusterNetworkAttachmentId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getInstanceClusterNetworkAttachment(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    expect(res.result).not.toBeNull();
+
+    // end-get_instance_cluster_network_attachment
+  });
+
+  test('updateInstanceClusterNetworkAttachment request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateInstanceClusterNetworkAttachment() result:');
+    // begin-update_instance_cluster_network_attachment
+
+    const params = {
+      instanceId: data.instanceId,
+      id: data.clusterNetworkAttachmentId,
+      name: 'my-instance-network-attachment-updated',
+    };
+
+    let res;
+    try {
+      res = await vpcService.updateInstanceClusterNetworkAttachment(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    expect(res.result).not.toBeNull();
+
+    // end-update_instance_cluster_network_attachment
+  });
+
   test.skip('createInstanceConsoleAccessToken request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
@@ -5087,6 +5217,587 @@ describe('VpcV1', () => {
     // end-get_region_zone
     expect(response.result).not.toBeNull();
 
+  });
+
+
+  test('listClusterNetworkProfiles request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listClusterNetworkProfiles() result:');
+    // begin-list_cluster_network_profiles
+
+    const params = {
+      limit: 10,
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.ClusterNetworkProfilesPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    data.clusterNetworkProfileName = allResults[0].name;
+    // end-list_cluster_network_profiles
+  });
+
+  test('getClusterNetworkProfile request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getClusterNetworkProfile() result:');
+    // begin-get_cluster_network_profile
+
+    const params = {
+      name: data.clusterNetworkProfileName,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getClusterNetworkProfile(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_cluster_network_profile
+  });
+
+  test('listClusterNetworks request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listClusterNetworks() result:');
+    // begin-list_cluster_networks
+
+    const params = {
+      limit: 10,
+      sort: 'name',
+      vpcId: data.vpcId,
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.ClusterNetworksPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_cluster_networks
+  });
+
+  test('createClusterNetwork request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createClusterNetwork() result:');
+    // begin-create_cluster_network
+
+    // Request models needed by this operation.
+
+    // ClusterNetworkProfileIdentityByName
+    const clusterNetworkProfileIdentityModel = {
+      name: data.clusterNetworkProfileName,
+    };
+
+    // VPCIdentityById
+    const vpcIdentityModel = {
+      id: data.vpcId,
+    };
+
+    // ZoneIdentityByName
+    const zoneIdentityModel = {
+      name: data.zone,
+    };
+
+    const params = {
+      profile: clusterNetworkProfileIdentityModel,
+      vpc: vpcIdentityModel,
+      zone: zoneIdentityModel,
+    };
+
+    let res;
+    try {
+      res = await vpcService.createClusterNetwork(params);
+      data.clusterNetworkId = res.result.id;
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_cluster_network
+  });
+
+  test('listClusterNetworkInterfaces request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listClusterNetworkInterfaces() result:');
+    // begin-list_cluster_network_interfaces
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      limit: 10,
+      name: 'my-name',
+      sort: 'name',
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.ClusterNetworkInterfacesPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_cluster_network_interfaces
+  });
+
+  test('createClusterNetworkInterface request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createClusterNetworkInterface() result:');
+    // begin-create_cluster_network_interface
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.createClusterNetworkInterface(params);
+      data.clusterNetworkInterfaceId = res.result.id;
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_cluster_network_interface
+  });
+
+  test('getClusterNetworkInterface request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getClusterNetworkInterface() result:');
+    // begin-get_cluster_network_interface
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      id: data.clusterNetworkInterfaceId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getClusterNetworkInterface(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_cluster_network_interface
+  });
+
+  test('updateClusterNetworkInterface request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateClusterNetworkInterface() result:');
+    // begin-update_cluster_network_interface
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      id: data.clusterNetworkInterfaceId,
+      name: 'my-cluster-network-interface-updated',
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.updateClusterNetworkInterface(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_cluster_network_interface
+  });
+
+  test('listClusterNetworkSubnets request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listClusterNetworkSubnets() result:');
+    // begin-list_cluster_network_subnets
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      limit: 10,
+      name: 'my-name',
+      sort: 'name',
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.ClusterNetworkSubnetsPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_cluster_network_subnets
+  });
+
+  test('createClusterNetworkSubnet request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createClusterNetworkSubnet() result:');
+    // begin-create_cluster_network_subnet
+
+    // Request models needed by this operation.
+
+    // ClusterNetworkSubnetPrototypeClusterNetworkSubnetByTotalCountPrototype
+    const clusterNetworkSubnetPrototypeModel = {
+      total_ipv4_address_count: 256,
+    };
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      clusterNetworkSubnetPrototype: clusterNetworkSubnetPrototypeModel,
+    };
+
+    let res;
+    try {
+      res = await vpcService.createClusterNetworkSubnet(params);
+      data.clusterNetworkSubnetId = res.result.id;
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-create_cluster_network_subnet
+  });
+
+  test('listClusterNetworkSubnetReservedIps request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('listClusterNetworkSubnetReservedIps() result:');
+    // begin-list_cluster_network_subnet_reserved_ips
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      clusterNetworkSubnetId: data.clusterNetworkSubnetId,
+      limit: 10,
+      name: 'my-name',
+      sort: 'name',
+    };
+
+    const allResults = [];
+    try {
+      const pager = new VpcV1.ClusterNetworkSubnetReservedIpsPager(vpcService, params);
+      while (pager.hasNext()) {
+        const nextPage = await pager.getNext();
+        expect(nextPage).not.toBeNull();
+        allResults.push(...nextPage);
+      }
+      console.log(JSON.stringify(allResults, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-list_cluster_network_subnet_reserved_ips
+  });
+
+  test('createClusterNetworkSubnetReservedIp request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('createClusterNetworkSubnetReservedIp() result:');
+    // begin-create_cluster_network_subnet_reserved_ip
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      clusterNetworkSubnetId: data.clusterNetworkSubnetId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.createClusterNetworkSubnetReservedIp(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    data.clusterNetworkSubnetReservedIpId = res.result.id;
+    // end-create_cluster_network_subnet_reserved_ip
+  });
+
+  test('getClusterNetworkSubnetReservedIp request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getClusterNetworkSubnetReservedIp() result:');
+    // begin-get_cluster_network_subnet_reserved_ip
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      clusterNetworkSubnetId: data.clusterNetworkSubnetId,
+      id: data.clusterNetworkSubnetReservedIpId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getClusterNetworkSubnetReservedIp(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_cluster_network_subnet_reserved_ip
+  });
+
+  test('updateClusterNetworkSubnetReservedIp request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateClusterNetworkSubnetReservedIp() result:');
+    // begin-update_cluster_network_subnet_reserved_ip
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      clusterNetworkSubnetId: data.clusterNetworkSubnetId,
+      id: data.clusterNetworkSubnetReservedIpId,
+      name: 'my-cluster-network-subnet-reserved-ip-updated',
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.updateClusterNetworkSubnetReservedIp(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_cluster_network_subnet_reserved_ip
+  });
+
+  test('getClusterNetworkSubnet request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getClusterNetworkSubnet() result:');
+    // begin-get_cluster_network_subnet
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      id: data.clusterNetworkSubnetId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getClusterNetworkSubnet(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_cluster_network_subnet
+  });
+
+  test('updateClusterNetworkSubnet request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateClusterNetworkSubnet() result:');
+    // begin-update_cluster_network_subnet
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      id: data.clusterNetworkSubnetId,
+      name: 'my-cluster-network-subnet-updated',
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.updateClusterNetworkSubnet(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_cluster_network_subnet
+  });
+
+  test('getClusterNetwork request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('getClusterNetwork() result:');
+    // begin-get_cluster_network
+
+    const params = {
+      id: data.clusterNetworkId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.getClusterNetwork(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-get_cluster_network
+  });
+
+  test('updateClusterNetwork request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('updateClusterNetwork() result:');
+    // begin-update_cluster_network
+
+    const params = {
+      id: data.clusterNetworkId,
+      name: 'my-cluster-network-updated',
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.updateClusterNetwork(params);
+    } catch (err) {
+      console.warn(err);
+    }
+
+    // end-update_cluster_network
   });
 
 
@@ -9142,6 +9853,36 @@ describe('VpcV1', () => {
 
   });
 
+
+  test('deleteInstanceClusterNetworkAttachment request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteInstanceClusterNetworkAttachment() result:');
+    // begin-delete_instance_cluster_network_attachment
+
+    const params = {
+      instanceId: data.instanceId,
+      id: data.clusterNetworkAttachmentId,
+    };
+
+    let res;
+    try {
+      res = await vpcService.deleteInstanceClusterNetworkAttachment(params);
+    } catch (err) {
+      console.warn(err);
+    }
+    expect(res.result).not.toBeNull();
+    // end-delete_instance_cluster_network_attachment
+  });
+
+
   test('deleteInstanceNetworkInterface request example', async () => {
 
     consoleLogMock.mockImplementation((output) => {
@@ -9561,6 +10302,131 @@ describe('VpcV1', () => {
     }
 
     // end-delete_share
+  });
+
+
+  test('deleteClusterNetworkInterface request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteClusterNetworkInterface() result:');
+    // begin-delete_cluster_network_interface
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      id: data.clusterNetworkInterfaceId,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.deleteClusterNetworkInterface(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    expect(res.result).not.toBeNull();
+
+    // end-delete_cluster_network_interface
+  });
+
+  test('deleteClusterNetworkSubnetReservedIp request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteClusterNetworkSubnetReservedIp() result:');
+    // begin-delete_cluster_network_subnet_reserved_ip
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      clusterNetworkSubnetId: data.clusterNetworkSubnetId,
+      id: data.clusterNetworkSubnetReservedIpId,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.deleteClusterNetworkSubnetReservedIp(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    expect(res.result).not.toBeNull();
+
+    // end-delete_cluster_network_subnet_reserved_ip
+  });
+
+  test('deleteClusterNetworkSubnet request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteClusterNetworkSubnet() result:');
+    // begin-delete_cluster_network_subnet
+
+    const params = {
+      clusterNetworkId: data.clusterNetworkId,
+      id: data.clusterNetworkSubnetId,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.deleteClusterNetworkSubnet(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    expect(res.result).not.toBeNull();
+
+    // end-delete_cluster_network_subnet
+  });
+
+  test('deleteClusterNetwork request example', async () => {
+    consoleLogMock.mockImplementation((output) => {
+      originalLog(output);
+    });
+    consoleWarnMock.mockImplementation((output) => {
+      // if an error occurs, display the message and then fail the test
+      originalWarn(output);
+      expect(true).toBeFalsy();
+    });
+
+    originalLog('deleteClusterNetwork() result:');
+    // begin-delete_cluster_network
+
+    const params = {
+      id: data.clusterNetworkId,
+      ifMatch: 'W/"96d225c4-56bd-43d9-98fc-d7148e5c5028"',
+    };
+
+    let res;
+    try {
+      res = await vpcService.deleteClusterNetwork(params);
+      console.log(JSON.stringify(res.result, null, 2));
+    } catch (err) {
+      console.warn(err);
+    }
+    expect(res.result).not.toBeNull();
+
+    // end-delete_cluster_network
   });
 
   test('deletePublicGateway request example', async () => {
