@@ -209,7 +209,7 @@ describe('VpcV1', () => {
 
     const params = {
       id: data.vpcId,
-      name: 'my-vpc-modified',
+      name: 'my-vpc-updated',
     };
 
     const response = await vpcService.updateVpc(params);
@@ -642,7 +642,7 @@ describe('VpcV1', () => {
     const params = {
       vpcId: data.vpcId,
       id: data.vpcRoutingTableId,
-      name: 'my-routing-table-modified',
+      name: 'my-routing-table-updated',
     };
 
     const response = await vpcService.updateVpcRoutingTable(params);
@@ -6694,7 +6694,7 @@ describe('VpcV1', () => {
 
     const response = await vpcService.updateIkePolicy({
       id: data.ikePolicyId,
-      name: 'my-ike-policy-modified',
+      name: 'my-ike-policy-updated',
       dhGroup: 15,
     });
 
@@ -8799,7 +8799,7 @@ describe('VpcV1', () => {
 
     const params = {
       id: data.endpointGatewayId,
-      name: 'my-endpoint-gateway-modified'
+      name: 'my-endpoint-gateway-updated'
     };
 
     const response = await vpcService.updateEndpointGateway(params);
