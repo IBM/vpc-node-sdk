@@ -7,6 +7,7 @@ dist: jammy
 node_js:
 - 18
 - 20
+- 22
 
 script:
 - npm run build
@@ -19,5 +20,5 @@ deploy:
   skip_cleanup: true
   script: npx semantic-release
   on:
-    node: 18
+    node: 22
     branch: master
