@@ -39,7 +39,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: 2024-11-13
+ * API Version: 2024-12-26
  */
 
 class VpcV1 extends BaseService {
@@ -84,7 +84,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2024-04-30` and `2024-11-14`.
+   *  `2024-11-19` and `2024-12-26`.
    */
   version: string;
 
@@ -95,7 +95,7 @@ class VpcV1 extends BaseService {
    * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
    * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2024-04-30` and `2024-11-14`.
+   * specify any date between `2024-11-19` and `2024-12-26`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -120,7 +120,7 @@ class VpcV1 extends BaseService {
     if (!('generation' in options)) {
       this.generation = 2;
     }
-    this.version = options.version || '2024-11-12';
+    this.version = options.version || '2024-12-17';
   }
 
   /*************************
@@ -4465,11 +4465,13 @@ class VpcV1 extends BaseService {
    * provided.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.publicKey - A unique public SSH key to import, in OpenSSH format (consisting of three
-   * space-separated fields: the algorithm name, base64-encoded key, and a comment). The algorithm and comment fields
-   * may be omitted, as only the key field is imported.
+   * @param {string} params.publicKey - The public SSH key to use, in OpenSSH format (consisting of three
+   * space-separated fields: the algorithm name, base64-encoded key value, and a comment). The algorithm and comment
+   * fields may be omitted, as only the key field is used.
    *
-   * Keys of type `rsa` may be 2048 or 4096 bits in length, however 4096 is recommended. Keys of type `ed25519` are 256
+   * The key field must not match another key in the region.
+   *
+   * Keys of type `rsa` must be 2048 or 4096 bits in length (4096 is recommended). Keys of type `ed25519` must be 256
    * bits in length.
    * @param {string} [params.name] - The name for this key. The name must not be used by another key in the region. If
    * unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -5107,6 +5109,8 @@ class VpcV1 extends BaseService {
    * property matching the specified placement group CRN.
    * @param {string} [params.placementGroupName] - Filters the collection to resources with a `placement_target.name`
    * property matching the exact specified placement group name.
+   * @param {string} [params.reservationAffinityPolicy] - Filters the collection to instances with a
+   * `reservation_affinity.policy` property matching the specified value.
    * @param {string} [params.reservationId] - Filters the collection to resources with a `reservation.id` property
    * matching the specified identifier.
    * @param {string} [params.reservationCrn] - Filters the collection to resources with a `reservation.crn` property
@@ -5127,7 +5131,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'clusterNetworkId', 'clusterNetworkCrn', 'clusterNetworkName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'clusterNetworkId', 'clusterNetworkCrn', 'clusterNetworkName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationAffinityPolicy', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5149,6 +5153,7 @@ class VpcV1 extends BaseService {
       'placement_group.id': _params.placementGroupId,
       'placement_group.crn': _params.placementGroupCrn,
       'placement_group.name': _params.placementGroupName,
+      'reservation_affinity.policy': _params.reservationAffinityPolicy,
       'reservation.id': _params.reservationId,
       'reservation.crn': _params.reservationCrn,
       'reservation.name': _params.reservationName,
@@ -7232,8 +7237,9 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.instanceId - The virtual server instance identifier.
-   * @param {VolumeAttachmentPrototypeVolume} params.volume - An existing volume to attach to the instance, or a
-   * prototype object for a new volume.
+   * @param {VolumeAttachmentPrototypeVolume} params.volume - The volume to use for this attachment. This can be
+   * specified as an existing unattached
+   * volume, or a prototype object for a new volume.
    * @param {boolean} [params.deleteVolumeOnInstanceDelete] - Indicates whether deleting the instance will also delete
    * the attached volume.
    * @param {string} [params.name] - The name for this volume attachment. The name must not be used by another volume
@@ -9105,6 +9111,10 @@ class VpcV1 extends BaseService {
    * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
    * specified name.
+   * @param {string} [params.profileResourceType] - Filters the collection of resources with a `profile.resource_type`
+   * property matching the specified value.
+   * @param {string} [params.affinityPolicy] - Filters the collection to reservations with an `affinity_policy` property
+   * matching the specified value.
    * @param {string} [params.resourceGroupId] - Filters the collection to resources with a `resource_group.id` property
    * matching the specified identifier.
    * @param {string} [params.zoneName] - Filters the collection to resources with a `zone.name` property matching the
@@ -9117,7 +9127,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservationCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'name', 'resourceGroupId', 'zoneName', 'headers'];
+    const _validParams = ['start', 'limit', 'name', 'profileResourceType', 'affinityPolicy', 'resourceGroupId', 'zoneName', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9129,6 +9139,8 @@ class VpcV1 extends BaseService {
       'start': _params.start,
       'limit': _params.limit,
       'name': _params.name,
+      'profile.resource_type': _params.profileResourceType,
+      'affinity_policy': _params.affinityPolicy,
       'resource_group.id': _params.resourceGroupId,
       'zone.name': _params.zoneName,
     };
@@ -9166,11 +9178,14 @@ class VpcV1 extends BaseService {
    * @param {ReservationCapacityPrototype} params.capacity - The capacity reservation configuration to use.
    * @param {ReservationCommittedUsePrototype} params.committedUse - The committed use configuration to use for this
    * reservation.
-   * @param {ReservationProfilePrototype} params.profile - The
-   * [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
-   * reservation.
+   * @param {ReservationProfilePrototype} params.profile - The [instance
+   * profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) or
+   * [bare metal server
+   * profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
+   * to use for this reservation.
    * @param {ZoneIdentity} params.zone - The zone to use for this reservation.
    * @param {string} [params.affinityPolicy] - The affinity policy to use for this reservation:
+   * - `automatic`: The reservation will be automatically selected
    * - `restricted`: The reservation must be manually requested.
    * @param {string} [params.name] - The name for this reservation. The name must not be used by another reservation in
    * the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -9348,6 +9363,11 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The reservation identifier.
+   * @param {string} [params.affinityPolicy] - The affinity policy to use for this reservation:
+   * - `automatic`: The reservation will be automatically selected
+   * - `restricted`: The reservation must be manually requested
+   *
+   * The affinity policy can only be changed for a reservation with a `status` of `inactive`.
    * @param {ReservationCapacityPatch} [params.capacity] - The capacity reservation configuration to use.
    *
    * The configuration can only be changed for reservations with a `status` of `inactive`.
@@ -9355,9 +9375,11 @@ class VpcV1 extends BaseService {
    * reservation.
    * @param {string} [params.name] - The name for this reservation. The name must not be used by another reservation in
    * the region.
-   * @param {ReservationProfilePatch} [params.profile] - The
-   * [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
-   * reservation.
+   * @param {ReservationProfilePatch} [params.profile] - The [instance
+   * profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) or
+   * [bare metal server
+   * profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
+   * to use for this reservation.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.Reservation>>}
    */
@@ -9366,13 +9388,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Reservation>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'capacity', 'committedUse', 'name', 'profile', 'headers'];
+    const _validParams = ['id', 'affinityPolicy', 'capacity', 'committedUse', 'name', 'profile', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'affinity_policy': _params.affinityPolicy,
       'capacity': _params.capacity,
       'committed_use': _params.committedUse,
       'name': _params.name,
@@ -10171,7 +10194,8 @@ class VpcV1 extends BaseService {
   /**
    * Delete a dedicated host.
    *
-   * This request deletes a dedicated host.
+   * This request deletes a dedicated host. This operation cannot be reversed. For this request to succeed, `instances`
+   * must be empty and `instance_placement_enabled` must be `false`.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The dedicated host identifier.
@@ -10756,6 +10780,12 @@ class VpcV1 extends BaseService {
    * matching the specified identifier.
    * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
    * specified name.
+   * @param {string} [params.reservationId] - Filters the collection to resources with a `reservation.id` property
+   * matching the specified identifier.
+   * @param {string} [params.reservationCrn] - Filters the collection to resources with a `reservation.crn` property
+   * matching the specified identifier.
+   * @param {string} [params.reservationName] - Filters the collection to resources with a `reservation.name` property
+   * matching the specified identifier.
    * @param {string} [params.vpcId] - Filters the collection to resources with a `vpc.id` property matching the
    * specified identifier.
    * @param {string} [params.vpcCrn] - Filters the collection to resources with a `vpc.crn` property matching the
@@ -10770,7 +10800,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10783,6 +10813,9 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
       'name': _params.name,
+      'reservation.id': _params.reservationId,
+      'reservation.crn': _params.reservationCrn,
+      'reservation.name': _params.reservationName,
       'vpc.id': _params.vpcId,
       'vpc.crn': _params.vpcCrn,
       'vpc.name': _params.vpcName,
@@ -12255,6 +12288,7 @@ class VpcV1 extends BaseService {
    * `stopped`.
    * @param {string} [params.name] - The name for this bare metal server. The name must not be used by another bare
    * metal server in the region. Changing the name will not affect the system hostname.
+   * @param {BareMetalServerReservationAffinityPatch} [params.reservationAffinity] -
    * @param {BareMetalServerTrustedPlatformModulePatch} [params.trustedPlatformModule] -
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServer>>}
@@ -12264,7 +12298,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServer>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'bandwidth', 'enableSecureBoot', 'name', 'trustedPlatformModule', 'headers'];
+    const _validParams = ['id', 'bandwidth', 'enableSecureBoot', 'name', 'reservationAffinity', 'trustedPlatformModule', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12274,6 +12308,7 @@ class VpcV1 extends BaseService {
       'bandwidth': _params.bandwidth,
       'enable_secure_boot': _params.enableSecureBoot,
       'name': _params.name,
+      'reservation_affinity': _params.reservationAffinity,
       'trusted_platform_module': _params.trustedPlatformModule,
     };
 
@@ -14438,8 +14473,9 @@ class VpcV1 extends BaseService {
    * Replication of a share can be scheduled to occur at most once every 15 minutes.
    *
    * For this property to be changed, the share `replication_role` must be `replica`.
-   * @param {number} [params.size] - The size of the file share rounded up to the next gigabyte. The value must not be
-   * less than the share's current size, and must not exceed the maximum supported by the share's profile and IOPS.
+   * @param {number} [params.size] - The size of the file share (in gigabytes), excluding share snapshots. The value
+   * must not be less than the share's current size, and must not exceed the maximum supported by the share's profile
+   * and IOPS.
    *
    * For this property to be changed:
    * - The share `lifecycle_state` must be `stable`
@@ -14513,7 +14549,7 @@ class VpcV1 extends BaseService {
    * List accessor bindings for a file share.
    *
    * This request lists accessor bindings for a share. Each accessor binding identifies a resource (possibly in another
-   * account) with access to this file share's data.
+   * account) with access to this file share including its snapshots.
    *
    * The share accessor bindings will be sorted by their `created_at` property values, with newest bindings first.
    *
@@ -15053,6 +15089,349 @@ class VpcV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List file share snapshots.
+   *
+   * This request lists snapshots for the specified file share, or across all accessible file shares. A snapshot
+   * preserves the data of a share at the time the snapshot was captured.
+   *
+   * If the file share is a replica, the list will contain snapshots corresponding to snapshots on the source.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier, or `-` to wildcard all accessible file shares.
+   * @param {string} [params.backupPolicyPlanId] - Filters the collection to backup policy jobs with a
+   * `backup_policy_plan.id` property matching the specified identifier.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.sort] - Sorts the returned collection by the specified property name in ascending order. A
+   * `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the
+   * collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property
+   * in ascending order.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareSnapshotCollection>>}
+   */
+  public listShareSnapshots(
+    params: VpcV1.ListShareSnapshotsParams
+  ): Promise<VpcV1.Response<VpcV1.ShareSnapshotCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId'];
+    const _validParams = ['shareId', 'backupPolicyPlanId', 'name', 'start', 'limit', 'sort', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'backup_policy_plan.id': _params.backupPolicyPlanId,
+      'name': _params.name,
+      'start': _params.start,
+      'limit': _params.limit,
+      'sort': _params.sort,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listShareSnapshots');
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/snapshots',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a snapshot for a file share.
+   *
+   * This request creates a new share snapshot from a share snapshot prototype object. The prototype object is
+   * structured in the same way as a retrieved share snapshot, and contains the information necessary to create the new
+   * share snapshot.
+   *
+   * The share must have the `access_control_mode` set to `security_group`.
+   *
+   * At present, the snapshot's `resource_group` will be inherited from its share, but may be specifiable in the future.
+   *
+   * The new snapshot will inherit the encryption settings from its share, , and must have a
+   * `replication_role` of `source` or `none`.
+   *
+   * If the share has a `replication_role` of `source`, a corresponding snapshot on the replica share will be created
+   * with a `status` of `pending`. It will remain in
+   * `pending` until the data is synchronized per the replication schedule determined by the replica share's
+   * `replication_cron_spec`.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} [params.name] - The name for this share snapshot. The name must not be used by another snapshot for
+   * the file share. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * @param {string[]} [params.userTags] - The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags)
+   * associated with this share snapshot.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareSnapshot>>}
+   */
+  public createShareSnapshot(
+    params: VpcV1.CreateShareSnapshotParams
+  ): Promise<VpcV1.Response<VpcV1.ShareSnapshot>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId'];
+    const _validParams = ['shareId', 'name', 'userTags', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+      'user_tags': _params.userTags,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createShareSnapshot');
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/snapshots',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a share snapshot.
+   *
+   * This request deletes a share snapshot. This operation cannot be reversed. For this request to succeed, the share
+   * must have a `replication_role` of `source` or `none`.
+   *
+   * If the request is accepted, the share snapshot `lifecycle_state` will be set to
+   * `deleting`. Once deletion processing completes, the share snapshot will no longer be retrievable.
+   *
+   * Deleting a share snapshot will not affect any previously-accepted requests to create a share from it.
+   *
+   * If the share has a `replication_role` of `source`, the corresponding snapshot on the replica share will be
+   * subsequently moved to a `lifecycle_state` of `deleting`. If the data for the corresponding snapshot has already
+   * been synchronized via the replication schedule determined by `replication_cron_spec`, the snapshot will remain
+   * available in the replica share's `.snapshot` directory until the next replication sync.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} params.id - The share snapshot identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareSnapshot>>}
+   */
+  public deleteShareSnapshot(
+    params: VpcV1.DeleteShareSnapshotParams
+  ): Promise<VpcV1.Response<VpcV1.ShareSnapshot>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId', 'id'];
+    const _validParams = ['shareId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteShareSnapshot');
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/snapshots/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a share snapshot.
+   *
+   * This request retrieves a single share snapshot specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} params.id - The share snapshot identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareSnapshot>>}
+   */
+  public getShareSnapshot(
+    params: VpcV1.GetShareSnapshotParams
+  ): Promise<VpcV1.Response<VpcV1.ShareSnapshot>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId', 'id'];
+    const _validParams = ['shareId', 'id', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getShareSnapshot');
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/snapshots/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a share snapshot.
+   *
+   * This request updates a share snapshot with the information provided in a share snapshot patch object. The share
+   * snapshot patch object is structured in the same way as a retrieved share snapshot and needs to contain only the
+   * information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.shareId - The file share identifier.
+   * @param {string} params.id - The share snapshot identifier.
+   * @param {string[]} [params.userTags] - The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags)
+   * associated with this share snapshot.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.ShareSnapshot>>}
+   */
+  public updateShareSnapshot(
+    params: VpcV1.UpdateShareSnapshotParams
+  ): Promise<VpcV1.Response<VpcV1.ShareSnapshot>> {
+    const _params = { ...params };
+    const _requiredParams = ['shareId', 'id'];
+    const _validParams = ['shareId', 'id', 'userTags', 'ifMatch', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'user_tags': _params.userTags,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'share_id': _params.shareId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateShareSnapshot');
+
+    const parameters = {
+      options: {
+        url: '/shares/{share_id}/snapshots/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -19655,7 +20034,6 @@ class VpcV1 extends BaseService {
    * @param {string} [params.direction] - The direction of traffic to match.
    * @param {string} [params.name] - The name for this network ACL rule. The name must not be used by another rule for
    * the network ACL.
-   * @param {string} [params.protocol] - The network protocol.
    * @param {string} [params.source] - The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches
    * all source addresses.
    * @param {number} [params.sourcePortMax] - The inclusive upper bound of TCP/UDP source port range.
@@ -19671,7 +20049,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACLRule>> {
     const _params = { ...params };
     const _requiredParams = ['networkAclId', 'id'];
-    const _validParams = ['networkAclId', 'id', 'action', 'before', 'code', 'destination', 'destinationPortMax', 'destinationPortMin', 'direction', 'name', 'protocol', 'source', 'sourcePortMax', 'sourcePortMin', 'type', 'headers'];
+    const _validParams = ['networkAclId', 'id', 'action', 'before', 'code', 'destination', 'destinationPortMax', 'destinationPortMin', 'direction', 'name', 'source', 'sourcePortMax', 'sourcePortMin', 'type', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19686,7 +20064,6 @@ class VpcV1 extends BaseService {
       'destination_port_min': _params.destinationPortMin,
       'direction': _params.direction,
       'name': _params.name,
-      'protocol': _params.protocol,
       'source': _params.source,
       'source_port_max': _params.sourcePortMax,
       'source_port_min': _params.sourcePortMin,
@@ -24036,7 +24413,7 @@ class VpcV1 extends BaseService {
    * @param {number} [params.connectionLimit] - The concurrent connection limit for the listener. If reached, incoming
    * connections may be queued or rejected.
    *
-   * This property will be present for load balancers in the `application` family.
+   * Supported for load balancers in the `application` family.
    * @param {LoadBalancerPoolIdentity} [params.defaultPool] - The default pool for this listener. If `https_redirect` is
    * specified, the
    * default pool will not be used.
@@ -25486,11 +25863,9 @@ class VpcV1 extends BaseService {
    * `health_monitor` property is specified.
    *
    * The port must be unique across all members for all pools associated with this pool's listener.
-   * @param {LoadBalancerPoolMemberTargetPrototype} params.target - The pool member target. Load balancers in the
-   * `network` family support virtual server
-   * instances. Load balancers in the `application` family support IP addresses. If the load
-   * balancer has route mode enabled, the member must be in a zone the load balancer has a
-   * subnet in.
+   * @param {LoadBalancerPoolMemberTargetPrototype} params.target - The pool member target. If the load balancer has
+   * route mode enabled, the member must be
+   * in a zone the load balancer has a subnet in.
    * @param {number} [params.weight] - The weight of the server member.
    *
    * If specified, the pool algorithm must be `weighted_round_robin`.
@@ -25746,11 +26121,9 @@ class VpcV1 extends BaseService {
    * `health_monitor` property is specified.
    *
    * The port must be unique across all members for all pools associated with this pool's listener.
-   * @param {LoadBalancerPoolMemberTargetPrototype} [params.target] - The pool member target. Load balancers in the
-   * `network` family support virtual server
-   * instances. Load balancers in the `application` family support IP addresses. If the load
-   * balancer has route mode enabled, the member must be in a zone the load balancer has a
-   * subnet in.
+   * @param {LoadBalancerPoolMemberTargetPrototype} [params.target] - The pool member target. If the load balancer has
+   * route mode enabled, the member must be
+   * in a zone the load balancer has a subnet in.
    * @param {number} [params.weight] - The weight of the server member.
    *
    * If specified, the pool algorithm must be `weighted_round_robin`.
@@ -27842,7 +28215,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2024-04-30` and `2024-11-14`.
+     *  `2024-11-19` and `2024-12-26`.
      */
     version: string;
   }
@@ -29066,12 +29439,14 @@ namespace VpcV1 {
 
   /** Parameters for the `createKey` operation. */
   export interface CreateKeyParams {
-    /** A unique public SSH key to import, in OpenSSH format (consisting of three space-separated fields: the
-     *  algorithm name, base64-encoded key, and a comment). The algorithm and comment fields may be omitted, as only the
-     *  key field is imported.
+    /** The public SSH key to use, in OpenSSH format (consisting of three space-separated fields: the algorithm
+     *  name, base64-encoded key value, and a comment). The algorithm and comment fields may be omitted, as only the key
+     *  field is used.
      *
-     *  Keys of type `rsa` may be 2048 or 4096 bits in length, however 4096 is recommended. Keys of type `ed25519` are
-     *  256 bits in length.
+     *  The key field must not match another key in the region.
+     *
+     *  Keys of type `rsa` must be 2048 or 4096 bits in length (4096 is recommended). Keys of type `ed25519` must be 256
+     *  bits in length.
      */
     publicKey: string;
     /** The name for this key. The name must not be used by another key in the region. If unspecified, the name will
@@ -29202,6 +29577,10 @@ namespace VpcV1 {
      *  placement group name.
      */
     placementGroupName?: string;
+    /** Filters the collection to instances with a `reservation_affinity.policy` property matching the specified
+     *  value.
+     */
+    reservationAffinityPolicy?: ListInstancesConstants.ReservationAffinityPolicy | string;
     /** Filters the collection to resources with a `reservation.id` property matching the specified identifier. */
     reservationId?: string;
     /** Filters the collection to resources with a `reservation.crn` property matching the specified identifier. */
@@ -29215,6 +29594,16 @@ namespace VpcV1 {
     /** Filters the collection to resources with a `vpc.name` property matching the exact specified name. */
     vpcName?: string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listInstances` operation. */
+  export namespace ListInstancesConstants {
+    /** Filters the collection to instances with a `reservation_affinity.policy` property matching the specified value. */
+    export enum ReservationAffinityPolicy {
+      AUTOMATIC = 'automatic',
+      DISABLED = 'disabled',
+      MANUAL = 'manual',
+    }
   }
 
   /** Parameters for the `createInstance` operation. */
@@ -29669,7 +30058,9 @@ namespace VpcV1 {
   export interface CreateInstanceVolumeAttachmentParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    /** An existing volume to attach to the instance, or a prototype object for a new volume. */
+    /** The volume to use for this attachment. This can be specified as an existing unattached
+     *  volume, or a prototype object for a new volume.
+     */
     volume: VolumeAttachmentPrototypeVolume;
     /** Indicates whether deleting the instance will also delete the attached volume. */
     deleteVolumeOnInstanceDelete?: boolean;
@@ -30097,11 +30488,24 @@ namespace VpcV1 {
     limit?: number;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
+    /** Filters the collection of resources with a `profile.resource_type` property matching the specified value. */
+    profileResourceType?: string;
+    /** Filters the collection to reservations with an `affinity_policy` property matching the specified value. */
+    affinityPolicy?: ListReservationsConstants.AffinityPolicy | string;
     /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
     resourceGroupId?: string;
     /** Filters the collection to resources with a `zone.name` property matching the exact specified name. */
     zoneName?: string;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listReservations` operation. */
+  export namespace ListReservationsConstants {
+    /** Filters the collection to reservations with an `affinity_policy` property matching the specified value. */
+    export enum AffinityPolicy {
+      AUTOMATIC = 'automatic',
+      RESTRICTED = 'restricted',
+    }
   }
 
   /** Parameters for the `createReservation` operation. */
@@ -30110,11 +30514,18 @@ namespace VpcV1 {
     capacity: ReservationCapacityPrototype;
     /** The committed use configuration to use for this reservation. */
     committedUse: ReservationCommittedUsePrototype;
-    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation. */
+    /** The [instance profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) or
+     *  [bare metal server
+     *  profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
+     *  to use for this reservation.
+     */
     profile: ReservationProfilePrototype;
     /** The zone to use for this reservation. */
     zone: ZoneIdentity;
-    /** The affinity policy to use for this reservation: - `restricted`: The reservation must be manually requested. */
+    /** The affinity policy to use for this reservation:
+     *  - `automatic`: The reservation will be automatically selected
+     *  - `restricted`: The reservation must be manually requested.
+     */
     affinityPolicy?: CreateReservationConstants.AffinityPolicy | string;
     /** The name for this reservation. The name must not be used by another reservation in the region. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -30129,8 +30540,9 @@ namespace VpcV1 {
 
   /** Constants for the `createReservation` operation. */
   export namespace CreateReservationConstants {
-    /** The affinity policy to use for this reservation: - `restricted`: The reservation must be manually requested. */
+    /** The affinity policy to use for this reservation: - `automatic`: The reservation will be automatically selected - `restricted`: The reservation must be manually requested. */
     export enum AffinityPolicy {
+      AUTOMATIC = 'automatic',
       RESTRICTED = 'restricted',
     }
   }
@@ -30153,6 +30565,13 @@ namespace VpcV1 {
   export interface UpdateReservationParams {
     /** The reservation identifier. */
     id: string;
+    /** The affinity policy to use for this reservation:
+     *  - `automatic`: The reservation will be automatically selected
+     *  - `restricted`: The reservation must be manually requested
+     *
+     *  The affinity policy can only be changed for a reservation with a `status` of `inactive`.
+     */
+    affinityPolicy?: UpdateReservationConstants.AffinityPolicy | string;
     /** The capacity reservation configuration to use.
      *
      *  The configuration can only be changed for reservations with a `status` of `inactive`.
@@ -30162,9 +30581,22 @@ namespace VpcV1 {
     committedUse?: ReservationCommittedUsePatch;
     /** The name for this reservation. The name must not be used by another reservation in the region. */
     name?: string;
-    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation. */
+    /** The [instance profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) or
+     *  [bare metal server
+     *  profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
+     *  to use for this reservation.
+     */
     profile?: ReservationProfilePatch;
     headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `updateReservation` operation. */
+  export namespace UpdateReservationConstants {
+    /** The affinity policy to use for this reservation: - `automatic`: The reservation will be automatically selected - `restricted`: The reservation must be manually requested The affinity policy can only be changed for a reservation with a `status` of `inactive`. */
+    export enum AffinityPolicy {
+      AUTOMATIC = 'automatic',
+      RESTRICTED = 'restricted',
+    }
   }
 
   /** Parameters for the `activateReservation` operation. */
@@ -30420,6 +30852,12 @@ namespace VpcV1 {
     resourceGroupId?: string;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
+    /** Filters the collection to resources with a `reservation.id` property matching the specified identifier. */
+    reservationId?: string;
+    /** Filters the collection to resources with a `reservation.crn` property matching the specified identifier. */
+    reservationCrn?: string;
+    /** Filters the collection to resources with a `reservation.name` property matching the specified identifier. */
+    reservationName?: string;
     /** Filters the collection to resources with a `vpc.id` property matching the specified identifier. */
     vpcId?: string;
     /** Filters the collection to resources with a `vpc.crn` property matching the specified CRN. */
@@ -30719,6 +31157,7 @@ namespace VpcV1 {
      *  Changing the name will not affect the system hostname.
      */
     name?: string;
+    reservationAffinity?: BareMetalServerReservationAffinityPatch;
     trustedPlatformModule?: BareMetalServerTrustedPlatformModulePatch;
     headers?: OutgoingHttpHeaders;
   }
@@ -31304,8 +31743,8 @@ namespace VpcV1 {
      *  For this property to be changed, the share `replication_role` must be `replica`.
      */
     replicationCronSpec?: string;
-    /** The size of the file share rounded up to the next gigabyte. The value must not be less than the share's
-     *  current size, and must not exceed the maximum supported by the share's profile and IOPS.
+    /** The size of the file share (in gigabytes), excluding share snapshots. The value must not be less than the
+     *  share's current size, and must not exceed the maximum supported by the share's profile and IOPS.
      *
      *  For this property to be changed:
      *  - The share `lifecycle_state` must be `stable`
@@ -31442,6 +31881,84 @@ namespace VpcV1 {
     id: string;
     /** The name for this share mount target. The name must not be used by another mount target for the file share. */
     name?: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `listShareSnapshots` operation. */
+  export interface ListShareSnapshotsParams {
+    /** The file share identifier, or `-` to wildcard all accessible file shares. */
+    shareId: string;
+    /** Filters the collection to backup policy jobs with a `backup_policy_plan.id` property matching the specified
+     *  identifier.
+     */
+    backupPolicyPlanId?: string;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
+     *  the name to sort in descending order. For example, the value `-created_at` sorts the collection by the
+     *  `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending
+     *  order.
+     */
+    sort?: ListShareSnapshotsConstants.Sort | string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Constants for the `listShareSnapshots` operation. */
+  export namespace ListShareSnapshotsConstants {
+    /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to the name to sort in descending order. For example, the value `-created_at` sorts the collection by the `created_at` property in descending order, and the value `name` sorts it by the `name` property in ascending order. */
+    export enum Sort {
+      CREATED_AT = 'created_at',
+      NAME = 'name',
+    }
+  }
+
+  /** Parameters for the `createShareSnapshot` operation. */
+  export interface CreateShareSnapshotParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The name for this share snapshot. The name must not be used by another snapshot for the file share. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+    /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this share snapshot. */
+    userTags?: string[];
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `deleteShareSnapshot` operation. */
+  export interface DeleteShareSnapshotParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The share snapshot identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `getShareSnapshot` operation. */
+  export interface GetShareSnapshotParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The share snapshot identifier. */
+    id: string;
+    headers?: OutgoingHttpHeaders;
+  }
+
+  /** Parameters for the `updateShareSnapshot` operation. */
+  export interface UpdateShareSnapshotParams {
+    /** The file share identifier. */
+    shareId: string;
+    /** The share snapshot identifier. */
+    id: string;
+    /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this share snapshot. */
+    userTags?: string[];
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
     headers?: OutgoingHttpHeaders;
   }
 
@@ -32616,8 +33133,6 @@ namespace VpcV1 {
     direction?: UpdateNetworkAclRuleConstants.Direction | string;
     /** The name for this network ACL rule. The name must not be used by another rule for the network ACL. */
     name?: string;
-    /** The network protocol. */
-    protocol?: UpdateNetworkAclRuleConstants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source?: string;
     /** The inclusive upper bound of TCP/UDP source port range. */
@@ -32643,13 +33158,6 @@ namespace VpcV1 {
     export enum Direction {
       INBOUND = 'inbound',
       OUTBOUND = 'outbound',
-    }
-    /** The network protocol. */
-    export enum Protocol {
-      ALL = 'all',
-      ICMP = 'icmp',
-      TCP = 'tcp',
-      UDP = 'udp',
     }
   }
 
@@ -33879,7 +34387,7 @@ namespace VpcV1 {
     /** The concurrent connection limit for the listener. If reached, incoming connections may be queued or
      *  rejected.
      *
-     *  This property will be present for load balancers in the `application` family.
+     *  Supported for load balancers in the `application` family.
      */
     connectionLimit?: number;
     /** The default pool for this listener. If `https_redirect` is specified, the
@@ -34472,10 +34980,8 @@ namespace VpcV1 {
      *  The port must be unique across all members for all pools associated with this pool's listener.
      */
     port: number;
-    /** The pool member target. Load balancers in the `network` family support virtual server
-     *  instances. Load balancers in the `application` family support IP addresses. If the load
-     *  balancer has route mode enabled, the member must be in a zone the load balancer has a
-     *  subnet in.
+    /** The pool member target. If the load balancer has route mode enabled, the member must be
+     *  in a zone the load balancer has a subnet in.
      */
     target: LoadBalancerPoolMemberTargetPrototype;
     /** The weight of the server member.
@@ -34537,10 +35043,8 @@ namespace VpcV1 {
      *  The port must be unique across all members for all pools associated with this pool's listener.
      */
     port?: number;
-    /** The pool member target. Load balancers in the `network` family support virtual server
-     *  instances. Load balancers in the `application` family support IP addresses. If the load
-     *  balancer has route mode enabled, the member must be in a zone the load balancer has a
-     *  subnet in.
+    /** The pool member target. If the load balancer has route mode enabled, the member must be
+     *  in a zone the load balancer has a subnet in.
      */
     target?: LoadBalancerPoolMemberTargetPrototype;
     /** The weight of the server member.
@@ -35243,6 +35747,7 @@ namespace VpcV1 {
       /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum MatchResourceType {
         INSTANCE = 'instance',
+        SHARE = 'share',
         VOLUME = 'volume',
       }
       /** The resource type. */
@@ -35338,7 +35843,7 @@ namespace VpcV1 {
     /** The snapshots operated on by this backup policy job (may be
      *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
      */
-    target_snapshots: SnapshotReference[];
+    target_snapshots: BackupPolicyTargetSnapshot[];
   }
   export namespace BackupPolicyJob {
     export namespace Constants {
@@ -35391,6 +35896,13 @@ namespace VpcV1 {
      *  - `internal_error`: Internal error (contact IBM support)
      *  - `snapshot_encryption_key_invalid`: The provided encryption key is unavailable
      *  - `snapshot_pending`: Cannot delete backup (snapshot) in the `pending` lifecycle state
+     *  - `snapshot_source_unsupported`: The source access control mode does not support
+     *    backups
+     *  - `snapshot_rate_too_high`: The rate of backups for the resource is too high
+     *  - `snapshot_share_limit`: The maximum limit for snapshots on this resource has been
+     *    reached
+     *  - `snapshot_source_unavailable`: The source data is not available (for example,
+     *    because the source is still being created).
      *  - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached
      *  - `source_volume_busy`: The source volume has `busy` set (after multiple retries)
      *  - `source_volume_too_large`: The source volume exceeds the [maximum supported
@@ -35408,11 +35920,15 @@ namespace VpcV1 {
   }
   export namespace BackupPolicyJobStatusReason {
     export namespace Constants {
-      /** A reason code for the status: - `internal_error`: Internal error (contact IBM support) - `snapshot_encryption_key_invalid`: The provided encryption key is unavailable - `snapshot_pending`: Cannot delete backup (snapshot) in the `pending` lifecycle state - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached - `source_volume_busy`: The source volume has `busy` set (after multiple retries) - `source_volume_too_large`: The source volume exceeds the [maximum supported size](https://cloud.ibm.com/docs/vpc?topic=vpc-snapshots-vpc-about&interface=api#snapshots-vpc-limitations) - `source_volume_unavailable`: The source volume is not attached to a running instance The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** A reason code for the status: - `internal_error`: Internal error (contact IBM support) - `snapshot_encryption_key_invalid`: The provided encryption key is unavailable - `snapshot_pending`: Cannot delete backup (snapshot) in the `pending` lifecycle state - `snapshot_source_unsupported`: The source access control mode does not support backups - `snapshot_rate_too_high`: The rate of backups for the resource is too high - `snapshot_share_limit`: The maximum limit for snapshots on this resource has been reached - `snapshot_source_unavailable`: The source data is not available (for example, because the source is still being created). - `snapshot_volume_limit`: The snapshot limit for the source volume has been reached - `source_volume_busy`: The source volume has `busy` set (after multiple retries) - `source_volume_too_large`: The source volume exceeds the [maximum supported size](https://cloud.ibm.com/docs/vpc?topic=vpc-snapshots-vpc-about&interface=api#snapshots-vpc-limitations) - `source_volume_unavailable`: The source volume is not attached to a running instance The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         INTERNAL_ERROR = 'internal_error',
         SNAPSHOT_ENCRYPTION_KEY_INVALID = 'snapshot_encryption_key_invalid',
         SNAPSHOT_PENDING = 'snapshot_pending',
+        SNAPSHOT_RATE_TOO_HIGH = 'snapshot_rate_too_high',
+        SNAPSHOT_SHARE_LIMIT = 'snapshot_share_limit',
+        SNAPSHOT_SOURCE_UNAVAILABLE = 'snapshot_source_unavailable',
+        SNAPSHOT_SOURCE_UNSUPPORTED = 'snapshot_source_unsupported',
         SNAPSHOT_VOLUME_LIMIT = 'snapshot_volume_limit',
         SOURCE_VOLUME_BUSY = 'source_volume_busy',
         SOURCE_VOLUME_TOO_LARGE = 'source_volume_too_large',
@@ -35683,6 +36199,7 @@ namespace VpcV1 {
       /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. */
       export enum MatchResourceType {
         INSTANCE = 'instance',
+        SHARE = 'share',
         VOLUME = 'volume',
       }
     }
@@ -35700,6 +36217,12 @@ namespace VpcV1 {
    * If unspecified, the policy will be scoped to the account.
    */
   export interface BackupPolicyScopePrototype {
+  }
+
+  /**
+   * BackupPolicyTargetSnapshot.
+   */
+  export interface BackupPolicyTargetSnapshot {
   }
 
   /**
@@ -35730,6 +36253,27 @@ namespace VpcV1 {
     enable_secure_boot: boolean;
     /** Firmware information for the bare metal server. */
     firmware: BareMetalServerFirmware;
+    /** The reasons for the current server `health_state` (if any):
+     *  - `reservation_capacity_unavailable`: The reservation affinity pool has no
+     *    available capacity.
+     *  - `reservation_deleted`: The reservation affinity pool has a deleted reservation.
+     *  - `reservation_expired`: The reservation affinity pool has an expired reservation.
+     *  - `reservation_failed`: The reservation affinity pool has a failed reservation.
+     *
+     *  See [health status reasons](https://cloud.ibm.com/docs/vpc?topic=vpc-server-health-status-reasons) for details.
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    health_reasons: BareMetalServerHealthReason[];
+    /** The health of this resource:
+     *  - `ok`: No abnormal behavior detected
+     *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
+     *  - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated
+     *  - `inapplicable`: The health state does not apply because of the current lifecycle
+     *     state. A resource with a lifecycle state of `failed` or `deleting` will have a
+     *     health state of `inapplicable`. A `pending` resource may also have this state.
+     */
+    health_state: BareMetalServer.Constants.HealthState | string;
     /** The URL for this bare metal server. */
     href: string;
     /** The unique identifier for this bare metal server. */
@@ -35765,6 +36309,9 @@ namespace VpcV1 {
      *  for this bare metal server.
      */
     profile: BareMetalServerProfileReference;
+    /** The reservation used by this bare metal server. If absent, no reservation is in use. */
+    reservation?: ReservationReference;
+    reservation_affinity: BareMetalServerReservationAffinity;
     /** The resource group for this bare metal server. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
@@ -35794,6 +36341,13 @@ namespace VpcV1 {
   }
   export namespace BareMetalServer {
     export namespace Constants {
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
       /** The lifecycle state of the bare metal server. */
       export enum LifecycleState {
         DELETING = 'deleting',
@@ -35958,6 +36512,29 @@ namespace VpcV1 {
         NONE = 'none',
         OPTIONAL = 'optional',
         REQUIRED = 'required',
+      }
+    }
+  }
+
+  /**
+   * BareMetalServerHealthReason.
+   */
+  export interface BareMetalServerHealthReason {
+    /** A reason code for this health state. */
+    code: BareMetalServerHealthReason.Constants.Code | string;
+    /** An explanation of the reason for this health state. */
+    message: string;
+    /** Link to documentation about the reason for this health state. */
+    more_info?: string;
+  }
+  export namespace BareMetalServerHealthReason {
+    export namespace Constants {
+      /** A reason code for this health state. */
+      export enum Code {
+        RESERVATION_CAPACITY_UNAVAILABLE = 'reservation_capacity_unavailable',
+        RESERVATION_DELETED = 'reservation_deleted',
+        RESERVATION_EXPIRED = 'reservation_expired',
+        RESERVATION_FAILED = 'reservation_failed',
       }
     }
   }
@@ -36599,6 +37176,7 @@ namespace VpcV1 {
     network_attachment_count: BareMetalServerProfileNetworkAttachmentCount;
     network_interface_count: BareMetalServerProfileNetworkInterfaceCount;
     os_architecture: BareMetalServerProfileOSArchitecture;
+    reservation_terms: BareMetalServerProfileReservationTerms;
     /** The resource type. */
     resource_type: BareMetalServerProfile.Constants.ResourceType | string;
     /** The supported trusted platform module modes for this bare metal server profile. */
@@ -36810,6 +37388,29 @@ namespace VpcV1 {
   }
 
   /**
+   * BareMetalServerProfileReservationTerms.
+   */
+  export interface BareMetalServerProfileReservationTerms {
+    /** The type for this profile field. */
+    type: BareMetalServerProfileReservationTerms.Constants.Type | string;
+    /** The supported committed use terms for a reservation using this profile. */
+    values: BareMetalServerProfileReservationTerms.Constants.Values[] | string[];
+  }
+  export namespace BareMetalServerProfileReservationTerms {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The supported committed use terms for a reservation using this profile. */
+      export enum Values {
+        ONE_YEAR = 'one_year',
+        THREE_YEAR = 'three_year',
+      }
+    }
+  }
+
+  /**
    * The supported trusted platform module modes for this bare metal server profile.
    */
   export interface BareMetalServerProfileSupportedTrustedPlatformModuleModes {
@@ -36881,6 +37482,7 @@ namespace VpcV1 {
      *  to use for this bare metal server.
      */
     profile: BareMetalServerProfileIdentity;
+    reservation_affinity?: BareMetalServerReservationAffinityPrototype;
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
@@ -36897,16 +37499,117 @@ namespace VpcV1 {
   }
 
   /**
+   * BareMetalServerReservationAffinity.
+   */
+  export interface BareMetalServerReservationAffinity {
+    /** The reservation affinity policy to use for this bare metal server:
+     *  - `disabled`: Reservations will not be used
+     *  - `manual`: Reservations in `pool` are available for use
+     *  - `automatic`: Any reservations with an `affinity_policy` of `automatic`
+     *    that have the same `profile` and `zone` as this bare metal server
+     *    are available for use.
+     */
+    policy: BareMetalServerReservationAffinity.Constants.Policy | string;
+    /** The pool of reservations available for use by this bare metal server when the `policy` is `manual`. This
+     *  must be empty if the `policy` is `automatic` or
+     *  `disabled`.
+     */
+    pool: ReservationReference[];
+  }
+  export namespace BareMetalServerReservationAffinity {
+    export namespace Constants {
+      /** The reservation affinity policy to use for this bare metal server: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` are available for use - `automatic`: Any reservations with an `affinity_policy` of `automatic` that have the same `profile` and `zone` as this bare metal server are available for use. */
+      export enum Policy {
+        AUTOMATIC = 'automatic',
+        DISABLED = 'disabled',
+        MANUAL = 'manual',
+      }
+    }
+  }
+
+  /**
+   * BareMetalServerReservationAffinityPatch.
+   */
+  export interface BareMetalServerReservationAffinityPatch {
+    /** The reservation affinity policy to use for this bare metal server:
+     *  - `disabled`: Reservations will not be used
+     *  - `manual`: Reservations in `pool` will be available for use
+     *  - `automatic`: Any reservations with an `affinity_policy` of `automatic` that have the
+     *    same `profile` and `zone` as this bare metal server are available for use.
+     */
+    policy?: BareMetalServerReservationAffinityPatch.Constants.Policy | string;
+    /** The pool of reservations available for use by this bare metal server, replacing the existing pool of
+     *  reservations.
+     *
+     *  Specified reservations must have a `status` of `active`, and have the same
+     *  `profile` and `zone` as this bare metal server.
+     *
+     *  If `policy` is `manual`, `pool` must have one reservation. If `policy` is `disabled` or `automatic`, `pool` must
+     *  be empty. If `policy` is `manual`, the `pool` must contain a reservation with available capacity.
+     */
+    pool?: ReservationIdentity[];
+  }
+  export namespace BareMetalServerReservationAffinityPatch {
+    export namespace Constants {
+      /** The reservation affinity policy to use for this bare metal server: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` will be available for use - `automatic`: Any reservations with an `affinity_policy` of `automatic` that have the same `profile` and `zone` as this bare metal server are available for use. */
+      export enum Policy {
+        AUTOMATIC = 'automatic',
+        DISABLED = 'disabled',
+        MANUAL = 'manual',
+      }
+    }
+  }
+
+  /**
+   * BareMetalServerReservationAffinityPrototype.
+   */
+  export interface BareMetalServerReservationAffinityPrototype {
+    /** The reservation affinity policy to use for this bare metal server:
+     *  - `disabled`: Reservations will not be used
+     *  - `manual`: Reservations in `pool` will be available for use
+     *  - `automatic`: Any reservations with an `affinity_policy` of `automatic` that have the
+     *    same `profile` and `zone` as this bare metal server are available for use.
+     *
+     *  The policy will default to `manual` if `pool` is not empty. Otherwise the policy will default to `automatic`.
+     */
+    policy?: BareMetalServerReservationAffinityPrototype.Constants.Policy | string;
+    /** The pool of reservations available for use by this bare metal server.
+     *
+     *  Specified reservations must have a `status` of `active`, and have the same `profile` and `zone` as this bare
+     *  metal server.
+     *
+     *  If `policy` is `manual`, `pool` must have one reservation. If `policy` is `disabled` or `automatic`, `pool` must
+     *  be empty. If `policy` is `manual`, the `pool` must contain a reservation with available capacity.
+     */
+    pool?: ReservationIdentity[];
+  }
+  export namespace BareMetalServerReservationAffinityPrototype {
+    export namespace Constants {
+      /** The reservation affinity policy to use for this bare metal server: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` will be available for use - `automatic`: Any reservations with an `affinity_policy` of `automatic` that have the same `profile` and `zone` as this bare metal server are available for use. The policy will default to `manual` if `pool` is not empty. Otherwise the policy will default to `automatic`. */
+      export enum Policy {
+        AUTOMATIC = 'automatic',
+        DISABLED = 'disabled',
+        MANUAL = 'manual',
+      }
+    }
+  }
+
+  /**
    * BareMetalServerStatusReason.
    */
   export interface BareMetalServerStatusReason {
     /** The status reason code:
+     *  - `cannot_reinitialize`: An error occurred while reinitializing bare metal server
      *  - `cannot_start`: Failed to start due to an internal error
      *  - `cannot_start_capacity`: Insufficient capacity within the selected zone
      *  - `cannot_start_compute`: An error occurred while allocating compute resources
      *  - `cannot_start_ip_address`: An error occurred while allocating an IP address
      *  - `cannot_start_network`: An error occurred while allocating network resources
      *  - `cannot_update_firmware`: An error occurred while updating bare metal server firmware
+     *  - `cannot_start_reservation_capacity`: Failed to start because the reservation has
+     *    insufficient capacity
+     *  - `cannot_start_reservation_expired`: Failed to start because the reservation has
+     *    expired
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
@@ -36919,7 +37622,7 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerStatusReason {
     export namespace Constants {
-      /** The status reason code: - `cannot_start`: Failed to start due to an internal error - `cannot_start_capacity`: Insufficient capacity within the selected zone - `cannot_start_compute`: An error occurred while allocating compute resources - `cannot_start_ip_address`: An error occurred while allocating an IP address - `cannot_start_network`: An error occurred while allocating network resources - `cannot_update_firmware`: An error occurred while updating bare metal server firmware The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The status reason code: - `cannot_reinitialize`: An error occurred while reinitializing bare metal server - `cannot_start`: Failed to start due to an internal error - `cannot_start_capacity`: Insufficient capacity within the selected zone - `cannot_start_compute`: An error occurred while allocating compute resources - `cannot_start_ip_address`: An error occurred while allocating an IP address - `cannot_start_network`: An error occurred while allocating network resources - `cannot_update_firmware`: An error occurred while updating bare metal server firmware - `cannot_start_reservation_capacity`: Failed to start because the reservation has insufficient capacity - `cannot_start_reservation_expired`: Failed to start because the reservation has expired The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         CANNOT_REINITIALIZE = 'cannot_reinitialize',
         CANNOT_START = 'cannot_start',
@@ -36927,6 +37630,8 @@ namespace VpcV1 {
         CANNOT_START_COMPUTE = 'cannot_start_compute',
         CANNOT_START_IP_ADDRESS = 'cannot_start_ip_address',
         CANNOT_START_NETWORK = 'cannot_start_network',
+        CANNOT_START_RESERVATION_CAPACITY = 'cannot_start_reservation_capacity',
+        CANNOT_START_RESERVATION_EXPIRED = 'cannot_start_reservation_expired',
         CANNOT_UPDATE_FIRMWARE = 'cannot_update_firmware',
       }
     }
@@ -38658,9 +39363,11 @@ namespace VpcV1 {
     resource_type: EndpointGateway.Constants.ResourceType | string;
     /** The security groups targeting this endpoint gateway. */
     security_groups: SecurityGroupReference[];
-    /** Deprecated: The fully qualified domain name for the target service. */
+    /** Deprecated: The fully qualified domain name for the target service. The domain name may have a wildcard
+     *  prefix.
+     */
     service_endpoint?: string;
-    /** The fully qualified domain names for the target service. */
+    /** The fully qualified domain names for the target service. A domain name may have a wildcard prefix. */
     service_endpoints: string[];
     /** The target for this endpoint gateway. */
     target: EndpointGatewayTarget;
@@ -40989,6 +41696,7 @@ namespace VpcV1 {
      *  - `reservation_expired`: The reservation affinity pool has an expired reservation.
      *  - `reservation_failed`: The reservation affinity pool has a failed reservation.
      *
+     *  See [health status reasons](https://cloud.ibm.com/docs/vpc?topic=vpc-server-health-status-reasons) for details.
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
@@ -41000,7 +41708,7 @@ namespace VpcV1 {
   }
   export namespace InstanceHealthReason {
     export namespace Constants {
-      /** A reason code for this health state: - `reservation_capacity_unavailable`: The reservation affinity pool has no available capacity. - `reservation_deleted`: The reservation affinity pool has a deleted reservation. - `reservation_expired`: The reservation affinity pool has an expired reservation. - `reservation_failed`: The reservation affinity pool has a failed reservation. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** A reason code for this health state: - `reservation_capacity_unavailable`: The reservation affinity pool has no available capacity. - `reservation_deleted`: The reservation affinity pool has a deleted reservation. - `reservation_expired`: The reservation affinity pool has an expired reservation. - `reservation_failed`: The reservation affinity pool has a failed reservation. See [health status reasons](https://cloud.ibm.com/docs/vpc?topic=vpc-server-health-status-reasons) for details. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         RESERVATION_CAPACITY_UNAVAILABLE = 'reservation_capacity_unavailable',
         RESERVATION_DELETED = 'reservation_deleted',
@@ -41827,17 +42535,24 @@ namespace VpcV1 {
    */
   export interface InstanceReservationAffinity {
     /** The reservation affinity policy to use for this virtual server instance:
+     *  - `automatic`: Any reservations with an `affinity_policy` of `automatic`
+     *    that have the same `profile` and `zone` as this virtual server instance
+     *    are available for use.
      *  - `disabled`: Reservations will not be used
      *  - `manual`: Reservations in `pool` are available for use.
      */
     policy: InstanceReservationAffinity.Constants.Policy | string;
-    /** The pool of reservations available for use by this virtual server instance. */
+    /** The pool of reservations available for use by this virtual server instance when the `policy` is `manual`.
+     *  This must be empty if the `policy` is `automatic` or
+     *  `disabled`.
+     */
     pool: ReservationReference[];
   }
   export namespace InstanceReservationAffinity {
     export namespace Constants {
-      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` are available for use. */
+      /** The reservation affinity policy to use for this virtual server instance: - `automatic`: Any reservations with an `affinity_policy` of `automatic` that have the same `profile` and `zone` as this virtual server instance are available for use. - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` are available for use. */
       export enum Policy {
+        AUTOMATIC = 'automatic',
         DISABLED = 'disabled',
         MANUAL = 'manual',
       }
@@ -41849,6 +42564,9 @@ namespace VpcV1 {
    */
   export interface InstanceReservationAffinityPatch {
     /** The reservation affinity policy to use for this virtual server instance:
+     *  - `automatic`: Any reservations with an `affinity_policy` of `automatic`
+     *    that have the same `profile` and `zone` as this virtual server instance
+     *    are available for use.
      *  - `disabled`: Reservations will not be used
      *  - `manual`: Reservations in `pool` will be available for use
      *
@@ -41858,17 +42576,19 @@ namespace VpcV1 {
     /** The pool of reservations available for use by this virtual server instance, replacing the existing pool of
      *  reservations.
      *
-     *  Specified reservations must have a `status` of `active`, and have the same
-     *  `profile` and `zone` as this virtual server instance.
+     *  Specified reservations must have a `status` of `active`, and have the same `profile` and `zone` as this virtual
+     *  server instance.
      *
-     *  If `policy` is `manual`, `pool` must have one reservation. If `policy` is `disabled`, `pool` must be empty.
+     *  If `policy` is `manual`, `pool` must have one reservation. If `policy` is `disabled` or `automatic`, `pool` must
+     *  be empty. If `policy` is `manual`, the `pool` must contain a reservation with available capacity.
      */
     pool?: ReservationIdentity[];
   }
   export namespace InstanceReservationAffinityPatch {
     export namespace Constants {
-      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` will be available for use The policy must be `disabled` if `placement_target` is set. */
+      /** The reservation affinity policy to use for this virtual server instance: - `automatic`: Any reservations with an `affinity_policy` of `automatic` that have the same `profile` and `zone` as this virtual server instance are available for use. - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` will be available for use The policy must be `disabled` if `placement_target` is set. */
       export enum Policy {
+        AUTOMATIC = 'automatic',
         DISABLED = 'disabled',
         MANUAL = 'manual',
       }
@@ -41882,24 +42602,31 @@ namespace VpcV1 {
     /** The reservation affinity policy to use for this virtual server instance:
      *  - `disabled`: Reservations will not be used
      *  - `manual`: Reservations in `pool` will be available for use
+     *  - `automatic`: Reservations with an `affinity_policy` of `automatic` that have the same
+     *    `profile` and `zone` as this virtual server instance will be available for use.
      *
-     *  The policy will default to `manual` if `pool` is not empty, and `disabled` otherwise.
+     *  The policy will default to `manual` if `pool` is not empty. The policy will default to
+     *  `disabled` if a `placement_target` is set. The policy will default to `automatic` in all other cases.
+     *
+     *  The policy must be `disabled` if `placement_target` is specified.
      */
     policy?: InstanceReservationAffinityPrototype.Constants.Policy | string;
     /** The pool of reservations available for use by this virtual server instance.
      *
-     *  Specified reservations must have a `status` of `active`, and have the same
-     *  `profile` and `zone` as this virtual server instance.
+     *  Specified reservations must have a `status` of `active`, and have the same `profile` and `zone` as this virtual
+     *  server instance.
      *
-     *  If `policy` is `manual`, a pool must be specified with at least one reservation. If
-     *  `policy` is `disabled` and a pool is specified, it must be empty.
+     *  If `policy` is `manual`, `pool` must be specified with one reservation. If `policy` is `disabled` or `automatic`
+     *  and `pool` is specified, it must be empty. If `policy` is `manual`, the `pool` must contain a reservation with
+     *  available capacity.
      */
     pool?: ReservationIdentity[];
   }
   export namespace InstanceReservationAffinityPrototype {
     export namespace Constants {
-      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` will be available for use The policy will default to `manual` if `pool` is not empty, and `disabled` otherwise. */
+      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` will be available for use - `automatic`: Reservations with an `affinity_policy` of `automatic` that have the same `profile` and `zone` as this virtual server instance will be available for use. The policy will default to `manual` if `pool` is not empty. The policy will default to `disabled` if a `placement_target` is set. The policy will default to `automatic` in all other cases. The policy must be `disabled` if `placement_target` is specified. */
       export enum Policy {
+        AUTOMATIC = 'automatic',
         DISABLED = 'disabled',
         MANUAL = 'manual',
       }
@@ -42977,7 +43704,7 @@ namespace VpcV1 {
     /** The concurrent connection limit for the listener. If reached, incoming connections may be queued or
      *  rejected.
      *
-     *  This property will be present for load balancers in the `application` family.
+     *  Supported for load balancers in the `application` family.
      */
     connection_limit?: number;
     /** The default pool for this listener.  If `https_redirect` is specified,
@@ -43364,10 +44091,8 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     provisioning_status: LoadBalancerPoolMember.Constants.ProvisioningStatus | string;
-    /** The pool member target. Load balancers in the `network` family support virtual server
-     *  instances. Load balancers in the `application` family support IP addresses. If the load
-     *  balancer has route mode enabled, the member must be in a zone the load balancer has a
-     *  subnet in.
+    /** The pool member target. If the load balancer has route mode enabled, the member must be
+     *  in a zone the load balancer has a subnet in.
      */
     target: LoadBalancerPoolMemberTarget;
     /** The weight of the server member.
@@ -43417,10 +44142,8 @@ namespace VpcV1 {
      *  The port must be unique across all members for all pools associated with this pool's listener.
      */
     port: number;
-    /** The pool member target. Load balancers in the `network` family support virtual server
-     *  instances. Load balancers in the `application` family support IP addresses. If the load
-     *  balancer has route mode enabled, the member must be in a zone the load balancer has a
-     *  subnet in.
+    /** The pool member target. If the load balancer has route mode enabled, the member must be
+     *  in a zone the load balancer has a subnet in.
      */
     target: LoadBalancerPoolMemberTargetPrototype;
     /** The weight of the server member.
@@ -43445,17 +44168,15 @@ namespace VpcV1 {
   }
 
   /**
-   * The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in
-   * the `application` family support IP addresses. If the load balancer has route mode enabled, the member must be in a
-   * zone the load balancer has a subnet in.
+   * The pool member target. If the load balancer has route mode enabled, the member must be in a zone the load balancer
+   * has a subnet in.
    */
   export interface LoadBalancerPoolMemberTarget {
   }
 
   /**
-   * The pool member target. Load balancers in the `network` family support virtual server instances. Load balancers in
-   * the `application` family support IP addresses. If the load balancer has route mode enabled, the member must be in a
-   * zone the load balancer has a subnet in.
+   * The pool member target. If the load balancer has route mode enabled, the member must be in a zone the load balancer
+   * has a subnet in.
    */
   export interface LoadBalancerPoolMemberTargetPrototype {
   }
@@ -44957,6 +45678,7 @@ namespace VpcV1 {
    */
   export interface Reservation {
     /** The affinity policy to use for this reservation:
+     *  - `automatic`: The reservation will be automatically selected
      *  - `restricted`: The reservation must be manually requested
      *
      *  The enumerated values for this property may
@@ -44985,7 +45707,11 @@ namespace VpcV1 {
     lifecycle_state: Reservation.Constants.LifecycleState | string;
     /** The name for this reservation. The name is unique across all reservations in the region. */
     name: string;
-    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) for this reservation. */
+    /** The [instance profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) or
+     *  [bare metal server
+     *  profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile)
+     *  for this reservation.
+     */
     profile: ReservationProfile;
     /** The resource group for this reservation. */
     resource_group: ResourceGroupReference;
@@ -45004,8 +45730,9 @@ namespace VpcV1 {
   }
   export namespace Reservation {
     export namespace Constants {
-      /** The affinity policy to use for this reservation: - `restricted`: The reservation must be manually requested The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The affinity policy to use for this reservation: - `automatic`: The reservation will be automatically selected - `restricted`: The reservation must be manually requested The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AffinityPolicy {
+        AUTOMATIC = 'automatic',
         RESTRICTED = 'restricted',
       }
       /** The lifecycle state of this reservation. */
@@ -45210,27 +45937,17 @@ namespace VpcV1 {
   }
 
   /**
-   * The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) for this reservation.
+   * The [instance profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) or
+   * [bare metal server profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile) for this
+   * reservation.
    */
   export interface ReservationProfile {
-    /** The URL for this virtual server instance profile. */
-    href: string;
-    /** The globally unique name for this virtual server instance profile. */
-    name: string;
-    /** The resource type. */
-    resource_type: ReservationProfile.Constants.ResourceType | string;
-  }
-  export namespace ReservationProfile {
-    export namespace Constants {
-      /** The resource type. */
-      export enum ResourceType {
-        INSTANCE_PROFILE = 'instance_profile',
-      }
-    }
   }
 
   /**
-   * The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation.
+   * The [instance profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) or
+   * [bare metal server profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile) to use for this
+   * reservation.
    */
   export interface ReservationProfilePatch {
     /** The globally unique name of the profile. */
@@ -45242,13 +45959,16 @@ namespace VpcV1 {
     export namespace Constants {
       /** The resource type of the profile. */
       export enum ResourceType {
+        BARE_METAL_SERVER_PROFILE = 'bare_metal_server_profile',
         INSTANCE_PROFILE = 'instance_profile',
       }
     }
   }
 
   /**
-   * The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this reservation.
+   * The [instance profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) or
+   * [bare metal server profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile) to use for this
+   * reservation.
    */
   export interface ReservationProfilePrototype {
     /** The globally unique name of the profile. */
@@ -45260,6 +45980,7 @@ namespace VpcV1 {
     export namespace Constants {
       /** The resource type of the profile. */
       export enum ResourceType {
+        BARE_METAL_SERVER_PROFILE = 'bare_metal_server_profile',
         INSTANCE_PROFILE = 'instance_profile',
       }
     }
@@ -46221,7 +46942,7 @@ namespace VpcV1 {
      */
     accessor_binding_role: Share.Constants.AccessorBindingRole | string;
     /** The accessor bindings for this file share. Each accessor binding identifies a resource (possibly in another
-     *  account) with access to this file share's data.
+     *  account) with access to this file share's data and its snapshots.
      */
     accessor_bindings: ShareAccessorBindingReference[];
     /** The transit encryption modes allowed for this share. */
@@ -46312,16 +47033,29 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: Share.Constants.ResourceType | string;
-    /** The size of the file share rounded up to the next gigabyte.
+    /** The size of the file share (in gigabytes), excluding share snapshots.
      *
      *  The maximum size for a share may increase in the future.
      */
     size: number;
+    /** The total number of snapshots for this share. */
+    snapshot_count: number;
+    /** The total size (in gigabytes) of snapshots used for this file share. */
+    snapshot_size: number;
     /** The source file share for this replica file share.
      *
      *  This property will be present when the `replication_role` is `replica`.
      */
     source_share?: ShareReference;
+    /** The snapshot this share was created from.
+     *
+     *  This property will be present when the share was created from a snapshot.
+     *
+     *  The resources supported by this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the
+     *  future.
+     */
+    source_snapshot?: ShareSourceSnapshot;
     /** Tags for this resource. */
     user_tags: string[];
     /** The zone this file share will reside in. */
@@ -46386,11 +47120,7 @@ namespace VpcV1 {
    * ShareAccessorBinding.
    */
   export interface ShareAccessorBinding {
-    /** The accessor for this share accessor binding.
-     *
-     *  The resources supported by this property may
-     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
-     */
+    /** The accessor for this share accessor binding. */
     accessor: ShareAccessorBindingAccessor;
     /** The date and time that the share accessor binding was created. */
     created_at: string;
@@ -46424,9 +47154,6 @@ namespace VpcV1 {
 
   /**
    * The accessor for this share accessor binding.
-   *
-   * The resources supported by this property may
-   * [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
    */
   export interface ShareAccessorBindingAccessor {
   }
@@ -47040,6 +47767,181 @@ namespace VpcV1 {
         CANNOT_REACH_SOURCE_SHARE = 'cannot_reach_source_share',
       }
     }
+  }
+
+  /**
+   * ShareSnapshot.
+   */
+  export interface ShareSnapshot {
+    /** If present, the backup policy plan which created this share snapshot. */
+    backup_policy_plan?: BackupPolicyPlanReference;
+    /** The date and time the data capture for this share snapshot was completed.
+     *
+     *  If absent, this snapshot's data has not yet been captured.
+     */
+    captured_at?: string;
+    /** The date and time that the share snapshot was created. */
+    created_at: string;
+    /** The CRN for this share snapshot. */
+    crn: string;
+    /** The fingerprint for this share snapshot. Only snapshots with identical data will have the same fingerprint.
+     *  This snapshot will also be available as a subdirectory named identically to this fingerprint in the share's
+     *  `.snapshot` directory.
+     */
+    fingerprint: string;
+    /** The URL for this share snapshot. */
+    href: string;
+    /** The unique identifier for this share snapshot. */
+    id: string;
+    /** The reasons for the current `lifecycle_state` (if any). */
+    lifecycle_reasons: ShareSnapshotLifecycleReason[];
+    /** The lifecycle state of this share snapshot
+     *  - `pending`: The share snapshot is being provisioned and is not yet usable. A
+     *    snapshot on a replica share will remain `pending` until the next replication sync
+     *    completes.
+     *  - `deleting`: The share snapshot is being deleted.
+     *  - `failed`: The share snapshot is irrecoverably unusable.
+     *  - `stable`: The share snapshot is stable and ready for use.
+     *  - `updating`: The share snapshot is being updated.
+     *  - `suspended`: The share snapshot is not currently usable (see `lifecycle_reasons`).
+     */
+    lifecycle_state: ShareSnapshot.Constants.LifecycleState | string;
+    /** The minimum size of a share created from this snapshot. When a snapshot is created, this will be set to the
+     *  size of the `source_share`.
+     */
+    minimum_size: number;
+    /** The name for this share snapshot. The name is unique across all snapshots for the file share. */
+    name: string;
+    /** The resource group for this share snapshot. */
+    resource_group: ResourceGroupReference;
+    /** The resource type. */
+    resource_type: ShareSnapshot.Constants.ResourceType | string;
+    /** The status of the share snapshot:
+     *  - `available`: The share snapshot is available for use.
+     *  - `failed`: The share snapshot is irrecoverably unusable.
+     *  - `pending`: The share snapshot is being provisioned and is not yet usable. A
+     *    snapshot on a replica share will remain `pending` until the next replication sync
+     *    completes.
+     *  - `unusable`: The share snapshot is not currently usable (see `status_reasons`)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    status: ShareSnapshot.Constants.Status | string;
+    /** The reasons for the current status (if any). */
+    status_reasons: ShareSnapshotStatusReason[];
+    /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this share snapshot. */
+    user_tags: string[];
+    /** The zone this share snapshot resides in. */
+    zone: ZoneReference;
+  }
+  export namespace ShareSnapshot {
+    export namespace Constants {
+      /** The lifecycle state of this share snapshot - `pending`: The share snapshot is being provisioned and is not yet usable. A snapshot on a replica share will remain `pending` until the next replication sync completes. - `deleting`: The share snapshot is being deleted. - `failed`: The share snapshot is irrecoverably unusable. - `stable`: The share snapshot is stable and ready for use. - `updating`: The share snapshot is being updated. - `suspended`: The share snapshot is not currently usable (see `lifecycle_reasons`). */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE_SNAPSHOT = 'share_snapshot',
+      }
+      /** The status of the share snapshot: - `available`: The share snapshot is available for use. - `failed`: The share snapshot is irrecoverably unusable. - `pending`: The share snapshot is being provisioned and is not yet usable. A snapshot on a replica share will remain `pending` until the next replication sync completes. - `unusable`: The share snapshot is not currently usable (see `status_reasons`) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Status {
+        AVAILABLE = 'available',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        UNUSABLE = 'unusable',
+      }
+    }
+  }
+
+  /**
+   * ShareSnapshotCollection.
+   */
+  export interface ShareSnapshotCollection {
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** A page of share snapshots. */
+    snapshots?: ShareSnapshot[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
+   * ShareSnapshotLifecycleReason.
+   */
+  export interface ShareSnapshotLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: ShareSnapshotLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** Link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace ShareSnapshotLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
+  }
+
+  /**
+   * ShareSnapshotStatusReason.
+   */
+  export interface ShareSnapshotStatusReason {
+    /** A reason code for the status:
+     *  - `encryption_key_deleted`: Share snapshot is unusable because its
+     *   `encryption_key` was deleted
+     *  - `internal_error`: Internal error (contact IBM support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: ShareSnapshotStatusReason.Constants.Code | string;
+    /** An explanation of the status reason. */
+    message: string;
+    /** Link to documentation about this status reason. */
+    more_info?: string;
+  }
+  export namespace ShareSnapshotStatusReason {
+    export namespace Constants {
+      /** A reason code for the status: - `encryption_key_deleted`: Share snapshot is unusable because its `encryption_key` was deleted - `internal_error`: Internal error (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        ENCRYPTION_KEY_DELETED = 'encryption_key_deleted',
+      }
+    }
+  }
+
+  /**
+   * ShareSourceSnapshot.
+   */
+  export interface ShareSourceSnapshot {
+  }
+
+  /**
+   * ShareSourceSnapshotPrototype.
+   */
+  export interface ShareSourceSnapshotPrototype {
   }
 
   /**
@@ -47691,8 +48593,12 @@ namespace VpcV1 {
     created_at: string;
     /** The CRN for this VPC. */
     crn: string;
-    /** The CSE ([Cloud Service Endpoint](https://cloud.ibm.com/docs/resources?topic=resources-service-endpoints))
-     *  source IP addresses for the VPC. The VPC will have one CSE source IP address per zone.
+    /** The CSE ([Cloud Service
+     *  Endpoint](https://cloud.ibm.com/docs/account?topic=account-service-endpoints-overview)) source IP addresses for
+     *  the VPC. The VPC will have at least one CSE source IP address per zone.
+     *
+     *  The maximum number of items for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     cse_source_ips?: VPCCSESourceIP[];
     /** The default network ACL to use for subnets created in this VPC. */
@@ -47761,7 +48667,7 @@ namespace VpcV1 {
    * VPCCSESourceIP.
    */
   export interface VPCCSESourceIP {
-    /** The cloud service endpoint source IP address for this zone. */
+    /** A cloud service endpoint source IP address for this zone. */
     ip: IP;
     /** The zone this cloud service endpoint source IP resides in. */
     zone: ZoneReference;
@@ -49638,7 +50544,11 @@ namespace VpcV1 {
      *  - `unusable`: Not able to be attached to any virtual server instances.
      */
     attachment_state: Volume.Constants.AttachmentState | string;
-    /** The maximum bandwidth (in megabits per second) for the volume. */
+    /** The maximum bandwidth (in megabits per second) for the volume.
+     *
+     *  The minimum and maximum limits for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     bandwidth: number;
     /** Indicates whether this volume is performing an operation that must be serialized. This must be `false` to
      *  perform an operation that is specified to require serialization.
@@ -49853,7 +50763,9 @@ namespace VpcV1 {
      *  If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** An existing volume to attach to the instance, or a prototype object for a new volume. */
+    /** The volume to use for this attachment. This can be specified as an existing unattached
+     *  volume, or a prototype object for a new volume.
+     */
     volume: VolumeAttachmentPrototypeVolume;
   }
 
@@ -49895,12 +50807,13 @@ namespace VpcV1 {
      *  If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** An existing volume to attach. */
+    /** An existing unattached volume. */
     volume: VolumeIdentity;
   }
 
   /**
-   * An existing volume to attach to the instance, or a prototype object for a new volume.
+   * The volume to use for this attachment. This can be specified as an existing unattached volume, or a prototype
+   * object for a new volume.
    */
   export interface VolumeAttachmentPrototypeVolume {
   }
@@ -50441,6 +51354,38 @@ namespace VpcV1 {
   }
 
   /**
+   * BackupPolicyJobSourceShareReference.
+   */
+  export interface BackupPolicyJobSourceShareReference extends BackupPolicyJobSource {
+    /** The CRN for this file share. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this file share. */
+    href: string;
+    /** The unique identifier for this file share. */
+    id: string;
+    /** The name for this share. The name is unique across all shares in the region. */
+    name: string;
+    /** If present, this property indicates that the resource associated with this reference
+     *  is remote and therefore may not be directly retrievable.
+     */
+    remote?: ShareRemote;
+    /** The resource type. */
+    resource_type: BackupPolicyJobSourceShareReference.Constants.ResourceType | string;
+  }
+  export namespace BackupPolicyJobSourceShareReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE = 'share',
+      }
+    }
+  }
+
+  /**
    * BackupPolicyJobSourceVolumeReference.
    */
   export interface BackupPolicyJobSourceVolumeReference extends BackupPolicyJobSource {
@@ -50528,6 +51473,48 @@ namespace VpcV1 {
   }
 
   /**
+   * BackupPolicyMatchResourceTypeShare.
+   */
+  export interface BackupPolicyMatchResourceTypeShare extends BackupPolicy {
+    /** The resource type this backup policy applies to. Resources that have both a matching type and a matching
+     *  user tag will be subject to the backup policy.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    match_resource_type: BackupPolicyMatchResourceTypeShare.Constants.MatchResourceType | string;
+  }
+  export namespace BackupPolicyMatchResourceTypeShare {
+    export namespace Constants {
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the backup policy. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        BACKUP_POLICY = 'backup_policy',
+      }
+      /** The resource type this backup policy applies to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum MatchResourceType {
+        SHARE = 'share',
+      }
+    }
+  }
+
+  /**
    * BackupPolicyMatchResourceTypeVolume.
    */
   export interface BackupPolicyMatchResourceTypeVolume extends BackupPolicy {
@@ -50598,6 +51585,24 @@ namespace VpcV1 {
   }
 
   /**
+   * BackupPolicyPrototypeBackupPolicyMatchResourceTypeSharePrototype.
+   */
+  export interface BackupPolicyPrototypeBackupPolicyMatchResourceTypeSharePrototype extends BackupPolicyPrototype {
+    /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching
+     *  user tag will be subject to the backup policy.
+     */
+    match_resource_type: BackupPolicyPrototypeBackupPolicyMatchResourceTypeSharePrototype.Constants.MatchResourceType | string;
+  }
+  export namespace BackupPolicyPrototypeBackupPolicyMatchResourceTypeSharePrototype {
+    export namespace Constants {
+      /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. */
+      export enum MatchResourceType {
+        SHARE = 'share',
+      }
+    }
+  }
+
+  /**
    * BackupPolicyPrototypeBackupPolicyMatchResourceTypeVolumePrototype.
    */
   export interface BackupPolicyPrototypeBackupPolicyMatchResourceTypeVolumePrototype extends BackupPolicyPrototype {
@@ -50655,6 +51660,66 @@ namespace VpcV1 {
       /** The resource type. */
       export enum ResourceType {
         ENTERPRISE = 'enterprise',
+      }
+    }
+  }
+
+  /**
+   * BackupPolicyTargetSnapshotShareSnapshotReference.
+   */
+  export interface BackupPolicyTargetSnapshotShareSnapshotReference extends BackupPolicyTargetSnapshot {
+    /** The CRN for this share snapshot. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this share snapshot. */
+    href: string;
+    /** The unique identifier for this share snapshot. */
+    id: string;
+    /** The name for this share snapshot. The name is unique across all snapshots for the file share. */
+    name: string;
+    /** The resource type. */
+    resource_type: BackupPolicyTargetSnapshotShareSnapshotReference.Constants.ResourceType | string;
+  }
+  export namespace BackupPolicyTargetSnapshotShareSnapshotReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE_SNAPSHOT = 'share_snapshot',
+      }
+    }
+  }
+
+  /**
+   * BackupPolicyTargetSnapshotSnapshotReference.
+   */
+  export interface BackupPolicyTargetSnapshotSnapshotReference extends BackupPolicyTargetSnapshot {
+    /** The CRN of this snapshot. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this snapshot. */
+    href: string;
+    /** The unique identifier for this snapshot. */
+    id: string;
+    /** The name for this snapshot. The name is unique across all snapshots in the region. */
+    name: string;
+    /** If present, this property indicates that the resource associated with this reference
+     *  is remote and therefore may not be directly retrievable.
+     */
+    remote?: SnapshotRemote;
+    /** The resource type. */
+    resource_type: BackupPolicyTargetSnapshotSnapshotReference.Constants.ResourceType | string;
+  }
+  export namespace BackupPolicyTargetSnapshotSnapshotReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SNAPSHOT = 'snapshot',
       }
     }
   }
@@ -55845,6 +56910,46 @@ namespace VpcV1 {
   }
 
   /**
+   * ReservationProfileBareMetalServerProfileReference.
+   */
+  export interface ReservationProfileBareMetalServerProfileReference extends ReservationProfile {
+    /** The URL for this bare metal server profile. */
+    href: string;
+    /** The name for this bare metal server profile. */
+    name: string;
+    /** The resource type. */
+    resource_type: ReservationProfileBareMetalServerProfileReference.Constants.ResourceType | string;
+  }
+  export namespace ReservationProfileBareMetalServerProfileReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        BARE_METAL_SERVER_PROFILE = 'bare_metal_server_profile',
+      }
+    }
+  }
+
+  /**
+   * ReservationProfileInstanceProfileReference.
+   */
+  export interface ReservationProfileInstanceProfileReference extends ReservationProfile {
+    /** The URL for this virtual server instance profile. */
+    href: string;
+    /** The globally unique name for this virtual server instance profile. */
+    name: string;
+    /** The resource type. */
+    resource_type: ReservationProfileInstanceProfileReference.Constants.ResourceType | string;
+  }
+  export namespace ReservationProfileInstanceProfileReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_PROFILE = 'instance_profile',
+      }
+    }
+  }
+
+  /**
    * ReservedIPTargetPrototypeEndpointGatewayIdentity.
    */
   export interface ReservedIPTargetPrototypeEndpointGatewayIdentity extends ReservedIPTargetPrototype {
@@ -57346,7 +58451,7 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
-    /** The size of the file share rounded up to the next gigabyte.
+    /** The size of the file share (in gigabytes), excluding share snapshots.
      *
      *  The maximum size for a share may increase in the future.
      */
@@ -57421,6 +58526,95 @@ namespace VpcV1 {
       export enum AllowedTransitEncryptionModes {
         NONE = 'none',
         USER_MANAGED = 'user_managed',
+      }
+    }
+  }
+
+  /**
+   * Create a file share from a source snapshot. The initial value for `access_control_mode`, and the zone the file
+   * share resides in will be inherited from `source_snapshot`.
+   */
+  export interface SharePrototypeShareBySourceSnapshot extends SharePrototype {
+    /** The root key to use to wrap the data encryption key for the share.
+     *
+     *  The specified key may be in a different account, subject to IAM policies.
+     *
+     *  If unspecified, the source snapshot's `encryption_key` will be used.
+     */
+    encryption_key?: EncryptionKeyIdentity;
+    /** The owner assigned to the file share at creation. Subsequent changes to the owner
+     *  must be performed by a client that has mounted the file share.
+     */
+    initial_owner?: ShareInitialOwner;
+    /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
+     *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
+     *  size.
+     *
+     *  In addition, each client accessing the share will be restricted to 48,000 IOPS.
+     */
+    iops?: number;
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) to use
+     *  for this file share. The profile must support the share's specified IOPS and size.
+     */
+    profile: ShareProfileIdentity;
+    /** The resource group to use. If unspecified, the account's [default resource
+     *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
+     */
+    resource_group?: ResourceGroupIdentity;
+    /** The size to use for the file share (in gigabytes). The specified value must be at least the snapshot's
+     *  `minimum_size`, and must be within the `size` range of the share's profile.
+     *
+     *  If unspecified, the source snapshot's `minimum_size` will be used.
+     */
+    size?: number;
+    /** The source snapshot for this file share.
+     *
+     *  This file share will reside in the same zone as the specified source snapshot.
+     *  The snapshot must have the `lifecycle_state` as `stable` and `status` as `available`
+     *  to be able to restore a share for it.
+     */
+    source_snapshot: ShareSourceSnapshotPrototype;
+  }
+  export namespace SharePrototypeShareBySourceSnapshot {
+    export namespace Constants {
+      /** The transit encryption modes to allow for this share. If unspecified: - If share mount targets are specified, and those share mount targets all specify a `transit_encryption` of `user_managed`, then only `user_managed` will be allowed. - Otherwise, all `transit_encryption` modes will be allowed. */
+      export enum AllowedTransitEncryptionModes {
+        NONE = 'none',
+        USER_MANAGED = 'user_managed',
+      }
+    }
+  }
+
+  /**
+   * Identifies a share snapshot by a unique property.
+   */
+  export interface ShareSourceSnapshotPrototypeShareSnapshotIdentity extends ShareSourceSnapshotPrototype {
+  }
+
+  /**
+   * ShareSourceSnapshotShareSnapshotReference.
+   */
+  export interface ShareSourceSnapshotShareSnapshotReference extends ShareSourceSnapshot {
+    /** The CRN for this share snapshot. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this share snapshot. */
+    href: string;
+    /** The unique identifier for this share snapshot. */
+    id: string;
+    /** The name for this share snapshot. The name is unique across all snapshots for the file share. */
+    name: string;
+    /** The resource type. */
+    resource_type: ShareSourceSnapshotShareSnapshotReference.Constants.ResourceType | string;
+  }
+  export namespace ShareSourceSnapshotShareSnapshotReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SHARE_SNAPSHOT = 'share_snapshot',
       }
     }
   }
@@ -60223,6 +61417,30 @@ namespace VpcV1 {
    */
   export interface ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentityVirtualNetworkInterfaceIdentityById extends ShareMountTargetVirtualNetworkInterfacePrototypeVirtualNetworkInterfaceIdentity {
     /** The unique identifier for this virtual network interface. */
+    id: string;
+  }
+
+  /**
+   * ShareSourceSnapshotPrototypeShareSnapshotIdentityShareSnapshotIdentityByCRN.
+   */
+  export interface ShareSourceSnapshotPrototypeShareSnapshotIdentityShareSnapshotIdentityByCRN extends ShareSourceSnapshotPrototypeShareSnapshotIdentity {
+    /** The CRN for this share snapshot. */
+    crn: string;
+  }
+
+  /**
+   * ShareSourceSnapshotPrototypeShareSnapshotIdentityShareSnapshotIdentityByHref.
+   */
+  export interface ShareSourceSnapshotPrototypeShareSnapshotIdentityShareSnapshotIdentityByHref extends ShareSourceSnapshotPrototypeShareSnapshotIdentity {
+    /** The URL for this share snapshot. */
+    href: string;
+  }
+
+  /**
+   * ShareSourceSnapshotPrototypeShareSnapshotIdentityShareSnapshotIdentityById.
+   */
+  export interface ShareSourceSnapshotPrototypeShareSnapshotIdentityShareSnapshotIdentityById extends ShareSourceSnapshotPrototypeShareSnapshotIdentity {
+    /** The unique identifier for this share snapshot. */
     id: string;
   }
 
@@ -63339,6 +64557,87 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.ShareMountTarget[]> {
       const results: ShareMountTarget[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * ShareSnapshotsPager can be used to simplify the use of listShareSnapshots().
+   */
+  export class ShareSnapshotsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListShareSnapshotsParams;
+
+    /**
+     * Construct a ShareSnapshotsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listShareSnapshots()
+     * @param {Object} params - The parameters to be passed to listShareSnapshots()
+     * @constructor
+     * @returns {ShareSnapshotsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListShareSnapshotsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listShareSnapshots().
+     * @returns {Promise<VpcV1.ShareSnapshot[]>}
+     */
+    public async getNext(): Promise<VpcV1.ShareSnapshot[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listShareSnapshots(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.snapshots;
+    }
+
+    /**
+     * Returns all results by invoking listShareSnapshots() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.ShareSnapshot[]>}
+     */
+    public async getAll(): Promise<VpcV1.ShareSnapshot[]> {
+      const results: ShareSnapshot[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
