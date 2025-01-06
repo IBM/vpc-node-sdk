@@ -35,4 +35,7 @@ jobs:
 
     - name: Release
       if: github.ref == 'refs/heads/master' && matrix.node-version == '22'
+      env:
+        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
       run: npx semantic-release
