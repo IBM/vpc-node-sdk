@@ -1,3 +1,13 @@
+# [0.24.0](https://github.com/IBM/vpc-node-sdk/compare/v0.23.0...v0.24.0) (2025-01-06)
+
+
+### Features
+
+* **release:** Updated SDK to use API generated on 2024-12-26 ([#52](https://github.com/IBM/vpc-node-sdk/issues/52)) ([30ac750](https://github.com/IBM/vpc-node-sdk/commit/30ac75098d90a9f773c470981ca6ee39254a4491))
+* **workflow:** added CI workflow file ([#53](https://github.com/IBM/vpc-node-sdk/issues/53)) ([5ce051f](https://github.com/IBM/vpc-node-sdk/commit/5ce051f052c15d66cdf6b15b6779596ecc4c957c))
+* **workflow:** fixed the ci.yml file ([#54](https://github.com/IBM/vpc-node-sdk/issues/54)) ([b7e5d52](https://github.com/IBM/vpc-node-sdk/commit/b7e5d526a4d9a66c71a5d716405f86445daedfe2))
+* **workflow:** fixed the environment on ci.yml file ([#55](https://github.com/IBM/vpc-node-sdk/issues/55)) ([39f78d1](https://github.com/IBM/vpc-node-sdk/commit/39f78d151483fe1b93f69a4920db6972981a5331))
+
 # [0.23.0](https://github.com/IBM/vpc-node-sdk/compare/v0.22.0...v0.23.0) (2024-11-14)
 
 
