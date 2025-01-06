@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.com/IBM/vpc-node-sdk.svg?branch=master)](https://travis-ci.com/IBM/vpc-node-sdk)
+[![CI](https://github.com/IBM/vpc-node-sdk/actions/workflows/ci.yml/badge.svg)](https://github.com/IBM/vpc-node-sdk/actions/workflows/ci.yml)
 [![Release](https://img.shields.io/github/v/release/IBM/vpc-node-sdk)](https://github.com/IBM/vpc-node-sdk/releases/latest)
 [![npm](https://img.shields.io/npm/v/ibm-vpc)](https://www.npmjs.com/package/ibm-vpc)
 ![npm](https://img.shields.io/npm/dm/ibm-vpc)
