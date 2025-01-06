@@ -9,6 +9,7 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    environment: ci
     strategy:
       matrix:
         node-version: [18, 20, 22]
@@ -35,7 +36,7 @@ jobs:
 
     - name: Release
       if: github.ref == 'refs/heads/master' && matrix.node-version == '22'
-      env:
-        NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
-        GH_TOKEN: ${{ secrets.GH_TOKEN }}
-      run: npx semantic-release
+      run: |
+        export NPM_TOKEN=${{ secrets.NPM_TOKEN }}
+        export GH_TOKEN=${{ secrets.GH_TOKEN }}
+        npx semantic-release
