@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2022, 2023, 2024.
+ * (C) Copyright IBM Corp. 2023, 2024, 2025.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.96.1-5136e54a-20241108-203028
+ * IBM OpenAPI SDK Code Generator Version: 3.102.0-615ec964-20250307-203034
  */
 
 /* eslint-disable max-classes-per-file */
@@ -24,6 +24,7 @@
 import * as extend from 'extend';
 import { IncomingHttpHeaders, OutgoingHttpHeaders } from 'http';
 import {
+  AbortSignal,
   Authenticator,
   BaseService,
   SDKLogger,
@@ -39,7 +40,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: 2024-12-26
+ * API Version: 2025-03-10
  */
 
 class VpcV1 extends BaseService {
@@ -84,7 +85,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2024-11-19` and `2024-12-26`.
+   *  `2024-11-19` and `2025-03-08`.
    */
   version: string;
 
@@ -95,7 +96,7 @@ class VpcV1 extends BaseService {
    * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
    * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2024-11-19` and `2024-12-26`.
+   * specify any date between `2024-11-19` and `2025-03-08`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -120,7 +121,7 @@ class VpcV1 extends BaseService {
     if (!('generation' in options)) {
       this.generation = 2;
     }
-    this.version = options.version || '2024-12-17';
+    this.version = options.version || '2025-03-04';
   }
 
   /*************************
@@ -149,7 +150,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPCCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'classicAccess', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'classicAccess', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -176,11 +177,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -225,7 +230,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPC>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['addressPrefixManagement', 'classicAccess', 'dns', 'name', 'resourceGroup', 'headers'];
+    const _validParams = ['addressPrefixManagement', 'classicAccess', 'dns', 'name', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -257,12 +262,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -295,7 +304,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -323,11 +332,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -349,7 +362,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPC>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -377,11 +390,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -408,7 +425,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPC>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'dns', 'name', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'dns', 'name', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -442,6 +459,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -449,6 +467,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -471,7 +492,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DefaultNetworkACL>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -499,11 +520,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -527,7 +552,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DefaultRoutingTable>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -555,11 +580,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -582,7 +611,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DefaultSecurityGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -610,11 +639,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -638,7 +671,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.AddressPrefixCollection>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId'];
-    const _validParams = ['vpcId', 'start', 'limit', 'headers'];
+    const _validParams = ['vpcId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -668,11 +701,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -710,7 +747,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.AddressPrefix>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'cidr', 'zone'];
-    const _validParams = ['vpcId', 'cidr', 'zone', 'isDefault', 'name', 'headers'];
+    const _validParams = ['vpcId', 'cidr', 'zone', 'isDefault', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -746,12 +783,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -775,7 +816,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'headers'];
+    const _validParams = ['vpcId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -804,10 +845,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -830,7 +875,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.AddressPrefix>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'headers'];
+    const _validParams = ['vpcId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -859,11 +904,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -892,7 +941,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.AddressPrefix>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'isDefault', 'name', 'headers'];
+    const _validParams = ['vpcId', 'id', 'isDefault', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -927,12 +976,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -983,7 +1036,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBindingCollection>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId'];
-    const _validParams = ['vpcId', 'sort', 'start', 'limit', 'name', 'vpcCrn', 'vpcName', 'accountId', 'headers'];
+    const _validParams = ['vpcId', 'sort', 'start', 'limit', 'name', 'vpcCrn', 'vpcName', 'accountId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1018,11 +1071,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1059,7 +1116,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'vpc'];
-    const _validParams = ['vpcId', 'vpc', 'name', 'headers'];
+    const _validParams = ['vpcId', 'vpc', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1093,12 +1150,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1124,7 +1185,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'headers'];
+    const _validParams = ['vpcId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1153,11 +1214,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1180,7 +1245,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'headers'];
+    const _validParams = ['vpcId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1209,11 +1274,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1240,7 +1309,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPCDNSResolutionBinding>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'name', 'headers'];
+    const _validParams = ['vpcId', 'id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1274,12 +1343,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1309,7 +1382,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: listVpcRoutes');
     const _params = { ...params };
     const _requiredParams = ['vpcId'];
-    const _validParams = ['vpcId', 'zoneName', 'start', 'limit', 'headers'];
+    const _validParams = ['vpcId', 'zoneName', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1340,11 +1413,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1406,7 +1483,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: createVpcRoute');
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'destination', 'zone'];
-    const _validParams = ['vpcId', 'destination', 'zone', 'action', 'advertise', 'name', 'nextHop', 'priority', 'headers'];
+    const _validParams = ['vpcId', 'destination', 'zone', 'action', 'advertise', 'name', 'nextHop', 'priority', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1445,12 +1522,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1475,7 +1556,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: deleteVpcRoute');
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'headers'];
+    const _validParams = ['vpcId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1504,10 +1585,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1532,7 +1617,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: getVpcRoute');
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'headers'];
+    const _validParams = ['vpcId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1561,11 +1646,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1612,7 +1701,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: updateVpcRoute');
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'advertise', 'name', 'nextHop', 'priority', 'headers'];
+    const _validParams = ['vpcId', 'id', 'advertise', 'name', 'nextHop', 'priority', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1649,12 +1738,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1683,7 +1776,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.RoutingTableCollection>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId'];
-    const _validParams = ['vpcId', 'start', 'limit', 'isDefault', 'headers'];
+    const _validParams = ['vpcId', 'start', 'limit', 'isDefault', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1714,11 +1807,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1793,7 +1890,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId'];
-    const _validParams = ['vpcId', 'acceptRoutesFrom', 'advertiseRoutesTo', 'name', 'routeDirectLinkIngress', 'routeInternetIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'routes', 'headers'];
+    const _validParams = ['vpcId', 'acceptRoutesFrom', 'advertiseRoutesTo', 'name', 'routeDirectLinkIngress', 'routeInternetIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'routes', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1833,12 +1930,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1864,7 +1965,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'ifMatch', 'headers'];
+    const _validParams = ['vpcId', 'id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1893,11 +1994,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -1920,7 +2025,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'headers'];
+    const _validParams = ['vpcId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -1949,11 +2054,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2037,7 +2146,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'id'];
-    const _validParams = ['vpcId', 'id', 'acceptRoutesFrom', 'advertiseRoutesTo', 'name', 'routeDirectLinkIngress', 'routeInternetIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'ifMatch', 'headers'];
+    const _validParams = ['vpcId', 'id', 'acceptRoutesFrom', 'advertiseRoutesTo', 'name', 'routeDirectLinkIngress', 'routeInternetIngress', 'routeTransitGatewayIngress', 'routeVpcZoneIngress', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2077,6 +2186,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -2084,6 +2194,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2112,7 +2225,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.RouteCollection>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'routingTableId'];
-    const _validParams = ['vpcId', 'routingTableId', 'start', 'limit', 'headers'];
+    const _validParams = ['vpcId', 'routingTableId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2143,11 +2256,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2207,7 +2324,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Route>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'routingTableId', 'destination', 'zone'];
-    const _validParams = ['vpcId', 'routingTableId', 'destination', 'zone', 'action', 'advertise', 'name', 'nextHop', 'priority', 'headers'];
+    const _validParams = ['vpcId', 'routingTableId', 'destination', 'zone', 'action', 'advertise', 'name', 'nextHop', 'priority', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2247,12 +2364,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2277,7 +2398,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'routingTableId', 'id'];
-    const _validParams = ['vpcId', 'routingTableId', 'id', 'headers'];
+    const _validParams = ['vpcId', 'routingTableId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2307,10 +2428,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2334,7 +2459,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Route>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'routingTableId', 'id'];
-    const _validParams = ['vpcId', 'routingTableId', 'id', 'headers'];
+    const _validParams = ['vpcId', 'routingTableId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2364,11 +2489,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2415,7 +2544,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Route>> {
     const _params = { ...params };
     const _requiredParams = ['vpcId', 'routingTableId', 'id'];
-    const _validParams = ['vpcId', 'routingTableId', 'id', 'advertise', 'name', 'nextHop', 'priority', 'headers'];
+    const _validParams = ['vpcId', 'routingTableId', 'id', 'advertise', 'name', 'nextHop', 'priority', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2453,12 +2582,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2499,7 +2632,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SubnetCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'zoneName', 'vpcId', 'vpcCrn', 'vpcName', 'routingTableId', 'routingTableName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'zoneName', 'vpcId', 'vpcCrn', 'vpcName', 'routingTableId', 'routingTableName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2531,11 +2664,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2559,7 +2696,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Subnet>> {
     const _params = { ...params };
     const _requiredParams = ['subnetPrototype'];
-    const _validParams = ['subnetPrototype', 'headers'];
+    const _validParams = ['subnetPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2584,12 +2721,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2615,7 +2756,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2643,10 +2784,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2668,7 +2813,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Subnet>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2696,11 +2841,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2731,7 +2880,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Subnet>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'networkAcl', 'publicGateway', 'routingTable', 'headers'];
+    const _validParams = ['id', 'name', 'networkAcl', 'publicGateway', 'routingTable', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2767,12 +2916,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2794,7 +2947,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2822,11 +2975,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2849,7 +3006,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'networkAclIdentity'];
-    const _validParams = ['id', 'networkAclIdentity', 'headers'];
+    const _validParams = ['id', 'networkAclIdentity', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2879,12 +3036,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2906,7 +3067,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2934,10 +3095,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -2959,7 +3124,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -2987,11 +3152,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3015,7 +3184,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'publicGatewayIdentity'];
-    const _validParams = ['id', 'publicGatewayIdentity', 'headers'];
+    const _validParams = ['id', 'publicGatewayIdentity', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3045,12 +3214,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3072,7 +3245,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3100,11 +3273,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3130,7 +3307,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.RoutingTable>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'routingTableIdentity'];
-    const _validParams = ['id', 'routingTableIdentity', 'headers'];
+    const _validParams = ['id', 'routingTableIdentity', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3160,12 +3337,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3202,7 +3383,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIPCollection>> {
     const _params = { ...params };
     const _requiredParams = ['subnetId'];
-    const _validParams = ['subnetId', 'start', 'limit', 'sort', 'targetId', 'targetCrn', 'targetName', 'targetResourceType', 'headers'];
+    const _validParams = ['subnetId', 'start', 'limit', 'sort', 'targetId', 'targetCrn', 'targetName', 'targetResourceType', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3237,11 +3418,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3281,7 +3466,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
     const _params = { ...params };
     const _requiredParams = ['subnetId'];
-    const _validParams = ['subnetId', 'address', 'autoDelete', 'name', 'target', 'headers'];
+    const _validParams = ['subnetId', 'address', 'autoDelete', 'name', 'target', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3317,12 +3502,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3349,7 +3538,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['subnetId', 'id'];
-    const _validParams = ['subnetId', 'id', 'headers'];
+    const _validParams = ['subnetId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3378,10 +3567,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3404,7 +3597,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
     const _params = { ...params };
     const _requiredParams = ['subnetId', 'id'];
-    const _validParams = ['subnetId', 'id', 'headers'];
+    const _validParams = ['subnetId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3433,11 +3626,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3468,7 +3665,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
     const _params = { ...params };
     const _requiredParams = ['subnetId', 'id'];
-    const _validParams = ['subnetId', 'id', 'autoDelete', 'name', 'headers'];
+    const _validParams = ['subnetId', 'id', 'autoDelete', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3503,12 +3700,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3545,7 +3746,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ImageCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'status', 'visibility', 'userDataFormat', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'status', 'visibility', 'userDataFormat', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3575,11 +3776,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3604,7 +3809,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Image>> {
     const _params = { ...params };
     const _requiredParams = ['imagePrototype'];
-    const _validParams = ['imagePrototype', 'headers'];
+    const _validParams = ['imagePrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3629,12 +3834,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3660,7 +3869,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3688,10 +3897,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3713,7 +3926,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Image>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3741,11 +3954,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3800,7 +4017,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Image>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'deprecationAt', 'name', 'obsolescenceAt', 'headers'];
+    const _validParams = ['id', 'deprecationAt', 'name', 'obsolescenceAt', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3835,12 +4052,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3873,7 +4094,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3901,10 +4122,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3935,7 +4160,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3963,10 +4188,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -3995,7 +4224,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ImageExportJobUnpaginatedCollection>> {
     const _params = { ...params };
     const _requiredParams = ['imageId'];
-    const _validParams = ['imageId', 'name', 'headers'];
+    const _validParams = ['imageId', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4024,11 +4253,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4065,7 +4298,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ImageExportJob>> {
     const _params = { ...params };
     const _requiredParams = ['imageId', 'storageBucket'];
-    const _validParams = ['imageId', 'storageBucket', 'format', 'name', 'headers'];
+    const _validParams = ['imageId', 'storageBucket', 'format', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4100,12 +4333,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4130,7 +4367,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['imageId', 'id'];
-    const _validParams = ['imageId', 'id', 'headers'];
+    const _validParams = ['imageId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4159,10 +4396,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4185,7 +4426,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ImageExportJob>> {
     const _params = { ...params };
     const _requiredParams = ['imageId', 'id'];
-    const _validParams = ['imageId', 'id', 'headers'];
+    const _validParams = ['imageId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4214,11 +4455,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4246,7 +4491,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ImageExportJob>> {
     const _params = { ...params };
     const _requiredParams = ['imageId', 'id'];
-    const _validParams = ['imageId', 'id', 'name', 'headers'];
+    const _validParams = ['imageId', 'id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4280,12 +4525,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4308,7 +4557,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.OperatingSystemCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4333,11 +4582,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4359,7 +4612,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.OperatingSystem>> {
     const _params = { ...params };
     const _requiredParams = ['name'];
-    const _validParams = ['name', 'headers'];
+    const _validParams = ['name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4387,11 +4640,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4420,7 +4677,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.KeyCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4446,11 +4703,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4487,7 +4748,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Key>> {
     const _params = { ...params };
     const _requiredParams = ['publicKey'];
-    const _validParams = ['publicKey', 'name', 'resourceGroup', 'type', 'headers'];
+    const _validParams = ['publicKey', 'name', 'resourceGroup', 'type', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4518,12 +4779,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4545,7 +4810,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4573,10 +4838,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4598,7 +4867,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Key>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4626,11 +4895,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4653,7 +4926,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Key>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4686,12 +4959,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4716,7 +4993,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceProfileCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['headers'];
+    const _validParams = ['signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4739,11 +5016,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4765,7 +5046,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceProfile>> {
     const _params = { ...params };
     const _requiredParams = ['name'];
-    const _validParams = ['name', 'headers'];
+    const _validParams = ['name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4793,11 +5074,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4818,7 +5103,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceTemplateCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['headers'];
+    const _validParams = ['signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4841,11 +5126,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4871,7 +5160,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceTemplate>> {
     const _params = { ...params };
     const _requiredParams = ['instanceTemplatePrototype'];
-    const _validParams = ['instanceTemplatePrototype', 'headers'];
+    const _validParams = ['instanceTemplatePrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4896,12 +5185,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4923,7 +5216,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -4951,10 +5244,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -4976,7 +5273,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceTemplate>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5004,11 +5301,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5034,7 +5335,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceTemplate>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5067,12 +5368,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5131,7 +5436,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'clusterNetworkId', 'clusterNetworkCrn', 'clusterNetworkName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationAffinityPolicy', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'clusterNetworkId', 'clusterNetworkCrn', 'clusterNetworkName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationAffinityPolicy', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5174,11 +5479,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5202,7 +5511,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Instance>> {
     const _params = { ...params };
     const _requiredParams = ['instancePrototype'];
-    const _validParams = ['instancePrototype', 'headers'];
+    const _validParams = ['instancePrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5227,12 +5536,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5260,7 +5573,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5288,11 +5601,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5314,7 +5631,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Instance>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5342,11 +5659,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5407,7 +5728,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Instance>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'availabilityPolicy', 'confidentialComputeMode', 'enableSecureBoot', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'totalVolumeBandwidth', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'availabilityPolicy', 'confidentialComputeMode', 'enableSecureBoot', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'totalVolumeBandwidth', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5448,6 +5769,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -5455,6 +5777,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5477,7 +5802,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceInitialization>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5505,11 +5830,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5535,7 +5864,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceAction>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'type'];
-    const _validParams = ['instanceId', 'type', 'force', 'headers'];
+    const _validParams = ['instanceId', 'type', 'force', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5569,12 +5898,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5599,7 +5932,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachmentCollection>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId'];
-    const _validParams = ['instanceId', 'start', 'limit', 'headers'];
+    const _validParams = ['instanceId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5629,11 +5962,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5676,7 +6013,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'clusterNetworkInterface'];
-    const _validParams = ['instanceId', 'clusterNetworkInterface', 'before', 'name', 'headers'];
+    const _validParams = ['instanceId', 'clusterNetworkInterface', 'before', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5711,12 +6048,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5742,7 +6083,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5771,11 +6112,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5798,7 +6143,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5827,11 +6172,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5859,7 +6208,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceClusterNetworkAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'name', 'headers'];
+    const _validParams = ['instanceId', 'id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5893,12 +6242,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5926,7 +6279,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceConsoleAccessToken>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'consoleType'];
-    const _validParams = ['instanceId', 'consoleType', 'force', 'headers'];
+    const _validParams = ['instanceId', 'consoleType', 'force', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5960,12 +6313,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -5989,7 +6346,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceDiskCollection>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId'];
-    const _validParams = ['instanceId', 'headers'];
+    const _validParams = ['instanceId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6017,11 +6374,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6044,7 +6405,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceDisk>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6073,11 +6434,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6102,7 +6467,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceDisk>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'name', 'headers'];
+    const _validParams = ['instanceId', 'id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6136,12 +6501,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6168,7 +6537,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachmentCollection>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId'];
-    const _validParams = ['instanceId', 'headers'];
+    const _validParams = ['instanceId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6196,11 +6565,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6233,7 +6606,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'virtualNetworkInterface'];
-    const _validParams = ['instanceId', 'virtualNetworkInterface', 'name', 'headers'];
+    const _validParams = ['instanceId', 'virtualNetworkInterface', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6267,12 +6640,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6298,7 +6675,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6327,10 +6704,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6353,7 +6734,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6382,11 +6763,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6413,7 +6798,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceNetworkAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'name', 'headers'];
+    const _validParams = ['instanceId', 'id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6447,12 +6832,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6481,7 +6870,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkInterfaceUnpaginatedCollection>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId'];
-    const _validParams = ['instanceId', 'headers'];
+    const _validParams = ['instanceId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6509,11 +6898,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6563,7 +6956,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'subnet'];
-    const _validParams = ['instanceId', 'subnet', 'allowIpSpoofing', 'name', 'primaryIp', 'securityGroups', 'headers'];
+    const _validParams = ['instanceId', 'subnet', 'allowIpSpoofing', 'name', 'primaryIp', 'securityGroups', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6600,12 +6993,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6635,7 +7032,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6664,10 +7061,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6694,7 +7095,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6723,11 +7124,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6765,7 +7170,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'allowIpSpoofing', 'name', 'headers'];
+    const _validParams = ['instanceId', 'id', 'allowIpSpoofing', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6800,12 +7205,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6828,7 +7237,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIPUnpaginatedCollection>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'networkInterfaceId'];
-    const _validParams = ['instanceId', 'networkInterfaceId', 'headers'];
+    const _validParams = ['instanceId', 'networkInterfaceId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6857,11 +7266,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6885,7 +7298,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
-    const _validParams = ['instanceId', 'networkInterfaceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'networkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6915,10 +7328,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -6943,7 +7360,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
-    const _validParams = ['instanceId', 'networkInterfaceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'networkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -6973,11 +7390,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7008,7 +7429,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
-    const _validParams = ['instanceId', 'networkInterfaceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'networkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7038,11 +7459,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7069,7 +7494,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: listInstanceNetworkInterfaceIps');
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'networkInterfaceId'];
-    const _validParams = ['instanceId', 'networkInterfaceId', 'start', 'limit', 'headers'];
+    const _validParams = ['instanceId', 'networkInterfaceId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7100,11 +7525,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7130,7 +7559,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: getInstanceNetworkInterfaceIp');
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'networkInterfaceId', 'id'];
-    const _validParams = ['instanceId', 'networkInterfaceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'networkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7160,11 +7589,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7188,7 +7621,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeAttachmentCollection>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId'];
-    const _validParams = ['instanceId', 'headers'];
+    const _validParams = ['instanceId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7216,11 +7649,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7252,7 +7689,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'volume'];
-    const _validParams = ['instanceId', 'volume', 'deleteVolumeOnInstanceDelete', 'name', 'headers'];
+    const _validParams = ['instanceId', 'volume', 'deleteVolumeOnInstanceDelete', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7287,12 +7724,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7316,7 +7757,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7345,10 +7786,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7371,7 +7816,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'headers'];
+    const _validParams = ['instanceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7400,11 +7845,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7433,7 +7882,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['instanceId', 'id'];
-    const _validParams = ['instanceId', 'id', 'deleteVolumeOnInstanceDelete', 'name', 'headers'];
+    const _validParams = ['instanceId', 'id', 'deleteVolumeOnInstanceDelete', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7468,12 +7917,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7499,7 +7952,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7524,11 +7977,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7579,7 +8036,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroup>> {
     const _params = { ...params };
     const _requiredParams = ['instanceTemplate', 'subnets'];
-    const _validParams = ['instanceTemplate', 'subnets', 'applicationPort', 'loadBalancer', 'loadBalancerPool', 'membershipCount', 'name', 'resourceGroup', 'headers'];
+    const _validParams = ['instanceTemplate', 'subnets', 'applicationPort', 'loadBalancer', 'loadBalancerPool', 'membershipCount', 'name', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7614,12 +8071,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7642,7 +8103,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7670,10 +8131,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7695,7 +8160,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7723,11 +8188,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7772,7 +8241,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'applicationPort', 'instanceTemplate', 'loadBalancer', 'loadBalancerPool', 'membershipCount', 'name', 'subnets', 'headers'];
+    const _validParams = ['id', 'applicationPort', 'instanceTemplate', 'loadBalancer', 'loadBalancerPool', 'membershipCount', 'name', 'subnets', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7811,12 +8280,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7838,7 +8311,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId'];
-    const _validParams = ['instanceGroupId', 'headers'];
+    const _validParams = ['instanceGroupId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7866,10 +8339,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7893,7 +8370,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerCollection>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId'];
-    const _validParams = ['instanceGroupId', 'start', 'limit', 'headers'];
+    const _validParams = ['instanceGroupId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7923,11 +8400,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -7951,7 +8432,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManager>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerPrototype'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerPrototype', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -7981,12 +8462,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8009,7 +8494,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'id'];
-    const _validParams = ['instanceGroupId', 'id', 'headers'];
+    const _validParams = ['instanceGroupId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8038,10 +8523,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8064,7 +8553,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManager>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'id'];
-    const _validParams = ['instanceGroupId', 'id', 'headers'];
+    const _validParams = ['instanceGroupId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8093,11 +8582,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8128,7 +8621,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManager>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'id'];
-    const _validParams = ['instanceGroupId', 'id', 'aggregationWindow', 'cooldown', 'managementEnabled', 'maxMembershipCount', 'minMembershipCount', 'name', 'headers'];
+    const _validParams = ['instanceGroupId', 'id', 'aggregationWindow', 'cooldown', 'managementEnabled', 'maxMembershipCount', 'minMembershipCount', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8167,12 +8660,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8197,7 +8694,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerActionsCollection>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'start', 'limit', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8228,11 +8725,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8257,7 +8758,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'instanceGroupManagerActionPrototype'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'instanceGroupManagerActionPrototype', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'instanceGroupManagerActionPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8288,12 +8789,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8317,7 +8822,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8347,10 +8852,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8374,7 +8883,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8404,11 +8913,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8444,7 +8957,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerAction>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'autoDelete', 'autoDeleteTimeout', 'cronSpec', 'group', 'manager', 'name', 'runAt', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'autoDelete', 'autoDeleteTimeout', 'cronSpec', 'group', 'manager', 'name', 'runAt', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8485,12 +8998,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8515,7 +9032,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'start', 'limit', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8546,11 +9063,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8575,7 +9096,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'instanceGroupManagerPolicyPrototype'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'instanceGroupManagerPolicyPrototype', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'instanceGroupManagerPolicyPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8606,12 +9127,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8635,7 +9160,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8665,10 +9190,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8692,7 +9221,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8722,11 +9251,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8754,7 +9287,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupManagerPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'instanceGroupManagerId', 'id'];
-    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'metricType', 'metricValue', 'name', 'headers'];
+    const _validParams = ['instanceGroupId', 'instanceGroupManagerId', 'id', 'metricType', 'metricValue', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8791,12 +9324,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8819,7 +9356,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId'];
-    const _validParams = ['instanceGroupId', 'headers'];
+    const _validParams = ['instanceGroupId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8847,10 +9384,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8874,7 +9415,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupMembershipCollection>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId'];
-    const _validParams = ['instanceGroupId', 'start', 'limit', 'headers'];
+    const _validParams = ['instanceGroupId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8904,11 +9445,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8932,7 +9477,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'id'];
-    const _validParams = ['instanceGroupId', 'id', 'headers'];
+    const _validParams = ['instanceGroupId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -8961,10 +9506,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -8987,7 +9536,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupMembership>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'id'];
-    const _validParams = ['instanceGroupId', 'id', 'headers'];
+    const _validParams = ['instanceGroupId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9016,11 +9565,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9047,7 +9600,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceGroupMembership>> {
     const _params = { ...params };
     const _requiredParams = ['instanceGroupId', 'id'];
-    const _validParams = ['instanceGroupId', 'id', 'deleteInstanceOnMembershipDelete', 'name', 'headers'];
+    const _validParams = ['instanceGroupId', 'id', 'deleteInstanceOnMembershipDelete', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9082,12 +9635,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9127,7 +9684,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservationCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'name', 'profileResourceType', 'affinityPolicy', 'resourceGroupId', 'zoneName', 'headers'];
+    const _validParams = ['start', 'limit', 'name', 'profileResourceType', 'affinityPolicy', 'resourceGroupId', 'zoneName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9157,11 +9714,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9200,7 +9761,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Reservation>> {
     const _params = { ...params };
     const _requiredParams = ['capacity', 'committedUse', 'profile', 'zone'];
-    const _validParams = ['capacity', 'committedUse', 'profile', 'zone', 'affinityPolicy', 'name', 'resourceGroup', 'headers'];
+    const _validParams = ['capacity', 'committedUse', 'profile', 'zone', 'affinityPolicy', 'name', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9234,12 +9795,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9262,7 +9827,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Reservation>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9290,11 +9855,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9316,7 +9885,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Reservation>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9344,11 +9913,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9388,7 +9961,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Reservation>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'affinityPolicy', 'capacity', 'committedUse', 'name', 'profile', 'headers'];
+    const _validParams = ['id', 'affinityPolicy', 'capacity', 'committedUse', 'name', 'profile', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9425,12 +9998,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9452,7 +10029,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9480,10 +10057,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9516,7 +10097,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostGroupCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'zoneName', 'name', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'zoneName', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9544,11 +10125,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9577,7 +10162,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
     const _params = { ...params };
     const _requiredParams = ['_class', 'family', 'zone'];
-    const _validParams = ['_class', 'family', 'zone', 'name', 'resourceGroup', 'headers'];
+    const _validParams = ['_class', 'family', 'zone', 'name', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9609,12 +10194,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9636,7 +10225,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9664,10 +10253,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9689,7 +10282,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9717,11 +10310,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9747,7 +10344,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9780,12 +10377,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9809,7 +10410,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostProfileCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9834,11 +10435,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9860,7 +10465,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostProfile>> {
     const _params = { ...params };
     const _requiredParams = ['name'];
-    const _validParams = ['name', 'headers'];
+    const _validParams = ['name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9888,11 +10493,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9923,7 +10532,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['dedicatedHostGroupId', 'start', 'limit', 'resourceGroupId', 'zoneName', 'name', 'headers'];
+    const _validParams = ['dedicatedHostGroupId', 'start', 'limit', 'resourceGroupId', 'zoneName', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -9952,11 +10561,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -9978,7 +10591,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
     const _params = { ...params };
     const _requiredParams = ['dedicatedHostPrototype'];
-    const _validParams = ['dedicatedHostPrototype', 'headers'];
+    const _validParams = ['dedicatedHostPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10003,12 +10616,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10032,7 +10649,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostDiskCollection>> {
     const _params = { ...params };
     const _requiredParams = ['dedicatedHostId'];
-    const _validParams = ['dedicatedHostId', 'headers'];
+    const _validParams = ['dedicatedHostId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10060,11 +10677,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10087,7 +10708,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>> {
     const _params = { ...params };
     const _requiredParams = ['dedicatedHostId', 'id'];
-    const _validParams = ['dedicatedHostId', 'id', 'headers'];
+    const _validParams = ['dedicatedHostId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10116,11 +10737,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10145,7 +10770,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHostDisk>> {
     const _params = { ...params };
     const _requiredParams = ['dedicatedHostId', 'id'];
-    const _validParams = ['dedicatedHostId', 'id', 'name', 'headers'];
+    const _validParams = ['dedicatedHostId', 'id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10179,12 +10804,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10207,7 +10836,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10235,10 +10864,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10260,7 +10893,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10288,11 +10921,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10320,7 +10957,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.DedicatedHost>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'instancePlacementEnabled', 'name', 'headers'];
+    const _validParams = ['id', 'instancePlacementEnabled', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10354,12 +10991,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10385,7 +11026,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PlacementGroupCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10410,11 +11051,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10443,7 +11088,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PlacementGroup>> {
     const _params = { ...params };
     const _requiredParams = ['strategy'];
-    const _validParams = ['strategy', 'name', 'resourceGroup', 'headers'];
+    const _validParams = ['strategy', 'name', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10473,12 +11118,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10501,7 +11150,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10529,10 +11178,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10554,7 +11207,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PlacementGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10582,11 +11235,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10612,7 +11269,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PlacementGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10645,12 +11302,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10678,7 +11339,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerProfileCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10703,11 +11364,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10729,7 +11394,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerProfile>> {
     const _params = { ...params };
     const _requiredParams = ['name'];
-    const _validParams = ['name', 'headers'];
+    const _validParams = ['name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10757,11 +11422,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10800,7 +11469,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10833,11 +11502,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10861,7 +11534,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServer>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerPrototype'];
-    const _validParams = ['bareMetalServerPrototype', 'headers'];
+    const _validParams = ['bareMetalServerPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10886,12 +11559,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10922,7 +11599,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerConsoleAccessToken>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'consoleType'];
-    const _validParams = ['bareMetalServerId', 'consoleType', 'force', 'headers'];
+    const _validParams = ['bareMetalServerId', 'consoleType', 'force', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10956,12 +11633,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -10985,7 +11666,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerDiskCollection>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId'];
-    const _validParams = ['bareMetalServerId', 'headers'];
+    const _validParams = ['bareMetalServerId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11013,11 +11694,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11040,7 +11725,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerDisk>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'id'];
-    const _validParams = ['bareMetalServerId', 'id', 'headers'];
+    const _validParams = ['bareMetalServerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11069,11 +11754,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11098,7 +11787,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerDisk>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'id'];
-    const _validParams = ['bareMetalServerId', 'id', 'name', 'headers'];
+    const _validParams = ['bareMetalServerId', 'id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11132,12 +11821,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11168,7 +11861,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachmentCollection>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId'];
-    const _validParams = ['bareMetalServerId', 'start', 'limit', 'headers'];
+    const _validParams = ['bareMetalServerId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11198,11 +11891,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11228,7 +11925,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'bareMetalServerNetworkAttachmentPrototype'];
-    const _validParams = ['bareMetalServerId', 'bareMetalServerNetworkAttachmentPrototype', 'headers'];
+    const _validParams = ['bareMetalServerId', 'bareMetalServerNetworkAttachmentPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11258,12 +11955,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11289,7 +11990,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'id'];
-    const _validParams = ['bareMetalServerId', 'id', 'headers'];
+    const _validParams = ['bareMetalServerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11318,10 +12019,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11344,7 +12049,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'id'];
-    const _validParams = ['bareMetalServerId', 'id', 'headers'];
+    const _validParams = ['bareMetalServerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11373,11 +12078,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11407,7 +12116,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkAttachment>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'id'];
-    const _validParams = ['bareMetalServerId', 'id', 'allowedVlans', 'name', 'headers'];
+    const _validParams = ['bareMetalServerId', 'id', 'allowedVlans', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11442,12 +12151,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11478,7 +12191,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkInterfaceCollection>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId'];
-    const _validParams = ['bareMetalServerId', 'start', 'limit', 'headers'];
+    const _validParams = ['bareMetalServerId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11508,11 +12221,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11545,7 +12262,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'bareMetalServerNetworkInterfacePrototype'];
-    const _validParams = ['bareMetalServerId', 'bareMetalServerNetworkInterfacePrototype', 'headers'];
+    const _validParams = ['bareMetalServerId', 'bareMetalServerNetworkInterfacePrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11575,12 +12292,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11609,7 +12330,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'id'];
-    const _validParams = ['bareMetalServerId', 'id', 'headers'];
+    const _validParams = ['bareMetalServerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11638,10 +12359,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11668,7 +12393,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'id'];
-    const _validParams = ['bareMetalServerId', 'id', 'headers'];
+    const _validParams = ['bareMetalServerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11697,11 +12422,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11756,7 +12485,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'id'];
-    const _validParams = ['bareMetalServerId', 'id', 'allowIpSpoofing', 'allowedVlans', 'enableInfrastructureNat', 'name', 'headers'];
+    const _validParams = ['bareMetalServerId', 'id', 'allowIpSpoofing', 'allowedVlans', 'enableInfrastructureNat', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11793,12 +12522,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11821,7 +12554,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIPUnpaginatedCollection>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId'];
-    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'headers'];
+    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11850,11 +12583,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11878,7 +12615,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId', 'id'];
-    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'headers'];
+    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11908,10 +12645,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -11936,7 +12677,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId', 'id'];
-    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'headers'];
+    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11966,11 +12707,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12002,7 +12747,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId', 'id'];
-    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'headers'];
+    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12032,11 +12777,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12061,7 +12810,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: listBareMetalServerNetworkInterfaceIps');
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId'];
-    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'headers'];
+    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12090,11 +12839,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12120,7 +12873,7 @@ class VpcV1 extends BaseService {
     VpcV1._logger.warn('A deprecated operation has been invoked: getBareMetalServerNetworkInterfaceIp');
     const _params = { ...params };
     const _requiredParams = ['bareMetalServerId', 'networkInterfaceId', 'id'];
-    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'headers'];
+    const _validParams = ['bareMetalServerId', 'networkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12150,11 +12903,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12177,7 +12934,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12205,10 +12962,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12230,7 +12991,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServer>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12258,11 +13019,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12298,7 +13063,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServer>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'bandwidth', 'enableSecureBoot', 'name', 'reservationAffinity', 'trustedPlatformModule', 'headers'];
+    const _validParams = ['id', 'bandwidth', 'enableSecureBoot', 'name', 'reservationAffinity', 'trustedPlatformModule', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12335,12 +13100,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12364,7 +13133,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'autoStart', 'headers'];
+    const _validParams = ['id', 'autoStart', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12397,11 +13166,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12425,7 +13198,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerInitialization>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12453,11 +13226,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12491,7 +13268,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BareMetalServerInitialization>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'image', 'keys'];
-    const _validParams = ['id', 'image', 'keys', 'userData', 'headers'];
+    const _validParams = ['id', 'image', 'keys', 'userData', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12526,12 +13303,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12554,7 +13335,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12582,10 +13363,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12607,7 +13392,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12635,10 +13420,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12664,7 +13453,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'type'];
-    const _validParams = ['id', 'type', 'headers'];
+    const _validParams = ['id', 'type', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12697,11 +13486,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12728,7 +13521,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeProfileCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12753,11 +13546,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12779,7 +13576,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeProfile>> {
     const _params = { ...params };
     const _requiredParams = ['name'];
-    const _validParams = ['name', 'headers'];
+    const _validParams = ['name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12807,11 +13604,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12855,7 +13656,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'name', 'attachmentState', 'encryption', 'operatingSystemFamily', 'operatingSystemArchitecture', 'zoneName', 'tag', 'headers'];
+    const _validParams = ['start', 'limit', 'name', 'attachmentState', 'encryption', 'operatingSystemFamily', 'operatingSystemArchitecture', 'zoneName', 'tag', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12887,11 +13688,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12914,7 +13719,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Volume>> {
     const _params = { ...params };
     const _requiredParams = ['volumePrototype'];
-    const _validParams = ['volumePrototype', 'headers'];
+    const _validParams = ['volumePrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12939,12 +13744,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -12969,7 +13778,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -12997,11 +13806,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13023,7 +13836,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Volume>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13051,11 +13864,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13084,9 +13901,9 @@ class VpcV1 extends BaseService {
    * `adjustable_iops_states`. If `adjustable_iops_states` is empty, then the IOPS cannot be changed.
    * @param {string} [params.name] - The name for this volume. The name must not be used by another volume in the
    * region.
-   * @param {VolumeProfileIdentity} [params.profile] - The profile to use for this volume. The requested profile must be
-   * in the same
-   * `family` as the current profile.  Additionally:
+   * @param {VolumeProfileIdentity} [params.profile] - The profile to use for this volume. The requested profile must
+   * have the same
+   * `family` and `storage_generation` values as the current profile. Additionally:
    * - If the volume is a boot volume then the value specified for `capacity` property
    * must not be less than the `boot_capacity.min` and must not exceed the
    * `boot_capacity.max` of the specified volume profile.
@@ -13105,7 +13922,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Volume>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'capacity', 'iops', 'name', 'profile', 'userTags', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'capacity', 'iops', 'name', 'profile', 'userTags', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13142,6 +13959,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -13149,6 +13967,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13185,7 +14006,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroupCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'backupPolicyPlanId', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'backupPolicyPlanId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13214,11 +14035,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13243,7 +14068,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>> {
     const _params = { ...params };
     const _requiredParams = ['snapshotConsistencyGroupPrototype'];
-    const _validParams = ['snapshotConsistencyGroupPrototype', 'headers'];
+    const _validParams = ['snapshotConsistencyGroupPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13268,12 +14093,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13296,7 +14125,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13324,11 +14153,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13350,7 +14183,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13378,11 +14211,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13412,7 +14249,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'deleteSnapshotsOnDelete', 'name', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'deleteSnapshotsOnDelete', 'name', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13446,6 +14283,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -13453,6 +14291,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13475,7 +14316,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['sourceVolumeId'];
-    const _validParams = ['sourceVolumeId', 'headers'];
+    const _validParams = ['sourceVolumeId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13499,10 +14340,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13549,7 +14394,7 @@ class VpcV1 extends BaseService {
    * @param {string} [params.copiesName] - Filters the collection to snapshots with an item in the `copies` property
    * with a `name` property matching the exact specified name.
    * @param {string} [params.copiesCrn] - Filters the collection to snapshots with an item in the `copies` property with
-   * an `id` property matching the specified CRN.
+   * a `crn` property matching the specified CRN.
    * @param {string} [params.copiesRemoteRegionName] - Filters the collection to snapshots with an item in the `copies`
    * property with a
    * `remote.region.name` property matching the exact specified name.
@@ -13575,7 +14420,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'tag', 'resourceGroupId', 'name', 'sourceVolumeId', 'sourceVolumeCrn', 'sourceImageId', 'sourceImageCrn', 'sort', 'backupPolicyPlanId', 'copiesId', 'copiesName', 'copiesCrn', 'copiesRemoteRegionName', 'sourceSnapshotId', 'sourceSnapshotRemoteRegionName', 'sourceVolumeRemoteRegionName', 'sourceImageRemoteRegionName', 'clonesZoneName', 'snapshotConsistencyGroupId', 'snapshotConsistencyGroupCrn', 'headers'];
+    const _validParams = ['start', 'limit', 'tag', 'resourceGroupId', 'name', 'sourceVolumeId', 'sourceVolumeCrn', 'sourceImageId', 'sourceImageCrn', 'sort', 'backupPolicyPlanId', 'copiesId', 'copiesName', 'copiesCrn', 'copiesRemoteRegionName', 'sourceSnapshotId', 'sourceSnapshotRemoteRegionName', 'sourceVolumeRemoteRegionName', 'sourceImageRemoteRegionName', 'clonesZoneName', 'snapshotConsistencyGroupId', 'snapshotConsistencyGroupCrn', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13620,11 +14465,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13647,7 +14496,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Snapshot>> {
     const _params = { ...params };
     const _requiredParams = ['snapshotPrototype'];
-    const _validParams = ['snapshotPrototype', 'headers'];
+    const _validParams = ['snapshotPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13672,12 +14521,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13694,14 +14547,14 @@ class VpcV1 extends BaseService {
    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
    * resource's current ETag value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.Snapshot>>}
    */
   public deleteSnapshot(
     params: VpcV1.DeleteSnapshotParams
-  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+  ): Promise<VpcV1.Response<VpcV1.Snapshot>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13729,11 +14582,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
+            'Accept': 'application/json',
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13755,7 +14613,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Snapshot>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13783,11 +14641,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13816,7 +14678,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Snapshot>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'userTags', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'name', 'userTags', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13850,6 +14712,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -13857,6 +14720,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13878,7 +14744,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotCloneCollection>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13906,11 +14772,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13934,7 +14804,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'zoneName'];
-    const _validParams = ['id', 'zoneName', 'headers'];
+    const _validParams = ['id', 'zoneName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13963,10 +14833,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -13989,7 +14863,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotClone>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'zoneName'];
-    const _validParams = ['id', 'zoneName', 'headers'];
+    const _validParams = ['id', 'zoneName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14018,11 +14892,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14046,7 +14924,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotClone>> {
     const _params = { ...params };
     const _requiredParams = ['id', 'zoneName'];
-    const _validParams = ['id', 'zoneName', 'headers'];
+    const _validParams = ['id', 'zoneName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14075,11 +14953,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14110,7 +14992,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareProfileCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'sort', 'headers'];
+    const _validParams = ['start', 'limit', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14136,11 +15018,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14162,7 +15048,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareProfile>> {
     const _params = { ...params };
     const _requiredParams = ['name'];
-    const _validParams = ['name', 'headers'];
+    const _validParams = ['name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14190,11 +15076,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14227,7 +15117,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'replicationRole', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'replicationRole', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14256,11 +15146,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14286,7 +15180,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Share>> {
     const _params = { ...params };
     const _requiredParams = ['sharePrototype'];
-    const _validParams = ['sharePrototype', 'headers'];
+    const _validParams = ['sharePrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14311,12 +15205,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14346,7 +15244,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Share>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14374,12 +15272,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14401,7 +15303,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Share>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14429,11 +15331,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14492,7 +15398,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Share>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'accessControlMode', 'allowedTransitEncryptionModes', 'iops', 'name', 'profile', 'replicationCronSpec', 'size', 'userTags', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'accessControlMode', 'allowedTransitEncryptionModes', 'iops', 'name', 'profile', 'replicationCronSpec', 'size', 'userTags', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14532,6 +15438,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -14539,6 +15446,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14565,7 +15475,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareAccessorBindingCollection>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'start', 'limit', 'headers'];
+    const _validParams = ['id', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14595,11 +15505,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14622,7 +15536,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['shareId', 'id'];
-    const _validParams = ['shareId', 'id', 'headers'];
+    const _validParams = ['shareId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14651,10 +15565,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14677,7 +15595,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareAccessorBinding>> {
     const _params = { ...params };
     const _requiredParams = ['shareId', 'id'];
-    const _validParams = ['shareId', 'id', 'headers'];
+    const _validParams = ['shareId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14706,11 +15624,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14747,7 +15669,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['shareId'];
-    const _validParams = ['shareId', 'fallbackPolicy', 'timeout', 'headers'];
+    const _validParams = ['shareId', 'fallbackPolicy', 'timeout', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14781,11 +15703,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14814,7 +15740,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareMountTargetCollection>> {
     const _params = { ...params };
     const _requiredParams = ['shareId'];
-    const _validParams = ['shareId', 'name', 'start', 'limit', 'headers'];
+    const _validParams = ['shareId', 'name', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14845,11 +15771,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14875,7 +15805,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareMountTarget>> {
     const _params = { ...params };
     const _requiredParams = ['shareId', 'shareMountTargetPrototype'];
-    const _validParams = ['shareId', 'shareMountTargetPrototype', 'headers'];
+    const _validParams = ['shareId', 'shareMountTargetPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14905,12 +15835,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14936,7 +15870,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareMountTarget>> {
     const _params = { ...params };
     const _requiredParams = ['shareId', 'id'];
-    const _validParams = ['shareId', 'id', 'headers'];
+    const _validParams = ['shareId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14965,11 +15899,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -14992,7 +15930,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareMountTarget>> {
     const _params = { ...params };
     const _requiredParams = ['shareId', 'id'];
-    const _validParams = ['shareId', 'id', 'headers'];
+    const _validParams = ['shareId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15021,11 +15959,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15052,7 +15994,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareMountTarget>> {
     const _params = { ...params };
     const _requiredParams = ['shareId', 'id'];
-    const _validParams = ['shareId', 'id', 'name', 'headers'];
+    const _validParams = ['shareId', 'id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15086,12 +16028,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15126,7 +16072,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareSnapshotCollection>> {
     const _params = { ...params };
     const _requiredParams = ['shareId'];
-    const _validParams = ['shareId', 'backupPolicyPlanId', 'name', 'start', 'limit', 'sort', 'headers'];
+    const _validParams = ['shareId', 'backupPolicyPlanId', 'name', 'start', 'limit', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15159,11 +16105,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15203,7 +16153,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareSnapshot>> {
     const _params = { ...params };
     const _requiredParams = ['shareId'];
-    const _validParams = ['shareId', 'name', 'userTags', 'headers'];
+    const _validParams = ['shareId', 'name', 'userTags', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15237,12 +16187,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15276,7 +16230,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareSnapshot>> {
     const _params = { ...params };
     const _requiredParams = ['shareId', 'id'];
-    const _validParams = ['shareId', 'id', 'headers'];
+    const _validParams = ['shareId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15305,11 +16259,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15332,7 +16290,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareSnapshot>> {
     const _params = { ...params };
     const _requiredParams = ['shareId', 'id'];
-    const _validParams = ['shareId', 'id', 'headers'];
+    const _validParams = ['shareId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15361,11 +16319,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15394,7 +16356,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareSnapshot>> {
     const _params = { ...params };
     const _requiredParams = ['shareId', 'id'];
-    const _validParams = ['shareId', 'id', 'userTags', 'ifMatch', 'headers'];
+    const _validParams = ['shareId', 'id', 'userTags', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15428,6 +16390,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -15435,6 +16398,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15460,7 +16426,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['shareId'];
-    const _validParams = ['shareId', 'headers'];
+    const _validParams = ['shareId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15488,10 +16454,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15514,7 +16484,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ShareReference>> {
     const _params = { ...params };
     const _requiredParams = ['shareId'];
-    const _validParams = ['shareId', 'headers'];
+    const _validParams = ['shareId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15542,11 +16512,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15579,7 +16553,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'tag', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'tag', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15607,11 +16581,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15635,7 +16613,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['backupPolicyPrototype'];
-    const _validParams = ['backupPolicyPrototype', 'headers'];
+    const _validParams = ['backupPolicyPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15660,12 +16638,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15704,7 +16686,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicyJobCollection>> {
     const _params = { ...params };
     const _requiredParams = ['backupPolicyId'];
-    const _validParams = ['backupPolicyId', 'status', 'backupPolicyPlanId', 'start', 'limit', 'sort', 'sourceId', 'targetSnapshotsId', 'targetSnapshotsCrn', 'headers'];
+    const _validParams = ['backupPolicyId', 'status', 'backupPolicyPlanId', 'start', 'limit', 'sort', 'sourceId', 'targetSnapshotsId', 'targetSnapshotsCrn', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15740,11 +16722,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15767,7 +16753,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicyJob>> {
     const _params = { ...params };
     const _requiredParams = ['backupPolicyId', 'id'];
-    const _validParams = ['backupPolicyId', 'id', 'headers'];
+    const _validParams = ['backupPolicyId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15796,11 +16782,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15824,7 +16814,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlanCollection>> {
     const _params = { ...params };
     const _requiredParams = ['backupPolicyId'];
-    const _validParams = ['backupPolicyId', 'name', 'headers'];
+    const _validParams = ['backupPolicyId', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15853,11 +16843,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15902,7 +16896,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
     const _params = { ...params };
     const _requiredParams = ['backupPolicyId', 'cronSpec'];
-    const _validParams = ['backupPolicyId', 'cronSpec', 'active', 'attachUserTags', 'clonePolicy', 'copyUserTags', 'deletionTrigger', 'name', 'remoteRegionPolicies', 'headers'];
+    const _validParams = ['backupPolicyId', 'cronSpec', 'active', 'attachUserTags', 'clonePolicy', 'copyUserTags', 'deletionTrigger', 'name', 'remoteRegionPolicies', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15942,12 +16936,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -15977,7 +16975,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
     const _params = { ...params };
     const _requiredParams = ['backupPolicyId', 'id'];
-    const _validParams = ['backupPolicyId', 'id', 'ifMatch', 'headers'];
+    const _validParams = ['backupPolicyId', 'id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16006,12 +17004,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16034,7 +17036,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
     const _params = { ...params };
     const _requiredParams = ['backupPolicyId', 'id'];
-    const _validParams = ['backupPolicyId', 'id', 'headers'];
+    const _validParams = ['backupPolicyId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16063,11 +17065,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16109,7 +17115,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicyPlan>> {
     const _params = { ...params };
     const _requiredParams = ['backupPolicyId', 'id'];
-    const _validParams = ['backupPolicyId', 'id', 'active', 'attachUserTags', 'clonePolicy', 'copyUserTags', 'cronSpec', 'deletionTrigger', 'name', 'remoteRegionPolicies', 'ifMatch', 'headers'];
+    const _validParams = ['backupPolicyId', 'id', 'active', 'attachUserTags', 'clonePolicy', 'copyUserTags', 'cronSpec', 'deletionTrigger', 'name', 'remoteRegionPolicies', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16150,6 +17156,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -16157,6 +17164,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16183,7 +17193,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16211,12 +17221,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16238,7 +17252,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16266,11 +17280,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16303,7 +17321,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.BackupPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'includedContent', 'matchUserTags', 'name', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'includedContent', 'matchUserTags', 'name', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16338,6 +17356,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -16345,6 +17364,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16372,7 +17394,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.RegionCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['headers'];
+    const _validParams = ['signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16395,11 +17417,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16421,7 +17447,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Region>> {
     const _params = { ...params };
     const _requiredParams = ['name'];
-    const _validParams = ['name', 'headers'];
+    const _validParams = ['name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16449,11 +17475,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16476,7 +17506,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ZoneCollection>> {
     const _params = { ...params };
     const _requiredParams = ['regionName'];
-    const _validParams = ['regionName', 'headers'];
+    const _validParams = ['regionName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16504,11 +17534,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16531,7 +17565,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Zone>> {
     const _params = { ...params };
     const _requiredParams = ['regionName', 'name'];
-    const _validParams = ['regionName', 'name', 'headers'];
+    const _validParams = ['regionName', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16560,11 +17594,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16597,7 +17635,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterfaceCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16623,11 +17661,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16708,7 +17750,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'ips', 'name', 'primaryIp', 'protocolStateFilteringMode', 'resourceGroup', 'securityGroups', 'subnet', 'headers'];
+    const _validParams = ['allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'ips', 'name', 'primaryIp', 'protocolStateFilteringMode', 'resourceGroup', 'securityGroups', 'subnet', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16745,12 +17787,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16774,7 +17820,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16802,11 +17848,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16828,7 +17878,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16856,11 +17906,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16918,7 +17972,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'name', 'protocolStateFilteringMode', 'headers'];
+    const _validParams = ['id', 'allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'name', 'protocolStateFilteringMode', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -16955,12 +18009,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -16988,7 +18046,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIPCollectionVirtualNetworkInterfaceContext>> {
     const _params = { ...params };
     const _requiredParams = ['virtualNetworkInterfaceId'];
-    const _validParams = ['virtualNetworkInterfaceId', 'start', 'limit', 'sort', 'headers'];
+    const _validParams = ['virtualNetworkInterfaceId', 'start', 'limit', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17019,11 +18077,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17046,7 +18108,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
-    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17075,10 +18137,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17102,7 +18168,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIPReference>> {
     const _params = { ...params };
     const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
-    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17131,11 +18197,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17173,7 +18243,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIPReference>> {
     const _params = { ...params };
     const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
-    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17202,11 +18272,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17234,7 +18308,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionVirtualNetworkInterfaceContext>> {
     const _params = { ...params };
     const _requiredParams = ['virtualNetworkInterfaceId'];
-    const _validParams = ['virtualNetworkInterfaceId', 'start', 'limit', 'sort', 'headers'];
+    const _validParams = ['virtualNetworkInterfaceId', 'start', 'limit', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17265,11 +18339,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17295,7 +18373,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
-    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17324,10 +18402,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17351,7 +18433,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIPReference>> {
     const _params = { ...params };
     const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
-    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17380,11 +18462,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17410,7 +18496,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIPReference>> {
     const _params = { ...params };
     const _requiredParams = ['virtualNetworkInterfaceId', 'id'];
-    const _validParams = ['virtualNetworkInterfaceId', 'id', 'headers'];
+    const _validParams = ['virtualNetworkInterfaceId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17439,11 +18525,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17470,7 +18560,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkProfileCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17495,11 +18585,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17521,7 +18615,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkProfile>> {
     const _params = { ...params };
     const _requiredParams = ['name'];
-    const _validParams = ['name', 'headers'];
+    const _validParams = ['name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17549,11 +18643,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17592,7 +18690,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'vpcId', 'vpcCrn', 'vpcName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17623,11 +18721,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17661,7 +18763,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetwork>> {
     const _params = { ...params };
     const _requiredParams = ['profile', 'vpc', 'zone'];
-    const _validParams = ['profile', 'vpc', 'zone', 'name', 'resourceGroup', 'subnetPrefixes', 'headers'];
+    const _validParams = ['profile', 'vpc', 'zone', 'name', 'resourceGroup', 'subnetPrefixes', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17694,12 +18796,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17734,7 +18840,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkInterfaceCollection>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId'];
-    const _validParams = ['clusterNetworkId', 'start', 'limit', 'name', 'sort', 'headers'];
+    const _validParams = ['clusterNetworkId', 'start', 'limit', 'name', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17766,11 +18872,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17812,7 +18922,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId'];
-    const _validParams = ['clusterNetworkId', 'name', 'primaryIp', 'subnet', 'headers'];
+    const _validParams = ['clusterNetworkId', 'name', 'primaryIp', 'subnet', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17847,12 +18957,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17879,7 +18993,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'id'];
-    const _validParams = ['clusterNetworkId', 'id', 'ifMatch', 'headers'];
+    const _validParams = ['clusterNetworkId', 'id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17908,12 +19022,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -17936,7 +19054,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'id'];
-    const _validParams = ['clusterNetworkId', 'id', 'headers'];
+    const _validParams = ['clusterNetworkId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -17965,11 +19083,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18001,7 +19123,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'id'];
-    const _validParams = ['clusterNetworkId', 'id', 'autoDelete', 'name', 'ifMatch', 'headers'];
+    const _validParams = ['clusterNetworkId', 'id', 'autoDelete', 'name', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18036,6 +19158,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -18043,6 +19166,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18073,7 +19199,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetCollection>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId'];
-    const _validParams = ['clusterNetworkId', 'start', 'limit', 'name', 'sort', 'headers'];
+    const _validParams = ['clusterNetworkId', 'start', 'limit', 'name', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18105,11 +19231,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18135,7 +19265,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetPrototype'];
-    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetPrototype', 'headers'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18165,12 +19295,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18201,7 +19335,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIPCollection>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetId'];
-    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'start', 'limit', 'name', 'sort', 'headers'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'start', 'limit', 'name', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18234,11 +19368,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18269,7 +19407,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetId'];
-    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'address', 'name', 'headers'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'address', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18304,12 +19442,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18338,7 +19480,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id'];
-    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id', 'ifMatch', 'headers'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18368,12 +19510,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18397,7 +19543,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id'];
-    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id', 'headers'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18427,11 +19573,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18465,7 +19615,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnetReservedIP>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id'];
-    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id', 'autoDelete', 'name', 'ifMatch', 'headers'];
+    const _validParams = ['clusterNetworkId', 'clusterNetworkSubnetId', 'id', 'autoDelete', 'name', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18501,6 +19651,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -18508,6 +19659,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18534,7 +19688,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'id'];
-    const _validParams = ['clusterNetworkId', 'id', 'ifMatch', 'headers'];
+    const _validParams = ['clusterNetworkId', 'id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18563,12 +19717,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18591,7 +19749,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'id'];
-    const _validParams = ['clusterNetworkId', 'id', 'headers'];
+    const _validParams = ['clusterNetworkId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18620,11 +19778,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18654,7 +19816,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetworkSubnet>> {
     const _params = { ...params };
     const _requiredParams = ['clusterNetworkId', 'id'];
-    const _validParams = ['clusterNetworkId', 'id', 'name', 'ifMatch', 'headers'];
+    const _validParams = ['clusterNetworkId', 'id', 'name', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18688,6 +19850,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -18695,6 +19858,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18720,7 +19886,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetwork>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18748,12 +19914,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18775,7 +19945,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetwork>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18803,11 +19973,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18835,7 +20009,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ClusterNetwork>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'name', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18868,6 +20042,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -18875,6 +20050,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18904,7 +20082,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PublicGatewayCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -18930,11 +20108,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -18968,7 +20150,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
     const _params = { ...params };
     const _requiredParams = ['vpc', 'zone'];
-    const _validParams = ['vpc', 'zone', 'floatingIp', 'name', 'resourceGroup', 'headers'];
+    const _validParams = ['vpc', 'zone', 'floatingIp', 'name', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19000,12 +20182,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19029,7 +20215,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19057,10 +20243,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19082,7 +20272,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19110,11 +20300,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19138,7 +20332,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PublicGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19171,12 +20365,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19217,7 +20415,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIPCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'sort', 'targetId', 'targetCrn', 'targetName', 'targetResourceType', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'sort', 'targetId', 'targetCrn', 'targetName', 'targetResourceType', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19248,11 +20446,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19274,7 +20476,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
     const _params = { ...params };
     const _requiredParams = ['floatingIpPrototype'];
-    const _validParams = ['floatingIpPrototype', 'headers'];
+    const _validParams = ['floatingIpPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19299,12 +20501,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19327,7 +20533,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19355,10 +20561,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19380,7 +20590,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19408,11 +20618,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19448,7 +20662,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FloatingIP>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'target', 'headers'];
+    const _validParams = ['id', 'name', 'target', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19482,12 +20696,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19517,7 +20735,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACLCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19543,11 +20761,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19571,7 +20793,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
     const _params = { ...params };
     const _requiredParams = ['networkAclPrototype'];
-    const _validParams = ['networkAclPrototype', 'headers'];
+    const _validParams = ['networkAclPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19596,12 +20818,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19624,7 +20850,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19652,10 +20878,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19677,7 +20907,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19705,11 +20935,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19733,7 +20967,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACL>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19766,12 +21000,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19798,7 +21036,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACLRuleCollection>> {
     const _params = { ...params };
     const _requiredParams = ['networkAclId'];
-    const _validParams = ['networkAclId', 'start', 'limit', 'direction', 'headers'];
+    const _validParams = ['networkAclId', 'start', 'limit', 'direction', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19829,11 +21067,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19857,7 +21099,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACLRule>> {
     const _params = { ...params };
     const _requiredParams = ['networkAclId', 'networkAclRulePrototype'];
-    const _validParams = ['networkAclId', 'networkAclRulePrototype', 'headers'];
+    const _validParams = ['networkAclId', 'networkAclRulePrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19887,12 +21129,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19915,7 +21161,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['networkAclId', 'id'];
-    const _validParams = ['networkAclId', 'id', 'headers'];
+    const _validParams = ['networkAclId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19944,10 +21190,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -19970,7 +21220,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACLRule>> {
     const _params = { ...params };
     const _requiredParams = ['networkAclId', 'id'];
-    const _validParams = ['networkAclId', 'id', 'headers'];
+    const _validParams = ['networkAclId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19999,11 +21249,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20029,15 +21283,23 @@ class VpcV1 extends BaseService {
    * Specify `null` to remove an existing ICMP traffic code.
    * @param {string} [params.destination] - The destination IP address or CIDR block to match. The CIDR block
    * `0.0.0.0/0` matches all destination addresses.
-   * @param {number} [params.destinationPortMax] - The inclusive upper bound of TCP/UDP destination port range.
-   * @param {number} [params.destinationPortMin] - The inclusive lower bound of TCP/UDP destination port range.
+   * @param {number} [params.destinationPortMax] - The inclusive upper bound of the TCP or UDP destination port range.
+   *
+   * Must be larger than or equal to `destination_port_min`.
+   * @param {number} [params.destinationPortMin] - The inclusive lower bound of the TCP or UDP destination port range.
+   *
+   * Must be smaller than or equal to `destination_port_max`.
    * @param {string} [params.direction] - The direction of traffic to match.
    * @param {string} [params.name] - The name for this network ACL rule. The name must not be used by another rule for
    * the network ACL.
    * @param {string} [params.source] - The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches
    * all source addresses.
-   * @param {number} [params.sourcePortMax] - The inclusive upper bound of TCP/UDP source port range.
-   * @param {number} [params.sourcePortMin] - The inclusive lower bound of TCP/UDP source port range.
+   * @param {number} [params.sourcePortMax] - The inclusive upper bound of the TCP or UDP source port range.
+   *
+   * Must be larger than or equal to `source_port_min`.
+   * @param {number} [params.sourcePortMin] - The inclusive lower bound of the TCP or UDP source port range.
+   *
+   * Must be smaller than or equal to `source_port_max`.
    * @param {number} [params.type] - The ICMP traffic type to match.
    *
    * Specify `null` to remove an existing ICMP traffic type value.
@@ -20049,7 +21311,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.NetworkACLRule>> {
     const _params = { ...params };
     const _requiredParams = ['networkAclId', 'id'];
-    const _validParams = ['networkAclId', 'id', 'action', 'before', 'code', 'destination', 'destinationPortMax', 'destinationPortMin', 'direction', 'name', 'source', 'sourcePortMax', 'sourcePortMin', 'type', 'headers'];
+    const _validParams = ['networkAclId', 'id', 'action', 'before', 'code', 'destination', 'destinationPortMax', 'destinationPortMin', 'direction', 'name', 'source', 'sourcePortMax', 'sourcePortMin', 'type', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20094,12 +21356,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20136,7 +21402,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroupCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'vpcId', 'vpcCrn', 'vpcName', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'vpcId', 'vpcCrn', 'vpcName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20165,11 +21431,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20202,7 +21472,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroup>> {
     const _params = { ...params };
     const _requiredParams = ['vpc'];
-    const _validParams = ['vpc', 'name', 'resourceGroup', 'rules', 'headers'];
+    const _validParams = ['vpc', 'name', 'resourceGroup', 'rules', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20233,12 +21503,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20262,7 +21536,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20290,10 +21564,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20315,7 +21593,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20343,11 +21621,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20373,7 +21655,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroup>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20406,12 +21688,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20434,7 +21720,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroupRuleCollection>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId'];
-    const _validParams = ['securityGroupId', 'headers'];
+    const _validParams = ['securityGroupId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20462,11 +21748,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20495,7 +21785,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId', 'securityGroupRulePrototype'];
-    const _validParams = ['securityGroupId', 'securityGroupRulePrototype', 'headers'];
+    const _validParams = ['securityGroupId', 'securityGroupRulePrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20525,12 +21815,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20554,7 +21848,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId', 'id'];
-    const _validParams = ['securityGroupId', 'id', 'headers'];
+    const _validParams = ['securityGroupId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20583,10 +21877,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20609,7 +21907,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId', 'id'];
-    const _validParams = ['securityGroupId', 'id', 'headers'];
+    const _validParams = ['securityGroupId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20638,11 +21936,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20699,7 +22001,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId', 'id'];
-    const _validParams = ['securityGroupId', 'id', 'code', 'direction', 'ipVersion', 'local', 'portMax', 'portMin', 'remote', 'type', 'headers'];
+    const _validParams = ['securityGroupId', 'id', 'code', 'direction', 'ipVersion', 'local', 'portMax', 'portMin', 'remote', 'type', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20740,12 +22042,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20769,7 +22075,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetCollection>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId'];
-    const _validParams = ['securityGroupId', 'start', 'limit', 'headers'];
+    const _validParams = ['securityGroupId', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20799,11 +22105,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20837,7 +22147,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId', 'id'];
-    const _validParams = ['securityGroupId', 'id', 'headers'];
+    const _validParams = ['securityGroupId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20866,10 +22176,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20893,7 +22207,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId', 'id'];
-    const _validParams = ['securityGroupId', 'id', 'headers'];
+    const _validParams = ['securityGroupId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20922,11 +22236,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -20959,7 +22277,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroupTargetReference>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId', 'id'];
-    const _validParams = ['securityGroupId', 'id', 'headers'];
+    const _validParams = ['securityGroupId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -20988,11 +22306,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21018,7 +22340,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IKEPolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21043,11 +22365,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21078,7 +22404,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['authenticationAlgorithm', 'dhGroup', 'encryptionAlgorithm', 'ikeVersion'];
-    const _validParams = ['authenticationAlgorithm', 'dhGroup', 'encryptionAlgorithm', 'ikeVersion', 'keyLifetime', 'name', 'resourceGroup', 'headers'];
+    const _validParams = ['authenticationAlgorithm', 'dhGroup', 'encryptionAlgorithm', 'ikeVersion', 'keyLifetime', 'name', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21112,12 +22438,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21140,7 +22470,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21168,10 +22498,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21193,7 +22527,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21221,11 +22555,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21254,7 +22592,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'authenticationAlgorithm', 'dhGroup', 'encryptionAlgorithm', 'ikeVersion', 'keyLifetime', 'name', 'headers'];
+    const _validParams = ['id', 'authenticationAlgorithm', 'dhGroup', 'encryptionAlgorithm', 'ikeVersion', 'keyLifetime', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21292,12 +22630,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21321,7 +22663,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IKEPolicyConnectionCollection>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'start', 'limit', 'headers'];
+    const _validParams = ['id', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21351,11 +22693,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21378,7 +22724,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IPsecPolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21403,11 +22749,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21449,7 +22799,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['authenticationAlgorithm', 'encryptionAlgorithm', 'pfs'];
-    const _validParams = ['authenticationAlgorithm', 'encryptionAlgorithm', 'pfs', 'keyLifetime', 'name', 'resourceGroup', 'headers'];
+    const _validParams = ['authenticationAlgorithm', 'encryptionAlgorithm', 'pfs', 'keyLifetime', 'name', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21482,12 +22832,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21510,7 +22864,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21538,10 +22892,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21563,7 +22921,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21591,11 +22949,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21635,7 +22997,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'authenticationAlgorithm', 'encryptionAlgorithm', 'keyLifetime', 'name', 'pfs', 'headers'];
+    const _validParams = ['id', 'authenticationAlgorithm', 'encryptionAlgorithm', 'keyLifetime', 'name', 'pfs', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21672,12 +23034,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21701,7 +23067,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IPsecPolicyConnectionCollection>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'start', 'limit', 'headers'];
+    const _validParams = ['id', 'start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21731,11 +23097,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21766,7 +23136,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'sort', 'mode', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'sort', 'mode', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21794,11 +23164,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21820,7 +23194,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayPrototype'];
-    const _validParams = ['vpnGatewayPrototype', 'headers'];
+    const _validParams = ['vpnGatewayPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21845,12 +23219,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21874,7 +23252,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21902,10 +23280,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21927,7 +23309,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -21955,11 +23337,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -21983,7 +23369,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'headers'];
+    const _validParams = ['id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22016,12 +23402,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22047,7 +23437,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCollection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId'];
-    const _validParams = ['vpnGatewayId', 'start', 'limit', 'status', 'headers'];
+    const _validParams = ['vpnGatewayId', 'start', 'limit', 'status', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22078,11 +23468,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22106,7 +23500,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'vpnGatewayConnectionPrototype'];
-    const _validParams = ['vpnGatewayId', 'vpnGatewayConnectionPrototype', 'headers'];
+    const _validParams = ['vpnGatewayId', 'vpnGatewayConnectionPrototype', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22136,12 +23530,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22165,7 +23563,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
-    const _validParams = ['vpnGatewayId', 'id', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22194,10 +23592,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22220,7 +23622,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
-    const _validParams = ['vpnGatewayId', 'id', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22249,11 +23651,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22303,7 +23709,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
-    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'distributeTraffic', 'establishMode', 'ikePolicy', 'ipsecPolicy', 'name', 'peer', 'psk', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'distributeTraffic', 'establishMode', 'ikePolicy', 'ipsecPolicy', 'name', 'peer', 'psk', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22345,12 +23751,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22375,7 +23785,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCIDRs>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
-    const _validParams = ['vpnGatewayId', 'id', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22404,11 +23814,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22434,7 +23848,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22464,10 +23878,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22493,7 +23911,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22523,10 +23941,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22553,7 +23975,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22583,10 +24005,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22611,7 +24037,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnectionCIDRs>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
-    const _validParams = ['vpnGatewayId', 'id', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22640,11 +24066,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22670,7 +24100,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22700,10 +24130,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22729,7 +24163,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22759,10 +24193,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22789,7 +24227,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id', 'cidr'];
-    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'cidr', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22819,10 +24257,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22856,7 +24298,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNServerCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'sort', 'headers'];
+    const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22884,11 +24326,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -22940,7 +24386,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNServer>> {
     const _params = { ...params };
     const _requiredParams = ['certificate', 'clientAuthentication', 'clientIpPool', 'subnets'];
-    const _validParams = ['certificate', 'clientAuthentication', 'clientIpPool', 'subnets', 'clientDnsServerIps', 'clientIdleTimeout', 'enableSplitTunneling', 'name', 'port', 'protocol', 'resourceGroup', 'securityGroups', 'headers'];
+    const _validParams = ['certificate', 'clientAuthentication', 'clientIpPool', 'subnets', 'clientDnsServerIps', 'clientIdleTimeout', 'enableSplitTunneling', 'name', 'port', 'protocol', 'resourceGroup', 'securityGroups', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22979,12 +24425,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23008,7 +24458,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23036,11 +24486,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23062,7 +24516,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNServer>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23090,11 +24544,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23146,7 +24604,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNServer>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'certificate', 'clientAuthentication', 'clientDnsServerIps', 'clientIdleTimeout', 'clientIpPool', 'enableSplitTunneling', 'name', 'port', 'protocol', 'subnets', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'certificate', 'clientAuthentication', 'clientDnsServerIps', 'clientIdleTimeout', 'clientIpPool', 'enableSplitTunneling', 'name', 'port', 'protocol', 'subnets', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23188,6 +24646,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -23195,6 +24654,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23217,7 +24679,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<string>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23245,11 +24707,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'text/plain',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23277,7 +24743,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNServerClientCollection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnServerId'];
-    const _validParams = ['vpnServerId', 'start', 'limit', 'sort', 'headers'];
+    const _validParams = ['vpnServerId', 'start', 'limit', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23308,11 +24774,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23337,7 +24807,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnServerId', 'id'];
-    const _validParams = ['vpnServerId', 'id', 'headers'];
+    const _validParams = ['vpnServerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23366,10 +24836,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23392,7 +24866,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNServerClient>> {
     const _params = { ...params };
     const _requiredParams = ['vpnServerId', 'id'];
-    const _validParams = ['vpnServerId', 'id', 'headers'];
+    const _validParams = ['vpnServerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23421,11 +24895,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23450,7 +24928,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnServerId', 'id'];
-    const _validParams = ['vpnServerId', 'id', 'headers'];
+    const _validParams = ['vpnServerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23479,10 +24957,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23512,7 +24994,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNServerRouteCollection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnServerId'];
-    const _validParams = ['vpnServerId', 'start', 'limit', 'sort', 'headers'];
+    const _validParams = ['vpnServerId', 'start', 'limit', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23543,11 +25025,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23580,7 +25066,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNServerRoute>> {
     const _params = { ...params };
     const _requiredParams = ['vpnServerId', 'destination'];
-    const _validParams = ['vpnServerId', 'destination', 'action', 'name', 'headers'];
+    const _validParams = ['vpnServerId', 'destination', 'action', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23615,12 +25101,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23643,7 +25133,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnServerId', 'id'];
-    const _validParams = ['vpnServerId', 'id', 'headers'];
+    const _validParams = ['vpnServerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23672,10 +25162,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23698,7 +25192,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNServerRoute>> {
     const _params = { ...params };
     const _requiredParams = ['vpnServerId', 'id'];
-    const _validParams = ['vpnServerId', 'id', 'headers'];
+    const _validParams = ['vpnServerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23727,11 +25221,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23757,7 +25255,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNServerRoute>> {
     const _params = { ...params };
     const _requiredParams = ['vpnServerId', 'id'];
-    const _validParams = ['vpnServerId', 'id', 'name', 'headers'];
+    const _validParams = ['vpnServerId', 'id', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23791,12 +25289,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23823,7 +25325,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerProfileCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23848,11 +25350,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23874,7 +25380,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerProfile>> {
     const _params = { ...params };
     const _requiredParams = ['name'];
-    const _validParams = ['name', 'headers'];
+    const _validParams = ['name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23902,11 +25408,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -23929,7 +25439,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -23954,11 +25464,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24002,7 +25516,7 @@ class VpcV1 extends BaseService {
    * To activate logging, the load balancer profile must support the specified logging type.
    * @param {string} [params.name] - The name for this load balancer. The name must not be used by another load balancer
    * in the VPC.  If unspecified, the name will be a hyphenated list of randomly-selected words.
-   * @param {LoadBalancerPoolPrototype[]} [params.pools] - The pools of this load balancer.
+   * @param {LoadBalancerPoolPrototypeLoadBalancerContext[]} [params.pools] - The pools of this load balancer.
    * @param {LoadBalancerProfileIdentity} [params.profile] - The profile to use for this load balancer.
    *
    * If unspecified, `application` will be used.
@@ -24024,7 +25538,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
     const _params = { ...params };
     const _requiredParams = ['isPublic', 'subnets'];
-    const _validParams = ['isPublic', 'subnets', 'dns', 'isPrivatePath', 'listeners', 'logging', 'name', 'pools', 'profile', 'resourceGroup', 'routeMode', 'securityGroups', 'headers'];
+    const _validParams = ['isPublic', 'subnets', 'dns', 'isPrivatePath', 'listeners', 'logging', 'name', 'pools', 'profile', 'resourceGroup', 'routeMode', 'securityGroups', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24063,12 +25577,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24093,7 +25611,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24121,11 +25639,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24147,7 +25669,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24175,11 +25697,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24224,7 +25750,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancer>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'dns', 'logging', 'name', 'subnets', 'ifMatch', 'headers'];
+    const _validParams = ['id', 'dns', 'logging', 'name', 'subnets', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24260,6 +25786,7 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
@@ -24267,6 +25794,9 @@ class VpcV1 extends BaseService {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24288,7 +25818,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerStatistics>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24316,11 +25846,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24342,7 +25876,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerCollection>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId'];
-    const _validParams = ['loadBalancerId', 'headers'];
+    const _validParams = ['loadBalancerId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24370,11 +25904,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24388,8 +25926,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
-   * @param {string} params.protocol - The listener protocol. Each listener in the load balancer must have a unique
-   * `port` and `protocol` combination.
+   * @param {string} params.protocol - The listener protocol. Each listener in the load balancer must have a
+   * non-overlapping port range and `protocol` combination.
    *
    * Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in
    * the `application` family support `tcp`, `http` and
@@ -24414,6 +25952,8 @@ class VpcV1 extends BaseService {
    * connections may be queued or rejected.
    *
    * Supported for load balancers in the `application` family.
+   *
+   * If unspecified, the limit will be `15000` for load balancers in the `application` family.
    * @param {LoadBalancerPoolIdentity} [params.defaultPool] - The default pool for this listener. If `https_redirect` is
    * specified, the
    * default pool will not be used.
@@ -24435,28 +25975,35 @@ class VpcV1 extends BaseService {
    * @param {number} [params.idleConnectionTimeout] - The idle connection timeout of the listener in seconds.
    *
    * Supported for load balancers in the `application` family.
+   *
+   * If unspecified, the timeout will be `50` for load balancers in the `application` family.
    * @param {LoadBalancerListenerPolicyPrototype[]} [params.policies] - The policy prototype objects for this listener.
    * The load balancer must be in the
    * `application` family.
-   * @param {number} [params.port] - The listener port number, or the inclusive lower bound of the port range. Each
-   * listener in the load balancer must have a unique `port` and `protocol` combination.
+   * @param {number} [params.port] - The listener port number. Each listener in the load balancer must have a
+   * non-overlapping port range and `protocol` combination.
    *
-   * Not supported for load balancers operating with route mode enabled.
+   * If `port_min` is also specified, `port` must have the same value as `port_min`.
    * @param {number} [params.portMax] - The inclusive upper bound of the range of ports used by this listener. Must not
    * be less than `port_min`.
    *
    * Only load balancers with route mode enabled, or network load balancers with
    * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
-   * mode is enabled, the value `65535` must be specified.
+   * mode is enabled, `65535` must be specified.
    *
    * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
    * same protocol.
    * @param {number} [params.portMin] - The inclusive lower bound of the range of ports used by this listener. Must not
    * be greater than `port_max`.
    *
+   * If specified, `port_max` must also be specified, and must not be smaller. If unspecified, `port_max` must also be
+   * unspecified.
+   *
+   * If `port` is also specified, `port_min` must have the same value as `port`.
+   *
    * Only load balancers with route mode enabled, or network load balancers with
    * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
-   * mode is enabled, the value `1` must be specified.
+   * mode is enabled, `1` must be specified.
    *
    * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
    * same protocol.
@@ -24468,7 +26015,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'protocol'];
-    const _validParams = ['loadBalancerId', 'protocol', 'acceptProxyProtocol', 'certificateInstance', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'idleConnectionTimeout', 'policies', 'port', 'portMax', 'portMin', 'headers'];
+    const _validParams = ['loadBalancerId', 'protocol', 'acceptProxyProtocol', 'certificateInstance', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'idleConnectionTimeout', 'policies', 'port', 'portMax', 'portMin', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24511,12 +26058,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24540,7 +26091,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'id'];
-    const _validParams = ['loadBalancerId', 'id', 'headers'];
+    const _validParams = ['loadBalancerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24569,10 +26120,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24595,7 +26150,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'id'];
-    const _validParams = ['loadBalancerId', 'id', 'headers'];
+    const _validParams = ['loadBalancerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24624,11 +26179,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24678,30 +26237,35 @@ class VpcV1 extends BaseService {
    * @param {number} [params.idleConnectionTimeout] - The idle connection timeout of the listener in seconds.
    *
    * Supported for load balancers in the `application` family.
-   * @param {number} [params.port] - The listener port number, or the inclusive lower bound of the port range. Each
-   * listener in the load balancer must have a unique `port` and `protocol` combination.
+   * @param {number} [params.port] - The inclusive lower bound of the range of ports used by this listener. Must not be
+   * greater than `port_max`. Updating `port` updates `port_min` to the same value.
    *
-   * Not supported for load balancers operating with route mode enabled.
+   * Only load balancers with route mode enabled, or network load balancers with
+   * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
+   * mode is enabled, the value must be `1`.
+   *
+   * Each listener in the load balancer must have a non-overlapping port range and
+   * `protocol` combination.
    * @param {number} [params.portMax] - The inclusive upper bound of the range of ports used by this listener. Must not
    * be less than `port_min`.
    *
    * Only load balancers with route mode enabled, or network load balancers with
    * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
-   * mode is enabled, the value `65535` must be specified.
+   * mode is enabled, `65535` must be specified.
    *
    * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
    * same protocol.
    * @param {number} [params.portMin] - The inclusive lower bound of the range of ports used by this listener. Must not
-   * be greater than `port_max`.
+   * be greater than `port_max`. Updating `port_min` updates `port` to the same value.
    *
    * Only load balancers with route mode enabled, or network load balancers with
    * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
-   * mode is enabled, the value `1` must be specified.
+   * mode is enabled, the value must be `1`.
    *
-   * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
-   * same protocol.
-   * @param {string} [params.protocol] - The listener protocol. Each listener in the load balancer must have a unique
-   * `port` and `protocol` combination.
+   * Each listener in the load balancer must have a non-overlapping port range and
+   * `protocol` combination.
+   * @param {string} [params.protocol] - The listener protocol. Each listener in the load balancer must have a
+   * non-overlapping port range and `protocol` combination.
    *
    * Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in
    * the `application` family support `tcp`, `http` and
@@ -24720,7 +26284,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'id'];
-    const _validParams = ['loadBalancerId', 'id', 'acceptProxyProtocol', 'certificateInstance', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'idleConnectionTimeout', 'port', 'portMax', 'portMin', 'protocol', 'headers'];
+    const _validParams = ['loadBalancerId', 'id', 'acceptProxyProtocol', 'certificateInstance', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'idleConnectionTimeout', 'port', 'portMax', 'portMin', 'protocol', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24763,12 +26327,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24792,7 +26360,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'listenerId'];
-    const _validParams = ['loadBalancerId', 'listenerId', 'headers'];
+    const _validParams = ['loadBalancerId', 'listenerId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24821,11 +26389,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24858,7 +26430,7 @@ class VpcV1 extends BaseService {
    * `LoadBalancerPoolIdentity` to specify a pool in this
    *   load balancer to forward to.
    * - If `action` is `https_redirect`, use
-   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
+   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener in this
    *   load balancer to redirect to.
    * - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
    *   specify a URL to redirect to.
@@ -24870,7 +26442,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'listenerId', 'action', 'priority'];
-    const _validParams = ['loadBalancerId', 'listenerId', 'action', 'priority', 'name', 'rules', 'target', 'headers'];
+    const _validParams = ['loadBalancerId', 'listenerId', 'action', 'priority', 'name', 'rules', 'target', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24908,12 +26480,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24937,7 +26513,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'listenerId', 'id'];
-    const _validParams = ['loadBalancerId', 'listenerId', 'id', 'headers'];
+    const _validParams = ['loadBalancerId', 'listenerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24967,10 +26543,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -24994,7 +26574,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'listenerId', 'id'];
-    const _validParams = ['loadBalancerId', 'listenerId', 'id', 'headers'];
+    const _validParams = ['loadBalancerId', 'listenerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25024,11 +26604,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25050,9 +26634,11 @@ class VpcV1 extends BaseService {
    * @param {number} [params.priority] - Priority of the policy. The priority is unique across all policies for this
    * load balancer listener. Lower value indicates higher priority.
    * @param {LoadBalancerListenerPolicyTargetPatch} [params.target] - - If `action` is `forward`, specify a
-   * `LoadBalancerPoolIdentity`.
+   * `LoadBalancerPoolIdentity` for a pool in this load
+   *   balancer.
    * - If `action` is `https_redirect`, specify a
-   * `LoadBalancerListenerPolicyHTTPSRedirectPatch`.
+   *   `LoadBalancerListenerPolicyHTTPSRedirectPatch` for a listener in this load balancer
+   *   with a `protocol` of `https`.
    * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>>}
@@ -25062,7 +26648,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'listenerId', 'id'];
-    const _validParams = ['loadBalancerId', 'listenerId', 'id', 'name', 'priority', 'target', 'headers'];
+    const _validParams = ['loadBalancerId', 'listenerId', 'id', 'name', 'priority', 'target', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25099,12 +26685,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25128,7 +26718,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRuleCollection>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'listenerId', 'policyId'];
-    const _validParams = ['loadBalancerId', 'listenerId', 'policyId', 'headers'];
+    const _validParams = ['loadBalancerId', 'listenerId', 'policyId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25158,11 +26748,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25179,8 +26773,13 @@ class VpcV1 extends BaseService {
    * @param {string} params.listenerId - The listener identifier.
    * @param {string} params.policyId - The policy identifier.
    * @param {string} params.condition - The condition for the rule.
-   * @param {string} params.type - The type of the rule. Body rules are applied to form-encoded request bodies using the
-   * `UTF-8` character set.
+   * @param {string} params.type - The content the rule applies to:
+   * - `body`: The UTF-8 form-encoded HTTP request body
+   * - `header`: The HTTP header
+   * - `hostname`: The fully-qualified domain name of the server specified in the Host
+   *   HTTP request header
+   * - `path`: The path of the HTTP request
+   * - `query`: The query of the HTTP request URL.
    * @param {string} params.value - The value to be matched for the rule condition.
    *
    * If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
@@ -25198,7 +26797,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'condition', 'type', 'value'];
-    const _validParams = ['loadBalancerId', 'listenerId', 'policyId', 'condition', 'type', 'value', 'field', 'headers'];
+    const _validParams = ['loadBalancerId', 'listenerId', 'policyId', 'condition', 'type', 'value', 'field', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25236,12 +26835,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25266,7 +26869,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'id'];
-    const _validParams = ['loadBalancerId', 'listenerId', 'policyId', 'id', 'headers'];
+    const _validParams = ['loadBalancerId', 'listenerId', 'policyId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25297,10 +26900,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25325,7 +26932,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'id'];
-    const _validParams = ['loadBalancerId', 'listenerId', 'policyId', 'id', 'headers'];
+    const _validParams = ['loadBalancerId', 'listenerId', 'policyId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25356,11 +26963,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25384,9 +26995,13 @@ class VpcV1 extends BaseService {
    * `hostname` or `path`.
    *
    * If the rule condition is not `matches_regex`, the value must be percent-encoded.
-   * @param {string} [params.type] - The type of the rule. Body rules are applied to form-encoded request bodies using
-   * the
-   * `UTF-8` character set.
+   * @param {string} [params.type] - The content the rule applies to:
+   * - `body`: The UTF-8 form-encoded HTTP request body
+   * - `header`: The HTTP header
+   * - `hostname`: The fully-qualified domain name of the server specified in the Host
+   *   HTTP request header
+   * - `path`: The path of the HTTP request
+   * - `query`: The query of the HTTP request URL.
    * @param {string} [params.value] - The value to be matched for the rule condition.
    *
    * If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
@@ -25398,7 +27013,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'listenerId', 'policyId', 'id'];
-    const _validParams = ['loadBalancerId', 'listenerId', 'policyId', 'id', 'condition', 'field', 'type', 'value', 'headers'];
+    const _validParams = ['loadBalancerId', 'listenerId', 'policyId', 'id', 'condition', 'field', 'type', 'value', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25437,12 +27052,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25464,7 +27083,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolCollection>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId'];
-    const _validParams = ['loadBalancerId', 'headers'];
+    const _validParams = ['loadBalancerId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25492,11 +27111,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25516,6 +27139,10 @@ class VpcV1 extends BaseService {
    * @param {string} params.protocol - The protocol used for this load balancer pool. Load balancers in the `network`
    * family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the
    * `application` family support `tcp`, `http`, and `https`.
+   * @param {LoadBalancerPoolFailsafePolicyPrototype} [params.failsafePolicy] - The failsafe policy to use for this
+   * pool.
+   *
+   * If unspecified, the default failsafe policy action from the profile will be used.
    * @param {LoadBalancerPoolMemberPrototype[]} [params.members] - The members for this load balancer pool. For load
    * balancers in the `network` family, the same `port` and `target` tuple cannot be shared by a pool member of any
    * other load balancer in the same VPC.
@@ -25529,9 +27156,10 @@ class VpcV1 extends BaseService {
    * For load balancers in the `network` family, this property must be `disabled`.
    * @param {LoadBalancerPoolSessionPersistencePrototype} [params.sessionPersistence] - The session persistence of this
    * pool. If specified, the load balancer must have
-   * `source_ip_session_persistence_supported` set to `true` in its profile. If
-   * unspecified, session persistence will be disabled, and traffic will be distributed
-   * across backend server members of the pool.
+   * `source_ip_session_persistence_supported` set to `true` in its profile.
+   *
+   * If unspecified, session persistence will be disabled, and traffic will be distributed
+   * across members of the pool.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPool>>}
    */
@@ -25540,7 +27168,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'algorithm', 'healthMonitor', 'protocol'];
-    const _validParams = ['loadBalancerId', 'algorithm', 'healthMonitor', 'protocol', 'members', 'name', 'proxyProtocol', 'sessionPersistence', 'headers'];
+    const _validParams = ['loadBalancerId', 'algorithm', 'healthMonitor', 'protocol', 'failsafePolicy', 'members', 'name', 'proxyProtocol', 'sessionPersistence', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25550,6 +27178,7 @@ class VpcV1 extends BaseService {
       'algorithm': _params.algorithm,
       'health_monitor': _params.healthMonitor,
       'protocol': _params.protocol,
+      'failsafe_policy': _params.failsafePolicy,
       'members': _params.members,
       'name': _params.name,
       'proxy_protocol': _params.proxyProtocol,
@@ -25579,12 +27208,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25595,7 +27228,8 @@ class VpcV1 extends BaseService {
    * Delete a load balancer pool.
    *
    * This request deletes a load balancer pool. This operation cannot be reversed. The pool must not currently be the
-   * default pool for any listener in the load balancer.
+   * default pool for any listener in the load balancer, nor be the target pool in the failsafe policy for any other
+   * pool.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
@@ -25608,7 +27242,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'id'];
-    const _validParams = ['loadBalancerId', 'id', 'headers'];
+    const _validParams = ['loadBalancerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25637,10 +27271,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25663,7 +27301,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'id'];
-    const _validParams = ['loadBalancerId', 'id', 'headers'];
+    const _validParams = ['loadBalancerId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25692,11 +27330,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25713,6 +27355,8 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The pool identifier.
    * @param {string} [params.algorithm] - The load balancing algorithm. The `least_connections` algorithm is only
    * supported for load balancers that have `availability` with value `subnet` in the profile.
+   * @param {LoadBalancerPoolFailsafePolicyPatch} [params.failsafePolicy] - The failsafe policy for this load balancer
+   * pool.
    * @param {LoadBalancerPoolHealthMonitorPatch} [params.healthMonitor] - The health monitor of this pool.
    * @param {string} [params.name] - The name for this load balancer pool. The name must not be used by another pool for
    * the load balancer.
@@ -25722,8 +27366,9 @@ class VpcV1 extends BaseService {
    * the `application` family support `tcp`, `http` and
    * `https`.
    *
-   * If this pool is associated with a load balancer listener, the specified protocol must match, or be compatible with
-   * the listener's protocol. At present, the compatible protocols are `http` and `https`.
+   * If this pool is associated with a load balancer listener or a load balancer failsafe target pool, the specified
+   * protocol must match or be compatible with each other's protocol. At present, the compatible protocols are `http`
+   * and `https`.
    * @param {string} [params.proxyProtocol] - The PROXY protocol setting for this pool:
    * - `v1`: Enabled with version 1 (human-readable header format)
    * - `v2`: Enabled with version 2 (binary header format)
@@ -25740,7 +27385,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'id'];
-    const _validParams = ['loadBalancerId', 'id', 'algorithm', 'healthMonitor', 'name', 'protocol', 'proxyProtocol', 'sessionPersistence', 'headers'];
+    const _validParams = ['loadBalancerId', 'id', 'algorithm', 'failsafePolicy', 'healthMonitor', 'name', 'protocol', 'proxyProtocol', 'sessionPersistence', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25748,6 +27393,7 @@ class VpcV1 extends BaseService {
 
     const body = {
       'algorithm': _params.algorithm,
+      'failsafe_policy': _params.failsafePolicy,
       'health_monitor': _params.healthMonitor,
       'name': _params.name,
       'protocol': _params.protocol,
@@ -25779,12 +27425,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25807,7 +27457,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMemberCollection>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'poolId'];
-    const _validParams = ['loadBalancerId', 'poolId', 'headers'];
+    const _validParams = ['loadBalancerId', 'poolId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25836,11 +27486,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25868,7 +27522,10 @@ class VpcV1 extends BaseService {
    * in a zone the load balancer has a subnet in.
    * @param {number} [params.weight] - The weight of the server member.
    *
-   * If specified, the pool algorithm must be `weighted_round_robin`.
+   * If specified, the pool algorithm must be `weighted_round_robin` and the load balancer must be in the `application`
+   * family.
+   *
+   * If unspecified, the weight will be `50` for load balancers in the `application` family.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>>}
    */
@@ -25877,7 +27534,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'poolId', 'port', 'target'];
-    const _validParams = ['loadBalancerId', 'poolId', 'port', 'target', 'weight', 'headers'];
+    const _validParams = ['loadBalancerId', 'poolId', 'port', 'target', 'weight', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25913,12 +27570,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -25943,7 +27604,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMemberCollection>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'poolId', 'members'];
-    const _validParams = ['loadBalancerId', 'poolId', 'members', 'headers'];
+    const _validParams = ['loadBalancerId', 'poolId', 'members', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25977,12 +27638,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26006,7 +27671,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'poolId', 'id'];
-    const _validParams = ['loadBalancerId', 'poolId', 'id', 'headers'];
+    const _validParams = ['loadBalancerId', 'poolId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26036,10 +27701,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26063,7 +27732,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'poolId', 'id'];
-    const _validParams = ['loadBalancerId', 'poolId', 'id', 'headers'];
+    const _validParams = ['loadBalancerId', 'poolId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26093,11 +27762,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26135,7 +27808,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPoolMember>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'poolId', 'id'];
-    const _validParams = ['loadBalancerId', 'poolId', 'id', 'port', 'target', 'weight', 'headers'];
+    const _validParams = ['loadBalancerId', 'poolId', 'id', 'port', 'target', 'weight', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26172,12 +27845,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26218,7 +27895,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGatewayCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'lifecycleState', 'vpcId', 'vpcCrn', 'vpcName', 'allowDnsResolutionBinding', 'headers'];
+    const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'lifecycleState', 'vpcId', 'vpcCrn', 'vpcName', 'allowDnsResolutionBinding', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26250,11 +27927,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26296,7 +27977,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
     const _params = { ...params };
     const _requiredParams = ['target', 'vpc'];
-    const _validParams = ['target', 'vpc', 'allowDnsResolutionBinding', 'ips', 'name', 'resourceGroup', 'securityGroups', 'headers'];
+    const _validParams = ['target', 'vpc', 'allowDnsResolutionBinding', 'ips', 'name', 'resourceGroup', 'securityGroups', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26330,12 +28011,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26363,7 +28048,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIPCollectionEndpointGatewayContext>> {
     const _params = { ...params };
     const _requiredParams = ['endpointGatewayId'];
-    const _validParams = ['endpointGatewayId', 'start', 'limit', 'sort', 'headers'];
+    const _validParams = ['endpointGatewayId', 'start', 'limit', 'sort', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26394,11 +28079,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26422,7 +28111,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['endpointGatewayId', 'id'];
-    const _validParams = ['endpointGatewayId', 'id', 'headers'];
+    const _validParams = ['endpointGatewayId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26451,10 +28140,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26478,7 +28171,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
     const _params = { ...params };
     const _requiredParams = ['endpointGatewayId', 'id'];
-    const _validParams = ['endpointGatewayId', 'id', 'headers'];
+    const _validParams = ['endpointGatewayId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26507,11 +28200,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26537,7 +28234,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ReservedIP>> {
     const _params = { ...params };
     const _requiredParams = ['endpointGatewayId', 'id'];
-    const _validParams = ['endpointGatewayId', 'id', 'headers'];
+    const _validParams = ['endpointGatewayId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26566,11 +28263,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26595,7 +28296,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26623,10 +28324,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26648,7 +28353,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26676,11 +28381,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26710,7 +28419,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'allowDnsResolutionBinding', 'name', 'headers'];
+    const _validParams = ['id', 'allowDnsResolutionBinding', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26744,12 +28453,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26763,9 +28476,10 @@ class VpcV1 extends BaseService {
    * List flow log collectors.
    *
    * This request lists flow log collectors in the region. A [flow log
-   * collector](https://cloud.ibm.com/docs/vpc?topic=vpc-flow-logs) summarizes data sent over the instance network
-   * interfaces and instance network attachments contained within its target. The collected flow logs are written to a
-   * cloud object storage bucket, where they can be [viewed](https://cloud.ibm.com/docs/vpc?topic=vpc-fl-analyze).
+   * collector](https://cloud.ibm.com/docs/vpc?topic=vpc-flow-logs) summarizes TCP and UDP data sent over the instance
+   * network interfaces and instance network attachments contained within its target. The collected flow logs are
+   * written to a cloud object storage bucket, where they can be
+   * [viewed](https://cloud.ibm.com/docs/vpc?topic=vpc-fl-analyze).
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -26792,7 +28506,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FlowLogCollectorCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'vpcId', 'vpcCrn', 'vpcName', 'targetId', 'targetResourceType', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'vpcId', 'vpcCrn', 'vpcName', 'targetId', 'targetResourceType', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26824,11 +28538,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26871,7 +28589,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FlowLogCollector>> {
     const _params = { ...params };
     const _requiredParams = ['storageBucket', 'target'];
-    const _validParams = ['storageBucket', 'target', 'active', 'name', 'resourceGroup', 'headers'];
+    const _validParams = ['storageBucket', 'target', 'active', 'name', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26903,12 +28621,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26932,7 +28654,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -26960,10 +28682,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -26985,7 +28711,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FlowLogCollector>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27013,11 +28739,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27045,7 +28775,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.FlowLogCollector>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'active', 'name', 'headers'];
+    const _validParams = ['id', 'active', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27079,12 +28809,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27119,7 +28853,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27145,11 +28879,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27193,7 +28931,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGateway>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancer', 'serviceEndpoints'];
-    const _validParams = ['loadBalancer', 'serviceEndpoints', 'defaultAccessPolicy', 'name', 'resourceGroup', 'zonalAffinity', 'headers'];
+    const _validParams = ['loadBalancer', 'serviceEndpoints', 'defaultAccessPolicy', 'name', 'resourceGroup', 'zonalAffinity', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27226,12 +28964,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27254,7 +28996,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27282,10 +29024,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27307,7 +29053,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'headers'];
+    const _validParams = ['id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27335,11 +29081,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27377,7 +29127,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'defaultAccessPolicy', 'loadBalancer', 'name', 'zonalAffinity', 'headers'];
+    const _validParams = ['id', 'defaultAccessPolicy', 'loadBalancer', 'name', 'zonalAffinity', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27413,12 +29163,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27449,7 +29203,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicyCollection>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId'];
-    const _validParams = ['privatePathServiceGatewayId', 'start', 'limit', 'accountId', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'start', 'limit', 'accountId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27480,11 +29234,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27523,7 +29281,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId', 'accessPolicy', 'account'];
-    const _validParams = ['privatePathServiceGatewayId', 'accessPolicy', 'account', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'accessPolicy', 'account', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27557,12 +29315,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27586,7 +29348,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId', 'id'];
-    const _validParams = ['privatePathServiceGatewayId', 'id', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27615,10 +29377,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27641,7 +29407,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId', 'id'];
-    const _validParams = ['privatePathServiceGatewayId', 'id', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27670,11 +29436,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27711,7 +29481,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayAccountPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId', 'id'];
-    const _validParams = ['privatePathServiceGatewayId', 'id', 'accessPolicy', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'accessPolicy', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27745,12 +29515,16 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27785,7 +29559,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayEndpointGatewayBindingCollection>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId'];
-    const _validParams = ['privatePathServiceGatewayId', 'start', 'limit', 'status', 'accountId', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'start', 'limit', 'status', 'accountId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27817,11 +29591,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27844,7 +29622,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.PrivatePathServiceGatewayEndpointGatewayBinding>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId', 'id'];
-    const _validParams = ['privatePathServiceGatewayId', 'id', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27873,11 +29651,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Accept': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27912,7 +29694,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId', 'id'];
-    const _validParams = ['privatePathServiceGatewayId', 'id', 'setAccountPolicy', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'setAccountPolicy', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -27946,11 +29728,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -27987,7 +29773,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId', 'id'];
-    const _validParams = ['privatePathServiceGatewayId', 'id', 'setAccountPolicy', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'id', 'setAccountPolicy', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -28021,11 +29807,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -28047,7 +29837,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId'];
-    const _validParams = ['privatePathServiceGatewayId', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -28075,10 +29865,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -28105,7 +29899,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId', 'account'];
-    const _validParams = ['privatePathServiceGatewayId', 'account', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'account', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -28138,11 +29932,15 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
             'Content-Type': 'application/json',
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -28166,7 +29964,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['privatePathServiceGatewayId'];
-    const _validParams = ['privatePathServiceGatewayId', 'headers'];
+    const _validParams = ['privatePathServiceGatewayId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -28194,10 +29992,14 @@ class VpcV1 extends BaseService {
         headers: extend(
           true,
           sdkHeaders,
+          this.baseOptions.headers,
           {
           },
           _params.headers
         ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
       }),
     };
 
@@ -28215,7 +30017,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2024-11-19` and `2024-12-26`.
+     *  `2024-11-19` and `2025-03-08`.
      */
     version: string;
   }
@@ -28243,8 +30045,13 @@ namespace VpcV1 {
    * request interfaces
    ************************/
 
+   interface DefaultParams {
+     headers?: OutgoingHttpHeaders;
+     signal?: AbortSignal;
+   }
+
   /** Parameters for the `listVpcs` operation. */
-  export interface ListVpcsParams {
+  export interface ListVpcsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -28253,11 +30060,10 @@ namespace VpcV1 {
     resourceGroupId?: string;
     /** Filters the collection to VPCs with a `classic_access` property matching the specified value. */
     classicAccess?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createVpc` operation. */
-  export interface CreateVpcParams {
+  export interface CreateVpcParams extends DefaultParams {
     /** Indicates whether a [default address
      *  prefix](https://cloud.ibm.com/docs/vpc?topic=vpc-configuring-address-prefixes) will be automatically created for
      *  each zone in this VPC. If `manual`, this VPC will be created with no default address prefixes.
@@ -28289,7 +30095,6 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createVpc` operation. */
@@ -28302,25 +30107,23 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteVpc` operation. */
-  export interface DeleteVpcParams {
+  export interface DeleteVpcParams extends DefaultParams {
     /** The VPC identifier. */
     id: string;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpc` operation. */
-  export interface GetVpcParams {
+  export interface GetVpcParams extends DefaultParams {
     /** The VPC identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVpc` operation. */
-  export interface UpdateVpcParams {
+  export interface UpdateVpcParams extends DefaultParams {
     /** The VPC identifier. */
     id: string;
     /** The DNS configuration for this VPC. */
@@ -28331,43 +30134,38 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpcDefaultNetworkAcl` operation. */
-  export interface GetVpcDefaultNetworkAclParams {
+  export interface GetVpcDefaultNetworkAclParams extends DefaultParams {
     /** The VPC identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpcDefaultRoutingTable` operation. */
-  export interface GetVpcDefaultRoutingTableParams {
+  export interface GetVpcDefaultRoutingTableParams extends DefaultParams {
     /** The VPC identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpcDefaultSecurityGroup` operation. */
-  export interface GetVpcDefaultSecurityGroupParams {
+  export interface GetVpcDefaultSecurityGroupParams extends DefaultParams {
     /** The VPC identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVpcAddressPrefixes` operation. */
-  export interface ListVpcAddressPrefixesParams {
+  export interface ListVpcAddressPrefixesParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createVpcAddressPrefix` operation. */
-  export interface CreateVpcAddressPrefixParams {
+  export interface CreateVpcAddressPrefixParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The IPv4 range of the address prefix, expressed in CIDR format. The range must not overlap with any existing
@@ -28393,29 +30191,26 @@ namespace VpcV1 {
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteVpcAddressPrefix` operation. */
-  export interface DeleteVpcAddressPrefixParams {
+  export interface DeleteVpcAddressPrefixParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The prefix identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpcAddressPrefix` operation. */
-  export interface GetVpcAddressPrefixParams {
+  export interface GetVpcAddressPrefixParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The prefix identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVpcAddressPrefix` operation. */
-  export interface UpdateVpcAddressPrefixParams {
+  export interface UpdateVpcAddressPrefixParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The prefix identifier. */
@@ -28427,11 +30222,10 @@ namespace VpcV1 {
     isDefault?: boolean;
     /** The name for this address prefix. The name must not be used by another address prefix for the VPC. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVpcDnsResolutionBindings` operation. */
-  export interface ListVpcDnsResolutionBindingsParams {
+  export interface ListVpcDnsResolutionBindingsParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** Sorts the returned collection by the specified property name in ascending order. A `-` may be prepended to
@@ -28454,7 +30248,6 @@ namespace VpcV1 {
      *  identifier.
      */
     accountId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listVpcDnsResolutionBindings` operation. */
@@ -28467,7 +30260,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createVpcDnsResolutionBinding` operation. */
-  export interface CreateVpcDnsResolutionBindingParams {
+  export interface CreateVpcDnsResolutionBindingParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** Another VPC to bind this VPC to for DNS resolution. The VPC must have
@@ -28482,29 +30275,26 @@ namespace VpcV1 {
      *  the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteVpcDnsResolutionBinding` operation. */
-  export interface DeleteVpcDnsResolutionBindingParams {
+  export interface DeleteVpcDnsResolutionBindingParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The DNS resolution binding identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpcDnsResolutionBinding` operation. */
-  export interface GetVpcDnsResolutionBindingParams {
+  export interface GetVpcDnsResolutionBindingParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The DNS resolution binding identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVpcDnsResolutionBinding` operation. */
-  export interface UpdateVpcDnsResolutionBindingParams {
+  export interface UpdateVpcDnsResolutionBindingParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The DNS resolution binding identifier. */
@@ -28513,11 +30303,10 @@ namespace VpcV1 {
      *  the VPC.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVpcRoutes` operation. */
-  export interface ListVpcRoutesParams {
+  export interface ListVpcRoutesParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** Filters the collection to resources with a `zone.name` property matching the exact specified name. */
@@ -28526,11 +30315,10 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createVpcRoute` operation. */
-  export interface CreateVpcRouteParams {
+  export interface CreateVpcRouteParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The destination CIDR of the route. The host identifier in the CIDR must be zero.
@@ -28581,7 +30369,6 @@ namespace VpcV1 {
      *  distributed between them.
      */
     priority?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createVpcRoute` operation. */
@@ -28596,25 +30383,23 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteVpcRoute` operation. */
-  export interface DeleteVpcRouteParams {
+  export interface DeleteVpcRouteParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The route identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpcRoute` operation. */
-  export interface GetVpcRouteParams {
+  export interface GetVpcRouteParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The route identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVpcRoute` operation. */
-  export interface UpdateVpcRouteParams {
+  export interface UpdateVpcRouteParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The route identifier. */
@@ -28647,11 +30432,10 @@ namespace VpcV1 {
      *  distributed between them.
      */
     priority?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVpcRoutingTables` operation. */
-  export interface ListVpcRoutingTablesParams {
+  export interface ListVpcRoutingTablesParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -28660,11 +30444,10 @@ namespace VpcV1 {
     limit?: number;
     /** Filters the collection to routing tables with an `is_default` property matching the specified value. */
     isDefault?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createVpcRoutingTable` operation. */
-  export interface CreateVpcRoutingTableParams {
+  export interface CreateVpcRoutingTableParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The filters specifying the resources that may create routes in this routing table.
@@ -28729,7 +30512,6 @@ namespace VpcV1 {
      *  created with no routes.
      */
     routes?: RoutePrototype[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createVpcRoutingTable` operation. */
@@ -28742,7 +30524,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteVpcRoutingTable` operation. */
-  export interface DeleteVpcRoutingTableParams {
+  export interface DeleteVpcRoutingTableParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The routing table identifier. */
@@ -28751,20 +30533,18 @@ namespace VpcV1 {
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpcRoutingTable` operation. */
-  export interface GetVpcRoutingTableParams {
+  export interface GetVpcRoutingTableParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The routing table identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVpcRoutingTable` operation. */
-  export interface UpdateVpcRoutingTableParams {
+  export interface UpdateVpcRoutingTableParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The routing table identifier. */
@@ -28840,7 +30620,6 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateVpcRoutingTable` operation. */
@@ -28853,7 +30632,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listVpcRoutingTableRoutes` operation. */
-  export interface ListVpcRoutingTableRoutesParams {
+  export interface ListVpcRoutingTableRoutesParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The routing table identifier. */
@@ -28862,11 +30641,10 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createVpcRoutingTableRoute` operation. */
-  export interface CreateVpcRoutingTableRouteParams {
+  export interface CreateVpcRoutingTableRouteParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The routing table identifier. */
@@ -28919,7 +30697,6 @@ namespace VpcV1 {
      *  distributed between them.
      */
     priority?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createVpcRoutingTableRoute` operation. */
@@ -28934,29 +30711,27 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteVpcRoutingTableRoute` operation. */
-  export interface DeleteVpcRoutingTableRouteParams {
+  export interface DeleteVpcRoutingTableRouteParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The routing table identifier. */
     routingTableId: string;
     /** The VPC routing table route identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpcRoutingTableRoute` operation. */
-  export interface GetVpcRoutingTableRouteParams {
+  export interface GetVpcRoutingTableRouteParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The routing table identifier. */
     routingTableId: string;
     /** The VPC routing table route identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVpcRoutingTableRoute` operation. */
-  export interface UpdateVpcRoutingTableRouteParams {
+  export interface UpdateVpcRoutingTableRouteParams extends DefaultParams {
     /** The VPC identifier. */
     vpcId: string;
     /** The routing table identifier. */
@@ -28991,11 +30766,10 @@ namespace VpcV1 {
      *  distributed between them.
      */
     priority?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listSubnets` operation. */
-  export interface ListSubnetsParams {
+  export interface ListSubnetsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -29014,32 +30788,28 @@ namespace VpcV1 {
     routingTableId?: string;
     /** Filters the collection to subnets with a `routing_table.name` property matching the exact specified name. */
     routingTableName?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createSubnet` operation. */
-  export interface CreateSubnetParams {
+  export interface CreateSubnetParams extends DefaultParams {
     /** The subnet prototype object. */
     subnetPrototype: SubnetPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteSubnet` operation. */
-  export interface DeleteSubnetParams {
+  export interface DeleteSubnetParams extends DefaultParams {
     /** The subnet identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSubnet` operation. */
-  export interface GetSubnetParams {
+  export interface GetSubnetParams extends DefaultParams {
     /** The subnet identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateSubnet` operation. */
-  export interface UpdateSubnetParams {
+  export interface UpdateSubnetParams extends DefaultParams {
     /** The subnet identifier. */
     id: string;
     /** The name for this subnet. The name must not be used by another subnet in the VPC. */
@@ -29053,66 +30823,58 @@ namespace VpcV1 {
      *  `route_transit_gateway_ingress`, and `route_vpc_zone_ingress` must be `false`.
      */
     routingTable?: RoutingTableIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSubnetNetworkAcl` operation. */
-  export interface GetSubnetNetworkAclParams {
+  export interface GetSubnetNetworkAclParams extends DefaultParams {
     /** The subnet identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceSubnetNetworkAcl` operation. */
-  export interface ReplaceSubnetNetworkAclParams {
+  export interface ReplaceSubnetNetworkAclParams extends DefaultParams {
     /** The subnet identifier. */
     id: string;
     /** The network ACL identity. */
     networkAclIdentity: NetworkACLIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `unsetSubnetPublicGateway` operation. */
-  export interface UnsetSubnetPublicGatewayParams {
+  export interface UnsetSubnetPublicGatewayParams extends DefaultParams {
     /** The subnet identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSubnetPublicGateway` operation. */
-  export interface GetSubnetPublicGatewayParams {
+  export interface GetSubnetPublicGatewayParams extends DefaultParams {
     /** The subnet identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `setSubnetPublicGateway` operation. */
-  export interface SetSubnetPublicGatewayParams {
+  export interface SetSubnetPublicGatewayParams extends DefaultParams {
     /** The subnet identifier. */
     id: string;
     /** The public gateway identity. */
     publicGatewayIdentity: PublicGatewayIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSubnetRoutingTable` operation. */
-  export interface GetSubnetRoutingTableParams {
+  export interface GetSubnetRoutingTableParams extends DefaultParams {
     /** The subnet identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceSubnetRoutingTable` operation. */
-  export interface ReplaceSubnetRoutingTableParams {
+  export interface ReplaceSubnetRoutingTableParams extends DefaultParams {
     /** The subnet identifier. */
     id: string;
     /** The routing table identity. */
     routingTableIdentity: RoutingTableIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listSubnetReservedIps` operation. */
-  export interface ListSubnetReservedIpsParams {
+  export interface ListSubnetReservedIpsParams extends DefaultParams {
     /** The subnet identifier. */
     subnetId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -29133,7 +30895,6 @@ namespace VpcV1 {
     targetName?: string;
     /** Filters the collection to resources with a `target.resource_type` property matching the specified value. */
     targetResourceType?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listSubnetReservedIps` operation. */
@@ -29147,7 +30908,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createSubnetReservedIp` operation. */
-  export interface CreateSubnetReservedIpParams {
+  export interface CreateSubnetReservedIpParams extends DefaultParams {
     /** The subnet identifier. */
     subnetId: string;
     /** The IP address to reserve, which must not already be reserved on the subnet.
@@ -29173,29 +30934,26 @@ namespace VpcV1 {
      *  If unspecified, the reserved IP will be created unbound.
      */
     target?: ReservedIPTargetPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteSubnetReservedIp` operation. */
-  export interface DeleteSubnetReservedIpParams {
+  export interface DeleteSubnetReservedIpParams extends DefaultParams {
     /** The subnet identifier. */
     subnetId: string;
     /** The reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSubnetReservedIp` operation. */
-  export interface GetSubnetReservedIpParams {
+  export interface GetSubnetReservedIpParams extends DefaultParams {
     /** The subnet identifier. */
     subnetId: string;
     /** The reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateSubnetReservedIp` operation. */
-  export interface UpdateSubnetReservedIpParams {
+  export interface UpdateSubnetReservedIpParams extends DefaultParams {
     /** The subnet identifier. */
     subnetId: string;
     /** The reserved IP identifier. */
@@ -29208,11 +30966,10 @@ namespace VpcV1 {
      *  starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listImages` operation. */
-  export interface ListImagesParams {
+  export interface ListImagesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -29231,7 +30988,6 @@ namespace VpcV1 {
      *  comma-separated values.
      */
     userDataFormat?: ListImagesConstants.UserDataFormat[] | string[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listImages` operation. */
@@ -29260,28 +31016,25 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createImage` operation. */
-  export interface CreateImageParams {
+  export interface CreateImageParams extends DefaultParams {
     /** The image prototype object. */
     imagePrototype: ImagePrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteImage` operation. */
-  export interface DeleteImageParams {
+  export interface DeleteImageParams extends DefaultParams {
     /** The image identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getImage` operation. */
-  export interface GetImageParams {
+  export interface GetImageParams extends DefaultParams {
     /** The image identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateImage` operation. */
-  export interface UpdateImageParams {
+  export interface UpdateImageParams extends DefaultParams {
     /** The image identifier. */
     id: string;
     /** The deprecation date and time to set for this image.
@@ -29321,34 +31074,30 @@ namespace VpcV1 {
      *  transition to `obsolete` upon its successful creation.
      */
     obsolescenceAt?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deprecateImage` operation. */
-  export interface DeprecateImageParams {
+  export interface DeprecateImageParams extends DefaultParams {
     /** The image identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `obsoleteImage` operation. */
-  export interface ObsoleteImageParams {
+  export interface ObsoleteImageParams extends DefaultParams {
     /** The image identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listImageExportJobs` operation. */
-  export interface ListImageExportJobsParams {
+  export interface ListImageExportJobsParams extends DefaultParams {
     /** The image identifier. */
     imageId: string;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createImageExportJob` operation. */
-  export interface CreateImageExportJobParams {
+  export interface CreateImageExportJobParams extends DefaultParams {
     /** The image identifier. */
     imageId: string;
     /** The Cloud Object Storage bucket to export the image to. The bucket must exist and an IAM
@@ -29366,7 +31115,6 @@ namespace VpcV1 {
      *  this name. The object name will be unique within the bucket.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createImageExportJob` operation. */
@@ -29379,25 +31127,23 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteImageExportJob` operation. */
-  export interface DeleteImageExportJobParams {
+  export interface DeleteImageExportJobParams extends DefaultParams {
     /** The image identifier. */
     imageId: string;
     /** The image export job identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getImageExportJob` operation. */
-  export interface GetImageExportJobParams {
+  export interface GetImageExportJobParams extends DefaultParams {
     /** The image identifier. */
     imageId: string;
     /** The image export job identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateImageExportJob` operation. */
-  export interface UpdateImageExportJobParams {
+  export interface UpdateImageExportJobParams extends DefaultParams {
     /** The image identifier. */
     imageId: string;
     /** The image export job identifier. */
@@ -29407,38 +31153,34 @@ namespace VpcV1 {
      *  `storage_object.name`, or `storage_href` values.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listOperatingSystems` operation. */
-  export interface ListOperatingSystemsParams {
+  export interface ListOperatingSystemsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getOperatingSystem` operation. */
-  export interface GetOperatingSystemParams {
+  export interface GetOperatingSystemParams extends DefaultParams {
     /** The operating system name. */
     name: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listKeys` operation. */
-  export interface ListKeysParams {
+  export interface ListKeysParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
     /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
     resourceGroupId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createKey` operation. */
-  export interface CreateKeyParams {
+  export interface CreateKeyParams extends DefaultParams {
     /** The public SSH key to use, in OpenSSH format (consisting of three space-separated fields: the algorithm
      *  name, base64-encoded key value, and a comment). The algorithm and comment fields may be omitted, as only the key
      *  field is used.
@@ -29459,7 +31201,6 @@ namespace VpcV1 {
     resourceGroup?: ResourceGroupIdentity;
     /** The crypto-system for this key. */
     type?: CreateKeyConstants.Type | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createKey` operation. */
@@ -29472,77 +31213,67 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteKey` operation. */
-  export interface DeleteKeyParams {
+  export interface DeleteKeyParams extends DefaultParams {
     /** The key identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getKey` operation. */
-  export interface GetKeyParams {
+  export interface GetKeyParams extends DefaultParams {
     /** The key identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateKey` operation. */
-  export interface UpdateKeyParams {
+  export interface UpdateKeyParams extends DefaultParams {
     /** The key identifier. */
     id: string;
     /** The name for this key. The name must not be used by another key in the region. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceProfiles` operation. */
-  export interface ListInstanceProfilesParams {
-    headers?: OutgoingHttpHeaders;
+  export interface ListInstanceProfilesParams extends DefaultParams {
   }
 
   /** Parameters for the `getInstanceProfile` operation. */
-  export interface GetInstanceProfileParams {
+  export interface GetInstanceProfileParams extends DefaultParams {
     /** The instance profile name. */
     name: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceTemplates` operation. */
-  export interface ListInstanceTemplatesParams {
-    headers?: OutgoingHttpHeaders;
+  export interface ListInstanceTemplatesParams extends DefaultParams {
   }
 
   /** Parameters for the `createInstanceTemplate` operation. */
-  export interface CreateInstanceTemplateParams {
+  export interface CreateInstanceTemplateParams extends DefaultParams {
     /** The instance template prototype object. */
     instanceTemplatePrototype: InstanceTemplatePrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceTemplate` operation. */
-  export interface DeleteInstanceTemplateParams {
+  export interface DeleteInstanceTemplateParams extends DefaultParams {
     /** The instance template identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceTemplate` operation. */
-  export interface GetInstanceTemplateParams {
+  export interface GetInstanceTemplateParams extends DefaultParams {
     /** The instance template identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceTemplate` operation. */
-  export interface UpdateInstanceTemplateParams {
+  export interface UpdateInstanceTemplateParams extends DefaultParams {
     /** The instance template identifier. */
     id: string;
     /** The name for this instance template. The name must not be used by another instance template in the region. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstances` operation. */
-  export interface ListInstancesParams {
+  export interface ListInstancesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -29593,7 +31324,6 @@ namespace VpcV1 {
     vpcCrn?: string;
     /** Filters the collection to resources with a `vpc.name` property matching the exact specified name. */
     vpcName?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listInstances` operation. */
@@ -29607,32 +31337,29 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createInstance` operation. */
-  export interface CreateInstanceParams {
+  export interface CreateInstanceParams extends DefaultParams {
     /** The instance prototype object. */
     instancePrototype: InstancePrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstance` operation. */
-  export interface DeleteInstanceParams {
+  export interface DeleteInstanceParams extends DefaultParams {
     /** The virtual server instance identifier. */
     id: string;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstance` operation. */
-  export interface GetInstanceParams {
+  export interface GetInstanceParams extends DefaultParams {
     /** The virtual server instance identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstance` operation. */
-  export interface UpdateInstanceParams {
+  export interface UpdateInstanceParams extends DefaultParams {
     /** The virtual server instance identifier. */
     id: string;
     /** The availability policy for this virtual server instance. */
@@ -29684,7 +31411,6 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateInstance` operation. */
@@ -29697,14 +31423,13 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `getInstanceInitialization` operation. */
-  export interface GetInstanceInitializationParams {
+  export interface GetInstanceInitializationParams extends DefaultParams {
     /** The instance identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceAction` operation. */
-  export interface CreateInstanceActionParams {
+  export interface CreateInstanceActionParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The type of action. */
@@ -29713,7 +31438,6 @@ namespace VpcV1 {
      *  action.
      */
     force?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createInstanceAction` operation. */
@@ -29727,18 +31451,17 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listInstanceClusterNetworkAttachments` operation. */
-  export interface ListInstanceClusterNetworkAttachmentsParams {
+  export interface ListInstanceClusterNetworkAttachmentsParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createClusterNetworkAttachment` operation. */
-  export interface CreateClusterNetworkAttachmentParams {
+  export interface CreateClusterNetworkAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** A cluster network interface for the instance cluster network attachment. This can be
@@ -29762,29 +31485,26 @@ namespace VpcV1 {
      *  starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceClusterNetworkAttachment` operation. */
-  export interface DeleteInstanceClusterNetworkAttachmentParams {
+  export interface DeleteInstanceClusterNetworkAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance cluster network attachment identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceClusterNetworkAttachment` operation. */
-  export interface GetInstanceClusterNetworkAttachmentParams {
+  export interface GetInstanceClusterNetworkAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance cluster network attachment identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceClusterNetworkAttachment` operation. */
-  export interface UpdateInstanceClusterNetworkAttachmentParams {
+  export interface UpdateInstanceClusterNetworkAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance cluster network attachment identifier. */
@@ -29793,11 +31513,10 @@ namespace VpcV1 {
      *  instance. Names starting with `ibm-` are reserved for provider-owned resources, and are not allowed.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceConsoleAccessToken` operation. */
-  export interface CreateInstanceConsoleAccessTokenParams {
+  export interface CreateInstanceConsoleAccessTokenParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance console type for which this token may be used. */
@@ -29806,7 +31525,6 @@ namespace VpcV1 {
      *  This has no effect on VNC consoles.
      */
     force?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createInstanceConsoleAccessToken` operation. */
@@ -29819,41 +31537,37 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listInstanceDisks` operation. */
-  export interface ListInstanceDisksParams {
+  export interface ListInstanceDisksParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceDisk` operation. */
-  export interface GetInstanceDiskParams {
+  export interface GetInstanceDiskParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance disk identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceDisk` operation. */
-  export interface UpdateInstanceDiskParams {
+  export interface UpdateInstanceDiskParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance disk identifier. */
     id: string;
     /** The name for this instance disk. The name must not be used by another disk on the instance. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceNetworkAttachments` operation. */
-  export interface ListInstanceNetworkAttachmentsParams {
+  export interface ListInstanceNetworkAttachmentsParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceNetworkAttachment` operation. */
-  export interface CreateInstanceNetworkAttachmentParams {
+  export interface CreateInstanceNetworkAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** A virtual network interface for the instance network attachment. This can be specified
@@ -29868,29 +31582,26 @@ namespace VpcV1 {
      *  resides in. If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceNetworkAttachment` operation. */
-  export interface DeleteInstanceNetworkAttachmentParams {
+  export interface DeleteInstanceNetworkAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network attachment identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceNetworkAttachment` operation. */
-  export interface GetInstanceNetworkAttachmentParams {
+  export interface GetInstanceNetworkAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network attachment identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceNetworkAttachment` operation. */
-  export interface UpdateInstanceNetworkAttachmentParams {
+  export interface UpdateInstanceNetworkAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network attachment identifier. */
@@ -29899,18 +31610,16 @@ namespace VpcV1 {
      *  instance.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceNetworkInterfaces` operation. */
-  export interface ListInstanceNetworkInterfacesParams {
+  export interface ListInstanceNetworkInterfacesParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceNetworkInterface` operation. */
-  export interface CreateInstanceNetworkInterfaceParams {
+  export interface CreateInstanceNetworkInterfaceParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The associated subnet. */
@@ -29939,29 +31648,26 @@ namespace VpcV1 {
      *  group is used.
      */
     securityGroups?: SecurityGroupIdentity[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceNetworkInterface` operation. */
-  export interface DeleteInstanceNetworkInterfaceParams {
+  export interface DeleteInstanceNetworkInterfaceParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network interface identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceNetworkInterface` operation. */
-  export interface GetInstanceNetworkInterfaceParams {
+  export interface GetInstanceNetworkInterfaceParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network interface identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceNetworkInterface` operation. */
-  export interface UpdateInstanceNetworkInterfaceParams {
+  export interface UpdateInstanceNetworkInterfaceParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network interface identifier. */
@@ -29978,53 +31684,48 @@ namespace VpcV1 {
      *  virtual server instance.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceNetworkInterfaceFloatingIps` operation. */
-  export interface ListInstanceNetworkInterfaceFloatingIpsParams {
+  export interface ListInstanceNetworkInterfaceFloatingIpsParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network interface identifier. */
     networkInterfaceId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `removeInstanceNetworkInterfaceFloatingIp` operation. */
-  export interface RemoveInstanceNetworkInterfaceFloatingIpParams {
+  export interface RemoveInstanceNetworkInterfaceFloatingIpParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceNetworkInterfaceFloatingIp` operation. */
-  export interface GetInstanceNetworkInterfaceFloatingIpParams {
+  export interface GetInstanceNetworkInterfaceFloatingIpParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `addInstanceNetworkInterfaceFloatingIp` operation. */
-  export interface AddInstanceNetworkInterfaceFloatingIpParams {
+  export interface AddInstanceNetworkInterfaceFloatingIpParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceNetworkInterfaceIps` operation. */
-  export interface ListInstanceNetworkInterfaceIpsParams {
+  export interface ListInstanceNetworkInterfaceIpsParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network interface identifier. */
@@ -30033,29 +31734,26 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceNetworkInterfaceIp` operation. */
-  export interface GetInstanceNetworkInterfaceIpParams {
+  export interface GetInstanceNetworkInterfaceIpParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The instance network interface identifier. */
     networkInterfaceId: string;
     /** The reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceVolumeAttachments` operation. */
-  export interface ListInstanceVolumeAttachmentsParams {
+  export interface ListInstanceVolumeAttachmentsParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceVolumeAttachment` operation. */
-  export interface CreateInstanceVolumeAttachmentParams {
+  export interface CreateInstanceVolumeAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The volume to use for this attachment. This can be specified as an existing unattached
@@ -30068,29 +31766,26 @@ namespace VpcV1 {
      *  If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceVolumeAttachment` operation. */
-  export interface DeleteInstanceVolumeAttachmentParams {
+  export interface DeleteInstanceVolumeAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The volume attachment identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceVolumeAttachment` operation. */
-  export interface GetInstanceVolumeAttachmentParams {
+  export interface GetInstanceVolumeAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The volume attachment identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceVolumeAttachment` operation. */
-  export interface UpdateInstanceVolumeAttachmentParams {
+  export interface UpdateInstanceVolumeAttachmentParams extends DefaultParams {
     /** The virtual server instance identifier. */
     instanceId: string;
     /** The volume attachment identifier. */
@@ -30099,20 +31794,18 @@ namespace VpcV1 {
     deleteVolumeOnInstanceDelete?: boolean;
     /** The name for this volume attachment. The name must not be used by another volume attachment on the instance. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceGroups` operation. */
-  export interface ListInstanceGroupsParams {
+  export interface ListInstanceGroupsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceGroup` operation. */
-  export interface CreateInstanceGroupParams {
+  export interface CreateInstanceGroupParams extends DefaultParams {
     /** Instance template to use when creating new instances.
      *
      *  Instance groups are not compatible with instance templates that specify `true` for
@@ -30154,25 +31847,22 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceGroup` operation. */
-  export interface DeleteInstanceGroupParams {
+  export interface DeleteInstanceGroupParams extends DefaultParams {
     /** The instance group identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceGroup` operation. */
-  export interface GetInstanceGroupParams {
+  export interface GetInstanceGroupParams extends DefaultParams {
     /** The instance group identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceGroup` operation. */
-  export interface UpdateInstanceGroupParams {
+  export interface UpdateInstanceGroupParams extends DefaultParams {
     /** The instance group identifier. */
     id: string;
     /** The port to use for new load balancer pool members created by this instance group.
@@ -30205,56 +31895,50 @@ namespace VpcV1 {
     name?: string;
     /** The subnets to use when creating new instances. */
     subnets?: SubnetIdentity[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceGroupLoadBalancer` operation. */
-  export interface DeleteInstanceGroupLoadBalancerParams {
+  export interface DeleteInstanceGroupLoadBalancerParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceGroupManagers` operation. */
-  export interface ListInstanceGroupManagersParams {
+  export interface ListInstanceGroupManagersParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceGroupManager` operation. */
-  export interface CreateInstanceGroupManagerParams {
+  export interface CreateInstanceGroupManagerParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager prototype object. */
     instanceGroupManagerPrototype: InstanceGroupManagerPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceGroupManager` operation. */
-  export interface DeleteInstanceGroupManagerParams {
+  export interface DeleteInstanceGroupManagerParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceGroupManager` operation. */
-  export interface GetInstanceGroupManagerParams {
+  export interface GetInstanceGroupManagerParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceGroupManager` operation. */
-  export interface UpdateInstanceGroupManagerParams {
+  export interface UpdateInstanceGroupManagerParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
@@ -30273,11 +31957,10 @@ namespace VpcV1 {
      *  group.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceGroupManagerActions` operation. */
-  export interface ListInstanceGroupManagerActionsParams {
+  export interface ListInstanceGroupManagerActionsParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
@@ -30286,44 +31969,40 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceGroupManagerAction` operation. */
-  export interface CreateInstanceGroupManagerActionParams {
+  export interface CreateInstanceGroupManagerActionParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
     instanceGroupManagerId: string;
     /** The instance group manager action prototype object. */
     instanceGroupManagerActionPrototype: InstanceGroupManagerActionPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceGroupManagerAction` operation. */
-  export interface DeleteInstanceGroupManagerActionParams {
+  export interface DeleteInstanceGroupManagerActionParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
     instanceGroupManagerId: string;
     /** The instance group manager action identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceGroupManagerAction` operation. */
-  export interface GetInstanceGroupManagerActionParams {
+  export interface GetInstanceGroupManagerActionParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
     instanceGroupManagerId: string;
     /** The instance group manager action identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceGroupManagerAction` operation. */
-  export interface UpdateInstanceGroupManagerActionParams {
+  export interface UpdateInstanceGroupManagerActionParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
@@ -30350,11 +32029,10 @@ namespace VpcV1 {
     name?: string;
     /** The date and time the scheduled action will run. */
     runAt?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceGroupManagerPolicies` operation. */
-  export interface ListInstanceGroupManagerPoliciesParams {
+  export interface ListInstanceGroupManagerPoliciesParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
@@ -30363,44 +32041,40 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createInstanceGroupManagerPolicy` operation. */
-  export interface CreateInstanceGroupManagerPolicyParams {
+  export interface CreateInstanceGroupManagerPolicyParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
     instanceGroupManagerId: string;
     /** The instance group manager policy prototype object. */
     instanceGroupManagerPolicyPrototype: InstanceGroupManagerPolicyPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceGroupManagerPolicy` operation. */
-  export interface DeleteInstanceGroupManagerPolicyParams {
+  export interface DeleteInstanceGroupManagerPolicyParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
     instanceGroupManagerId: string;
     /** The instance group manager policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceGroupManagerPolicy` operation. */
-  export interface GetInstanceGroupManagerPolicyParams {
+  export interface GetInstanceGroupManagerPolicyParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
     instanceGroupManagerId: string;
     /** The instance group manager policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceGroupManagerPolicy` operation. */
-  export interface UpdateInstanceGroupManagerPolicyParams {
+  export interface UpdateInstanceGroupManagerPolicyParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group manager identifier. */
@@ -30415,7 +32089,6 @@ namespace VpcV1 {
      *  instance group manager.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateInstanceGroupManagerPolicy` operation. */
@@ -30430,43 +32103,39 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteInstanceGroupMemberships` operation. */
-  export interface DeleteInstanceGroupMembershipsParams {
+  export interface DeleteInstanceGroupMembershipsParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listInstanceGroupMemberships` operation. */
-  export interface ListInstanceGroupMembershipsParams {
+  export interface ListInstanceGroupMembershipsParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteInstanceGroupMembership` operation. */
-  export interface DeleteInstanceGroupMembershipParams {
+  export interface DeleteInstanceGroupMembershipParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group membership identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getInstanceGroupMembership` operation. */
-  export interface GetInstanceGroupMembershipParams {
+  export interface GetInstanceGroupMembershipParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group membership identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateInstanceGroupMembership` operation. */
-  export interface UpdateInstanceGroupMembershipParams {
+  export interface UpdateInstanceGroupMembershipParams extends DefaultParams {
     /** The instance group identifier. */
     instanceGroupId: string;
     /** The instance group membership identifier. */
@@ -30477,11 +32146,10 @@ namespace VpcV1 {
      *  instance group manager.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listReservations` operation. */
-  export interface ListReservationsParams {
+  export interface ListReservationsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -30496,7 +32164,6 @@ namespace VpcV1 {
     resourceGroupId?: string;
     /** Filters the collection to resources with a `zone.name` property matching the exact specified name. */
     zoneName?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listReservations` operation. */
@@ -30509,7 +32176,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createReservation` operation. */
-  export interface CreateReservationParams {
+  export interface CreateReservationParams extends DefaultParams {
     /** The capacity reservation configuration to use. */
     capacity: ReservationCapacityPrototype;
     /** The committed use configuration to use for this reservation. */
@@ -30535,7 +32202,6 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createReservation` operation. */
@@ -30548,21 +32214,19 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteReservation` operation. */
-  export interface DeleteReservationParams {
+  export interface DeleteReservationParams extends DefaultParams {
     /** The reservation identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getReservation` operation. */
-  export interface GetReservationParams {
+  export interface GetReservationParams extends DefaultParams {
     /** The reservation identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateReservation` operation. */
-  export interface UpdateReservationParams {
+  export interface UpdateReservationParams extends DefaultParams {
     /** The reservation identifier. */
     id: string;
     /** The affinity policy to use for this reservation:
@@ -30587,7 +32251,6 @@ namespace VpcV1 {
      *  to use for this reservation.
      */
     profile?: ReservationProfilePatch;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateReservation` operation. */
@@ -30600,14 +32263,13 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `activateReservation` operation. */
-  export interface ActivateReservationParams {
+  export interface ActivateReservationParams extends DefaultParams {
     /** The reservation identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listDedicatedHostGroups` operation. */
-  export interface ListDedicatedHostGroupsParams {
+  export interface ListDedicatedHostGroupsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -30618,11 +32280,10 @@ namespace VpcV1 {
     zoneName?: string;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createDedicatedHostGroup` operation. */
-  export interface CreateDedicatedHostGroupParams {
+  export interface CreateDedicatedHostGroupParams extends DefaultParams {
     /** The dedicated host profile class for hosts in this group. */
     _class: string;
     /** The dedicated host profile family for hosts in this group. */
@@ -30637,7 +32298,6 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createDedicatedHostGroup` operation. */
@@ -30651,48 +32311,43 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteDedicatedHostGroup` operation. */
-  export interface DeleteDedicatedHostGroupParams {
+  export interface DeleteDedicatedHostGroupParams extends DefaultParams {
     /** The dedicated host group identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getDedicatedHostGroup` operation. */
-  export interface GetDedicatedHostGroupParams {
+  export interface GetDedicatedHostGroupParams extends DefaultParams {
     /** The dedicated host group identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateDedicatedHostGroup` operation. */
-  export interface UpdateDedicatedHostGroupParams {
+  export interface UpdateDedicatedHostGroupParams extends DefaultParams {
     /** The dedicated host group identifier. */
     id: string;
     /** The name for this dedicated host group. The name must not be used by another dedicated host group in the
      *  region.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listDedicatedHostProfiles` operation. */
-  export interface ListDedicatedHostProfilesParams {
+  export interface ListDedicatedHostProfilesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getDedicatedHostProfile` operation. */
-  export interface GetDedicatedHostProfileParams {
+  export interface GetDedicatedHostProfileParams extends DefaultParams {
     /** The dedicated host profile name. */
     name: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listDedicatedHosts` operation. */
-  export interface ListDedicatedHostsParams {
+  export interface ListDedicatedHostsParams extends DefaultParams {
     /** Filters the collection to dedicated hosts with a `group.id` property matching the specified identifier. */
     dedicatedHostGroupId?: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -30705,79 +32360,70 @@ namespace VpcV1 {
     zoneName?: string;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createDedicatedHost` operation. */
-  export interface CreateDedicatedHostParams {
+  export interface CreateDedicatedHostParams extends DefaultParams {
     /** The dedicated host prototype object. */
     dedicatedHostPrototype: DedicatedHostPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listDedicatedHostDisks` operation. */
-  export interface ListDedicatedHostDisksParams {
+  export interface ListDedicatedHostDisksParams extends DefaultParams {
     /** The dedicated host identifier. */
     dedicatedHostId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getDedicatedHostDisk` operation. */
-  export interface GetDedicatedHostDiskParams {
+  export interface GetDedicatedHostDiskParams extends DefaultParams {
     /** The dedicated host identifier. */
     dedicatedHostId: string;
     /** The dedicated host disk identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateDedicatedHostDisk` operation. */
-  export interface UpdateDedicatedHostDiskParams {
+  export interface UpdateDedicatedHostDiskParams extends DefaultParams {
     /** The dedicated host identifier. */
     dedicatedHostId: string;
     /** The dedicated host disk identifier. */
     id: string;
     /** The name for this dedicated host disk. The name must not be used by another disk on the dedicated host. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteDedicatedHost` operation. */
-  export interface DeleteDedicatedHostParams {
+  export interface DeleteDedicatedHostParams extends DefaultParams {
     /** The dedicated host identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getDedicatedHost` operation. */
-  export interface GetDedicatedHostParams {
+  export interface GetDedicatedHostParams extends DefaultParams {
     /** The dedicated host identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateDedicatedHost` operation. */
-  export interface UpdateDedicatedHostParams {
+  export interface UpdateDedicatedHostParams extends DefaultParams {
     /** The dedicated host identifier. */
     id: string;
     /** If set to true, instances can be placed on this dedicated host. */
     instancePlacementEnabled?: boolean;
     /** The name for this dedicated host. The name must not be used by another dedicated host in the region. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listPlacementGroups` operation. */
-  export interface ListPlacementGroupsParams {
+  export interface ListPlacementGroupsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createPlacementGroup` operation. */
-  export interface CreatePlacementGroupParams {
+  export interface CreatePlacementGroupParams extends DefaultParams {
     /** The strategy for this placement group:
      *  - `host_spread`: place on different compute hosts
      *  - `power_spread`: place on compute hosts that use different power sources.
@@ -30791,7 +32437,6 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createPlacementGroup` operation. */
@@ -30804,46 +32449,41 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deletePlacementGroup` operation. */
-  export interface DeletePlacementGroupParams {
+  export interface DeletePlacementGroupParams extends DefaultParams {
     /** The placement group identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPlacementGroup` operation. */
-  export interface GetPlacementGroupParams {
+  export interface GetPlacementGroupParams extends DefaultParams {
     /** The placement group identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updatePlacementGroup` operation. */
-  export interface UpdatePlacementGroupParams {
+  export interface UpdatePlacementGroupParams extends DefaultParams {
     /** The placement group identifier. */
     id: string;
     /** The name for this placement group. The name must not be used by another placement group in the region. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listBareMetalServerProfiles` operation. */
-  export interface ListBareMetalServerProfilesParams {
+  export interface ListBareMetalServerProfilesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getBareMetalServerProfile` operation. */
-  export interface GetBareMetalServerProfileParams {
+  export interface GetBareMetalServerProfileParams extends DefaultParams {
     /** The bare metal server profile name. */
     name: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listBareMetalServers` operation. */
-  export interface ListBareMetalServersParams {
+  export interface ListBareMetalServersParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -30864,18 +32504,16 @@ namespace VpcV1 {
     vpcCrn?: string;
     /** Filters the collection to resources with a `vpc.name` property matching the exact specified name. */
     vpcName?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createBareMetalServer` operation. */
-  export interface CreateBareMetalServerParams {
+  export interface CreateBareMetalServerParams extends DefaultParams {
     /** The bare metal server prototype object. */
     bareMetalServerPrototype: BareMetalServerPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createBareMetalServerConsoleAccessToken` operation. */
-  export interface CreateBareMetalServerConsoleAccessTokenParams {
+  export interface CreateBareMetalServerConsoleAccessTokenParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server console type for which this token may be used
@@ -30887,7 +32525,6 @@ namespace VpcV1 {
      *  This has no effect on VNC consoles.
      */
     force?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createBareMetalServerConsoleAccessToken` operation. */
@@ -30900,23 +32537,21 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listBareMetalServerDisks` operation. */
-  export interface ListBareMetalServerDisksParams {
+  export interface ListBareMetalServerDisksParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getBareMetalServerDisk` operation. */
-  export interface GetBareMetalServerDiskParams {
+  export interface GetBareMetalServerDiskParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server disk identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateBareMetalServerDisk` operation. */
-  export interface UpdateBareMetalServerDiskParams {
+  export interface UpdateBareMetalServerDiskParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server disk identifier. */
@@ -30925,49 +32560,44 @@ namespace VpcV1 {
      *  server.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listBareMetalServerNetworkAttachments` operation. */
-  export interface ListBareMetalServerNetworkAttachmentsParams {
+  export interface ListBareMetalServerNetworkAttachmentsParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createBareMetalServerNetworkAttachment` operation. */
-  export interface CreateBareMetalServerNetworkAttachmentParams {
+  export interface CreateBareMetalServerNetworkAttachmentParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network attachment prototype object. */
     bareMetalServerNetworkAttachmentPrototype: BareMetalServerNetworkAttachmentPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteBareMetalServerNetworkAttachment` operation. */
-  export interface DeleteBareMetalServerNetworkAttachmentParams {
+  export interface DeleteBareMetalServerNetworkAttachmentParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network attachment identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getBareMetalServerNetworkAttachment` operation. */
-  export interface GetBareMetalServerNetworkAttachmentParams {
+  export interface GetBareMetalServerNetworkAttachmentParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network attachment identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateBareMetalServerNetworkAttachment` operation. */
-  export interface UpdateBareMetalServerNetworkAttachmentParams {
+  export interface UpdateBareMetalServerNetworkAttachmentParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network attachment identifier. */
@@ -30980,49 +32610,44 @@ namespace VpcV1 {
      *  metal server.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listBareMetalServerNetworkInterfaces` operation. */
-  export interface ListBareMetalServerNetworkInterfacesParams {
+  export interface ListBareMetalServerNetworkInterfacesParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createBareMetalServerNetworkInterface` operation. */
-  export interface CreateBareMetalServerNetworkInterfaceParams {
+  export interface CreateBareMetalServerNetworkInterfaceParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network interface prototype object. */
     bareMetalServerNetworkInterfacePrototype: BareMetalServerNetworkInterfacePrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteBareMetalServerNetworkInterface` operation. */
-  export interface DeleteBareMetalServerNetworkInterfaceParams {
+  export interface DeleteBareMetalServerNetworkInterfaceParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network interface identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getBareMetalServerNetworkInterface` operation. */
-  export interface GetBareMetalServerNetworkInterfaceParams {
+  export interface GetBareMetalServerNetworkInterfaceParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network interface identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateBareMetalServerNetworkInterface` operation. */
-  export interface UpdateBareMetalServerNetworkInterfaceParams {
+  export interface UpdateBareMetalServerNetworkInterfaceParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network interface identifier. */
@@ -31059,87 +32684,78 @@ namespace VpcV1 {
      *  interface on the bare metal server.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listBareMetalServerNetworkInterfaceFloatingIps` operation. */
-  export interface ListBareMetalServerNetworkInterfaceFloatingIpsParams {
+  export interface ListBareMetalServerNetworkInterfaceFloatingIpsParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `removeBareMetalServerNetworkInterfaceFloatingIp` operation. */
-  export interface RemoveBareMetalServerNetworkInterfaceFloatingIpParams {
+  export interface RemoveBareMetalServerNetworkInterfaceFloatingIpParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getBareMetalServerNetworkInterfaceFloatingIp` operation. */
-  export interface GetBareMetalServerNetworkInterfaceFloatingIpParams {
+  export interface GetBareMetalServerNetworkInterfaceFloatingIpParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `addBareMetalServerNetworkInterfaceFloatingIp` operation. */
-  export interface AddBareMetalServerNetworkInterfaceFloatingIpParams {
+  export interface AddBareMetalServerNetworkInterfaceFloatingIpParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listBareMetalServerNetworkInterfaceIps` operation. */
-  export interface ListBareMetalServerNetworkInterfaceIpsParams {
+  export interface ListBareMetalServerNetworkInterfaceIpsParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getBareMetalServerNetworkInterfaceIp` operation. */
-  export interface GetBareMetalServerNetworkInterfaceIpParams {
+  export interface GetBareMetalServerNetworkInterfaceIpParams extends DefaultParams {
     /** The bare metal server identifier. */
     bareMetalServerId: string;
     /** The bare metal server network interface identifier. */
     networkInterfaceId: string;
     /** The reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteBareMetalServer` operation. */
-  export interface DeleteBareMetalServerParams {
+  export interface DeleteBareMetalServerParams extends DefaultParams {
     /** The bare metal server identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getBareMetalServer` operation. */
-  export interface GetBareMetalServerParams {
+  export interface GetBareMetalServerParams extends DefaultParams {
     /** The bare metal server identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateBareMetalServer` operation. */
-  export interface UpdateBareMetalServerParams {
+  export interface UpdateBareMetalServerParams extends DefaultParams {
     /** The bare metal server identifier. */
     id: string;
     /** The total bandwidth (in megabits per second) shared across the bare metal server's network interfaces. The
@@ -31159,29 +32775,26 @@ namespace VpcV1 {
     name?: string;
     reservationAffinity?: BareMetalServerReservationAffinityPatch;
     trustedPlatformModule?: BareMetalServerTrustedPlatformModulePatch;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateFirmwareForBareMetalServer` operation. */
-  export interface UpdateFirmwareForBareMetalServerParams {
+  export interface UpdateFirmwareForBareMetalServerParams extends DefaultParams {
     /** The bare metal server identifier. */
     id: string;
     /** Indicates whether to automatically start the bare metal server after the firmware update is successfully
      *  completed.
      */
     autoStart?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getBareMetalServerInitialization` operation. */
-  export interface GetBareMetalServerInitializationParams {
+  export interface GetBareMetalServerInitializationParams extends DefaultParams {
     /** The bare metal server identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceBareMetalServerInitialization` operation. */
-  export interface ReplaceBareMetalServerInitializationParams {
+  export interface ReplaceBareMetalServerInitializationParams extends DefaultParams {
     /** The bare metal server identifier. */
     id: string;
     /** The image to be used when provisioning the bare metal server. */
@@ -31200,25 +32813,22 @@ namespace VpcV1 {
      *  If unspecified, no user data will be made available.
      */
     userData?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `restartBareMetalServer` operation. */
-  export interface RestartBareMetalServerParams {
+  export interface RestartBareMetalServerParams extends DefaultParams {
     /** The bare metal server identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `startBareMetalServer` operation. */
-  export interface StartBareMetalServerParams {
+  export interface StartBareMetalServerParams extends DefaultParams {
     /** The bare metal server identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `stopBareMetalServer` operation. */
-  export interface StopBareMetalServerParams {
+  export interface StopBareMetalServerParams extends DefaultParams {
     /** The bare metal server identifier. */
     id: string;
     /** The type of stop operation:
@@ -31226,7 +32836,6 @@ namespace VpcV1 {
      *  - `hard`: immediately stop the server.
      */
     type: StopBareMetalServerConstants.Type | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `stopBareMetalServer` operation. */
@@ -31239,23 +32848,21 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listVolumeProfiles` operation. */
-  export interface ListVolumeProfilesParams {
+  export interface ListVolumeProfilesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVolumeProfile` operation. */
-  export interface GetVolumeProfileParams {
+  export interface GetVolumeProfileParams extends DefaultParams {
     /** The volume profile name. */
     name: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVolumes` operation. */
-  export interface ListVolumesParams {
+  export interface ListVolumesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -31284,7 +32891,6 @@ namespace VpcV1 {
     zoneName?: string;
     /** Filters the collection to resources with an item in the `tags` property matching the exact specified tag. */
     tag?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listVolumes` operation. */
@@ -31303,32 +32909,29 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createVolume` operation. */
-  export interface CreateVolumeParams {
+  export interface CreateVolumeParams extends DefaultParams {
     /** The volume prototype object. */
     volumePrototype: VolumePrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteVolume` operation. */
-  export interface DeleteVolumeParams {
+  export interface DeleteVolumeParams extends DefaultParams {
     /** The volume identifier. */
     id: string;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVolume` operation. */
-  export interface GetVolumeParams {
+  export interface GetVolumeParams extends DefaultParams {
     /** The volume identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVolume` operation. */
-  export interface UpdateVolumeParams {
+  export interface UpdateVolumeParams extends DefaultParams {
     /** The volume identifier. */
     id: string;
     /** The capacity to use for the volume (in gigabytes). For the capacity to be changed the volume's current
@@ -31349,8 +32952,8 @@ namespace VpcV1 {
     iops?: number;
     /** The name for this volume. The name must not be used by another volume in the region. */
     name?: string;
-    /** The profile to use for this volume. The requested profile must be in the same
-     *  `family` as the current profile.  Additionally:
+    /** The profile to use for this volume. The requested profile must have the same
+     *  `family` and `storage_generation` values as the current profile. Additionally:
      *  - If the volume is a boot volume then the value specified for `capacity` property
      *  must not be less than the `boot_capacity.min` and must not exceed the
      *  `boot_capacity.max` of the specified volume profile.
@@ -31365,11 +32968,10 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listSnapshotConsistencyGroups` operation. */
-  export interface ListSnapshotConsistencyGroupsParams {
+  export interface ListSnapshotConsistencyGroupsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -31388,7 +32990,6 @@ namespace VpcV1 {
      *  identifier.
      */
     backupPolicyPlanId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listSnapshotConsistencyGroups` operation. */
@@ -31401,28 +33002,25 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createSnapshotConsistencyGroup` operation. */
-  export interface CreateSnapshotConsistencyGroupParams {
+  export interface CreateSnapshotConsistencyGroupParams extends DefaultParams {
     /** The snapshot consistency group prototype object. */
     snapshotConsistencyGroupPrototype: SnapshotConsistencyGroupPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteSnapshotConsistencyGroup` operation. */
-  export interface DeleteSnapshotConsistencyGroupParams {
+  export interface DeleteSnapshotConsistencyGroupParams extends DefaultParams {
     /** The snapshot consistency group identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSnapshotConsistencyGroup` operation. */
-  export interface GetSnapshotConsistencyGroupParams {
+  export interface GetSnapshotConsistencyGroupParams extends DefaultParams {
     /** The snapshot consistency group identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateSnapshotConsistencyGroup` operation. */
-  export interface UpdateSnapshotConsistencyGroupParams {
+  export interface UpdateSnapshotConsistencyGroupParams extends DefaultParams {
     /** The snapshot consistency group identifier. */
     id: string;
     /** Indicates whether deleting the snapshot consistency group will also delete the snapshots in the group. */
@@ -31435,18 +33033,16 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteSnapshots` operation. */
-  export interface DeleteSnapshotsParams {
+  export interface DeleteSnapshotsParams extends DefaultParams {
     /** Filters the collection to resources with a `source_volume.id` property matching the specified identifier. */
     sourceVolumeId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listSnapshots` operation. */
-  export interface ListSnapshotsParams {
+  export interface ListSnapshotsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -31491,7 +33087,7 @@ namespace VpcV1 {
      *  the exact specified name.
      */
     copiesName?: string;
-    /** Filters the collection to snapshots with an item in the `copies` property with an `id` property matching the
+    /** Filters the collection to snapshots with an item in the `copies` property with a `crn` property matching the
      *  specified CRN.
      */
     copiesCrn?: string;
@@ -31525,7 +33121,6 @@ namespace VpcV1 {
      *  identifier.
      */
     snapshotConsistencyGroupCrn?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listSnapshots` operation. */
@@ -31538,32 +33133,29 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createSnapshot` operation. */
-  export interface CreateSnapshotParams {
+  export interface CreateSnapshotParams extends DefaultParams {
     /** The snapshot prototype object. */
     snapshotPrototype: SnapshotPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteSnapshot` operation. */
-  export interface DeleteSnapshotParams {
+  export interface DeleteSnapshotParams extends DefaultParams {
     /** The snapshot identifier. */
     id: string;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSnapshot` operation. */
-  export interface GetSnapshotParams {
+  export interface GetSnapshotParams extends DefaultParams {
     /** The snapshot identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateSnapshot` operation. */
-  export interface UpdateSnapshotParams {
+  export interface UpdateSnapshotParams extends DefaultParams {
     /** The snapshot identifier. */
     id: string;
     /** The name for this snapshot. The name must not be used by another snapshot in the region. */
@@ -31574,45 +33166,40 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listSnapshotClones` operation. */
-  export interface ListSnapshotClonesParams {
+  export interface ListSnapshotClonesParams extends DefaultParams {
     /** The snapshot identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteSnapshotClone` operation. */
-  export interface DeleteSnapshotCloneParams {
+  export interface DeleteSnapshotCloneParams extends DefaultParams {
     /** The snapshot identifier. */
     id: string;
     /** The zone name. */
     zoneName: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSnapshotClone` operation. */
-  export interface GetSnapshotCloneParams {
+  export interface GetSnapshotCloneParams extends DefaultParams {
     /** The snapshot identifier. */
     id: string;
     /** The zone name. */
     zoneName: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createSnapshotClone` operation. */
-  export interface CreateSnapshotCloneParams {
+  export interface CreateSnapshotCloneParams extends DefaultParams {
     /** The snapshot identifier. */
     id: string;
     /** The zone name. */
     zoneName: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listShareProfiles` operation. */
-  export interface ListShareProfilesParams {
+  export interface ListShareProfilesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -31623,7 +33210,6 @@ namespace VpcV1 {
      *  order.
      */
     sort?: ListShareProfilesConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listShareProfiles` operation. */
@@ -31636,14 +33222,13 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `getShareProfile` operation. */
-  export interface GetShareProfileParams {
+  export interface GetShareProfileParams extends DefaultParams {
     /** The file share profile name. */
     name: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listShares` operation. */
-  export interface ListSharesParams {
+  export interface ListSharesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -31660,7 +33245,6 @@ namespace VpcV1 {
     sort?: ListSharesConstants.Sort | string;
     /** Filters the collection to file shares with a `replication_role` property matching the specified value. */
     replicationRole?: ListSharesConstants.ReplicationRole | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listShares` operation. */
@@ -31679,32 +33263,29 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createShare` operation. */
-  export interface CreateShareParams {
+  export interface CreateShareParams extends DefaultParams {
     /** The file share prototype object. */
     sharePrototype: SharePrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteShare` operation. */
-  export interface DeleteShareParams {
+  export interface DeleteShareParams extends DefaultParams {
     /** The file share identifier. */
     id: string;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getShare` operation. */
-  export interface GetShareParams {
+  export interface GetShareParams extends DefaultParams {
     /** The file share identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateShare` operation. */
-  export interface UpdateShareParams {
+  export interface UpdateShareParams extends DefaultParams {
     /** The file share identifier. */
     id: string;
     /** The access control mode for the share:
@@ -31758,7 +33339,6 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateShare` operation. */
@@ -31776,36 +33356,33 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listShareAccessorBindings` operation. */
-  export interface ListShareAccessorBindingsParams {
+  export interface ListShareAccessorBindingsParams extends DefaultParams {
     /** The file share identifier. */
     id: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteShareAccessorBinding` operation. */
-  export interface DeleteShareAccessorBindingParams {
+  export interface DeleteShareAccessorBindingParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The file share accessor binding identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getShareAccessorBinding` operation. */
-  export interface GetShareAccessorBindingParams {
+  export interface GetShareAccessorBindingParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The file share accessor binding identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `failoverShare` operation. */
-  export interface FailoverShareParams {
+  export interface FailoverShareParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The action to take if the failover request is accepted but cannot be performed or times out:
@@ -31821,7 +33398,6 @@ namespace VpcV1 {
      *  If the timeout is reached, the `fallback_policy` will be triggered.
      */
     timeout?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `failoverShare` operation. */
@@ -31834,7 +33410,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listShareMountTargets` operation. */
-  export interface ListShareMountTargetsParams {
+  export interface ListShareMountTargetsParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
@@ -31843,49 +33419,44 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createShareMountTarget` operation. */
-  export interface CreateShareMountTargetParams {
+  export interface CreateShareMountTargetParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The share mount target prototype object. */
     shareMountTargetPrototype: ShareMountTargetPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteShareMountTarget` operation. */
-  export interface DeleteShareMountTargetParams {
+  export interface DeleteShareMountTargetParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The file share mount target identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getShareMountTarget` operation. */
-  export interface GetShareMountTargetParams {
+  export interface GetShareMountTargetParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The file share mount target identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateShareMountTarget` operation. */
-  export interface UpdateShareMountTargetParams {
+  export interface UpdateShareMountTargetParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The file share mount target identifier. */
     id: string;
     /** The name for this share mount target. The name must not be used by another mount target for the file share. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listShareSnapshots` operation. */
-  export interface ListShareSnapshotsParams {
+  export interface ListShareSnapshotsParams extends DefaultParams {
     /** The file share identifier, or `-` to wildcard all accessible file shares. */
     shareId: string;
     /** Filters the collection to backup policy jobs with a `backup_policy_plan.id` property matching the specified
@@ -31904,7 +33475,6 @@ namespace VpcV1 {
      *  order.
      */
     sort?: ListShareSnapshotsConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listShareSnapshots` operation. */
@@ -31917,7 +33487,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createShareSnapshot` operation. */
-  export interface CreateShareSnapshotParams {
+  export interface CreateShareSnapshotParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The name for this share snapshot. The name must not be used by another snapshot for the file share. If
@@ -31926,29 +33496,26 @@ namespace VpcV1 {
     name?: string;
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this share snapshot. */
     userTags?: string[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteShareSnapshot` operation. */
-  export interface DeleteShareSnapshotParams {
+  export interface DeleteShareSnapshotParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The share snapshot identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getShareSnapshot` operation. */
-  export interface GetShareSnapshotParams {
+  export interface GetShareSnapshotParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The share snapshot identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateShareSnapshot` operation. */
-  export interface UpdateShareSnapshotParams {
+  export interface UpdateShareSnapshotParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
     /** The share snapshot identifier. */
@@ -31959,25 +33526,22 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteShareSource` operation. */
-  export interface DeleteShareSourceParams {
+  export interface DeleteShareSourceParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getShareSource` operation. */
-  export interface GetShareSourceParams {
+  export interface GetShareSourceParams extends DefaultParams {
     /** The file share identifier. */
     shareId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listBackupPolicies` operation. */
-  export interface ListBackupPoliciesParams {
+  export interface ListBackupPoliciesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -31988,18 +33552,16 @@ namespace VpcV1 {
     name?: string;
     /** Filters the collection to resources with an item in the `tags` property matching the exact specified tag. */
     tag?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createBackupPolicy` operation. */
-  export interface CreateBackupPolicyParams {
+  export interface CreateBackupPolicyParams extends DefaultParams {
     /** The backup policy prototype object. */
     backupPolicyPrototype: BackupPolicyPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listBackupPolicyJobs` operation. */
-  export interface ListBackupPolicyJobsParams {
+  export interface ListBackupPolicyJobsParams extends DefaultParams {
     /** The backup policy identifier. */
     backupPolicyId: string;
     /** Filters the collection to backup policy jobs with a `status` property matching the specified value. */
@@ -32028,7 +33590,6 @@ namespace VpcV1 {
      *  property matching the specified CRN.
      */
     targetSnapshotsCrn?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listBackupPolicyJobs` operation. */
@@ -32047,25 +33608,23 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `getBackupPolicyJob` operation. */
-  export interface GetBackupPolicyJobParams {
+  export interface GetBackupPolicyJobParams extends DefaultParams {
     /** The backup policy identifier. */
     backupPolicyId: string;
     /** The backup policy job identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listBackupPolicyPlans` operation. */
-  export interface ListBackupPolicyPlansParams {
+  export interface ListBackupPolicyPlansParams extends DefaultParams {
     /** The backup policy identifier. */
     backupPolicyId: string;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createBackupPolicyPlan` operation. */
-  export interface CreateBackupPolicyPlanParams {
+  export interface CreateBackupPolicyPlanParams extends DefaultParams {
     /** The backup policy identifier. */
     backupPolicyId: string;
     /** The cron specification for the backup schedule. The backup policy jobs
@@ -32091,11 +33650,10 @@ namespace VpcV1 {
     name?: string;
     /** The policies for additional backups in remote regions. */
     remoteRegionPolicies?: BackupPolicyPlanRemoteRegionPolicyPrototype[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteBackupPolicyPlan` operation. */
-  export interface DeleteBackupPolicyPlanParams {
+  export interface DeleteBackupPolicyPlanParams extends DefaultParams {
     /** The backup policy identifier. */
     backupPolicyId: string;
     /** The backup policy plan identifier. */
@@ -32104,20 +33662,18 @@ namespace VpcV1 {
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getBackupPolicyPlan` operation. */
-  export interface GetBackupPolicyPlanParams {
+  export interface GetBackupPolicyPlanParams extends DefaultParams {
     /** The backup policy identifier. */
     backupPolicyId: string;
     /** The backup policy plan identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateBackupPolicyPlan` operation. */
-  export interface UpdateBackupPolicyPlanParams {
+  export interface UpdateBackupPolicyPlanParams extends DefaultParams {
     /** The backup policy identifier. */
     backupPolicyId: string;
     /** The backup policy plan identifier. */
@@ -32147,29 +33703,26 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteBackupPolicy` operation. */
-  export interface DeleteBackupPolicyParams {
+  export interface DeleteBackupPolicyParams extends DefaultParams {
     /** The backup policy identifier. */
     id: string;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getBackupPolicy` operation. */
-  export interface GetBackupPolicyParams {
+  export interface GetBackupPolicyParams extends DefaultParams {
     /** The backup policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateBackupPolicy` operation. */
-  export interface UpdateBackupPolicyParams {
+  export interface UpdateBackupPolicyParams extends DefaultParams {
     /** The backup policy identifier. */
     id: string;
     /** The included content for backups created using this policy:
@@ -32187,7 +33740,6 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateBackupPolicy` operation. */
@@ -32200,46 +33752,41 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listRegions` operation. */
-  export interface ListRegionsParams {
-    headers?: OutgoingHttpHeaders;
+  export interface ListRegionsParams extends DefaultParams {
   }
 
   /** Parameters for the `getRegion` operation. */
-  export interface GetRegionParams {
+  export interface GetRegionParams extends DefaultParams {
     /** The region name. */
     name: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listRegionZones` operation. */
-  export interface ListRegionZonesParams {
+  export interface ListRegionZonesParams extends DefaultParams {
     /** The region name. */
     regionName: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getRegionZone` operation. */
-  export interface GetRegionZoneParams {
+  export interface GetRegionZoneParams extends DefaultParams {
     /** The region name. */
     regionName: string;
     /** The zone name. */
     name: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVirtualNetworkInterfaces` operation. */
-  export interface ListVirtualNetworkInterfacesParams {
+  export interface ListVirtualNetworkInterfacesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
     /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
     resourceGroupId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createVirtualNetworkInterface` operation. */
-  export interface CreateVirtualNetworkInterfaceParams {
+  export interface CreateVirtualNetworkInterfaceParams extends DefaultParams {
     /** Indicates whether source IP spoofing is allowed on this interface. If `false`, source IP spoofing is
      *  prevented on this interface. If `true`, source IP spoofing is allowed on this interface.
      */
@@ -32310,7 +33857,6 @@ namespace VpcV1 {
     securityGroups?: SecurityGroupIdentity[];
     /** The associated subnet. Required if `primary_ip` does not specify a reserved IP identity. */
     subnet?: SubnetIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createVirtualNetworkInterface` operation. */
@@ -32324,21 +33870,19 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteVirtualNetworkInterfaces` operation. */
-  export interface DeleteVirtualNetworkInterfacesParams {
+  export interface DeleteVirtualNetworkInterfacesParams extends DefaultParams {
     /** The virtual network interface identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVirtualNetworkInterface` operation. */
-  export interface GetVirtualNetworkInterfaceParams {
+  export interface GetVirtualNetworkInterfaceParams extends DefaultParams {
     /** The virtual network interface identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVirtualNetworkInterface` operation. */
-  export interface UpdateVirtualNetworkInterfaceParams {
+  export interface UpdateVirtualNetworkInterfaceParams extends DefaultParams {
     /** The virtual network interface identifier. */
     id: string;
     /** Indicates whether source IP spoofing is allowed on this interface.
@@ -32382,7 +33926,6 @@ namespace VpcV1 {
      *  mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information.
      */
     protocolStateFilteringMode?: UpdateVirtualNetworkInterfaceConstants.ProtocolStateFilteringMode | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateVirtualNetworkInterface` operation. */
@@ -32396,7 +33939,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listNetworkInterfaceFloatingIps` operation. */
-  export interface ListNetworkInterfaceFloatingIpsParams {
+  export interface ListNetworkInterfaceFloatingIpsParams extends DefaultParams {
     /** The virtual network interface identifier. */
     virtualNetworkInterfaceId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -32409,7 +33952,6 @@ namespace VpcV1 {
      *  `name` property in ascending order.
      */
     sort?: ListNetworkInterfaceFloatingIpsConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listNetworkInterfaceFloatingIps` operation. */
@@ -32422,34 +33964,31 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `removeNetworkInterfaceFloatingIp` operation. */
-  export interface RemoveNetworkInterfaceFloatingIpParams {
+  export interface RemoveNetworkInterfaceFloatingIpParams extends DefaultParams {
     /** The virtual network interface identifier. */
     virtualNetworkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getNetworkInterfaceFloatingIp` operation. */
-  export interface GetNetworkInterfaceFloatingIpParams {
+  export interface GetNetworkInterfaceFloatingIpParams extends DefaultParams {
     /** The virtual network interface identifier. */
     virtualNetworkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `addNetworkInterfaceFloatingIp` operation. */
-  export interface AddNetworkInterfaceFloatingIpParams {
+  export interface AddNetworkInterfaceFloatingIpParams extends DefaultParams {
     /** The virtual network interface identifier. */
     virtualNetworkInterfaceId: string;
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVirtualNetworkInterfaceIps` operation. */
-  export interface ListVirtualNetworkInterfaceIpsParams {
+  export interface ListVirtualNetworkInterfaceIpsParams extends DefaultParams {
     /** The virtual network interface identifier. */
     virtualNetworkInterfaceId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -32462,7 +34001,6 @@ namespace VpcV1 {
      *  `name` property in ascending order.
      */
     sort?: ListVirtualNetworkInterfaceIpsConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listVirtualNetworkInterfaceIps` operation. */
@@ -32475,50 +34013,45 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `removeVirtualNetworkInterfaceIp` operation. */
-  export interface RemoveVirtualNetworkInterfaceIpParams {
+  export interface RemoveVirtualNetworkInterfaceIpParams extends DefaultParams {
     /** The virtual network interface identifier. */
     virtualNetworkInterfaceId: string;
     /** The reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVirtualNetworkInterfaceIp` operation. */
-  export interface GetVirtualNetworkInterfaceIpParams {
+  export interface GetVirtualNetworkInterfaceIpParams extends DefaultParams {
     /** The virtual network interface identifier. */
     virtualNetworkInterfaceId: string;
     /** The reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `addVirtualNetworkInterfaceIp` operation. */
-  export interface AddVirtualNetworkInterfaceIpParams {
+  export interface AddVirtualNetworkInterfaceIpParams extends DefaultParams {
     /** The virtual network interface identifier. */
     virtualNetworkInterfaceId: string;
     /** The reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listClusterNetworkProfiles` operation. */
-  export interface ListClusterNetworkProfilesParams {
+  export interface ListClusterNetworkProfilesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getClusterNetworkProfile` operation. */
-  export interface GetClusterNetworkProfileParams {
+  export interface GetClusterNetworkProfileParams extends DefaultParams {
     /** The cluster network profile name. */
     name: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listClusterNetworks` operation. */
-  export interface ListClusterNetworksParams {
+  export interface ListClusterNetworksParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -32539,7 +34072,6 @@ namespace VpcV1 {
     vpcCrn?: string;
     /** Filters the collection to cluster networks with a `vpc.name` property matching the specified name. */
     vpcName?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listClusterNetworks` operation. */
@@ -32552,7 +34084,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createClusterNetwork` operation. */
-  export interface CreateClusterNetworkParams {
+  export interface CreateClusterNetworkParams extends DefaultParams {
     /** The profile to use for this cluster network. */
     profile: ClusterNetworkProfileIdentity;
     /** The VPC this cluster network will reside in. */
@@ -32571,11 +34103,10 @@ namespace VpcV1 {
      */
     resourceGroup?: ResourceGroupIdentity;
     subnetPrefixes?: ClusterNetworkSubnetPrefixPrototype[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listClusterNetworkInterfaces` operation. */
-  export interface ListClusterNetworkInterfacesParams {
+  export interface ListClusterNetworkInterfacesParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -32590,7 +34121,6 @@ namespace VpcV1 {
      *  order.
      */
     sort?: ListClusterNetworkInterfacesConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listClusterNetworkInterfaces` operation. */
@@ -32603,7 +34133,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createClusterNetworkInterface` operation. */
-  export interface CreateClusterNetworkInterfaceParams {
+  export interface CreateClusterNetworkInterfaceParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The name for this cluster network interface. The name must not be used by another interface in the cluster
@@ -32628,11 +34158,10 @@ namespace VpcV1 {
      *  network subnet reserved IP identity.
      */
     subnet?: ClusterNetworkSubnetIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteClusterNetworkInterface` operation. */
-  export interface DeleteClusterNetworkInterfaceParams {
+  export interface DeleteClusterNetworkInterfaceParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network interface identifier. */
@@ -32641,20 +34170,18 @@ namespace VpcV1 {
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getClusterNetworkInterface` operation. */
-  export interface GetClusterNetworkInterfaceParams {
+  export interface GetClusterNetworkInterfaceParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network interface identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateClusterNetworkInterface` operation. */
-  export interface UpdateClusterNetworkInterfaceParams {
+  export interface UpdateClusterNetworkInterfaceParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network interface identifier. */
@@ -32671,11 +34198,10 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listClusterNetworkSubnets` operation. */
-  export interface ListClusterNetworkSubnetsParams {
+  export interface ListClusterNetworkSubnetsParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -32690,7 +34216,6 @@ namespace VpcV1 {
      *  order.
      */
     sort?: ListClusterNetworkSubnetsConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listClusterNetworkSubnets` operation. */
@@ -32703,16 +34228,15 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createClusterNetworkSubnet` operation. */
-  export interface CreateClusterNetworkSubnetParams {
+  export interface CreateClusterNetworkSubnetParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network subnet prototype object. */
     clusterNetworkSubnetPrototype: ClusterNetworkSubnetPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listClusterNetworkSubnetReservedIps` operation. */
-  export interface ListClusterNetworkSubnetReservedIpsParams {
+  export interface ListClusterNetworkSubnetReservedIpsParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network subnet identifier. */
@@ -32729,7 +34253,6 @@ namespace VpcV1 {
      *  order.
      */
     sort?: ListClusterNetworkSubnetReservedIpsConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listClusterNetworkSubnetReservedIps` operation. */
@@ -32743,7 +34266,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createClusterNetworkSubnetReservedIp` operation. */
-  export interface CreateClusterNetworkSubnetReservedIpParams {
+  export interface CreateClusterNetworkSubnetReservedIpParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network subnet identifier. */
@@ -32758,11 +34281,10 @@ namespace VpcV1 {
      *  allowed. If unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteClusterNetworkSubnetReservedIp` operation. */
-  export interface DeleteClusterNetworkSubnetReservedIpParams {
+  export interface DeleteClusterNetworkSubnetReservedIpParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network subnet identifier. */
@@ -32773,22 +34295,20 @@ namespace VpcV1 {
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getClusterNetworkSubnetReservedIp` operation. */
-  export interface GetClusterNetworkSubnetReservedIpParams {
+  export interface GetClusterNetworkSubnetReservedIpParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network subnet identifier. */
     clusterNetworkSubnetId: string;
     /** The cluster network subnet reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateClusterNetworkSubnetReservedIp` operation. */
-  export interface UpdateClusterNetworkSubnetReservedIpParams {
+  export interface UpdateClusterNetworkSubnetReservedIpParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network subnet identifier. */
@@ -32809,11 +34329,10 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteClusterNetworkSubnet` operation. */
-  export interface DeleteClusterNetworkSubnetParams {
+  export interface DeleteClusterNetworkSubnetParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network subnet identifier. */
@@ -32822,20 +34341,18 @@ namespace VpcV1 {
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getClusterNetworkSubnet` operation. */
-  export interface GetClusterNetworkSubnetParams {
+  export interface GetClusterNetworkSubnetParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network subnet identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateClusterNetworkSubnet` operation. */
-  export interface UpdateClusterNetworkSubnetParams {
+  export interface UpdateClusterNetworkSubnetParams extends DefaultParams {
     /** The cluster network identifier. */
     clusterNetworkId: string;
     /** The cluster network subnet identifier. */
@@ -32848,29 +34365,26 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteClusterNetwork` operation. */
-  export interface DeleteClusterNetworkParams {
+  export interface DeleteClusterNetworkParams extends DefaultParams {
     /** The cluster network identifier. */
     id: string;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getClusterNetwork` operation. */
-  export interface GetClusterNetworkParams {
+  export interface GetClusterNetworkParams extends DefaultParams {
     /** The cluster network identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateClusterNetwork` operation. */
-  export interface UpdateClusterNetworkParams {
+  export interface UpdateClusterNetworkParams extends DefaultParams {
     /** The cluster network identifier. */
     id: string;
     /** The name for this cluster network. The name must not be used by another cluster network in the region. Names
@@ -32881,22 +34395,20 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listPublicGateways` operation. */
-  export interface ListPublicGatewaysParams {
+  export interface ListPublicGatewaysParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
     /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
     resourceGroupId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createPublicGateway` operation. */
-  export interface CreatePublicGatewayParams {
+  export interface CreatePublicGatewayParams extends DefaultParams {
     /** The VPC this public gateway will reside in. */
     vpc: VPCIdentity;
     /** The zone this public gateway will reside in. */
@@ -32910,34 +34422,30 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deletePublicGateway` operation. */
-  export interface DeletePublicGatewayParams {
+  export interface DeletePublicGatewayParams extends DefaultParams {
     /** The public gateway identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPublicGateway` operation. */
-  export interface GetPublicGatewayParams {
+  export interface GetPublicGatewayParams extends DefaultParams {
     /** The public gateway identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updatePublicGateway` operation. */
-  export interface UpdatePublicGatewayParams {
+  export interface UpdatePublicGatewayParams extends DefaultParams {
     /** The public gateway identifier. */
     id: string;
     /** The name for this public gateway. The name must not be used by another public gateway in the VPC. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listFloatingIps` operation. */
-  export interface ListFloatingIpsParams {
+  export interface ListFloatingIpsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -32958,7 +34466,6 @@ namespace VpcV1 {
     targetName?: string;
     /** Filters the collection to resources with a `target.resource_type` property matching the specified value. */
     targetResourceType?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listFloatingIps` operation. */
@@ -32971,28 +34478,25 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createFloatingIp` operation. */
-  export interface CreateFloatingIpParams {
+  export interface CreateFloatingIpParams extends DefaultParams {
     /** The floating IP prototype object. */
     floatingIpPrototype: FloatingIPPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteFloatingIp` operation. */
-  export interface DeleteFloatingIpParams {
+  export interface DeleteFloatingIpParams extends DefaultParams {
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getFloatingIp` operation. */
-  export interface GetFloatingIpParams {
+  export interface GetFloatingIpParams extends DefaultParams {
     /** The floating IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateFloatingIp` operation. */
-  export interface UpdateFloatingIpParams {
+  export interface UpdateFloatingIpParams extends DefaultParams {
     /** The floating IP identifier. */
     id: string;
     /** The name for this floating IP. The name must not be used by another floating IP in the region. */
@@ -33010,52 +34514,46 @@ namespace VpcV1 {
      *  Specify `null` to remove an existing binding.
      */
     target?: FloatingIPTargetPatch;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listNetworkAcls` operation. */
-  export interface ListNetworkAclsParams {
+  export interface ListNetworkAclsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
     /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
     resourceGroupId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createNetworkAcl` operation. */
-  export interface CreateNetworkAclParams {
+  export interface CreateNetworkAclParams extends DefaultParams {
     /** The network ACL prototype object. */
     networkAclPrototype: NetworkACLPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteNetworkAcl` operation. */
-  export interface DeleteNetworkAclParams {
+  export interface DeleteNetworkAclParams extends DefaultParams {
     /** The network ACL identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getNetworkAcl` operation. */
-  export interface GetNetworkAclParams {
+  export interface GetNetworkAclParams extends DefaultParams {
     /** The network ACL identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateNetworkAcl` operation. */
-  export interface UpdateNetworkAclParams {
+  export interface UpdateNetworkAclParams extends DefaultParams {
     /** The network ACL identifier. */
     id: string;
     /** The name for this network ACL. The name must not be used by another network ACL for the VPC. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listNetworkAclRules` operation. */
-  export interface ListNetworkAclRulesParams {
+  export interface ListNetworkAclRulesParams extends DefaultParams {
     /** The network ACL identifier. */
     networkAclId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -33064,7 +34562,6 @@ namespace VpcV1 {
     limit?: number;
     /** Filters the collection to rules with a `direction` property matching the specified value. */
     direction?: ListNetworkAclRulesConstants.Direction | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listNetworkAclRules` operation. */
@@ -33077,34 +34574,31 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createNetworkAclRule` operation. */
-  export interface CreateNetworkAclRuleParams {
+  export interface CreateNetworkAclRuleParams extends DefaultParams {
     /** The network ACL identifier. */
     networkAclId: string;
     /** The network ACL rule prototype object. */
     networkAclRulePrototype: NetworkACLRulePrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteNetworkAclRule` operation. */
-  export interface DeleteNetworkAclRuleParams {
+  export interface DeleteNetworkAclRuleParams extends DefaultParams {
     /** The network ACL identifier. */
     networkAclId: string;
     /** The rule identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getNetworkAclRule` operation. */
-  export interface GetNetworkAclRuleParams {
+  export interface GetNetworkAclRuleParams extends DefaultParams {
     /** The network ACL identifier. */
     networkAclId: string;
     /** The rule identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateNetworkAclRule` operation. */
-  export interface UpdateNetworkAclRuleParams {
+  export interface UpdateNetworkAclRuleParams extends DefaultParams {
     /** The network ACL identifier. */
     networkAclId: string;
     /** The rule identifier. */
@@ -33125,9 +34619,15 @@ namespace VpcV1 {
      *  addresses.
      */
     destination?: string;
-    /** The inclusive upper bound of TCP/UDP destination port range. */
+    /** The inclusive upper bound of the TCP or UDP destination port range.
+     *
+     *  Must be larger than or equal to `destination_port_min`.
+     */
     destinationPortMax?: number;
-    /** The inclusive lower bound of TCP/UDP destination port range. */
+    /** The inclusive lower bound of the TCP or UDP destination port range.
+     *
+     *  Must be smaller than or equal to `destination_port_max`.
+     */
     destinationPortMin?: number;
     /** The direction of traffic to match. */
     direction?: UpdateNetworkAclRuleConstants.Direction | string;
@@ -33135,16 +34635,21 @@ namespace VpcV1 {
     name?: string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source?: string;
-    /** The inclusive upper bound of TCP/UDP source port range. */
+    /** The inclusive upper bound of the TCP or UDP source port range.
+     *
+     *  Must be larger than or equal to `source_port_min`.
+     */
     sourcePortMax?: number;
-    /** The inclusive lower bound of TCP/UDP source port range. */
+    /** The inclusive lower bound of the TCP or UDP source port range.
+     *
+     *  Must be smaller than or equal to `source_port_max`.
+     */
     sourcePortMin?: number;
     /** The ICMP traffic type to match.
      *
      *  Specify `null` to remove an existing ICMP traffic type value.
      */
     type?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateNetworkAclRule` operation. */
@@ -33162,7 +34667,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listSecurityGroups` operation. */
-  export interface ListSecurityGroupsParams {
+  export interface ListSecurityGroupsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -33175,11 +34680,10 @@ namespace VpcV1 {
     vpcCrn?: string;
     /** Filters the collection to resources with a `vpc.name` property matching the exact specified name. */
     vpcName?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createSecurityGroup` operation. */
-  export interface CreateSecurityGroupParams {
+  export interface CreateSecurityGroupParams extends DefaultParams {
     /** The VPC this security group will reside in. */
     vpc: VPCIdentity;
     /** The name for this security group. The name must not be used by another security group for the VPC. If
@@ -33194,68 +34698,60 @@ namespace VpcV1 {
      *  created, resulting in all traffic being denied.
      */
     rules?: SecurityGroupRulePrototype[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteSecurityGroup` operation. */
-  export interface DeleteSecurityGroupParams {
+  export interface DeleteSecurityGroupParams extends DefaultParams {
     /** The security group identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSecurityGroup` operation. */
-  export interface GetSecurityGroupParams {
+  export interface GetSecurityGroupParams extends DefaultParams {
     /** The security group identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateSecurityGroup` operation. */
-  export interface UpdateSecurityGroupParams {
+  export interface UpdateSecurityGroupParams extends DefaultParams {
     /** The security group identifier. */
     id: string;
     /** The name for this security group. The name must not be used by another security group for the VPC. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listSecurityGroupRules` operation. */
-  export interface ListSecurityGroupRulesParams {
+  export interface ListSecurityGroupRulesParams extends DefaultParams {
     /** The security group identifier. */
     securityGroupId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createSecurityGroupRule` operation. */
-  export interface CreateSecurityGroupRuleParams {
+  export interface CreateSecurityGroupRuleParams extends DefaultParams {
     /** The security group identifier. */
     securityGroupId: string;
     /** The properties of the security group rule to be created. */
     securityGroupRulePrototype: SecurityGroupRulePrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteSecurityGroupRule` operation. */
-  export interface DeleteSecurityGroupRuleParams {
+  export interface DeleteSecurityGroupRuleParams extends DefaultParams {
     /** The security group identifier. */
     securityGroupId: string;
     /** The rule identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSecurityGroupRule` operation. */
-  export interface GetSecurityGroupRuleParams {
+  export interface GetSecurityGroupRuleParams extends DefaultParams {
     /** The security group identifier. */
     securityGroupId: string;
     /** The rule identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateSecurityGroupRule` operation. */
-  export interface UpdateSecurityGroupRuleParams {
+  export interface UpdateSecurityGroupRuleParams extends DefaultParams {
     /** The security group identifier. */
     securityGroupId: string;
     /** The rule identifier. */
@@ -33305,7 +34801,6 @@ namespace VpcV1 {
      *  Specify `null` to remove an existing ICMP traffic type value.
      */
     type?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateSecurityGroupRule` operation. */
@@ -33322,54 +34817,49 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listSecurityGroupTargets` operation. */
-  export interface ListSecurityGroupTargetsParams {
+  export interface ListSecurityGroupTargetsParams extends DefaultParams {
     /** The security group identifier. */
     securityGroupId: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteSecurityGroupTargetBinding` operation. */
-  export interface DeleteSecurityGroupTargetBindingParams {
+  export interface DeleteSecurityGroupTargetBindingParams extends DefaultParams {
     /** The security group identifier. */
     securityGroupId: string;
     /** The security group target identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getSecurityGroupTarget` operation. */
-  export interface GetSecurityGroupTargetParams {
+  export interface GetSecurityGroupTargetParams extends DefaultParams {
     /** The security group identifier. */
     securityGroupId: string;
     /** The security group target identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createSecurityGroupTargetBinding` operation. */
-  export interface CreateSecurityGroupTargetBindingParams {
+  export interface CreateSecurityGroupTargetBindingParams extends DefaultParams {
     /** The security group identifier. */
     securityGroupId: string;
     /** The security group target identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listIkePolicies` operation. */
-  export interface ListIkePoliciesParams {
+  export interface ListIkePoliciesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createIkePolicy` operation. */
-  export interface CreateIkePolicyParams {
+  export interface CreateIkePolicyParams extends DefaultParams {
     /** The authentication algorithm. */
     authenticationAlgorithm: CreateIkePolicyConstants.AuthenticationAlgorithm | string;
     /** The Diffie-Hellman group. */
@@ -33388,7 +34878,6 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createIkePolicy` operation. */
@@ -33408,21 +34897,19 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteIkePolicy` operation. */
-  export interface DeleteIkePolicyParams {
+  export interface DeleteIkePolicyParams extends DefaultParams {
     /** The IKE policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getIkePolicy` operation. */
-  export interface GetIkePolicyParams {
+  export interface GetIkePolicyParams extends DefaultParams {
     /** The IKE policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateIkePolicy` operation. */
-  export interface UpdateIkePolicyParams {
+  export interface UpdateIkePolicyParams extends DefaultParams {
     /** The IKE policy identifier. */
     id: string;
     /** The authentication algorithm. */
@@ -33437,7 +34924,6 @@ namespace VpcV1 {
     keyLifetime?: number;
     /** The name for this IKE policy. The name must not be used by another IKE policy in the region. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateIkePolicy` operation. */
@@ -33457,27 +34943,25 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listIkePolicyConnections` operation. */
-  export interface ListIkePolicyConnectionsParams {
+  export interface ListIkePolicyConnectionsParams extends DefaultParams {
     /** The IKE policy identifier. */
     id: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listIpsecPolicies` operation. */
-  export interface ListIpsecPoliciesParams {
+  export interface ListIpsecPoliciesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createIpsecPolicy` operation. */
-  export interface CreateIpsecPolicyParams {
+  export interface CreateIpsecPolicyParams extends DefaultParams {
     /** The authentication algorithm
      *
      *  Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
@@ -33509,7 +34993,6 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createIpsecPolicy` operation. */
@@ -33549,21 +35032,19 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteIpsecPolicy` operation. */
-  export interface DeleteIpsecPolicyParams {
+  export interface DeleteIpsecPolicyParams extends DefaultParams {
     /** The IPsec policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getIpsecPolicy` operation. */
-  export interface GetIpsecPolicyParams {
+  export interface GetIpsecPolicyParams extends DefaultParams {
     /** The IPsec policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateIpsecPolicy` operation. */
-  export interface UpdateIpsecPolicyParams {
+  export interface UpdateIpsecPolicyParams extends DefaultParams {
     /** The IPsec policy identifier. */
     id: string;
     /** The authentication algorithm
@@ -33591,7 +35072,6 @@ namespace VpcV1 {
      *  Groups `group_2` and `group_5` have been deprecated.
      */
     pfs?: UpdateIpsecPolicyConstants.Pfs | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateIpsecPolicy` operation. */
@@ -33631,18 +35111,17 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listIpsecPolicyConnections` operation. */
-  export interface ListIpsecPolicyConnectionsParams {
+  export interface ListIpsecPolicyConnectionsParams extends DefaultParams {
     /** The IPsec policy identifier. */
     id: string;
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVpnGateways` operation. */
-  export interface ListVpnGatewaysParams {
+  export interface ListVpnGatewaysParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -33657,7 +35136,6 @@ namespace VpcV1 {
     sort?: ListVpnGatewaysConstants.Sort | string;
     /** Filters the collection to VPN gateways with a `mode` property matching the specified value. */
     mode?: ListVpnGatewaysConstants.Mode | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listVpnGateways` operation. */
@@ -33675,37 +35153,33 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createVpnGateway` operation. */
-  export interface CreateVpnGatewayParams {
+  export interface CreateVpnGatewayParams extends DefaultParams {
     /** The VPN gateway prototype object. */
     vpnGatewayPrototype: VPNGatewayPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteVpnGateway` operation. */
-  export interface DeleteVpnGatewayParams {
+  export interface DeleteVpnGatewayParams extends DefaultParams {
     /** The VPN gateway identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpnGateway` operation. */
-  export interface GetVpnGatewayParams {
+  export interface GetVpnGatewayParams extends DefaultParams {
     /** The VPN gateway identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVpnGateway` operation. */
-  export interface UpdateVpnGatewayParams {
+  export interface UpdateVpnGatewayParams extends DefaultParams {
     /** The VPN gateway identifier. */
     id: string;
     /** The name for this VPN gateway. The name must not be used by another VPN gateway in the VPC. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVpnGatewayConnections` operation. */
-  export interface ListVpnGatewayConnectionsParams {
+  export interface ListVpnGatewayConnectionsParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -33714,7 +35188,6 @@ namespace VpcV1 {
     limit?: number;
     /** Filters the collection to VPN gateway connections with a `status` property matching the specified value. */
     status?: ListVpnGatewayConnectionsConstants.Status | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listVpnGatewayConnections` operation. */
@@ -33727,34 +35200,31 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createVpnGatewayConnection` operation. */
-  export interface CreateVpnGatewayConnectionParams {
+  export interface CreateVpnGatewayConnectionParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection prototype object. */
     vpnGatewayConnectionPrototype: VPNGatewayConnectionPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteVpnGatewayConnection` operation. */
-  export interface DeleteVpnGatewayConnectionParams {
+  export interface DeleteVpnGatewayConnectionParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpnGatewayConnection` operation. */
-  export interface GetVpnGatewayConnectionParams {
+  export interface GetVpnGatewayConnectionParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVpnGatewayConnection` operation. */
-  export interface UpdateVpnGatewayConnectionParams {
+  export interface UpdateVpnGatewayConnectionParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
@@ -33796,7 +35266,6 @@ namespace VpcV1 {
     peer?: VPNGatewayConnectionPeerPatch;
     /** The pre-shared key. */
     psk?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateVpnGatewayConnection` operation. */
@@ -33809,91 +35278,83 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listVpnGatewayConnectionsLocalCidrs` operation. */
-  export interface ListVpnGatewayConnectionsLocalCidrsParams {
+  export interface ListVpnGatewayConnectionsLocalCidrsParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `removeVpnGatewayConnectionsLocalCidr` operation. */
-  export interface RemoveVpnGatewayConnectionsLocalCidrParams {
+  export interface RemoveVpnGatewayConnectionsLocalCidrParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
     /** The IP address range in CIDR block notation. */
     cidr: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `checkVpnGatewayConnectionsLocalCidr` operation. */
-  export interface CheckVpnGatewayConnectionsLocalCidrParams {
+  export interface CheckVpnGatewayConnectionsLocalCidrParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
     /** The IP address range in CIDR block notation. */
     cidr: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `addVpnGatewayConnectionsLocalCidr` operation. */
-  export interface AddVpnGatewayConnectionsLocalCidrParams {
+  export interface AddVpnGatewayConnectionsLocalCidrParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
     /** The IP address range in CIDR block notation. */
     cidr: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVpnGatewayConnectionsPeerCidrs` operation. */
-  export interface ListVpnGatewayConnectionsPeerCidrsParams {
+  export interface ListVpnGatewayConnectionsPeerCidrsParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `removeVpnGatewayConnectionsPeerCidr` operation. */
-  export interface RemoveVpnGatewayConnectionsPeerCidrParams {
+  export interface RemoveVpnGatewayConnectionsPeerCidrParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
     /** The IP address range in CIDR block notation. */
     cidr: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `checkVpnGatewayConnectionsPeerCidr` operation. */
-  export interface CheckVpnGatewayConnectionsPeerCidrParams {
+  export interface CheckVpnGatewayConnectionsPeerCidrParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
     /** The IP address range in CIDR block notation. */
     cidr: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `addVpnGatewayConnectionsPeerCidr` operation. */
-  export interface AddVpnGatewayConnectionsPeerCidrParams {
+  export interface AddVpnGatewayConnectionsPeerCidrParams extends DefaultParams {
     /** The VPN gateway identifier. */
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
     /** The IP address range in CIDR block notation. */
     cidr: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVpnServers` operation. */
-  export interface ListVpnServersParams {
+  export interface ListVpnServersParams extends DefaultParams {
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -33908,7 +35369,6 @@ namespace VpcV1 {
      *  order.
      */
     sort?: ListVpnServersConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listVpnServers` operation. */
@@ -33921,7 +35381,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createVpnServer` operation. */
-  export interface CreateVpnServerParams {
+  export interface CreateVpnServerParams extends DefaultParams {
     /** The certificate instance for this VPN server. */
     certificate: CertificateInstanceIdentity;
     /** The methods used to authenticate VPN clients to this VPN server. VPN clients must authenticate against all
@@ -33965,7 +35425,6 @@ namespace VpcV1 {
     resourceGroup?: ResourceGroupIdentity;
     /** The security groups to use for this VPN server. If unspecified, the VPC's default security group is used. */
     securityGroups?: SecurityGroupIdentity[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createVpnServer` operation. */
@@ -33978,25 +35437,23 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteVpnServer` operation. */
-  export interface DeleteVpnServerParams {
+  export interface DeleteVpnServerParams extends DefaultParams {
     /** The VPN server identifier. */
     id: string;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpnServer` operation. */
-  export interface GetVpnServerParams {
+  export interface GetVpnServerParams extends DefaultParams {
     /** The VPN server identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVpnServer` operation. */
-  export interface UpdateVpnServerParams {
+  export interface UpdateVpnServerParams extends DefaultParams {
     /** The VPN server identifier. */
     id: string;
     /** The certificate instance for this VPN server. */
@@ -34040,7 +35497,6 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateVpnServer` operation. */
@@ -34053,14 +35509,13 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `getVpnServerClientConfiguration` operation. */
-  export interface GetVpnServerClientConfigurationParams {
+  export interface GetVpnServerClientConfigurationParams extends DefaultParams {
     /** The VPN server identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVpnServerClients` operation. */
-  export interface ListVpnServerClientsParams {
+  export interface ListVpnServerClientsParams extends DefaultParams {
     /** The VPN server identifier. */
     vpnServerId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -34072,7 +35527,6 @@ namespace VpcV1 {
      *  `created_at` property in descending order.
      */
     sort?: ListVpnServerClientsConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listVpnServerClients` operation. */
@@ -34084,34 +35538,31 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteVpnServerClient` operation. */
-  export interface DeleteVpnServerClientParams {
+  export interface DeleteVpnServerClientParams extends DefaultParams {
     /** The VPN server identifier. */
     vpnServerId: string;
     /** The VPN client identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpnServerClient` operation. */
-  export interface GetVpnServerClientParams {
+  export interface GetVpnServerClientParams extends DefaultParams {
     /** The VPN server identifier. */
     vpnServerId: string;
     /** The VPN client identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `disconnectVpnClient` operation. */
-  export interface DisconnectVpnClientParams {
+  export interface DisconnectVpnClientParams extends DefaultParams {
     /** The VPN server identifier. */
     vpnServerId: string;
     /** The VPN client identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listVpnServerRoutes` operation. */
-  export interface ListVpnServerRoutesParams {
+  export interface ListVpnServerRoutesParams extends DefaultParams {
     /** The VPN server identifier. */
     vpnServerId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -34124,7 +35575,6 @@ namespace VpcV1 {
      *  order.
      */
     sort?: ListVpnServerRoutesConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listVpnServerRoutes` operation. */
@@ -34137,7 +35587,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createVpnServerRoute` operation. */
-  export interface CreateVpnServerRouteParams {
+  export interface CreateVpnServerRouteParams extends DefaultParams {
     /** The VPN server identifier. */
     vpnServerId: string;
     /** The destination to use for this VPN route in the VPN server. Must be unique within the VPN server. If an
@@ -34155,7 +35605,6 @@ namespace VpcV1 {
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createVpnServerRoute` operation. */
@@ -34169,61 +35618,55 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteVpnServerRoute` operation. */
-  export interface DeleteVpnServerRouteParams {
+  export interface DeleteVpnServerRouteParams extends DefaultParams {
     /** The VPN server identifier. */
     vpnServerId: string;
     /** The VPN route identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getVpnServerRoute` operation. */
-  export interface GetVpnServerRouteParams {
+  export interface GetVpnServerRouteParams extends DefaultParams {
     /** The VPN server identifier. */
     vpnServerId: string;
     /** The VPN route identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateVpnServerRoute` operation. */
-  export interface UpdateVpnServerRouteParams {
+  export interface UpdateVpnServerRouteParams extends DefaultParams {
     /** The VPN server identifier. */
     vpnServerId: string;
     /** The VPN route identifier. */
     id: string;
     /** The name for this VPN server route. The name must not be used by another route for the VPN server. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listLoadBalancerProfiles` operation. */
-  export interface ListLoadBalancerProfilesParams {
+  export interface ListLoadBalancerProfilesParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLoadBalancerProfile` operation. */
-  export interface GetLoadBalancerProfileParams {
+  export interface GetLoadBalancerProfileParams extends DefaultParams {
     /** The load balancer profile name. */
     name: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listLoadBalancers` operation. */
-  export interface ListLoadBalancersParams {
+  export interface ListLoadBalancersParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createLoadBalancer` operation. */
-  export interface CreateLoadBalancerParams {
+  export interface CreateLoadBalancerParams extends DefaultParams {
     /** Indicates whether this load balancer is public.
      *
      *  At present,
@@ -34265,7 +35708,7 @@ namespace VpcV1 {
      */
     name?: string;
     /** The pools of this load balancer. */
-    pools?: LoadBalancerPoolPrototype[];
+    pools?: LoadBalancerPoolPrototypeLoadBalancerContext[];
     /** The profile to use for this load balancer.
      *
      *  If unspecified, `application` will be used.
@@ -34285,29 +35728,26 @@ namespace VpcV1 {
      *  The load balancer profile must support security groups.
      */
     securityGroups?: SecurityGroupIdentity[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteLoadBalancer` operation. */
-  export interface DeleteLoadBalancerParams {
+  export interface DeleteLoadBalancerParams extends DefaultParams {
     /** The load balancer identifier. */
     id: string;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLoadBalancer` operation. */
-  export interface GetLoadBalancerParams {
+  export interface GetLoadBalancerParams extends DefaultParams {
     /** The load balancer identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateLoadBalancer` operation. */
-  export interface UpdateLoadBalancerParams {
+  export interface UpdateLoadBalancerParams extends DefaultParams {
     /** The load balancer identifier. */
     id: string;
     /** The DNS configuration for this load balancer.
@@ -34339,29 +35779,26 @@ namespace VpcV1 {
      *  value. Required if the request body includes an array.
      */
     ifMatch?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLoadBalancerStatistics` operation. */
-  export interface GetLoadBalancerStatisticsParams {
+  export interface GetLoadBalancerStatisticsParams extends DefaultParams {
     /** The load balancer identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listLoadBalancerListeners` operation. */
-  export interface ListLoadBalancerListenersParams {
+  export interface ListLoadBalancerListenersParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createLoadBalancerListener` operation. */
-  export interface CreateLoadBalancerListenerParams {
+  export interface CreateLoadBalancerListenerParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
-    /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol`
-     *  combination.
+    /** The listener protocol. Each listener in the load balancer must have a non-overlapping port range and
+     *  `protocol` combination.
      *
      *  Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in
      *  the `application` family support `tcp`, `http` and
@@ -34388,6 +35825,8 @@ namespace VpcV1 {
      *  rejected.
      *
      *  Supported for load balancers in the `application` family.
+     *
+     *  If unspecified, the limit will be `15000` for load balancers in the `application` family.
      */
     connectionLimit?: number;
     /** The default pool for this listener. If `https_redirect` is specified, the
@@ -34413,21 +35852,23 @@ namespace VpcV1 {
     /** The idle connection timeout of the listener in seconds.
      *
      *  Supported for load balancers in the `application` family.
+     *
+     *  If unspecified, the timeout will be `50` for load balancers in the `application` family.
      */
     idleConnectionTimeout?: number;
     /** The policy prototype objects for this listener. The load balancer must be in the `application` family. */
     policies?: LoadBalancerListenerPolicyPrototype[];
-    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
-     *  must have a unique `port` and `protocol` combination.
+    /** The listener port number. Each listener in the load balancer must have a non-overlapping port range and
+     *  `protocol` combination.
      *
-     *  Not supported for load balancers operating with route mode enabled.
+     *  If `port_min` is also specified, `port` must have the same value as `port_min`.
      */
     port?: number;
     /** The inclusive upper bound of the range of ports used by this listener. Must not be less than `port_min`.
      *
      *  Only load balancers with route mode enabled, or network load balancers with
      *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, the value `65535` must be specified.
+     *  route mode is enabled, `65535` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
@@ -34435,20 +35876,24 @@ namespace VpcV1 {
     portMax?: number;
     /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
      *
+     *  If specified, `port_max` must also be specified, and must not be smaller. If unspecified, `port_max` must also
+     *  be unspecified.
+     *
+     *  If `port` is also specified, `port_min` must have the same value as `port`.
+     *
      *  Only load balancers with route mode enabled, or network load balancers with
      *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, the value `1` must be specified.
+     *  route mode is enabled, `1` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
      */
     portMin?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createLoadBalancerListener` operation. */
   export namespace CreateLoadBalancerListenerConstants {
-    /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol` combination. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. Additional restrictions: - If `default_pool` is set, the pool's protocol must match, or be compatible with the listener's protocol. At present, the compatible protocols are `http` and `https`. - If `https_redirect` is set, the protocol must be `http`. */
+    /** The listener protocol. Each listener in the load balancer must have a non-overlapping port range and `protocol` combination. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. Additional restrictions: - If `default_pool` is set, the pool's protocol must match, or be compatible with the listener's protocol. At present, the compatible protocols are `http` and `https`. - If `https_redirect` is set, the protocol must be `http`. */
     export enum Protocol {
       HTTP = 'http',
       HTTPS = 'https',
@@ -34458,25 +35903,23 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteLoadBalancerListener` operation. */
-  export interface DeleteLoadBalancerListenerParams {
+  export interface DeleteLoadBalancerListenerParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLoadBalancerListener` operation. */
-  export interface GetLoadBalancerListenerParams {
+  export interface GetLoadBalancerListenerParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateLoadBalancerListener` operation. */
-  export interface UpdateLoadBalancerListenerParams {
+  export interface UpdateLoadBalancerListenerParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
@@ -34522,34 +35965,40 @@ namespace VpcV1 {
      *  Supported for load balancers in the `application` family.
      */
     idleConnectionTimeout?: number;
-    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
-     *  must have a unique `port` and `protocol` combination.
+    /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
+     *  Updating `port` updates `port_min` to the same value.
      *
-     *  Not supported for load balancers operating with route mode enabled.
+     *  Only load balancers with route mode enabled, or network load balancers with
+     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
+     *  route mode is enabled, the value must be `1`.
+     *
+     *  Each listener in the load balancer must have a non-overlapping port range and
+     *  `protocol` combination.
      */
     port?: number;
     /** The inclusive upper bound of the range of ports used by this listener. Must not be less than `port_min`.
      *
      *  Only load balancers with route mode enabled, or network load balancers with
      *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, the value `65535` must be specified.
+     *  route mode is enabled, `65535` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
      */
     portMax?: number;
     /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
+     *  Updating `port_min` updates `port` to the same value.
      *
      *  Only load balancers with route mode enabled, or network load balancers with
      *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, the value `1` must be specified.
+     *  route mode is enabled, the value must be `1`.
      *
-     *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
-     *  the same protocol.
+     *  Each listener in the load balancer must have a non-overlapping port range and
+     *  `protocol` combination.
      */
     portMin?: number;
-    /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol`
-     *  combination.
+    /** The listener protocol. Each listener in the load balancer must have a non-overlapping port range and
+     *  `protocol` combination.
      *
      *  Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in
      *  the `application` family support `tcp`, `http` and
@@ -34562,12 +36011,11 @@ namespace VpcV1 {
      *  `https`.
      */
     protocol?: UpdateLoadBalancerListenerConstants.Protocol | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateLoadBalancerListener` operation. */
   export namespace UpdateLoadBalancerListenerConstants {
-    /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol` combination. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. Additional restrictions: - If `default_pool` is set, the protocol cannot be changed. - If `https_redirect` is set, the protocol must be `http`. - If another listener's `https_redirect` targets this listener, the protocol must be `https`. */
+    /** The listener protocol. Each listener in the load balancer must have a non-overlapping port range and `protocol` combination. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. Additional restrictions: - If `default_pool` is set, the protocol cannot be changed. - If `https_redirect` is set, the protocol must be `http`. - If another listener's `https_redirect` targets this listener, the protocol must be `https`. */
     export enum Protocol {
       HTTP = 'http',
       HTTPS = 'https',
@@ -34577,16 +36025,15 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listLoadBalancerListenerPolicies` operation. */
-  export interface ListLoadBalancerListenerPoliciesParams {
+  export interface ListLoadBalancerListenerPoliciesParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
     listenerId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createLoadBalancerListenerPolicy` operation. */
-  export interface CreateLoadBalancerListenerPolicyParams {
+  export interface CreateLoadBalancerListenerPolicyParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
@@ -34613,13 +36060,12 @@ namespace VpcV1 {
     /** - If `action` is `forward`, use `LoadBalancerPoolIdentity` to specify a pool in this
      *    load balancer to forward to.
      *  - If `action` is `https_redirect`, use
-     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
+     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener in this
      *    load balancer to redirect to.
      *  - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
      *    specify a URL to redirect to.
      */
     target?: LoadBalancerListenerPolicyTargetPrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createLoadBalancerListenerPolicy` operation. */
@@ -34634,29 +36080,27 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteLoadBalancerListenerPolicy` operation. */
-  export interface DeleteLoadBalancerListenerPolicyParams {
+  export interface DeleteLoadBalancerListenerPolicyParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
     listenerId: string;
     /** The policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLoadBalancerListenerPolicy` operation. */
-  export interface GetLoadBalancerListenerPolicyParams {
+  export interface GetLoadBalancerListenerPolicyParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
     listenerId: string;
     /** The policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateLoadBalancerListenerPolicy` operation. */
-  export interface UpdateLoadBalancerListenerPolicyParams {
+  export interface UpdateLoadBalancerListenerPolicyParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
@@ -34669,28 +36113,28 @@ namespace VpcV1 {
      *  value indicates higher priority.
      */
     priority?: number;
-    /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
+    /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity` for a pool in this load
+     *    balancer.
      *  - If `action` is `https_redirect`, specify a
-     *  `LoadBalancerListenerPolicyHTTPSRedirectPatch`.
+     *    `LoadBalancerListenerPolicyHTTPSRedirectPatch` for a listener in this load balancer
+     *    with a `protocol` of `https`.
      *  - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
      */
     target?: LoadBalancerListenerPolicyTargetPatch;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listLoadBalancerListenerPolicyRules` operation. */
-  export interface ListLoadBalancerListenerPolicyRulesParams {
+  export interface ListLoadBalancerListenerPolicyRulesParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
     listenerId: string;
     /** The policy identifier. */
     policyId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createLoadBalancerListenerPolicyRule` operation. */
-  export interface CreateLoadBalancerListenerPolicyRuleParams {
+  export interface CreateLoadBalancerListenerPolicyRuleParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
@@ -34699,7 +36143,14 @@ namespace VpcV1 {
     policyId: string;
     /** The condition for the rule. */
     condition: CreateLoadBalancerListenerPolicyRuleConstants.Condition | string;
-    /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
+    /** The content the rule applies to:
+     *  - `body`: The UTF-8 form-encoded HTTP request body
+     *  - `header`: The HTTP header
+     *  - `hostname`: The fully-qualified domain name of the server specified in the Host
+     *    HTTP request header
+     *  - `path`: The path of the HTTP request
+     *  - `query`: The query of the HTTP request URL.
+     */
     type: CreateLoadBalancerListenerPolicyRuleConstants.Type | string;
     /** The value to be matched for the rule condition.
      *
@@ -34713,7 +36164,6 @@ namespace VpcV1 {
      *  If the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     field?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createLoadBalancerListenerPolicyRule` operation. */
@@ -34724,7 +36174,7 @@ namespace VpcV1 {
       EQUALS = 'equals',
       MATCHES_REGEX = 'matches_regex',
     }
-    /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
+    /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL. */
     export enum Type {
       BODY = 'body',
       HEADER = 'header',
@@ -34735,7 +36185,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteLoadBalancerListenerPolicyRule` operation. */
-  export interface DeleteLoadBalancerListenerPolicyRuleParams {
+  export interface DeleteLoadBalancerListenerPolicyRuleParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
@@ -34744,11 +36194,10 @@ namespace VpcV1 {
     policyId: string;
     /** The rule identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLoadBalancerListenerPolicyRule` operation. */
-  export interface GetLoadBalancerListenerPolicyRuleParams {
+  export interface GetLoadBalancerListenerPolicyRuleParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
@@ -34757,11 +36206,10 @@ namespace VpcV1 {
     policyId: string;
     /** The rule identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateLoadBalancerListenerPolicyRule` operation. */
-  export interface UpdateLoadBalancerListenerPolicyRuleParams {
+  export interface UpdateLoadBalancerListenerPolicyRuleParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The listener identifier. */
@@ -34779,14 +36227,20 @@ namespace VpcV1 {
      *  If the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     field?: string;
-    /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
+    /** The content the rule applies to:
+     *  - `body`: The UTF-8 form-encoded HTTP request body
+     *  - `header`: The HTTP header
+     *  - `hostname`: The fully-qualified domain name of the server specified in the Host
+     *    HTTP request header
+     *  - `path`: The path of the HTTP request
+     *  - `query`: The query of the HTTP request URL.
+     */
     type?: UpdateLoadBalancerListenerPolicyRuleConstants.Type | string;
     /** The value to be matched for the rule condition.
      *
      *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     value?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateLoadBalancerListenerPolicyRule` operation. */
@@ -34797,7 +36251,7 @@ namespace VpcV1 {
       EQUALS = 'equals',
       MATCHES_REGEX = 'matches_regex',
     }
-    /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
+    /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL. */
     export enum Type {
       BODY = 'body',
       HEADER = 'header',
@@ -34808,14 +36262,13 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listLoadBalancerPools` operation. */
-  export interface ListLoadBalancerPoolsParams {
+  export interface ListLoadBalancerPoolsParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createLoadBalancerPool` operation. */
-  export interface CreateLoadBalancerPoolParams {
+  export interface CreateLoadBalancerPoolParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that
@@ -34829,6 +36282,11 @@ namespace VpcV1 {
      *  `application` family support `tcp`, `http`, and `https`.
      */
     protocol: CreateLoadBalancerPoolConstants.Protocol | string;
+    /** The failsafe policy to use for this pool.
+     *
+     *  If unspecified, the default failsafe policy action from the profile will be used.
+     */
+    failsafePolicy?: LoadBalancerPoolFailsafePolicyPrototype;
     /** The members for this load balancer pool. For load balancers in the `network` family, the same `port` and
      *  `target` tuple cannot be shared by a pool member of any other load balancer in the same VPC.
      */
@@ -34846,12 +36304,12 @@ namespace VpcV1 {
      */
     proxyProtocol?: CreateLoadBalancerPoolConstants.ProxyProtocol | string;
     /** The session persistence of this pool. If specified, the load balancer must have
-     *  `source_ip_session_persistence_supported` set to `true` in its profile. If
-     *  unspecified, session persistence will be disabled, and traffic will be distributed
-     *  across backend server members of the pool.
+     *  `source_ip_session_persistence_supported` set to `true` in its profile.
+     *
+     *  If unspecified, session persistence will be disabled, and traffic will be distributed
+     *  across members of the pool.
      */
     sessionPersistence?: LoadBalancerPoolSessionPersistencePrototype;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createLoadBalancerPool` operation. */
@@ -34878,25 +36336,23 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deleteLoadBalancerPool` operation. */
-  export interface DeleteLoadBalancerPoolParams {
+  export interface DeleteLoadBalancerPoolParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The pool identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLoadBalancerPool` operation. */
-  export interface GetLoadBalancerPoolParams {
+  export interface GetLoadBalancerPoolParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The pool identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateLoadBalancerPool` operation. */
-  export interface UpdateLoadBalancerPoolParams {
+  export interface UpdateLoadBalancerPoolParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The pool identifier. */
@@ -34905,6 +36361,8 @@ namespace VpcV1 {
      *  have `availability` with value `subnet` in the profile.
      */
     algorithm?: UpdateLoadBalancerPoolConstants.Algorithm | string;
+    /** The failsafe policy for this load balancer pool. */
+    failsafePolicy?: LoadBalancerPoolFailsafePolicyPatch;
     /** The health monitor of this pool. */
     healthMonitor?: LoadBalancerPoolHealthMonitorPatch;
     /** The name for this load balancer pool. The name must not be used by another pool for the load balancer. */
@@ -34915,8 +36373,9 @@ namespace VpcV1 {
      *  the `application` family support `tcp`, `http` and
      *  `https`.
      *
-     *  If this pool is associated with a load balancer listener, the specified protocol must match, or be compatible
-     *  with the listener's protocol. At present, the compatible protocols are `http` and `https`.
+     *  If this pool is associated with a load balancer listener or a load balancer failsafe target pool, the specified
+     *  protocol must match or be compatible with each other's protocol. At present, the compatible protocols are `http`
+     *  and `https`.
      */
     protocol?: UpdateLoadBalancerPoolConstants.Protocol | string;
     /** The PROXY protocol setting for this pool:
@@ -34929,7 +36388,6 @@ namespace VpcV1 {
     proxyProtocol?: UpdateLoadBalancerPoolConstants.ProxyProtocol | string;
     /** The session persistence of this pool. */
     sessionPersistence?: LoadBalancerPoolSessionPersistencePatch;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updateLoadBalancerPool` operation. */
@@ -34940,7 +36398,7 @@ namespace VpcV1 {
       ROUND_ROBIN = 'round_robin',
       WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
     }
-    /** The protocol for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. If this pool is associated with a load balancer listener, the specified protocol must match, or be compatible with the listener's protocol. At present, the compatible protocols are `http` and `https`. */
+    /** The protocol for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. If this pool is associated with a load balancer listener or a load balancer failsafe target pool, the specified protocol must match or be compatible with each other's protocol. At present, the compatible protocols are `http` and `https`. */
     export enum Protocol {
       HTTP = 'http',
       HTTPS = 'https',
@@ -34956,16 +36414,15 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listLoadBalancerPoolMembers` operation. */
-  export interface ListLoadBalancerPoolMembersParams {
+  export interface ListLoadBalancerPoolMembersParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The pool identifier. */
     poolId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createLoadBalancerPoolMember` operation. */
-  export interface CreateLoadBalancerPoolMemberParams {
+  export interface CreateLoadBalancerPoolMemberParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The pool identifier. */
@@ -34986,47 +36443,46 @@ namespace VpcV1 {
     target: LoadBalancerPoolMemberTargetPrototype;
     /** The weight of the server member.
      *
-     *  If specified, the pool algorithm must be `weighted_round_robin`.
+     *  If specified, the pool algorithm must be `weighted_round_robin` and the load balancer must be in the
+     *  `application` family.
+     *
+     *  If unspecified, the weight will be `50` for load balancers in the `application` family.
      */
     weight?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `replaceLoadBalancerPoolMembers` operation. */
-  export interface ReplaceLoadBalancerPoolMembersParams {
+  export interface ReplaceLoadBalancerPoolMembersParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The pool identifier. */
     poolId: string;
     /** The member prototype objects for this pool. */
     members: LoadBalancerPoolMemberPrototype[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteLoadBalancerPoolMember` operation. */
-  export interface DeleteLoadBalancerPoolMemberParams {
+  export interface DeleteLoadBalancerPoolMemberParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The pool identifier. */
     poolId: string;
     /** The member identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getLoadBalancerPoolMember` operation. */
-  export interface GetLoadBalancerPoolMemberParams {
+  export interface GetLoadBalancerPoolMemberParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The pool identifier. */
     poolId: string;
     /** The member identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateLoadBalancerPoolMember` operation. */
-  export interface UpdateLoadBalancerPoolMemberParams {
+  export interface UpdateLoadBalancerPoolMemberParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
     /** The pool identifier. */
@@ -35052,11 +36508,10 @@ namespace VpcV1 {
      *  If specified, the pool algorithm must be `weighted_round_robin`.
      */
     weight?: number;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listEndpointGateways` operation. */
-  export interface ListEndpointGatewaysParams {
+  export interface ListEndpointGatewaysParams extends DefaultParams {
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -35079,7 +36534,6 @@ namespace VpcV1 {
      *  specified value.
      */
     allowDnsResolutionBinding?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listEndpointGateways` operation. */
@@ -35097,7 +36551,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `createEndpointGateway` operation. */
-  export interface CreateEndpointGatewayParams {
+  export interface CreateEndpointGatewayParams extends DefaultParams {
     /** The target to use for this endpoint gateway. The target:
      *  - Must not already be the target of another endpoint gateway in the VPC
      *  - Must not have a service endpoint that duplicates or overlaps with any `service_endpoints`
@@ -35127,11 +36581,10 @@ namespace VpcV1 {
      *  used.
      */
     securityGroups?: SecurityGroupIdentity[];
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listEndpointGatewayIps` operation. */
-  export interface ListEndpointGatewayIpsParams {
+  export interface ListEndpointGatewayIpsParams extends DefaultParams {
     /** The endpoint gateway identifier. */
     endpointGatewayId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -35144,7 +36597,6 @@ namespace VpcV1 {
      *  order.
      */
     sort?: ListEndpointGatewayIpsConstants.Sort | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listEndpointGatewayIps` operation. */
@@ -35158,48 +36610,43 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `removeEndpointGatewayIp` operation. */
-  export interface RemoveEndpointGatewayIpParams {
+  export interface RemoveEndpointGatewayIpParams extends DefaultParams {
     /** The endpoint gateway identifier. */
     endpointGatewayId: string;
     /** The reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getEndpointGatewayIp` operation. */
-  export interface GetEndpointGatewayIpParams {
+  export interface GetEndpointGatewayIpParams extends DefaultParams {
     /** The endpoint gateway identifier. */
     endpointGatewayId: string;
     /** The reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `addEndpointGatewayIp` operation. */
-  export interface AddEndpointGatewayIpParams {
+  export interface AddEndpointGatewayIpParams extends DefaultParams {
     /** The endpoint gateway identifier. */
     endpointGatewayId: string;
     /** The reserved IP identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteEndpointGateway` operation. */
-  export interface DeleteEndpointGatewayParams {
+  export interface DeleteEndpointGatewayParams extends DefaultParams {
     /** The endpoint gateway identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getEndpointGateway` operation. */
-  export interface GetEndpointGatewayParams {
+  export interface GetEndpointGatewayParams extends DefaultParams {
     /** The endpoint gateway identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateEndpointGateway` operation. */
-  export interface UpdateEndpointGatewayParams {
+  export interface UpdateEndpointGatewayParams extends DefaultParams {
     /** The endpoint gateway identifier. */
     id: string;
     /** Indicates whether to allow DNS resolution for this endpoint gateway when the VPC this endpoint gateway
@@ -35211,11 +36658,10 @@ namespace VpcV1 {
     allowDnsResolutionBinding?: boolean;
     /** The name for this endpoint gateway. The name must not be used by another endpoint gateway in the VPC. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listFlowLogCollectors` operation. */
-  export interface ListFlowLogCollectorsParams {
+  export interface ListFlowLogCollectorsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
@@ -35234,11 +36680,10 @@ namespace VpcV1 {
     targetId?: string;
     /** Filters the collection to resources with a `target.resource_type` property matching the specified value. */
     targetResourceType?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createFlowLogCollector` operation. */
-  export interface CreateFlowLogCollectorParams {
+  export interface CreateFlowLogCollectorParams extends DefaultParams {
     /** The Cloud Object Storage bucket where the collected flows will be logged.
      *  The bucket must exist and an IAM service authorization must grant
      *  `IBM Cloud Flow Logs` resources of `VPC Infrastructure Services` writer
@@ -35266,25 +36711,22 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `deleteFlowLogCollector` operation. */
-  export interface DeleteFlowLogCollectorParams {
+  export interface DeleteFlowLogCollectorParams extends DefaultParams {
     /** The flow log collector identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getFlowLogCollector` operation. */
-  export interface GetFlowLogCollectorParams {
+  export interface GetFlowLogCollectorParams extends DefaultParams {
     /** The flow log collector identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updateFlowLogCollector` operation. */
-  export interface UpdateFlowLogCollectorParams {
+  export interface UpdateFlowLogCollectorParams extends DefaultParams {
     /** The flow log collector identifier. */
     id: string;
     /** Indicates whether this collector is active. Updating to false deactivates the collector and updating to true
@@ -35293,22 +36735,20 @@ namespace VpcV1 {
     active?: boolean;
     /** The name for this flow log collector. The name must not be used by another flow log collector in the VPC. */
     name?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `listPrivatePathServiceGateways` operation. */
-  export interface ListPrivatePathServiceGatewaysParams {
+  export interface ListPrivatePathServiceGatewaysParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
     /** Filters the collection to resources with a `resource_group.id` property matching the specified identifier. */
     resourceGroupId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createPrivatePathServiceGateway` operation. */
-  export interface CreatePrivatePathServiceGatewayParams {
+  export interface CreatePrivatePathServiceGatewayParams extends DefaultParams {
     /** The load balancer for this private path service gateway. The load balancer must
      *  have `is_private_path` set to `true`.
      *
@@ -35337,7 +36777,6 @@ namespace VpcV1 {
      *             in the region the service resides in.
      */
     zonalAffinity?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createPrivatePathServiceGateway` operation. */
@@ -35351,21 +36790,19 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deletePrivatePathServiceGateway` operation. */
-  export interface DeletePrivatePathServiceGatewayParams {
+  export interface DeletePrivatePathServiceGatewayParams extends DefaultParams {
     /** The private path service gateway identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPrivatePathServiceGateway` operation. */
-  export interface GetPrivatePathServiceGatewayParams {
+  export interface GetPrivatePathServiceGatewayParams extends DefaultParams {
     /** The private path service gateway identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updatePrivatePathServiceGateway` operation. */
-  export interface UpdatePrivatePathServiceGatewayParams {
+  export interface UpdatePrivatePathServiceGatewayParams extends DefaultParams {
     /** The private path service gateway identifier. */
     id: string;
     /** The policy to use for bindings from accounts without an explicit account policy. */
@@ -35387,7 +36824,6 @@ namespace VpcV1 {
      *             in the region the service resides in.
      */
     zonalAffinity?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updatePrivatePathServiceGateway` operation. */
@@ -35401,7 +36837,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listPrivatePathServiceGatewayAccountPolicies` operation. */
-  export interface ListPrivatePathServiceGatewayAccountPoliciesParams {
+  export interface ListPrivatePathServiceGatewayAccountPoliciesParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -35410,11 +36846,10 @@ namespace VpcV1 {
     limit?: number;
     /** Filters the collection to resources with an `account.id` property matching the specified identifier. */
     accountId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `createPrivatePathServiceGatewayAccountPolicy` operation. */
-  export interface CreatePrivatePathServiceGatewayAccountPolicyParams {
+  export interface CreatePrivatePathServiceGatewayAccountPolicyParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
     /** The access policy for the account. Updating the access policy only affects pending and future endpoint
@@ -35435,7 +36870,6 @@ namespace VpcV1 {
      *  policies for this private path service gateway.
      */
     account: AccountIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `createPrivatePathServiceGatewayAccountPolicy` operation. */
@@ -35449,25 +36883,23 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `deletePrivatePathServiceGatewayAccountPolicy` operation. */
-  export interface DeletePrivatePathServiceGatewayAccountPolicyParams {
+  export interface DeletePrivatePathServiceGatewayAccountPolicyParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
     /** The account policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `getPrivatePathServiceGatewayAccountPolicy` operation. */
-  export interface GetPrivatePathServiceGatewayAccountPolicyParams {
+  export interface GetPrivatePathServiceGatewayAccountPolicyParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
     /** The account policy identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `updatePrivatePathServiceGatewayAccountPolicy` operation. */
-  export interface UpdatePrivatePathServiceGatewayAccountPolicyParams {
+  export interface UpdatePrivatePathServiceGatewayAccountPolicyParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
     /** The account policy identifier. */
@@ -35486,7 +36918,6 @@ namespace VpcV1 {
      *    gateway bindings from this account to `denied`.
      */
     accessPolicy?: UpdatePrivatePathServiceGatewayAccountPolicyConstants.AccessPolicy | string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `updatePrivatePathServiceGatewayAccountPolicy` operation. */
@@ -35500,7 +36931,7 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `listPrivatePathServiceGatewayEndpointGatewayBindings` operation. */
-  export interface ListPrivatePathServiceGatewayEndpointGatewayBindingsParams {
+  export interface ListPrivatePathServiceGatewayEndpointGatewayBindingsParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
     /** A server-provided token determining what resource to start the page on. */
@@ -35511,7 +36942,6 @@ namespace VpcV1 {
     status?: ListPrivatePathServiceGatewayEndpointGatewayBindingsConstants.Status | string;
     /** Filters the collection to resources with an `account.id` property matching the specified identifier. */
     accountId?: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Constants for the `listPrivatePathServiceGatewayEndpointGatewayBindings` operation. */
@@ -35527,16 +36957,15 @@ namespace VpcV1 {
   }
 
   /** Parameters for the `getPrivatePathServiceGatewayEndpointGatewayBinding` operation. */
-  export interface GetPrivatePathServiceGatewayEndpointGatewayBindingParams {
+  export interface GetPrivatePathServiceGatewayEndpointGatewayBindingParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
     /** The endpoint gateway binding identifier. */
     id: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `denyPrivatePathServiceGatewayEndpointGatewayBinding` operation. */
-  export interface DenyPrivatePathServiceGatewayEndpointGatewayBindingParams {
+  export interface DenyPrivatePathServiceGatewayEndpointGatewayBindingParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
     /** The endpoint gateway binding identifier. */
@@ -35554,11 +36983,10 @@ namespace VpcV1 {
      *  - All `pending` endpoint gateway bindings for the account will remain `pending`.
      */
     setAccountPolicy?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `permitPrivatePathServiceGatewayEndpointGatewayBinding` operation. */
-  export interface PermitPrivatePathServiceGatewayEndpointGatewayBindingParams {
+  export interface PermitPrivatePathServiceGatewayEndpointGatewayBindingParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
     /** The endpoint gateway binding identifier. */
@@ -35578,30 +37006,26 @@ namespace VpcV1 {
      *  - All `pending` endpoint gateway bindings for the account will remain `pending`.
      */
     setAccountPolicy?: boolean;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `publishPrivatePathServiceGateway` operation. */
-  export interface PublishPrivatePathServiceGatewayParams {
+  export interface PublishPrivatePathServiceGatewayParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `revokeAccountForPrivatePathServiceGateway` operation. */
-  export interface RevokeAccountForPrivatePathServiceGatewayParams {
+  export interface RevokeAccountForPrivatePathServiceGatewayParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
     /** The account that will be revoked access to the private path service gateway. */
     account: AccountIdentity;
-    headers?: OutgoingHttpHeaders;
   }
 
   /** Parameters for the `unpublishPrivatePathServiceGateway` operation. */
-  export interface UnpublishPrivatePathServiceGatewayParams {
+  export interface UnpublishPrivatePathServiceGatewayParams extends DefaultParams {
     /** The private path service gateway identifier. */
     privatePathServiceGatewayId: string;
-    headers?: OutgoingHttpHeaders;
   }
 
   /*************************
@@ -36891,6 +38315,7 @@ namespace VpcV1 {
      *  corresponding network attachment.
      */
     port_speed: number;
+    /** The primary IP address of this bare metal server network interface. */
     primary_ip: ReservedIPReference;
     /** The resource type. */
     resource_type: BareMetalServerNetworkInterface.Constants.ResourceType | string;
@@ -39078,13 +40503,19 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: DedicatedHostProfileVCPUManufacturer.Constants.Type | string;
     /** The VCPU manufacturer for a dedicated host with this profile. */
-    value: string;
+    value: DedicatedHostProfileVCPUManufacturer.Constants.Value | string;
   }
   export namespace DedicatedHostProfileVCPUManufacturer {
     export namespace Constants {
       /** The type for this profile field. */
       export enum Type {
         FIXED = 'fixed',
+      }
+      /** The VCPU manufacturer for a dedicated host with this profile. */
+      export enum Value {
+        AMD = 'amd',
+        IBM = 'ibm',
+        INTEL = 'intel',
       }
     }
   }
@@ -40171,7 +41602,7 @@ namespace VpcV1 {
      */
     obsolescence_at?: string;
     /** The operating system included in this image. */
-    operating_system?: OperatingSystem;
+    operating_system: OperatingSystem;
     /** The resource group for this image. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
@@ -41200,12 +42631,24 @@ namespace VpcV1 {
   export interface InstanceGPU {
     /** The number of GPUs assigned to the instance. */
     count: number;
-    /** The GPU manufacturer. */
-    manufacturer: string;
+    /** The GPU manufacturer.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    manufacturer: InstanceGPU.Constants.Manufacturer | string;
     /** The overall amount of GPU memory in GiB (gibibytes). */
     memory: number;
     /** The GPU model. */
     model: string;
+  }
+  export namespace InstanceGPU {
+    export namespace Constants {
+      /** The GPU manufacturer. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Manufacturer {
+        NVIDIA = 'nvidia',
+      }
+    }
   }
 
   /**
@@ -42178,13 +43621,17 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: InstanceProfileGPUManufacturer.Constants.Type | string;
     /** The possible GPU manufacturer(s) for an instance with this profile. */
-    values: string[];
+    values: InstanceProfileGPUManufacturer.Constants.Values[] | string[];
   }
   export namespace InstanceProfileGPUManufacturer {
     export namespace Constants {
       /** The type for this profile field. */
       export enum Type {
         ENUM = 'enum',
+      }
+      /** The possible GPU manufacturer(s) for an instance with this profile. */
+      export enum Values {
+        NVIDIA = 'nvidia',
       }
     }
   }
@@ -42372,8 +43819,6 @@ namespace VpcV1 {
    * InstanceProfileVCPUArchitecture.
    */
   export interface InstanceProfileVCPUArchitecture {
-    /** The default VCPU architecture for an instance with this profile. */
-    default?: string;
     /** The type for this profile field. */
     type: InstanceProfileVCPUArchitecture.Constants.Type | string;
     /** The VCPU architecture for an instance with this profile. */
@@ -42392,18 +43837,22 @@ namespace VpcV1 {
    * InstanceProfileVCPUManufacturer.
    */
   export interface InstanceProfileVCPUManufacturer {
-    /** The default VCPU manufacturer for an instance with this profile. */
-    default?: string;
     /** The type for this profile field. */
     type: InstanceProfileVCPUManufacturer.Constants.Type | string;
     /** The VCPU manufacturer for an instance with this profile. */
-    value: string;
+    value: InstanceProfileVCPUManufacturer.Constants.Value | string;
   }
   export namespace InstanceProfileVCPUManufacturer {
     export namespace Constants {
       /** The type for this profile field. */
       export enum Type {
         FIXED = 'fixed',
+      }
+      /** The VCPU manufacturer for an instance with this profile. */
+      export enum Value {
+        AMD = 'amd',
+        IBM = 'ibm',
+        INTEL = 'intel',
       }
     }
   }
@@ -42908,8 +44357,22 @@ namespace VpcV1 {
     architecture: string;
     /** The number of VCPUs assigned. */
     count: number;
-    /** The VCPU manufacturer. */
-    manufacturer: string;
+    /** The VCPU manufacturer.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    manufacturer: InstanceVCPU.Constants.Manufacturer | string;
+  }
+  export namespace InstanceVCPU {
+    export namespace Constants {
+      /** The VCPU manufacturer. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Manufacturer {
+        AMD = 'amd',
+        IBM = 'ibm',
+        INTEL = 'intel',
+      }
+    }
   }
 
   /**
@@ -43049,6 +44512,8 @@ namespace VpcV1 {
      *  Not supported by private path load balancers.
      */
     dns?: LoadBalancerDNS;
+    /** The supported `failsafe_policy.action` values for this load balancer's pools. */
+    failsafe_policy_actions: LoadBalancer.Constants.FailsafePolicyActions[] | string[];
     /** Fully qualified domain name assigned to this load balancer. */
     hostname: string;
     /** The URL for this load balancer. */
@@ -43140,6 +44605,13 @@ namespace VpcV1 {
       export enum Availability {
         REGION = 'region',
         SUBNET = 'subnet',
+      }
+      /** The supported `failsafe_policy.action` values for this load balancer's pools. */
+      export enum FailsafePolicyActions {
+        BYPASS = 'bypass',
+        DROP = 'drop',
+        FAIL = 'fail',
+        FORWARD = 'forward',
       }
       /** The operating status of this load balancer. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum OperatingStatus {
@@ -43289,15 +44761,9 @@ namespace VpcV1 {
     policies?: LoadBalancerListenerPolicyReference[];
     /** The listener port number, or the inclusive lower bound of the port range. */
     port: number;
-    /** The inclusive upper bound of the range of ports used by this listener.
-     *
-     *  At present, only load balancers in the `network` family support more than one port per listener.
-     */
+    /** The inclusive upper bound of the range of ports used by this listener. */
     port_max: number;
-    /** The inclusive lower bound of the range of ports used by this listener.
-     *
-     *  At present, only load balancers in the `network` family support more than one port per listener.
-     */
+    /** The inclusive lower bound of the range of ports used by this listener. */
     port_min: number;
     /** The listener protocol.
      *
@@ -43371,7 +44837,11 @@ namespace VpcV1 {
   export interface LoadBalancerListenerHTTPSRedirectPatch {
     /** The HTTP status code for this redirect. */
     http_status_code?: number;
-    /** Identifies a load balancer listener by a unique property. */
+    /** The target listener.
+     *
+     *  The target listener must be in this load balancer, and must not be the same as the
+     *  listener in the URL.
+     */
     listener?: LoadBalancerListenerIdentity;
     /** The redirect relative target URI. */
     uri?: string;
@@ -43383,7 +44853,11 @@ namespace VpcV1 {
   export interface LoadBalancerListenerHTTPSRedirectPrototype {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
-    /** Identifies a load balancer listener by a unique property. */
+    /** The target listener.
+     *
+     *  The target listener must be in this load balancer, and must not be the same as the
+     *  listener in the URL.
+     */
     listener: LoadBalancerListenerIdentity;
     /** The redirect relative target URI. */
     uri?: string;
@@ -43401,8 +44875,8 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicy {
     /** The policy action:
      *  - `forward`: Requests will be forwarded to the specified `target` pool
-     *  - `https_redirect`: Requests will be redirected to the specified target listener. The
-     *    listener must have a `protocol` of `http`, and the target listener must have a
+     *  - `https_redirect`: Requests will be redirected to the specified `target` listener.
+     *    The listener must have a `protocol` of `http`, and the target listener must have a
      *    `protocol` of `https`
      *  - `redirect`: Requests will be redirected to the specified `target.url`
      *  - `reject`: Requests will be rejected with a `403` status code
@@ -43442,7 +44916,7 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerListenerPolicy {
     export namespace Constants {
-      /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified target listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified `target` listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Action {
         FORWARD = 'forward',
         HTTPS_REDIRECT = 'https_redirect',
@@ -43494,7 +44968,7 @@ namespace VpcV1 {
     /** - If `action` is `forward`, use `LoadBalancerPoolIdentity` to specify a pool in this
      *    load balancer to forward to.
      *  - If `action` is `https_redirect`, use
-     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
+     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener in this
      *    load balancer to redirect to.
      *  - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
      *    specify a URL to redirect to.
@@ -43616,7 +45090,14 @@ namespace VpcV1 {
      *  If the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     field?: string;
-    /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
+    /** The content the rule applies to:
+     *  - `body`: The UTF-8 form-encoded HTTP request body
+     *  - `header`: The HTTP header
+     *  - `hostname`: The fully-qualified domain name of the server specified in the Host
+     *    HTTP request header
+     *  - `path`: The path of the HTTP request
+     *  - `query`: The query of the HTTP request URL.
+     */
     type: LoadBalancerListenerPolicyRulePrototype.Constants.Type | string;
     /** The value to be matched for the rule condition.
      *
@@ -43632,7 +45113,7 @@ namespace VpcV1 {
         EQUALS = 'equals',
         MATCHES_REGEX = 'matches_regex',
       }
-      /** The type of the rule. Body rules are applied to form-encoded request bodies using the `UTF-8` character set. */
+      /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL. */
       export enum Type {
         BODY = 'body',
         HEADER = 'header',
@@ -43667,9 +45148,11 @@ namespace VpcV1 {
   }
 
   /**
-   * - If `action` is `forward`, specify a `LoadBalancerPoolIdentity`.
+   * - If `action` is `forward`, specify a `LoadBalancerPoolIdentity` for a pool in this load
+   *   balancer.
    * - If `action` is `https_redirect`, specify a
-   * `LoadBalancerListenerPolicyHTTPSRedirectPatch`.
+   *   `LoadBalancerListenerPolicyHTTPSRedirectPatch` for a listener in this load balancer
+   *   with a `protocol` of `https`.
    * - If `action` is `redirect`, specify a `LoadBalancerListenerPolicyRedirectURLPatch`.
    */
   export interface LoadBalancerListenerPolicyTargetPatch {
@@ -43679,7 +45162,7 @@ namespace VpcV1 {
    * - If `action` is `forward`, use `LoadBalancerPoolIdentity` to specify a pool in this
    *   load balancer to forward to.
    * - If `action` is `https_redirect`, use
-   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
+   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener in this
    *   load balancer to redirect to.
    * - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
    *   specify a URL to redirect to.
@@ -43705,6 +45188,8 @@ namespace VpcV1 {
      *  rejected.
      *
      *  Supported for load balancers in the `application` family.
+     *
+     *  If unspecified, the limit will be `15000` for load balancers in the `application` family.
      */
     connection_limit?: number;
     /** The default pool for this listener.  If `https_redirect` is specified,
@@ -43729,19 +45214,21 @@ namespace VpcV1 {
     /** The idle connection timeout of the listener in seconds.
      *
      *  Supported for load balancers in the `application` family.
+     *
+     *  If unspecified, the timeout will be `50` for load balancers in the `application` family.
      */
     idle_connection_timeout?: number;
-    /** The listener port number, or the inclusive lower bound of the port range. Each listener in the load balancer
-     *  must have a unique `port` and `protocol` combination.
+    /** The listener port number. Each listener in the load balancer must have a non-overlapping port range and
+     *  `protocol` combination.
      *
-     *  Not supported for load balancers operating with route mode enabled.
+     *  If `port_min` is also specified, `port` must have the same value as `port_min`.
      */
     port?: number;
     /** The inclusive upper bound of the range of ports used by this listener. Must not be less than `port_min`.
      *
      *  Only load balancers with route mode enabled, or network load balancers with
      *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, the value `65535` must be specified.
+     *  route mode is enabled, `65535` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
@@ -43749,16 +45236,21 @@ namespace VpcV1 {
     port_max?: number;
     /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
      *
+     *  If specified, `port_max` must also be specified, and must not be smaller. If unspecified, `port_max` must also
+     *  be unspecified.
+     *
+     *  If `port` is also specified, `port_min` must have the same value as `port`.
+     *
      *  Only load balancers with route mode enabled, or network load balancers with
      *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, the value `1` must be specified.
+     *  route mode is enabled, `1` must be specified.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
      *  the same protocol.
      */
     port_min?: number;
-    /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol`
-     *  combination.
+    /** The listener protocol. Each listener in the load balancer must have a non-overlapping port range and
+     *  `protocol` combination.
      *
      *  Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in
      *  the `application` family support `tcp`, `http` and
@@ -43774,7 +45266,7 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerListenerPrototypeLoadBalancerContext {
     export namespace Constants {
-      /** The listener protocol. Each listener in the load balancer must have a unique `port` and `protocol` combination. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. Additional restrictions: - If `default_pool` is set, the pool's protocol must match, or be compatible with the listener's protocol. At present, the compatible protocols are `http` and `https`. - If `https_redirect` is set, the protocol must be `http`. */
+      /** The listener protocol. Each listener in the load balancer must have a non-overlapping port range and `protocol` combination. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. Additional restrictions: - If `default_pool` is set, the pool's protocol must match, or be compatible with the listener's protocol. At present, the compatible protocols are `http` and `https`. - If `https_redirect` is set, the protocol must be `http`. */
       export enum Protocol {
         HTTP = 'http',
         HTTPS = 'https',
@@ -43858,6 +45350,7 @@ namespace VpcV1 {
     algorithm: LoadBalancerPool.Constants.Algorithm | string;
     /** The date and time that this pool was created. */
     created_at: string;
+    failsafe_policy: LoadBalancerPoolFailsafePolicy;
     /** The health monitor of this pool. */
     health_monitor: LoadBalancerPoolHealthMonitor;
     /** The URL for this load balancer pool. */
@@ -43939,6 +45432,141 @@ namespace VpcV1 {
   }
 
   /**
+   * LoadBalancerPoolFailsafePolicy.
+   */
+  export interface LoadBalancerPoolFailsafePolicy {
+    /** A load balancer failsafe policy action:
+     *  - `bypass`: Bypasses the members and sends requests directly to their destination IPs.
+     *  - `drop`: Drops requests.
+     *  - `fail`: Fails requests with an HTTP `503` status code.
+     *  - `forward`: Forwards requests to the `target` pool.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    action: LoadBalancerPoolFailsafePolicy.Constants.Action | string;
+    /** The healthy member count at which the failsafe policy action will be triggered. At present, this is always
+     *  `0`, but may be modifiable in the future.
+     */
+    healthy_member_threshold_count: number;
+    /** If `action` is `forward`, the target pool to forward to.
+     *
+     *  If `action` is not `forward`, this property will be absent.
+     *
+     *  The targets supported by this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    target?: LoadBalancerPoolReference;
+  }
+  export namespace LoadBalancerPoolFailsafePolicy {
+    export namespace Constants {
+      /** A load balancer failsafe policy action: - `bypass`: Bypasses the members and sends requests directly to their destination IPs. - `drop`: Drops requests. - `fail`: Fails requests with an HTTP `503` status code. - `forward`: Forwards requests to the `target` pool. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Action {
+        BYPASS = 'bypass',
+        DROP = 'drop',
+        FAIL = 'fail',
+        FORWARD = 'forward',
+      }
+    }
+  }
+
+  /**
+   * The failsafe policy for this load balancer pool.
+   */
+  export interface LoadBalancerPoolFailsafePolicyPatch {
+    /** A load balancer failsafe policy action:
+     *  - `bypass`: Bypasses the members and sends requests directly to their destination IPs. If specified, this load
+     *  balancer must have `route_mode` enabled.
+     *  - `drop`: Drops requests. If specified, the pool protocol must be `tcp`.
+     *  - `fail`: Fails requests with an HTTP `503` status code. If specified, the pool protocol must be `http` or
+     *  `https`.
+     *  - `forward`: Forwards requests to the `target` pool. If specified, the pool protocol must be `http` or `https`.
+     *
+     *  The specified value must be listed in the `failsafe_policy_actions` for this pool's load balancer.
+     */
+    action?: LoadBalancerPoolFailsafePolicyPatch.Constants.Action | string;
+    /** The failsafe target pool to forward to.
+     *
+     *  The specified pool must:
+     *  - Belong to this load balancer
+     *  - Have the same `protocol` as this pool, or have a compatible protocol.
+     *    At present, the compatible protocols are `http` and `https`.
+     *  - Not have a `failsafe_policy.action` of `forward` or `bypass`.
+     *
+     *  If specified, `action` must be `forward`.
+     *
+     *  Specify `null` to remove an existing failsafe target pool.
+     */
+    target?: LoadBalancerPoolFailsafePolicyTargetPatch;
+  }
+  export namespace LoadBalancerPoolFailsafePolicyPatch {
+    export namespace Constants {
+      /** A load balancer failsafe policy action: - `bypass`: Bypasses the members and sends requests directly to their destination IPs. If specified, this load balancer must have `route_mode` enabled. - `drop`: Drops requests. If specified, the pool protocol must be `tcp`. - `fail`: Fails requests with an HTTP `503` status code. If specified, the pool protocol must be `http` or `https`. - `forward`: Forwards requests to the `target` pool. If specified, the pool protocol must be `http` or `https`. The specified value must be listed in the `failsafe_policy_actions` for this pool's load balancer. */
+      export enum Action {
+        BYPASS = 'bypass',
+        DROP = 'drop',
+        FAIL = 'fail',
+        FORWARD = 'forward',
+      }
+    }
+  }
+
+  /**
+   * LoadBalancerPoolFailsafePolicyPrototype.
+   */
+  export interface LoadBalancerPoolFailsafePolicyPrototype {
+    /** A load balancer failsafe policy action:
+     *  - `bypass`: Bypasses the members and sends requests directly to their destination IPs. If specified, this load
+     *  balancer must have `route_mode` enabled.
+     *  - `drop`: Drops requests. If specified, the pool protocol must be `tcp`.
+     *  - `fail`: Fails requests with an HTTP `503` status code. If specified, the pool protocol must be `http` or
+     *  `https`.
+     *  - `forward`: Forwards requests to the `target` pool. If specified, the pool protocol must be `http` or `https`.
+     *
+     *  The specified value must be listed in the `failsafe_policy_actions` for this pool's load balancer.
+     */
+    action?: LoadBalancerPoolFailsafePolicyPrototype.Constants.Action | string;
+    /** The failsafe target pool to forward to.
+     *
+     *  The specified pool must:
+     *  - Belong to this load balancer
+     *  - Have the same `protocol` as this pool, or have a compatible protocol.
+     *    At present, the compatible protocols are `http` and `https`.
+     *  - Have a `failsafe_policy.action` of `fail` or `drop`
+     *
+     *  If specified, `action` must be `forward`.
+     */
+    target?: LoadBalancerPoolIdentity;
+  }
+  export namespace LoadBalancerPoolFailsafePolicyPrototype {
+    export namespace Constants {
+      /** A load balancer failsafe policy action: - `bypass`: Bypasses the members and sends requests directly to their destination IPs. If specified, this load balancer must have `route_mode` enabled. - `drop`: Drops requests. If specified, the pool protocol must be `tcp`. - `fail`: Fails requests with an HTTP `503` status code. If specified, the pool protocol must be `http` or `https`. - `forward`: Forwards requests to the `target` pool. If specified, the pool protocol must be `http` or `https`. The specified value must be listed in the `failsafe_policy_actions` for this pool's load balancer. */
+      export enum Action {
+        BYPASS = 'bypass',
+        DROP = 'drop',
+        FAIL = 'fail',
+        FORWARD = 'forward',
+      }
+    }
+  }
+
+  /**
+   * The failsafe target pool to forward to.
+   *
+   * The specified pool must:
+   * - Belong to this load balancer
+   * - Have the same `protocol` as this pool, or have a compatible protocol.
+   *   At present, the compatible protocols are `http` and `https`.
+   * - Not have a `failsafe_policy.action` of `forward` or `bypass`.
+   *
+   * If specified, `action` must be `forward`.
+   *
+   * Specify `null` to remove an existing failsafe target pool.
+   */
+  export interface LoadBalancerPoolFailsafePolicyTargetPatch {
+  }
+
+  /**
    * LoadBalancerPoolHealthMonitor.
    */
   export interface LoadBalancerPoolHealthMonitor {
@@ -43953,22 +45581,16 @@ namespace VpcV1 {
     port?: number;
     /** The seconds to wait for a response to a health check. */
     timeout: number;
-    /** The protocol type to use for health checks.
+    /** The protocol type used for health checks.
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     type: LoadBalancerPoolHealthMonitor.Constants.Type | string;
-    /** The health check URL path, in the format of an [origin-form request
-     *  target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
-     *
-     *  If `type` is `tcp`, this property will be absent.
-     */
-    url_path?: string;
   }
   export namespace LoadBalancerPoolHealthMonitor {
     export namespace Constants {
-      /** The protocol type to use for health checks. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The protocol type used for health checks. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Type {
         HTTP = 'http',
         HTTPS = 'https',
@@ -43999,6 +45621,8 @@ namespace VpcV1 {
     /** The health check URL path.  If specified, `type` must be `http` or `https`.
      *
      *  Must be in the format of an [origin-form request target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
+     *
+     *  Specify `null` to remove a url_path.
      */
     url_path?: string;
   }
@@ -44030,11 +45654,6 @@ namespace VpcV1 {
     timeout: number;
     /** The protocol type to use for health checks. */
     type: LoadBalancerPoolHealthMonitorPrototype.Constants.Type | string;
-    /** The health check URL path.  If specified, `type` must be `http` or `https`.
-     *
-     *  Must be in the format of an [origin-form request target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
-     */
-    url_path?: string;
   }
   export namespace LoadBalancerPoolHealthMonitorPrototype {
     export namespace Constants {
@@ -44148,7 +45767,10 @@ namespace VpcV1 {
     target: LoadBalancerPoolMemberTargetPrototype;
     /** The weight of the server member.
      *
-     *  If specified, the pool algorithm must be `weighted_round_robin`.
+     *  If specified, the pool algorithm must be `weighted_round_robin` and the load balancer must be in the
+     *  `application` family.
+     *
+     *  If unspecified, the weight will be `50` for load balancers in the `application` family.
      */
     weight?: number;
   }
@@ -44182,13 +45804,13 @@ namespace VpcV1 {
   }
 
   /**
-   * LoadBalancerPoolPrototype.
+   * LoadBalancerPoolPrototypeLoadBalancerContext.
    */
-  export interface LoadBalancerPoolPrototype {
+  export interface LoadBalancerPoolPrototypeLoadBalancerContext {
     /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that
      *  have `availability` with value `subnet` in the profile.
      */
-    algorithm: LoadBalancerPoolPrototype.Constants.Algorithm | string;
+    algorithm: LoadBalancerPoolPrototypeLoadBalancerContext.Constants.Algorithm | string;
     /** The health monitor of this pool. */
     health_monitor: LoadBalancerPoolHealthMonitorPrototype;
     /** The members for this load balancer pool. For load balancers in the `network` family, the same `port` and
@@ -44203,7 +45825,7 @@ namespace VpcV1 {
      *  `udp` (if `udp_supported` is `true`). Load balancers in the
      *  `application` family support `tcp`, `http`, and `https`.
      */
-    protocol: LoadBalancerPoolPrototype.Constants.Protocol | string;
+    protocol: LoadBalancerPoolPrototypeLoadBalancerContext.Constants.Protocol | string;
     /** The PROXY protocol setting for this pool:
      *  - `v1`: Enabled with version 1 (human-readable header format)
      *  - `v2`: Enabled with version 2 (binary header format)
@@ -44211,15 +45833,16 @@ namespace VpcV1 {
      *
      *  For load balancers in the `network` family, this property must be `disabled`.
      */
-    proxy_protocol?: LoadBalancerPoolPrototype.Constants.ProxyProtocol | string;
+    proxy_protocol?: LoadBalancerPoolPrototypeLoadBalancerContext.Constants.ProxyProtocol | string;
     /** The session persistence of this pool. If specified, the load balancer must have
-     *  `source_ip_session_persistence_supported` set to `true` in its profile. If
-     *  unspecified, session persistence will be disabled, and traffic will be distributed
-     *  across backend server members of the pool.
+     *  `source_ip_session_persistence_supported` set to `true` in its profile.
+     *
+     *  If unspecified, session persistence will be disabled, and traffic will be distributed
+     *  across members of the pool.
      */
     session_persistence?: LoadBalancerPoolSessionPersistencePrototype;
   }
-  export namespace LoadBalancerPoolPrototype {
+  export namespace LoadBalancerPoolPrototypeLoadBalancerContext {
     export namespace Constants {
       /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that have `availability` with value `subnet` in the profile. */
       export enum Algorithm {
@@ -44343,6 +45966,7 @@ namespace VpcV1 {
   export interface LoadBalancerProfile {
     access_modes: LoadBalancerProfileAccessModes;
     availability: LoadBalancerProfileAvailability;
+    failsafe_policy_actions: LoadBalancerProfileFailsafePolicyActions;
     /** The product family this load balancer profile belongs to.
      *
      *  The enumerated values for this property may
@@ -44415,6 +46039,12 @@ namespace VpcV1 {
     profiles: LoadBalancerProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
+  }
+
+  /**
+   * LoadBalancerProfileFailsafePolicyActions.
+   */
+  export interface LoadBalancerProfileFailsafePolicyActions {
   }
 
   /**
@@ -44642,7 +46272,11 @@ namespace VpcV1 {
     ip_version: NetworkACLRule.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name is unique across all rules for the network ACL. */
     name: string;
-    /** The network protocol. */
+    /** The name of the network protocol.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     protocol: NetworkACLRule.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
@@ -44663,7 +46297,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -44731,7 +46365,11 @@ namespace VpcV1 {
     ip_version: NetworkACLRuleItem.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name is unique across all rules for the network ACL. */
     name: string;
-    /** The network protocol. */
+    /** The name of the network protocol.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     protocol: NetworkACLRuleItem.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
@@ -44752,7 +46390,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -44785,7 +46423,7 @@ namespace VpcV1 {
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRulePrototype.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
@@ -44806,7 +46444,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -44834,7 +46472,7 @@ namespace VpcV1 {
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLContext.Constants.Protocol | string;
     /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
     source: string;
@@ -44855,7 +46493,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -44939,15 +46577,16 @@ namespace VpcV1 {
      *  corresponding network attachment.
      */
     port_speed: number;
+    /** The primary IP address of this instance network interface. */
     primary_ip: ReservedIPReference;
     /** The resource type. */
     resource_type: NetworkInterface.Constants.ResourceType | string;
     /** The security groups targeting this instance network interface.
      *
-     *  If this instance has network attachments, this network interface is a
-     *  [read-only representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its
-     *  corresponding network attachment and its attached virtual network interface, and the security groups are
-     *  associated with the attached virtual network interface.
+     *  If this instance has network attachments, this network interface is a [read-only
+     *  representation](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#vni-old-api-clients) of its corresponding
+     *  network attachment and its attached virtual network interface, and the security groups are associated with the
+     *  attached virtual network interface.
      */
     security_groups: SecurityGroupReference[];
     /** The status of the instance network interface.
@@ -45014,6 +46653,7 @@ namespace VpcV1 {
     id: string;
     /** The name for this bare metal server network interface. */
     name: string;
+    /** The primary IP address of this bare metal server network interface. */
     primary_ip: ReservedIPReference;
     /** The resource type. */
     resource_type: NetworkInterfaceBareMetalServerContextReference.Constants.ResourceType | string;
@@ -45060,6 +46700,7 @@ namespace VpcV1 {
     id: string;
     /** The name for this instance network interface. */
     name: string;
+    /** The primary IP address of this instance network interface. */
     primary_ip: ReservedIPReference;
     /** The resource type. */
     resource_type: NetworkInterfaceInstanceContextReference.Constants.ResourceType | string;
@@ -46747,7 +48388,7 @@ namespace VpcV1 {
      *  to all local IP addresses (or from all local IP addresses, for outbound rules).
      */
     local: SecurityGroupRuleLocal;
-    /** The protocol to allow.
+    /** The name of the network protocol to allow.
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
@@ -46770,7 +48411,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to allow. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The name of the network protocol to allow. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -46808,7 +48449,7 @@ namespace VpcV1 {
 
   /**
    * The local IP address or range of local IP addresses to which this rule will allow inbound traffic (or from which,
-   * for outbound traffic)
+   * for outbound traffic).
    *
    * If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP addresses (or from all
    * local IP addresses, for outbound rules).
@@ -46830,13 +48471,13 @@ namespace VpcV1 {
      */
     ip_version?: SecurityGroupRulePrototype.Constants.IpVersion | string;
     /** The local IP address or range of local IP addresses to which this rule will allow inbound
-     *  traffic (or from which, for outbound traffic)
+     *  traffic (or from which, for outbound traffic).
      *
      *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP
      *  addresses (or from all local IP addresses, for outbound rules).
      */
     local?: SecurityGroupRuleLocalPrototype;
-    /** The protocol to allow. */
+    /** The name of the network protocol to allow. */
     protocol: SecurityGroupRulePrototype.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
@@ -46858,7 +48499,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The protocol to allow. */
+      /** The name of the network protocol to allow. */
       export enum Protocol {
         ALL = 'all',
         ICMP = 'icmp',
@@ -48022,6 +49663,15 @@ namespace VpcV1 {
      *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
      */
     source_volume: VolumeReference;
+    /** The [storage
+     *  generation](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=api#using-api-iops-profiles):
+     *  - `1`: The first storage generation
+     *  - `2`: The second storage generation
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    storage_generation: number;
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this snapshot. */
     user_tags: string[];
   }
@@ -48039,6 +49689,7 @@ namespace VpcV1 {
         PENDING = 'pending',
         STABLE = 'stable',
         SUSPENDED = 'suspended',
+        UNUSABLE = 'unusable',
         UPDATING = 'updating',
         WAITING = 'waiting',
       }
@@ -48576,8 +50227,22 @@ namespace VpcV1 {
     architecture: string;
     /** The number of VCPUs assigned. */
     count: number;
-    /** The VCPU manufacturer. */
-    manufacturer: string;
+    /** The VCPU manufacturer.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    manufacturer: VCPU.Constants.Manufacturer | string;
+  }
+  export namespace VCPU {
+    export namespace Constants {
+      /** The VCPU manufacturer. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Manufacturer {
+        AMD = 'amd',
+        IBM = 'ibm',
+        INTEL = 'intel',
+      }
+    }
   }
 
   /**
@@ -50624,6 +52289,15 @@ namespace VpcV1 {
     status: Volume.Constants.Status | string;
     /** The reasons for the current status (if any). */
     status_reasons: VolumeStatusReason[];
+    /** The [storage
+     *  generation](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=api#using-api-iops-profiles):
+     *  - `1`: The first storage generation
+     *  - `2`: The second storage generation
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    storage_generation: number;
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume. */
     user_tags: string[];
     /** The volume attachments for this volume. */
@@ -50962,6 +52636,8 @@ namespace VpcV1 {
     iops: VolumeProfileIOPS;
     /** The globally unique name for this volume profile. */
     name: string;
+    /** The storage generation value of volumes of this profile. */
+    storage_generation: VolumeProfileStorageGenerationFixed;
   }
   export namespace VolumeProfile {
     export namespace Constants {
@@ -51073,6 +52749,24 @@ namespace VpcV1 {
   }
 
   /**
+   * The storage generation value of volumes of this profile.
+   */
+  export interface VolumeProfileStorageGenerationFixed {
+    /** The type for this profile field. */
+    type: VolumeProfileStorageGenerationFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: number;
+  }
+  export namespace VolumeProfileStorageGenerationFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
+  /**
    * VolumePrototype.
    */
   export interface VolumePrototype {
@@ -51084,7 +52778,7 @@ namespace VpcV1 {
      *  name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) to use for this volume. */
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) for this volume. */
     profile: VolumeProfileIdentity;
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
@@ -51120,7 +52814,7 @@ namespace VpcV1 {
      *  name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) to use for this volume. */
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) for this volume. */
     profile: VolumeProfileIdentity;
     /** The resource group to use for this volume. If unspecified, the instance's resource group will be used. */
     resource_group?: ResourceGroupIdentity;
@@ -51149,13 +52843,16 @@ namespace VpcV1 {
      *  name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) to use for this volume. */
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) for this volume. */
     profile: VolumeProfileIdentity;
     /** The resource group to use for this volume. If unspecified, the instance's resource group will be used. */
     resource_group?: ResourceGroupIdentity;
     /** The snapshot to use as a source for the volume's data.
      *
      *  The specified snapshot may be in a different account, subject to IAM policies.
+     *
+     *  To create a volume from a `source_snapshot`, the volume profile and the
+     *  source snapshot must have the same `storage_generation` value.
      */
     source_snapshot: SnapshotIdentity;
     /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume. */
@@ -53623,6 +55320,7 @@ namespace VpcV1 {
     id: string;
     /** The name for this bare metal server network interface. */
     name: string;
+    /** The primary IP address of this bare metal server network interface. */
     primary_ip: ReservedIPReference;
     /** The resource type. */
     resource_type: FloatingIPTargetBareMetalServerNetworkInterfaceReference.Constants.ResourceType | string;
@@ -53661,6 +55359,7 @@ namespace VpcV1 {
     id: string;
     /** The name for this instance network interface. */
     name: string;
+    /** The primary IP address of this instance network interface. */
     primary_ip: ReservedIPReference;
     /** The resource type. */
     resource_type: FloatingIPTargetNetworkInterfaceReference.Constants.ResourceType | string;
@@ -55837,7 +57536,11 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyHTTPSRedirectPatch extends LoadBalancerListenerPolicyTargetPatch {
     /** The HTTP status code for this redirect. */
     http_status_code?: number;
-    /** Identifies a load balancer listener by a unique property. */
+    /** The target listener.
+     *
+     *  The target listener must be in this load balancer, and must not be the same as the
+     *  listener in the URL.
+     */
     listener?: LoadBalancerListenerIdentity;
     /** The redirect relative target URI. */
     uri?: string;
@@ -55882,7 +57585,11 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerPolicyHTTPSRedirectPrototype extends LoadBalancerListenerPolicyTargetPrototype {
     /** The HTTP status code for this redirect. */
     http_status_code: number;
-    /** Identifies a load balancer listener by a unique property. */
+    /** The target listener.
+     *
+     *  The target listener must be in this load balancer, and must not be the same as the
+     *  listener in the URL.
+     */
     listener: LoadBalancerListenerIdentity;
     /** The redirect relative target URI. */
     uri?: string;
@@ -55973,6 +57680,97 @@ namespace VpcV1 {
     id: string;
     /** The name for this load balancer pool. The name is unique across all pools for the load balancer. */
     name: string;
+  }
+
+  /**
+   * LoadBalancerPoolFailsafePolicyTargetPatchLoadBalancerPoolIdentityByHref.
+   */
+  export interface LoadBalancerPoolFailsafePolicyTargetPatchLoadBalancerPoolIdentityByHref extends LoadBalancerPoolFailsafePolicyTargetPatch {
+    /** The URL for this load balancer pool. */
+    href: string;
+  }
+
+  /**
+   * LoadBalancerPoolFailsafePolicyTargetPatchLoadBalancerPoolIdentityById.
+   */
+  export interface LoadBalancerPoolFailsafePolicyTargetPatchLoadBalancerPoolIdentityById extends LoadBalancerPoolFailsafePolicyTargetPatch {
+    /** The unique identifier for this load balancer pool. */
+    id: string;
+  }
+
+  /**
+   * LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSPrototype.
+   */
+  export interface LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSPrototype extends LoadBalancerPoolHealthMonitorPrototype {
+    /** The protocol type to use for health checks. */
+    type: LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSPrototype.Constants.Type | string;
+    /** The health check URL path to use.
+     *
+     *  Must be in the format of an [origin-form request target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
+     */
+    url_path?: string;
+  }
+  export namespace LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSPrototype {
+    export namespace Constants {
+      /** The protocol type to use for health checks. */
+      export enum Type {
+        HTTP = 'http',
+        HTTPS = 'https',
+      }
+    }
+  }
+
+  /**
+   * LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeTCPPrototype.
+   */
+  export interface LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeTCPPrototype extends LoadBalancerPoolHealthMonitorPrototype {
+    /** The protocol type to use for health checks. */
+    type: LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeTCPPrototype.Constants.Type | string;
+  }
+  export namespace LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeTCPPrototype {
+    export namespace Constants {
+      /** The protocol type to use for health checks. */
+      export enum Type {
+        TCP = 'tcp',
+      }
+    }
+  }
+
+  /**
+   * LoadBalancerPoolHealthMonitorTypeHTTPHTTPS.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPS extends LoadBalancerPoolHealthMonitor {
+    /** The protocol type used for health checks. */
+    type: LoadBalancerPoolHealthMonitorTypeHTTPHTTPS.Constants.Type | string;
+    /** The health check URL path, in the format of an [origin-form request
+     *  target](https://tools.ietf.org/html/rfc7230#section-5.3.1).
+     */
+    url_path: string;
+  }
+  export namespace LoadBalancerPoolHealthMonitorTypeHTTPHTTPS {
+    export namespace Constants {
+      /** The protocol type used for health checks. */
+      export enum Type {
+        HTTP = 'http',
+        HTTPS = 'https',
+      }
+    }
+  }
+
+  /**
+   * LoadBalancerPoolHealthMonitorTypeTCP.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeTCP extends LoadBalancerPoolHealthMonitor {
+    /** The protocol type used for health checks. */
+    type: LoadBalancerPoolHealthMonitorTypeTCP.Constants.Type | string;
+  }
+  export namespace LoadBalancerPoolHealthMonitorTypeTCP {
+    export namespace Constants {
+      /** The protocol type used for health checks. */
+      export enum Type {
+        TCP = 'tcp',
+      }
+    }
   }
 
   /**
@@ -56083,6 +57881,56 @@ namespace VpcV1 {
       export enum Value {
         REGION = 'region',
         SUBNET = 'subnet',
+      }
+    }
+  }
+
+  /**
+   * The failsafe policy action configuration for a load balancer with this profile depends on its configuration.
+   */
+  export interface LoadBalancerProfileFailsafePolicyActionsDependent extends LoadBalancerProfileFailsafePolicyActions {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileFailsafePolicyActionsDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileFailsafePolicyActionsDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /**
+   * The failsafe policy action configuration for a load balancer with this profile.
+   */
+  export interface LoadBalancerProfileFailsafePolicyActionsEnum extends LoadBalancerProfileFailsafePolicyActions {
+    /** The default failsafe policy action for this profile. */
+    default: LoadBalancerProfileFailsafePolicyActionsEnum.Constants.Default | string;
+    /** The type for this profile field. */
+    type: LoadBalancerProfileFailsafePolicyActionsEnum.Constants.Type | string;
+    /** The supported failsafe policy actions. */
+    values: LoadBalancerProfileFailsafePolicyActionsEnum.Constants.Values[] | string[];
+  }
+  export namespace LoadBalancerProfileFailsafePolicyActionsEnum {
+    export namespace Constants {
+      /** The default failsafe policy action for this profile. */
+      export enum Default {
+        BYPASS = 'bypass',
+        DROP = 'drop',
+        FAIL = 'fail',
+        FORWARD = 'forward',
+      }
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The supported failsafe policy actions. */
+      export enum Values {
+        BYPASS = 'bypass',
+        DROP = 'drop',
+        FAIL = 'fail',
+        FORWARD = 'forward',
       }
     }
   }
@@ -56348,10 +58196,10 @@ namespace VpcV1 {
   }
 
   /**
-   * NetworkACLRuleItemNetworkACLRuleProtocolAll.
+   * A rule for all ICMP, TCP and UDP traffic.
    */
   export interface NetworkACLRuleItemNetworkACLRuleProtocolAll extends NetworkACLRuleItem {
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRuleItemNetworkACLRuleProtocolAll.Constants.Protocol | string;
   }
   export namespace NetworkACLRuleItemNetworkACLRuleProtocolAll {
@@ -56370,7 +58218,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -56378,7 +58226,7 @@ namespace VpcV1 {
   }
 
   /**
-   * NetworkACLRuleItemNetworkACLRuleProtocolICMP.
+   * A rule for ICMP traffic.
    */
   export interface NetworkACLRuleItemNetworkACLRuleProtocolICMP extends NetworkACLRuleItem {
     /** The ICMP traffic code to match.
@@ -56386,7 +58234,7 @@ namespace VpcV1 {
      *  If absent, all codes are matched.
      */
     code?: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRuleItemNetworkACLRuleProtocolICMP.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
@@ -56410,7 +58258,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -56421,15 +58269,15 @@ namespace VpcV1 {
    * NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP.
    */
   export interface NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP extends NetworkACLRuleItem {
-    /** The inclusive upper bound of TCP/UDP destination port range. */
+    /** The inclusive upper bound of the TCP or UDP destination port range. */
     destination_port_max: number;
-    /** The inclusive lower bound of TCP/UDP destination port range. */
+    /** The inclusive lower bound of the TCP or UDP destination port range. */
     destination_port_min: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP.Constants.Protocol | string;
-    /** The inclusive upper bound of TCP/UDP source port range. */
+    /** The inclusive upper bound of the TCP or UDP source port range. */
     source_port_max: number;
-    /** The inclusive lower bound of TCP/UDP source port range. */
+    /** The inclusive lower bound of the TCP or UDP source port range. */
     source_port_min: number;
   }
   export namespace NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP {
@@ -56448,7 +58296,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -56457,10 +58305,10 @@ namespace VpcV1 {
   }
 
   /**
-   * NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype.
+   * A rule for all ICMP, TCP and UDP traffic.
    */
   export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototypeNetworkACLContext {
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype.Constants.Protocol | string;
   }
   export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype {
@@ -56479,7 +58327,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -56487,7 +58335,7 @@ namespace VpcV1 {
   }
 
   /**
-   * NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype.
+   * A rule for ICMP traffic.
    */
   export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype extends NetworkACLRulePrototypeNetworkACLContext {
     /** The ICMP traffic code to match.
@@ -56495,7 +58343,7 @@ namespace VpcV1 {
      *  If specified, `type` must also be specified.  If unspecified, all codes are matched.
      */
     code?: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
@@ -56519,7 +58367,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -56527,18 +58375,34 @@ namespace VpcV1 {
   }
 
   /**
-   * NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype.
+   * A rule for TCP or UDP traffic.
    */
   export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype extends NetworkACLRulePrototypeNetworkACLContext {
-    /** The inclusive upper bound of TCP/UDP destination port range. */
+    /** The inclusive upper bound of the TCP or UDP destination port range.
+     *
+     *  If specified, `destination_port_min` must also be specified, and must not be larger. If unspecified,
+     *  `destination_port_min` must also be unspecified, allowing traffic for all destination ports.
+     */
     destination_port_max?: number;
-    /** The inclusive lower bound of TCP/UDP destination port range. */
+    /** The inclusive lower bound of the TCP or UDP destination port range.
+     *
+     *  If specified, `destination_port_max` must also be specified, and must not be smaller. If unspecified,
+     *  `destination_port_max` must also be unspecified, allowing traffic for all destination ports.
+     */
     destination_port_min?: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype.Constants.Protocol | string;
-    /** The inclusive upper bound of TCP/UDP source port range. */
+    /** The inclusive upper bound of the TCP or UDP source port range.
+     *
+     *  If specified, `source_port_min` must also be specified, and must not be larger. If unspecified,
+     *  `source_port_min` must also be unspecified, allowing traffic for all source ports.
+     */
     source_port_max?: number;
-    /** The inclusive lower bound of TCP/UDP source port range. */
+    /** The inclusive lower bound of the TCP or UDP source port range.
+     *
+     *  If specified, `source_port_max` must also be specified, and must not be smaller. If unspecified,
+     *  `source_port_max` must also be unspecified, allowing traffic for all source ports.
+     */
     source_port_min?: number;
   }
   export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype {
@@ -56557,7 +58421,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -56566,10 +58430,10 @@ namespace VpcV1 {
   }
 
   /**
-   * NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype.
+   * A rule for all ICMP, TCP and UDP traffic.
    */
   export interface NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototype {
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype.Constants.Protocol | string;
   }
   export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype {
@@ -56588,7 +58452,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -56596,7 +58460,7 @@ namespace VpcV1 {
   }
 
   /**
-   * NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype.
+   * A rule for ICMP traffic.
    */
   export interface NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype extends NetworkACLRulePrototype {
     /** The ICMP traffic code to match.
@@ -56604,7 +58468,7 @@ namespace VpcV1 {
      *  If specified, `type` must also be specified.  If unspecified, all codes are matched.
      */
     code?: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
@@ -56628,7 +58492,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -56636,18 +58500,34 @@ namespace VpcV1 {
   }
 
   /**
-   * NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype.
+   * A rule for TCP or UDP traffic.
    */
   export interface NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype extends NetworkACLRulePrototype {
-    /** The inclusive upper bound of TCP/UDP destination port range. */
+    /** The inclusive upper bound of the TCP or UDP destination port range.
+     *
+     *  If specified, `destination_port_min` must also be specified, and must not be larger. If unspecified,
+     *  `destination_port_min` must also be unspecified, allowing traffic for all destination ports.
+     */
     destination_port_max?: number;
-    /** The inclusive lower bound of TCP/UDP destination port range. */
+    /** The inclusive lower bound of the TCP or UDP destination port range.
+     *
+     *  If specified, `destination_port_max` must also be specified, and must not be smaller. If unspecified,
+     *  `destination_port_max` must also be unspecified, allowing traffic for all destination ports.
+     */
     destination_port_min?: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype.Constants.Protocol | string;
-    /** The inclusive upper bound of TCP/UDP source port range. */
+    /** The inclusive upper bound of the TCP or UDP source port range.
+     *
+     *  If specified, `source_port_min` must also be specified, and must not be larger. If unspecified,
+     *  `source_port_min` must also be unspecified, allowing traffic for all source ports.
+     */
     source_port_max?: number;
-    /** The inclusive lower bound of TCP/UDP source port range. */
+    /** The inclusive lower bound of the TCP or UDP source port range.
+     *
+     *  If specified, `source_port_max` must also be specified, and must not be smaller. If unspecified,
+     *  `source_port_max` must also be unspecified, allowing traffic for all source ports.
+     */
     source_port_min?: number;
   }
   export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype {
@@ -56666,7 +58546,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -56675,10 +58555,10 @@ namespace VpcV1 {
   }
 
   /**
-   * NetworkACLRuleNetworkACLRuleProtocolAll.
+   * A rule for all ICMP, TCP and UDP traffic.
    */
   export interface NetworkACLRuleNetworkACLRuleProtocolAll extends NetworkACLRule {
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRuleNetworkACLRuleProtocolAll.Constants.Protocol | string;
   }
   export namespace NetworkACLRuleNetworkACLRuleProtocolAll {
@@ -56697,7 +58577,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -56705,7 +58585,7 @@ namespace VpcV1 {
   }
 
   /**
-   * NetworkACLRuleNetworkACLRuleProtocolICMP.
+   * A rule for ICMP traffic.
    */
   export interface NetworkACLRuleNetworkACLRuleProtocolICMP extends NetworkACLRule {
     /** The ICMP traffic code to match.
@@ -56713,7 +58593,7 @@ namespace VpcV1 {
      *  If absent, all codes are matched.
      */
     code?: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRuleNetworkACLRuleProtocolICMP.Constants.Protocol | string;
     /** The ICMP traffic type to match.
      *
@@ -56737,7 +58617,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -56748,15 +58628,15 @@ namespace VpcV1 {
    * NetworkACLRuleNetworkACLRuleProtocolTCPUDP.
    */
   export interface NetworkACLRuleNetworkACLRuleProtocolTCPUDP extends NetworkACLRule {
-    /** The inclusive upper bound of TCP/UDP destination port range. */
+    /** The inclusive upper bound of the TCP or UDP destination port range. */
     destination_port_max: number;
-    /** The inclusive lower bound of TCP/UDP destination port range. */
+    /** The inclusive lower bound of the TCP or UDP destination port range. */
     destination_port_min: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: NetworkACLRuleNetworkACLRuleProtocolTCPUDP.Constants.Protocol | string;
-    /** The inclusive upper bound of TCP/UDP source port range. */
+    /** The inclusive upper bound of the TCP or UDP source port range. */
     source_port_max: number;
-    /** The inclusive lower bound of TCP/UDP source port range. */
+    /** The inclusive lower bound of the TCP or UDP source port range. */
     source_port_min: number;
   }
   export namespace NetworkACLRuleNetworkACLRuleProtocolTCPUDP {
@@ -56775,7 +58655,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -57442,35 +59322,11 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule allowing traffic for all supported protocols.
+   * A rule allowing all ICMP, TCP and UDP traffic.
    */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll extends SecurityGroupRulePrototype {
-    /** The direction of traffic to allow. */
-    direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.Direction | string;
-    /** The IP version to allow. The format of `local.address`, `remote.address`,
-     *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
-     *
-     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
-     *  IP version.
-     */
-    ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.IpVersion | string;
-    /** The local IP address or range of local IP addresses to which this rule will allow inbound
-     *  traffic (or from which, for outbound traffic)
-     *
-     *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP
-     *  addresses (or from all local IP addresses, for outbound rules).
-     */
-    local?: SecurityGroupRuleLocalPrototype;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.Protocol | string;
-    /** The remote IP addresses or security groups from which this rule will allow traffic (or to
-     *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
-     *  security group within the VPC.
-     *
-     *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source
-     *  (or to any destination, for outbound rules).
-     */
-    remote?: SecurityGroupRuleRemotePrototype;
   }
   export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll {
     export namespace Constants {
@@ -57483,7 +59339,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -57499,32 +59355,8 @@ namespace VpcV1 {
      *  If specified, `type` must also be specified.  If unspecified, all codes are allowed.
      */
     code?: number;
-    /** The direction of traffic to allow. */
-    direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.Direction | string;
-    /** The IP version to allow. The format of `local.address`, `remote.address`,
-     *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
-     *
-     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
-     *  IP version.
-     */
-    ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.IpVersion | string;
-    /** The local IP address or range of local IP addresses to which this rule will allow inbound
-     *  traffic (or from which, for outbound traffic)
-     *
-     *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP
-     *  addresses (or from all local IP addresses, for outbound rules).
-     */
-    local?: SecurityGroupRuleLocalPrototype;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMP.Constants.Protocol | string;
-    /** The remote IP addresses or security groups from which this rule will allow traffic (or to
-     *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
-     *  security group within the VPC.
-     *
-     *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source
-     *  (or to any destination, for outbound rules).
-     */
-    remote?: SecurityGroupRuleRemotePrototype;
     /** The ICMP traffic type to allow.
      *
      *  If unspecified, all types are allowed.
@@ -57542,7 +59374,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -57551,49 +59383,22 @@ namespace VpcV1 {
 
   /**
    * A rule specifying the TCP or UDP traffic to allow.
-   *
-   * Either both `port_min` and `port_max` will be present, or neither. When neither is present, all destination ports
-   * are allowed for the protocol. When both have the same value, that single destination port is allowed.
    */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP extends SecurityGroupRulePrototype {
-    /** The direction of traffic to allow. */
-    direction: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.Direction | string;
-    /** The IP version to allow. The format of `local.address`, `remote.address`,
-     *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
-     *
-     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
-     *  IP version.
-     */
-    ip_version?: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.IpVersion | string;
-    /** The local IP address or range of local IP addresses to which this rule will allow inbound
-     *  traffic (or from which, for outbound traffic)
-     *
-     *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic to all local IP
-     *  addresses (or from all local IP addresses, for outbound rules).
-     */
-    local?: SecurityGroupRuleLocalPrototype;
-    /** The inclusive upper bound of TCP/UDP destination port range.
+    /** The inclusive upper bound of the TCP or UDP destination port range.
      *
      *  If specified, `port_min` must also be specified, and must not be larger. If unspecified,
      *  `port_min` must also be unspecified, allowing traffic on all destination ports.
      */
     port_max?: number;
-    /** The inclusive lower bound of TCP/UDP destination port range
+    /** The inclusive lower bound of the TCP or UDP destination port range.
      *
      *  If specified, `port_max` must also be specified, and must not be smaller. If unspecified, `port_max` must also
      *  be unspecified, allowing traffic on all destination ports.
      */
     port_min?: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP.Constants.Protocol | string;
-    /** The remote IP addresses or security groups from which this rule will allow traffic (or to
-     *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
-     *  security group within the VPC.
-     *
-     *  If unspecified, a CIDR block of `0.0.0.0/0` will be used to allow traffic from any source
-     *  (or to any destination, for outbound rules).
-     */
-    remote?: SecurityGroupRuleRemotePrototype;
   }
   export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolTCPUDP {
     export namespace Constants {
@@ -57606,7 +59411,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -57717,10 +59522,10 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule allowing traffic for all supported protocols.
+   * A rule allowing all ICMP, TCP and UDP traffic.
    */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolAll extends SecurityGroupRule {
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: SecurityGroupRuleSecurityGroupRuleProtocolAll.Constants.Protocol | string;
   }
   export namespace SecurityGroupRuleSecurityGroupRuleProtocolAll {
@@ -57734,7 +59539,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ALL = 'all',
       }
@@ -57747,7 +59552,7 @@ namespace VpcV1 {
   export interface SecurityGroupRuleSecurityGroupRuleProtocolICMP extends SecurityGroupRule {
     /** The ICMP traffic code to allow. If absent, all codes are allowed. */
     code?: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: SecurityGroupRuleSecurityGroupRuleProtocolICMP.Constants.Protocol | string;
     /** The ICMP traffic type to allow. If absent, all types are allowed. */
     type?: number;
@@ -57763,7 +59568,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
       }
@@ -57777,11 +59582,11 @@ namespace VpcV1 {
    * are allowed for the protocol. When both have the same value, that single destination port is allowed.
    */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolTCPUDP extends SecurityGroupRule {
-    /** The inclusive upper bound of TCP/UDP destination port range. */
+    /** The inclusive upper bound of the TCP or UDP destination port range. */
     port_max?: number;
-    /** The inclusive lower bound of TCP/UDP destination port range. */
+    /** The inclusive lower bound of the TCP or UDP destination port range. */
     port_min?: number;
-    /** The network protocol. */
+    /** The name of the network protocol. */
     protocol: SecurityGroupRuleSecurityGroupRuleProtocolTCPUDP.Constants.Protocol | string;
   }
   export namespace SecurityGroupRuleSecurityGroupRuleProtocolTCPUDP {
@@ -57795,7 +59600,7 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
-      /** The network protocol. */
+      /** The name of the network protocol. */
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
@@ -59768,7 +61573,7 @@ namespace VpcV1 {
      *  name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
-    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) to use for this volume. */
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles) for this volume. */
     profile: VolumeProfileIdentity;
     /** The resource group to use for this volume. If unspecified, the instance's resource group will be used. */
     resource_group?: ResourceGroupIdentity;
@@ -60101,6 +61906,9 @@ namespace VpcV1 {
     /** The snapshot to use as a source for the volume's data.
      *
      *  The specified snapshot may be in a different account, subject to IAM policies.
+     *
+     *  To create a volume from a `source_snapshot`, the volume profile and the
+     *  source snapshot must have the same `storage_generation` value.
      */
     source_snapshot: SnapshotIdentity;
   }
@@ -61613,6 +63421,9 @@ namespace VpcV1 {
     /** The snapshot to use as a source for the volume's data.
      *
      *  The specified snapshot may be in a different account, subject to IAM policies.
+     *
+     *  To create a volume from a `source_snapshot`, the volume profile and the
+     *  source snapshot must have the same `storage_generation` value.
      */
     source_snapshot: SnapshotIdentity;
   }
