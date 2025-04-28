@@ -40,7 +40,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: 2025-03-10
+ * API Version: 2025-04-22
  */
 
 class VpcV1 extends BaseService {
@@ -49,6 +49,30 @@ class VpcV1 extends BaseService {
   static DEFAULT_SERVICE_URL: string = 'https://us-south.iaas.cloud.ibm.com/v1';
 
   static DEFAULT_SERVICE_NAME: string = 'vpc';
+
+  private static _regionalEndpoints = new Map([
+    ['au-syd', 'https://au-syd.iaas.cloud.ibm.com/v1'], // Australia (Sydney)
+    ['br-sao', 'https://br-sao.iaas.cloud.ibm.com/v1'], // Brazil (Sao Paulo)
+    ['ca-mon', 'https://ca-mon.iaas.cloud.ibm.com/v1'], // Canada (Montreal)
+    ['ca-tor', 'https://ca-tor.iaas.cloud.ibm.com/v1'], // Canada (Toronto)
+    ['eu-de', 'https://eu-de.iaas.cloud.ibm.com/v1'], // Germany (Frankfurt)
+    ['eu-es', 'https://eu-es.iaas.cloud.ibm.com/v1'], // Spain (Madrid)
+    ['eu-gb', 'https://eu-gb.iaas.cloud.ibm.com/v1'], // United Kingdom (London)
+    ['jp-osa', 'https://jp-osa.iaas.cloud.ibm.com/v1'], // Japan (Osaka)
+    ['jp-tok', 'https://jp-tok.iaas.cloud.ibm.com/v1'], // Japan (Tokyo)
+    ['us-east', 'https://us-east.iaas.cloud.ibm.com/v1'], // US East (Washington DC)
+    ['us-south', 'https://us-south.iaas.cloud.ibm.com/v1'], // US South (Dallas)
+  ]);
+
+  /**
+   * Returns the service URL associated with the specified region.
+   * @param region a string representing the region
+   * @returns the service URL associated with the specified region or undefined
+   * if no mapping for the region exists
+   */
+  public static getServiceUrlForRegion(region: string): string {
+    return this._regionalEndpoints.get(region)
+  }
 
   /*************************
    * Factory method
@@ -85,7 +109,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2024-11-19` and `2025-03-08`.
+   *  `2025-04-08` and `2025-04-23`.
    */
   version: string;
 
@@ -96,7 +120,7 @@ class VpcV1 extends BaseService {
    * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
    * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2024-11-19` and `2025-03-08`.
+   * specify any date between `2025-04-08` and `2025-04-23`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -121,7 +145,7 @@ class VpcV1 extends BaseService {
     if (!('generation' in options)) {
       this.generation = 2;
     }
-    this.version = options.version || '2025-03-04';
+    this.version = options.version || '2025-04-22';
   }
 
   /*************************
@@ -3738,6 +3762,8 @@ class VpcV1 extends BaseService {
    * specified value.
    * @param {string[]} [params.userDataFormat] - Filters the collection to images with a `user_data_format` property
    * matching one of the specified comma-separated values.
+   * @param {string} [params.ownerType] - Filters the collection to images with an `owner_type` property matching the
+   * specified value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.ImageCollection>>}
    */
@@ -3746,7 +3772,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.ImageCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'status', 'visibility', 'userDataFormat', 'signal', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'status', 'visibility', 'userDataFormat', 'ownerType', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -3762,6 +3788,7 @@ class VpcV1 extends BaseService {
       'status': _params.status,
       'visibility': _params.visibility,
       'user_data_format': _params.userDataFormat,
+      'owner_type': _params.ownerType,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listImages');
@@ -13252,11 +13279,12 @@ class VpcV1 extends BaseService {
    * @param {ImageIdentity} params.image - The image to be used when provisioning the bare metal server.
    * @param {KeyIdentity[]} params.keys - The public SSH keys to install on the bare metal server. Keys will be made
    * available to the bare metal server as cloud-init vendor data. For cloud-init enabled images, these keys will also
-   * be added as SSH authorized keys for the administrative user.
+   * be added as SSH authorized keys for the [default
+   * user](https://cloud.ibm.com/docs/vpc?topic=vpc-vsi_is_connecting_linux#determining-default-user-account).
    *
    * For Windows images, at least one key must be specified, and one will be selected to encrypt the administrator
-   * password. Keys are optional for other images, but if no keys are specified, the instance will be inaccessible
-   * unless the specified image provides another means of access.
+   * password. Keys are optional for other images, but if no keys are specified, the bare metal server will be
+   * inaccessible unless the specified image provides another means of access.
    * @param {string} [params.userData] - User data to be made available when initializing the bare metal server.
    *
    * If unspecified, no user data will be made available.
@@ -13628,12 +13656,12 @@ class VpcV1 extends BaseService {
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
    * @param {number} [params.limit] - The number of resources to return on a page.
-   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
-   * specified name.
    * @param {string} [params.attachmentState] - Filters the collection to volumes with an `attachment_state` property
    * matching the specified value.
    * @param {string} [params.encryption] - Filters the collection to resources with an `encryption` property matching
    * the specified value.
+   * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
+   * specified name.
    * @param {string} [params.operatingSystemFamily] - Filters the collection to resources with an
    * `operating_system.family` property matching the specified operating system family.
    *
@@ -13644,10 +13672,10 @@ class VpcV1 extends BaseService {
    *
    * This parameter also supports the values `null` and `not:null` which filter the collection to resources which have
    * no operating system or any operating system, respectively.
-   * @param {string} [params.zoneName] - Filters the collection to resources with a `zone.name` property matching the
-   * exact specified name.
    * @param {string} [params.tag] - Filters the collection to resources with an item in the `tags` property matching the
    * exact specified tag.
+   * @param {string} [params.zoneName] - Filters the collection to resources with a `zone.name` property matching the
+   * exact specified name.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VolumeCollection>>}
    */
@@ -13656,7 +13684,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'name', 'attachmentState', 'encryption', 'operatingSystemFamily', 'operatingSystemArchitecture', 'zoneName', 'tag', 'signal', 'headers'];
+    const _validParams = ['start', 'limit', 'attachmentState', 'encryption', 'name', 'operatingSystemFamily', 'operatingSystemArchitecture', 'tag', 'zoneName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -13667,13 +13695,13 @@ class VpcV1 extends BaseService {
       'generation': this.generation,
       'start': _params.start,
       'limit': _params.limit,
-      'name': _params.name,
       'attachment_state': _params.attachmentState,
       'encryption': _params.encryption,
+      'name': _params.name,
       'operating_system.family': _params.operatingSystemFamily,
       'operating_system.architecture': _params.operatingSystemArchitecture,
-      'zone.name': _params.zoneName,
       'tag': _params.tag,
+      'zone.name': _params.zoneName,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumes');
@@ -13887,6 +13915,9 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The volume identifier.
+   * @param {number} [params.bandwidth] - The maximum bandwidth (in megabits per second) for the volume.
+   *
+   * If specified, the volume profile must not have a `bandwidth.type` of `dependent`.
    * @param {number} [params.capacity] - The capacity to use for the volume (in gigabytes). For the capacity to be
    * changed the volume's current `attachment_state` must be one of the values included in
    * `adjustable_capacity_states`. If `adjustable_capacity_states` is empty, then the volume capacity cannot be changed.
@@ -13911,7 +13942,7 @@ class VpcV1 extends BaseService {
    * must not be less than the `capacity.min` and must not exceed the `capacity.max`
    * of the specified volume profile.
    * @param {string[]} [params.userTags] - The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags)
-   * associated with this volume.
+   * associated with this volume (replacing any existing tags).
    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
    * resource's current ETag value. Required if the request body includes an array.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -13922,13 +13953,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Volume>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'capacity', 'iops', 'name', 'profile', 'userTags', 'ifMatch', 'signal', 'headers'];
+    const _validParams = ['id', 'bandwidth', 'capacity', 'iops', 'name', 'profile', 'userTags', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'bandwidth': _params.bandwidth,
       'capacity': _params.capacity,
       'iops': _params.iops,
       'name': _params.name,
@@ -14547,11 +14579,11 @@ class VpcV1 extends BaseService {
    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
    * resource's current ETag value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
-   * @returns {Promise<VpcV1.Response<VpcV1.Snapshot>>}
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
   public deleteSnapshot(
     params: VpcV1.DeleteSnapshotParams
-  ): Promise<VpcV1.Response<VpcV1.Snapshot>> {
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
     const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
@@ -14584,7 +14616,6 @@ class VpcV1 extends BaseService {
           sdkHeaders,
           this.baseOptions.headers,
           {
-            'Accept': 'application/json',
             'If-Match': _params.ifMatch,
           },
           _params.headers
@@ -15362,14 +15393,17 @@ class VpcV1 extends BaseService {
    *
    * For this property to be changed, the share must have no mount targets,
    * `replication_role` must be `none` and `accessor_binding_role` must not be `accessor`.
-   * @param {string[]} [params.allowedTransitEncryptionModes] - The transit encryption modes to allow for this share.
+   * @param {string[]} [params.allowedTransitEncryptionModes] - The transit encryption modes to allow for this share
+   * (replacing the existing allowed transit encryption modes). The specified transit encryption modes must contain all
+   * transit_encryption modes specified by existing mount targets.
    *
    * For this property to be updated, the `accessor_binding_role` must be `none`.
-   * @param {number} [params.iops] - The maximum input/output operations per second (IOPS) for the file share. In
-   * addition, each client accessing the share will be restricted to 48,000 IOPS.
+   * @param {number} [params.iops] - The maximum input/output operations per second (IOPS) for the file share.
    *
    * The maximum IOPS for a share may increase in the future. For this property to be changed, the share
-   * `accessor_binding_role` must not be `accessor`.
+   * `accessor_binding_role` must not be `accessor`, the share profile must not have an `iops.type` of `dependent` or
+   * `fixed`, and the specified value must be within the `iops` range of the share's profile supported by the share's
+   * size.
    * @param {string} [params.name] - The name for this share. The name must not be used by another share in the region.
    * @param {ShareProfileIdentity} [params.profile] - The profile to use for this file share.
    *
@@ -16127,12 +16161,9 @@ class VpcV1 extends BaseService {
    * structured in the same way as a retrieved share snapshot, and contains the information necessary to create the new
    * share snapshot.
    *
-   * The share must have the `access_control_mode` set to `security_group`.
+   * The share must have an `access_control_mode` of `security_group` and a `replication_role` of `source` or `none`.
    *
-   * At present, the snapshot's `resource_group` will be inherited from its share, but may be specifiable in the future.
-   *
-   * The new snapshot will inherit the encryption settings from its share, , and must have a
-   * `replication_role` of `source` or `none`.
+   * The snapshot will inherit its `resource_group` and encryption settings from the share.
    *
    * If the share has a `replication_role` of `source`, a corresponding snapshot on the replica share will be created
    * with a `status` of `pending`. It will remain in
@@ -20718,9 +20749,10 @@ class VpcV1 extends BaseService {
   /**
    * List network ACLs.
    *
-   * This request lists network ACLs in the region. A network ACL defines a set of packet filtering (5-tuple) rules for
-   * all traffic in and out of a subnet. Both allow and deny rules can be defined, and rules are stateless such that
-   * reverse traffic in response to allowed traffic is not automatically permitted.
+   * This request lists network ACLs in the region. A network ACL defines a set of packet filtering rules for traffic in
+   * and out of the subnets the network ACL is attached to. No traffic is allowed by default. Both allow and deny rules
+   * can be defined, and rules are stateless so that reverse traffic in response to allowed traffic is not automatically
+   * allowed.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -21378,10 +21410,9 @@ class VpcV1 extends BaseService {
   /**
    * List security groups.
    *
-   * This request lists security groups in the region. Security groups provide a way to apply IP filtering rules to
-   * instances in the associated VPC. With security groups, all traffic is denied by default, and rules added to
-   * security groups define which traffic the security group permits. Security group rules are stateful such that
-   * reverse traffic in response to allowed traffic is automatically permitted.
+   * This request lists security groups in the region. A security group defines a set of packet filtering rules to allow
+   * traffic in and out of the resources targeted by the security group. No traffic is allowed by default. Security
+   * group rules are stateful so that reverse traffic in response to allowed traffic is automatically allowed.
    *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
@@ -21463,7 +21494,7 @@ class VpcV1 extends BaseService {
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
    * @param {SecurityGroupRulePrototype[]} [params.rules] - The prototype objects for rules to be created for this
-   * security group. If unspecified, no rules will be created, resulting in all traffic being denied.
+   * security group. If unspecified, no rules will be created, resulting in no traffic being allowed.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SecurityGroup>>}
    */
@@ -22649,7 +22680,7 @@ class VpcV1 extends BaseService {
   /**
    * List VPN gateway connections that use a specified IKE policy.
    *
-   * This request lists VPN gateway connections that use a IKE policy.
+   * This request lists VPN gateway connections that use an IKE policy.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The IKE policy identifier.
@@ -23053,7 +23084,7 @@ class VpcV1 extends BaseService {
   /**
    * List VPN gateway connections that use a specified IPsec policy.
    *
-   * This request lists VPN gateway connections that use a IPsec policy.
+   * This request lists VPN gateway connections that use an IPsec policy.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The IPsec policy identifier.
@@ -25488,7 +25519,7 @@ class VpcV1 extends BaseService {
    * @param {boolean} params.isPublic - Indicates whether this load balancer is public.
    *
    * At present,
-   * - If route mode is enabled, the load balancer must be private.
+   * - If `route_mode` is set to `true`, the load balancer must be private.
    * - If `is_private_path` is specified, it must be set to `false`.
    * @param {SubnetIdentity[]} params.subnets - The subnets to provision this load balancer in.  The subnets must be in
    * the same VPC.
@@ -25523,7 +25554,8 @@ class VpcV1 extends BaseService {
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
-   * @param {boolean} [params.routeMode] - Indicates whether route mode is enabled for this load balancer.
+   * @param {boolean} [params.routeMode] - Indicates whether [route
+   * mode](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-vnf&interface=ui) is enabled for this load balancer.
    *
    * At present, public load balancers are not supported with route mode enabled.
    * @param {SecurityGroupIdentity[]} [params.securityGroups] - The security groups to use for this load balancer. If
@@ -25981,18 +26013,20 @@ class VpcV1 extends BaseService {
    * The load balancer must be in the
    * `application` family.
    * @param {number} [params.port] - The listener port number. Each listener in the load balancer must have a
-   * non-overlapping port range and `protocol` combination.
+   * non-overlapping port range and `protocol` combination. Protocol values of `tcp`, `http` and `https` share the TCP
+   * port space.
    *
    * If `port_min` is also specified, `port` must have the same value as `port_min`.
    * @param {number} [params.portMax] - The inclusive upper bound of the range of ports used by this listener. Must not
    * be less than `port_min`.
    *
-   * Only load balancers with route mode enabled, or network load balancers with
-   * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
-   * mode is enabled, `65535` must be specified.
+   * Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+   * `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must be
+   * `65535`.
    *
    * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
-   * same protocol.
+   * same protocol. Protocol values of `tcp`, `http` and
+   * `https` share the TCP port space.
    * @param {number} [params.portMin] - The inclusive lower bound of the range of ports used by this listener. Must not
    * be greater than `port_max`.
    *
@@ -26001,12 +26035,13 @@ class VpcV1 extends BaseService {
    *
    * If `port` is also specified, `port_min` must have the same value as `port`.
    *
-   * Only load balancers with route mode enabled, or network load balancers with
-   * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
-   * mode is enabled, `1` must be specified.
+   * Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+   * `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must be
+   * `1`.
    *
    * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
-   * same protocol.
+   * same protocol. Protocol values of `tcp`, `http` and
+   * `https` share the TCP port space.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListener>>}
    */
@@ -26240,27 +26275,28 @@ class VpcV1 extends BaseService {
    * @param {number} [params.port] - The inclusive lower bound of the range of ports used by this listener. Must not be
    * greater than `port_max`. Updating `port` updates `port_min` to the same value.
    *
-   * Only load balancers with route mode enabled, or network load balancers with
-   * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
-   * mode is enabled, the value must be `1`.
+   * Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+   * `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must be
+   * `1`.
    *
    * Each listener in the load balancer must have a non-overlapping port range and
-   * `protocol` combination.
+   * `protocol` combination. Protocol values of `tcp`, `http` and `https` share the TCP port space.
    * @param {number} [params.portMax] - The inclusive upper bound of the range of ports used by this listener. Must not
    * be less than `port_min`.
    *
-   * Only load balancers with route mode enabled, or network load balancers with
-   * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
-   * mode is enabled, `65535` must be specified.
+   * Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+   * `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must be
+   * `65535`.
    *
    * The specified port range must not overlap with port ranges used by other listeners for this load balancer using the
-   * same protocol.
+   * same protocol. Protocol values of `tcp`, `http` and
+   * `https` share the TCP port space.
    * @param {number} [params.portMin] - The inclusive lower bound of the range of ports used by this listener. Must not
    * be greater than `port_max`. Updating `port_min` updates `port` to the same value.
    *
-   * Only load balancers with route mode enabled, or network load balancers with
-   * `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When route
-   * mode is enabled, the value must be `1`.
+   * Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+   * `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must be
+   * `1`.
    *
    * Each listener in the load balancer must have a non-overlapping port range and
    * `protocol` combination.
@@ -26409,13 +26445,15 @@ class VpcV1 extends BaseService {
    *
    * This request creates a new policy from a load balancer listener policy object. The prototype object is structured
    * in the same way as a retrieved policy, and contains the information necessary to create the new policy. For this
-   * request to succeed, the listener must have a `protocol` of `http` or `https`.
+   * request to succeed, the load balancer must be in the `application` family.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
    * @param {string} params.listenerId - The listener identifier.
    * @param {string} params.action - The policy action:
-   * - `forward`: Requests will be forwarded to the specified `target` pool
+   * - `forward_to_listener`: Requests will be forwarded to the specified
+   *   `target` listener.
+   * - `forward_to_pool`: Requests will be forwarded to the specified `target` pool.
    * - `https_redirect`: Requests will be redirected to the specified `target.listener`.
    *    This listener must have a `protocol` of `http`, and the target listener must
    *    have a `protocol` of `https`.
@@ -26426,11 +26464,13 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this policy. The name must not be used by another policy for the load
    * balancer listener. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {LoadBalancerListenerPolicyRulePrototype[]} [params.rules] - The rule prototype objects for this policy.
-   * @param {LoadBalancerListenerPolicyTargetPrototype} [params.target] - - If `action` is `forward`, use
-   * `LoadBalancerPoolIdentity` to specify a pool in this
+   * @param {LoadBalancerListenerPolicyTargetPrototype} [params.target] - - If `action` is `forward_to_listener`,
+   * specify a `LoadBalancerListenerIdentity` in this
    *   load balancer to forward to.
+   * - If `action` is `forward_to_pool`, use `LoadBalancerPoolIdentity` to specify a pool in
+   *   this load balancer to forward to.
    * - If `action` is `https_redirect`, use
-   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener in this
+   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
    *   load balancer to redirect to.
    * - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
    *   specify a URL to redirect to.
@@ -26633,9 +26673,11 @@ class VpcV1 extends BaseService {
    * balancer listener.
    * @param {number} [params.priority] - Priority of the policy. The priority is unique across all policies for this
    * load balancer listener. Lower value indicates higher priority.
-   * @param {LoadBalancerListenerPolicyTargetPatch} [params.target] - - If `action` is `forward`, specify a
-   * `LoadBalancerPoolIdentity` for a pool in this load
-   *   balancer.
+   * @param {LoadBalancerListenerPolicyTargetPatch} [params.target] - - If `action` is `forward_to_listener`, specify a
+   * `LoadBalancerListenerIdentity` for a
+   *   listener in this load balancer.
+   * - If `action` is `forward_to_pool`, specify a `LoadBalancerPoolIdentity` for a pool in
+   *   this load balancer.
    * - If `action` is `https_redirect`, specify a
    *   `LoadBalancerListenerPolicyHTTPSRedirectPatch` for a listener in this load balancer
    *   with a `protocol` of `https`.
@@ -26779,16 +26821,19 @@ class VpcV1 extends BaseService {
    * - `hostname`: The fully-qualified domain name of the server specified in the Host
    *   HTTP request header
    * - `path`: The path of the HTTP request
-   * - `query`: The query of the HTTP request URL.
+   * - `query`: The query of the HTTP request URL
+   * - `sni_hostname`: The fully-qualified domain name of the server provided in the
+   *   "server name indicator" extension during TLS negotiation
+   *
+   * - For listeners with `protocol` `http` or `https`, any type may be specified.
+   * - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified.
    * @param {string} params.value - The value to be matched for the rule condition.
    *
    * If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
-   * @param {string} [params.field] - The field to match for this rule. This property must be specified if the rule type
-   * is
-   * `header`, may be specified if the rule type is `body` or `query`, and must not be specified if the rule type is
-   * `hostname` or `path`.
-   *
-   * If the rule condition is not `matches_regex`, the value must be percent-encoded.
+   * @param {string} [params.field] - The field to match for this rule.
+   * - If the `type` is `header`, this property must be specified.
+   * - If the `type` is `body` or `query`, this property may be specified.
+   * - For all other types, this property must not be specified.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerListenerPolicyRule>>}
    */
@@ -26989,19 +27034,22 @@ class VpcV1 extends BaseService {
    * @param {string} params.policyId - The policy identifier.
    * @param {string} params.id - The rule identifier.
    * @param {string} [params.condition] - The condition for the rule.
-   * @param {string} [params.field] - The field to match for this rule. This property must be specified if the rule type
-   * is
-   * `header`, may be specified if the rule type is `body` or `query`, and must not be specified if the rule type is
-   * `hostname` or `path`.
-   *
-   * If the rule condition is not `matches_regex`, the value must be percent-encoded.
+   * @param {string} [params.field] - The field to match for this rule.
+   * - If the `type` is `header`, this property must be specified.
+   * - If the `type` is `body` or `query`, this property may be specified.
+   * - For all other types, this property must not be specified.
    * @param {string} [params.type] - The content the rule applies to:
    * - `body`: The UTF-8 form-encoded HTTP request body
    * - `header`: The HTTP header
    * - `hostname`: The fully-qualified domain name of the server specified in the Host
    *   HTTP request header
    * - `path`: The path of the HTTP request
-   * - `query`: The query of the HTTP request URL.
+   * - `query`: The query of the HTTP request URL
+   * - `sni_hostname`: The fully-qualified domain name of the server provided in the
+   *   "server name indicator" extension during TLS negotiation
+   *
+   * - For listeners with `protocol` `http` or `https`, any type may be specified.
+   * - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified.
    * @param {string} [params.value] - The value to be matched for the rule condition.
    *
    * If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
@@ -27136,6 +27184,19 @@ class VpcV1 extends BaseService {
    * @param {string} params.algorithm - The load balancing algorithm. The `least_connections` algorithm is only
    * supported for load balancers that have `availability` with value `subnet` in the profile.
    * @param {LoadBalancerPoolHealthMonitorPrototype} params.healthMonitor - The health monitor of this pool.
+   *
+   * If this pool has a member targeting a load balancer then:
+   *
+   * - If the targeted load balancer has multiple subnets, this health monitor will be
+   *   used to direct traffic to the available subnets.
+   * - The health checks spawned by this health monitor will be handled as any other
+   *   traffic (that is, subject to the configuration of listeners and pools on the target
+   *   load balancer).
+   * - This health monitor does not affect how pool member health is determined within the
+   *   target load balancer.
+   *
+   * For more information, see [Private Path network load balancer frequently asked
+   * questions](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-faqs#ppnlb-faqs).
    * @param {string} params.protocol - The protocol used for this load balancer pool. Load balancers in the `network`
    * family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the
    * `application` family support `tcp`, `http`, and `https`.
@@ -27358,6 +27419,19 @@ class VpcV1 extends BaseService {
    * @param {LoadBalancerPoolFailsafePolicyPatch} [params.failsafePolicy] - The failsafe policy for this load balancer
    * pool.
    * @param {LoadBalancerPoolHealthMonitorPatch} [params.healthMonitor] - The health monitor of this pool.
+   *
+   * If this pool has a member targeting a load balancer then:
+   *
+   * - If the targeted load balancer has multiple subnets, this health monitor will be
+   *   used to direct traffic to the available subnets.
+   * - The health checks spawned by this health monitor will be handled as any other
+   *   traffic (that is, subject to the configuration of listeners and pools on the
+   *   target load balancer).
+   * - This health monitor does not affect how pool member health is determined within
+   *   the target load balancer.
+   *
+   * For more information, see [Private Path network load balancer frequently asked
+   * questions](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-faqs#ppnlb-faqs).
    * @param {string} [params.name] - The name for this load balancer pool. The name must not be used by another pool for
    * the load balancer.
    * @param {string} [params.protocol] - The protocol for this load balancer pool.
@@ -27506,6 +27580,8 @@ class VpcV1 extends BaseService {
    *
    * This request creates a new member and adds the member to the pool.
    *
+   * The pool must not already have a member targeting a load balancer.
+   *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
    * @param {string} params.poolId - The pool identifier.
@@ -27517,9 +27593,16 @@ class VpcV1 extends BaseService {
    * `health_monitor` property is specified.
    *
    * The port must be unique across all members for all pools associated with this pool's listener.
-   * @param {LoadBalancerPoolMemberTargetPrototype} params.target - The pool member target. If the load balancer has
-   * route mode enabled, the member must be
-   * in a zone the load balancer has a subnet in.
+   *
+   * For load balancers in the `network` family, the same `port` and `target` tuple cannot be shared by a pool member of
+   * any other load balancer in the same VPC.
+   * @param {LoadBalancerPoolMemberTargetPrototype} params.target - The pool member target.
+   *
+   * If the load balancer has `route_mode` set to `true`, the member must be in a zone the load
+   * balancer has a subnet in.
+   *
+   * For load balancers in the `network` family, the same `port` and `target` tuple cannot
+   * be shared by a pool member of any other load balancer in the same VPC.
    * @param {number} [params.weight] - The weight of the server member.
    *
    * If specified, the pool algorithm must be `weighted_round_robin` and the load balancer must be in the `application`
@@ -27794,9 +27877,16 @@ class VpcV1 extends BaseService {
    * `health_monitor` property is specified.
    *
    * The port must be unique across all members for all pools associated with this pool's listener.
-   * @param {LoadBalancerPoolMemberTargetPrototype} [params.target] - The pool member target. If the load balancer has
-   * route mode enabled, the member must be
-   * in a zone the load balancer has a subnet in.
+   *
+   * For load balancers in the `network` family, the same `port` and `target` tuple cannot be shared by a pool member of
+   * any other load balancer in the same VPC.
+   * @param {LoadBalancerPoolMemberTargetPrototype} [params.target] - The pool member target.
+   *
+   * If the load balancer has `route_mode` set to `true`, the member must be in a zone the load
+   * balancer has a subnet in.
+   *
+   * For load balancers in the `network` family, the same `port` and `target` tuple cannot
+   * be shared by a pool member of any other load balancer in the same VPC.
    * @param {number} [params.weight] - The weight of the server member.
    *
    * If specified, the pool algorithm must be `weighted_round_robin`.
@@ -30017,7 +30107,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2024-11-19` and `2025-03-08`.
+     *  `2025-04-08` and `2025-04-23`.
      */
     version: string;
   }
@@ -30988,6 +31078,8 @@ namespace VpcV1 {
      *  comma-separated values.
      */
     userDataFormat?: ListImagesConstants.UserDataFormat[] | string[];
+    /** Filters the collection to images with an `owner_type` property matching the specified value. */
+    ownerType?: ListImagesConstants.OwnerType | string;
   }
 
   /** Constants for the `listImages` operation. */
@@ -31012,6 +31104,11 @@ namespace VpcV1 {
       CLOUD_INIT = 'cloud_init',
       ESXI_KICKSTART = 'esxi_kickstart',
       IPXE = 'ipxe',
+    }
+    /** Filters the collection to images with an `owner_type` property matching the specified value. */
+    export enum OwnerType {
+      PROVIDER = 'provider',
+      USER = 'user',
     }
   }
 
@@ -31419,6 +31516,7 @@ namespace VpcV1 {
     export enum ConfidentialComputeMode {
       DISABLED = 'disabled',
       SGX = 'sgx',
+      TDX = 'tdx',
     }
   }
 
@@ -32801,11 +32899,12 @@ namespace VpcV1 {
     image: ImageIdentity;
     /** The public SSH keys to install on the bare metal server. Keys will be made available to the bare metal
      *  server as cloud-init vendor data. For cloud-init enabled images, these keys will also be added as SSH authorized
-     *  keys for the administrative user.
+     *  keys for the [default
+     *  user](https://cloud.ibm.com/docs/vpc?topic=vpc-vsi_is_connecting_linux#determining-default-user-account).
      *
      *  For Windows images, at least one key must be specified, and one will be selected to encrypt the administrator
-     *  password. Keys are optional for other images, but if no keys are specified, the instance will be inaccessible
-     *  unless the specified image provides another means of access.
+     *  password. Keys are optional for other images, but if no keys are specified, the bare metal server will be
+     *  inaccessible unless the specified image provides another means of access.
      */
     keys: KeyIdentity[];
     /** User data to be made available when initializing the bare metal server.
@@ -32867,12 +32966,12 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
-    /** Filters the collection to resources with a `name` property matching the exact specified name. */
-    name?: string;
     /** Filters the collection to volumes with an `attachment_state` property matching the specified value. */
     attachmentState?: ListVolumesConstants.AttachmentState | string;
     /** Filters the collection to resources with an `encryption` property matching the specified value. */
     encryption?: ListVolumesConstants.Encryption | string;
+    /** Filters the collection to resources with a `name` property matching the exact specified name. */
+    name?: string;
     /** Filters the collection to resources with an `operating_system.family` property matching the specified
      *  operating system family.
      *
@@ -32887,10 +32986,10 @@ namespace VpcV1 {
      *  have no operating system or any operating system, respectively.
      */
     operatingSystemArchitecture?: string;
-    /** Filters the collection to resources with a `zone.name` property matching the exact specified name. */
-    zoneName?: string;
     /** Filters the collection to resources with an item in the `tags` property matching the exact specified tag. */
     tag?: string;
+    /** Filters the collection to resources with a `zone.name` property matching the exact specified name. */
+    zoneName?: string;
   }
 
   /** Constants for the `listVolumes` operation. */
@@ -32934,6 +33033,11 @@ namespace VpcV1 {
   export interface UpdateVolumeParams extends DefaultParams {
     /** The volume identifier. */
     id: string;
+    /** The maximum bandwidth (in megabits per second) for the volume.
+     *
+     *  If specified, the volume profile must not have a `bandwidth.type` of `dependent`.
+     */
+    bandwidth?: number;
     /** The capacity to use for the volume (in gigabytes). For the capacity to be changed the volume's current
      *  `attachment_state` must be one of the values included in
      *  `adjustable_capacity_states`. If `adjustable_capacity_states` is empty, then the volume capacity cannot be
@@ -32962,7 +33066,9 @@ namespace VpcV1 {
      *  of the specified volume profile.
      */
     profile?: VolumeProfileIdentity;
-    /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume. */
+    /** The [user tags](https://cloud.ibm.com/apidocs/tagging#types-of-tags) associated with this volume (replacing
+     *  any existing tags).
+     */
     userTags?: string[];
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value. Required if the request body includes an array.
@@ -33298,16 +33404,19 @@ namespace VpcV1 {
      *  `replication_role` must be `none` and `accessor_binding_role` must not be `accessor`.
      */
     accessControlMode?: UpdateShareConstants.AccessControlMode | string;
-    /** The transit encryption modes to allow for this share.
+    /** The transit encryption modes to allow for this share
+     *  (replacing the existing allowed transit encryption modes). The specified transit encryption modes must contain
+     *  all transit_encryption modes specified by existing mount targets.
      *
      *  For this property to be updated, the `accessor_binding_role` must be `none`.
      */
     allowedTransitEncryptionModes?: UpdateShareConstants.AllowedTransitEncryptionModes[] | string[];
-    /** The maximum input/output operations per second (IOPS) for the file share. In addition, each client accessing
-     *  the share will be restricted to 48,000 IOPS.
+    /** The maximum input/output operations per second (IOPS) for the file share.
      *
      *  The maximum IOPS for a share may increase in the future. For this property to be changed, the share
-     *  `accessor_binding_role` must not be `accessor`.
+     *  `accessor_binding_role` must not be `accessor`, the share profile must not have an `iops.type` of `dependent` or
+     *  `fixed`, and the specified value must be within the `iops` range of the share's profile supported by the share's
+     *  size.
      */
     iops?: number;
     /** The name for this share. The name must not be used by another share in the region. */
@@ -33348,7 +33457,7 @@ namespace VpcV1 {
       SECURITY_GROUP = 'security_group',
       VPC = 'vpc',
     }
-    /** An allowed transit encryption mode for this share. - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+    /** AllowedTransitEncryptionModes */
     export enum AllowedTransitEncryptionModes {
       NONE = 'none',
       USER_MANAGED = 'user_managed',
@@ -34695,7 +34804,7 @@ namespace VpcV1 {
      */
     resourceGroup?: ResourceGroupIdentity;
     /** The prototype objects for rules to be created for this security group. If unspecified, no rules will be
-     *  created, resulting in all traffic being denied.
+     *  created, resulting in no traffic being allowed.
      */
     rules?: SecurityGroupRulePrototype[];
   }
@@ -35670,7 +35779,7 @@ namespace VpcV1 {
     /** Indicates whether this load balancer is public.
      *
      *  At present,
-     *  - If route mode is enabled, the load balancer must be private.
+     *  - If `route_mode` is set to `true`, the load balancer must be private.
      *  - If `is_private_path` is specified, it must be set to `false`.
      */
     isPublic: boolean;
@@ -35718,7 +35827,8 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resourceGroup?: ResourceGroupIdentity;
-    /** Indicates whether route mode is enabled for this load balancer.
+    /** Indicates whether [route mode](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-vnf&interface=ui) is enabled for
+     *  this load balancer.
      *
      *  At present, public load balancers are not supported with route mode enabled.
      */
@@ -35859,19 +35969,20 @@ namespace VpcV1 {
     /** The policy prototype objects for this listener. The load balancer must be in the `application` family. */
     policies?: LoadBalancerListenerPolicyPrototype[];
     /** The listener port number. Each listener in the load balancer must have a non-overlapping port range and
-     *  `protocol` combination.
+     *  `protocol` combination. Protocol values of `tcp`, `http` and `https` share the TCP port space.
      *
      *  If `port_min` is also specified, `port` must have the same value as `port_min`.
      */
     port?: number;
     /** The inclusive upper bound of the range of ports used by this listener. Must not be less than `port_min`.
      *
-     *  Only load balancers with route mode enabled, or network load balancers with
-     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, `65535` must be specified.
+     *  Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+     *  `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must
+     *  be `65535`.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
-     *  the same protocol.
+     *  the same protocol. Protocol values of `tcp`, `http` and
+     *  `https` share the TCP port space.
      */
     portMax?: number;
     /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
@@ -35881,12 +35992,13 @@ namespace VpcV1 {
      *
      *  If `port` is also specified, `port_min` must have the same value as `port`.
      *
-     *  Only load balancers with route mode enabled, or network load balancers with
-     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, `1` must be specified.
+     *  Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+     *  `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must
+     *  be `1`.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
-     *  the same protocol.
+     *  the same protocol. Protocol values of `tcp`, `http` and
+     *  `https` share the TCP port space.
      */
     portMin?: number;
   }
@@ -35968,30 +36080,31 @@ namespace VpcV1 {
     /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
      *  Updating `port` updates `port_min` to the same value.
      *
-     *  Only load balancers with route mode enabled, or network load balancers with
-     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, the value must be `1`.
+     *  Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+     *  `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must
+     *  be `1`.
      *
      *  Each listener in the load balancer must have a non-overlapping port range and
-     *  `protocol` combination.
+     *  `protocol` combination. Protocol values of `tcp`, `http` and `https` share the TCP port space.
      */
     port?: number;
     /** The inclusive upper bound of the range of ports used by this listener. Must not be less than `port_min`.
      *
-     *  Only load balancers with route mode enabled, or network load balancers with
-     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, `65535` must be specified.
+     *  Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+     *  `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must
+     *  be `65535`.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
-     *  the same protocol.
+     *  the same protocol. Protocol values of `tcp`, `http` and
+     *  `https` share the TCP port space.
      */
     portMax?: number;
     /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
      *  Updating `port_min` updates `port` to the same value.
      *
-     *  Only load balancers with route mode enabled, or network load balancers with
-     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, the value must be `1`.
+     *  Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+     *  `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must
+     *  be `1`.
      *
      *  Each listener in the load balancer must have a non-overlapping port range and
      *  `protocol` combination.
@@ -36039,7 +36152,9 @@ namespace VpcV1 {
     /** The listener identifier. */
     listenerId: string;
     /** The policy action:
-     *  - `forward`: Requests will be forwarded to the specified `target` pool
+     *  - `forward_to_listener`: Requests will be forwarded to the specified
+     *    `target` listener.
+     *  - `forward_to_pool`: Requests will be forwarded to the specified `target` pool.
      *  - `https_redirect`: Requests will be redirected to the specified `target.listener`.
      *     This listener must have a `protocol` of `http`, and the target listener must
      *     have a `protocol` of `https`.
@@ -36057,10 +36172,12 @@ namespace VpcV1 {
     name?: string;
     /** The rule prototype objects for this policy. */
     rules?: LoadBalancerListenerPolicyRulePrototype[];
-    /** - If `action` is `forward`, use `LoadBalancerPoolIdentity` to specify a pool in this
+    /** - If `action` is `forward_to_listener`, specify a `LoadBalancerListenerIdentity` in this
      *    load balancer to forward to.
+     *  - If `action` is `forward_to_pool`, use `LoadBalancerPoolIdentity` to specify a pool in
+     *    this load balancer to forward to.
      *  - If `action` is `https_redirect`, use
-     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener in this
+     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
      *    load balancer to redirect to.
      *  - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
      *    specify a URL to redirect to.
@@ -36070,9 +36187,10 @@ namespace VpcV1 {
 
   /** Constants for the `createLoadBalancerListenerPolicy` operation. */
   export namespace CreateLoadBalancerListenerPolicyConstants {
-    /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified `target.listener`. This listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https`. - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code. */
+    /** The policy action: - `forward_to_listener`: Requests will be forwarded to the specified `target` listener. - `forward_to_pool`: Requests will be forwarded to the specified `target` pool. - `https_redirect`: Requests will be redirected to the specified `target.listener`. This listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https`. - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code. */
     export enum Action {
-      FORWARD = 'forward',
+      FORWARD_TO_LISTENER = 'forward_to_listener',
+      FORWARD_TO_POOL = 'forward_to_pool',
       HTTPS_REDIRECT = 'https_redirect',
       REDIRECT = 'redirect',
       REJECT = 'reject',
@@ -36113,8 +36231,10 @@ namespace VpcV1 {
      *  value indicates higher priority.
      */
     priority?: number;
-    /** - If `action` is `forward`, specify a `LoadBalancerPoolIdentity` for a pool in this load
-     *    balancer.
+    /** - If `action` is `forward_to_listener`, specify a `LoadBalancerListenerIdentity` for a
+     *    listener in this load balancer.
+     *  - If `action` is `forward_to_pool`, specify a `LoadBalancerPoolIdentity` for a pool in
+     *    this load balancer.
      *  - If `action` is `https_redirect`, specify a
      *    `LoadBalancerListenerPolicyHTTPSRedirectPatch` for a listener in this load balancer
      *    with a `protocol` of `https`.
@@ -36149,7 +36269,12 @@ namespace VpcV1 {
      *  - `hostname`: The fully-qualified domain name of the server specified in the Host
      *    HTTP request header
      *  - `path`: The path of the HTTP request
-     *  - `query`: The query of the HTTP request URL.
+     *  - `query`: The query of the HTTP request URL
+     *  - `sni_hostname`: The fully-qualified domain name of the server provided in the
+     *    "server name indicator" extension during TLS negotiation
+     *
+     *  - For listeners with `protocol` `http` or `https`, any type may be specified.
+     *  - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified.
      */
     type: CreateLoadBalancerListenerPolicyRuleConstants.Type | string;
     /** The value to be matched for the rule condition.
@@ -36157,11 +36282,10 @@ namespace VpcV1 {
      *  If the rule type is `query` and the rule condition is not `matches_regex`, the value must be percent-encoded.
      */
     value: string;
-    /** The field to match for this rule. This property must be specified if the rule type is
-     *  `header`, may be specified if the rule type is `body` or `query`, and must not be specified if the rule type is
-     *  `hostname` or `path`.
-     *
-     *  If the rule condition is not `matches_regex`, the value must be percent-encoded.
+    /** The field to match for this rule.
+     *  - If the `type` is `header`, this property must be specified.
+     *  - If the `type` is `body` or `query`, this property may be specified.
+     *  - For all other types, this property must not be specified.
      */
     field?: string;
   }
@@ -36174,13 +36298,14 @@ namespace VpcV1 {
       EQUALS = 'equals',
       MATCHES_REGEX = 'matches_regex',
     }
-    /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL. */
+    /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL - `sni_hostname`: The fully-qualified domain name of the server provided in the "server name indicator" extension during TLS negotiation - For listeners with `protocol` `http` or `https`, any type may be specified. - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified. */
     export enum Type {
       BODY = 'body',
       HEADER = 'header',
       HOSTNAME = 'hostname',
       PATH = 'path',
       QUERY = 'query',
+      SNI_HOSTNAME = 'sni_hostname',
     }
   }
 
@@ -36220,11 +36345,10 @@ namespace VpcV1 {
     id: string;
     /** The condition for the rule. */
     condition?: UpdateLoadBalancerListenerPolicyRuleConstants.Condition | string;
-    /** The field to match for this rule. This property must be specified if the rule type is
-     *  `header`, may be specified if the rule type is `body` or `query`, and must not be specified if the rule type is
-     *  `hostname` or `path`.
-     *
-     *  If the rule condition is not `matches_regex`, the value must be percent-encoded.
+    /** The field to match for this rule.
+     *  - If the `type` is `header`, this property must be specified.
+     *  - If the `type` is `body` or `query`, this property may be specified.
+     *  - For all other types, this property must not be specified.
      */
     field?: string;
     /** The content the rule applies to:
@@ -36233,7 +36357,12 @@ namespace VpcV1 {
      *  - `hostname`: The fully-qualified domain name of the server specified in the Host
      *    HTTP request header
      *  - `path`: The path of the HTTP request
-     *  - `query`: The query of the HTTP request URL.
+     *  - `query`: The query of the HTTP request URL
+     *  - `sni_hostname`: The fully-qualified domain name of the server provided in the
+     *    "server name indicator" extension during TLS negotiation
+     *
+     *  - For listeners with `protocol` `http` or `https`, any type may be specified.
+     *  - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified.
      */
     type?: UpdateLoadBalancerListenerPolicyRuleConstants.Type | string;
     /** The value to be matched for the rule condition.
@@ -36251,13 +36380,14 @@ namespace VpcV1 {
       EQUALS = 'equals',
       MATCHES_REGEX = 'matches_regex',
     }
-    /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL. */
+    /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL - `sni_hostname`: The fully-qualified domain name of the server provided in the "server name indicator" extension during TLS negotiation - For listeners with `protocol` `http` or `https`, any type may be specified. - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified. */
     export enum Type {
       BODY = 'body',
       HEADER = 'header',
       HOSTNAME = 'hostname',
       PATH = 'path',
       QUERY = 'query',
+      SNI_HOSTNAME = 'sni_hostname',
     }
   }
 
@@ -36275,7 +36405,21 @@ namespace VpcV1 {
      *  have `availability` with value `subnet` in the profile.
      */
     algorithm: CreateLoadBalancerPoolConstants.Algorithm | string;
-    /** The health monitor of this pool. */
+    /** The health monitor of this pool.
+     *
+     *  If this pool has a member targeting a load balancer then:
+     *
+     *  - If the targeted load balancer has multiple subnets, this health monitor will be
+     *    used to direct traffic to the available subnets.
+     *  - The health checks spawned by this health monitor will be handled as any other
+     *    traffic (that is, subject to the configuration of listeners and pools on the target
+     *    load balancer).
+     *  - This health monitor does not affect how pool member health is determined within the
+     *    target load balancer.
+     *
+     *  For more information, see [Private Path network load balancer frequently asked
+     *  questions](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-faqs#ppnlb-faqs).
+     */
     healthMonitor: LoadBalancerPoolHealthMonitorPrototype;
     /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and
      *  `udp` (if `udp_supported` is `true`). Load balancers in the
@@ -36363,7 +36507,21 @@ namespace VpcV1 {
     algorithm?: UpdateLoadBalancerPoolConstants.Algorithm | string;
     /** The failsafe policy for this load balancer pool. */
     failsafePolicy?: LoadBalancerPoolFailsafePolicyPatch;
-    /** The health monitor of this pool. */
+    /** The health monitor of this pool.
+     *
+     *  If this pool has a member targeting a load balancer then:
+     *
+     *  - If the targeted load balancer has multiple subnets, this health monitor will be
+     *    used to direct traffic to the available subnets.
+     *  - The health checks spawned by this health monitor will be handled as any other
+     *    traffic (that is, subject to the configuration of listeners and pools on the
+     *    target load balancer).
+     *  - This health monitor does not affect how pool member health is determined within
+     *    the target load balancer.
+     *
+     *  For more information, see [Private Path network load balancer frequently asked
+     *  questions](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-faqs#ppnlb-faqs).
+     */
     healthMonitor?: LoadBalancerPoolHealthMonitorPatch;
     /** The name for this load balancer pool. The name must not be used by another pool for the load balancer. */
     name?: string;
@@ -36435,10 +36593,18 @@ namespace VpcV1 {
      *  `health_monitor` property is specified.
      *
      *  The port must be unique across all members for all pools associated with this pool's listener.
+     *
+     *  For load balancers in the `network` family, the same `port` and `target` tuple cannot be shared by a pool member
+     *  of any other load balancer in the same VPC.
      */
     port: number;
-    /** The pool member target. If the load balancer has route mode enabled, the member must be
-     *  in a zone the load balancer has a subnet in.
+    /** The pool member target.
+     *
+     *  If the load balancer has `route_mode` set to `true`, the member must be in a zone the load
+     *  balancer has a subnet in.
+     *
+     *  For load balancers in the `network` family, the same `port` and `target` tuple cannot
+     *  be shared by a pool member of any other load balancer in the same VPC.
      */
     target: LoadBalancerPoolMemberTargetPrototype;
     /** The weight of the server member.
@@ -36497,10 +36663,18 @@ namespace VpcV1 {
      *  `health_monitor` property is specified.
      *
      *  The port must be unique across all members for all pools associated with this pool's listener.
+     *
+     *  For load balancers in the `network` family, the same `port` and `target` tuple cannot be shared by a pool member
+     *  of any other load balancer in the same VPC.
      */
     port?: number;
-    /** The pool member target. If the load balancer has route mode enabled, the member must be
-     *  in a zone the load balancer has a subnet in.
+    /** The pool member target.
+     *
+     *  If the load balancer has `route_mode` set to `true`, the member must be in a zone the load
+     *  balancer has a subnet in.
+     *
+     *  For load balancers in the `network` family, the same `port` and `target` tuple cannot
+     *  be shared by a pool member of any other load balancer in the same VPC.
      */
     target?: LoadBalancerPoolMemberTargetPrototype;
     /** The weight of the server member.
@@ -37060,11 +37234,11 @@ namespace VpcV1 {
    * AddressPrefix.
    */
   export interface AddressPrefix {
-    /** The CIDR block for this prefix. */
+    /** The CIDR block for this address prefix. */
     cidr: string;
-    /** The date and time that the prefix was created. */
+    /** The date and time that this address prefix was created. */
     created_at: string;
-    /** Indicates whether subnets exist with addresses from this prefix. */
+    /** Indicates whether subnets exist with addresses from this address prefix. */
     has_subnets: boolean;
     /** The URL for this address prefix. */
     href: string;
@@ -37814,14 +37988,27 @@ namespace VpcV1 {
    * The bare metal server CPU configuration.
    */
   export interface BareMetalServerCPU {
-    /** The CPU architecture. */
-    architecture: string;
+    /** The CPU architecture.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    architecture: BareMetalServerCPU.Constants.Architecture | string;
     /** The total number of cores. */
     core_count: number;
     /** The total number of CPU sockets. */
     socket_count: number;
     /** The total number of hardware threads per core. */
     threads_per_core: number;
+  }
+  export namespace BareMetalServerCPU {
+    export namespace Constants {
+      /** The CPU architecture. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Architecture {
+        AMD64 = 'amd64',
+        S390X = 's390x',
+      }
+    }
   }
 
   /**
@@ -37985,11 +38172,12 @@ namespace VpcV1 {
     image: ImageIdentity;
     /** The public SSH keys to install on the bare metal server. Keys will be made available to the bare metal
      *  server as cloud-init vendor data. For cloud-init enabled images, these keys will also be added as SSH authorized
-     *  keys for the administrative user.
+     *  keys for the [default
+     *  user](https://cloud.ibm.com/docs/vpc?topic=vpc-vsi_is_connecting_linux#determining-default-user-account).
      *
      *  For Windows images, at least one key must be specified, and one will be selected to encrypt the administrator
-     *  password. Keys are optional for other images, but if no keys are specified, the instance will be inaccessible
-     *  unless the specified image provides another means of access.
+     *  password. Keys are optional for other images, but if no keys are specified, the bare metal server will be
+     *  inaccessible unless the specified image provides another means of access.
      */
     keys: KeyIdentity[];
     /** User data to be made available when initializing the bare metal server.
@@ -38629,17 +38817,27 @@ namespace VpcV1 {
    */
   export interface BareMetalServerProfileCPUArchitecture {
     /** The default CPU architecture for a bare metal server with this profile. */
-    default?: string;
+    default?: BareMetalServerProfileCPUArchitecture.Constants.Default | string;
     /** The type for this profile field. */
     type: BareMetalServerProfileCPUArchitecture.Constants.Type | string;
     /** The CPU architecture for a bare metal server with this profile. */
-    value: string;
+    value: BareMetalServerProfileCPUArchitecture.Constants.Value | string;
   }
   export namespace BareMetalServerProfileCPUArchitecture {
     export namespace Constants {
+      /** The default CPU architecture for a bare metal server with this profile. */
+      export enum Default {
+        AMD64 = 'amd64',
+        S390X = 's390x',
+      }
       /** The type for this profile field. */
       export enum Type {
         FIXED = 'fixed',
+      }
+      /** The CPU architecture for a bare metal server with this profile. */
+      export enum Value {
+        AMD64 = 'amd64',
+        S390X = 's390x',
       }
     }
   }
@@ -40485,13 +40683,18 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: DedicatedHostProfileVCPUArchitecture.Constants.Type | string;
     /** The VCPU architecture for a dedicated host with this profile. */
-    value: string;
+    value: DedicatedHostProfileVCPUArchitecture.Constants.Value | string;
   }
   export namespace DedicatedHostProfileVCPUArchitecture {
     export namespace Constants {
       /** The type for this profile field. */
       export enum Type {
         FIXED = 'fixed',
+      }
+      /** The VCPU architecture for a dedicated host with this profile. */
+      export enum Value {
+        AMD64 = 'amd64',
+        S390X = 's390x',
       }
     }
   }
@@ -40584,8 +40787,8 @@ namespace VpcV1 {
     name: string;
     /** The resource group for the default network ACL for a VPC. Set to the VPC's resource group at creation. */
     resource_group: ResourceGroupReference;
-    /** The ordered rules for the default network ACL for a VPC. Defaults to two rules which allow all inbound and
-     *  outbound traffic, respectively. Rules for the default network ACL may be changed, added, or removed.
+    /** The ordered rules for the default network ACL for a VPC. Defaults to two rules which allow ICMP, TCP and UDP
+     *  inbound and outbound traffic, respectively. Rules for the default network ACL may be changed, added, or removed.
      */
     rules: NetworkACLRuleItem[];
     /** The subnets to which this network ACL is attached. */
@@ -40718,9 +40921,9 @@ namespace VpcV1 {
     name: string;
     /** The resource group for this security group. */
     resource_group: ResourceGroupReference;
-    /** The rules for the default security group for a VPC. Defaults to allowing all outbound traffic, and allowing
-     *  all inbound traffic from other interfaces in the VPC's default security group. Rules for the default security
-     *  group may be changed, added or removed.
+    /** The rules for the default security group for a VPC. Defaults to allowing ICMP, TCP and UDP outbound traffic,
+     *  and allowing ICMP, TCP and UDP inbound traffic from other interfaces in the VPC's default security group. Rules
+     *  for the default security group may be changed, added or removed.
      */
     rules: SecurityGroupRule[];
     /** The targets for this security group. */
@@ -41603,6 +41806,8 @@ namespace VpcV1 {
     obsolescence_at?: string;
     /** The operating system included in this image. */
     operating_system: OperatingSystem;
+    /** The owner type of this image: - `user`: Owned by this account - `provider`: Owned by a different account. */
+    owner_type: Image.Constants.OwnerType | string;
     /** The resource group for this image. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
@@ -41645,6 +41850,11 @@ namespace VpcV1 {
       export enum Encryption {
         NONE = 'none',
         USER_MANAGED = 'user_managed',
+      }
+      /** The owner type of this image: - `user`: Owned by this account - `provider`: Owned by a different account. */
+      export enum OwnerType {
+        PROVIDER = 'provider',
+        USER = 'user',
       }
       /** The resource type. */
       export enum ResourceType {
@@ -41930,7 +42140,7 @@ namespace VpcV1 {
     /** If present, this property indicates that the resource associated with this reference
      *  is remote and therefore may not be directly retrievable.
      */
-    remote?: ImageRemote;
+    remote?: ImageRemoteContextImageReference;
     /** The resource type. */
     resource_type: ImageReference.Constants.ResourceType | string;
   }
@@ -41947,7 +42157,7 @@ namespace VpcV1 {
    * If present, this property indicates that the resource associated with this reference is remote and therefore may
    * not be directly retrievable.
    */
-  export interface ImageRemote {
+  export interface ImageRemoteContextImageReference {
     /** If present, this property indicates that the referenced resource is remote to this
      *  account, and identifies the owning account.
      */
@@ -42141,6 +42351,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
       /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
@@ -42646,6 +42857,7 @@ namespace VpcV1 {
     export namespace Constants {
       /** The GPU manufacturer. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Manufacturer {
+        INTEL = 'intel',
         NVIDIA = 'nvidia',
       }
     }
@@ -43631,6 +43843,7 @@ namespace VpcV1 {
       }
       /** The possible GPU manufacturer(s) for an instance with this profile. */
       export enum Values {
+        INTEL = 'intel',
         NVIDIA = 'nvidia',
       }
     }
@@ -43776,6 +43989,7 @@ namespace VpcV1 {
       export enum Default {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
       /** The type for this profile field. */
       export enum Type {
@@ -43785,6 +43999,7 @@ namespace VpcV1 {
       export enum Values {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -43822,13 +44037,18 @@ namespace VpcV1 {
     /** The type for this profile field. */
     type: InstanceProfileVCPUArchitecture.Constants.Type | string;
     /** The VCPU architecture for an instance with this profile. */
-    value: string;
+    value: InstanceProfileVCPUArchitecture.Constants.Value | string;
   }
   export namespace InstanceProfileVCPUArchitecture {
     export namespace Constants {
       /** The type for this profile field. */
       export enum Type {
         FIXED = 'fixed',
+      }
+      /** The VCPU architecture for an instance with this profile. */
+      export enum Value {
+        AMD64 = 'amd64',
+        S390X = 's390x',
       }
     }
   }
@@ -43892,9 +44112,10 @@ namespace VpcV1 {
      *  If unspecified, the default secure boot mode from the profile will be used.
      */
     enable_secure_boot?: boolean;
-    /** The public SSH keys for the administrative user of the virtual server instance. Keys will be made available
-     *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
-     *  added as SSH authorized keys for the administrative user.
+    /** The public SSH keys for this virtual server instance. Keys will be made available to the virtual server
+     *  instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be added as SSH
+     *  authorized keys for the [default
+     *  user](https://cloud.ibm.com/docs/vpc?topic=vpc-vsi_is_connecting_linux#determining-default-user-account).
      *
      *  For Windows images, the keys of type `rsa` must be specified, and one will be selected to encrypt [the
      *  administrator password](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization). Keys are optional for
@@ -43955,6 +44176,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -44154,9 +44376,10 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this instance template. */
     id: string;
-    /** The public SSH keys for the administrative user of the virtual server instance. Keys will be made available
-     *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
-     *  added as SSH authorized keys for the administrative user.
+    /** The public SSH keys for this virtual server instance. Keys will be made available to the virtual server
+     *  instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be added as SSH
+     *  authorized keys for the [default
+     *  user](https://cloud.ibm.com/docs/vpc?topic=vpc-vsi_is_connecting_linux#determining-default-user-account).
      *
      *  For Windows images, the keys of type `rsa` must be specified, and one will be selected to encrypt [the
      *  administrator password](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization). Keys are optional for
@@ -44211,6 +44434,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -44266,9 +44490,10 @@ namespace VpcV1 {
      *  If unspecified, the default secure boot mode from the profile will be used.
      */
     enable_secure_boot?: boolean;
-    /** The public SSH keys for the administrative user of the virtual server instance. Keys will be made available
-     *  to the virtual server instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be
-     *  added as SSH authorized keys for the administrative user.
+    /** The public SSH keys for this virtual server instance. Keys will be made available to the virtual server
+     *  instance as cloud-init vendor data. For cloud-init enabled images, these keys will also be added as SSH
+     *  authorized keys for the [default
+     *  user](https://cloud.ibm.com/docs/vpc?topic=vpc-vsi_is_connecting_linux#determining-default-user-account).
      *
      *  For Windows images, the keys of type `rsa` must be specified, and one will be selected to encrypt [the
      *  administrator password](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization). Keys are optional for
@@ -44327,6 +44552,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -44353,8 +44579,12 @@ namespace VpcV1 {
    * The virtual server instance VCPU configuration.
    */
   export interface InstanceVCPU {
-    /** The VCPU architecture. */
-    architecture: string;
+    /** The VCPU architecture.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    architecture: InstanceVCPU.Constants.Architecture | string;
     /** The number of VCPUs assigned. */
     count: number;
     /** The VCPU manufacturer.
@@ -44366,6 +44596,11 @@ namespace VpcV1 {
   }
   export namespace InstanceVCPU {
     export namespace Constants {
+      /** The VCPU architecture. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Architecture {
+        AMD64 = 'amd64',
+        S390X = 's390x',
+      }
       /** The VCPU manufacturer. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Manufacturer {
         AMD = 'amd',
@@ -44491,6 +44726,8 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     access_mode: LoadBalancer.Constants.AccessMode | string;
+    /** The load balancer pool members attached to this load balancer. */
+    attached_load_balancer_pool_members: LoadBalancerPoolMemberReference[];
     /** The availability of this load balancer:
      *  - `subnet`: remains available if at least one zone that the load balancer's subnets reside
      *    in is available
@@ -44571,7 +44808,8 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: LoadBalancer.Constants.ResourceType | string;
-    /** Indicates whether route mode is enabled for this load balancer.
+    /** Indicates whether [route mode](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-vnf&interface=ui) is enabled for
+     *  this load balancer.
      *
      *  At present, public load balancers are not supported with route mode enabled.
      */
@@ -44874,7 +45112,9 @@ namespace VpcV1 {
    */
   export interface LoadBalancerListenerPolicy {
     /** The policy action:
-     *  - `forward`: Requests will be forwarded to the specified `target` pool
+     *  - `forward_to_listener`: Requests will be forwarded to the specified `target`
+     *    listener
+     *  - `forward_to_pool`: Requests will be forwarded to the specified `target` pool
      *  - `https_redirect`: Requests will be redirected to the specified `target` listener.
      *    The listener must have a `protocol` of `http`, and the target listener must have a
      *    `protocol` of `https`
@@ -44907,7 +45147,8 @@ namespace VpcV1 {
     provisioning_status: LoadBalancerListenerPolicy.Constants.ProvisioningStatus | string;
     /** The rules for this policy. */
     rules: LoadBalancerListenerPolicyRuleReference[];
-    /** - If `action` is `forward`, the response is a `LoadBalancerPoolReference`
+    /** - If `action` is `forward_to_listener`, specify a `LoadBalancerListenerIdentity`
+     *  - If `action` is `forward_to_pool`, specify a `LoadBalancerPoolIdentity`
      *  - If `action` is `https_redirect`, the response is a
      *  `LoadBalancerListenerPolicyHTTPSRedirect`
      *  - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`.
@@ -44916,9 +45157,10 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerListenerPolicy {
     export namespace Constants {
-      /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified `target` listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The policy action: - `forward_to_listener`: Requests will be forwarded to the specified `target` listener - `forward_to_pool`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified `target` listener. The listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https` - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Action {
-        FORWARD = 'forward',
+        FORWARD_TO_LISTENER = 'forward_to_listener',
+        FORWARD_TO_POOL = 'forward_to_pool',
         HTTPS_REDIRECT = 'https_redirect',
         REDIRECT = 'redirect',
         REJECT = 'reject',
@@ -44947,7 +45189,9 @@ namespace VpcV1 {
    */
   export interface LoadBalancerListenerPolicyPrototype {
     /** The policy action:
-     *  - `forward`: Requests will be forwarded to the specified `target` pool
+     *  - `forward_to_listener`: Requests will be forwarded to the specified
+     *    `target` listener.
+     *  - `forward_to_pool`: Requests will be forwarded to the specified `target` pool.
      *  - `https_redirect`: Requests will be redirected to the specified `target.listener`.
      *     This listener must have a `protocol` of `http`, and the target listener must
      *     have a `protocol` of `https`.
@@ -44965,10 +45209,12 @@ namespace VpcV1 {
     priority: number;
     /** The rule prototype objects for this policy. */
     rules?: LoadBalancerListenerPolicyRulePrototype[];
-    /** - If `action` is `forward`, use `LoadBalancerPoolIdentity` to specify a pool in this
+    /** - If `action` is `forward_to_listener`, specify a `LoadBalancerListenerIdentity` in this
      *    load balancer to forward to.
+     *  - If `action` is `forward_to_pool`, use `LoadBalancerPoolIdentity` to specify a pool in
+     *    this load balancer to forward to.
      *  - If `action` is `https_redirect`, use
-     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener in this
+     *    `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
      *    load balancer to redirect to.
      *  - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
      *    specify a URL to redirect to.
@@ -44977,9 +45223,10 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerListenerPolicyPrototype {
     export namespace Constants {
-      /** The policy action: - `forward`: Requests will be forwarded to the specified `target` pool - `https_redirect`: Requests will be redirected to the specified `target.listener`. This listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https`. - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code. */
+      /** The policy action: - `forward_to_listener`: Requests will be forwarded to the specified `target` listener. - `forward_to_pool`: Requests will be forwarded to the specified `target` pool. - `https_redirect`: Requests will be redirected to the specified `target.listener`. This listener must have a `protocol` of `http`, and the target listener must have a `protocol` of `https`. - `redirect`: Requests will be redirected to the specified `target.url` - `reject`: Requests will be rejected with a `403` status code. */
       export enum Action {
-        FORWARD = 'forward',
+        FORWARD_TO_LISTENER = 'forward_to_listener',
+        FORWARD_TO_POOL = 'forward_to_pool',
         HTTPS_REDIRECT = 'https_redirect',
         REDIRECT = 'redirect',
         REJECT = 'reject',
@@ -45065,6 +45312,7 @@ namespace VpcV1 {
         HOSTNAME = 'hostname',
         PATH = 'path',
         QUERY = 'query',
+        SNI_HOSTNAME = 'sni_hostname',
       }
     }
   }
@@ -45083,11 +45331,10 @@ namespace VpcV1 {
   export interface LoadBalancerListenerPolicyRulePrototype {
     /** The condition for the rule. */
     condition: LoadBalancerListenerPolicyRulePrototype.Constants.Condition | string;
-    /** The field to match for this rule. This property must be specified if the rule type is
-     *  `header`, may be specified if the rule type is `body` or `query`, and must not be specified if the rule type is
-     *  `hostname` or `path`.
-     *
-     *  If the rule condition is not `matches_regex`, the value must be percent-encoded.
+    /** The field to match for this rule.
+     *  - If the `type` is `header`, this property must be specified.
+     *  - If the `type` is `body` or `query`, this property may be specified.
+     *  - For all other types, this property must not be specified.
      */
     field?: string;
     /** The content the rule applies to:
@@ -45096,7 +45343,12 @@ namespace VpcV1 {
      *  - `hostname`: The fully-qualified domain name of the server specified in the Host
      *    HTTP request header
      *  - `path`: The path of the HTTP request
-     *  - `query`: The query of the HTTP request URL.
+     *  - `query`: The query of the HTTP request URL
+     *  - `sni_hostname`: The fully-qualified domain name of the server provided in the
+     *    "server name indicator" extension during TLS negotiation
+     *
+     *  - For listeners with `protocol` `http` or `https`, any type may be specified.
+     *  - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified.
      */
     type: LoadBalancerListenerPolicyRulePrototype.Constants.Type | string;
     /** The value to be matched for the rule condition.
@@ -45113,13 +45365,14 @@ namespace VpcV1 {
         EQUALS = 'equals',
         MATCHES_REGEX = 'matches_regex',
       }
-      /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL. */
+      /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL - `sni_hostname`: The fully-qualified domain name of the server provided in the "server name indicator" extension during TLS negotiation - For listeners with `protocol` `http` or `https`, any type may be specified. - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified. */
       export enum Type {
         BODY = 'body',
         HEADER = 'header',
         HOSTNAME = 'hostname',
         PATH = 'path',
         QUERY = 'query',
+        SNI_HOSTNAME = 'sni_hostname',
       }
     }
   }
@@ -45139,7 +45392,8 @@ namespace VpcV1 {
   }
 
   /**
-   * - If `action` is `forward`, the response is a `LoadBalancerPoolReference`
+   * - If `action` is `forward_to_listener`, specify a `LoadBalancerListenerIdentity`
+   * - If `action` is `forward_to_pool`, specify a `LoadBalancerPoolIdentity`
    * - If `action` is `https_redirect`, the response is a
    * `LoadBalancerListenerPolicyHTTPSRedirect`
    * - If `action` is `redirect`, the response is a `LoadBalancerListenerPolicyRedirectURL`.
@@ -45148,8 +45402,10 @@ namespace VpcV1 {
   }
 
   /**
-   * - If `action` is `forward`, specify a `LoadBalancerPoolIdentity` for a pool in this load
-   *   balancer.
+   * - If `action` is `forward_to_listener`, specify a `LoadBalancerListenerIdentity` for a
+   *   listener in this load balancer.
+   * - If `action` is `forward_to_pool`, specify a `LoadBalancerPoolIdentity` for a pool in
+   *   this load balancer.
    * - If `action` is `https_redirect`, specify a
    *   `LoadBalancerListenerPolicyHTTPSRedirectPatch` for a listener in this load balancer
    *   with a `protocol` of `https`.
@@ -45159,10 +45415,12 @@ namespace VpcV1 {
   }
 
   /**
-   * - If `action` is `forward`, use `LoadBalancerPoolIdentity` to specify a pool in this
+   * - If `action` is `forward_to_listener`, specify a `LoadBalancerListenerIdentity` in this
    *   load balancer to forward to.
+   * - If `action` is `forward_to_pool`, use `LoadBalancerPoolIdentity` to specify a pool in
+   *   this load balancer to forward to.
    * - If `action` is `https_redirect`, use
-   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener in this
+   *   `LoadBalancerListenerPolicyHTTPSRedirectPrototype` to specify a listener on this
    *   load balancer to redirect to.
    * - If `action` is `redirect`, use `LoadBalancerListenerPolicyRedirectURLPrototype`to
    *   specify a URL to redirect to.
@@ -45219,19 +45477,20 @@ namespace VpcV1 {
      */
     idle_connection_timeout?: number;
     /** The listener port number. Each listener in the load balancer must have a non-overlapping port range and
-     *  `protocol` combination.
+     *  `protocol` combination. Protocol values of `tcp`, `http` and `https` share the TCP port space.
      *
      *  If `port_min` is also specified, `port` must have the same value as `port_min`.
      */
     port?: number;
     /** The inclusive upper bound of the range of ports used by this listener. Must not be less than `port_min`.
      *
-     *  Only load balancers with route mode enabled, or network load balancers with
-     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, `65535` must be specified.
+     *  Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+     *  `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must
+     *  be `65535`.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
-     *  the same protocol.
+     *  the same protocol. Protocol values of `tcp`, `http` and
+     *  `https` share the TCP port space.
      */
     port_max?: number;
     /** The inclusive lower bound of the range of ports used by this listener. Must not be greater than `port_max`.
@@ -45241,12 +45500,13 @@ namespace VpcV1 {
      *
      *  If `port` is also specified, `port_min` must have the same value as `port`.
      *
-     *  Only load balancers with route mode enabled, or network load balancers with
-     *  `is_public` or `is_private_path` set to `true` support different values for `port_min` and `port_max`. When
-     *  route mode is enabled, `1` must be specified.
+     *  Only network load balancers with `route_mode`, `is_public` or `is_private_path` set to
+     *  `true` support different values for `port_min` and `port_max`. If `route_mode` is set to `true`, the value must
+     *  be `1`.
      *
      *  The specified port range must not overlap with port ranges used by other listeners for this load balancer using
-     *  the same protocol.
+     *  the same protocol. Protocol values of `tcp`, `http` and
+     *  `https` share the TCP port space.
      */
     port_min?: number;
     /** The listener protocol. Each listener in the load balancer must have a non-overlapping port range and
@@ -45351,7 +45611,21 @@ namespace VpcV1 {
     /** The date and time that this pool was created. */
     created_at: string;
     failsafe_policy: LoadBalancerPoolFailsafePolicy;
-    /** The health monitor of this pool. */
+    /** The health monitor of this pool.
+     *
+     *  If this pool has a member targeting a load balancer then:
+     *
+     *  - If the targeted load balancer has multiple subnets, this health monitor is used to
+     *    direct traffic to the available subnets.
+     *  - The health checks spawned by this health monitor is handled as any other traffic
+     *    (that is, subject to the configuration of listeners and pools on the target load
+     *    balancer).
+     *  - This health monitor does not affect how pool member health is determined within the
+     *    target load balancer.
+     *
+     *  For more information, see [Private Path network load balancer frequently asked
+     *  questions](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-faqs#ppnlb-faqs).
+     */
     health_monitor: LoadBalancerPoolHealthMonitor;
     /** The URL for this load balancer pool. */
     href: string;
@@ -45710,9 +45984,7 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     provisioning_status: LoadBalancerPoolMember.Constants.ProvisioningStatus | string;
-    /** The pool member target. If the load balancer has route mode enabled, the member must be
-     *  in a zone the load balancer has a subnet in.
-     */
+    /** The pool member target. */
     target: LoadBalancerPoolMemberTarget;
     /** The weight of the server member.
      *
@@ -45759,10 +46031,18 @@ namespace VpcV1 {
      *  `health_monitor` property is specified.
      *
      *  The port must be unique across all members for all pools associated with this pool's listener.
+     *
+     *  For load balancers in the `network` family, the same `port` and `target` tuple cannot be shared by a pool member
+     *  of any other load balancer in the same VPC.
      */
     port: number;
-    /** The pool member target. If the load balancer has route mode enabled, the member must be
-     *  in a zone the load balancer has a subnet in.
+    /** The pool member target.
+     *
+     *  If the load balancer has `route_mode` set to `true`, the member must be in a zone the load
+     *  balancer has a subnet in.
+     *
+     *  For load balancers in the `network` family, the same `port` and `target` tuple cannot
+     *  be shared by a pool member of any other load balancer in the same VPC.
      */
     target: LoadBalancerPoolMemberTargetPrototype;
     /** The weight of the server member.
@@ -45790,15 +46070,19 @@ namespace VpcV1 {
   }
 
   /**
-   * The pool member target. If the load balancer has route mode enabled, the member must be in a zone the load balancer
-   * has a subnet in.
+   * The pool member target.
    */
   export interface LoadBalancerPoolMemberTarget {
   }
 
   /**
-   * The pool member target. If the load balancer has route mode enabled, the member must be in a zone the load balancer
-   * has a subnet in.
+   * The pool member target.
+   *
+   * If the load balancer has `route_mode` set to `true`, the member must be in a zone the load balancer has a subnet
+   * in.
+   *
+   * For load balancers in the `network` family, the same `port` and `target` tuple cannot be shared by a pool member of
+   * any other load balancer in the same VPC.
    */
   export interface LoadBalancerPoolMemberTargetPrototype {
   }
@@ -45811,7 +46095,21 @@ namespace VpcV1 {
      *  have `availability` with value `subnet` in the profile.
      */
     algorithm: LoadBalancerPoolPrototypeLoadBalancerContext.Constants.Algorithm | string;
-    /** The health monitor of this pool. */
+    /** The health monitor of this pool.
+     *
+     *  If this pool has a member targeting a load balancer then:
+     *
+     *  - If the targeted load balancer has multiple subnets, this health monitor will be
+     *    used to direct traffic to the available subnets.
+     *  - The health checks spawned by this health monitor will be handled as any other
+     *    traffic (that is, subject to the configuration of listeners and pools on the target
+     *    load balancer).
+     *  - This health monitor does not affect how pool member health is determined within the
+     *    target load balancer.
+     *
+     *  For more information, see [Private Path network load balancer frequently asked
+     *  questions](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-faqs#ppnlb-faqs).
+     */
     health_monitor: LoadBalancerPoolHealthMonitorPrototype;
     /** The members for this load balancer pool. For load balancers in the `network` family, the same `port` and
      *  `target` tuple cannot be shared by a pool member of any other load balancer in the same VPC.
@@ -45983,6 +46281,8 @@ namespace VpcV1 {
     route_mode_supported: LoadBalancerProfileRouteModeSupported;
     security_groups_supported: LoadBalancerProfileSecurityGroupsSupported;
     source_ip_session_persistence_supported: LoadBalancerProfileSourceIPSessionPersistenceSupported;
+    /** The load balancer profiles that load balancers with this profile can target. */
+    targetable_load_balancer_profiles: LoadBalancerProfileReference[];
     udp_supported: LoadBalancerProfileUDPSupported;
   }
   export namespace LoadBalancerProfile {
@@ -46184,7 +46484,7 @@ namespace VpcV1 {
     name: string;
     /** The resource group for this network ACL. */
     resource_group: ResourceGroupReference;
-    /** The ordered rules for this network ACL. If no rules exist, all traffic will be denied. */
+    /** The ordered rules for this network ACL. If no rules exist, no traffic will be allowed. */
     rules: NetworkACLRuleItem[];
     /** The subnets to which this network ACL is attached. */
     subnets: SubnetReference[];
@@ -48012,7 +48312,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: PageLink;
-    /** A page of routes in the routing table. */
+    /** A page of routes in the VPC routing table. */
     routes: Route[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -48028,7 +48328,7 @@ namespace VpcV1 {
     limit: number;
     /** A link to the next page of resources. This property is present for all pages except the last page. */
     next?: PageLink;
-    /** A page of routes in the routing table. */
+    /** A page of routes in the VPC default routing table. */
     routes: Route[];
     /** The total number of resources across all pages. */
     total_count: number;
@@ -48318,7 +48618,7 @@ namespace VpcV1 {
     name: string;
     /** The resource group for this security group. */
     resource_group: ResourceGroupReference;
-    /** The rules for this security group. If no rules exist, all traffic will be denied. */
+    /** The rules for this security group. If no rules exist, no traffic will be allowed. */
     rules: SecurityGroupRule[];
     /** The targets for this security group. */
     targets: SecurityGroupTargetReference[];
@@ -48586,7 +48886,13 @@ namespace VpcV1 {
      *  account) with access to this file share's data and its snapshots.
      */
     accessor_bindings: ShareAccessorBindingReference[];
-    /** The transit encryption modes allowed for this share. */
+    /** The transit encryption modes allowed for this share:
+     *  - `none`: Not encrypted in transit.
+     *  - `user_managed`: Encrypted in transit using an instance identity certificate.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     allowed_transit_encryption_modes: Share.Constants.AllowedTransitEncryptionModes[] | string[];
     /** The date and time that the file share is created. */
     created_at: string;
@@ -48699,7 +49005,7 @@ namespace VpcV1 {
     source_snapshot?: ShareSourceSnapshot;
     /** Tags for this resource. */
     user_tags: string[];
-    /** The zone this file share will reside in. */
+    /** The zone this file share resides in. */
     zone: ZoneReference;
   }
   export namespace Share {
@@ -48715,7 +49021,7 @@ namespace VpcV1 {
         NONE = 'none',
         ORIGIN = 'origin',
       }
-      /** The transit encryption modes allowed for this share. */
+      /** The transit encryption modes allowed for this share: - `none`: Not encrypted in transit. - `user_managed`: Encrypted in transit using an instance identity certificate. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AllowedTransitEncryptionModes {
         NONE = 'none',
         USER_MANAGED = 'user_managed',
@@ -49105,7 +49411,9 @@ namespace VpcV1 {
    * ShareMountTargetPrototype.
    */
   export interface ShareMountTargetPrototype {
-    /** The name for this share mount target. The name must not be used by another mount target for the file share. */
+    /** The name for this share mount target. The name must not be used by another mount target for the file share.
+     *  If unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
     name?: string;
     /** The transit encryption mode to use for this share mount target:
      *  - `none`: Not encrypted in transit.
@@ -49293,11 +49601,11 @@ namespace VpcV1 {
      *  - Otherwise, all `transit_encryption` modes will be allowed.
      */
     allowed_transit_encryption_modes?: SharePrototypeShareContext.Constants.AllowedTransitEncryptionModes[] | string[];
-    /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
-     *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
-     *  size.
+    /** The maximum input/output operations per second (IOPS) for the file share.
      *
-     *  In addition, each client accessing the share will be restricted to 48,000 IOPS.
+     *  If the share profile has an `iops.type` of `dependent` or `fixed`, this property is system-managed and must not
+     *  be specified. Otherwise, the specified value must be within the `iops` range of the share profile as supported
+     *  by the share's specified size.
      */
     iops?: number;
     /** The mount targets for this replica file share. Each mount target must be in a unique VPC.
@@ -50223,8 +50531,12 @@ namespace VpcV1 {
    * The VCPU configuration.
    */
   export interface VCPU {
-    /** The VCPU architecture. */
-    architecture: string;
+    /** The VCPU architecture.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    architecture: VCPU.Constants.Architecture | string;
     /** The number of VCPUs assigned. */
     count: number;
     /** The VCPU manufacturer.
@@ -50236,6 +50548,11 @@ namespace VpcV1 {
   }
   export namespace VCPU {
     export namespace Constants {
+      /** The VCPU architecture. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Architecture {
+        AMD64 = 'amd64',
+        S390X = 's390x',
+      }
       /** The VCPU manufacturer. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Manufacturer {
         AMD = 'amd',
@@ -52211,6 +52528,10 @@ namespace VpcV1 {
     attachment_state: Volume.Constants.AttachmentState | string;
     /** The maximum bandwidth (in megabits per second) for the volume.
      *
+     *  If the volume profile has a `bandwidth.type` of `dependent`, the [bandwidth is
+     *  calculated](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-bandwidth#attached-block-vol-bandwidth) from
+     *  the `iops` value.
+     *
      *  The minimum and maximum limits for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
@@ -52623,6 +52944,7 @@ namespace VpcV1 {
   export interface VolumeProfile {
     adjustable_capacity_states: VolumeProfileAdjustableCapacityStates;
     adjustable_iops_states: VolumeProfileAdjustableIOPSStates;
+    bandwidth: VolumeProfileBandwidth;
     boot_capacity: VolumeProfileBootCapacity;
     capacity: VolumeProfileCapacity;
     /** The product family this volume profile belongs to.
@@ -52699,6 +53021,12 @@ namespace VpcV1 {
   }
 
   /**
+   * VolumeProfileBandwidth.
+   */
+  export interface VolumeProfileBandwidth {
+  }
+
+  /**
    * VolumeProfileBootCapacity.
    */
   export interface VolumeProfileBootCapacity {
@@ -52770,8 +53098,23 @@ namespace VpcV1 {
    * VolumePrototype.
    */
   export interface VolumePrototype {
-    /** The maximum I/O operations per second (IOPS) to use for this volume. If specified, the `family` of the
-     *  volume profile must be `custom` or `defined_performance`.
+    /** The maximum bandwidth (in megabits per second) for the volume.
+     *
+     *  If the volume profile has a `bandwidth.type` of `dependent`, this property is system-managed and must not be
+     *  specified.
+     *
+     *  Provided the property is user-managed, if it is unspecified, its value will be set based on the specified
+     *  [`iops` and
+     *  `capacity`](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=api).
+     */
+    bandwidth?: number;
+    /** The maximum I/O operations per second (IOPS) to use for this volume.
+     *
+     *  If the volume profile has a `iops.type` of `dependent`, this property is system-managed and must not be
+     *  specified.
+     *
+     *  Provided the property is user-managed, if it is unspecified, its value will be set based on the specified [
+     *  `capacity`](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=api).
      */
     iops?: number;
     /** The name for this volume. The name must not be used by another volume in the region. If unspecified, the
@@ -52794,6 +53137,16 @@ namespace VpcV1 {
    * VolumePrototypeInstanceByImageContext.
    */
   export interface VolumePrototypeInstanceByImageContext {
+    /** The maximum bandwidth (in megabits per second) for the volume.
+     *
+     *  If the volume profile has a `bandwidth.type` of `dependent`, this property is system-managed and must not be
+     *  specified.
+     *
+     *  Provided the property is user-managed, if it is unspecified, its value will be set based on the specified
+     *  [`iops` and
+     *  `capacity`](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=api).
+     */
+    bandwidth?: number;
     /** The capacity to use for the volume (in gigabytes). The specified value must be at least the image's
      *  `minimum_provisioned_size`, at most 250 gigabytes, and within the
      *  `boot_capacity` range of the volume's profile.
@@ -52806,8 +53159,13 @@ namespace VpcV1 {
      *  If unspecified, the `encryption` type for the volume will be `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The maximum I/O operations per second (IOPS) to use for this volume. If specified, the `family` of the
-     *  volume profile must be `custom` or `defined_performance`.
+    /** The maximum I/O operations per second (IOPS) to use for this volume.
+     *
+     *  If the volume profile has a `iops.type` of `dependent`, this property is system-managed and must not be
+     *  specified.
+     *
+     *  Provided the property is user-managed, if it is unspecified, its value will be set based on the specified [
+     *  `capacity`](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=api).
      */
     iops?: number;
     /** The name for this volume. The name must not be used by another volume in the region. If unspecified, the
@@ -52826,6 +53184,16 @@ namespace VpcV1 {
    * VolumePrototypeInstanceBySourceSnapshotContext.
    */
   export interface VolumePrototypeInstanceBySourceSnapshotContext {
+    /** The maximum bandwidth (in megabits per second) for the volume.
+     *
+     *  If the volume profile has a `bandwidth.type` of `dependent`, this property is system-managed and must not be
+     *  specified.
+     *
+     *  Provided the property is user-managed, if it is unspecified, its value will be set based on the specified
+     *  [`iops` and
+     *  `capacity`](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=api).
+     */
+    bandwidth?: number;
     /** The capacity to use for the volume (in gigabytes). The specified value must be at least the snapshot's
      *  `minimum_capacity`, at most 250 gigabytes, and within the `boot_capacity` range of the volume's profile.
      */
@@ -52835,8 +53203,13 @@ namespace VpcV1 {
      *  If unspecified, the `encryption` type for the volume will be `provider_managed`.
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The maximum I/O operations per second (IOPS) to use for this volume. If specified, the `family` of the
-     *  volume profile must be `custom` or `defined_performance`.
+    /** The maximum I/O operations per second (IOPS) to use for this volume.
+     *
+     *  If the volume profile has a `iops.type` of `dependent`, this property is system-managed and must not be
+     *  specified.
+     *
+     *  Provided the property is user-managed, if it is unspecified, its value will be set based on the specified [
+     *  `capacity`](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=api).
      */
     iops?: number;
     /** The name for this volume. The name must not be used by another volume in the region. If unspecified, the
@@ -57103,6 +57476,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57126,6 +57500,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57145,6 +57520,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57193,6 +57569,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57212,6 +57589,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57264,6 +57642,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57287,6 +57666,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57306,6 +57686,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57354,6 +57735,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57382,6 +57764,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57403,6 +57786,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57428,6 +57812,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -57531,6 +57916,12 @@ namespace VpcV1 {
   }
 
   /**
+   * Identifies a load balancer listener by a unique property.
+   */
+  export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerIdentity extends LoadBalancerListenerPolicyTargetPatch {
+  }
+
+  /**
    * LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyHTTPSRedirectPatch.
    */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerPolicyHTTPSRedirectPatch extends LoadBalancerListenerPolicyTargetPatch {
@@ -57577,6 +57968,12 @@ namespace VpcV1 {
    * Identifies a load balancer pool by a unique property.
    */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity extends LoadBalancerListenerPolicyTargetPatch {
+  }
+
+  /**
+   * Identifies a load balancer listener by a unique property.
+   */
+  export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerIdentity extends LoadBalancerListenerPolicyTargetPrototype {
   }
 
   /**
@@ -57664,6 +58061,20 @@ namespace VpcV1 {
      *  - `{protocol}://test.{host}:80/{path}`.
      */
     url: string;
+  }
+
+  /**
+   * LoadBalancerListenerPolicyTargetLoadBalancerListenerReference.
+   */
+  export interface LoadBalancerListenerPolicyTargetLoadBalancerListenerReference extends LoadBalancerListenerPolicyTarget {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this load balancer listener. */
+    href: string;
+    /** The unique identifier for this load balancer listener. */
+    id: string;
   }
 
   /**
@@ -57808,6 +58219,12 @@ namespace VpcV1 {
   }
 
   /**
+   * Identifies a load balancer by a unique property.
+   */
+  export interface LoadBalancerPoolMemberTargetPrototypeLoadBalancerIdentity extends LoadBalancerPoolMemberTargetPrototype {
+  }
+
+  /**
    * LoadBalancerPoolMemberTargetIP.
    */
   export interface LoadBalancerPoolMemberTargetIP extends LoadBalancerPoolMemberTarget {
@@ -57837,6 +58254,34 @@ namespace VpcV1 {
      *  region.
      */
     name: string;
+  }
+
+  /**
+   * LoadBalancerPoolMemberTargetLoadBalancerReference.
+   */
+  export interface LoadBalancerPoolMemberTargetLoadBalancerReference extends LoadBalancerPoolMemberTarget {
+    /** The CRN for this load balancer. */
+    crn: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this load balancer. */
+    href: string;
+    /** The unique identifier for this load balancer. */
+    id: string;
+    /** The name for this load balancer. The name is unique across all load balancers in the VPC. */
+    name: string;
+    /** The resource type. */
+    resource_type: LoadBalancerPoolMemberTargetLoadBalancerReference.Constants.ResourceType | string;
+  }
+  export namespace LoadBalancerPoolMemberTargetLoadBalancerReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        LOAD_BALANCER = 'load_balancer',
+      }
+    }
   }
 
   /**
@@ -57986,7 +58431,8 @@ namespace VpcV1 {
   }
 
   /**
-   * The route mode support for a load balancer with this profile depends on its configuration.
+   * The [route mode](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-vnf&interface=ui) support for a load balancer with
+   * this profile depends on its configuration.
    */
   export interface LoadBalancerProfileRouteModeSupportedDependent extends LoadBalancerProfileRouteModeSupported {
     /** The type for this profile field. */
@@ -58002,7 +58448,8 @@ namespace VpcV1 {
   }
 
   /**
-   * The route mode support for a load balancer with this profile.
+   * The [route mode](https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-vnf&interface=ui) support for a load balancer with
+   * this profile.
    */
   export interface LoadBalancerProfileRouteModeSupportedFixed extends LoadBalancerProfileRouteModeSupported {
     /** The type for this profile field. */
@@ -58150,7 +58597,7 @@ namespace VpcV1 {
    */
   export interface NetworkACLPrototypeNetworkACLByRules extends NetworkACLPrototype {
     /** The prototype objects for rules to create along with this network ACL. If unspecified, no rules will be
-     *  created, resulting in all traffic being denied.
+     *  created, resulting in no traffic being allowed.
      */
     rules?: NetworkACLRulePrototypeNetworkACLContext[];
   }
@@ -58159,7 +58606,7 @@ namespace VpcV1 {
    * NetworkACLPrototypeNetworkACLBySourceNetworkACL.
    */
   export interface NetworkACLPrototypeNetworkACLBySourceNetworkACL extends NetworkACLPrototype {
-    /** Network ACL to copy rules from. */
+    /** The network ACL to copy rules from. */
     source_network_acl: NetworkACLIdentity;
   }
 
@@ -58196,7 +58643,7 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule for all ICMP, TCP and UDP traffic.
+   * A rule for ICMP, TCP and UDP traffic.
    */
   export interface NetworkACLRuleItemNetworkACLRuleProtocolAll extends NetworkACLRuleItem {
     /** The name of the network protocol. */
@@ -58305,7 +58752,7 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule for all ICMP, TCP and UDP traffic.
+   * A rule for ICMP, TCP and UDP traffic.
    */
   export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototypeNetworkACLContext {
     /** The name of the network protocol. */
@@ -58430,7 +58877,7 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule for all ICMP, TCP and UDP traffic.
+   * A rule for ICMP, TCP and UDP traffic.
    */
   export interface NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototype {
     /** The name of the network protocol. */
@@ -58555,7 +59002,7 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule for all ICMP, TCP and UDP traffic.
+   * A rule for ICMP, TCP and UDP traffic.
    */
   export interface NetworkACLRuleNetworkACLRuleProtocolAll extends NetworkACLRule {
     /** The name of the network protocol. */
@@ -59322,7 +59769,7 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule allowing all ICMP, TCP and UDP traffic.
+   * A rule allowing ICMP, TCP and UDP traffic.
    */
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll extends SecurityGroupRulePrototype {
     /** The name of the network protocol. */
@@ -59522,7 +59969,7 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule allowing all ICMP, TCP and UDP traffic.
+   * A rule allowing ICMP, TCP and UDP traffic.
    */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolAll extends SecurityGroupRule {
     /** The name of the network protocol. */
@@ -59877,7 +60324,6 @@ namespace VpcV1 {
   /**
    * The virtual network interface for this share mount target. The virtual network interface must:
    *
-   * - be in the same `zone` as the share
    * - have `allow_ip_spoofing` set to `false`
    * - have `enable_infrastructure_nat` set to `true`
    * - have `protocol_state_filtering_mode` set to `auto` or `enabled`
@@ -60094,6 +60540,22 @@ namespace VpcV1 {
   }
 
   /**
+   * The permitted IOPS for a share with this profile depends on its configuration.
+   */
+  export interface ShareProfileIOPSDependent extends ShareProfileIOPS {
+    /** The type for this profile field. */
+    type: ShareProfileIOPSDependent.Constants.Type | string;
+  }
+  export namespace ShareProfileIOPSDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /**
    * The permitted IOPS range of a share with this profile depends on its configuration.
    */
   export interface ShareProfileIOPSDependentRange extends ShareProfileIOPS {
@@ -60194,9 +60656,9 @@ namespace VpcV1 {
   }
 
   /**
-   * Create an accessor file share for an existing file share. The values for `initial_owner`,
-   * `access_control_mode`, `encryption_key`, `zone`, `profile`, `iops` and `size` will be inherited from
-   * `origin_share`.
+   * Create an accessor file share for an existing file share. The values for
+   * `access_control_mode`, `encryption_key`, `initial_owner`, `iops`, `profile`, `size`, and
+   * `zone` will be inherited from `origin_share`.
    */
   export interface SharePrototypeShareByOriginShare extends SharePrototype {
     /** The origin share for the accessor share. The origin share must have an
@@ -60241,11 +60703,11 @@ namespace VpcV1 {
      *  must be performed by a client that has mounted the file share.
      */
     initial_owner?: ShareInitialOwner;
-    /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
-     *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
-     *  size.
+    /** The maximum input/output operations per second (IOPS) for the file share.
      *
-     *  In addition, each client accessing the share will be restricted to 48,000 IOPS.
+     *  If the share profile has an `iops.type` of `dependent` or `fixed`, this property is system-managed and must not
+     *  be specified. Otherwise, the specified value must be within the `iops` range of the share profile as supported
+     *  by the share's specified size.
      */
     iops?: number;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) to use
@@ -60257,6 +60719,9 @@ namespace VpcV1 {
      */
     resource_group?: ResourceGroupIdentity;
     /** The size of the file share (in gigabytes), excluding share snapshots.
+     *
+     *  The specified value must be within the permitted `capacity` range of the share's profile and supported by the
+     *  share's specified IOPS.
      *
      *  The maximum size for a share may increase in the future.
      */
@@ -60282,8 +60747,8 @@ namespace VpcV1 {
   }
 
   /**
-   * Create a replica file share for an existing file share. The values for `initial_owner`,
-   * `access_control_mode`, `encryption_key` and `size` will be inherited from `source_share`.
+   * Create a replica file share for an existing file share. The values for
+   * `access_control_mode`, `encryption_key`, `initial_owner`, and `size` will be inherited from `source_share`.
    */
   export interface SharePrototypeShareBySourceShare extends SharePrototype {
     /** The root key to use to wrap the data encryption key for the share.
@@ -60293,11 +60758,11 @@ namespace VpcV1 {
      *  will be inherited from `source_share`).
      */
     encryption_key?: EncryptionKeyIdentity;
-    /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
-     *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
-     *  size.
+    /** The maximum input/output operations per second (IOPS) for the file share.
      *
-     *  In addition, each client accessing the share will be restricted to 48,000 IOPS.
+     *  If the share profile has an `iops.type` of `dependent` or `fixed`, this property is system-managed and must not
+     *  be specified. Otherwise, the specified value must be within the `iops` range of the share profile as supported
+     *  by the share's specified size.
      */
     iops?: number;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) to use
@@ -60351,11 +60816,11 @@ namespace VpcV1 {
      *  must be performed by a client that has mounted the file share.
      */
     initial_owner?: ShareInitialOwner;
-    /** The maximum input/output operations per second (IOPS) for the file share. The share must be in the
-     *  `defined_performance` profile family, and the value must be in the range supported by the share's specified
-     *  size.
+    /** The maximum input/output operations per second (IOPS) for the file share.
      *
-     *  In addition, each client accessing the share will be restricted to 48,000 IOPS.
+     *  If the share profile has an `iops.type` of `dependent` or `fixed`, this property is system-managed and must not
+     *  be specified. Otherwise, the specified value must be within the `iops` range of the share profile as supported
+     *  by the share's specified size.
      */
     iops?: number;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-file-storage-profiles) to use
@@ -61565,8 +62030,23 @@ namespace VpcV1 {
    * VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext.
    */
   export interface VolumeAttachmentPrototypeVolumeVolumePrototypeInstanceContext extends VolumeAttachmentPrototypeVolume {
-    /** The maximum I/O operations per second (IOPS) to use for this volume. If specified, the `family` of the
-     *  volume profile must be `custom` or `defined_performance`.
+    /** The maximum bandwidth (in megabits per second) for the volume.
+     *
+     *  If the volume profile has a `bandwidth.type` of `dependent`, this property is system-managed and must not be
+     *  specified.
+     *
+     *  Provided the property is user-managed, if it is unspecified, its value will be set based on the specified
+     *  [`iops` and
+     *  `capacity`](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=api).
+     */
+    bandwidth?: number;
+    /** The maximum I/O operations per second (IOPS) to use for this volume.
+     *
+     *  If the volume profile has a `iops.type` of `dependent`, this property is system-managed and must not be
+     *  specified.
+     *
+     *  Provided the property is user-managed, if it is unspecified, its value will be set based on the specified [
+     *  `capacity`](https://cloud.ibm.com/docs/vpc?topic=vpc-block-storage-profiles&interface=api).
      */
     iops?: number;
     /** The name for this volume. The name must not be used by another volume in the region. If unspecified, the
@@ -61603,6 +62083,106 @@ namespace VpcV1 {
   export interface VolumeIdentityById extends VolumeIdentity {
     /** The unique identifier for this volume. */
     id: string;
+  }
+
+  /**
+   * The maximum bandwidth (in Mbps) of a volume with this profile depends on its configuration.
+   */
+  export interface VolumeProfileBandwidthDependent extends VolumeProfileBandwidth {
+    /** The type for this profile field. */
+    type: VolumeProfileBandwidthDependent.Constants.Type | string;
+  }
+  export namespace VolumeProfileBandwidthDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /**
+   * The maximum bandwidth (in Mbps) of a volume with this profile varies depending on its configuration.
+   */
+  export interface VolumeProfileBandwidthDependentRange extends VolumeProfileBandwidth {
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: VolumeProfileBandwidthDependentRange.Constants.Type | string;
+  }
+  export namespace VolumeProfileBandwidthDependentRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT_RANGE = 'dependent_range',
+      }
+    }
+  }
+
+  /**
+   * The available maximum bandwidth values (in Mbps) of a volume with this profile.
+   */
+  export interface VolumeProfileBandwidthEnum extends VolumeProfileBandwidth {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: VolumeProfileBandwidthEnum.Constants.Type | string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+  export namespace VolumeProfileBandwidthEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
+  }
+
+  /**
+   * The maximum bandwidth (in Mbps) of a volume with this profile is fixed.
+   */
+  export interface VolumeProfileBandwidthFixed extends VolumeProfileBandwidth {
+    /** The type for this profile field. */
+    type: VolumeProfileBandwidthFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: number;
+  }
+  export namespace VolumeProfileBandwidthFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
+  /**
+   * The maximum bandwidth range (in Mbps) of a volume with this profile.
+   */
+  export interface VolumeProfileBandwidthRange extends VolumeProfileBandwidth {
+    /** The default value for this profile field. */
+    default: number;
+    /** The maximum value for this profile field. */
+    max: number;
+    /** The minimum value for this profile field. */
+    min: number;
+    /** The increment step value for this profile field. */
+    step: number;
+    /** The type for this profile field. */
+    type: VolumeProfileBandwidthRange.Constants.Type | string;
+  }
+  export namespace VolumeProfileBandwidthRange {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        RANGE = 'range',
+      }
+    }
   }
 
   /**
@@ -62551,6 +63131,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62570,6 +63151,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62589,6 +63171,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62608,6 +63191,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62627,6 +63211,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62646,6 +63231,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62665,6 +63251,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62684,6 +63271,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62703,6 +63291,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62722,6 +63311,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62741,6 +63331,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62760,6 +63351,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62779,6 +63371,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62798,6 +63391,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62817,6 +63411,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62836,6 +63431,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62855,6 +63451,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62874,6 +63471,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62893,6 +63491,7 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
   }
@@ -62912,8 +63511,25 @@ namespace VpcV1 {
       export enum ConfidentialComputeMode {
         DISABLED = 'disabled',
         SGX = 'sgx',
+        TDX = 'tdx',
       }
     }
+  }
+
+  /**
+   * LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerIdentityLoadBalancerListenerIdentityByHref.
+   */
+  export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerIdentityLoadBalancerListenerIdentityByHref extends LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerIdentity {
+    /** The URL for this load balancer listener. */
+    href: string;
+  }
+
+  /**
+   * LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerIdentityLoadBalancerListenerIdentityById.
+   */
+  export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerIdentityLoadBalancerListenerIdentityById extends LoadBalancerListenerPolicyTargetPatchLoadBalancerListenerIdentity {
+    /** The unique identifier for this load balancer listener. */
+    id: string;
   }
 
   /**
@@ -62929,6 +63545,22 @@ namespace VpcV1 {
    */
   export interface LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentityLoadBalancerPoolIdentityLoadBalancerPoolIdentityById extends LoadBalancerListenerPolicyTargetPatchLoadBalancerPoolIdentity {
     /** The unique identifier for this load balancer pool. */
+    id: string;
+  }
+
+  /**
+   * LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerIdentityLoadBalancerListenerIdentityByHref.
+   */
+  export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerIdentityLoadBalancerListenerIdentityByHref extends LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerIdentity {
+    /** The URL for this load balancer listener. */
+    href: string;
+  }
+
+  /**
+   * LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerIdentityLoadBalancerListenerIdentityById.
+   */
+  export interface LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerIdentityLoadBalancerListenerIdentityById extends LoadBalancerListenerPolicyTargetPrototypeLoadBalancerListenerIdentity {
+    /** The unique identifier for this load balancer listener. */
     id: string;
   }
 
@@ -62969,6 +63601,30 @@ namespace VpcV1 {
    */
   export interface LoadBalancerPoolMemberTargetPrototypeInstanceIdentityInstanceIdentityById extends LoadBalancerPoolMemberTargetPrototypeInstanceIdentity {
     /** The unique identifier for this virtual server instance. */
+    id: string;
+  }
+
+  /**
+   * LoadBalancerPoolMemberTargetPrototypeLoadBalancerIdentityLoadBalancerIdentityByCRN.
+   */
+  export interface LoadBalancerPoolMemberTargetPrototypeLoadBalancerIdentityLoadBalancerIdentityByCRN extends LoadBalancerPoolMemberTargetPrototypeLoadBalancerIdentity {
+    /** The CRN for this load balancer. */
+    crn: string;
+  }
+
+  /**
+   * LoadBalancerPoolMemberTargetPrototypeLoadBalancerIdentityLoadBalancerIdentityByHref.
+   */
+  export interface LoadBalancerPoolMemberTargetPrototypeLoadBalancerIdentityLoadBalancerIdentityByHref extends LoadBalancerPoolMemberTargetPrototypeLoadBalancerIdentity {
+    /** The URL for this load balancer. */
+    href: string;
+  }
+
+  /**
+   * LoadBalancerPoolMemberTargetPrototypeLoadBalancerIdentityLoadBalancerIdentityById.
+   */
+  export interface LoadBalancerPoolMemberTargetPrototypeLoadBalancerIdentityLoadBalancerIdentityById extends LoadBalancerPoolMemberTargetPrototypeLoadBalancerIdentity {
+    /** The unique identifier for this load balancer. */
     id: string;
   }
 
