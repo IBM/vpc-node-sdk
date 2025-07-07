@@ -130,11 +130,6 @@ class VpcV1 extends BaseService {
   constructor(options: UserOptions) {
     options = options || {};
 
-    const _requiredParams = ['version'];
-    const _validationErrors = validateParams(options, _requiredParams, null);
-    if (_validationErrors) {
-      throw _validationErrors;
-    }
     super(options);
     if (options.serviceUrl) {
       this.setServiceUrl(options.serviceUrl);
