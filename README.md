@@ -73,6 +73,9 @@ const options = {
     }),
     serviceUrl: "https://us-south.iaas.cloud.ibm.com/v1",
 };
+
+// region specific service url can be fetched using vpcV1.getServiceUrlForRegion("us-south")
+
 const service = vpcV1.newInstance(options);
 // Retrieve the list of regions for your account.
 const response = service.listRegions({});
