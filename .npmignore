@@ -1,6 +1,5 @@
 test
 coverage
-.travis.yml
 scripts/
 tslint.json
 .eslintrc.js
