@@ -33,7 +33,7 @@ jobs:
         npm run build
         npm run lint
         npm run check-packages
-        npm run test-ci
+        npm run test-unit-ci
 
     - name: Release
       if: github.ref == 'refs/heads/master' && matrix.node-version == '22'
