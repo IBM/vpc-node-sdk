@@ -42,7 +42,7 @@
     "@ibm-cloud/sdk-test-utilities": "^1.0.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "axios": "1.11.0",
+    "axios": "1.12.2",
     "dotenv": "^16.4.5",
     "eslint": "^7.26.0",
     "eslint-config-google": "^0.14.0",
