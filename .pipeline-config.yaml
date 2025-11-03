@@ -1,0 +1,17 @@
+version: '2'
+
+tasks:
+  simple-execute:
+    displayName: NodeJS SDK PR Checks
+    steps:
+      - name: execute
+        image: icr.io/continuous-delivery/pipeline/pipeline-base-image:2.81
+        script: |
+          #!/usr/bin/env bash
+          
+          echo "NodeJS SDK PR Checks Begin"
+          #!/usr/bin/env bash
+          set -e
+          make install
+          make test-unit
+          
