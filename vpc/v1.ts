@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.107.1-41b0fbd0-20250825-080732
+ * IBM OpenAPI SDK Code Generator Version: 3.108.0-56772134-20251111-102802
  */
 
 /* eslint-disable max-classes-per-file */
@@ -40,7 +40,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: 2025-09-23
+ * API Version: 2025-12-16
  */
 
 class VpcV1 extends BaseService {
@@ -58,6 +58,7 @@ class VpcV1 extends BaseService {
     ['eu-de', 'https://eu-de.iaas.cloud.ibm.com/v1'], // Germany (Frankfurt)
     ['eu-es', 'https://eu-es.iaas.cloud.ibm.com/v1'], // Spain (Madrid)
     ['eu-gb', 'https://eu-gb.iaas.cloud.ibm.com/v1'], // United Kingdom (London)
+    ['in-che', 'https://in-che.iaas.cloud.ibm.com/v1'], // India (Chennai)
     ['jp-osa', 'https://jp-osa.iaas.cloud.ibm.com/v1'], // Japan (Osaka)
     ['jp-tok', 'https://jp-tok.iaas.cloud.ibm.com/v1'], // Japan (Tokyo)
     ['us-east', 'https://us-east.iaas.cloud.ibm.com/v1'], // US East (Washington DC)
@@ -109,7 +110,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2025-09-16` and `2025-09-24`.
+   *  `2025-12-09` and `2025-12-17`.
    */
   version: string;
 
@@ -120,7 +121,7 @@ class VpcV1 extends BaseService {
    * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
    * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2025-09-16` and `2025-09-24`.
+   * specify any date between `2025-12-09` and `2025-12-17`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -140,7 +141,7 @@ class VpcV1 extends BaseService {
     if (!('generation' in options)) {
       this.generation = 2;
     }
-    this.version = options.version || '2025-09-23';
+    this.version = options.version || '2025-12-16';
   }
 
   /*************************
@@ -5671,8 +5672,8 @@ class VpcV1 extends BaseService {
    * specified CRN.
    * @param {string} [params.vpcName] - Filters the collection to resources with a `vpc.name` property matching the
    * exact specified name.
-   * @param {boolean} [params.allowDnsResolutionBinding] - Filters the collection to endpoint gateways with an
-   * `allow_dns_resolution_binding` property matching the specified value.
+   * @param {string[]} [params.dnsResolutionBindingMode] - Filters the collection to endpoint gateways with a
+   * `dns_resolution_binding_mode` property matching one of the specified comma-separated values.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EndpointGatewayCollection>>}
    */
@@ -5681,7 +5682,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGatewayCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'lifecycleState', 'vpcId', 'vpcCrn', 'vpcName', 'allowDnsResolutionBinding', 'signal', 'headers'];
+    const _validParams = ['name', 'start', 'limit', 'resourceGroupId', 'lifecycleState', 'vpcId', 'vpcCrn', 'vpcName', 'dnsResolutionBindingMode', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5698,7 +5699,7 @@ class VpcV1 extends BaseService {
       'vpc.id': _params.vpcId,
       'vpc.crn': _params.vpcCrn,
       'vpc.name': _params.vpcName,
-      'allow_dns_resolution_binding': _params.allowDnsResolutionBinding,
+      'dns_resolution_binding_mode': _params.dnsResolutionBindingMode,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listEndpointGateways');
@@ -5741,26 +5742,45 @@ class VpcV1 extends BaseService {
    * - Must not have a service endpoint that overlaps with any `service_endpoints` of
    *   another endpoint gateway in the VPC.
    *
-   * If `allow_dns_resolution_binding` is `true`, then there must not be another endpoint
-   * gateway with `allow_dns_resolution_binding` set to `true` in the [DNS
-   * sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) connected topology that:
+   * If `dns_resolution_binding_mode` is set to `primary`, then there must not be
+   * another endpoint gateway in the [DNS sharing](/docs/vpc?topic=vpc-vpe-dns-sharing)
+   * connected topology that:
    * - Has the same `target` as this endpoint gateway
    * - Has `service_endpoints` that overlap with the `service_endpoints` for this endpoint
    *   gateway.
+   *
+   * If `dns_resolution_binding_mode` is set to `per_resource_binding`, then:
+   * - The VPC in the topology with `dns.enable_hub` set to `true` must have an endpoint
+   *   gateway with the same `target` as this endpoint gateway.
+   * - The VPC in the topology with `dns.enable_hub` set to `true` must have an endpoint
+   *   gateway with `dns_resolution_binding_mode` set to `primary`.
+   * - No other VPC in the topology can have an endpoint gateway with a resource binding
+   *   using the same `service_endpoint` as a resource binding for this endpoint gateway.
    * @param {VPCIdentity} params.vpc - The VPC this endpoint gateway will reside in.
-   * @param {boolean} [params.allowDnsResolutionBinding] - Indicates whether to allow DNS resolution for this endpoint
-   * gateway when the VPC this endpoint gateway resides in has a DNS resolution binding to a VPC with `dns.enable_hub`
-   * set to `true`.
+   * @param {string} [params.dnsResolutionBindingMode] - The DNS resolution binding mode to use for this endpoint
+   * gateway:
+   * - `disabled`: The endpoint gateway will not participate in [DNS sharing for VPE
+   *    gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) with other VPCs in a connected
+   *    topology.
+   * - `primary`: The endpoint gateway will participate in [DNS sharing for VPE gateways]
+   *    (/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in
+   *    has a DNS resolution binding to another VPC. If the VPC this endpoint gateway
+   *    resides in has a DNS resolution binding to another VPC, then no other VPC in the
+   *    topology can have an endpoint gateway with the same `target` as this endpoint
+   *    gateway.
+   * - `per_resource_binding`: The endpoint gateway will participate in [DNS sharing for VPE
+   *    gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway
+   *    resides in has a DNS resolution binding to another VPC. Resource binding must be
+   *    enabled for the `target` service.
    *
-   * If `true`, then there must not be another endpoint gateway with
-   * `allow_dns_resolution_binding` set to `true` in the [DNS sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) connected
-   * topology that:
-   * - Has the same `target` as this endpoint gateway
-   * - Has `service_endpoints` that overlap with the `service_endpoints` for this endpoint
-   *   gateway.
+   *    The VPC this endpoint gateway resides in must have `dns.enable_hub` set to
+   *    `false`.
    *
-   * Must be `true` if the VPC this endpoint gateway resides in has `dns.enable_hub` set to
-   * `true`.
+   *    If the VPC this endpoint gateway resides in has DNS resolution binding to another
+   *    VPC, the other VPC must:
+   *    - have `dns.enable_hub` set to `true`
+   *    - contain an endpoint gateway for the same `target` service with
+   *      `dns_resolution_binding_mode` set to `primary`.
    * @param {EndpointGatewayReservedIP[]} [params.ips] - The reserved IPs to bind to this endpoint gateway. At most one
    * reserved IP per zone is allowed.
    * @param {string} [params.name] - The name for this endpoint gateway. The name must not be used by another endpoint
@@ -5778,7 +5798,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
     const _params = { ...params };
     const _requiredParams = ['target', 'vpc'];
-    const _validParams = ['target', 'vpc', 'allowDnsResolutionBinding', 'ips', 'name', 'resourceGroup', 'securityGroups', 'signal', 'headers'];
+    const _validParams = ['target', 'vpc', 'dnsResolutionBindingMode', 'ips', 'name', 'resourceGroup', 'securityGroups', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -5787,7 +5807,7 @@ class VpcV1 extends BaseService {
     const body = {
       'target': _params.target,
       'vpc': _params.vpc,
-      'allow_dns_resolution_binding': _params.allowDnsResolutionBinding,
+      'dns_resolution_binding_mode': _params.dnsResolutionBindingMode,
       'ips': _params.ips,
       'name': _params.name,
       'resource_group': _params.resourceGroup,
@@ -6080,12 +6100,349 @@ class VpcV1 extends BaseService {
   }
 
   /**
+   * List resource bindings for an endpoint gateway.
+   *
+   * This request lists resource bindings for an endpoint gateway. A resource binding is an association between the
+   * endpoint gateway and a resource in the endpoint gateway's `target` service. The resource binding provides a fully
+   * qualified domain name for the
+   * `service_endpoint` to access the resource from the endpoint gateway's VPC.
+   *
+   * The resource bindings will be sorted by their `created_at` property values, with newest resource bindings first.
+   * Resource bindings with identical `created_at` property values will in turn be sorted by ascending `name` property
+   * values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.endpointGatewayId - The endpoint gateway identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EndpointGatewayResourceBindingCollection>>}
+   */
+  public listEndpointGatewayResourceBindings(
+    params: VpcV1.ListEndpointGatewayResourceBindingsParams
+  ): Promise<VpcV1.Response<VpcV1.EndpointGatewayResourceBindingCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['endpointGatewayId'];
+    const _validParams = ['endpointGatewayId', 'start', 'limit', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const path = {
+      'endpoint_gateway_id': _params.endpointGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listEndpointGatewayResourceBindings');
+
+    const parameters = {
+      options: {
+        url: '/endpoint_gateways/{endpoint_gateway_id}/resource_bindings',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a resource binding for an endpoint gateway.
+   *
+   * This request creates a new resource binding for an endpoint gateway from an endpoint gateway resource binding
+   * prototype object. The prototype object is structured in the same way as a retrieved endpoint gateway resource
+   * binding, and contains the information necessary to create the new resource binding.
+   *
+   * For this request to succeed, resource binding must be enabled for this endpoint gateway's
+   * `target` service and this endpoint gateway resource binding must not conflict with another resource binding in the
+   * [DNS sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) connected topology.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.endpointGatewayId - The endpoint gateway identifier.
+   * @param {EndpointGatewayResourceBindingTargetPrototype} params.target - The target to use for this resource binding.
+   * @param {string} [params.name] - The name for this resource binding. The name must not be used by another resource
+   * binding for the endpoint gateway. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EndpointGatewayResourceBinding>>}
+   */
+  public createEndpointGatewayResourceBinding(
+    params: VpcV1.CreateEndpointGatewayResourceBindingParams
+  ): Promise<VpcV1.Response<VpcV1.EndpointGatewayResourceBinding>> {
+    const _params = { ...params };
+    const _requiredParams = ['endpointGatewayId', 'target'];
+    const _validParams = ['endpointGatewayId', 'target', 'name', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'target': _params.target,
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'endpoint_gateway_id': _params.endpointGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createEndpointGatewayResourceBinding');
+
+    const parameters = {
+      options: {
+        url: '/endpoint_gateways/{endpoint_gateway_id}/resource_bindings',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a resource binding from an endpoint gateway.
+   *
+   * This request deletes the specified resource binding from the specified endpoint gateway. This operation cannot be
+   * reversed.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.endpointGatewayId - The endpoint gateway identifier.
+   * @param {string} params.id - The resource binding identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deleteEndpointGatewayResourceBinding(
+    params: VpcV1.DeleteEndpointGatewayResourceBindingParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['endpointGatewayId', 'id'];
+    const _validParams = ['endpointGatewayId', 'id', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'endpoint_gateway_id': _params.endpointGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteEndpointGatewayResourceBinding');
+
+    const parameters = {
+      options: {
+        url: '/endpoint_gateways/{endpoint_gateway_id}/resource_bindings/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve an endpoint gateway resource binding.
+   *
+   * This request retrieves a single endpoint gateway resource binding specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.endpointGatewayId - The endpoint gateway identifier.
+   * @param {string} params.id - The resource binding identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EndpointGatewayResourceBinding>>}
+   */
+  public getEndpointGatewayResourceBinding(
+    params: VpcV1.GetEndpointGatewayResourceBindingParams
+  ): Promise<VpcV1.Response<VpcV1.EndpointGatewayResourceBinding>> {
+    const _params = { ...params };
+    const _requiredParams = ['endpointGatewayId', 'id'];
+    const _validParams = ['endpointGatewayId', 'id', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'endpoint_gateway_id': _params.endpointGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getEndpointGatewayResourceBinding');
+
+    const parameters = {
+      options: {
+        url: '/endpoint_gateways/{endpoint_gateway_id}/resource_bindings/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update an endpoint gateway resource binding.
+   *
+   * This request updates an endpoint gateway resource binding with the information in a provided endpoint gateway
+   * resource binding patch. The endpoint gateway resource binding patch object is structured in the same way as a
+   * retrieved endpoint gateway resource binding and contains only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.endpointGatewayId - The endpoint gateway identifier.
+   * @param {string} params.id - The resource binding identifier.
+   * @param {string} [params.name] - The name for this resource binding. The name must not be used by another resource
+   * binding for the endpoint gateway.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EndpointGatewayResourceBinding>>}
+   */
+  public updateEndpointGatewayResourceBinding(
+    params: VpcV1.UpdateEndpointGatewayResourceBindingParams
+  ): Promise<VpcV1.Response<VpcV1.EndpointGatewayResourceBinding>> {
+    const _params = { ...params };
+    const _requiredParams = ['endpointGatewayId', 'id'];
+    const _validParams = ['endpointGatewayId', 'id', 'name', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'endpoint_gateway_id': _params.endpointGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateEndpointGatewayResourceBinding');
+
+    const parameters = {
+      options: {
+        url: '/endpoint_gateways/{endpoint_gateway_id}/resource_bindings/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * Delete an endpoint gateway.
    *
    * This request deletes an endpoint gateway. This operation cannot be reversed.
    *
    * Reserved IPs that were bound to the endpoint gateway will be released if their
    * `auto_delete` property is set to true.
+   *
+   * If the VPC this endpoint gateway resides in has `dns.enable_hub` set to `true`, then no other VPC in the [DNS
+   * sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) topology must contain an endpoint gateway with the same `target`
+   * service as this endpoint gateway.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The endpoint gateway identifier.
@@ -6206,19 +6563,30 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The endpoint gateway identifier.
-   * @param {boolean} [params.allowDnsResolutionBinding] - Indicates whether to allow DNS resolution for this endpoint
-   * gateway when the VPC this endpoint gateway resides in has a DNS resolution binding to a VPC with `dns.enable_hub`
-   * set to `true`.
+   * @param {string} [params.dnsResolutionBindingMode] - The DNS resolution binding mode to use for this endpoint
+   * gateway:
+   * - `disabled`: The endpoint gateway will not participate in [DNS sharing for VPE
+   *    gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) with other VPCs in a connected
+   *    topology.
+   * - `primary`: The endpoint gateway will participate in [DNS sharing for VPE gateways]
+   *    (/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in
+   *    has a DNS resolution binding to another VPC. If the VPC this endpoint gateway
+   *    resides in has a DNS resolution binding to another VPC, then no other VPC in the
+   *    topology can have an endpoint gateway with the same `target` as this endpoint
+   *    gateway.
+   * - `per_resource_binding`: The endpoint gateway will participate in [DNS sharing for VPE
+   *    gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway
+   *    resides in has a DNS resolution binding to another VPC. Resource binding must be
+   *    enabled for the `target` service.
    *
-   * If `true`, then there must not be another endpoint gateway with
-   * `allow_dns_resolution_binding` set to `true` in the [DNS sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) connected
-   * topology that:
-   * - Has the same `target` as this endpoint gateway
-   * - Has `service_endpoints` that overlap with the `service_endpoints` for this endpoint
-   *   gateway.
+   *    The VPC this endpoint gateway resides in must have `dns.enable_hub` set to
+   *    `false`.
    *
-   * Must be `true` if the VPC this endpoint gateway resides in has `dns.enable_hub` set to
-   * `true`.
+   *    If the VPC this endpoint gateway resides in has DNS resolution binding to another
+   *    VPC, the other VPC must:
+   *    - have `dns.enable_hub` set to `true`
+   *    - contain an endpoint gateway for the same `target` service with
+   *      `dns_resolution_binding_mode` set to `primary`.
    * @param {string} [params.name] - The name for this endpoint gateway. The name must not be used by another endpoint
    * gateway in the VPC.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -6229,14 +6597,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EndpointGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'allowDnsResolutionBinding', 'name', 'signal', 'headers'];
+    const _validParams = ['id', 'dnsResolutionBindingMode', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
-      'allow_dns_resolution_binding': _params.allowDnsResolutionBinding,
+      'dns_resolution_binding_mode': _params.dnsResolutionBindingMode,
       'name': _params.name,
     };
 
@@ -6714,8 +7082,10 @@ class VpcV1 extends BaseService {
    * instance network attachments, virtual network interfaces or instance network interfaces
    * within the target that are themselves the target of a more specific flow log collector.
    *
-   * The target must not be a virtual network interface that is attached to a bare metal server
-   * network attachment or to a file share mount target.
+   * For this request to succeed, the target must:
+   * - not be a virtual network interface that is attached to a bare metal server network
+   *   attachment or to a file share mount target
+   * - not already be the target of another flow log collector.
    * @param {boolean} [params.active] - Indicates whether this collector will be active upon creation.
    * @param {string} [params.name] - The name for this flow log collector. The name must not be used by another flow log
    * collector in the VPC. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -10432,6 +10802,10 @@ class VpcV1 extends BaseService {
    * property matching the specified CRN.
    * @param {string} [params.dedicatedHostName] - Filters the collection to resources with a `dedicated_host.name`
    * property matching the exact specified name.
+   * @param {string} [params.instanceGroupMembershipInstanceGroupId] - Filters the collection to instances with an
+   * `instance_group_membership.instance_group.id` property matching the specified instance group identifier.
+   * @param {string} [params.instanceGroupMembershipInstanceGroupCrn] - Filters the collection to instances with an
+   * `instance_group_membership.instance_group.crn` property matching the specified instance group CRN.
    * @param {string} [params.placementGroupId] - Filters the collection to resources with a `placement_target.id`
    * property matching the specified placement group identifier.
    * @param {string} [params.placementGroupCrn] - Filters the collection to resources with a `placement_target.crn`
@@ -10460,7 +10834,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'clusterNetworkId', 'clusterNetworkCrn', 'clusterNetworkName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationAffinityPolicy', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'signal', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'clusterNetworkId', 'clusterNetworkCrn', 'clusterNetworkName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'instanceGroupMembershipInstanceGroupId', 'instanceGroupMembershipInstanceGroupCrn', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationAffinityPolicy', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10479,6 +10853,8 @@ class VpcV1 extends BaseService {
       'dedicated_host.id': _params.dedicatedHostId,
       'dedicated_host.crn': _params.dedicatedHostCrn,
       'dedicated_host.name': _params.dedicatedHostName,
+      'instance_group_membership.instance_group.id': _params.instanceGroupMembershipInstanceGroupId,
+      'instance_group_membership.instance_group.crn': _params.instanceGroupMembershipInstanceGroupCrn,
       'placement_group.id': _params.placementGroupId,
       'placement_group.crn': _params.placementGroupCrn,
       'placement_group.name': _params.placementGroupName,
@@ -10727,11 +11103,11 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this virtual server instance. The name must not be used by another
    * virtual server instance in the region. Changing the name will not affect the system hostname.
    * @param {InstancePlacementTargetPatch} [params.placementTarget] - The placement restrictions to use for the virtual
-   * server instance. For the
-   * placement restrictions to be changed, the instance `status` must be `stopping` or
-   * `stopped`.
+   * server instance.
    *
-   * If set, `reservation_affinity.policy` must be `disabled`.
+   * If specified, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated
+   * host or dedicated host group, the `vcpu.percentage` must be `100` and the instance must
+   * have two or more vCPUs.
    * @param {InstancePatchProfile} [params.profile] - The profile to use for this virtual server instance. Any disks
    * associated with the
    * current profile will be deleted, and any disks associated with the requested profile
@@ -10745,10 +11121,17 @@ class VpcV1 extends BaseService {
    * - Have the same `vcpu.architecture`.
    * - Support the number of network attachments or network interfaces the instance
    *   currently has.
+   * - Have the `volume_bandwidth_qos_mode` listed in its `volume_bandwidth_qos_modes`.
    * @param {InstanceReservationAffinityPatch} [params.reservationAffinity] -
    * @param {number} [params.totalVolumeBandwidth] - The amount of bandwidth (in megabits per second) allocated
    * exclusively to instance storage volumes. An increase in this value will result in a corresponding decrease to
    * `total_network_bandwidth`.
+   * @param {InstanceVCPUPatch} [params.vcpu] -
+   * @param {string} [params.volumeBandwidthQosMode] - The volume bandwidth QoS mode to use for this virtual server
+   * instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`.
+   *
+   * For this property to be changed, the virtual server instance `status` must be
+   * `stopping` or `stopped`.
    * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
    * resource's current ETag value. Required if the request body includes an array.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -10759,7 +11142,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Instance>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'availabilityPolicy', 'confidentialComputeMode', 'enableSecureBoot', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'totalVolumeBandwidth', 'ifMatch', 'signal', 'headers'];
+    const _validParams = ['id', 'availabilityPolicy', 'confidentialComputeMode', 'enableSecureBoot', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'totalVolumeBandwidth', 'vcpu', 'volumeBandwidthQosMode', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10775,6 +11158,8 @@ class VpcV1 extends BaseService {
       'profile': _params.profile,
       'reservation_affinity': _params.reservationAffinity,
       'total_volume_bandwidth': _params.totalVolumeBandwidth,
+      'vcpu': _params.vcpu,
+      'volume_bandwidth_qos_mode': _params.volumeBandwidthQosMode,
     };
 
     const query = {
@@ -11972,10 +12357,11 @@ class VpcV1 extends BaseService {
    * randomly-selected words.
    * @param {NetworkInterfaceIPPrototype} [params.primaryIp] - The primary IP address to bind to the instance network
    * interface. This can be
-   * specified using an existing reserved IP, or a prototype object for a new reserved IP.
+   * specified using an existing reserved IP, or a prototype object for a new reserved
+   * IP.
    *
-   * If an existing reserved IP or a prototype object with an address is specified, it must
-   * be available on the instance network interface's subnet. Otherwise, an
+   * If an existing reserved IP or a prototype object with an address is specified, it
+   * must be available on the instance network interface's subnet. Otherwise, an
    * available address on the subnet will be automatically selected and reserved.
    * @param {SecurityGroupIdentity[]} [params.securityGroups] - The security groups to use for this instance network
    * interface. If unspecified, the VPC's default security group is used.
@@ -16463,6 +16849,8 @@ class VpcV1 extends BaseService {
    * @param {string} params.networkAclId - The network ACL identifier.
    * @param {string} params.id - The rule identifier.
    * @param {string} [params.action] - The action to perform for a packet matching the rule.
+   *
+   * Must not be `deny` if `protocol` is `icmp_tcp_udp`.
    * @param {NetworkACLRuleBeforePatch} [params.before] - The rule to move this rule immediately before.
    *
    * Specify `null` to move this rule after all existing rules.
@@ -19729,6 +20117,8 @@ class VpcV1 extends BaseService {
    *
    * Specify a CIDR block of `0.0.0.0/0` to allow traffic to all local IP addresses (or from all
    * local IP addresses, for outbound rules).
+   * @param {string} [params.name] - The name for this security group rule. The name must not be used by another rule in
+   * the security group.
    * @param {number} [params.portMax] - The inclusive upper bound of the protocol destination port range. If set,
    * `port_min` must also be set, and must not be larger.
    *
@@ -19753,7 +20143,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SecurityGroupRule>> {
     const _params = { ...params };
     const _requiredParams = ['securityGroupId', 'id'];
-    const _validParams = ['securityGroupId', 'id', 'code', 'direction', 'ipVersion', 'local', 'portMax', 'portMin', 'remote', 'type', 'signal', 'headers'];
+    const _validParams = ['securityGroupId', 'id', 'code', 'direction', 'ipVersion', 'local', 'name', 'portMax', 'portMin', 'remote', 'type', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -19764,6 +20154,7 @@ class VpcV1 extends BaseService {
       'direction': _params.direction,
       'ip_version': _params.ipVersion,
       'local': _params.local,
+      'name': _params.name,
       'port_max': _params.portMax,
       'port_min': _params.portMin,
       'remote': _params.remote,
@@ -24035,6 +24426,8 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The virtual network interface identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>>}
    */
@@ -24043,7 +24436,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'signal', 'headers'];
+    const _validParams = ['id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24074,6 +24467,7 @@ class VpcV1 extends BaseService {
           this.baseOptions.headers,
           {
             'Accept': 'application/json',
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -24187,6 +24581,8 @@ class VpcV1 extends BaseService {
    * Protocol state filtering monitors each network connection flowing over this virtual network interface, and drops
    * any packets that are invalid based on the current connection state and protocol. See [Protocol state filtering
    * mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>>}
    */
@@ -24195,7 +24591,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VirtualNetworkInterface>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'name', 'protocolStateFilteringMode', 'signal', 'headers'];
+    const _validParams = ['id', 'allowIpSpoofing', 'autoDelete', 'enableInfrastructureNat', 'name', 'protocolStateFilteringMode', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -24236,6 +24632,7 @@ class VpcV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -26199,17 +26596,14 @@ class VpcV1 extends BaseService {
    *
    * If the VPC specified by the identifier in the URL is a DNS hub VPC (has `dns.enable_hub` set to `true`) then there
    * is one binding for each VPC bound to the hub VPC. The endpoint gateways in the bound VPCs can allow (using
-   * `allow_dns_resolution_binding`) the hub VPC to centralize resolution of their DNS names.
+   * `dns_resolution_binding_mode`) the hub VPC to centralize resolution of their DNS names.
    *
    * If the VPC specified by the identifier in the URL is not a DNS hub VPC, then there is at most one binding (to a hub
    * VPC). The endpoint gateways in the VPC specified by the identifier in the URL can allow (using
-   * `allow_dns_resolution_binding`) its hub VPC to centralize resolution of their DNS names.
+   * `dns_resolution_binding_mode`) its hub VPC to centralize resolution of their DNS names.
    *
    * To make use of centralized DNS resolution, a VPC bound to a DNS hub VPC must delegate DNS resolution to its hub VPC
    * by setting `dns.resolver.type` to `delegate`.
-   *
-   * The bindings will be sorted by their `created_at` property values, with newest bindings first. Bindings with
-   * identical `created_at` property values will in turn be sorted by ascending `name` property values.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpcId - The VPC identifier.
@@ -26296,9 +26690,20 @@ class VpcV1 extends BaseService {
    * - The VPC specified by the identifier in the URL must not already have a DNS resolution
    *   binding
    * - The VPC specified by the identifier in the URL must have `dns.enable_hub` set to
-   *   `false`
+   *  `false`
    * - The updated DNS sharing connected topology must not contain more than one endpoint
-   *   gateway with `allow_dns_resolution_binding` set to `true` targeting the same service.
+   *   gateway with `dns_resolution_binding_mode` set to `primary` targeting the same service.
+   *
+   * Additionally, if the VPC specified by the identifier in the URL has endpoint gateways that have
+   * `dns_resolution_binding_mode` set to `per_resource_binding`, then those endpoint gateways will participate in [DNS
+   * sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) with all VPCs in the connected topology. If this VPC contains an
+   * endpoint gateway targeting a service that has resource binding enabled, then for this request to succeed:
+   * - The VPC in the topology with `dns.enable_hub` set to `true` must have an endpoint
+   *   gateway with the same `target` as the endpoint gateway in this VPC, and with
+   *   `dns_resolution_binding_mode` set to `primary`.
+   * - No other VPC in the topology can have an endpoint gateway with a resource binding
+   *   using the same `service_endpoint` as a resource binding for the endpoint gateway in
+   *   this VPC.
    *
    * See [About DNS sharing for VPE gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) for more information.
    *
@@ -27873,7 +28278,7 @@ class VpcV1 extends BaseService {
    * @param {string} params.encryptionAlgorithm - The encryption algorithm.
    * @param {number} params.ikeVersion - The IKE protocol version.
    * @param {number} [params.keyLifetime] - The key lifetime in seconds.
-   * @param {string} [params.name] - The name for this IKE policy. The name must not be used by another IKE policies in
+   * @param {string} [params.name] - The name for this IKE policy. The name must not be used by another IKE policy in
    * the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
@@ -28268,7 +28673,7 @@ class VpcV1 extends BaseService {
    *
    * Groups `group_2` and `group_5` have been deprecated.
    * @param {number} [params.keyLifetime] - The key lifetime in seconds.
-   * @param {string} [params.name] - The name for this IPsec policy. The name must not be used by another IPsec policies
+   * @param {string} [params.name] - The name for this IPsec policy. The name must not be used by another IPsec policy
    * in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
@@ -28841,6 +29246,11 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The VPN gateway identifier.
+   * @param {number} [params.localAsn] - The local autonomous system number (ASN) for this VPN gateway and its
+   * connections. The ASN values in the
+   * [restricted ASN list](
+   * https://cloud.ibm.com/docs/vpc?topic=vpc-planning-considerations-vpn#dynamic-route-based-considerations) are
+   * reserved and unavailable.
    * @param {string} [params.name] - The name for this VPN gateway. The name must not be used by another VPN gateway in
    * the VPC.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
@@ -28851,13 +29261,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'name', 'signal', 'headers'];
+    const _validParams = ['id', 'localAsn', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'local_asn': _params.localAsn,
       'name': _params.name,
     };
 
@@ -28888,6 +29299,250 @@ class VpcV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List advertised CIDRs for a VPN gateway.
+   *
+   * This request lists advertised CIDRs for a VPN gateway.
+   *
+   * This request is only supported for route mode VPN gateways.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpnGatewayId - The VPN gateway identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayAdvertisedCIDRCollection>>}
+   */
+  public listVpnGatewayAdvertisedCidrs(
+    params: VpcV1.ListVpnGatewayAdvertisedCidrsParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayAdvertisedCIDRCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpnGatewayId'];
+    const _validParams = ['vpnGatewayId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayAdvertisedCidrs');
+
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/advertised_cidrs',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Remove an advertised CIDR from a VPN gateway.
+   *
+   * This request removes a CIDR from a VPN gateway advertised CIDRs.
+   *
+   * This request is only supported for route mode VPN gateways.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpnGatewayId - The VPN gateway identifier.
+   * @param {string} params.cidr - The IP address range in CIDR block notation.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public removeVpnGatewayAdvertisedCidr(
+    params: VpcV1.RemoveVpnGatewayAdvertisedCidrParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpnGatewayId', 'cidr'];
+    const _validParams = ['vpnGatewayId', 'cidr', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'cidr': _params.cidr,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'removeVpnGatewayAdvertisedCidr');
+
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/advertised_cidrs/{cidr}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Check if the specified advertised CIDR exists on a VPN gateway.
+   *
+   * This request succeeds if an advertised CIDR exists on the specified VPN gateway, and fails otherwise.
+   *
+   * This request is only supported for route mode VPN gateways.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpnGatewayId - The VPN gateway identifier.
+   * @param {string} params.cidr - The IP address range in CIDR block notation.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public checkVpnGatewayAdvertisedCidr(
+    params: VpcV1.CheckVpnGatewayAdvertisedCidrParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpnGatewayId', 'cidr'];
+    const _validParams = ['vpnGatewayId', 'cidr', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'cidr': _params.cidr,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'checkVpnGatewayAdvertisedCidr');
+
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/advertised_cidrs/{cidr}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Set an advertised CIDR on a VPN gateway.
+   *
+   * This request adds the specified CIDR to the specified VPN gateway advertised CIDRs. This request succeeds if the
+   * specified CIDR already exists. A request body is not required, and if provided, is ignored.
+   *
+   * This request is only supported for route mode VPN gateways.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpnGatewayId - The VPN gateway identifier.
+   * @param {string} params.cidr - The IP address range in CIDR block notation.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public addVpnGatewayAdvertisedCidr(
+    params: VpcV1.AddVpnGatewayAdvertisedCidrParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpnGatewayId', 'cidr'];
+    const _validParams = ['vpnGatewayId', 'cidr', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'cidr': _params.cidr,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'addVpnGatewayAdvertisedCidr');
+
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/advertised_cidrs/{cidr}',
+        method: 'PUT',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
           },
           _params.headers
         ),
@@ -29037,6 +29692,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.vpnGatewayId - The VPN gateway identifier.
    * @param {string} params.id - The VPN gateway connection identifier.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
    */
@@ -29045,7 +29702,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
-    const _validParams = ['vpnGatewayId', 'id', 'signal', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -29076,6 +29733,7 @@ class VpcV1 extends BaseService {
           sdkHeaders,
           this.baseOptions.headers,
           {
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -29183,6 +29841,16 @@ class VpcV1 extends BaseService {
    * connection for the VPN gateway.
    * @param {VPNGatewayConnectionPeerPatch} [params.peer] -
    * @param {string} [params.psk] - The pre-shared key.
+   * @param {string} [params.routingProtocol] - The routing protocol for this VPN gateway connection. For this property
+   * to be specified, `mode` must be `route`.
+   *
+   * - `none`: No routing protocol will be used.
+   * - `bgp`: The BGP routing protocol will be used.
+   * @param {VPNGatewayConnectionTunnel[]} [params.tunnels] - The VPN tunnel configuration to use for this VPN gateway
+   * connection
+   * (in dynamic route mode).
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>>}
    */
@@ -29191,7 +29859,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGatewayConnection>> {
     const _params = { ...params };
     const _requiredParams = ['vpnGatewayId', 'id'];
-    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'distributeTraffic', 'establishMode', 'ikePolicy', 'ipsecPolicy', 'name', 'peer', 'psk', 'signal', 'headers'];
+    const _validParams = ['vpnGatewayId', 'id', 'adminStateUp', 'deadPeerDetection', 'distributeTraffic', 'establishMode', 'ikePolicy', 'ipsecPolicy', 'name', 'peer', 'psk', 'routingProtocol', 'tunnels', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -29207,6 +29875,8 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'peer': _params.peer,
       'psk': _params.psk,
+      'routing_protocol': _params.routingProtocol,
+      'tunnels': _params.tunnels,
     };
 
     const query = {
@@ -29237,6 +29907,7 @@ class VpcV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -29741,6 +30412,131 @@ class VpcV1 extends BaseService {
           sdkHeaders,
           this.baseOptions.headers,
           {
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List VPN gateway service connections.
+   *
+   * This request lists service connections on a VPN gateway. The VPN gateway service connections will be sorted by
+   * ascending `created_at` property values. A VPN gateway service connection connects services such as transit gateway
+   * to a VPN gateway. This facilitates the propagation of routes learned from VPN gateway peer connections to the
+   * connected service (for example, a transit gateway).
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpnGatewayId - The VPN gateway identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayServiceConnectionCollection>>}
+   */
+  public listVpnGatewayServiceConnections(
+    params: VpcV1.ListVpnGatewayServiceConnectionsParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayServiceConnectionCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpnGatewayId'];
+    const _validParams = ['vpnGatewayId', 'start', 'limit', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayServiceConnections');
+
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/service_connections',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a VPN gateway service connection.
+   *
+   * This request retrieves VPN gateway service connection specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpnGatewayId - The VPN gateway identifier.
+   * @param {string} params.id - The VPN gateway service connection identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayServiceConnection>>}
+   */
+  public getVpnGatewayServiceConnection(
+    params: VpcV1.GetVpnGatewayServiceConnectionParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayServiceConnection>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpnGatewayId', 'id'];
+    const _validParams = ['vpnGatewayId', 'id', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnGatewayServiceConnection');
+
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/service_connections/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
           },
           _params.headers
         ),
@@ -30798,7 +31594,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2025-09-16` and `2025-09-24`.
+     *  `2025-12-09` and `2025-12-17`.
      */
     version: string;
   }
@@ -31951,10 +32747,10 @@ namespace VpcV1 {
     vpcCrn?: string;
     /** Filters the collection to resources with a `vpc.name` property matching the exact specified name. */
     vpcName?: string;
-    /** Filters the collection to endpoint gateways with an `allow_dns_resolution_binding` property matching the
-     *  specified value.
+    /** Filters the collection to endpoint gateways with a `dns_resolution_binding_mode` property matching one of
+     *  the specified comma-separated values.
      */
-    allowDnsResolutionBinding?: boolean;
+    dnsResolutionBindingMode?: ListEndpointGatewaysConstants.DnsResolutionBindingMode[] | string[];
   }
 
   /** Constants for the `listEndpointGateways` operation. */
@@ -31969,6 +32765,12 @@ namespace VpcV1 {
       UPDATING = 'updating',
       WAITING = 'waiting',
     }
+    /** Filters the collection to endpoint gateways with a `dns_resolution_binding_mode` property matching one of the specified comma-separated values. */
+    export enum DnsResolutionBindingMode {
+      DISABLED = 'disabled',
+      PER_RESOURCE_BINDING = 'per_resource_binding',
+      PRIMARY = 'primary',
+    }
   }
 
   /** Parameters for the `createEndpointGateway` operation. */
@@ -31978,30 +32780,49 @@ namespace VpcV1 {
      *  - Must not have a service endpoint that overlaps with any `service_endpoints` of
      *    another endpoint gateway in the VPC.
      *
-     *  If `allow_dns_resolution_binding` is `true`, then there must not be another endpoint
-     *  gateway with `allow_dns_resolution_binding` set to `true` in the [DNS
-     *  sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) connected topology that:
+     *  If `dns_resolution_binding_mode` is set to `primary`, then there must not be
+     *  another endpoint gateway in the [DNS sharing](/docs/vpc?topic=vpc-vpe-dns-sharing)
+     *  connected topology that:
      *  - Has the same `target` as this endpoint gateway
      *  - Has `service_endpoints` that overlap with the `service_endpoints` for this endpoint
      *    gateway.
+     *
+     *  If `dns_resolution_binding_mode` is set to `per_resource_binding`, then:
+     *  - The VPC in the topology with `dns.enable_hub` set to `true` must have an endpoint
+     *    gateway with the same `target` as this endpoint gateway.
+     *  - The VPC in the topology with `dns.enable_hub` set to `true` must have an endpoint
+     *    gateway with `dns_resolution_binding_mode` set to `primary`.
+     *  - No other VPC in the topology can have an endpoint gateway with a resource binding
+     *    using the same `service_endpoint` as a resource binding for this endpoint gateway.
      */
     target: EndpointGatewayTargetPrototype;
     /** The VPC this endpoint gateway will reside in. */
     vpc: VPCIdentity;
-    /** Indicates whether to allow DNS resolution for this endpoint gateway when the VPC this endpoint gateway
-     *  resides in has a DNS resolution binding to a VPC with `dns.enable_hub` set to `true`.
+    /** The DNS resolution binding mode to use for this endpoint gateway:
+     *  - `disabled`: The endpoint gateway will not participate in [DNS sharing for VPE
+     *     gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) with other VPCs in a connected
+     *     topology.
+     *  - `primary`: The endpoint gateway will participate in [DNS sharing for VPE gateways]
+     *     (/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in
+     *     has a DNS resolution binding to another VPC. If the VPC this endpoint gateway
+     *     resides in has a DNS resolution binding to another VPC, then no other VPC in the
+     *     topology can have an endpoint gateway with the same `target` as this endpoint
+     *     gateway.
+     *  - `per_resource_binding`: The endpoint gateway will participate in [DNS sharing for VPE
+     *     gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway
+     *     resides in has a DNS resolution binding to another VPC. Resource binding must be
+     *     enabled for the `target` service.
      *
-     *  If `true`, then there must not be another endpoint gateway with
-     *  `allow_dns_resolution_binding` set to `true` in the [DNS sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) connected
-     *  topology that:
-     *  - Has the same `target` as this endpoint gateway
-     *  - Has `service_endpoints` that overlap with the `service_endpoints` for this endpoint
-     *    gateway.
+     *     The VPC this endpoint gateway resides in must have `dns.enable_hub` set to
+     *     `false`.
      *
-     *  Must be `true` if the VPC this endpoint gateway resides in has `dns.enable_hub` set to
-     *  `true`.
+     *     If the VPC this endpoint gateway resides in has DNS resolution binding to another
+     *     VPC, the other VPC must:
+     *     - have `dns.enable_hub` set to `true`
+     *     - contain an endpoint gateway for the same `target` service with
+     *       `dns_resolution_binding_mode` set to `primary`.
      */
-    allowDnsResolutionBinding?: boolean;
+    dnsResolutionBindingMode?: CreateEndpointGatewayConstants.DnsResolutionBindingMode | string;
     /** The reserved IPs to bind to this endpoint gateway. At most one reserved IP per zone is allowed. */
     ips?: EndpointGatewayReservedIP[];
     /** The name for this endpoint gateway. The name must not be used by another endpoint gateway in the VPC. If
@@ -32016,6 +32837,16 @@ namespace VpcV1 {
      *  used.
      */
     securityGroups?: SecurityGroupIdentity[];
+  }
+
+  /** Constants for the `createEndpointGateway` operation. */
+  export namespace CreateEndpointGatewayConstants {
+    /** The DNS resolution binding mode to use for this endpoint gateway: - `disabled`: The endpoint gateway will not participate in [DNS sharing for VPE gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) with other VPCs in a connected topology. - `primary`: The endpoint gateway will participate in [DNS sharing for VPE gateways] (/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in has a DNS resolution binding to another VPC. If the VPC this endpoint gateway resides in has a DNS resolution binding to another VPC, then no other VPC in the topology can have an endpoint gateway with the same `target` as this endpoint gateway. - `per_resource_binding`: The endpoint gateway will participate in [DNS sharing for VPE gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in has a DNS resolution binding to another VPC. Resource binding must be enabled for the `target` service. The VPC this endpoint gateway resides in must have `dns.enable_hub` set to `false`. If the VPC this endpoint gateway resides in has DNS resolution binding to another VPC, the other VPC must: - have `dns.enable_hub` set to `true` - contain an endpoint gateway for the same `target` service with `dns_resolution_binding_mode` set to `primary`. */
+    export enum DnsResolutionBindingMode {
+      DISABLED = 'disabled',
+      PER_RESOURCE_BINDING = 'per_resource_binding',
+      PRIMARY = 'primary',
+    }
   }
 
   /** Parameters for the `listEndpointGatewayIps` operation. */
@@ -32068,6 +32899,56 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** Parameters for the `listEndpointGatewayResourceBindings` operation. */
+  export interface ListEndpointGatewayResourceBindingsParams extends DefaultParams {
+    /** The endpoint gateway identifier. */
+    endpointGatewayId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+  }
+
+  /** Parameters for the `createEndpointGatewayResourceBinding` operation. */
+  export interface CreateEndpointGatewayResourceBindingParams extends DefaultParams {
+    /** The endpoint gateway identifier. */
+    endpointGatewayId: string;
+    /** The target to use for this resource binding. */
+    target: EndpointGatewayResourceBindingTargetPrototype;
+    /** The name for this resource binding. The name must not be used by another resource binding for the endpoint
+     *  gateway. If unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+  }
+
+  /** Parameters for the `deleteEndpointGatewayResourceBinding` operation. */
+  export interface DeleteEndpointGatewayResourceBindingParams extends DefaultParams {
+    /** The endpoint gateway identifier. */
+    endpointGatewayId: string;
+    /** The resource binding identifier. */
+    id: string;
+  }
+
+  /** Parameters for the `getEndpointGatewayResourceBinding` operation. */
+  export interface GetEndpointGatewayResourceBindingParams extends DefaultParams {
+    /** The endpoint gateway identifier. */
+    endpointGatewayId: string;
+    /** The resource binding identifier. */
+    id: string;
+  }
+
+  /** Parameters for the `updateEndpointGatewayResourceBinding` operation. */
+  export interface UpdateEndpointGatewayResourceBindingParams extends DefaultParams {
+    /** The endpoint gateway identifier. */
+    endpointGatewayId: string;
+    /** The resource binding identifier. */
+    id: string;
+    /** The name for this resource binding. The name must not be used by another resource binding for the endpoint
+     *  gateway.
+     */
+    name?: string;
+  }
+
   /** Parameters for the `deleteEndpointGateway` operation. */
   export interface DeleteEndpointGatewayParams extends DefaultParams {
     /** The endpoint gateway identifier. */
@@ -32084,22 +32965,43 @@ namespace VpcV1 {
   export interface UpdateEndpointGatewayParams extends DefaultParams {
     /** The endpoint gateway identifier. */
     id: string;
-    /** Indicates whether to allow DNS resolution for this endpoint gateway when the VPC this endpoint gateway
-     *  resides in has a DNS resolution binding to a VPC with `dns.enable_hub` set to `true`.
+    /** The DNS resolution binding mode to use for this endpoint gateway:
+     *  - `disabled`: The endpoint gateway will not participate in [DNS sharing for VPE
+     *     gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) with other VPCs in a connected
+     *     topology.
+     *  - `primary`: The endpoint gateway will participate in [DNS sharing for VPE gateways]
+     *     (/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in
+     *     has a DNS resolution binding to another VPC. If the VPC this endpoint gateway
+     *     resides in has a DNS resolution binding to another VPC, then no other VPC in the
+     *     topology can have an endpoint gateway with the same `target` as this endpoint
+     *     gateway.
+     *  - `per_resource_binding`: The endpoint gateway will participate in [DNS sharing for VPE
+     *     gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway
+     *     resides in has a DNS resolution binding to another VPC. Resource binding must be
+     *     enabled for the `target` service.
      *
-     *  If `true`, then there must not be another endpoint gateway with
-     *  `allow_dns_resolution_binding` set to `true` in the [DNS sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) connected
-     *  topology that:
-     *  - Has the same `target` as this endpoint gateway
-     *  - Has `service_endpoints` that overlap with the `service_endpoints` for this endpoint
-     *    gateway.
+     *     The VPC this endpoint gateway resides in must have `dns.enable_hub` set to
+     *     `false`.
      *
-     *  Must be `true` if the VPC this endpoint gateway resides in has `dns.enable_hub` set to
-     *  `true`.
+     *     If the VPC this endpoint gateway resides in has DNS resolution binding to another
+     *     VPC, the other VPC must:
+     *     - have `dns.enable_hub` set to `true`
+     *     - contain an endpoint gateway for the same `target` service with
+     *       `dns_resolution_binding_mode` set to `primary`.
      */
-    allowDnsResolutionBinding?: boolean;
+    dnsResolutionBindingMode?: UpdateEndpointGatewayConstants.DnsResolutionBindingMode | string;
     /** The name for this endpoint gateway. The name must not be used by another endpoint gateway in the VPC. */
     name?: string;
+  }
+
+  /** Constants for the `updateEndpointGateway` operation. */
+  export namespace UpdateEndpointGatewayConstants {
+    /** The DNS resolution binding mode to use for this endpoint gateway: - `disabled`: The endpoint gateway will not participate in [DNS sharing for VPE gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) with other VPCs in a connected topology. - `primary`: The endpoint gateway will participate in [DNS sharing for VPE gateways] (/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in has a DNS resolution binding to another VPC. If the VPC this endpoint gateway resides in has a DNS resolution binding to another VPC, then no other VPC in the topology can have an endpoint gateway with the same `target` as this endpoint gateway. - `per_resource_binding`: The endpoint gateway will participate in [DNS sharing for VPE gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in has a DNS resolution binding to another VPC. Resource binding must be enabled for the `target` service. The VPC this endpoint gateway resides in must have `dns.enable_hub` set to `false`. If the VPC this endpoint gateway resides in has DNS resolution binding to another VPC, the other VPC must: - have `dns.enable_hub` set to `true` - contain an endpoint gateway for the same `target` service with `dns_resolution_binding_mode` set to `primary`. */
+    export enum DnsResolutionBindingMode {
+      DISABLED = 'disabled',
+      PER_RESOURCE_BINDING = 'per_resource_binding',
+      PRIMARY = 'primary',
+    }
   }
 
   /** Parameters for the `listFloatingIps` operation. */
@@ -32211,8 +33113,10 @@ namespace VpcV1 {
      *  instance network attachments, virtual network interfaces or instance network interfaces
      *  within the target that are themselves the target of a more specific flow log collector.
      *
-     *  The target must not be a virtual network interface that is attached to a bare metal server
-     *  network attachment or to a file share mount target.
+     *  For this request to succeed, the target must:
+     *  - not be a virtual network interface that is attached to a bare metal server network
+     *    attachment or to a file share mount target
+     *  - not already be the target of another flow log collector.
      */
     target: FlowLogCollectorTargetPrototype;
     /** Indicates whether this collector will be active upon creation. */
@@ -32921,6 +33825,14 @@ namespace VpcV1 {
     dedicatedHostCrn?: string;
     /** Filters the collection to resources with a `dedicated_host.name` property matching the exact specified name. */
     dedicatedHostName?: string;
+    /** Filters the collection to instances with an `instance_group_membership.instance_group.id` property matching
+     *  the specified instance group identifier.
+     */
+    instanceGroupMembershipInstanceGroupId?: string;
+    /** Filters the collection to instances with an `instance_group_membership.instance_group.crn` property matching
+     *  the specified instance group CRN.
+     */
+    instanceGroupMembershipInstanceGroupCrn?: string;
     /** Filters the collection to resources with a `placement_target.id` property matching the specified placement
      *  group identifier.
      */
@@ -33006,11 +33918,11 @@ namespace VpcV1 {
      *  the region. Changing the name will not affect the system hostname.
      */
     name?: string;
-    /** The placement restrictions to use for the virtual server instance. For the
-     *  placement restrictions to be changed, the instance `status` must be `stopping` or
-     *  `stopped`.
+    /** The placement restrictions to use for the virtual server instance.
      *
-     *  If set, `reservation_affinity.policy` must be `disabled`.
+     *  If specified, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated
+     *  host or dedicated host group, the `vcpu.percentage` must be `100` and the instance must
+     *  have two or more vCPUs.
      */
     placementTarget?: InstancePlacementTargetPatch;
     /** The profile to use for this virtual server instance. Any disks associated with the
@@ -33025,6 +33937,7 @@ namespace VpcV1 {
      *  - Have the same `vcpu.architecture`.
      *  - Support the number of network attachments or network interfaces the instance
      *    currently has.
+     *  - Have the `volume_bandwidth_qos_mode` listed in its `volume_bandwidth_qos_modes`.
      */
     profile?: InstancePatchProfile;
     reservationAffinity?: InstanceReservationAffinityPatch;
@@ -33033,6 +33946,14 @@ namespace VpcV1 {
      *  `total_network_bandwidth`.
      */
     totalVolumeBandwidth?: number;
+    vcpu?: InstanceVCPUPatch;
+    /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in
+     *  the instance profile's `volume_bandwidth_qos_modes`.
+     *
+     *  For this property to be changed, the virtual server instance `status` must be
+     *  `stopping` or `stopped`.
+     */
+    volumeBandwidthQosMode?: UpdateInstanceConstants.VolumeBandwidthQosMode | string;
     /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
      *  value. Required if the request body includes an array.
      */
@@ -33046,6 +33967,11 @@ namespace VpcV1 {
       DISABLED = 'disabled',
       SGX = 'sgx',
       TDX = 'tdx',
+    }
+    /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. For this property to be changed, the virtual server instance `status` must be `stopping` or `stopped`. */
+    export enum VolumeBandwidthQosMode {
+      POOLED = 'pooled',
+      WEIGHTED = 'weighted',
     }
   }
 
@@ -33264,10 +34190,11 @@ namespace VpcV1 {
      */
     name?: string;
     /** The primary IP address to bind to the instance network interface. This can be
-     *  specified using an existing reserved IP, or a prototype object for a new reserved IP.
+     *  specified using an existing reserved IP, or a prototype object for a new reserved
+     *  IP.
      *
-     *  If an existing reserved IP or a prototype object with an address is specified, it must
-     *  be available on the instance network interface's subnet. Otherwise, an
+     *  If an existing reserved IP or a prototype object with an address is specified, it
+     *  must be available on the instance network interface's subnet. Otherwise, an
      *  available address on the subnet will be automatically selected and reserved.
      */
     primaryIp?: NetworkInterfaceIPPrototype;
@@ -34505,7 +35432,10 @@ namespace VpcV1 {
     networkAclId: string;
     /** The rule identifier. */
     id: string;
-    /** The action to perform for a packet matching the rule. */
+    /** The action to perform for a packet matching the rule.
+     *
+     *  Must not be `deny` if `protocol` is `icmp_tcp_udp`.
+     */
     action?: UpdateNetworkAclRuleConstants.Action | string;
     /** The rule to move this rule immediately before.
      *
@@ -34556,7 +35486,7 @@ namespace VpcV1 {
 
   /** Constants for the `updateNetworkAclRule` operation. */
   export namespace UpdateNetworkAclRuleConstants {
-    /** The action to perform for a packet matching the rule. */
+    /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
     export enum Action {
       ALLOW = 'allow',
       DENY = 'deny',
@@ -35252,6 +36182,8 @@ namespace VpcV1 {
      *  local IP addresses, for outbound rules).
      */
     local?: SecurityGroupRuleLocalPatch;
+    /** The name for this security group rule. The name must not be used by another rule in the security group. */
+    name?: string;
     /** The inclusive upper bound of the protocol destination port range. If set, `port_min` must also be set, and
      *  must not be larger.
      *
@@ -36237,6 +37169,10 @@ namespace VpcV1 {
   export interface DeleteVirtualNetworkInterfacesParams extends DefaultParams {
     /** The virtual network interface identifier. */
     id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
   }
 
   /** Parameters for the `getVirtualNetworkInterface` operation. */
@@ -36290,6 +37226,10 @@ namespace VpcV1 {
      *  mode](https://cloud.ibm.com/docs/vpc?topic=vpc-vni-about#protocol-state-filtering) for more information.
      */
     protocolStateFilteringMode?: UpdateVirtualNetworkInterfaceConstants.ProtocolStateFilteringMode | string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
   }
 
   /** Constants for the `updateVirtualNetworkInterface` operation. */
@@ -37285,8 +38225,8 @@ namespace VpcV1 {
     ikeVersion: number;
     /** The key lifetime in seconds. */
     keyLifetime?: number;
-    /** The name for this IKE policy. The name must not be used by another IKE policies in the region. If
-     *  unspecified, the name will be a hyphenated list of randomly-selected words.
+    /** The name for this IKE policy. The name must not be used by another IKE policy in the region. If unspecified,
+     *  the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
@@ -37400,7 +38340,7 @@ namespace VpcV1 {
     pfs: CreateIpsecPolicyConstants.Pfs | string;
     /** The key lifetime in seconds. */
     keyLifetime?: number;
-    /** The name for this IPsec policy. The name must not be used by another IPsec policies in the region. If
+    /** The name for this IPsec policy. The name must not be used by another IPsec policy in the region. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
@@ -37589,8 +38529,44 @@ namespace VpcV1 {
   export interface UpdateVpnGatewayParams extends DefaultParams {
     /** The VPN gateway identifier. */
     id: string;
+    /** The local autonomous system number (ASN) for this VPN gateway and its connections. The ASN values in the
+     *  [restricted ASN list](
+     *  https://cloud.ibm.com/docs/vpc?topic=vpc-planning-considerations-vpn#dynamic-route-based-considerations) are
+     *  reserved and unavailable.
+     */
+    localAsn?: number;
     /** The name for this VPN gateway. The name must not be used by another VPN gateway in the VPC. */
     name?: string;
+  }
+
+  /** Parameters for the `listVpnGatewayAdvertisedCidrs` operation. */
+  export interface ListVpnGatewayAdvertisedCidrsParams extends DefaultParams {
+    /** The VPN gateway identifier. */
+    vpnGatewayId: string;
+  }
+
+  /** Parameters for the `removeVpnGatewayAdvertisedCidr` operation. */
+  export interface RemoveVpnGatewayAdvertisedCidrParams extends DefaultParams {
+    /** The VPN gateway identifier. */
+    vpnGatewayId: string;
+    /** The IP address range in CIDR block notation. */
+    cidr: string;
+  }
+
+  /** Parameters for the `checkVpnGatewayAdvertisedCidr` operation. */
+  export interface CheckVpnGatewayAdvertisedCidrParams extends DefaultParams {
+    /** The VPN gateway identifier. */
+    vpnGatewayId: string;
+    /** The IP address range in CIDR block notation. */
+    cidr: string;
+  }
+
+  /** Parameters for the `addVpnGatewayAdvertisedCidr` operation. */
+  export interface AddVpnGatewayAdvertisedCidrParams extends DefaultParams {
+    /** The VPN gateway identifier. */
+    vpnGatewayId: string;
+    /** The IP address range in CIDR block notation. */
+    cidr: string;
   }
 
   /** Parameters for the `listVpnGatewayConnections` operation. */
@@ -37628,6 +38604,10 @@ namespace VpcV1 {
     vpnGatewayId: string;
     /** The VPN gateway connection identifier. */
     id: string;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value.
+     */
+    ifMatch?: string;
   }
 
   /** Parameters for the `getVpnGatewayConnection` operation. */
@@ -37681,6 +38661,19 @@ namespace VpcV1 {
     peer?: VPNGatewayConnectionPeerPatch;
     /** The pre-shared key. */
     psk?: string;
+    /** The routing protocol for this VPN gateway connection. For this property to be specified, `mode` must be
+     *  `route`.
+     *
+     *  - `none`: No routing protocol will be used.
+     *  - `bgp`: The BGP routing protocol will be used.
+     */
+    routingProtocol?: UpdateVpnGatewayConnectionConstants.RoutingProtocol | string;
+    /** The VPN tunnel configuration to use for this VPN gateway connection (in dynamic route mode). */
+    tunnels?: VPNGatewayConnectionTunnel[];
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
   }
 
   /** Constants for the `updateVpnGatewayConnection` operation. */
@@ -37689,6 +38682,11 @@ namespace VpcV1 {
     export enum EstablishMode {
       BIDIRECTIONAL = 'bidirectional',
       PEER_ONLY = 'peer_only',
+    }
+    /** The routing protocol for this VPN gateway connection. For this property to be specified, `mode` must be `route`. - `none`: No routing protocol will be used. - `bgp`: The BGP routing protocol will be used. */
+    export enum RoutingProtocol {
+      BGP = 'bgp',
+      NONE = 'none',
     }
   }
 
@@ -37766,6 +38764,24 @@ namespace VpcV1 {
     id: string;
     /** The IP address range in CIDR block notation. */
     cidr: string;
+  }
+
+  /** Parameters for the `listVpnGatewayServiceConnections` operation. */
+  export interface ListVpnGatewayServiceConnectionsParams extends DefaultParams {
+    /** The VPN gateway identifier. */
+    vpnGatewayId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+  }
+
+  /** Parameters for the `getVpnGatewayServiceConnection` operation. */
+  export interface GetVpnGatewayServiceConnectionParams extends DefaultParams {
+    /** The VPN gateway identifier. */
+    vpnGatewayId: string;
+    /** The VPN gateway service connection identifier. */
+    id: string;
   }
 
   /** Parameters for the `listVpnServers` operation. */
@@ -40017,7 +41033,7 @@ namespace VpcV1 {
    */
   export interface BareMetalServerProfileSupportedTrustedPlatformModuleModes {
     /** The default trusted platform module for a bare metal server with this profile. */
-    default?: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Default | string;
+    default: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Default | string;
     /** The type for this profile field. */
     type: BareMetalServerProfileSupportedTrustedPlatformModuleModes.Constants.Type | string;
     /** The supported trusted platform module modes. */
@@ -41277,7 +42293,7 @@ namespace VpcV1 {
     /** The disk interface used for attaching the disk. */
     interface_type: DedicatedHostDisk.Constants.InterfaceType | string;
     /** The lifecycle state of this dedicated host disk. */
-    lifecycle_state?: DedicatedHostDisk.Constants.LifecycleState | string;
+    lifecycle_state: DedicatedHostDisk.Constants.LifecycleState | string;
     /** The name for this dedicated host disk. The name is unique across all disks on the dedicated host. */
     name: string;
     /** Indicates whether this dedicated host disk is available for instance disk creation. */
@@ -41918,9 +42934,11 @@ namespace VpcV1 {
     /** The resource group for this security group. */
     resource_group: ResourceGroupReference;
     /** The rules for the default security group for a VPC. Created with:
-     *  - A rule allowing inbound ICMP, TCP and UDP traffic from other interfaces in the
-     *    VPC's default security group
-     *  - A rule allowing outbound ICMP, TCP and UDP traffic to any destination
+     *  - A rule named `inbound-icmp-tcp-udp-from-this-security-group` allowing inbound
+     *    ICMP, TCP and UDP traffic from other interfaces in the VPC's default security
+     *    group
+     *  - A rule named `outbound-icmp-tcp-udp` allowing outbound ICMP, TCP and UDP traffic
+     *    to any destination
      *
      *  Rules for the default security group may be changed, added or removed.
      */
@@ -41961,14 +42979,22 @@ namespace VpcV1 {
    * EndpointGateway.
    */
   export interface EndpointGateway {
-    /** Indicates whether to allow DNS resolution for this endpoint gateway when the VPC this endpoint gateway
-     *  resides in has a DNS resolution binding to a VPC with `dns.enable_hub` set to `true`.
-     */
-    allow_dns_resolution_binding: boolean;
     /** The date and time that the endpoint gateway was created. */
     created_at: string;
     /** The CRN for this endpoint gateway. */
     crn: string;
+    /** The DNS resolution binding mode used for this endpoint gateway:
+     *  - `disabled`: The endpoint gateway is not participating in [DNS sharing for VPE
+     *     gateways](/docs/vpc?topic=vpc-vpe-dns-sharing).
+     *  - `primary`: The endpoint gateway is participating in [DNS sharing for VPE gateways]
+     *     (/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in
+     *     has a DNS resolution binding to another VPC.
+     *  - `per_resource_binding`: The endpoint gateway is participating in [DNS sharing for VPE
+     *     gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway
+     *     resides in has a DNS resolution binding to another VPC, and resource binding is
+     *     enabled for the `target` service.
+     */
+    dns_resolution_binding_mode: EndpointGateway.Constants.DnsResolutionBindingMode | string;
     /** The health of this resource:
      *  - `ok`: No abnormal behavior detected
      *  - `degraded`: Experiencing compromised performance, capacity, or connectivity
@@ -42009,6 +43035,12 @@ namespace VpcV1 {
   }
   export namespace EndpointGateway {
     export namespace Constants {
+      /** The DNS resolution binding mode used for this endpoint gateway: - `disabled`: The endpoint gateway is not participating in [DNS sharing for VPE gateways](/docs/vpc?topic=vpc-vpe-dns-sharing). - `primary`: The endpoint gateway is participating in [DNS sharing for VPE gateways] (/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in has a DNS resolution binding to another VPC. - `per_resource_binding`: The endpoint gateway is participating in [DNS sharing for VPE gateways](/docs/vpc?topic=vpc-vpe-dns-sharing) if the VPC this endpoint gateway resides in has a DNS resolution binding to another VPC, and resource binding is enabled for the `target` service. */
+      export enum DnsResolutionBindingMode {
+        DISABLED = 'disabled',
+        PER_RESOURCE_BINDING = 'per_resource_binding',
+        PRIMARY = 'primary',
+      }
       /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
         DEGRADED = 'degraded',
@@ -42137,6 +43169,117 @@ namespace VpcV1 {
   }
 
   /**
+   * EndpointGatewayResourceBinding.
+   */
+  export interface EndpointGatewayResourceBinding {
+    /** The date and time that the resource binding was created. */
+    created_at: string;
+    /** The URL for this endpoint gateway resource binding. */
+    href: string;
+    /** The unique identifier for this endpoint gateway resource binding. */
+    id: string;
+    /** The reasons for the current `lifecycle_state` (if any). */
+    lifecycle_reasons: EndpointGatewayResourceBindingLifecycleReason[];
+    /** The lifecycle state of the resource binding. */
+    lifecycle_state: EndpointGatewayResourceBinding.Constants.LifecycleState | string;
+    /** The name for this resource binding. The name is unique across all resource bindings for the endpoint
+     *  gateway.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: EndpointGatewayResourceBinding.Constants.ResourceType | string;
+    /** The fully qualified domain name of the service endpoint for the resource targeted by this resource binding. */
+    service_endpoint: string;
+    /** The target for this endpoint gateway resource binding. */
+    target: EndpointGatewayResourceBindingTarget;
+    /** The type of resource binding:
+     *  - `weak`: The binding is not dependent on the existence of the target resource.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    type: EndpointGatewayResourceBinding.Constants.Type | string;
+  }
+  export namespace EndpointGatewayResourceBinding {
+    export namespace Constants {
+      /** The lifecycle state of the resource binding. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        ENDPOINT_GATEWAY_RESOURCE_BINDING = 'endpoint_gateway_resource_binding',
+      }
+      /** The type of resource binding: - `weak`: The binding is not dependent on the existence of the target resource. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Type {
+        WEAK = 'weak',
+      }
+    }
+  }
+
+  /**
+   * EndpointGatewayResourceBindingCollection.
+   */
+  export interface EndpointGatewayResourceBindingCollection {
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** A page of resource bindings for the endpoint gateway. */
+    resource_bindings: EndpointGatewayResourceBinding[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
+   * EndpointGatewayResourceBindingLifecycleReason.
+   */
+  export interface EndpointGatewayResourceBindingLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: EndpointGatewayResourceBindingLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** A link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace EndpointGatewayResourceBindingLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
+  }
+
+  /**
+   * The target for this endpoint gateway resource binding.
+   */
+  export interface EndpointGatewayResourceBindingTarget {
+  }
+
+  /**
+   * The target to use for this resource binding.
+   */
+  export interface EndpointGatewayResourceBindingTargetPrototype {
+  }
+
+  /**
    * The target for this endpoint gateway.
    */
   export interface EndpointGatewayTarget {
@@ -42160,12 +43303,19 @@ namespace VpcV1 {
    * - Must not have a service endpoint that overlaps with any `service_endpoints` of
    *   another endpoint gateway in the VPC.
    *
-   * If `allow_dns_resolution_binding` is `true`, then there must not be another endpoint gateway with
-   * `allow_dns_resolution_binding` set to `true` in the [DNS sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) connected
-   * topology that:
+   * If `dns_resolution_binding_mode` is set to `primary`, then there must not be another endpoint gateway in the [DNS
+   * sharing](/docs/vpc?topic=vpc-vpe-dns-sharing) connected topology that:
    * - Has the same `target` as this endpoint gateway
    * - Has `service_endpoints` that overlap with the `service_endpoints` for this endpoint
    *   gateway.
+   *
+   * If `dns_resolution_binding_mode` is set to `per_resource_binding`, then:
+   * - The VPC in the topology with `dns.enable_hub` set to `true` must have an endpoint
+   *   gateway with the same `target` as this endpoint gateway.
+   * - The VPC in the topology with `dns.enable_hub` set to `true` must have an endpoint
+   *   gateway with `dns_resolution_binding_mode` set to `primary`.
+   * - No other VPC in the topology can have an endpoint gateway with a resource binding
+   *   using the same `service_endpoint` as a resource binding for this endpoint gateway.
    */
   export interface EndpointGatewayTargetPrototype {
     /** The target resource type for this endpoint gateway. */
@@ -42447,8 +43597,10 @@ namespace VpcV1 {
    * virtual network interfaces or instance network interfaces within the target that are themselves the target of a
    * more specific flow log collector.
    *
-   * The target must not be a virtual network interface that is attached to a bare metal server network attachment or to
-   * a file share mount target.
+   * For this request to succeed, the target must:
+   * - not be a virtual network interface that is attached to a bare metal server network
+   *   attachment or to a file share mount target
+   * - not already be the target of another flow log collector.
    */
   export interface FlowLogCollectorTargetPrototype {
   }
@@ -43425,6 +44577,8 @@ namespace VpcV1 {
     id: string;
     /** The image the virtual server instance was provisioned from. */
     image?: ImageReference;
+    /** The instance group membership for this virtual server instance. */
+    instance_group_membership?: InstanceGroupMembershipReferenceInstanceContext;
     /** The reasons for the current `lifecycle_state` (if any). */
     lifecycle_reasons: InstanceLifecycleReason[];
     /** The lifecycle state of the virtual server instance. */
@@ -43502,6 +44656,8 @@ namespace VpcV1 {
     vcpu: InstanceVCPU;
     /** The volume attachments for this virtual server instance, including the boot volume attachment. */
     volume_attachments: VolumeAttachmentReferenceInstanceContext[];
+    /** The volume bandwidth QoS mode for this virtual server instance. */
+    volume_bandwidth_qos_mode: Instance.Constants.VolumeBandwidthQosMode | string;
     /** The VPC this virtual server instance resides in. */
     vpc: VPCReference;
     /** The zone this virtual server instance resides in. */
@@ -43546,6 +44702,11 @@ namespace VpcV1 {
         STARTING = 'starting',
         STOPPED = 'stopped',
         STOPPING = 'stopping',
+      }
+      /** The volume bandwidth QoS mode for this virtual server instance. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -44492,6 +45653,26 @@ namespace VpcV1 {
   }
 
   /**
+   * InstanceGroupMembershipReferenceInstanceContext.
+   */
+  export interface InstanceGroupMembershipReferenceInstanceContext {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this instance group membership. */
+    href: string;
+    /** The unique identifier for this instance group membership. */
+    id: string;
+    /** The instance group associated with this membership. */
+    instance_group: InstanceGroupReference;
+    /** The name for this instance group membership. The name is unique across all memberships for the instance
+     *  group.
+     */
+    name: string;
+  }
+
+  /**
    * InstanceGroupReference.
    */
   export interface InstanceGroupReference {
@@ -44829,6 +46010,7 @@ namespace VpcV1 {
    * - Have the same `vcpu.architecture`.
    * - Support the number of network attachments or network interfaces the instance
    *   currently has.
+   * - Have the `volume_bandwidth_qos_mode` listed in its `volume_bandwidth_qos_modes`.
    */
   export interface InstancePatchProfile {
   }
@@ -44840,11 +46022,10 @@ namespace VpcV1 {
   }
 
   /**
-   * The placement restrictions to use for the virtual server instance. For the placement restrictions to be changed,
-   * the instance `status` must be `stopping` or
-   * `stopped`.
+   * The placement restrictions to use for the virtual server instance.
    *
-   * If set, `reservation_affinity.policy` must be `disabled`.
+   * If specified, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated host or dedicated host
+   * group, the `vcpu.percentage` must be `100` and the instance must have two or more vCPUs.
    */
   export interface InstancePlacementTargetPatch {
   }
@@ -44852,7 +46033,8 @@ namespace VpcV1 {
   /**
    * The placement restrictions to use for the virtual server instance.
    *
-   * If specified, `reservation_affinity.policy` must be `disabled`.
+   * If specified, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated host or dedicated host
+   * group, the `vcpu.percentage` must be `100` and the instance must have two or more vCPUs.
    */
   export interface InstancePlacementTargetPrototype {
   }
@@ -44903,8 +46085,12 @@ namespace VpcV1 {
     supported_cluster_network_profiles: ClusterNetworkProfileReference[];
     total_volume_bandwidth: InstanceProfileVolumeBandwidth;
     vcpu_architecture: InstanceProfileVCPUArchitecture;
+    vcpu_burst_limit: InstanceProfileVCPUBurstLimit;
     vcpu_count: InstanceProfileVCPU;
     vcpu_manufacturer: InstanceProfileVCPUManufacturer;
+    /** The permitted values for VCPU percentage for an instance with this profile. */
+    vcpu_percentage: InstanceProfileVCPUPercentage;
+    volume_bandwidth_qos_modes: InstanceProfileVolumeBandwidthQoSModes;
   }
   export namespace InstanceProfile {
     export namespace Constants {
@@ -44936,7 +46122,7 @@ namespace VpcV1 {
    * InstanceProfileCollection.
    */
   export interface InstanceProfileCollection {
-    /** A page of virtual server instance profiles. */
+    /** The virtual server instance profiles. */
     profiles: InstanceProfile[];
   }
 
@@ -45230,15 +46416,47 @@ namespace VpcV1 {
   }
 
   /**
+   * InstanceProfileVCPUBurstLimit.
+   */
+  export interface InstanceProfileVCPUBurstLimit {
+  }
+
+  /**
    * InstanceProfileVCPUManufacturer.
    */
   export interface InstanceProfileVCPUManufacturer {
   }
 
   /**
+   * The permitted values for VCPU percentage for an instance with this profile.
+   */
+  export interface InstanceProfileVCPUPercentage {
+    /** The default value for this profile field. */
+    default: number;
+    /** The type for this profile field. */
+    type: InstanceProfileVCPUPercentage.Constants.Type | string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+  export namespace InstanceProfileVCPUPercentage {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
+  }
+
+  /**
    * InstanceProfileVolumeBandwidth.
    */
   export interface InstanceProfileVolumeBandwidth {
+  }
+
+  /**
+   * InstanceProfileVolumeBandwidthQoSModes.
+   */
+  export interface InstanceProfileVolumeBandwidthQoSModes {
   }
 
   /**
@@ -45295,17 +46513,21 @@ namespace VpcV1 {
     name?: string;
     /** The placement restrictions to use for the virtual server instance.
      *
-     *  If specified, `reservation_affinity.policy` must be `disabled`.
+     *  If specified, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated
+     *  host or dedicated host group, the `vcpu.percentage` must be `100` and the instance must
+     *  have two or more vCPUs.
      */
     placement_target?: InstancePlacementTargetPrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
      *  virtual server instance.
      *
-     *  If unspecified, `bx2-2x8` will be used, but this default value is expected to change
-     *  in the future.
+     *  If unspecified, `bxf-2x8` will be used, but this default value may change
+     *  in the future without changing the API version.
      */
     profile?: InstanceProfileIdentity;
-    /** The reservation affinity settings for this virtual server instance. */
+    /** The reservation affinity settings for this virtual server instance. If specified,
+     *  the instance must have two or more vCPUs, and `vcpu.percentage` must be `100`.
+     */
     reservation_affinity?: InstanceReservationAffinityPrototype;
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
@@ -45320,8 +46542,15 @@ namespace VpcV1 {
      *  virtual server instance.
      */
     user_data?: string;
+    vcpu?: InstanceVCPUPrototype;
     /** The additional volume attachments to create for the virtual server instance. */
     volume_attachments?: VolumeAttachmentPrototype[];
+    /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in
+     *  the instance profile's `volume_bandwidth_qos_modes`.
+     *
+     *  If unspecified, the default volume bandwidth QoS mode from the profile will be used.
+     */
+    volume_bandwidth_qos_mode?: InstancePrototype.Constants.VolumeBandwidthQosMode | string;
     /** The VPC this virtual server instance will reside in.
      *
      *  If specified, it must match the VPC for the subnets of the instance network
@@ -45336,6 +46565,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -45426,7 +46660,8 @@ namespace VpcV1 {
   }
 
   /**
-   * The reservation affinity settings for this virtual server instance.
+   * The reservation affinity settings for this virtual server instance. If specified, the instance must have two or
+   * more vCPUs, and `vcpu.percentage` must be `100`.
    */
   export interface InstanceReservationAffinityPrototype {
     /** The reservation affinity policy to use for this virtual server instance:
@@ -45436,7 +46671,9 @@ namespace VpcV1 {
      *    `profile` and `zone` as this virtual server instance will be available for use.
      *
      *  The policy will default to `manual` if `pool` is not empty. The policy will default to
-     *  `disabled` if a `placement_target` is set. The policy will default to `automatic` in all other cases.
+     *  `disabled` if a `placement_target` is set. The policy will default to `disabled` if the provided instance
+     *  configuration is restricted from enabling reservations. The policy will default to `automatic` in all other
+     *  cases.
      *
      *  The policy must be `disabled` if `placement_target` is specified.
      */
@@ -45454,7 +46691,7 @@ namespace VpcV1 {
   }
   export namespace InstanceReservationAffinityPrototype {
     export namespace Constants {
-      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` will be available for use - `automatic`: Reservations with an `affinity_policy` of `automatic` that have the same `profile` and `zone` as this virtual server instance will be available for use. The policy will default to `manual` if `pool` is not empty. The policy will default to `disabled` if a `placement_target` is set. The policy will default to `automatic` in all other cases. The policy must be `disabled` if `placement_target` is specified. */
+      /** The reservation affinity policy to use for this virtual server instance: - `disabled`: Reservations will not be used - `manual`: Reservations in `pool` will be available for use - `automatic`: Reservations with an `affinity_policy` of `automatic` that have the same `profile` and `zone` as this virtual server instance will be available for use. The policy will default to `manual` if `pool` is not empty. The policy will default to `disabled` if a `placement_target` is set. The policy will default to `disabled` if the provided instance configuration is restricted from enabling reservations. The policy will default to `automatic` in all other cases. The policy must be `disabled` if `placement_target` is specified. */
       export enum Policy {
         AUTOMATIC = 'automatic',
         DISABLED = 'disabled',
@@ -45556,17 +46793,21 @@ namespace VpcV1 {
     name: string;
     /** The placement restrictions to use for the virtual server instance.
      *
-     *  If specified, `reservation_affinity.policy` must be `disabled`.
+     *  If specified, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated
+     *  host or dedicated host group, the `vcpu.percentage` must be `100` and the instance must
+     *  have two or more vCPUs.
      */
     placement_target?: InstancePlacementTargetPrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
      *  virtual server instance.
      *
-     *  If unspecified, `bx2-2x8` will be used, but this default value is expected to change
-     *  in the future.
+     *  If unspecified, `bxf-2x8` will be used, but this default value may change
+     *  in the future without changing the API version.
      */
     profile?: InstanceProfileIdentity;
-    /** The reservation affinity settings for this virtual server instance. */
+    /** The reservation affinity settings for this virtual server instance. If specified,
+     *  the instance must have two or more vCPUs, and `vcpu.percentage` must be `100`.
+     */
     reservation_affinity?: InstanceReservationAffinityPrototype;
     /** The resource group for this instance template. */
     resource_group: ResourceGroupReference;
@@ -45579,8 +46820,15 @@ namespace VpcV1 {
      *  virtual server instance.
      */
     user_data?: string;
+    vcpu?: InstanceVCPUPrototype;
     /** The additional volume attachments to create for the virtual server instance. */
     volume_attachments?: VolumeAttachmentPrototype[];
+    /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in
+     *  the instance profile's `volume_bandwidth_qos_modes`.
+     *
+     *  If unspecified, the default volume bandwidth QoS mode from the profile will be used.
+     */
+    volume_bandwidth_qos_mode?: InstanceTemplate.Constants.VolumeBandwidthQosMode | string;
     /** The VPC this virtual server instance will reside in.
      *
      *  If specified, it must match the VPC for the subnets of the instance network
@@ -45595,6 +46843,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -45673,17 +46926,21 @@ namespace VpcV1 {
     name?: string;
     /** The placement restrictions to use for the virtual server instance.
      *
-     *  If specified, `reservation_affinity.policy` must be `disabled`.
+     *  If specified, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated
+     *  host or dedicated host group, the `vcpu.percentage` must be `100` and the instance must
+     *  have two or more vCPUs.
      */
     placement_target?: InstancePlacementTargetPrototype;
     /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-profiles) to use for this
      *  virtual server instance.
      *
-     *  If unspecified, `bx2-2x8` will be used, but this default value is expected to change
-     *  in the future.
+     *  If unspecified, `bxf-2x8` will be used, but this default value may change
+     *  in the future without changing the API version.
      */
     profile?: InstanceProfileIdentity;
-    /** The reservation affinity settings for this virtual server instance. */
+    /** The reservation affinity settings for this virtual server instance. If specified,
+     *  the instance must have two or more vCPUs, and `vcpu.percentage` must be `100`.
+     */
     reservation_affinity?: InstanceReservationAffinityPrototype;
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
@@ -45698,8 +46955,15 @@ namespace VpcV1 {
      *  virtual server instance.
      */
     user_data?: string;
+    vcpu?: InstanceVCPUPrototype;
     /** The additional volume attachments to create for the virtual server instance. */
     volume_attachments?: VolumeAttachmentPrototype[];
+    /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in
+     *  the instance profile's `volume_bandwidth_qos_modes`.
+     *
+     *  If unspecified, the default volume bandwidth QoS mode from the profile will be used.
+     */
+    volume_bandwidth_qos_mode?: InstanceTemplatePrototype.Constants.VolumeBandwidthQosMode | string;
     /** The VPC this virtual server instance will reside in.
      *
      *  If specified, it must match the VPC for the subnets of the instance network
@@ -45714,6 +46978,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -45746,14 +47015,24 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     architecture: InstanceVCPU.Constants.Architecture | string;
+    burst?: InstanceVCPUBurst;
     /** The number of VCPUs assigned. */
     count: number;
-    /** The VCPU manufacturer.
+    /** The VCPU manufacturer for this instance. It may be `unassigned` when instance `status` is `failed`,
+     *  `pending`, or `stopped`.
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     manufacturer: InstanceVCPU.Constants.Manufacturer | string;
+    /** The percentage of VCPU time allocated to the virtual server instance.
+     *
+     *  The virtual server instance `vcpu.percentage` will be `100` when:
+     *  - The virtual server instance `placement_target` is a dedicated host or dedicated
+     *    host group.
+     *  - The virtual server instance `reservation_affinity.policy` is `disabled`.
+     */
+    percentage: number;
   }
   export namespace InstanceVCPU {
     export namespace Constants {
@@ -45762,13 +47041,60 @@ namespace VpcV1 {
         AMD64 = 'amd64',
         S390X = 's390x',
       }
-      /** The VCPU manufacturer. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The VCPU manufacturer for this instance. It may be `unassigned` when instance `status` is `failed`, `pending`, or `stopped`. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Manufacturer {
         AMD = 'amd',
         IBM = 'ibm',
         INTEL = 'intel',
+        UNASSIGNED = 'unassigned',
       }
     }
+  }
+
+  /**
+   * InstanceVCPUBurst.
+   */
+  export interface InstanceVCPUBurst {
+    /** The maximum percentage of the base VCPU capacity the virtual server may exceed. For example, if `vcpu.count`
+     *  is 1, `vcpu.percentage` is 50 and `vcpu.burst.limit` is 200, the instance may burst to using one full VCPU.
+     *
+     *  The maximum value for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    limit: number;
+  }
+
+  /**
+   * InstanceVCPUPatch.
+   */
+  export interface InstanceVCPUPatch {
+    /** The percentage of VCPU time allocated to the virtual server instance.
+     *
+     *  The virtual server instance `vcpu.percentage` must be `100` when:
+     *  - The virtual server instance `placement_target` is a dedicated host or dedicated
+     *    host group.
+     *  - The virtual server instance `reservation_affinity.policy` is not `disabled`.
+     *
+     *  For this property to be changed, the virtual server instance `status` must be
+     *  `stopping` or `stopped`.
+     */
+    percentage: number;
+  }
+
+  /**
+   * InstanceVCPUPrototype.
+   */
+  export interface InstanceVCPUPrototype {
+    /** The percentage of VCPU clock cycles allocated to the instance.
+     *
+     *  The virtual server instance `vcpu.percentage` must be `100` when:
+     *  - The virtual server instance `placement_target` is a dedicated host or dedicated
+     *    host group.
+     *  - The virtual server instance `reservation_affinity.policy` is not `disabled`.
+     *
+     *  If unspecified, the default for `vcpu_percentage` from the profile will be used.
+     */
+    percentage?: number;
   }
 
   /**
@@ -47792,10 +49118,264 @@ namespace VpcV1 {
       }
       /** The network protocol. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Protocol {
-        ALL = 'all',
+        AH = 'ah',
+        ANY = 'any',
+        ESP = 'esp',
+        GRE = 'gre',
         ICMP = 'icmp',
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
         TCP = 'tcp',
         UDP = 'udp',
+        VRRP = 'vrrp',
       }
     }
   }
@@ -47885,10 +49465,264 @@ namespace VpcV1 {
       }
       /** The network protocol. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Protocol {
-        ALL = 'all',
+        AH = 'ah',
+        ANY = 'any',
+        ESP = 'esp',
+        GRE = 'gre',
         ICMP = 'icmp',
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
         TCP = 'tcp',
         UDP = 'udp',
+        VRRP = 'vrrp',
       }
     }
   }
@@ -47897,7 +49731,10 @@ namespace VpcV1 {
    * NetworkACLRulePrototype.
    */
   export interface NetworkACLRulePrototype {
-    /** The action to perform for a packet matching the rule. */
+    /** The action to perform for a packet matching the rule.
+     *
+     *  Must not be `deny` if `protocol` is `icmp_tcp_udp`.
+     */
     action: NetworkACLRulePrototype.Constants.Action | string;
     /** The rule to insert this rule immediately before.
      *
@@ -47923,7 +49760,7 @@ namespace VpcV1 {
   }
   export namespace NetworkACLRulePrototype {
     export namespace Constants {
-      /** The action to perform for a packet matching the rule. */
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
       export enum Action {
         ALLOW = 'allow',
         DENY = 'deny',
@@ -47939,10 +49776,264 @@ namespace VpcV1 {
       }
       /** The network protocol. */
       export enum Protocol {
-        ALL = 'all',
+        AH = 'ah',
+        ANY = 'any',
+        ESP = 'esp',
+        GRE = 'gre',
         ICMP = 'icmp',
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
         TCP = 'tcp',
         UDP = 'udp',
+        VRRP = 'vrrp',
       }
     }
   }
@@ -47951,7 +50042,10 @@ namespace VpcV1 {
    * NetworkACLRulePrototypeNetworkACLContext.
    */
   export interface NetworkACLRulePrototypeNetworkACLContext {
-    /** The action to perform for a packet matching the rule. */
+    /** The action to perform for a packet matching the rule.
+     *
+     *  Must not be `deny` if `protocol` is `icmp_tcp_udp`.
+     */
     action: NetworkACLRulePrototypeNetworkACLContext.Constants.Action | string;
     /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all destination
      *  addresses.
@@ -47972,7 +50066,7 @@ namespace VpcV1 {
   }
   export namespace NetworkACLRulePrototypeNetworkACLContext {
     export namespace Constants {
-      /** The action to perform for a packet matching the rule. */
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
       export enum Action {
         ALLOW = 'allow',
         DENY = 'deny',
@@ -47988,10 +50082,264 @@ namespace VpcV1 {
       }
       /** The network protocol. */
       export enum Protocol {
-        ALL = 'all',
+        AH = 'ah',
+        ANY = 'any',
+        ESP = 'esp',
+        GRE = 'gre',
         ICMP = 'icmp',
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
         TCP = 'tcp',
         UDP = 'udp',
+        VRRP = 'vrrp',
       }
     }
   }
@@ -48226,10 +50574,11 @@ namespace VpcV1 {
      */
     name?: string;
     /** The primary IP address to bind to the instance network interface. This can be
-     *  specified using an existing reserved IP, or a prototype object for a new reserved IP.
+     *  specified using an existing reserved IP, or a prototype object for a new reserved
+     *  IP.
      *
-     *  If an existing reserved IP or a prototype object with an address is specified, it must
-     *  be available on the instance network interface's subnet. Otherwise, an
+     *  If an existing reserved IP or a prototype object with an address is specified, it
+     *  must be available on the instance network interface's subnet. Otherwise, an
      *  available address on the subnet will be automatically selected and reserved.
      */
     primary_ip?: NetworkInterfaceIPPrototype;
@@ -50022,6 +52371,8 @@ namespace VpcV1 {
      *  to all local IP addresses (or from all local IP addresses, for outbound rules).
      */
     local: SecurityGroupRuleLocal;
+    /** The name for this security group rule. The name is unique across all rules in the security group. */
+    name: string;
     /** The network protocol.
      *
      *  The enumerated values for this property may
@@ -50033,6 +52384,8 @@ namespace VpcV1 {
      *  (or to any destination, for outbound rules).
      */
     remote: SecurityGroupRuleRemote;
+    /** The resource type. */
+    resource_type: SecurityGroupRule.Constants.ResourceType | string;
   }
   export namespace SecurityGroupRule {
     export namespace Constants {
@@ -50047,10 +52400,268 @@ namespace VpcV1 {
       }
       /** The network protocol. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Protocol {
-        ALL = 'all',
+        AH = 'ah',
+        ANY = 'any',
+        ESP = 'esp',
+        GRE = 'gre',
         ICMP = 'icmp',
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
         TCP = 'tcp',
         UDP = 'udp',
+        VRRP = 'vrrp',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SECURITY_GROUP_RULE = 'security_group_rule',
       }
     }
   }
@@ -50111,6 +52722,10 @@ namespace VpcV1 {
      *  addresses (or from all local IP addresses, for outbound rules).
      */
     local?: SecurityGroupRuleLocalPrototype;
+    /** The name for this security group rule. The name must not be used by another rule in the security group. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
     /** The network protocol. */
     protocol: SecurityGroupRulePrototype.Constants.Protocol | string;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
@@ -50135,10 +52750,264 @@ namespace VpcV1 {
       }
       /** The network protocol. */
       export enum Protocol {
-        ALL = 'all',
+        AH = 'ah',
+        ANY = 'any',
+        ESP = 'esp',
+        GRE = 'gre',
         ICMP = 'icmp',
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
         TCP = 'tcp',
         UDP = 'udp',
+        VRRP = 'vrrp',
       }
     }
   }
@@ -52180,7 +55049,7 @@ namespace VpcV1 {
      *  The maximum number of items for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
-    cse_source_ips?: VPCCSESourceIP[];
+    cse_source_ips: VPCCSESourceIP[];
     /** The default network ACL to use for subnets created in this VPC. */
     default_network_acl: NetworkACLReference;
     /** The default routing table to use for subnets created in this VPC. */
@@ -52289,8 +55158,8 @@ namespace VpcV1 {
   export interface VPCDNSPatch {
     /** Indicates whether this VPC is enabled as a DNS name resolution hub.
      *
-     *  Updating the value to `true` requires `allow_dns_resolution_binding` to be `true` for all endpoint gateways
-     *  residing in this VPC.
+     *  Updating the value to `true` requires `dns_resolution_binding_mode` be set to `primary` for all endpoint
+     *  gateways residing in this VPC.
      *
      *  Changing the value requires `dns.resolution_binding_count` to be zero.
      */
@@ -52316,8 +55185,9 @@ namespace VpcV1 {
   export interface VPCDNSResolutionBinding {
     /** The date and time that the DNS resolution binding was created. */
     created_at: string;
-    /** The endpoint gateways that have `allow_dns_resolution_binding` set to `true` and reside in the VPC that has
-     *  `dns.enable_hub` set to `false`.
+    /** The endpoint gateways that have `dns_resolution_binding_mode` set to either `primary` or
+     *  `per_resource_binding` and reside in the VPC that has `dns.enable_hub` set to
+     *  `false`.
      *
      *  The endpoint gateways may be remote and therefore may not be directly retrievable.
      */
@@ -52741,6 +55611,16 @@ namespace VpcV1 {
   }
 
   /**
+   * VPNGatewayAdvertisedCIDRCollection.
+   */
+  export interface VPNGatewayAdvertisedCIDRCollection {
+    /** The static CIDRs advertised through any enabled routing protocol (for example, BGP). The routing protocol
+     *  will advertise routes with these CIDRs as route destinations.
+     */
+    advertised_cidrs: string[];
+  }
+
+  /**
    * VPNGatewayCollection.
    */
   export interface VPNGatewayCollection {
@@ -52927,6 +55807,121 @@ namespace VpcV1 {
         HOLD = 'hold',
         NONE = 'none',
         RESTART = 'restart',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayConnectionDynamicRouteModeLocal.
+   */
+  export interface VPNGatewayConnectionDynamicRouteModeLocal {
+    /** The local IKE identities.
+     *
+     *  A VPN gateway in dynamic route mode consists of two members in active-active mode. The first identity applies to
+     *  the first member, and the second identity applies to the second member.
+     */
+    ike_identities: VPNGatewayConnectionIKEIdentity[];
+  }
+
+  /**
+   * VPNGatewayConnectionDynamicRouteModeLocalPrototype.
+   */
+  export interface VPNGatewayConnectionDynamicRouteModeLocalPrototype {
+    /** The local IKE identities to use.
+     *
+     *  A VPN gateway in dynamic route mode consists of two members in active-active mode. The first specified identity
+     *  will be applied to the first member, and the second specified identity will be applied to the second member.
+     *
+     *  If unspecified, then `type` will be `ipv4_address` and `value` will be the public IP address of the member's VPN
+     *  connection tunnel.
+     */
+    ike_identities?: VPNGatewayConnectionIKEIdentityPrototype[];
+  }
+
+  /**
+   * VPNGatewayConnectionDynamicRouteModePeer.
+   */
+  export interface VPNGatewayConnectionDynamicRouteModePeer {
+    /** The peer autonomous system number (ASN) for this VPN gateway connection. */
+    asn: number;
+    /** The peer IKE identity. */
+    ike_identity: VPNGatewayConnectionIKEIdentity;
+    /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+    type: VPNGatewayConnectionDynamicRouteModePeer.Constants.Type | string;
+  }
+  export namespace VPNGatewayConnectionDynamicRouteModePeer {
+    export namespace Constants {
+      /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+      export enum Type {
+        ADDRESS = 'address',
+        FQDN = 'fqdn',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayConnectionDynamicRouteModePeerPrototype.
+   */
+  export interface VPNGatewayConnectionDynamicRouteModePeerPrototype {
+    /** The peer autonomous system number (ASN) for this VPN gateway connection. The ASN values in the
+     *  [restricted ASN list](
+     *  https://cloud.ibm.com/docs/vpc?topic=vpc-planning-considerations-vpn#dynamic-route-based-considerations) are
+     *  reserved and unavailable.
+     */
+    asn: number;
+    /** The peer IKE identity to use.
+     *
+     *  If unspecified:
+     *  - If `peer.address` is specified, the `type` will be `ipv4_address`, and
+     *  the `value` will be `peer.address`.
+     *  - If `peer.fqdn` is specified, the `type` will be `fqdn`, and the `value`
+     *  will be `peer.fqdn`.
+     */
+    ike_identity?: VPNGatewayConnectionIKEIdentityPrototype;
+  }
+
+  /**
+   * VPNGatewayConnectionDynamicRouteModeTunnel.
+   */
+  export interface VPNGatewayConnectionDynamicRouteModeTunnel {
+    /** The IP address of the neighbor on the virtual tunnel interface.
+     *  This serves as the destination address for BGP peering sessions on the peer gateway
+     *  within the tunnel.
+     */
+    neighbor_ip: IP;
+    /** BGP routing protocol state as defined in [RFC 4721](https://www.rfc-editor.org/rfc/rfc4271#section-8.2.2). */
+    protocol_state: VPNGatewayConnectionDynamicRouteModeTunnel.Constants.ProtocolState | string;
+    /** The IP address of the VPN gateway member in which the tunnel resides. */
+    public_ip: IP;
+    /** The status of the VPN Tunnel.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    status: VPNGatewayConnectionDynamicRouteModeTunnel.Constants.Status | string;
+    /** The reasons for the current status (if any). */
+    status_reasons: VPNGatewayConnectionTunnelStatusReason[];
+    /** The IP address assigned to the VPN gateway's virtual tunnel interface.
+     *  This serves as the source address for BGP peering sessions initiated from the VPN
+     *  gateway towards the peer gateway within the tunnel.
+     */
+    tunnel_interface_ip: IP;
+  }
+  export namespace VPNGatewayConnectionDynamicRouteModeTunnel {
+    export namespace Constants {
+      /** BGP routing protocol state as defined in [RFC 4721](https://www.rfc-editor.org/rfc/rfc4271#section-8.2.2). */
+      export enum ProtocolState {
+        ACTIVE = 'active',
+        CONNECT = 'connect',
+        ESTABLISHED = 'established',
+        IDLE = 'idle',
+        OPEN_CONFIRM = 'open_confirm',
+        OPEN_SENT = 'open_sent',
+      }
+      /** The status of the VPN Tunnel. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Status {
+        DOWN = 'down',
+        UP = 'up',
       }
     }
   }
@@ -53260,6 +56255,38 @@ namespace VpcV1 {
   }
 
   /**
+   * VPNGatewayConnectionTunnel.
+   */
+  export interface VPNGatewayConnectionTunnel {
+    /** The IP address of the neighbor on the virtual tunnel interface.
+     *  This serves as the destination address for BGP peering sessions on the peer gateway
+     *  within the tunnel.
+     */
+    neighbor_ip?: IP;
+    /** The IP address assigned to the VPN gateway's virtual tunnel interface.
+     *  This serves as the source address for BGP peering sessions initiated from the VPN
+     *  gateway towards the peer gateway within the tunnel.
+     */
+    tunnel_interface_ip?: IP;
+  }
+
+  /**
+   * VPNGatewayConnectionTunnelPrototype.
+   */
+  export interface VPNGatewayConnectionTunnelPrototype {
+    /** The IP address of the neighbor on the virtual tunnel interface.
+     *  This serves as the destination address for BGP peering sessions on the peer gateway
+     *  within the tunnel.
+     */
+    neighbor_ip: IP;
+    /** The IP address assigned to the VPN gateway's virtual tunnel interface.
+     *  This serves as the source address for BGP peering sessions initiated from the VPN
+     *  gateway towards the peer gateway within the tunnel.
+     */
+    tunnel_interface_ip: IP;
+  }
+
+  /**
    * VPNGatewayConnectionTunnelStatusReason.
    */
   export interface VPNGatewayConnectionTunnelStatusReason {
@@ -53491,6 +56518,123 @@ namespace VpcV1 {
     resource_group?: ResourceGroupIdentity;
     /** Identifies a subnet by a unique property. */
     subnet: SubnetIdentity;
+  }
+
+  /**
+   * VPNGatewayServiceConnection.
+   */
+  export interface VPNGatewayServiceConnection {
+    /** The date and time that this VPN gateway service connection was created. */
+    created_at: string;
+    creator: VPNGatewayServiceConnectionCreator;
+    /** The unique identifier for this VPN gateway service connection. */
+    id: string;
+    /** The reasons for the current `lifecycle_state` (if any). */
+    lifecycle_reasons: VPNGatewayServiceConnectionLifecycleReason[];
+    /** The lifecycle state of the VPN gateway service connection. */
+    lifecycle_state: VPNGatewayServiceConnection.Constants.LifecycleState | string;
+    /** The status of this VPN gateway service connection:
+     *  - `degraded`: operating with compromised performance.
+     *  - `down`: not operational.
+     *  - `up`: operating normally.
+     */
+    status: VPNGatewayServiceConnection.Constants.Status | string;
+    /** The reasons for the current VPN gateway service connection status (if any). */
+    status_reasons: VPNGatewayServiceConnectionStatusReason[];
+  }
+  export namespace VPNGatewayServiceConnection {
+    export namespace Constants {
+      /** The lifecycle state of the VPN gateway service connection. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The status of this VPN gateway service connection: - `degraded`: operating with compromised performance. - `down`: not operational. - `up`: operating normally. */
+      export enum Status {
+        DEGRADED = 'degraded',
+        DOWN = 'down',
+        UP = 'up',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayServiceConnectionCollection.
+   */
+  export interface VPNGatewayServiceConnectionCollection {
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** A page of service connections for the VPN gateway. */
+    service_connections: VPNGatewayServiceConnection[];
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
+   * VPNGatewayServiceConnectionCreator.
+   */
+  export interface VPNGatewayServiceConnectionCreator {
+  }
+
+  /**
+   * VPNGatewayServiceConnectionLifecycleReason.
+   */
+  export interface VPNGatewayServiceConnectionLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `internal_error`: internal error (contact IBM support)
+     *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
+     *    support)
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: VPNGatewayServiceConnectionLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** A link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace VPNGatewayServiceConnectionLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `internal_error`: internal error (contact IBM support) - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        RESOURCE_SUSPENDED_BY_PROVIDER = 'resource_suspended_by_provider',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayServiceConnectionStatusReason.
+   */
+  export interface VPNGatewayServiceConnectionStatusReason {
+    /** The reasons for the current VPN gateway service connection status (if any).
+     *  - `internal_error`
+     *  - `peer_not_responding`.
+     */
+    code: VPNGatewayServiceConnectionStatusReason.Constants.Code | string;
+    /** An explanation of the reason for this VPN gateway service connection's status. */
+    message: string;
+    /** A link to documentation about this status reason. */
+    more_info?: string;
+  }
+  export namespace VPNGatewayServiceConnectionStatusReason {
+    export namespace Constants {
+      /** The reasons for the current VPN gateway service connection status (if any). - `internal_error` - `peer_not_responding`. */
+      export enum Code {
+        INTERNAL_ERROR = 'internal_error',
+        PEER_NOT_RESPONDING = 'peer_not_responding',
+      }
+    }
   }
 
   /**
@@ -57166,6 +60310,20 @@ namespace VpcV1 {
   }
 
   /**
+   * The CRN for the resource targeted by this resource binding.
+   */
+  export interface EndpointGatewayResourceBindingTargetCRN extends EndpointGatewayResourceBindingTarget {
+    crn: string;
+  }
+
+  /**
+   * The resource to bind to the endpoint gateway.
+   */
+  export interface EndpointGatewayResourceBindingTargetPrototypeEndpointGatewayResourceBindingTargetByCRN extends EndpointGatewayResourceBindingTargetPrototype {
+    crn: string;
+  }
+
+  /**
    * EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypePrivatePathServiceGatewayPrototype.
    */
   export interface EndpointGatewayTargetPrototypeEndpointGatewayTargetResourceTypePrivatePathServiceGatewayPrototype extends EndpointGatewayTargetPrototype {
@@ -58979,6 +62137,24 @@ namespace VpcV1 {
   }
 
   /**
+   * The permitted value for VCPU burst limit percentage for an instance with this profile.
+   */
+  export interface InstanceProfileVCPUBurstLimitFixed extends InstanceProfileVCPUBurstLimit {
+    /** The type for this profile field. */
+    type: InstanceProfileVCPUBurstLimitFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: number;
+  }
+  export namespace InstanceProfileVCPUBurstLimitFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
+  /**
    * The VCPU count for an instance with this profile depends on its configuration.
    */
   export interface InstanceProfileVCPUDependent extends InstanceProfileVCPU {
@@ -59153,6 +62329,52 @@ namespace VpcV1 {
   }
 
   /**
+   * The volume bandwidth QoS modes for an instance with this profile depends on its configuration.
+   */
+  export interface InstanceProfileVolumeBandwidthQoSModesDependent extends InstanceProfileVolumeBandwidthQoSModes {
+    /** The type for this profile field. */
+    type: InstanceProfileVolumeBandwidthQoSModesDependent.Constants.Type | string;
+  }
+  export namespace InstanceProfileVolumeBandwidthQoSModesDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /**
+   * InstanceProfileVolumeBandwidthQoSModesEnum.
+   */
+  export interface InstanceProfileVolumeBandwidthQoSModesEnum extends InstanceProfileVolumeBandwidthQoSModes {
+    /** The default volume bandwidth QoS mode for this profile. */
+    default: InstanceProfileVolumeBandwidthQoSModesEnum.Constants.Default | string;
+    /** The type for this profile field. */
+    type: InstanceProfileVolumeBandwidthQoSModesEnum.Constants.Type | string;
+    /** The permitted volume bandwidth QoS modes for an instance using this profile. */
+    values: InstanceProfileVolumeBandwidthQoSModesEnum.Constants.Values[] | string[];
+  }
+  export namespace InstanceProfileVolumeBandwidthQoSModesEnum {
+    export namespace Constants {
+      /** The default volume bandwidth QoS mode for this profile. */
+      export enum Default {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The permitted volume bandwidth QoS modes for an instance using this profile. */
+      export enum Values {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
+    }
+  }
+
+  /**
    * The permitted storage bandwidth range (in megabits per second) shared across the storage volumes of an instance
    * with this profile.
    */
@@ -59203,6 +62425,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -59227,6 +62454,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -59246,6 +62478,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -59296,6 +62533,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -59315,6 +62557,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -59369,6 +62616,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -59393,6 +62645,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -59412,6 +62669,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -59462,6 +62724,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -59491,6 +62758,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -59512,6 +62784,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -59538,6 +62815,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -60411,13 +63693,13 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule for ICMP, TCP and UDP traffic.
+   * NetworkACLRuleItemNetworkACLRuleProtocolAny.
    */
-  export interface NetworkACLRuleItemNetworkACLRuleProtocolAll extends NetworkACLRuleItem {
+  export interface NetworkACLRuleItemNetworkACLRuleProtocolAny extends NetworkACLRuleItem {
     /** The network protocol. */
-    protocol: NetworkACLRuleItemNetworkACLRuleProtocolAll.Constants.Protocol | string;
+    protocol: NetworkACLRuleItemNetworkACLRuleProtocolAny.Constants.Protocol | string;
   }
-  export namespace NetworkACLRuleItemNetworkACLRuleProtocolAll {
+  export namespace NetworkACLRuleItemNetworkACLRuleProtocolAny {
     export namespace Constants {
       /** The action to perform for a packet matching the rule. */
       export enum Action {
@@ -60435,7 +63717,7 @@ namespace VpcV1 {
       }
       /** The network protocol. */
       export enum Protocol {
-        ALL = 'all',
+        ANY = 'any',
       }
     }
   }
@@ -60481,6 +63763,332 @@ namespace VpcV1 {
   }
 
   /**
+   * NetworkACLRuleItemNetworkACLRuleProtocolICMPTCPUDP.
+   */
+  export interface NetworkACLRuleItemNetworkACLRuleProtocolICMPTCPUDP extends NetworkACLRuleItem {
+    /** The network protocol. */
+    protocol: NetworkACLRuleItemNetworkACLRuleProtocolICMPTCPUDP.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRuleItemNetworkACLRuleProtocolICMPTCPUDP {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol. */
+      export enum Protocol {
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+      }
+    }
+  }
+
+  /**
+   * NetworkACLRuleItemNetworkACLRuleProtocolIndividual.
+   */
+  export interface NetworkACLRuleItemNetworkACLRuleProtocolIndividual extends NetworkACLRuleItem {
+    /** The network protocol.
+     *
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
+     *  protocols are:
+     *  - `ah`: AH (authentication header, protocol number `51`)
+     *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
+     *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
+     *  - `ip_in_ip`: IP encapsulation within IP (protocol number `4`)
+     *  - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`)
+     *  - `rsvp`: RSVP (reservation protocol, protocol number `46`)
+     *  - `sctp`: SCTP (stream control transmission protocol, protocol number `132`)
+     *  - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`)
+     *
+     *  For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal.
+     */
+    protocol: NetworkACLRuleItemNetworkACLRuleProtocolIndividual.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRuleItemNetworkACLRuleProtocolIndividual {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol. The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known protocols are: - `ah`: AH (authentication header, protocol number `51`) - `esp`: ESP (encapsulating security payload, protocol number `50`) - `gre`: GRE (generic routing encapsulation, protocol number `47`) - `ip_in_ip`: IP encapsulation within IP (protocol number `4`) - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`) - `rsvp`: RSVP (reservation protocol, protocol number `46`) - `sctp`: SCTP (stream control transmission protocol, protocol number `132`) - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`) For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal. */
+      export enum Protocol {
+        AH = 'ah',
+        ESP = 'esp',
+        GRE = 'gre',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
+        VRRP = 'vrrp',
+      }
+    }
+  }
+
+  /**
    * A rule for TCP or UDP traffic.
    */
   export interface NetworkACLRuleItemNetworkACLRuleProtocolTCPUDP extends NetworkACLRuleItem {
@@ -60520,15 +64128,15 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule for ICMP, TCP and UDP traffic.
+   * NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAnyPrototype.
    */
-  export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototypeNetworkACLContext {
+  export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAnyPrototype extends NetworkACLRulePrototypeNetworkACLContext {
     /** The network protocol. */
-    protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype.Constants.Protocol | string;
+    protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAnyPrototype.Constants.Protocol | string;
   }
-  export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAllPrototype {
+  export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolAnyPrototype {
     export namespace Constants {
-      /** The action to perform for a packet matching the rule. */
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
       export enum Action {
         ALLOW = 'allow',
         DENY = 'deny',
@@ -60544,7 +64152,7 @@ namespace VpcV1 {
       }
       /** The network protocol. */
       export enum Protocol {
-        ALL = 'all',
+        ANY = 'any',
       }
     }
   }
@@ -60568,7 +64176,7 @@ namespace VpcV1 {
   }
   export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPPrototype {
     export namespace Constants {
-      /** The action to perform for a packet matching the rule. */
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
       export enum Action {
         ALLOW = 'allow',
         DENY = 'deny',
@@ -60585,6 +64193,332 @@ namespace VpcV1 {
       /** The network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
+      }
+    }
+  }
+
+  /**
+   * NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPTCPUDPPrototype.
+   */
+  export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPTCPUDPPrototype extends NetworkACLRulePrototypeNetworkACLContext {
+    /** The network protocol. */
+    protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPTCPUDPPrototype.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolICMPTCPUDPPrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol. */
+      export enum Protocol {
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+      }
+    }
+  }
+
+  /**
+   * NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolIndividualPrototype.
+   */
+  export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolIndividualPrototype extends NetworkACLRulePrototypeNetworkACLContext {
+    /** The network protocol.
+     *
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
+     *  protocols are:
+     *  - `ah`: AH (authentication header, protocol number `51`)
+     *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
+     *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
+     *  - `ip_in_ip`: IP encapsulation within IP (protocol number `4`)
+     *  - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`)
+     *  - `rsvp`: RSVP (reservation protocol, protocol number `46`)
+     *  - `sctp`: SCTP (stream control transmission protocol, protocol number `132`)
+     *  - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`)
+     *
+     *  For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal.
+     */
+    protocol: NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolIndividualPrototype.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolIndividualPrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol. The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known protocols are: - `ah`: AH (authentication header, protocol number `51`) - `esp`: ESP (encapsulating security payload, protocol number `50`) - `gre`: GRE (generic routing encapsulation, protocol number `47`) - `ip_in_ip`: IP encapsulation within IP (protocol number `4`) - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`) - `rsvp`: RSVP (reservation protocol, protocol number `46`) - `sctp`: SCTP (stream control transmission protocol, protocol number `132`) - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`) For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal. */
+      export enum Protocol {
+        AH = 'ah',
+        ESP = 'esp',
+        GRE = 'gre',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
+        VRRP = 'vrrp',
       }
     }
   }
@@ -60622,7 +64556,7 @@ namespace VpcV1 {
   }
   export namespace NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolTCPUDPPrototype {
     export namespace Constants {
-      /** The action to perform for a packet matching the rule. */
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
       export enum Action {
         ALLOW = 'allow',
         DENY = 'deny',
@@ -60645,15 +64579,15 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule for ICMP, TCP and UDP traffic.
+   * NetworkACLRulePrototypeNetworkACLRuleProtocolAnyPrototype.
    */
-  export interface NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype extends NetworkACLRulePrototype {
+  export interface NetworkACLRulePrototypeNetworkACLRuleProtocolAnyPrototype extends NetworkACLRulePrototype {
     /** The network protocol. */
-    protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype.Constants.Protocol | string;
+    protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolAnyPrototype.Constants.Protocol | string;
   }
-  export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolAllPrototype {
+  export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolAnyPrototype {
     export namespace Constants {
-      /** The action to perform for a packet matching the rule. */
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
       export enum Action {
         ALLOW = 'allow',
         DENY = 'deny',
@@ -60669,7 +64603,7 @@ namespace VpcV1 {
       }
       /** The network protocol. */
       export enum Protocol {
-        ALL = 'all',
+        ANY = 'any',
       }
     }
   }
@@ -60693,7 +64627,7 @@ namespace VpcV1 {
   }
   export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolICMPPrototype {
     export namespace Constants {
-      /** The action to perform for a packet matching the rule. */
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
       export enum Action {
         ALLOW = 'allow',
         DENY = 'deny',
@@ -60710,6 +64644,332 @@ namespace VpcV1 {
       /** The network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
+      }
+    }
+  }
+
+  /**
+   * NetworkACLRulePrototypeNetworkACLRuleProtocolICMPTCPUDPPrototype.
+   */
+  export interface NetworkACLRulePrototypeNetworkACLRuleProtocolICMPTCPUDPPrototype extends NetworkACLRulePrototype {
+    /** The network protocol. */
+    protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolICMPTCPUDPPrototype.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolICMPTCPUDPPrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol. */
+      export enum Protocol {
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+      }
+    }
+  }
+
+  /**
+   * NetworkACLRulePrototypeNetworkACLRuleProtocolIndividualPrototype.
+   */
+  export interface NetworkACLRulePrototypeNetworkACLRuleProtocolIndividualPrototype extends NetworkACLRulePrototype {
+    /** The network protocol.
+     *
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
+     *  protocols are:
+     *  - `ah`: AH (authentication header, protocol number `51`)
+     *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
+     *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
+     *  - `ip_in_ip`: IP encapsulation within IP (protocol number `4`)
+     *  - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`)
+     *  - `rsvp`: RSVP (reservation protocol, protocol number `46`)
+     *  - `sctp`: SCTP (stream control transmission protocol, protocol number `132`)
+     *  - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`)
+     *
+     *  For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal.
+     */
+    protocol: NetworkACLRulePrototypeNetworkACLRuleProtocolIndividualPrototype.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolIndividualPrototype {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol. The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known protocols are: - `ah`: AH (authentication header, protocol number `51`) - `esp`: ESP (encapsulating security payload, protocol number `50`) - `gre`: GRE (generic routing encapsulation, protocol number `47`) - `ip_in_ip`: IP encapsulation within IP (protocol number `4`) - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`) - `rsvp`: RSVP (reservation protocol, protocol number `46`) - `sctp`: SCTP (stream control transmission protocol, protocol number `132`) - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`) For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal. */
+      export enum Protocol {
+        AH = 'ah',
+        ESP = 'esp',
+        GRE = 'gre',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
+        VRRP = 'vrrp',
       }
     }
   }
@@ -60747,7 +65007,7 @@ namespace VpcV1 {
   }
   export namespace NetworkACLRulePrototypeNetworkACLRuleProtocolTCPUDPPrototype {
     export namespace Constants {
-      /** The action to perform for a packet matching the rule. */
+      /** The action to perform for a packet matching the rule. Must not be `deny` if `protocol` is `icmp_tcp_udp`. */
       export enum Action {
         ALLOW = 'allow',
         DENY = 'deny',
@@ -60770,13 +65030,13 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule for ICMP, TCP and UDP traffic.
+   * NetworkACLRuleNetworkACLRuleProtocolAny.
    */
-  export interface NetworkACLRuleNetworkACLRuleProtocolAll extends NetworkACLRule {
+  export interface NetworkACLRuleNetworkACLRuleProtocolAny extends NetworkACLRule {
     /** The network protocol. */
-    protocol: NetworkACLRuleNetworkACLRuleProtocolAll.Constants.Protocol | string;
+    protocol: NetworkACLRuleNetworkACLRuleProtocolAny.Constants.Protocol | string;
   }
-  export namespace NetworkACLRuleNetworkACLRuleProtocolAll {
+  export namespace NetworkACLRuleNetworkACLRuleProtocolAny {
     export namespace Constants {
       /** The action to perform for a packet matching the rule. */
       export enum Action {
@@ -60794,7 +65054,7 @@ namespace VpcV1 {
       }
       /** The network protocol. */
       export enum Protocol {
-        ALL = 'all',
+        ANY = 'any',
       }
     }
   }
@@ -60835,6 +65095,332 @@ namespace VpcV1 {
       /** The network protocol. */
       export enum Protocol {
         ICMP = 'icmp',
+      }
+    }
+  }
+
+  /**
+   * NetworkACLRuleNetworkACLRuleProtocolICMPTCPUDP.
+   */
+  export interface NetworkACLRuleNetworkACLRuleProtocolICMPTCPUDP extends NetworkACLRule {
+    /** The network protocol. */
+    protocol: NetworkACLRuleNetworkACLRuleProtocolICMPTCPUDP.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRuleNetworkACLRuleProtocolICMPTCPUDP {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol. */
+      export enum Protocol {
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+      }
+    }
+  }
+
+  /**
+   * NetworkACLRuleNetworkACLRuleProtocolIndividual.
+   */
+  export interface NetworkACLRuleNetworkACLRuleProtocolIndividual extends NetworkACLRule {
+    /** The network protocol.
+     *
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
+     *  protocols are:
+     *  - `ah`: AH (authentication header, protocol number `51`)
+     *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
+     *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
+     *  - `ip_in_ip`: IP encapsulation within IP (protocol number `4`)
+     *  - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`)
+     *  - `rsvp`: RSVP (reservation protocol, protocol number `46`)
+     *  - `sctp`: SCTP (stream control transmission protocol, protocol number `132`)
+     *  - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`)
+     *
+     *  For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal.
+     */
+    protocol: NetworkACLRuleNetworkACLRuleProtocolIndividual.Constants.Protocol | string;
+  }
+  export namespace NetworkACLRuleNetworkACLRuleProtocolIndividual {
+    export namespace Constants {
+      /** The action to perform for a packet matching the rule. */
+      export enum Action {
+        ALLOW = 'allow',
+        DENY = 'deny',
+      }
+      /** The direction of traffic to match. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version for this rule. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol. The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known protocols are: - `ah`: AH (authentication header, protocol number `51`) - `esp`: ESP (encapsulating security payload, protocol number `50`) - `gre`: GRE (generic routing encapsulation, protocol number `47`) - `ip_in_ip`: IP encapsulation within IP (protocol number `4`) - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`) - `rsvp`: RSVP (reservation protocol, protocol number `46`) - `sctp`: SCTP (stream control transmission protocol, protocol number `132`) - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`) For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal. */
+      export enum Protocol {
+        AH = 'ah',
+        ESP = 'esp',
+        GRE = 'gre',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
+        VRRP = 'vrrp',
       }
     }
   }
@@ -61537,13 +66123,13 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule allowing ICMP, TCP and UDP traffic.
+   * A rule allowing traffic for any protocol.
    */
-  export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll extends SecurityGroupRulePrototype {
+  export interface SecurityGroupRuleProtocolAny extends SecurityGroupRule {
     /** The network protocol. */
-    protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll.Constants.Protocol | string;
+    protocol: SecurityGroupRuleProtocolAny.Constants.Protocol | string;
   }
-  export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolAll {
+  export namespace SecurityGroupRuleProtocolAny {
     export namespace Constants {
       /** The direction of traffic to allow. */
       export enum Direction {
@@ -61554,9 +66140,337 @@ namespace VpcV1 {
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
+      /** The resource type. */
+      export enum ResourceType {
+        SECURITY_GROUP_RULE = 'security_group_rule',
+      }
       /** The network protocol. */
       export enum Protocol {
-        ALL = 'all',
+        ANY = 'any',
+      }
+    }
+  }
+
+  /**
+   * A rule allowing ICMP, TCP and UDP traffic.
+   */
+  export interface SecurityGroupRuleProtocolICMPTCPUDP extends SecurityGroupRule {
+    /** The network protocol. */
+    protocol: SecurityGroupRuleProtocolICMPTCPUDP.Constants.Protocol | string;
+  }
+  export namespace SecurityGroupRuleProtocolICMPTCPUDP {
+    export namespace Constants {
+      /** The direction of traffic to allow. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SECURITY_GROUP_RULE = 'security_group_rule',
+      }
+      /** The network protocol. */
+      export enum Protocol {
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+      }
+    }
+  }
+
+  /**
+   * A rule allowing traffic for one protocol (other than ICMP, TCP or UDP).
+   */
+  export interface SecurityGroupRuleProtocolIndividual extends SecurityGroupRule {
+    /** The network protocol to allow.
+     *
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
+     *  protocols are:
+     *  - `ah`: AH (authentication header, protocol number `51`)
+     *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
+     *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
+     *  - `ip_in_ip`: IP encapsulation within IP (protocol number `4`)
+     *  - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`)
+     *  - `rsvp`: RSVP (reservation protocol, protocol number `46`)
+     *  - `sctp`: SCTP (stream control transmission protocol, protocol number `132`)
+     *  - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`)
+     *
+     *  For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal.
+     */
+    protocol: SecurityGroupRuleProtocolIndividual.Constants.Protocol | string;
+  }
+  export namespace SecurityGroupRuleProtocolIndividual {
+    export namespace Constants {
+      /** The direction of traffic to allow. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SECURITY_GROUP_RULE = 'security_group_rule',
+      }
+      /** The network protocol to allow. The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known protocols are: - `ah`: AH (authentication header, protocol number `51`) - `esp`: ESP (encapsulating security payload, protocol number `50`) - `gre`: GRE (generic routing encapsulation, protocol number `47`) - `ip_in_ip`: IP encapsulation within IP (protocol number `4`) - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`) - `rsvp`: RSVP (reservation protocol, protocol number `46`) - `sctp`: SCTP (stream control transmission protocol, protocol number `132`) - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`) For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal. */
+      export enum Protocol {
+        AH = 'ah',
+        ESP = 'esp',
+        GRE = 'gre',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
+        VRRP = 'vrrp',
       }
     }
   }
@@ -61630,6 +66544,347 @@ namespace VpcV1 {
       export enum Protocol {
         TCP = 'tcp',
         UDP = 'udp',
+      }
+    }
+  }
+
+  /**
+   * A rule allowing traffic for any protocol.
+   */
+  export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolAnyPrototype extends SecurityGroupRulePrototype {
+    /** The network protocol. */
+    protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolAnyPrototype.Constants.Protocol | string;
+  }
+  export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolAnyPrototype {
+    export namespace Constants {
+      /** The direction of traffic to allow. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol. */
+      export enum Protocol {
+        ANY = 'any',
+      }
+    }
+  }
+
+  /**
+   * A rule allowing ICMP, TCP and UDP traffic.
+   */
+  export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMPTCPUDPPrototype extends SecurityGroupRulePrototype {
+    /** The network protocol. */
+    protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMPTCPUDPPrototype.Constants.Protocol | string;
+  }
+  export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolICMPTCPUDPPrototype {
+    export namespace Constants {
+      /** The direction of traffic to allow. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol. */
+      export enum Protocol {
+        ICMP_TCP_UDP = 'icmp_tcp_udp',
+      }
+    }
+  }
+
+  /**
+   * SecurityGroupRulePrototypeSecurityGroupRuleProtocolIndividualPrototype.
+   */
+  export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolIndividualPrototype extends SecurityGroupRulePrototype {
+    /** The network protocol to allow.
+     *
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
+     *  protocols are:
+     *  - `ah`: AH (authentication header, protocol number `51`)
+     *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
+     *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
+     *  - `ip_in_ip`: IP encapsulation within IP (protocol number `4`)
+     *  - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`)
+     *  - `rsvp`: RSVP (reservation protocol, protocol number `46`)
+     *  - `sctp`: SCTP (stream control transmission protocol, protocol number `132`)
+     *  - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`)
+     *
+     *  For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal.
+     */
+    protocol: SecurityGroupRulePrototypeSecurityGroupRuleProtocolIndividualPrototype.Constants.Protocol | string;
+  }
+  export namespace SecurityGroupRulePrototypeSecurityGroupRuleProtocolIndividualPrototype {
+    export namespace Constants {
+      /** The direction of traffic to allow. */
+      export enum Direction {
+        INBOUND = 'inbound',
+        OUTBOUND = 'outbound',
+      }
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      export enum IpVersion {
+        IPV4 = 'ipv4',
+      }
+      /** The network protocol to allow. The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known protocols are: - `ah`: AH (authentication header, protocol number `51`) - `esp`: ESP (encapsulating security payload, protocol number `50`) - `gre`: GRE (generic routing encapsulation, protocol number `47`) - `ip_in_ip`: IP encapsulation within IP (protocol number `4`) - `l2tp`: L2TP (layer two tunneling protocol, protocol number `115`) - `rsvp`: RSVP (reservation protocol, protocol number `46`) - `sctp`: SCTP (stream control transmission protocol, protocol number `132`) - `vrrp`: VRRP (virtual router redundancy protocol, protocol number `112`) For other protocols, specify a value of `number_`*N*, where *N* is the network protocol number in decimal. */
+      export enum Protocol {
+        AH = 'ah',
+        ESP = 'esp',
+        GRE = 'gre',
+        IP_IN_IP = 'ip_in_ip',
+        L2TP = 'l2tp',
+        NUMBER_0 = 'number_0',
+        NUMBER_10 = 'number_10',
+        NUMBER_100 = 'number_100',
+        NUMBER_101 = 'number_101',
+        NUMBER_102 = 'number_102',
+        NUMBER_103 = 'number_103',
+        NUMBER_104 = 'number_104',
+        NUMBER_105 = 'number_105',
+        NUMBER_106 = 'number_106',
+        NUMBER_107 = 'number_107',
+        NUMBER_108 = 'number_108',
+        NUMBER_109 = 'number_109',
+        NUMBER_11 = 'number_11',
+        NUMBER_110 = 'number_110',
+        NUMBER_111 = 'number_111',
+        NUMBER_113 = 'number_113',
+        NUMBER_114 = 'number_114',
+        NUMBER_116 = 'number_116',
+        NUMBER_117 = 'number_117',
+        NUMBER_118 = 'number_118',
+        NUMBER_119 = 'number_119',
+        NUMBER_12 = 'number_12',
+        NUMBER_120 = 'number_120',
+        NUMBER_121 = 'number_121',
+        NUMBER_122 = 'number_122',
+        NUMBER_123 = 'number_123',
+        NUMBER_124 = 'number_124',
+        NUMBER_125 = 'number_125',
+        NUMBER_126 = 'number_126',
+        NUMBER_127 = 'number_127',
+        NUMBER_128 = 'number_128',
+        NUMBER_129 = 'number_129',
+        NUMBER_13 = 'number_13',
+        NUMBER_130 = 'number_130',
+        NUMBER_131 = 'number_131',
+        NUMBER_133 = 'number_133',
+        NUMBER_134 = 'number_134',
+        NUMBER_135 = 'number_135',
+        NUMBER_136 = 'number_136',
+        NUMBER_137 = 'number_137',
+        NUMBER_138 = 'number_138',
+        NUMBER_139 = 'number_139',
+        NUMBER_14 = 'number_14',
+        NUMBER_140 = 'number_140',
+        NUMBER_141 = 'number_141',
+        NUMBER_142 = 'number_142',
+        NUMBER_143 = 'number_143',
+        NUMBER_144 = 'number_144',
+        NUMBER_145 = 'number_145',
+        NUMBER_146 = 'number_146',
+        NUMBER_147 = 'number_147',
+        NUMBER_148 = 'number_148',
+        NUMBER_149 = 'number_149',
+        NUMBER_15 = 'number_15',
+        NUMBER_150 = 'number_150',
+        NUMBER_151 = 'number_151',
+        NUMBER_152 = 'number_152',
+        NUMBER_153 = 'number_153',
+        NUMBER_154 = 'number_154',
+        NUMBER_155 = 'number_155',
+        NUMBER_156 = 'number_156',
+        NUMBER_157 = 'number_157',
+        NUMBER_158 = 'number_158',
+        NUMBER_159 = 'number_159',
+        NUMBER_16 = 'number_16',
+        NUMBER_160 = 'number_160',
+        NUMBER_161 = 'number_161',
+        NUMBER_162 = 'number_162',
+        NUMBER_163 = 'number_163',
+        NUMBER_164 = 'number_164',
+        NUMBER_165 = 'number_165',
+        NUMBER_166 = 'number_166',
+        NUMBER_167 = 'number_167',
+        NUMBER_168 = 'number_168',
+        NUMBER_169 = 'number_169',
+        NUMBER_170 = 'number_170',
+        NUMBER_171 = 'number_171',
+        NUMBER_172 = 'number_172',
+        NUMBER_173 = 'number_173',
+        NUMBER_174 = 'number_174',
+        NUMBER_175 = 'number_175',
+        NUMBER_176 = 'number_176',
+        NUMBER_177 = 'number_177',
+        NUMBER_178 = 'number_178',
+        NUMBER_179 = 'number_179',
+        NUMBER_18 = 'number_18',
+        NUMBER_180 = 'number_180',
+        NUMBER_181 = 'number_181',
+        NUMBER_182 = 'number_182',
+        NUMBER_183 = 'number_183',
+        NUMBER_184 = 'number_184',
+        NUMBER_185 = 'number_185',
+        NUMBER_186 = 'number_186',
+        NUMBER_187 = 'number_187',
+        NUMBER_188 = 'number_188',
+        NUMBER_189 = 'number_189',
+        NUMBER_19 = 'number_19',
+        NUMBER_190 = 'number_190',
+        NUMBER_191 = 'number_191',
+        NUMBER_192 = 'number_192',
+        NUMBER_193 = 'number_193',
+        NUMBER_194 = 'number_194',
+        NUMBER_195 = 'number_195',
+        NUMBER_196 = 'number_196',
+        NUMBER_197 = 'number_197',
+        NUMBER_198 = 'number_198',
+        NUMBER_199 = 'number_199',
+        NUMBER_2 = 'number_2',
+        NUMBER_20 = 'number_20',
+        NUMBER_200 = 'number_200',
+        NUMBER_201 = 'number_201',
+        NUMBER_202 = 'number_202',
+        NUMBER_203 = 'number_203',
+        NUMBER_204 = 'number_204',
+        NUMBER_205 = 'number_205',
+        NUMBER_206 = 'number_206',
+        NUMBER_207 = 'number_207',
+        NUMBER_208 = 'number_208',
+        NUMBER_209 = 'number_209',
+        NUMBER_21 = 'number_21',
+        NUMBER_210 = 'number_210',
+        NUMBER_211 = 'number_211',
+        NUMBER_212 = 'number_212',
+        NUMBER_213 = 'number_213',
+        NUMBER_214 = 'number_214',
+        NUMBER_215 = 'number_215',
+        NUMBER_216 = 'number_216',
+        NUMBER_217 = 'number_217',
+        NUMBER_218 = 'number_218',
+        NUMBER_219 = 'number_219',
+        NUMBER_22 = 'number_22',
+        NUMBER_220 = 'number_220',
+        NUMBER_221 = 'number_221',
+        NUMBER_222 = 'number_222',
+        NUMBER_223 = 'number_223',
+        NUMBER_224 = 'number_224',
+        NUMBER_225 = 'number_225',
+        NUMBER_226 = 'number_226',
+        NUMBER_227 = 'number_227',
+        NUMBER_228 = 'number_228',
+        NUMBER_229 = 'number_229',
+        NUMBER_23 = 'number_23',
+        NUMBER_230 = 'number_230',
+        NUMBER_231 = 'number_231',
+        NUMBER_232 = 'number_232',
+        NUMBER_233 = 'number_233',
+        NUMBER_234 = 'number_234',
+        NUMBER_235 = 'number_235',
+        NUMBER_236 = 'number_236',
+        NUMBER_237 = 'number_237',
+        NUMBER_238 = 'number_238',
+        NUMBER_239 = 'number_239',
+        NUMBER_24 = 'number_24',
+        NUMBER_240 = 'number_240',
+        NUMBER_241 = 'number_241',
+        NUMBER_242 = 'number_242',
+        NUMBER_243 = 'number_243',
+        NUMBER_244 = 'number_244',
+        NUMBER_245 = 'number_245',
+        NUMBER_246 = 'number_246',
+        NUMBER_247 = 'number_247',
+        NUMBER_248 = 'number_248',
+        NUMBER_249 = 'number_249',
+        NUMBER_25 = 'number_25',
+        NUMBER_250 = 'number_250',
+        NUMBER_251 = 'number_251',
+        NUMBER_252 = 'number_252',
+        NUMBER_253 = 'number_253',
+        NUMBER_254 = 'number_254',
+        NUMBER_255 = 'number_255',
+        NUMBER_26 = 'number_26',
+        NUMBER_27 = 'number_27',
+        NUMBER_28 = 'number_28',
+        NUMBER_29 = 'number_29',
+        NUMBER_3 = 'number_3',
+        NUMBER_30 = 'number_30',
+        NUMBER_31 = 'number_31',
+        NUMBER_32 = 'number_32',
+        NUMBER_33 = 'number_33',
+        NUMBER_34 = 'number_34',
+        NUMBER_35 = 'number_35',
+        NUMBER_36 = 'number_36',
+        NUMBER_37 = 'number_37',
+        NUMBER_38 = 'number_38',
+        NUMBER_39 = 'number_39',
+        NUMBER_40 = 'number_40',
+        NUMBER_41 = 'number_41',
+        NUMBER_42 = 'number_42',
+        NUMBER_43 = 'number_43',
+        NUMBER_44 = 'number_44',
+        NUMBER_45 = 'number_45',
+        NUMBER_48 = 'number_48',
+        NUMBER_49 = 'number_49',
+        NUMBER_5 = 'number_5',
+        NUMBER_52 = 'number_52',
+        NUMBER_53 = 'number_53',
+        NUMBER_54 = 'number_54',
+        NUMBER_55 = 'number_55',
+        NUMBER_56 = 'number_56',
+        NUMBER_57 = 'number_57',
+        NUMBER_58 = 'number_58',
+        NUMBER_59 = 'number_59',
+        NUMBER_60 = 'number_60',
+        NUMBER_61 = 'number_61',
+        NUMBER_62 = 'number_62',
+        NUMBER_63 = 'number_63',
+        NUMBER_64 = 'number_64',
+        NUMBER_65 = 'number_65',
+        NUMBER_66 = 'number_66',
+        NUMBER_67 = 'number_67',
+        NUMBER_68 = 'number_68',
+        NUMBER_69 = 'number_69',
+        NUMBER_7 = 'number_7',
+        NUMBER_70 = 'number_70',
+        NUMBER_71 = 'number_71',
+        NUMBER_72 = 'number_72',
+        NUMBER_73 = 'number_73',
+        NUMBER_74 = 'number_74',
+        NUMBER_75 = 'number_75',
+        NUMBER_76 = 'number_76',
+        NUMBER_77 = 'number_77',
+        NUMBER_78 = 'number_78',
+        NUMBER_79 = 'number_79',
+        NUMBER_8 = 'number_8',
+        NUMBER_80 = 'number_80',
+        NUMBER_81 = 'number_81',
+        NUMBER_82 = 'number_82',
+        NUMBER_83 = 'number_83',
+        NUMBER_84 = 'number_84',
+        NUMBER_85 = 'number_85',
+        NUMBER_86 = 'number_86',
+        NUMBER_87 = 'number_87',
+        NUMBER_88 = 'number_88',
+        NUMBER_89 = 'number_89',
+        NUMBER_9 = 'number_9',
+        NUMBER_90 = 'number_90',
+        NUMBER_91 = 'number_91',
+        NUMBER_92 = 'number_92',
+        NUMBER_93 = 'number_93',
+        NUMBER_94 = 'number_94',
+        NUMBER_95 = 'number_95',
+        NUMBER_96 = 'number_96',
+        NUMBER_97 = 'number_97',
+        NUMBER_98 = 'number_98',
+        NUMBER_99 = 'number_99',
+        RSVP = 'rsvp',
+        SCTP = 'sctp',
+        VRRP = 'vrrp',
       }
     }
   }
@@ -61737,31 +66992,6 @@ namespace VpcV1 {
   }
 
   /**
-   * A rule allowing ICMP, TCP and UDP traffic.
-   */
-  export interface SecurityGroupRuleSecurityGroupRuleProtocolAll extends SecurityGroupRule {
-    /** The network protocol. */
-    protocol: SecurityGroupRuleSecurityGroupRuleProtocolAll.Constants.Protocol | string;
-  }
-  export namespace SecurityGroupRuleSecurityGroupRuleProtocolAll {
-    export namespace Constants {
-      /** The direction of traffic to allow. */
-      export enum Direction {
-        INBOUND = 'inbound',
-        OUTBOUND = 'outbound',
-      }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
-      export enum IpVersion {
-        IPV4 = 'ipv4',
-      }
-      /** The network protocol. */
-      export enum Protocol {
-        ALL = 'all',
-      }
-    }
-  }
-
-  /**
    * A rule specifying the ICMP traffic to allow.
    */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolICMP extends SecurityGroupRule {
@@ -61782,6 +67012,10 @@ namespace VpcV1 {
       /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SECURITY_GROUP_RULE = 'security_group_rule',
       }
       /** The network protocol. */
       export enum Protocol {
@@ -61814,6 +67048,10 @@ namespace VpcV1 {
       /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        SECURITY_GROUP_RULE = 'security_group_rule',
       }
       /** The network protocol. */
       export enum Protocol {
@@ -63352,6 +68590,56 @@ namespace VpcV1 {
   }
 
   /**
+   * VPNGatewayConnectionDynamicRouteModePeerPrototypeVPNGatewayConnectionPeerByAddress.
+   */
+  export interface VPNGatewayConnectionDynamicRouteModePeerPrototypeVPNGatewayConnectionPeerByAddress extends VPNGatewayConnectionDynamicRouteModePeerPrototype {
+    /** The IP address of the peer VPN gateway for this connection. */
+    address: string;
+  }
+
+  /**
+   * VPNGatewayConnectionDynamicRouteModePeerPrototypeVPNGatewayConnectionPeerByFQDN.
+   */
+  export interface VPNGatewayConnectionDynamicRouteModePeerPrototypeVPNGatewayConnectionPeerByFQDN extends VPNGatewayConnectionDynamicRouteModePeerPrototype {
+    /** The FQDN of the peer VPN gateway for this connection. */
+    fqdn: string;
+  }
+
+  /**
+   * VPNGatewayConnectionDynamicRouteModePeerVPNGatewayConnectionPeerByAddress.
+   */
+  export interface VPNGatewayConnectionDynamicRouteModePeerVPNGatewayConnectionPeerByAddress extends VPNGatewayConnectionDynamicRouteModePeer {
+    /** The IP address of the peer VPN gateway for this connection. */
+    address: string;
+  }
+  export namespace VPNGatewayConnectionDynamicRouteModePeerVPNGatewayConnectionPeerByAddress {
+    export namespace Constants {
+      /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+      export enum Type {
+        ADDRESS = 'address',
+        FQDN = 'fqdn',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayConnectionDynamicRouteModePeerVPNGatewayConnectionPeerByFQDN.
+   */
+  export interface VPNGatewayConnectionDynamicRouteModePeerVPNGatewayConnectionPeerByFQDN extends VPNGatewayConnectionDynamicRouteModePeer {
+    /** The FQDN of the peer VPN gateway for this connection. */
+    fqdn: string;
+  }
+  export namespace VPNGatewayConnectionDynamicRouteModePeerVPNGatewayConnectionPeerByFQDN {
+    export namespace Constants {
+      /** Indicates whether `peer.address` or `peer.fqdn` is used. */
+      export enum Type {
+        ADDRESS = 'address',
+        FQDN = 'fqdn',
+      }
+    }
+  }
+
+  /**
    * VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityFQDN.
    */
   export interface VPNGatewayConnectionIKEIdentityPrototypeVPNGatewayConnectionIKEIdentityFQDN extends VPNGatewayConnectionIKEIdentityPrototype {
@@ -63571,6 +68859,19 @@ namespace VpcV1 {
    * The peer VPN gateway for this connection. If `peer.type` is `ipv4_address`, only `peer.address` may be specified.
    * If `peer.type` is fqdn, only `peer.fqdn` may be specified.
    */
+  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatch extends VPNGatewayConnectionPeerPatch {
+    /** The peer autonomous system number (ASN) for this VPN gateway connection. The ASN values in the
+     *  [restricted ASN list](
+     *  https://cloud.ibm.com/docs/vpc?topic=vpc-planning-considerations-vpn#dynamic-route-based-considerations) are
+     *  reserved and unavailable.
+     */
+    asn?: number;
+  }
+
+  /**
+   * The peer VPN gateway for this connection. If `peer.type` is `ipv4_address`, only `peer.address` may be specified.
+   * If `peer.type` is fqdn, only `peer.fqdn` may be specified.
+   */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatch extends VPNGatewayConnectionPeerPatch {
   }
 
@@ -63662,6 +68963,38 @@ namespace VpcV1 {
       export enum Type {
         ADDRESS = 'address',
         FQDN = 'fqdn',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayConnectionPrototypeVPNGatewayConnectionDynamicRouteModePrototype.
+   */
+  export interface VPNGatewayConnectionPrototypeVPNGatewayConnectionDynamicRouteModePrototype extends VPNGatewayConnectionPrototype {
+    /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
+     *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
+     *  the lower `public_ip` address. Before enabling it on VPN connections to on-prem private networks, review
+     *  [distributing traffic
+     *  restrictions](https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-limitations#distributing-traffic-restrictions).
+     */
+    distribute_traffic?: boolean;
+    local?: VPNGatewayConnectionDynamicRouteModeLocalPrototype;
+    peer: VPNGatewayConnectionDynamicRouteModePeerPrototype;
+    /** The routing protocol for this VPN gateway connection. */
+    routing_protocol: VPNGatewayConnectionPrototypeVPNGatewayConnectionDynamicRouteModePrototype.Constants.RoutingProtocol | string;
+    /** The VPN tunnel configuration to use for this VPN gateway connection (in dynamic route mode). */
+    tunnels: VPNGatewayConnectionTunnelPrototype[];
+  }
+  export namespace VPNGatewayConnectionPrototypeVPNGatewayConnectionDynamicRouteModePrototype {
+    export namespace Constants {
+      /** The establish mode of the VPN gateway connection: - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol negotiations or rekeying processes. - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway connection. Additionally, the peer is responsible for initiating the rekeying process after the connection is established. If rekeying does not occur, the VPN gateway connection will be brought down after its lifetime expires. */
+      export enum EstablishMode {
+        BIDIRECTIONAL = 'bidirectional',
+        PEER_ONLY = 'peer_only',
+      }
+      /** The routing protocol for this VPN gateway connection. */
+      export enum RoutingProtocol {
+        BGP = 'bgp',
       }
     }
   }
@@ -63853,6 +69186,16 @@ namespace VpcV1 {
    * VPNGatewayPrototypeVPNGatewayRouteModePrototype.
    */
   export interface VPNGatewayPrototypeVPNGatewayRouteModePrototype extends VPNGatewayPrototype {
+    /** The static CIDRs advertised through any enabled routing protocol (for example, BGP). The routing protocol
+     *  will advertise routes with these CIDRs as route destinations.
+     */
+    advertised_cidrs?: string[];
+    /** The local autonomous system number (ASN) for this VPN gateway and its connections. The ASN values in the
+     *  [restricted ASN list](
+     *  https://cloud.ibm.com/docs/vpc?topic=vpc-planning-considerations-vpn#dynamic-route-based-considerations) are
+     *  reserved and unavailable.
+     */
+    local_asn?: number;
     /** The mode for this VPN gateway. */
     mode?: VPNGatewayPrototypeVPNGatewayRouteModePrototype.Constants.Mode | string;
   }
@@ -63869,6 +69212,12 @@ namespace VpcV1 {
    * VPNGatewayRouteMode.
    */
   export interface VPNGatewayRouteMode extends VPNGateway {
+    /** The static CIDRs advertised through any enabled routing protocol (for example, BGP). The routing protocol
+     *  will advertise routes with these CIDRs as route destinations.
+     */
+    advertised_cidrs: string[];
+    /** The local autonomous system number (ASN) for this VPN gateway and its connections. */
+    local_asn: number;
     /** The mode for this VPN gateway. */
     mode: VPNGatewayRouteMode.Constants.Mode | string;
   }
@@ -63898,6 +69247,26 @@ namespace VpcV1 {
       /** The mode for this VPN gateway. */
       export enum Mode {
         ROUTE = 'route',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayServiceConnectionCreatorTransitGatewayReference.
+   */
+  export interface VPNGatewayServiceConnectionCreatorTransitGatewayReference extends VPNGatewayServiceConnectionCreator {
+    /** The CRN for this transit gateway. */
+    crn: string;
+    /** The unique identifier for this transit gateway. */
+    id: string;
+    /** The resource type. */
+    resource_type: VPNGatewayServiceConnectionCreatorTransitGatewayReference.Constants.ResourceType | string;
+  }
+  export namespace VPNGatewayServiceConnectionCreatorTransitGatewayReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        TRANSIT_GATEWAY = 'transit_gateway',
       }
     }
   }
@@ -64995,21 +70364,43 @@ namespace VpcV1 {
   }
 
   /**
-   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec.
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecWithGroup.
    */
-  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec extends InstanceGroupManagerActionPrototypeScheduledActionPrototype {
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecWithGroup extends InstanceGroupManagerActionPrototypeScheduledActionPrototype {
     /** The cron specification for a recurring scheduled action. Actions can be applied a maximum of one time within
      *  a 5 min period.
      */
-    cron_spec?: string;
+    cron_spec: string;
+    group: InstanceGroupManagerScheduledActionGroupPrototype;
   }
 
   /**
-   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt.
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecWithManager.
    */
-  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt extends InstanceGroupManagerActionPrototypeScheduledActionPrototype {
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecWithManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototype {
+    /** The cron specification for a recurring scheduled action. Actions can be applied a maximum of one time within
+     *  a 5 min period.
+     */
+    cron_spec: string;
+    manager: InstanceGroupManagerScheduledActionManagerPrototype;
+  }
+
+  /**
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtWithGroup.
+   */
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtWithGroup extends InstanceGroupManagerActionPrototypeScheduledActionPrototype {
+    group: InstanceGroupManagerScheduledActionGroupPrototype;
     /** The date and time the scheduled action will run. */
-    run_at?: string;
+    run_at: string;
+  }
+
+  /**
+   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtWithManager.
+   */
+  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtWithManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototype {
+    manager: InstanceGroupManagerScheduledActionManagerPrototype;
+    /** The date and time the scheduled action will run. */
+    run_at: string;
   }
 
   /**
@@ -65243,6 +70634,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -65262,6 +70658,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -65283,6 +70684,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -65302,6 +70708,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -65323,6 +70734,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -65342,6 +70758,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -65363,6 +70784,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -65382,6 +70808,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -65403,6 +70834,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -65422,6 +70858,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -65443,6 +70884,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -65462,6 +70908,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -65483,6 +70934,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -65502,6 +70958,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -65523,6 +70984,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -65542,6 +71008,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -65563,6 +71034,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -65582,6 +71058,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -65603,6 +71084,11 @@ namespace VpcV1 {
         SGX = 'sgx',
         TDX = 'tdx',
       }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
+      }
     }
   }
 
@@ -65622,6 +71108,11 @@ namespace VpcV1 {
         DISABLED = 'disabled',
         SGX = 'sgx',
         TDX = 'tdx',
+      }
+      /** The volume bandwidth QoS mode to use for this virtual server instance. The specified value must be listed in the instance profile's `volume_bandwidth_qos_modes`. If unspecified, the default volume bandwidth QoS mode from the profile will be used. */
+      export enum VolumeBandwidthQosMode {
+        POOLED = 'pooled',
+        WEIGHTED = 'weighted',
       }
     }
   }
@@ -66035,6 +71526,22 @@ namespace VpcV1 {
   }
 
   /**
+   * VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionPeerAddressPatch.
+   */
+  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionPeerAddressPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatch {
+    /** The IP address of the peer VPN gateway for this connection. */
+    address?: string;
+  }
+
+  /**
+   * VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch.
+   */
+  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatch {
+    /** The FQDN of the peer VPN gateway for this connection. */
+    fqdn?: string;
+  }
+
+  /**
    * VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerAddressPatch.
    */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerAddressPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatch {
@@ -66064,6 +71571,54 @@ namespace VpcV1 {
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatch {
     /** The FQDN of the peer VPN gateway for this connection. */
     fqdn?: string;
+  }
+
+  /**
+   * VPNGatewayConnectionRouteModeVPNGatewayConnectionDynamicRouteMode.
+   */
+  export interface VPNGatewayConnectionRouteModeVPNGatewayConnectionDynamicRouteMode extends VPNGatewayConnectionRouteMode {
+    /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
+     *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
+     *  the lower `public_ip` address.
+     */
+    distribute_traffic: boolean;
+    local: VPNGatewayConnectionDynamicRouteModeLocal;
+    peer: VPNGatewayConnectionDynamicRouteModePeer;
+    /** The routing protocol for this VPN gateway connection. */
+    routing_protocol: VPNGatewayConnectionRouteModeVPNGatewayConnectionDynamicRouteMode.Constants.RoutingProtocol | string;
+    /** The VPN tunnel configuration for this VPN gateway connection (in dynamic route mode). */
+    tunnels: VPNGatewayConnectionDynamicRouteModeTunnel[];
+  }
+  export namespace VPNGatewayConnectionRouteModeVPNGatewayConnectionDynamicRouteMode {
+    export namespace Constants {
+      /** The authentication mode. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum AuthenticationMode {
+        PSK = 'psk',
+      }
+      /** The establish mode of the VPN gateway connection: - `bidirectional`: Either side of the VPN gateway can initiate IKE protocol negotiations or rekeying processes. - `peer_only`: Only the peer can initiate IKE protocol negotiations for this VPN gateway connection. Additionally, the peer is responsible for initiating the rekeying process after the connection is established. If rekeying does not occur, the VPN gateway connection will be brought down after its lifetime expires. */
+      export enum EstablishMode {
+        BIDIRECTIONAL = 'bidirectional',
+        PEER_ONLY = 'peer_only',
+      }
+      /** The mode of the VPN gateway. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Mode {
+        POLICY = 'policy',
+        ROUTE = 'route',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY_CONNECTION = 'vpn_gateway_connection',
+      }
+      /** The status of a VPN gateway connection. */
+      export enum Status {
+        DOWN = 'down',
+        UP = 'up',
+      }
+      /** The routing protocol for this VPN gateway connection. */
+      export enum RoutingProtocol {
+        BGP = 'bgp',
+      }
+    }
   }
 
   /**
@@ -66215,34 +71770,6 @@ namespace VpcV1 {
      *  source snapshot must have the same `storage_generation` value.
      */
     source_snapshot: SnapshotIdentity;
-  }
-
-  /**
-   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByGroup.
-   */
-  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByGroup extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec {
-    group: InstanceGroupManagerScheduledActionGroupPrototype;
-  }
-
-  /**
-   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByManager.
-   */
-  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpecByManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByCronSpec {
-    manager: InstanceGroupManagerScheduledActionManagerPrototype;
-  }
-
-  /**
-   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByGroup.
-   */
-  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByGroup extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt {
-    group: InstanceGroupManagerScheduledActionGroupPrototype;
-  }
-
-  /**
-   * InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByManager.
-   */
-  export interface InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAtByManager extends InstanceGroupManagerActionPrototypeScheduledActionPrototypeByRunAt {
-    manager: InstanceGroupManagerScheduledActionManagerPrototype;
   }
 
   /*************************
@@ -67537,6 +73064,87 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.ReservedIP[]> {
       const results: ReservedIP[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * EndpointGatewayResourceBindingsPager can be used to simplify the use of listEndpointGatewayResourceBindings().
+   */
+  export class EndpointGatewayResourceBindingsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListEndpointGatewayResourceBindingsParams;
+
+    /**
+     * Construct a EndpointGatewayResourceBindingsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listEndpointGatewayResourceBindings()
+     * @param {Object} params - The parameters to be passed to listEndpointGatewayResourceBindings()
+     * @constructor
+     * @returns {EndpointGatewayResourceBindingsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListEndpointGatewayResourceBindingsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listEndpointGatewayResourceBindings().
+     * @returns {Promise<VpcV1.EndpointGatewayResourceBinding[]>}
+     */
+    public async getNext(): Promise<VpcV1.EndpointGatewayResourceBinding[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listEndpointGatewayResourceBindings(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.resource_bindings;
+    }
+
+    /**
+     * Returns all results by invoking listEndpointGatewayResourceBindings() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.EndpointGatewayResourceBinding[]>}
+     */
+    public async getAll(): Promise<VpcV1.EndpointGatewayResourceBinding[]> {
+      const results: EndpointGatewayResourceBinding[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
@@ -72073,6 +77681,87 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.VPNGatewayConnection[]> {
       const results: VPNGatewayConnection[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * VpnGatewayServiceConnectionsPager can be used to simplify the use of listVpnGatewayServiceConnections().
+   */
+  export class VpnGatewayServiceConnectionsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListVpnGatewayServiceConnectionsParams;
+
+    /**
+     * Construct a VpnGatewayServiceConnectionsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listVpnGatewayServiceConnections()
+     * @param {Object} params - The parameters to be passed to listVpnGatewayServiceConnections()
+     * @constructor
+     * @returns {VpnGatewayServiceConnectionsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListVpnGatewayServiceConnectionsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listVpnGatewayServiceConnections().
+     * @returns {Promise<VpcV1.VPNGatewayServiceConnection[]>}
+     */
+    public async getNext(): Promise<VpcV1.VPNGatewayServiceConnection[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listVpnGatewayServiceConnections(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.service_connections;
+    }
+
+    /**
+     * Returns all results by invoking listVpnGatewayServiceConnections() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.VPNGatewayServiceConnection[]>}
+     */
+    public async getAll(): Promise<VpcV1.VPNGatewayServiceConnection[]> {
+      const results: VPNGatewayServiceConnection[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
