@@ -1,5 +1,5 @@
 /**
- * (C) Copyright IBM Corp. 2023, 2024, 2025.
+ * (C) Copyright IBM Corp. 2024, 2025, 2026.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.108.0-56772134-20251111-102802
+ * IBM OpenAPI SDK Code Generator Version: 3.111.0-1bfb72c2-20260206-185521
  */
 
 /* eslint-disable max-classes-per-file */
@@ -40,7 +40,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: 2025-12-16
+ * API Version: 2026-03-24
  */
 
 class VpcV1 extends BaseService {
@@ -110,7 +110,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2025-12-09` and `2025-12-17`.
+   *  `2025-12-09` and `2026-03-25`.
    */
   version: string;
 
@@ -121,7 +121,7 @@ class VpcV1 extends BaseService {
    * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
    * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2025-12-09` and `2025-12-17`.
+   * specify any date between `2025-12-09` and `2026-03-25`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -141,7 +141,7 @@ class VpcV1 extends BaseService {
     if (!('generation' in options)) {
       this.generation = 2;
     }
-    this.version = options.version || '2025-12-16';
+    this.version = options.version || '2026-03-24';
   }
 
   /*************************
@@ -10790,6 +10790,8 @@ class VpcV1 extends BaseService {
    * matching the specified identifier.
    * @param {string} [params.name] - Filters the collection to resources with a `name` property matching the exact
    * specified name.
+   * @param {string} [params.availabilityClass] - Filters the collection to instances with an `availability.class`
+   * property matching the specified value.
    * @param {string} [params.clusterNetworkId] - Filters the collection to instances with a `cluster_network.id`
    * property matching the specified identifier.
    * @param {string} [params.clusterNetworkCrn] - Filters the collection to instances with a `cluster_network.crn`
@@ -10834,7 +10836,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'clusterNetworkId', 'clusterNetworkCrn', 'clusterNetworkName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'instanceGroupMembershipInstanceGroupId', 'instanceGroupMembershipInstanceGroupCrn', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationAffinityPolicy', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'signal', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'availabilityClass', 'clusterNetworkId', 'clusterNetworkCrn', 'clusterNetworkName', 'dedicatedHostId', 'dedicatedHostCrn', 'dedicatedHostName', 'instanceGroupMembershipInstanceGroupId', 'instanceGroupMembershipInstanceGroupCrn', 'placementGroupId', 'placementGroupCrn', 'placementGroupName', 'reservationAffinityPolicy', 'reservationId', 'reservationCrn', 'reservationName', 'vpcId', 'vpcCrn', 'vpcName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10847,6 +10849,7 @@ class VpcV1 extends BaseService {
       'limit': _params.limit,
       'resource_group.id': _params.resourceGroupId,
       'name': _params.name,
+      'availability.class': _params.availabilityClass,
       'cluster_network.id': _params.clusterNetworkId,
       'cluster_network.crn': _params.clusterNetworkCrn,
       'cluster_network.name': _params.clusterNetworkName,
@@ -11088,6 +11091,7 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The virtual server instance identifier.
+   * @param {InstanceAvailabilityPatch} [params.availability] -
    * @param {InstanceAvailabilityPolicyPatch} [params.availabilityPolicy] -
    * @param {string} [params.confidentialComputeMode] - The confidential compute mode to use for this virtual server
    * instance.
@@ -11142,13 +11146,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Instance>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'availabilityPolicy', 'confidentialComputeMode', 'enableSecureBoot', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'totalVolumeBandwidth', 'vcpu', 'volumeBandwidthQosMode', 'ifMatch', 'signal', 'headers'];
+    const _validParams = ['id', 'availability', 'availabilityPolicy', 'confidentialComputeMode', 'enableSecureBoot', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'totalVolumeBandwidth', 'vcpu', 'volumeBandwidthQosMode', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'availability': _params.availability,
       'availability_policy': _params.availabilityPolicy,
       'confidential_compute_mode': _params.confidentialComputeMode,
       'enable_secure_boot': _params.enableSecureBoot,
@@ -14323,12 +14328,15 @@ class VpcV1 extends BaseService {
    * @param {LoadBalancerPoolIdentity} [params.defaultPool] - The default pool for this listener. If `https_redirect` is
    * specified, the
    * default pool will not be used.
-   * If specified, the pool must:
    *
+   * If specified, the pool must:
    * - Belong to this load balancer.
    * - Have the same `protocol` as this listener, or have a compatible protocol.
    *   At present, the compatible protocols are `http` and `https`.
    * - Not already be the `default_pool` for another listener.
+   * - Not already be the `failsafe_policy.target` for another `default_pool` and
+   *   `failsafe_policy.target` (applies only to load balancers in the `network`
+   *   family).
    *
    * If unspecified, this listener will be created with no default pool, but one may be
    * subsequently set.
@@ -14586,13 +14594,17 @@ class VpcV1 extends BaseService {
    *
    * Supported for load balancers in the `application` family.
    * @param {LoadBalancerListenerDefaultPoolPatch} [params.defaultPool] - The default pool for this listener. If
-   * `https_redirect` is set, the default pool will not
-   * be used. The specified pool must:
+   * `https_redirect` is specified, the
+   * default pool will not be used.
    *
+   * The specified pool must:
    * - Belong to this load balancer
    * - Have the same `protocol` as this listener, or have a compatible protocol.
    *   At present, the compatible protocols are `http` and `https`.
-   * - Not already be the `default_pool` for another listener
+   * - Not already be the `default_pool` for another listener.
+   * - Not already be the `failsafe_policy.target` for another `default_pool` and
+   *   `failsafe_policy.target` (applies only to load balancers in the `network`
+   *   family).
    *
    * Specify `null` to remove an existing default pool.
    * @param {LoadBalancerListenerHTTPSRedirectPatch} [params.httpsRedirect] - The target listener that requests will be
@@ -16858,7 +16870,7 @@ class VpcV1 extends BaseService {
    *
    * Specify `null` to remove an existing ICMP traffic code.
    * @param {string} [params.destination] - The destination IP address or CIDR block to match. The CIDR block
-   * `0.0.0.0/0` matches all destination addresses.
+   * `0.0.0.0/0` will match all destination addresses.
    * @param {number} [params.destinationPortMax] - The inclusive upper bound of the TCP or UDP destination port range.
    *
    * Must be larger than or equal to `destination_port_min`.
@@ -16868,8 +16880,8 @@ class VpcV1 extends BaseService {
    * @param {string} [params.direction] - The direction of traffic to match.
    * @param {string} [params.name] - The name for this network ACL rule. The name must not be used by another rule for
    * the network ACL.
-   * @param {string} [params.source] - The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches
-   * all source addresses.
+   * @param {string} [params.source] - The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` will
+   * match all source addresses.
    * @param {number} [params.sourcePortMax] - The inclusive upper bound of the TCP or UDP source port range.
    *
    * Must be larger than or equal to `source_port_min`.
@@ -18453,6 +18465,10 @@ class VpcV1 extends BaseService {
    * `vpc` and a `zone`. Incoming traffic for these IP addresses will be routed according to the VPC's ingress routing
    * table.
    *
+   * The public address ranges will be sorted by their `created_at` property values, with newest public address ranges
+   * first. Public address ranges with identical `created_at` property values will in turn be sorted by ascending `id`
+   * property values.
+   *
    * @param {Object} [params] - The parameters to send to the service.
    * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
    * @param {number} [params.limit] - The number of resources to return on a page.
@@ -18517,7 +18533,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {number} params.ipv4AddressCount - The total number of public IPv4 addresses required. Must be a power of 2.
    * @param {string} [params.name] - The name for this public address range. The name must not be used by another public
-   * address range in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * address range in the region. Names starting with `ibm-` are reserved for provider-managed resources, and are not
+   * allowed. If unspecified, the name will be a hyphenated list of randomly-selected words.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
@@ -18706,7 +18723,8 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The public address range identifier.
    * @param {string} [params.name] - The name for this public address range. The name must not be used by another public
-   * address range in the region.
+   * address range in the region. Names starting with `ibm-` are reserved for provider-managed resources, and are not
+   * allowed.
    * @param {PublicAddressRangeTargetPatch} [params.target] - The target to bind this public address range to.
    *
    * If the public address range is not currently bound to a target, both `target.vpc` and
@@ -20108,8 +20126,8 @@ class VpcV1 extends BaseService {
    * @param {string} [params.ipVersion] - The IP version to allow. The format of `local.address`, `remote.address`,
    * `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
    *
-   * If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP
-   * version.
+   * If `remote` references a security group, then this rule will only apply to IP addresses in that group matching this
+   * IP version.
    * @param {SecurityGroupRuleLocalPatch} [params.local] - The local IP address or range of local IP addresses to which
    * this rule will allow inbound
    * traffic (or from which, for outbound traffic). Can be specified as an IP address or a CIDR
@@ -20130,8 +20148,10 @@ class VpcV1 extends BaseService {
    * @param {SecurityGroupRuleRemotePatch} [params.remote] - The remote IP addresses or security groups from which this
    * rule will allow traffic (or to
    * which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
-   * security group. A CIDR block of `0.0.0.0/0` will allow traffic from any source (or to
-   * any destination, for outbound rules).
+   * security group.
+   *
+   * Specify a CIDR block of `0.0.0.0/0` to allow traffic from any source (or to any
+   * destination, for outbound rules).
    * @param {number} [params.type] - The ICMP traffic type to allow.
    *
    * Specify `null` to remove an existing ICMP traffic type value.
@@ -25102,8 +25122,9 @@ class VpcV1 extends BaseService {
    *
    * This request binds the specified reserved IP to the specified virtual network interface.
    *
-   * The reserved IP must currently be unbound and in the primary IP's subnet. The virtual network interface's `target`
-   * must not currently be a file share mount target.
+   * The reserved IP must currently be unbound and in the primary IP's subnet.
+   *
+   * The virtual network interface's `target` must not currently be a file share mount target.
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.virtualNetworkInterfaceId - The virtual network interface identifier.
@@ -25303,6 +25324,8 @@ class VpcV1 extends BaseService {
    *
    * This parameter also supports the values `null` and `not:null` which filter the collection to resources which have
    * no operating system or any operating system, respectively.
+   * @param {number} [params.storageGeneration] - Filters the collection to volumes with a `storage_generation` property
+   * matching the specified value.
    * @param {string} [params.tag] - Filters the collection to resources with an item in the `tags` property matching the
    * exact specified tag.
    * @param {string} [params.zoneName] - Filters the collection to resources with a `zone.name` property matching the
@@ -25315,7 +25338,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VolumeCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'attachmentState', 'encryption', 'name', 'operatingSystemFamily', 'operatingSystemArchitecture', 'tag', 'zoneName', 'signal', 'headers'];
+    const _validParams = ['start', 'limit', 'attachmentState', 'encryption', 'name', 'operatingSystemFamily', 'operatingSystemArchitecture', 'storageGeneration', 'tag', 'zoneName', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -25331,6 +25354,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'operating_system.family': _params.operatingSystemFamily,
       'operating_system.architecture': _params.operatingSystemArchitecture,
+      'storage_generation': _params.storageGeneration,
       'tag': _params.tag,
       'zone.name': _params.zoneName,
     };
@@ -25688,6 +25712,391 @@ class VpcV1 extends BaseService {
       options: {
         url: '/volumes/{id}/instance_profiles',
         method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List jobs for a volume.
+   *
+   * This request lists jobs for a volume. Each job represents an action performed on the volume and includes metadata
+   * such as:
+   *
+   * - `job_type`: Currently, only the `migrate` job type is supported.
+   * - `status`: Indicates the current state of the job (e.g., queued, running,
+   *    succeeded, failed).
+   *
+   * The jobs will be sorted by their `created_at` property values, with newest jobs first.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.volumeId - The volume identifier.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VolumeJobCollection>>}
+   */
+  public listVolumeJobs(
+    params: VpcV1.ListVolumeJobsParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeJobCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['volumeId'];
+    const _validParams = ['volumeId', 'start', 'limit', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const path = {
+      'volume_id': _params.volumeId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumeJobs');
+
+    const parameters = {
+      options: {
+        url: '/volumes/{volume_id}/jobs',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Create a job for a volume.
+   *
+   * This request creates and queues a new job for the volume specified in the URL using the volume job prototype
+   * object.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.volumeId - The volume identifier.
+   * @param {VolumeJobPrototype} params.volumeJobPrototype - The volume job prototype object.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VolumeJob>>}
+   */
+  public createVolumeJob(
+    params: VpcV1.CreateVolumeJobParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeJob>> {
+    const _params = { ...params };
+    const _requiredParams = ['volumeId', 'volumeJobPrototype'];
+    const _validParams = ['volumeId', 'volumeJobPrototype', 'start', 'limit', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = _params.volumeJobPrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+    };
+
+    const path = {
+      'volume_id': _params.volumeId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createVolumeJob');
+
+    const parameters = {
+      options: {
+        url: '/volumes/{volume_id}/jobs',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Delete a volume job.
+   *
+   * This request deletes a volume job. This operation cannot be reversed. If the job has not completed, the job will be
+   * canceled, and the incomplete volume job will be deleted.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.volumeId - The volume identifier.
+   * @param {string} params.id - The volume job identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public deleteVolumeJob(
+    params: VpcV1.DeleteVolumeJobParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['volumeId', 'id'];
+    const _validParams = ['volumeId', 'id', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'volume_id': _params.volumeId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'deleteVolumeJob');
+
+    const parameters = {
+      options: {
+        url: '/volumes/{volume_id}/jobs/{id}',
+        method: 'DELETE',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a volume job.
+   *
+   * This request retrieves a single volume job specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.volumeId - The volume identifier.
+   * @param {string} params.id - The volume job identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VolumeJob>>}
+   */
+  public getVolumeJob(
+    params: VpcV1.GetVolumeJobParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeJob>> {
+    const _params = { ...params };
+    const _requiredParams = ['volumeId', 'id'];
+    const _validParams = ['volumeId', 'id', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'volume_id': _params.volumeId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVolumeJob');
+
+    const parameters = {
+      options: {
+        url: '/volumes/{volume_id}/jobs/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a volume job.
+   *
+   * This request updates an volume job with the information in a provided volume job patch. The volume job patch object
+   * is structured in the same way as a retrieved volume job and contains only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.volumeId - The volume identifier.
+   * @param {string} params.id - The volume job identifier.
+   * @param {string} [params.name] - The name for this volume job. The name must not be used by another job for this
+   * volume.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VolumeJob>>}
+   */
+  public updateVolumeJob(
+    params: VpcV1.UpdateVolumeJobParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeJob>> {
+    const _params = { ...params };
+    const _requiredParams = ['volumeId', 'id'];
+    const _validParams = ['volumeId', 'id', 'name', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'volume_id': _params.volumeId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVolumeJob');
+
+    const parameters = {
+      options: {
+        url: '/volumes/{volume_id}/jobs/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Cancel a queued or running volume job.
+   *
+   * This request cancels a `queued` or `running` volume job.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.volumeId - The volume identifier.
+   * @param {string} params.id - The volume job identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VolumeJob>>}
+   */
+  public cancelVolumeJob(
+    params: VpcV1.CancelVolumeJobParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeJob>> {
+    const _params = { ...params };
+    const _requiredParams = ['volumeId', 'id'];
+    const _validParams = ['volumeId', 'id', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'volume_id': _params.volumeId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'cancelVolumeJob');
+
+    const parameters = {
+      options: {
+        url: '/volumes/{volume_id}/jobs/{id}/cancel',
+        method: 'POST',
         qs: query,
         path,
       },
@@ -28858,13 +29267,13 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The IPsec policy identifier.
-   * @param {string} [params.authenticationAlgorithm] - The authentication algorithm
+   * @param {string} [params.authenticationAlgorithm] - The authentication algorithm.
    *
    * Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
    * `aes192gcm16`, or `aes256gcm16`
    *
    * The `md5` and `sha1` algorithms have been deprecated.
-   * @param {string} [params.encryptionAlgorithm] - The encryption algorithm
+   * @param {string} [params.encryptionAlgorithm] - The encryption algorithm.
    *
    * The `authentication_algorithm` must be `disabled` if and only if
    * `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`
@@ -31594,7 +32003,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2025-12-09` and `2025-12-17`.
+     *  `2025-12-09` and `2026-03-25`.
      */
     version: string;
   }
@@ -33811,6 +34220,8 @@ namespace VpcV1 {
     resourceGroupId?: string;
     /** Filters the collection to resources with a `name` property matching the exact specified name. */
     name?: string;
+    /** Filters the collection to instances with an `availability.class` property matching the specified value. */
+    availabilityClass?: ListInstancesConstants.AvailabilityClass | string;
     /** Filters the collection to instances with a `cluster_network.id` property matching the specified identifier. */
     clusterNetworkId?: string;
     /** Filters the collection to instances with a `cluster_network.crn` property matching the specified CRN. */
@@ -33865,6 +34276,11 @@ namespace VpcV1 {
 
   /** Constants for the `listInstances` operation. */
   export namespace ListInstancesConstants {
+    /** Filters the collection to instances with an `availability.class` property matching the specified value. */
+    export enum AvailabilityClass {
+      SPOT = 'spot',
+      STANDARD = 'standard',
+    }
     /** Filters the collection to instances with a `reservation_affinity.policy` property matching the specified value. */
     export enum ReservationAffinityPolicy {
       AUTOMATIC = 'automatic',
@@ -33899,6 +34315,7 @@ namespace VpcV1 {
   export interface UpdateInstanceParams extends DefaultParams {
     /** The virtual server instance identifier. */
     id: string;
+    availability?: InstanceAvailabilityPatch;
     availabilityPolicy?: InstanceAvailabilityPolicyPatch;
     /** The confidential compute mode to use for this virtual server instance.
      *
@@ -34602,12 +35019,15 @@ namespace VpcV1 {
     connectionLimit?: number;
     /** The default pool for this listener. If `https_redirect` is specified, the
      *  default pool will not be used.
-     *  If specified, the pool must:
      *
+     *  If specified, the pool must:
      *  - Belong to this load balancer.
      *  - Have the same `protocol` as this listener, or have a compatible protocol.
      *    At present, the compatible protocols are `http` and `https`.
      *  - Not already be the `default_pool` for another listener.
+     *  - Not already be the `failsafe_policy.target` for another `default_pool` and
+     *    `failsafe_policy.target` (applies only to load balancers in the `network`
+     *    family).
      *
      *  If unspecified, this listener will be created with no default pool, but one may be
      *  subsequently set.
@@ -34713,13 +35133,17 @@ namespace VpcV1 {
      *  Supported for load balancers in the `application` family.
      */
     connectionLimit?: number;
-    /** The default pool for this listener. If `https_redirect` is set, the default pool will not
-     *  be used. The specified pool must:
+    /** The default pool for this listener. If `https_redirect` is specified, the
+     *  default pool will not be used.
      *
+     *  The specified pool must:
      *  - Belong to this load balancer
      *  - Have the same `protocol` as this listener, or have a compatible protocol.
      *    At present, the compatible protocols are `http` and `https`.
-     *  - Not already be the `default_pool` for another listener
+     *  - Not already be the `default_pool` for another listener.
+     *  - Not already be the `failsafe_policy.target` for another `default_pool` and
+     *    `failsafe_policy.target` (applies only to load balancers in the `network`
+     *    family).
      *
      *  Specify `null` to remove an existing default pool.
      */
@@ -35447,7 +35871,7 @@ namespace VpcV1 {
      *  Specify `null` to remove an existing ICMP traffic code.
      */
     code?: number;
-    /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all destination
+    /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` will match all destination
      *  addresses.
      */
     destination?: string;
@@ -35465,7 +35889,7 @@ namespace VpcV1 {
     direction?: UpdateNetworkAclRuleConstants.Direction | string;
     /** The name for this network ACL rule. The name must not be used by another rule for the network ACL. */
     name?: string;
-    /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
+    /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` will match all source addresses. */
     source?: string;
     /** The inclusive upper bound of the TCP or UDP source port range.
      *
@@ -35860,7 +36284,8 @@ namespace VpcV1 {
     /** The total number of public IPv4 addresses required. Must be a power of 2. */
     ipv4AddressCount: number;
     /** The name for this public address range. The name must not be used by another public address range in the
-     *  region. If unspecified, the name will be a hyphenated list of randomly-selected words.
+     *  region. Names starting with `ibm-` are reserved for provider-managed resources, and are not allowed. If
+     *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
     /** The resource group to use. If unspecified, the account's [default resource
@@ -35890,7 +36315,7 @@ namespace VpcV1 {
     /** The public address range identifier. */
     id: string;
     /** The name for this public address range. The name must not be used by another public address range in the
-     *  region.
+     *  region. Names starting with `ibm-` are reserved for provider-managed resources, and are not allowed.
      */
     name?: string;
     /** The target to bind this public address range to.
@@ -36170,8 +36595,8 @@ namespace VpcV1 {
     /** The IP version to allow. The format of `local.address`, `remote.address`,
      *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
      *
-     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
-     *  IP version.
+     *  If `remote` references a security group, then this rule will only apply to IP addresses in that group matching
+     *  this IP version.
      */
     ipVersion?: UpdateSecurityGroupRuleConstants.IpVersion | string;
     /** The local IP address or range of local IP addresses to which this rule will allow inbound
@@ -36198,8 +36623,10 @@ namespace VpcV1 {
     portMin?: number;
     /** The remote IP addresses or security groups from which this rule will allow traffic (or to
      *  which, for outbound rules). Can be specified as an IP address, a CIDR block, or a
-     *  security group. A CIDR block of `0.0.0.0/0` will allow traffic from any source (or to
-     *  any destination, for outbound rules).
+     *  security group.
+     *
+     *  Specify a CIDR block of `0.0.0.0/0` to allow traffic from any source (or to any
+     *  destination, for outbound rules).
      */
     remote?: SecurityGroupRuleRemotePatch;
     /** The ICMP traffic type to allow.
@@ -36216,7 +36643,7 @@ namespace VpcV1 {
       INBOUND = 'inbound',
       OUTBOUND = 'outbound',
     }
-    /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+    /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule will only apply to IP addresses in that group matching this IP version. */
     export enum IpVersion {
       IPV4 = 'ipv4',
     }
@@ -37380,6 +37807,8 @@ namespace VpcV1 {
      *  have no operating system or any operating system, respectively.
      */
     operatingSystemArchitecture?: string;
+    /** Filters the collection to volumes with a `storage_generation` property matching the specified value. */
+    storageGeneration?: number;
     /** Filters the collection to resources with an item in the `tags` property matching the exact specified tag. */
     tag?: string;
     /** Filters the collection to resources with a `zone.name` property matching the exact specified name. */
@@ -37484,6 +37913,62 @@ namespace VpcV1 {
     start?: string;
     /** The number of resources to return on a page. */
     limit?: number;
+  }
+
+  /** Parameters for the `listVolumeJobs` operation. */
+  export interface ListVolumeJobsParams extends DefaultParams {
+    /** The volume identifier. */
+    volumeId: string;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+  }
+
+  /** Parameters for the `createVolumeJob` operation. */
+  export interface CreateVolumeJobParams extends DefaultParams {
+    /** The volume identifier. */
+    volumeId: string;
+    /** The volume job prototype object. */
+    volumeJobPrototype: VolumeJobPrototype;
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+  }
+
+  /** Parameters for the `deleteVolumeJob` operation. */
+  export interface DeleteVolumeJobParams extends DefaultParams {
+    /** The volume identifier. */
+    volumeId: string;
+    /** The volume job identifier. */
+    id: string;
+  }
+
+  /** Parameters for the `getVolumeJob` operation. */
+  export interface GetVolumeJobParams extends DefaultParams {
+    /** The volume identifier. */
+    volumeId: string;
+    /** The volume job identifier. */
+    id: string;
+  }
+
+  /** Parameters for the `updateVolumeJob` operation. */
+  export interface UpdateVolumeJobParams extends DefaultParams {
+    /** The volume identifier. */
+    volumeId: string;
+    /** The volume job identifier. */
+    id: string;
+    /** The name for this volume job. The name must not be used by another job for this volume. */
+    name?: string;
+  }
+
+  /** Parameters for the `cancelVolumeJob` operation. */
+  export interface CancelVolumeJobParams extends DefaultParams {
+    /** The volume identifier. */
+    volumeId: string;
+    /** The volume job identifier. */
+    id: string;
   }
 
   /** Parameters for the `listVpcs` operation. */
@@ -38402,7 +38887,7 @@ namespace VpcV1 {
   export interface UpdateIpsecPolicyParams extends DefaultParams {
     /** The IPsec policy identifier. */
     id: string;
-    /** The authentication algorithm
+    /** The authentication algorithm.
      *
      *  Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
      *  `aes192gcm16`, or `aes256gcm16`
@@ -38410,7 +38895,7 @@ namespace VpcV1 {
      *  The `md5` and `sha1` algorithms have been deprecated.
      */
     authenticationAlgorithm?: UpdateIpsecPolicyConstants.AuthenticationAlgorithm | string;
-    /** The encryption algorithm
+    /** The encryption algorithm.
      *
      *  The `authentication_algorithm` must be `disabled` if and only if
      *  `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`
@@ -38431,14 +38916,14 @@ namespace VpcV1 {
 
   /** Constants for the `updateIpsecPolicy` operation. */
   export namespace UpdateIpsecPolicyConstants {
-    /** The authentication algorithm Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `md5` and `sha1` algorithms have been deprecated. */
+    /** The authentication algorithm. Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `md5` and `sha1` algorithms have been deprecated. */
     export enum AuthenticationAlgorithm {
       DISABLED = 'disabled',
       SHA256 = 'sha256',
       SHA384 = 'sha384',
       SHA512 = 'sha512',
     }
-    /** The encryption algorithm The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `triple_des` algorithm has been deprecated. */
+    /** The encryption algorithm. The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `triple_des` algorithm has been deprecated. */
     export enum EncryptionAlgorithm {
       AES128 = 'aes128',
       AES128GCM16 = 'aes128gcm16',
@@ -39993,7 +40478,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variable is supported, corresponding to the `BareMetalServer`
      *  property:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled.
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled.
      */
     bare_metal_server: string;
   }
@@ -40913,7 +41398,14 @@ namespace VpcV1 {
    * BareMetalServerProfileDiskSupportedInterfaces.
    */
   export interface BareMetalServerProfileDiskSupportedInterfaces {
-    /** The default value for this profile field. */
+    /** The default interface type supported by a bare metal server with this profile.
+     *  - `fcp`: Fiber Channel Protocol
+     *  - `sata`: Serial Advanced Technology Attachment
+     *  - `nvme`: Non-Volatile Memory Express
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
     default: BareMetalServerProfileDiskSupportedInterfaces.Constants.Default | string;
     /** The type for this profile field. */
     type: BareMetalServerProfileDiskSupportedInterfaces.Constants.Type | string;
@@ -40922,7 +41414,7 @@ namespace VpcV1 {
   }
   export namespace BareMetalServerProfileDiskSupportedInterfaces {
     export namespace Constants {
-      /** The default value for this profile field. */
+      /** The default interface type supported by a bare metal server with this profile. - `fcp`: Fiber Channel Protocol - `sata`: Serial Advanced Technology Attachment - `nvme`: Non-Volatile Memory Express The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Default {
         FCP = 'fcp',
         NVME = 'nvme',
@@ -42969,8 +43461,9 @@ namespace VpcV1 {
    */
   export interface EncryptionKeyReference {
     /** The CRN of the [Key Protect Root
-     *  Key](https://cloud.ibm.com/docs/key-protect?topic=key-protect-getting-started-tutorial) or [Hyper Protect Crypto
-     *  Services Root Key](https://cloud.ibm.com/docs/hs-crypto?topic=hs-crypto-get-started) for this resource.
+     *  Key](https://cloud.ibm.com/docs/key-protect?topic=key-protect-getting-started-tutorial) for this resource.
+     *
+     *  The use of Hyper Protect Crypto Services for encryption keys has been deprecated.
      */
     crn: string;
   }
@@ -44059,7 +44552,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variables are supported, corresponding to `BareMetalServer`
      *  properties:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled.
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled.
      */
     bare_metal_server: string;
     /** The expression that must be satisfied by the properties of a virtual server instance provisioned using this
@@ -44069,7 +44562,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variables are supported, corresponding to `Instance`
      *  properties:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
@@ -44093,7 +44586,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variable is supported, corresponding to the `BareMetalServer`
      *  property:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled.
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled.
      */
     bare_metal_server?: string;
     /** The expression that must be satisfied by the properties of a virtual server instance provisioned using this
@@ -44103,7 +44596,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variables are supported, corresponding to `Instance`
      *  properties:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
@@ -44130,7 +44623,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variable is supported, corresponding to the `BareMetalServer`
      *  property:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled.
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled.
      */
     bare_metal_server?: string;
     /** The expression that must be satisfied by the properties of a virtual server instance provisioned using this
@@ -44142,7 +44635,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variables are supported, corresponding to `Instance`
      *  properties:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
@@ -44213,10 +44706,11 @@ namespace VpcV1 {
     /** The date and time that the image export job was created. */
     created_at: string;
     /** A base64-encoded, encrypted representation of the key that was used to encrypt the data for the exported
-     *  image. This key can be unwrapped with the image's `encryption_key` root key using either Key Protect or Hyper
-     *  Protect Crypto Services.
+     *  image. This key can be unwrapped with the image's `encryption_key` root key using Key Protect.
      *
      *  If absent, the export job is for an unencrypted image.
+     *
+     *  The use of Hyper Protect Crypto Services for image encryption keys has been deprecated.
      */
     encrypted_data_key?: string;
     /** The format of the exported image. */
@@ -44527,6 +45021,7 @@ namespace VpcV1 {
    * Instance.
    */
   export interface Instance {
+    availability: InstanceAvailability;
     /** The availability policy for this virtual server instance. */
     availability_policy: InstanceAvailabilityPolicy;
     /** The total bandwidth (in megabits per second) shared across the instance network attachments or instance
@@ -44753,6 +45248,58 @@ namespace VpcV1 {
   }
 
   /**
+   * InstanceAvailability.
+   */
+  export interface InstanceAvailability {
+    /** The availability class for the virtual server instance:
+     *  - `spot`: The virtual server instance may be preempted.
+     *  - `standard`: The virtual server instance will not be preempted.
+     *
+     *  See [virtual server instance availability
+     *  class](https://cloud.ibm.com/docs/vpc?topic=vpc-spot-instances-virtual-servers) for details.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    class: InstanceAvailability.Constants.Class | string;
+  }
+  export namespace InstanceAvailability {
+    export namespace Constants {
+      /** The availability class for the virtual server instance: - `spot`: The virtual server instance may be preempted. - `standard`: The virtual server instance will not be preempted. See [virtual server instance availability class](https://cloud.ibm.com/docs/vpc?topic=vpc-spot-instances-virtual-servers) for details. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Class {
+        SPOT = 'spot',
+        STANDARD = 'standard',
+      }
+    }
+  }
+
+  /**
+   * InstanceAvailabilityPatch.
+   */
+  export interface InstanceAvailabilityPatch {
+    /** The availability class for the virtual server instance:
+     *  - `spot`: The virtual server instance may be preempted.
+     *  - `standard`: The virtual server instance will not be preempted.
+     *
+     *  If `spot` is specified, the virtual server instance:
+     *  - `reservation_affinity.policy` must be `disabled`
+     *  - `placement_target` must not specify a dedicated host or dedicated host group.
+     *
+     *  To change the availability class, the instance `status` must be `stopping` or `stopped`.
+     */
+    class?: InstanceAvailabilityPatch.Constants.Class | string;
+  }
+  export namespace InstanceAvailabilityPatch {
+    export namespace Constants {
+      /** The availability class for the virtual server instance: - `spot`: The virtual server instance may be preempted. - `standard`: The virtual server instance will not be preempted. If `spot` is specified, the virtual server instance: - `reservation_affinity.policy` must be `disabled` - `placement_target` must not specify a dedicated host or dedicated host group. To change the availability class, the instance `status` must be `stopping` or `stopped`. */
+      export enum Class {
+        SPOT = 'spot',
+        STANDARD = 'standard',
+      }
+    }
+  }
+
+  /**
    * The availability policy for this virtual server instance.
    */
   export interface InstanceAvailabilityPolicy {
@@ -44767,12 +45314,29 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     host_failure: InstanceAvailabilityPolicy.Constants.HostFailure | string;
+    /** The action to perform if the virtual server instance is preempted:
+     *  - `delete`: Delete the virtual server instance
+     *  - `stop`: Leave the virtual server instance stopped
+     *
+     *  See [virtual server instance
+     *  preemption](https://cloud.ibm.com/docs/vpc?topic=vpc-spot-instances-virtual-servers#spot-instances-preemption)
+     *  for details.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    preemption: InstanceAvailabilityPolicy.Constants.Preemption | string;
   }
   export namespace InstanceAvailabilityPolicy {
     export namespace Constants {
       /** The action to perform if the compute host experiences a failure: - `restart`: Restart the virtual server instance - `stop`: Leave the virtual server instance stopped See [handling host failures](https://cloud.ibm.com/docs/vpc?topic=vpc-host-failure-recovery-policies) for details. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum HostFailure {
         RESTART = 'restart',
+        STOP = 'stop',
+      }
+      /** The action to perform if the virtual server instance is preempted: - `delete`: Delete the virtual server instance - `stop`: Leave the virtual server instance stopped See [virtual server instance preemption](https://cloud.ibm.com/docs/vpc?topic=vpc-spot-instances-virtual-servers#spot-instances-preemption) for details. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Preemption {
+        DELETE = 'delete',
         STOP = 'stop',
       }
     }
@@ -44787,12 +45351,22 @@ namespace VpcV1 {
      *  - `stop`: Leave the virtual server instance stopped.
      */
     host_failure?: InstanceAvailabilityPolicyPatch.Constants.HostFailure | string;
+    /** The action to perform if the virtual server instance is preempted:
+     *  - `delete`: Delete the virtual server instance
+     *  - `stop`: Leave the virtual server instance stopped.
+     */
+    preemption?: InstanceAvailabilityPolicyPatch.Constants.Preemption | string;
   }
   export namespace InstanceAvailabilityPolicyPatch {
     export namespace Constants {
       /** The action to perform if the compute host experiences a failure: - `restart`: Restart the virtual server instance - `stop`: Leave the virtual server instance stopped. */
       export enum HostFailure {
         RESTART = 'restart',
+        STOP = 'stop',
+      }
+      /** The action to perform if the virtual server instance is preempted: - `delete`: Delete the virtual server instance - `stop`: Leave the virtual server instance stopped. */
+      export enum Preemption {
+        DELETE = 'delete',
         STOP = 'stop',
       }
     }
@@ -44810,6 +45384,15 @@ namespace VpcV1 {
      *  details.
      */
     host_failure?: InstanceAvailabilityPolicyPrototype.Constants.HostFailure | string;
+    /** The action to perform if the virtual server instance is preempted:
+     *  - `delete`: Delete the virtual server instance
+     *  - `stop`: Leave the virtual server instance stopped
+     *
+     *  See [virtual server instance
+     *  preemption](https://cloud.ibm.com/docs/vpc?topic=vpc-spot-instances-virtual-servers#spot-instances-preemption)
+     *  for details.
+     */
+    preemption?: InstanceAvailabilityPolicyPrototype.Constants.Preemption | string;
   }
   export namespace InstanceAvailabilityPolicyPrototype {
     export namespace Constants {
@@ -44817,6 +45400,37 @@ namespace VpcV1 {
       export enum HostFailure {
         RESTART = 'restart',
         STOP = 'stop',
+      }
+      /** The action to perform if the virtual server instance is preempted: - `delete`: Delete the virtual server instance - `stop`: Leave the virtual server instance stopped See [virtual server instance preemption](https://cloud.ibm.com/docs/vpc?topic=vpc-spot-instances-virtual-servers#spot-instances-preemption) for details. */
+      export enum Preemption {
+        DELETE = 'delete',
+        STOP = 'stop',
+      }
+    }
+  }
+
+  /**
+   * InstanceAvailabilityPrototype.
+   */
+  export interface InstanceAvailabilityPrototype {
+    /** The availability class for the virtual server instance:
+     *  - `spot`: The virtual server instance may be preempted.
+     *  - `standard`: The virtual server instance will not be preempted.
+     *
+     *  If `spot` is specified, the virtual server instance:
+     *  - `reservation_affinity.policy` must be `disabled`
+     *  - `placement_target` must not specify a dedicated host or dedicated host group.
+     *
+     *  If unspecified, the default for `availability_class` from the profile will be used.
+     */
+    class?: InstanceAvailabilityPrototype.Constants.Class | string;
+  }
+  export namespace InstanceAvailabilityPrototype {
+    export namespace Constants {
+      /** The availability class for the virtual server instance: - `spot`: The virtual server instance may be preempted. - `standard`: The virtual server instance will not be preempted. If `spot` is specified, the virtual server instance: - `reservation_affinity.policy` must be `disabled` - `placement_target` must not specify a dedicated host or dedicated host group. If unspecified, the default for `availability_class` from the profile will be used. */
+      export enum Class {
+        SPOT = 'spot',
+        STANDARD = 'standard',
       }
     }
   }
@@ -45764,11 +46378,11 @@ namespace VpcV1 {
    */
   export interface InstanceLifecycleReason {
     /** A reason code for this lifecycle state:
-     *  - `failed_registration`: the instance's registration to Resource Controller has
+     *  - `failed_registration`: The instance's registration to Resource Controller has
      *    failed. Delete the instance and provision it again. If the problem persists,
      *    contact IBM Support.
-     *  - `internal_error`: internal error (contact IBM support)
-     *  - `pending_registration`: the instance's registration to Resource Controller is
+     *  - `internal_error`: Internal error (contact IBM support)
+     *  - `pending_registration`: The instance's registration to Resource Controller is
      *    being processed.
      *  - `resource_suspended_by_provider`: The resource has been suspended (contact IBM
      *    support)
@@ -45784,7 +46398,7 @@ namespace VpcV1 {
   }
   export namespace InstanceLifecycleReason {
     export namespace Constants {
-      /** A reason code for this lifecycle state: - `failed_registration`: the instance's registration to Resource Controller has failed. Delete the instance and provision it again. If the problem persists, contact IBM Support. - `internal_error`: internal error (contact IBM support) - `pending_registration`: the instance's registration to Resource Controller is being processed. - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** A reason code for this lifecycle state: - `failed_registration`: The instance's registration to Resource Controller has failed. Delete the instance and provision it again. If the problem persists, contact IBM Support. - `internal_error`: Internal error (contact IBM support) - `pending_registration`: The instance's registration to Resource Controller is being processed. - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         FAILED_REGISTRATION = 'failed_registration',
         INTERNAL_ERROR = 'internal_error',
@@ -46043,6 +46657,7 @@ namespace VpcV1 {
    * InstanceProfile.
    */
   export interface InstanceProfile {
+    availability_class: InstanceProfileAvailabilityClass;
     bandwidth: InstanceProfileBandwidth;
     cluster_network_attachment_count: InstanceProfileClusterNetworkAttachmentCount;
     confidential_compute_modes: InstanceProfileSupportedConfidentialComputeModes;
@@ -46060,6 +46675,7 @@ namespace VpcV1 {
     /** The globally unique name for this virtual server instance profile. */
     name: string;
     network_attachment_count: InstanceProfileNetworkAttachmentCount;
+    network_bandwidth_mode: InstanceProfileNetworkBandwidthMode;
     network_interface_count: InstanceProfileNetworkInterfaceCount;
     numa_count?: InstanceProfileNUMACount;
     os_architecture: InstanceProfileOSArchitecture;
@@ -46104,6 +46720,12 @@ namespace VpcV1 {
         PREVIOUS = 'previous',
       }
     }
+  }
+
+  /**
+   * InstanceProfileAvailabilityClass.
+   */
+  export interface InstanceProfileAvailabilityClass {
   }
 
   /**
@@ -46257,6 +46879,12 @@ namespace VpcV1 {
    * InstanceProfileNetworkAttachmentCount.
    */
   export interface InstanceProfileNetworkAttachmentCount {
+  }
+
+  /**
+   * InstanceProfileNetworkBandwidthMode.
+   */
+  export interface InstanceProfileNetworkBandwidthMode {
   }
 
   /**
@@ -46463,6 +47091,7 @@ namespace VpcV1 {
    * InstancePrototype.
    */
   export interface InstancePrototype {
+    availability?: InstanceAvailabilityPrototype;
     /** The availability policy to use for this virtual server instance. */
     availability_policy?: InstanceAvailabilityPolicyPrototype;
     /** The cluster network attachments to create for this virtual server instance. A cluster network attachment
@@ -46730,6 +47359,7 @@ namespace VpcV1 {
         CANNOT_START_STORAGE = 'cannot_start_storage',
         ENCRYPTION_KEY_DELETED = 'encryption_key_deleted',
         STOPPED_BY_HOST_FAILURE = 'stopped_by_host_failure',
+        STOPPED_BY_PREEMPTION = 'stopped_by_preemption',
         STOPPED_FOR_IMAGE_CREATION = 'stopped_for_image_creation',
       }
     }
@@ -46739,6 +47369,7 @@ namespace VpcV1 {
    * InstanceTemplate.
    */
   export interface InstanceTemplate {
+    availability?: InstanceAvailabilityPrototype;
     /** The availability policy to use for this virtual server instance. */
     availability_policy?: InstanceAvailabilityPolicyPrototype;
     /** The cluster network attachments to create for this virtual server instance. A cluster network attachment
@@ -46878,6 +47509,7 @@ namespace VpcV1 {
    * InstanceTemplatePrototype.
    */
   export interface InstanceTemplatePrototype {
+    availability?: InstanceAvailabilityPrototype;
     /** The availability policy to use for this virtual server instance. */
     availability_policy?: InstanceAvailabilityPolicyPrototype;
     /** The cluster network attachments to create for this virtual server instance. A cluster network attachment
@@ -47538,13 +48170,16 @@ namespace VpcV1 {
   }
 
   /**
-   * The default pool for this listener. If `https_redirect` is set, the default pool will not be used. The specified
-   * pool must:
+   * The default pool for this listener. If `https_redirect` is specified, the default pool will not be used.
    *
+   * The specified pool must:
    * - Belong to this load balancer
    * - Have the same `protocol` as this listener, or have a compatible protocol.
    *   At present, the compatible protocols are `http` and `https`.
-   * - Not already be the `default_pool` for another listener
+   * - Not already be the `default_pool` for another listener.
+   * - Not already be the `failsafe_policy.target` for another `default_pool` and
+   *   `failsafe_policy.target` (applies only to load balancers in the `network`
+   *   family).
    *
    * Specify `null` to remove an existing default pool.
    */
@@ -49079,6 +49714,9 @@ namespace VpcV1 {
     created_at: string;
     /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all destination
      *  addresses.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  or CIDR blocks in the future.
      */
     destination: string;
     /** The direction of traffic to match. */
@@ -49087,7 +49725,11 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this network ACL rule. */
     id: string;
-    /** The IP version for this rule. */
+    /** The IP version for this rule.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future.
+     */
     ip_version: NetworkACLRule.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name is unique across all rules for the network ACL. */
     name: string;
@@ -49097,7 +49739,11 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     protocol: NetworkACLRule.Constants.Protocol | string;
-    /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
+    /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 CIDR
+     *  blocks in the future.
+     */
     source: string;
   }
   export namespace NetworkACLRule {
@@ -49112,7 +49758,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -49426,6 +50072,9 @@ namespace VpcV1 {
     created_at: string;
     /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all destination
      *  addresses.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  or CIDR blocks in the future.
      */
     destination: string;
     /** The direction of traffic to match. */
@@ -49434,7 +50083,11 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this network ACL rule. */
     id: string;
-    /** The IP version for this rule. */
+    /** The IP version for this rule.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future.
+     */
     ip_version: NetworkACLRuleItem.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name is unique across all rules for the network ACL. */
     name: string;
@@ -49444,7 +50097,11 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     protocol: NetworkACLRuleItem.Constants.Protocol | string;
-    /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
+    /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 CIDR
+     *  blocks in the future.
+     */
     source: string;
   }
   export namespace NetworkACLRuleItem {
@@ -49459,7 +50116,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -49741,13 +50398,13 @@ namespace VpcV1 {
      *  If unspecified, this rule will be inserted after all existing rules.
      */
     before?: NetworkACLRuleBeforePrototype;
-    /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all destination
+    /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` will match all destination
      *  addresses.
      */
     destination: string;
     /** The direction of traffic to match. */
     direction: NetworkACLRulePrototype.Constants.Direction | string;
-    /** The IP version for this rule. */
+    /** The IP version to match. The format of `source` and `destination` must match this property. */
     ip_version?: NetworkACLRulePrototype.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name must not be used by another rule for the network ACL. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -49755,7 +50412,7 @@ namespace VpcV1 {
     name?: string;
     /** The network protocol. */
     protocol: NetworkACLRulePrototype.Constants.Protocol | string;
-    /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
+    /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` will match all source addresses. */
     source: string;
   }
   export namespace NetworkACLRulePrototype {
@@ -49770,7 +50427,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -50047,13 +50704,13 @@ namespace VpcV1 {
      *  Must not be `deny` if `protocol` is `icmp_tcp_udp`.
      */
     action: NetworkACLRulePrototypeNetworkACLContext.Constants.Action | string;
-    /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all destination
+    /** The destination IP address or CIDR block to match. The CIDR block `0.0.0.0/0` will match all destination
      *  addresses.
      */
     destination: string;
     /** The direction of traffic to match. */
     direction: NetworkACLRulePrototypeNetworkACLContext.Constants.Direction | string;
-    /** The IP version for this rule. */
+    /** The IP version to match. The format of `source` and `destination` must match this property. */
     ip_version?: NetworkACLRulePrototypeNetworkACLContext.Constants.IpVersion | string;
     /** The name for this network ACL rule. The name must not be used by another rule for the network ACL. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -50061,7 +50718,7 @@ namespace VpcV1 {
     name?: string;
     /** The network protocol. */
     protocol: NetworkACLRulePrototypeNetworkACLContext.Constants.Protocol | string;
-    /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` matches all source addresses. */
+    /** The source IP address or CIDR block to match. The CIDR block `0.0.0.0/0` will match all source addresses. */
     source: string;
   }
   export namespace NetworkACLRulePrototypeNetworkACLContext {
@@ -50076,7 +50733,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -50992,7 +51649,11 @@ namespace VpcV1 {
    * PublicAddressRange.
    */
   export interface PublicAddressRange {
-    /** The public IPv4 range, expressed in CIDR format. */
+    /** The public IP address block for this public address range, expressed in CIDR format.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
+     *  blocks in the future.
+     */
     cidr: string;
     /** The date and time that the public address range was created. */
     created_at: string;
@@ -52359,11 +53020,13 @@ namespace VpcV1 {
     href: string;
     /** The unique identifier for this security group rule. */
     id: string;
-    /** The IP version to allow. The format of `local.address`, `remote.address`,
-     *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
+    /** The IP version to allow.
      *
      *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
      *  IP version.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future.
      */
     ip_version: SecurityGroupRule.Constants.IpVersion | string;
     /** The local IP address or range of local IP addresses to which this rule will allow inbound
@@ -52394,7 +53057,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -52711,8 +53374,8 @@ namespace VpcV1 {
     /** The IP version to allow. The format of `local.address`, `remote.address`,
      *  `local.cidr_block` or `remote.cidr_block` must match this property, if they are used.
      *
-     *  If `remote` references a security group, then this rule only applies to IP addresses in that group matching this
-     *  IP version.
+     *  If `remote` references a security group, then this rule will only apply to IP addresses in that group matching
+     *  this IP version.
      */
     ip_version?: SecurityGroupRulePrototype.Constants.IpVersion | string;
     /** The local IP address or range of local IP addresses to which this rule will allow inbound
@@ -52744,7 +53407,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule will only apply to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -53022,8 +53685,9 @@ namespace VpcV1 {
 
   /**
    * The remote IP addresses or security groups from which this rule will allow traffic (or to which, for outbound
-   * rules). Can be specified as an IP address, a CIDR block, or a security group. A CIDR block of `0.0.0.0/0` will
-   * allow traffic from any source (or to any destination, for outbound rules).
+   * rules). Can be specified as an IP address, a CIDR block, or a security group.
+   *
+   * Specify a CIDR block of `0.0.0.0/0` to allow traffic from any source (or to any destination, for outbound rules).
    */
   export interface SecurityGroupRuleRemotePatch {
   }
@@ -54360,7 +55024,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variable is supported, corresponding to the `BareMetalServer`
      *  property:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled.
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled.
      */
     bare_metal_server: string;
     /** The expression that must be satisfied by the properties of a virtual server instance provisioned using this
@@ -54370,7 +55034,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variables are supported, corresponding to `Instance`
      *  properties:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
@@ -54395,7 +55059,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variable is supported, corresponding to the `BareMetalServer`
      *  property:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled.
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled.
      */
     bare_metal_server?: string;
     /** The expression that must be satisfied by the properties of a virtual server instance provisioned using this
@@ -54405,7 +55069,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variables are supported, corresponding to `Instance`
      *  properties:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
@@ -54433,7 +55097,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variable is supported, corresponding to the `BareMetalServer`
      *  property:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled.
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled.
      */
     bare_metal_server?: string;
     /** The expression that must be satisfied by the properties of a virtual server instance provisioned using this
@@ -54445,7 +55109,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variables are supported, corresponding to `Instance`
      *  properties:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
@@ -57437,7 +58101,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variable is supported, corresponding to the `BareMetalServer`
      *  property:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled.
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled.
      */
     bare_metal_server: string;
     /** The expression that must be satisfied by the properties of a virtual server instance provisioned using this
@@ -57447,7 +58111,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variables are supported, corresponding to `Instance`
      *  properties:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
@@ -57472,7 +58136,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variable is supported, corresponding to the `BareMetalServer`
      *  property:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled.
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled.
      */
     bare_metal_server?: string;
     /** The expression that must be satisfied by the properties of a virtual server instance provisioned using this
@@ -57482,7 +58146,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variables are supported, corresponding to `Instance`
      *  properties:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
@@ -57510,7 +58174,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variable is supported, corresponding to the `BareMetalServer`
      *  property:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled.
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled.
      */
     bare_metal_server?: string;
     /** The expression that must be satisfied by the properties of a virtual server instance provisioned using this
@@ -57522,7 +58186,7 @@ namespace VpcV1 {
      *  Language](https://github.com/google/cel-spec/blob/master/doc/langdef.md), but does not support built-in
      *  functions and macros. In addition, the following variables are supported, corresponding to `Instance`
      *  properties:
-     *  - `enable_secure_boot` (boolean): Indicates whether secure boot is enabled
+     *  - `enable_secure_boot` (boolean): Whether secure boot is enabled
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
@@ -57812,6 +58476,176 @@ namespace VpcV1 {
   }
 
   /**
+   * VolumeJob.
+   */
+  export interface VolumeJob {
+    /** Indicates whether this volume job will be automatically deleted after it completes. At present, this is
+     *  always `false`, but may be modifiable in the future.
+     */
+    auto_delete: boolean;
+    /** The date and time that the volume job was completed.
+     *
+     *  If absent, the volume job has not yet completed.
+     */
+    completed_at?: string;
+    /** The date and time that the volume job was created. */
+    created_at: string;
+    /** The date and time that the volume job is estimated to complete.
+     *
+     *  If absent, the volume job is still queued and has not yet started.
+     */
+    estimated_completion_at?: string;
+    /** The URL for this volume job. */
+    href: string;
+    /** The unique identifier for this volume job. */
+    id: string;
+    /** The type of volume job.
+     *
+     *  - `migrate`: Migrates a volume to a new `storage_generation` profile.
+     *               During the migration process, the volume will be `busy`.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    job_type: VolumeJob.Constants.JobType | string;
+    /** The name for this volume job. The name must not be used by another job for this volume. */
+    name: string;
+    /** The resource type. */
+    resource_type: VolumeJob.Constants.ResourceType | string;
+    /** The date and time that the volume job was started.
+     *
+     *  If absent, the volume job has not yet started.
+     */
+    started_at?: string;
+    /** The status of this volume job:
+     *  - `canceled`:  the job is canceled
+     *  - `canceling`: the job is being canceled
+     *  - `deleting`:  the job is being deleted
+     *  - `failed`:    the job could not be completed successfully
+     *  - `queued`:    the job is queued
+     *  - `running`:   the job is in progress
+     *  - `succeeded`: the job completed successfully
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    status: VolumeJob.Constants.Status | string;
+    /** The reasons for the current status (if any). */
+    status_reasons: VolumeJobStatusReason[];
+  }
+  export namespace VolumeJob {
+    export namespace Constants {
+      /** The type of volume job. - `migrate`: Migrates a volume to a new `storage_generation` profile. During the migration process, the volume will be `busy`. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum JobType {
+        MIGRATE = 'migrate',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VOLUME_JOB = 'volume_job',
+      }
+      /** The status of this volume job: - `canceled`:  the job is canceled - `canceling`: the job is being canceled - `deleting`:  the job is being deleted - `failed`:    the job could not be completed successfully - `queued`:    the job is queued - `running`:   the job is in progress - `succeeded`: the job completed successfully The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Status {
+        CANCELED = 'canceled',
+        CANCELING = 'canceling',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        QUEUED = 'queued',
+        RUNNING = 'running',
+        SUCCEEDED = 'succeeded',
+      }
+    }
+  }
+
+  /**
+   * VolumeJobCollection.
+   */
+  export interface VolumeJobCollection {
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The jobs for this volume. */
+    jobs: VolumeJob[];
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
+   * VolumeJobPrototype.
+   */
+  export interface VolumeJobPrototype {
+    /** The type of job this volume job will perform.
+     *
+     *  - `migrate`: Migrates a volume to a new `storage_generation` profile.
+     *               During the migration process, the volume will be `busy`.
+     */
+    job_type: VolumeJobPrototype.Constants.JobType | string;
+    /** The name for this volume job. The name must not be used by another job for this volume. If unspecified, the
+     *  name will be a hyphenated list of randomly-selected words.
+     */
+    name?: string;
+  }
+  export namespace VolumeJobPrototype {
+    export namespace Constants {
+      /** The type of job this volume job will perform. - `migrate`: Migrates a volume to a new `storage_generation` profile. During the migration process, the volume will be `busy`. */
+      export enum JobType {
+        MIGRATE = 'migrate',
+      }
+    }
+  }
+
+  /**
+   * VolumeJobStatusReason.
+   */
+  export interface VolumeJobStatusReason {
+    /** A reason code for the status:
+     *  - `instance_powered_off`: The instance the volume is attached to has been powered off
+     *  - `internal_error`: Internal error (contact IBM support)
+     *  - `volume_detached_from_instance`: The volume is not attached to a running instance.
+     */
+    code: VolumeJobStatusReason.Constants.Code | string;
+    /** An explanation of the status reason. */
+    message: string;
+    /** A link to documentation about this status reason. */
+    more_info?: string;
+  }
+  export namespace VolumeJobStatusReason {
+    export namespace Constants {
+      /** A reason code for the status: - `instance_powered_off`: The instance the volume is attached to has been powered off - `internal_error`: Internal error (contact IBM support) - `volume_detached_from_instance`: The volume is not attached to a running instance. */
+      export enum Code {
+        INSTANCE_POWERED_OFF = 'instance_powered_off',
+        INTERNAL_ERROR = 'internal_error',
+        VOLUME_DETACHED_FROM_INSTANCE = 'volume_detached_from_instance',
+      }
+    }
+  }
+
+  /**
+   * The parameters to use after the volume is migrated.
+   */
+  export interface VolumeJobTypeMigrateParameters {
+    /** The value to use for the volume's `bandwidth` after migration.
+     *
+     *  If specified, the volume profile after migration must not have a `bandwidth.type` of
+     *  `dependent`.
+     */
+    bandwidth?: number;
+    /** The value to use for the volume's `iops` after migration.
+     *
+     *  If specified, the volume profile after migration must not have an `iops.type` of
+     *  `dependent`.
+     */
+    iops?: number;
+    /** The profile with a `storage_generation` value of `2` to migrate the volume to.
+     *
+     *  The volume's current profile must have a `storage_generation` value of `1`.
+     */
+    profile: VolumeProfileIdentity;
+  }
+
+  /**
    * VolumeProfile.
    */
   export interface VolumeProfile {
@@ -58082,7 +58916,8 @@ namespace VpcV1 {
      */
     bandwidth?: number;
     /** The capacity to use for the volume (in gigabytes). The specified value must be at least the snapshot's
-     *  `minimum_capacity`, at most 250 gigabytes, and within the `boot_capacity` range of the volume's profile.
+     *  `minimum_capacity`, at most 250 gigabytes, and within the
+     *  `boot_capacity` range of the volume's profile.
      */
     capacity?: number;
     /** The root key to use to wrap the data encryption key for the volume.
@@ -60275,8 +61110,9 @@ namespace VpcV1 {
    */
   export interface EncryptionKeyIdentityByCRN extends EncryptionKeyIdentity {
     /** The CRN of the [Key Protect Root
-     *  Key](https://cloud.ibm.com/docs/key-protect?topic=key-protect-getting-started-tutorial) or [Hyper Protect Crypto
-     *  Services Root Key](https://cloud.ibm.com/docs/hs-crypto?topic=hs-crypto-get-started) for this resource.
+     *  Key](https://cloud.ibm.com/docs/key-protect?topic=key-protect-getting-started-tutorial) for this resource.
+     *
+     *  The use of Hyper Protect Crypto Services for encryption keys has been deprecated.
      */
     crn: string;
   }
@@ -60688,9 +61524,9 @@ namespace VpcV1 {
   }
 
   /**
-   * FlowLogCollectorTargetInstanceNetworkAttachmentReference.
+   * FlowLogCollectorTargetInstanceNetworkAttachmentReferenceFlowLogCollectorContext.
    */
-  export interface FlowLogCollectorTargetInstanceNetworkAttachmentReference extends FlowLogCollectorTarget {
+  export interface FlowLogCollectorTargetInstanceNetworkAttachmentReferenceFlowLogCollectorContext extends FlowLogCollectorTarget {
     /** If present, this property indicates the referenced resource has been deleted, and provides
      *  some supplementary information.
      */
@@ -60703,16 +61539,10 @@ namespace VpcV1 {
      *  instance.
      */
     name: string;
-    /** The primary IP address of the virtual network interface for the instance network attachment. */
-    primary_ip: ReservedIPReference;
     /** The resource type. */
-    resource_type: FlowLogCollectorTargetInstanceNetworkAttachmentReference.Constants.ResourceType | string;
-    /** The subnet of the virtual network interface for the instance network attachment. */
-    subnet: SubnetReference;
-    /** The virtual network interface for this instance network attachment. */
-    virtual_network_interface: VirtualNetworkInterfaceReferenceAttachmentContext;
+    resource_type: FlowLogCollectorTargetInstanceNetworkAttachmentReferenceFlowLogCollectorContext.Constants.ResourceType | string;
   }
-  export namespace FlowLogCollectorTargetInstanceNetworkAttachmentReference {
+  export namespace FlowLogCollectorTargetInstanceNetworkAttachmentReferenceFlowLogCollectorContext {
     export namespace Constants {
       /** The resource type. */
       export enum ResourceType {
@@ -60891,11 +61721,11 @@ namespace VpcV1 {
     /** A base64-encoded, encrypted representation of the key that was used to encrypt the data for this image.
      *
      *  That representation is created by wrapping the key's value with the `encryption_key` root key (which must also
-     *  be specified), using either [Key Protect](https://cloud.ibm.com/docs/key-protect?topic=key-protect-wrap-keys) or
-     *  the
-     *  [Hyper Protect Crypto Services](https://cloud.ibm.com/docs/services/hs-crypto?topic=hs-crypto-wrap-keys).
+     *  be specified), using [Key Protect](https://cloud.ibm.com/docs/key-protect?topic=key-protect-wrap-keys).
      *
      *  If unspecified, the imported image is treated as unencrypted.
+     *
+     *  The use of Hyper Protect Crypto Services for image encryption keys has been deprecated.
      */
     encrypted_data_key?: string;
     /** The root key that was used to wrap the data key (which is ultimately represented as
@@ -61445,6 +62275,68 @@ namespace VpcV1 {
       /** The resource type. */
       export enum ResourceType {
         PLACEMENT_GROUP = 'placement_group',
+      }
+    }
+  }
+
+  /**
+   * The permitted availability class values for an instance with this profile.
+   */
+  export interface InstanceProfileAvailabilityClassEnum extends InstanceProfileAvailabilityClass {
+    /** The default availability class for an instance with this profile. */
+    default: InstanceProfileAvailabilityClassEnum.Constants.Default | string;
+    /** The type for this profile field. */
+    type: InstanceProfileAvailabilityClassEnum.Constants.Type | string;
+    /** The permitted values for this profile field. */
+    values: InstanceProfileAvailabilityClassEnum.Constants.Values[] | string[];
+  }
+  export namespace InstanceProfileAvailabilityClassEnum {
+    export namespace Constants {
+      /** The default availability class for an instance with this profile. */
+      export enum Default {
+        SPOT = 'spot',
+        STANDARD = 'standard',
+      }
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The permitted values for this profile field. */
+      export enum Values {
+        SPOT = 'spot',
+        STANDARD = 'standard',
+      }
+    }
+  }
+
+  /**
+   * The availability class values for an instance with this profile.
+   */
+  export interface InstanceProfileAvailabilityClassFixed extends InstanceProfileAvailabilityClass {
+    /** The type for this profile field. */
+    type: InstanceProfileAvailabilityClassFixed.Constants.Type | string;
+    /** The availability class for the virtual server instance:
+     *  - `spot`: The virtual server instance may be preempted.
+     *  - `standard`: The virtual server instance will not be preempted.
+     *
+     *  See [virtual server instance availability
+     *  class](https://cloud.ibm.com/docs/vpc?topic=vpc-spot-instances-virtual-servers) for details.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    value: InstanceProfileAvailabilityClassFixed.Constants.Value | string;
+  }
+  export namespace InstanceProfileAvailabilityClassFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+      /** The availability class for the virtual server instance: - `spot`: The virtual server instance may be preempted. - `standard`: The virtual server instance will not be preempted. See [virtual server instance availability class](https://cloud.ibm.com/docs/vpc?topic=vpc-spot-instances-virtual-servers) for details. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Value {
+        SPOT = 'spot',
+        STANDARD = 'standard',
       }
     }
   }
@@ -62062,6 +62954,68 @@ namespace VpcV1 {
       /** The type for this profile field. */
       export enum Type {
         RANGE = 'range',
+      }
+    }
+  }
+
+  /**
+   * The permitted network bandwidth modes for an instance with this profile.
+   */
+  export interface InstanceProfileNetworkBandwidthModeEnum extends InstanceProfileNetworkBandwidthMode {
+    /** The default network bandwidth mode for this profile. */
+    default?: InstanceProfileNetworkBandwidthModeEnum.Constants.Default | string;
+    /** The type for this profile field. */
+    type: InstanceProfileNetworkBandwidthModeEnum.Constants.Type | string;
+    /** The supported network bandwidth modes for an instance with this profile. */
+    values: InstanceProfileNetworkBandwidthModeEnum.Constants.Values[] | string[];
+  }
+  export namespace InstanceProfileNetworkBandwidthModeEnum {
+    export namespace Constants {
+      /** The default network bandwidth mode for this profile. */
+      export enum Default {
+        DIVIDED = 'divided',
+        POOLED = 'pooled',
+      }
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+      /** The supported network bandwidth modes for an instance with this profile. */
+      export enum Values {
+        DIVIDED = 'divided',
+        POOLED = 'pooled',
+      }
+    }
+  }
+
+  /**
+   * The network bandwidth mode for an instance with this profile.
+   */
+  export interface InstanceProfileNetworkBandwidthModeFixed extends InstanceProfileNetworkBandwidthMode {
+    /** The type for this profile field. */
+    type: InstanceProfileNetworkBandwidthModeFixed.Constants.Type | string;
+    /** A network bandwidth mode:
+     *
+     *  - `divided`: network bandwidth divided equally across the instance's network attachments
+     *    (or the instance's network interfaces).
+     *  - `pooled`: network bandwidth pooled among instance network attachments
+     *    (or the instance's network interfaces).
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    value: InstanceProfileNetworkBandwidthModeFixed.Constants.Value | string;
+  }
+  export namespace InstanceProfileNetworkBandwidthModeFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+      /** A network bandwidth mode: - `divided`: network bandwidth divided equally across the instance's network attachments (or the instance's network interfaces). - `pooled`: network bandwidth pooled among instance network attachments (or the instance's network interfaces). The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Value {
+        DIVIDED = 'divided',
+        POOLED = 'pooled',
       }
     }
   }
@@ -63123,7 +64077,10 @@ namespace VpcV1 {
    * LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSPrototype.
    */
   export interface LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSPrototype extends LoadBalancerPoolHealthMonitorPrototype {
-    /** The protocol type to use for health checks. */
+    /** The protocol type to use for health checks.
+     *
+     *  Load balancers in the `network` family do not support the `https` protocol.
+     */
     type: LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSPrototype.Constants.Type | string;
     /** The health check URL path to use.
      *
@@ -63133,7 +64090,7 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSPrototype {
     export namespace Constants {
-      /** The protocol type to use for health checks. */
+      /** The protocol type to use for health checks. Load balancers in the `network` family do not support the `https` protocol. */
       export enum Type {
         HTTP = 'http',
         HTTPS = 'https',
@@ -63711,7 +64668,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -63751,7 +64708,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -63781,7 +64738,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -63825,7 +64782,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -64115,7 +65072,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -64146,7 +65103,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -64186,7 +65143,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -64216,7 +65173,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -64260,7 +65217,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -64566,7 +65523,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -64597,7 +65554,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -64637,7 +65594,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -64667,7 +65624,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -64711,7 +65668,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -65017,7 +65974,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version to match. The format of `source` and `destination` must match this property. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -65048,7 +66005,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -65088,7 +66045,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -65118,7 +66075,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -65162,7 +66119,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -65452,7 +66409,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version for this rule. */
+      /** The IP version for this rule. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -66051,69 +67008,53 @@ namespace VpcV1 {
   }
 
   /**
-   * SecurityGroupRuleLocalPatchCIDR.
+   * SecurityGroupRuleLocalPatchSecurityGroupRuleCIDRPrototype.
    */
-  export interface SecurityGroupRuleLocalPatchCIDR extends SecurityGroupRuleLocalPatch {
-    /** The CIDR block.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
-     *  blocks in the future.
-     */
+  export interface SecurityGroupRuleLocalPatchSecurityGroupRuleCIDRPrototype extends SecurityGroupRuleLocalPatch {
+    /** The CIDR block. */
     cidr_block: string;
   }
 
   /**
-   * SecurityGroupRuleLocalPatchIP.
+   * SecurityGroupRuleLocalPatchSecurityGroupRuleIPPrototype.
    */
-  export interface SecurityGroupRuleLocalPatchIP extends SecurityGroupRuleLocalPatch {
-    /** The IP address.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
-     *  in the future.
-     */
+  export interface SecurityGroupRuleLocalPatchSecurityGroupRuleIPPrototype extends SecurityGroupRuleLocalPatch {
+    /** The IP address. */
     address: string;
   }
 
   /**
-   * SecurityGroupRuleLocalPrototypeCIDR.
+   * SecurityGroupRuleLocalPrototypeSecurityGroupRuleCIDRPrototype.
    */
-  export interface SecurityGroupRuleLocalPrototypeCIDR extends SecurityGroupRuleLocalPrototype {
-    /** The CIDR block.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
-     *  blocks in the future.
-     */
+  export interface SecurityGroupRuleLocalPrototypeSecurityGroupRuleCIDRPrototype extends SecurityGroupRuleLocalPrototype {
+    /** The CIDR block. */
     cidr_block: string;
   }
 
   /**
-   * SecurityGroupRuleLocalPrototypeIP.
+   * SecurityGroupRuleLocalPrototypeSecurityGroupRuleIPPrototype.
    */
-  export interface SecurityGroupRuleLocalPrototypeIP extends SecurityGroupRuleLocalPrototype {
-    /** The IP address.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
-     *  in the future.
-     */
+  export interface SecurityGroupRuleLocalPrototypeSecurityGroupRuleIPPrototype extends SecurityGroupRuleLocalPrototype {
+    /** The IP address. */
     address: string;
   }
 
   /**
-   * SecurityGroupRuleLocalCIDR.
+   * SecurityGroupRuleLocalSecurityGroupRuleCIDR.
    */
-  export interface SecurityGroupRuleLocalCIDR extends SecurityGroupRuleLocal {
+  export interface SecurityGroupRuleLocalSecurityGroupRuleCIDR extends SecurityGroupRuleLocal {
     /** The CIDR block.
      *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 CIDR
      *  blocks in the future.
      */
     cidr_block: string;
   }
 
   /**
-   * SecurityGroupRuleLocalIP.
+   * SecurityGroupRuleLocalSecurityGroupRuleIP.
    */
-  export interface SecurityGroupRuleLocalIP extends SecurityGroupRuleLocal {
+  export interface SecurityGroupRuleLocalSecurityGroupRuleIP extends SecurityGroupRuleLocal {
     /** The IP address.
      *
      *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
@@ -66136,7 +67077,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -66165,7 +67106,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -66208,7 +67149,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -66499,7 +67440,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule will only apply to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -66536,7 +67477,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule will only apply to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -66562,7 +67503,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule will only apply to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -66587,7 +67528,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule will only apply to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -66626,7 +67567,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule will only apply to IP addresses in that group matching this IP version. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -66890,56 +67831,24 @@ namespace VpcV1 {
   }
 
   /**
-   * SecurityGroupRuleRemotePatchCIDR.
-   */
-  export interface SecurityGroupRuleRemotePatchCIDR extends SecurityGroupRuleRemotePatch {
-    /** The CIDR block.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
-     *  blocks in the future.
-     */
-    cidr_block: string;
-  }
-
-  /**
-   * SecurityGroupRuleRemotePatchIP.
-   */
-  export interface SecurityGroupRuleRemotePatchIP extends SecurityGroupRuleRemotePatch {
-    /** The IP address.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
-     *  in the future.
-     */
-    address: string;
-  }
-
-  /**
    * Identifies a security group by a unique property.
    */
   export interface SecurityGroupRuleRemotePatchSecurityGroupIdentity extends SecurityGroupRuleRemotePatch {
   }
 
   /**
-   * SecurityGroupRuleRemotePrototypeCIDR.
+   * SecurityGroupRuleRemotePatchSecurityGroupRuleCIDRPrototype.
    */
-  export interface SecurityGroupRuleRemotePrototypeCIDR extends SecurityGroupRuleRemotePrototype {
-    /** The CIDR block.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
-     *  blocks in the future.
-     */
+  export interface SecurityGroupRuleRemotePatchSecurityGroupRuleCIDRPrototype extends SecurityGroupRuleRemotePatch {
+    /** The CIDR block. */
     cidr_block: string;
   }
 
   /**
-   * SecurityGroupRuleRemotePrototypeIP.
+   * SecurityGroupRuleRemotePatchSecurityGroupRuleIPPrototype.
    */
-  export interface SecurityGroupRuleRemotePrototypeIP extends SecurityGroupRuleRemotePrototype {
-    /** The IP address.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
-     *  in the future.
-     */
+  export interface SecurityGroupRuleRemotePatchSecurityGroupRuleIPPrototype extends SecurityGroupRuleRemotePatch {
+    /** The IP address. */
     address: string;
   }
 
@@ -66950,26 +67859,18 @@ namespace VpcV1 {
   }
 
   /**
-   * SecurityGroupRuleRemoteCIDR.
+   * SecurityGroupRuleRemotePrototypeSecurityGroupRuleCIDRPrototype.
    */
-  export interface SecurityGroupRuleRemoteCIDR extends SecurityGroupRuleRemote {
-    /** The CIDR block.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 address
-     *  blocks in the future.
-     */
+  export interface SecurityGroupRuleRemotePrototypeSecurityGroupRuleCIDRPrototype extends SecurityGroupRuleRemotePrototype {
+    /** The CIDR block. */
     cidr_block: string;
   }
 
   /**
-   * SecurityGroupRuleRemoteIP.
+   * SecurityGroupRuleRemotePrototypeSecurityGroupRuleIPPrototype.
    */
-  export interface SecurityGroupRuleRemoteIP extends SecurityGroupRuleRemote {
-    /** The IP address.
-     *
-     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
-     *  in the future.
-     */
+  export interface SecurityGroupRuleRemotePrototypeSecurityGroupRuleIPPrototype extends SecurityGroupRuleRemotePrototype {
+    /** The IP address. */
     address: string;
   }
 
@@ -66992,6 +67893,30 @@ namespace VpcV1 {
   }
 
   /**
+   * SecurityGroupRuleRemoteSecurityGroupRuleCIDR.
+   */
+  export interface SecurityGroupRuleRemoteSecurityGroupRuleCIDR extends SecurityGroupRuleRemote {
+    /** The CIDR block.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 CIDR
+     *  blocks in the future.
+     */
+    cidr_block: string;
+  }
+
+  /**
+   * SecurityGroupRuleRemoteSecurityGroupRuleIP.
+   */
+  export interface SecurityGroupRuleRemoteSecurityGroupRuleIP extends SecurityGroupRuleRemote {
+    /** The IP address.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
+     */
+    address: string;
+  }
+
+  /**
    * A rule specifying the ICMP traffic to allow.
    */
   export interface SecurityGroupRuleSecurityGroupRuleProtocolICMP extends SecurityGroupRule {
@@ -67009,7 +67934,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -67045,7 +67970,7 @@ namespace VpcV1 {
         INBOUND = 'inbound',
         OUTBOUND = 'outbound',
       }
-      /** The IP version to allow. The format of `local.address`, `remote.address`, `local.cidr_block` or `remote.cidr_block` must match this property, if they are used. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. */
+      /** The IP version to allow. If `remote` references a security group, then this rule only applies to IP addresses in that group matching this IP version. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support `ipv6` in the future. */
       export enum IpVersion {
         IPV4 = 'ipv4',
       }
@@ -67328,8 +68253,9 @@ namespace VpcV1 {
   }
 
   /**
-   * The virtual network interface for this share mount target. The virtual network interface must:
+   * The virtual network interface for this share mount target.
    *
+   * The virtual network interface must:
    * - have `allow_ip_spoofing` set to `false`
    * - have `enable_infrastructure_nat` set to `true`
    * - have `protocol_state_filtering_mode` set to `auto` or `enabled`
@@ -68876,13 +69802,6 @@ namespace VpcV1 {
   }
 
   /**
-   * The peer VPN gateway for this connection. If `peer.type` is `ipv4_address`, only `peer.address` may be specified.
-   * If `peer.type` is fqdn, only `peer.fqdn` may be specified.
-   */
-  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatch extends VPNGatewayConnectionPeerPatch {
-  }
-
-  /**
    * VPNGatewayConnectionPolicyMode.
    */
   export interface VPNGatewayConnectionPolicyMode extends VPNGatewayConnection {
@@ -69555,6 +70474,63 @@ namespace VpcV1 {
   export interface VolumeIdentityById extends VolumeIdentity {
     /** The unique identifier for this volume. */
     id: string;
+  }
+
+  /**
+   * VolumeJobPrototypeVolumeJobTypeMigratePrototype.
+   */
+  export interface VolumeJobPrototypeVolumeJobTypeMigratePrototype extends VolumeJobPrototype {
+    /** The type of job this volume job will perform.
+     *
+     *  The volume must:
+     *  - Have a `status` of `available`
+     *  - Not currently have another `migrate` job with a `status` of `queued` or `running`.
+     *
+     *  If the volume is attached to an instance, the instance must be in `running` state.
+     */
+    job_type: VolumeJobPrototypeVolumeJobTypeMigratePrototype.Constants.JobType | string;
+    /** The parameters to use after the volume is migrated. */
+    parameters: VolumeJobTypeMigrateParameters;
+  }
+  export namespace VolumeJobPrototypeVolumeJobTypeMigratePrototype {
+    export namespace Constants {
+      /** The type of job this volume job will perform. The volume must: - Have a `status` of `available` - Not currently have another `migrate` job with a `status` of `queued` or `running`. If the volume is attached to an instance, the instance must be in `running` state. */
+      export enum JobType {
+        MIGRATE = 'migrate',
+      }
+    }
+  }
+
+  /**
+   * VolumeJobTypeMigrate.
+   */
+  export interface VolumeJobTypeMigrate extends VolumeJob {
+    /** The type of volume job. */
+    job_type: VolumeJobTypeMigrate.Constants.JobType | string;
+    /** The parameters to use after the volume is migrated. */
+    parameters: VolumeJobTypeMigrateParameters;
+  }
+  export namespace VolumeJobTypeMigrate {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VOLUME_JOB = 'volume_job',
+      }
+      /** The status of this volume job: - `canceled`:  the job is canceled - `canceling`: the job is being canceled - `deleting`:  the job is being deleted - `failed`:    the job could not be completed successfully - `queued`:    the job is queued - `running`:   the job is in progress - `succeeded`: the job completed successfully The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Status {
+        CANCELED = 'canceled',
+        CANCELING = 'canceling',
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        QUEUED = 'queued',
+        RUNNING = 'running',
+        SUCCEEDED = 'succeeded',
+      }
+      /** The type of volume job. */
+      export enum JobType {
+        MIGRATE = 'migrate',
+      }
+    }
   }
 
   /**
@@ -71530,7 +72506,7 @@ namespace VpcV1 {
    */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionPeerAddressPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatch {
     /** The IP address of the peer VPN gateway for this connection. */
-    address?: string;
+    address: string;
   }
 
   /**
@@ -71538,7 +72514,7 @@ namespace VpcV1 {
    */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionDynamicRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionDynamicRouteModePeerPatch {
     /** The FQDN of the peer VPN gateway for this connection. */
-    fqdn?: string;
+    fqdn: string;
   }
 
   /**
@@ -71546,7 +72522,7 @@ namespace VpcV1 {
    */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerAddressPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatch {
     /** The IP address of the peer VPN gateway for this connection. */
-    address?: string;
+    address: string;
   }
 
   /**
@@ -71554,23 +72530,7 @@ namespace VpcV1 {
    */
   export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPolicyModePeerPatchVPNGatewayConnectionPeerFQDNPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionPolicyModePeerPatch {
     /** The FQDN of the peer VPN gateway for this connection. */
-    fqdn?: string;
-  }
-
-  /**
-   * VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerAddressPatch.
-   */
-  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerAddressPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatch {
-    /** The IP address of the peer VPN gateway for this connection. */
-    address?: string;
-  }
-
-  /**
-   * VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch.
-   */
-  export interface VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionStaticRouteModePeerPatchVPNGatewayConnectionPeerFQDNPatch extends VPNGatewayConnectionPeerPatchVPNGatewayConnectionStaticRouteModePeerPatch {
-    /** The FQDN of the peer VPN gateway for this connection. */
-    fqdn?: string;
+    fqdn: string;
   }
 
   /**
@@ -76709,6 +77669,87 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.InstanceProfileReference[]> {
       const results: InstanceProfileReference[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * VolumeJobsPager can be used to simplify the use of listVolumeJobs().
+   */
+  export class VolumeJobsPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListVolumeJobsParams;
+
+    /**
+     * Construct a VolumeJobsPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listVolumeJobs()
+     * @param {Object} params - The parameters to be passed to listVolumeJobs()
+     * @constructor
+     * @returns {VolumeJobsPager}
+     */
+    constructor(client: VpcV1, params: VpcV1.ListVolumeJobsParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listVolumeJobs().
+     * @returns {Promise<VpcV1.VolumeJob[]>}
+     */
+    public async getNext(): Promise<VpcV1.VolumeJob[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listVolumeJobs(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.jobs;
+    }
+
+    /**
+     * Returns all results by invoking listVolumeJobs() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.VolumeJob[]>}
+     */
+    public async getAll(): Promise<VpcV1.VolumeJob[]> {
+      const results: VolumeJob[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
