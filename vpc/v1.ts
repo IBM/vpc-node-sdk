@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.111.0-1bfb72c2-20260206-185521
+ * IBM OpenAPI SDK Code Generator Version: 3.114.4-9b56d441-20260612-210048
  */
 
 /* eslint-disable max-classes-per-file */
@@ -40,7 +40,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: 2026-03-24
+ * API Version: 2026-06-23
  */
 
 class VpcV1 extends BaseService {
@@ -110,7 +110,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2025-12-09` and `2026-03-25`.
+   *  `2026-04-07` and `2026-06-23`.
    */
   version: string;
 
@@ -121,7 +121,7 @@ class VpcV1 extends BaseService {
    * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
    * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2025-12-09` and `2026-03-25`.
+   * specify any date between `2026-04-07` and `2026-06-23`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -141,7 +141,7 @@ class VpcV1 extends BaseService {
     if (!('generation' in options)) {
       this.generation = 2;
     }
-    this.version = options.version || '2026-03-24';
+    this.version = options.version || '2026-06-23';
   }
 
   /*************************
@@ -2939,14 +2939,15 @@ class VpcV1 extends BaseService {
    * be added as SSH authorized keys for the [default
    * user](https://cloud.ibm.com/docs/vpc?topic=vpc-vsi_is_connecting_linux#determining-default-user-account).
    *
-   * For Windows images, at least one key must be specified, and one will be selected to encrypt the administrator
-   * password. Keys are optional for other images, but if no keys are specified, the bare metal server will be
-   * inaccessible unless the specified image provides another means of access.
+   * For Windows images, at least one SSH key of type `rsa` must be specified. One of the provided keys is selected to
+   * encrypt the administrator password. SSH keys are optional for other images; however, if no keys are specified, the
+   * bare metal server will be inaccessible unless the selected image provides an alternative access mechanism.
    * @param {BareMetalServerInitializationDefaultTrustedProfilePrototype} [params.defaultTrustedProfile] - The default
    * trusted profile to be used when initializing the bare metal server.
    *
    * If unspecified, no default trusted profile will be made available.
-   * @param {string} [params.userData] - The user data to be made available when initializing the bare metal server.
+   * @param {string} [params.userData] - The [user data](https://cloud.ibm.com/docs/vpc?topic=vpc-user-data) to make
+   * available when setting up the bare metal server.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerInitialization>>}
    */
@@ -7719,8 +7720,6 @@ class VpcV1 extends BaseService {
    * reversed. An image with `remote.account` set is not allowed to be deleted. Additionally, an image cannot be deleted
    * if it:
    * - has a `status` of `deleting`
-   * - has a `status` of `pending` with a `status_reasons` code of
-   *   `image_request_in_progress`
    * - has `catalog_offering.managed` set to `true`.
    *
    * @param {Object} params - The parameters to send to the service.
@@ -10674,6 +10673,8 @@ class VpcV1 extends BaseService {
    * region. An instance profile specifies the performance characteristics and pricing model for an instance.
    *
    * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.InstanceProfileCollection>>}
    */
@@ -10682,7 +10683,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.InstanceProfileCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['signal', 'headers'];
+    const _validParams = ['start', 'limit', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -10691,6 +10692,8 @@ class VpcV1 extends BaseService {
     const query = {
       'version': this.version,
       'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceProfiles');
@@ -11107,9 +11110,11 @@ class VpcV1 extends BaseService {
    * @param {string} [params.name] - The name for this virtual server instance. The name must not be used by another
    * virtual server instance in the region. Changing the name will not affect the system hostname.
    * @param {InstancePlacementTargetPatch} [params.placementTarget] - The placement restrictions to use for the virtual
-   * server instance.
+   * server instance. For the
+   * placement restrictions to be changed, the instance `status` must be `stopping` or
+   * `stopped`.
    *
-   * If specified, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated
+   * If set, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated
    * host or dedicated host group, the `vcpu.percentage` must be `100` and the instance must
    * have two or more vCPUs.
    * @param {InstancePatchProfile} [params.profile] - The profile to use for this virtual server instance. Any disks
@@ -11127,6 +11132,11 @@ class VpcV1 extends BaseService {
    *   currently has.
    * - Have the `volume_bandwidth_qos_mode` listed in its `volume_bandwidth_qos_modes`.
    * @param {InstanceReservationAffinityPatch} [params.reservationAffinity] -
+   * @param {number} [params.threadsPerCore] - The threads per core to use for this virtual server instance. Must be one
+   * of the values in the profile's `threads_per_core.values`.
+   *
+   * For this property to be changed, the virtual server instance `status` must be
+   * `stopping` or `stopped`.
    * @param {number} [params.totalVolumeBandwidth] - The amount of bandwidth (in megabits per second) allocated
    * exclusively to instance storage volumes. An increase in this value will result in a corresponding decrease to
    * `total_network_bandwidth`.
@@ -11146,7 +11156,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.Instance>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'availability', 'availabilityPolicy', 'confidentialComputeMode', 'enableSecureBoot', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'totalVolumeBandwidth', 'vcpu', 'volumeBandwidthQosMode', 'ifMatch', 'signal', 'headers'];
+    const _validParams = ['id', 'availability', 'availabilityPolicy', 'confidentialComputeMode', 'enableSecureBoot', 'metadataService', 'name', 'placementTarget', 'profile', 'reservationAffinity', 'threadsPerCore', 'totalVolumeBandwidth', 'vcpu', 'volumeBandwidthQosMode', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -11162,6 +11172,7 @@ class VpcV1 extends BaseService {
       'placement_target': _params.placementTarget,
       'profile': _params.profile,
       'reservation_affinity': _params.reservationAffinity,
+      'threads_per_core': _params.threadsPerCore,
       'total_volume_bandwidth': _params.totalVolumeBandwidth,
       'vcpu': _params.vcpu,
       'volume_bandwidth_qos_mode': _params.volumeBandwidthQosMode,
@@ -13027,6 +13038,198 @@ class VpcV1 extends BaseService {
   }
 
   /**
+   * List instance software attachments associated with an instance.
+   *
+   * This request lists software attachments associated with an instance.
+   *
+   * The instance software attachments will be sorted by their `created_at` property values, with newest instance
+   * software attachments first. Software attachments with identical
+   * `created_at` property values will in turn be sorted by ascending `name` property values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceSoftwareAttachmentCollection>>}
+   */
+  public listInstanceSoftwareAttachments(
+    params: VpcV1.ListInstanceSoftwareAttachmentsParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceSoftwareAttachmentCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId'];
+    const _validParams = ['instanceId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listInstanceSoftwareAttachments');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/software_attachments',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve an instance software attachment.
+   *
+   * This request retrieves a single instance software attachment specified by identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {string} params.id - The instance software attachment identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceSoftwareAttachment>>}
+   */
+  public getInstanceSoftwareAttachment(
+    params: VpcV1.GetInstanceSoftwareAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceSoftwareAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId', 'id'];
+    const _validParams = ['instanceId', 'id', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getInstanceSoftwareAttachment');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/software_attachments/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update an instance software attachment.
+   *
+   * This request updates an instance software attachment with the information provided in an instance software
+   * attachment patch object. The instance software attachment patch object is structured in the same way as a retrieved
+   * instance software attachment and needs to contain only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.instanceId - The virtual server instance identifier.
+   * @param {string} params.id - The instance software attachment identifier.
+   * @param {string} [params.name] - The name for this instance software attachment. The name must not be used by
+   * another software attachment for this instance.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.InstanceSoftwareAttachment>>}
+   */
+  public updateInstanceSoftwareAttachment(
+    params: VpcV1.UpdateInstanceSoftwareAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.InstanceSoftwareAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['instanceId', 'id'];
+    const _validParams = ['instanceId', 'id', 'name', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'instance_id': _params.instanceId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateInstanceSoftwareAttachment');
+
+    const parameters = {
+      options: {
+        url: '/instances/{instance_id}/software_attachments/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * List volumes attachments on an instance.
    *
    * This request lists volume attachments on an instance. A volume attachment connects a volume to an instance. Each
@@ -14319,6 +14522,11 @@ class VpcV1 extends BaseService {
    * @param {CertificateInstanceIdentity} [params.certificateInstance] - The certificate instance to use for SSL
    * termination. The listener must have a
    * `protocol` of `https`.
+   * @param {LoadBalancerListenerClientAuthenticationPrototype} [params.clientAuthentication] - The client
+   * authentication to use for this listener.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The listener must
+   * have a `protocol` of `https`.
    * @param {number} [params.connectionLimit] - The concurrent connection limit for the listener. If reached, incoming
    * connections may be queued or rejected.
    *
@@ -14392,7 +14600,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'protocol'];
-    const _validParams = ['loadBalancerId', 'protocol', 'acceptProxyProtocol', 'certificateInstance', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'idleConnectionTimeout', 'policies', 'port', 'portMax', 'portMin', 'signal', 'headers'];
+    const _validParams = ['loadBalancerId', 'protocol', 'acceptProxyProtocol', 'certificateInstance', 'clientAuthentication', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'idleConnectionTimeout', 'policies', 'port', 'portMax', 'portMin', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14402,6 +14610,7 @@ class VpcV1 extends BaseService {
       'protocol': _params.protocol,
       'accept_proxy_protocol': _params.acceptProxyProtocol,
       'certificate_instance': _params.certificateInstance,
+      'client_authentication': _params.clientAuthentication,
       'connection_limit': _params.connectionLimit,
       'default_pool': _params.defaultPool,
       'https_redirect': _params.httpsRedirect,
@@ -14589,6 +14798,13 @@ class VpcV1 extends BaseService {
    * @param {CertificateInstanceIdentity} [params.certificateInstance] - The certificate instance to use for SSL
    * termination. The listener must have a
    * `protocol` of `https`.
+   * @param {LoadBalancerListenerClientAuthenticationPatch} [params.clientAuthentication] - The client authentication to
+   * use for this listener.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The listener must
+   * have a `protocol` of `https`.
+   *
+   * Specify `null` to remove an existing client authentication.
    * @param {number} [params.connectionLimit] - The concurrent connection limit for the listener. If reached, incoming
    * connections may be queued or rejected.
    *
@@ -14666,7 +14882,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerListener>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'id'];
-    const _validParams = ['loadBalancerId', 'id', 'acceptProxyProtocol', 'certificateInstance', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'idleConnectionTimeout', 'port', 'portMax', 'portMin', 'protocol', 'signal', 'headers'];
+    const _validParams = ['loadBalancerId', 'id', 'acceptProxyProtocol', 'certificateInstance', 'clientAuthentication', 'connectionLimit', 'defaultPool', 'httpsRedirect', 'idleConnectionTimeout', 'port', 'portMax', 'portMin', 'protocol', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -14675,6 +14891,7 @@ class VpcV1 extends BaseService {
     const body = {
       'accept_proxy_protocol': _params.acceptProxyProtocol,
       'certificate_instance': _params.certificateInstance,
+      'client_authentication': _params.clientAuthentication,
       'connection_limit': _params.connectionLimit,
       'default_pool': _params.defaultPool,
       'https_redirect': _params.httpsRedirect,
@@ -15546,6 +15763,15 @@ class VpcV1 extends BaseService {
    * @param {string} params.protocol - The protocol used for this load balancer pool. Load balancers in the `network`
    * family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the
    * `application` family support `tcp`, `http`, and `https`.
+   *
+   * **NOTE**: HTTP sends data in plain text, making it vulnerable to eavesdropping and tampering. Additionally, HTTP
+   * has no built-in mechanism to verify the identity of the server you are connecting to. It is recommended to choose
+   * `https` instead of `http`. For more details, see: https://www.cloudflare.com/learning/ssl/why-is-http-not-secure.
+   * @param {LoadBalancerPoolClientAuthenticationPrototype} [params.clientAuthentication] - The client authentication to
+   * use for this pool.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The pool must
+   * have a `protocol` of `https`.
    * @param {LoadBalancerPoolFailsafePolicyPrototype} [params.failsafePolicy] - The failsafe policy to use for this
    * pool.
    *
@@ -15561,6 +15787,11 @@ class VpcV1 extends BaseService {
    * - `disabled`: Disabled
    *
    * For load balancers in the `network` family, this property must be `disabled`.
+   * @param {LoadBalancerPoolServerAuthenticationPrototype} [params.serverAuthentication] - The server authentication to
+   * use for this pool.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The pool must
+   * have a `protocol` of `https`.
    * @param {LoadBalancerPoolSessionPersistencePrototype} [params.sessionPersistence] - The session persistence of this
    * pool. If specified, the load balancer must have
    * `source_ip_session_persistence_supported` set to `true` in its profile.
@@ -15575,7 +15806,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'algorithm', 'healthMonitor', 'protocol'];
-    const _validParams = ['loadBalancerId', 'algorithm', 'healthMonitor', 'protocol', 'failsafePolicy', 'members', 'name', 'proxyProtocol', 'sessionPersistence', 'signal', 'headers'];
+    const _validParams = ['loadBalancerId', 'algorithm', 'healthMonitor', 'protocol', 'clientAuthentication', 'failsafePolicy', 'members', 'name', 'proxyProtocol', 'serverAuthentication', 'sessionPersistence', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15585,10 +15816,12 @@ class VpcV1 extends BaseService {
       'algorithm': _params.algorithm,
       'health_monitor': _params.healthMonitor,
       'protocol': _params.protocol,
+      'client_authentication': _params.clientAuthentication,
       'failsafe_policy': _params.failsafePolicy,
       'members': _params.members,
       'name': _params.name,
       'proxy_protocol': _params.proxyProtocol,
+      'server_authentication': _params.serverAuthentication,
       'session_persistence': _params.sessionPersistence,
     };
 
@@ -15762,6 +15995,13 @@ class VpcV1 extends BaseService {
    * @param {string} params.id - The pool identifier.
    * @param {string} [params.algorithm] - The load balancing algorithm. The `least_connections` algorithm is only
    * supported for load balancers that have `availability` with value `subnet` in the profile.
+   * @param {LoadBalancerPoolClientAuthenticationPatch} [params.clientAuthentication] - The client authentication to use
+   * for this pool.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The pool must
+   * have a `protocol` of `https`.
+   *
+   * Specify `null` to remove an existing client authentication.
    * @param {LoadBalancerPoolFailsafePolicyPatch} [params.failsafePolicy] - The failsafe policy for this load balancer
    * pool.
    * @param {LoadBalancerPoolHealthMonitorPatch} [params.healthMonitor] - The health monitor of this pool.
@@ -15795,8 +16035,17 @@ class VpcV1 extends BaseService {
    * - `disabled`: Disabled
    *
    * For load balancers in the `network` family, this property must be `disabled`.
+   * @param {LoadBalancerPoolServerAuthenticationPatch} [params.serverAuthentication] - The server authentication to use
+   * for this pool.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The pool must
+   * have a `protocol` of `https`.
+   *
+   * Specify `null` to remove an existing server authentication.
    * @param {LoadBalancerPoolSessionPersistencePatch} [params.sessionPersistence] - The session persistence of this
    * pool.
+   * @param {string} [params.ifMatch] - If present, the request will fail if the specified ETag value does not match the
+   * resource's current ETag value. Required if the request body includes an array.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.LoadBalancerPool>>}
    */
@@ -15805,7 +16054,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.LoadBalancerPool>> {
     const _params = { ...params };
     const _requiredParams = ['loadBalancerId', 'id'];
-    const _validParams = ['loadBalancerId', 'id', 'algorithm', 'failsafePolicy', 'healthMonitor', 'name', 'protocol', 'proxyProtocol', 'sessionPersistence', 'signal', 'headers'];
+    const _validParams = ['loadBalancerId', 'id', 'algorithm', 'clientAuthentication', 'failsafePolicy', 'healthMonitor', 'name', 'protocol', 'proxyProtocol', 'serverAuthentication', 'sessionPersistence', 'ifMatch', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -15813,11 +16062,13 @@ class VpcV1 extends BaseService {
 
     const body = {
       'algorithm': _params.algorithm,
+      'client_authentication': _params.clientAuthentication,
       'failsafe_policy': _params.failsafePolicy,
       'health_monitor': _params.healthMonitor,
       'name': _params.name,
       'protocol': _params.protocol,
       'proxy_protocol': _params.proxyProtocol,
+      'server_authentication': _params.serverAuthentication,
       'session_persistence': _params.sessionPersistence,
     };
 
@@ -15849,6 +16100,7 @@ class VpcV1 extends BaseService {
           {
             'Accept': 'application/json',
             'Content-Type': 'application/merge-patch+json',
+            'If-Match': _params.ifMatch,
           },
           _params.headers
         ),
@@ -20876,6 +21128,8 @@ class VpcV1 extends BaseService {
    *   mount target control access to the mount target.
    * - `vpc`: All clients in the VPC for a mount target have access to the mount target.
    *
+   * The `vpc` access control mode has been deprecated. Use `security_group` instead.
+   *
    * For this property to be changed, the share must have no mount targets,
    * `replication_role` must be `none` and `accessor_binding_role` must not be `accessor`.
    * @param {string[]} [params.allowedAccessProtocols] - The access protocols to allow for this share (replacing any
@@ -22084,6 +22338,8 @@ class VpcV1 extends BaseService {
    * in ascending order.
    * @param {string} [params.backupPolicyPlanId] - Filters the collection to backup policy jobs with a
    * `backup_policy_plan.id` property matching the specified identifier.
+   * @param {string} [params.backupPolicyJobId] - Filters the collection to snapshot consistency groups with a
+   * `backup_policy_job.id` property matching the specified identifier.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroupCollection>>}
    */
@@ -22092,7 +22348,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.SnapshotConsistencyGroupCollection>> {
     const _params = { ...params };
     const _requiredParams = [];
-    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'backupPolicyPlanId', 'signal', 'headers'];
+    const _validParams = ['start', 'limit', 'resourceGroupId', 'name', 'sort', 'backupPolicyPlanId', 'backupPolicyJobId', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -22107,6 +22363,7 @@ class VpcV1 extends BaseService {
       'name': _params.name,
       'sort': _params.sort,
       'backup_policy_plan.id': _params.backupPolicyPlanId,
+      'backup_policy_job.id': _params.backupPolicyJobId,
     };
 
     const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSnapshotConsistencyGroups');
@@ -28682,10 +28939,46 @@ class VpcV1 extends BaseService {
    * This request creates a new IKE policy.
    *
    * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.authenticationAlgorithm - The authentication algorithm.
-   * @param {number} params.dhGroup - The Diffie-Hellman group.
-   * @param {string} params.encryptionAlgorithm - The encryption algorithm.
    * @param {number} params.ikeVersion - The IKE protocol version.
+   * @param {string} [params.authenticationAlgorithm] - Deprecated: The authentication algorithm.
+   *
+   * `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead.
+   *
+   * If  specified, `authentication_algorithms` must not be specified.
+   * @param {string[]} [params.authenticationAlgorithms] - The authentication algorithms to use for IKE Negotiation.
+   *
+   * If specified, `authentication_algorithm` must not be specified.
+   *
+   * If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+   *
+   * The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+   * priority over the one after it.
+   * @param {number} [params.dhGroup] - Deprecated: The Diffie-Hellman group.
+   *
+   * `dh_group` has been deprecated. Use `dh_groups` instead.
+   *
+   * If  specified, `dh_groups` must not be specified.
+   * @param {number[]} [params.dhGroups] - The Diffie-Hellman groups to use for IKE negotiation.
+   *
+   * If  specified, `dh_group` must not be specified.
+   *
+   * If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+   *
+   * The order of the Diffie-Hellman groups in this array indicates their priority for negotiation, with each
+   * Diffie-Hellman group having priority over the one after it.
+   * @param {string} [params.encryptionAlgorithm] - Deprecated: The encryption algorithm.
+   *
+   * `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead.
+   *
+   * If  specified, `encryption_algorithms` must not be specified.
+   * @param {string[]} [params.encryptionAlgorithms] - The encryption algorithms to use for IKE Negotiation.
+   *
+   * If  specified, `encryption_algorithm` must not be specified.
+   *
+   * If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+   *
+   * The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+   * priority over the one after it.
    * @param {number} [params.keyLifetime] - The key lifetime in seconds.
    * @param {string} [params.name] - The name for this IKE policy. The name must not be used by another IKE policy in
    * the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
@@ -28699,18 +28992,21 @@ class VpcV1 extends BaseService {
     params: VpcV1.CreateIkePolicyParams
   ): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
     const _params = { ...params };
-    const _requiredParams = ['authenticationAlgorithm', 'dhGroup', 'encryptionAlgorithm', 'ikeVersion'];
-    const _validParams = ['authenticationAlgorithm', 'dhGroup', 'encryptionAlgorithm', 'ikeVersion', 'keyLifetime', 'name', 'resourceGroup', 'signal', 'headers'];
+    const _requiredParams = ['ikeVersion'];
+    const _validParams = ['ikeVersion', 'authenticationAlgorithm', 'authenticationAlgorithms', 'dhGroup', 'dhGroups', 'encryptionAlgorithm', 'encryptionAlgorithms', 'keyLifetime', 'name', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
-      'authentication_algorithm': _params.authenticationAlgorithm,
-      'dh_group': _params.dhGroup,
-      'encryption_algorithm': _params.encryptionAlgorithm,
       'ike_version': _params.ikeVersion,
+      'authentication_algorithm': _params.authenticationAlgorithm,
+      'authentication_algorithms': _params.authenticationAlgorithms,
+      'dh_group': _params.dhGroup,
+      'dh_groups': _params.dhGroups,
+      'encryption_algorithm': _params.encryptionAlgorithm,
+      'encryption_algorithms': _params.encryptionAlgorithms,
       'key_lifetime': _params.keyLifetime,
       'name': _params.name,
       'resource_group': _params.resourceGroup,
@@ -28873,9 +29169,60 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The IKE policy identifier.
-   * @param {string} [params.authenticationAlgorithm] - The authentication algorithm.
-   * @param {number} [params.dhGroup] - The Diffie-Hellman group.
-   * @param {string} [params.encryptionAlgorithm] - The encryption algorithm.
+   * @param {string} [params.authenticationAlgorithm] - Deprecated: The authentication algorithm.
+   *
+   * `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead.
+   *
+   * If specified, `authentication_algorithms` must not be specified.
+   *
+   * Updating this property will also update the
+   * `authentication_algorithms` field accordingly.
+   * @param {string[]} [params.authenticationAlgorithms] - The authentication algorithms to use for IKE Negotiation.
+   *
+   * If specified, `authentication_algorithm` must not be specified.
+   *
+   * If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+   *
+   * The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+   * priority over the one after it.
+   *
+   * Updating this property will also update the
+   * `authentication_algorithm` field accordingly.
+   * @param {number} [params.dhGroup] - Deprecated: The Diffie-Hellman group.
+   *
+   * `dh_group` has been deprecated. Use `dh_groups` instead.
+   *
+   * If specified, `dh_groups` must not be specified.
+   *
+   * Updating this property will also update the `dh_groups` field accordingly.
+   * @param {number[]} [params.dhGroups] - The Diffie-Hellman groups to use for IKE Negotiation.
+   *
+   * If specified, `dh_group` must not be specified.
+   *
+   * If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+   *
+   * The order of the Diffie-Hellman groups in this array indicates their priority for negotiation, with each
+   * Diffie-Hellman group having priority over the one after it.
+   *
+   * Updating this property will also update the `dh_group` field accordingly.
+   * @param {string} [params.encryptionAlgorithm] - Deprecated: The encryption algorithm.
+   *
+   * `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead.
+   *
+   * If specified, `encryption_algorithms` must not be specified.
+   *
+   * Updating this property will also update the
+   * `encryption_algorithms` field accordingly.
+   * @param {string[]} [params.encryptionAlgorithms] - The encryption algorithms to use for IKE negotiation.
+   *
+   * If specified, `encryption_algorithm` must not be specified.
+   *
+   * If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+   *
+   * The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+   * priority over the one after it.
+   *
+   * Updating this property will also update the `encryption_algorithm` field accordingly.
    * @param {number} [params.ikeVersion] - The IKE protocol version.
    * @param {number} [params.keyLifetime] - The key lifetime in seconds.
    * @param {string} [params.name] - The name for this IKE policy. The name must not be used by another IKE policy in
@@ -28888,7 +29235,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IKEPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'authenticationAlgorithm', 'dhGroup', 'encryptionAlgorithm', 'ikeVersion', 'keyLifetime', 'name', 'signal', 'headers'];
+    const _validParams = ['id', 'authenticationAlgorithm', 'authenticationAlgorithms', 'dhGroup', 'dhGroups', 'encryptionAlgorithm', 'encryptionAlgorithms', 'ikeVersion', 'keyLifetime', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -28896,8 +29243,11 @@ class VpcV1 extends BaseService {
 
     const body = {
       'authentication_algorithm': _params.authenticationAlgorithm,
+      'authentication_algorithms': _params.authenticationAlgorithms,
       'dh_group': _params.dhGroup,
+      'dh_groups': _params.dhGroups,
       'encryption_algorithm': _params.encryptionAlgorithm,
+      'encryption_algorithms': _params.encryptionAlgorithms,
       'ike_version': _params.ikeVersion,
       'key_lifetime': _params.keyLifetime,
       'name': _params.name,
@@ -29065,25 +29415,67 @@ class VpcV1 extends BaseService {
    *
    * This request creates a new IPsec policy.
    *
-   * @param {Object} params - The parameters to send to the service.
-   * @param {string} params.authenticationAlgorithm - The authentication algorithm
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.authenticationAlgorithm] - Deprecated: The authentication algorithm.
+   *
+   * `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead.
+   *
+   * If specified, `authentication_algorithms` must not be specified.
    *
    * Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
    * `aes192gcm16`, or `aes256gcm16`
    *
    * The `md5` and `sha1` algorithms have been deprecated.
-   * @param {string} params.encryptionAlgorithm - The encryption algorithm
+   * @param {string[]} [params.authenticationAlgorithms] - The authentication algorithms to use for IPsec negotiation.
+   *
+   * If specified, `authentication_algorithm` must not be specified.
+   *
+   * Must be `["disabled"]` when `encryption_algorithms` has only combined-mode algorithms
+   * (`aes128gcm16`, `aes192gcm16`, and `aes256gcm16`).
+   *
+   * The `md5` and `sha1` algorithms have been deprecated.
+   *
+   * The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+   * priority over the one after it.
+   * @param {string} [params.encryptionAlgorithm] - Deprecated: The encryption algorithm.
+   *
+   * `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead.
+   *
+   * If specified, `encryption_algorithms` must not be specified.
    *
    * The `authentication_algorithm` must be `disabled` if and only if
    * `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`
    *
    * The `triple_des` algorithm has been deprecated.
-   * @param {string} params.pfs - The Perfect Forward Secrecy group.
+   * @param {string[]} [params.encryptionAlgorithms] - The encryption algorithms to use for IPsec negotiation.
    *
-   * Groups `group_2` and `group_5` have been deprecated.
+   * If specified, `encryption_algorithm` must not be specified.
+   *
+   * If only combined-mode encryption algorithms (`aes128gcm16`, `aes192gcm16`, and
+   * `aes256gcm16`) are to be used, then `authentication_algorithms` must be `["disabled"]`.
+   *
+   * The `triple_des` algorithm has been deprecated.
+   *
+   * The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+   * priority over the one after it.
    * @param {number} [params.keyLifetime] - The key lifetime in seconds.
    * @param {string} [params.name] - The name for this IPsec policy. The name must not be used by another IPsec policy
    * in the region. If unspecified, the name will be a hyphenated list of randomly-selected words.
+   * @param {string} [params.pfs] - Deprecated: The Perfect Forward Secrecy group.
+   *
+   * `pfs` has been deprecated. Use `pfs_groups` instead.
+   *
+   * If specified, `pfs_groups` must not be specified.
+   *
+   * Groups `group_2` and `group_5` have been deprecated.
+   * @param {string[]} [params.pfsGroups] - The Perfect Forward Secrecy groups to use for IPsec negotiation.
+   *
+   * If specified, `pfs` must not be specified.
+   *
+   * Groups `group_2` and `group_5` have been deprecated.
+   *
+   * The order of the Perfect Forward Secrecy groups in this array indicates their priority for negotiation, with each
+   * Perfect Forward Secrecy group having priority over the one after it.
    * @param {ResourceGroupIdentity} [params.resourceGroup] - The resource group to use. If unspecified, the account's
    * [default resource
    * group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
@@ -29091,11 +29483,11 @@ class VpcV1 extends BaseService {
    * @returns {Promise<VpcV1.Response<VpcV1.IPsecPolicy>>}
    */
   public createIpsecPolicy(
-    params: VpcV1.CreateIpsecPolicyParams
+    params?: VpcV1.CreateIpsecPolicyParams
   ): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
     const _params = { ...params };
-    const _requiredParams = ['authenticationAlgorithm', 'encryptionAlgorithm', 'pfs'];
-    const _validParams = ['authenticationAlgorithm', 'encryptionAlgorithm', 'pfs', 'keyLifetime', 'name', 'resourceGroup', 'signal', 'headers'];
+    const _requiredParams = [];
+    const _validParams = ['authenticationAlgorithm', 'authenticationAlgorithms', 'encryptionAlgorithm', 'encryptionAlgorithms', 'keyLifetime', 'name', 'pfs', 'pfsGroups', 'resourceGroup', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -29103,10 +29495,13 @@ class VpcV1 extends BaseService {
 
     const body = {
       'authentication_algorithm': _params.authenticationAlgorithm,
+      'authentication_algorithms': _params.authenticationAlgorithms,
       'encryption_algorithm': _params.encryptionAlgorithm,
-      'pfs': _params.pfs,
+      'encryption_algorithms': _params.encryptionAlgorithms,
       'key_lifetime': _params.keyLifetime,
       'name': _params.name,
+      'pfs': _params.pfs,
+      'pfs_groups': _params.pfsGroups,
       'resource_group': _params.resourceGroup,
     };
 
@@ -29267,24 +29662,82 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The IPsec policy identifier.
-   * @param {string} [params.authenticationAlgorithm] - The authentication algorithm.
+   * @param {string} [params.authenticationAlgorithm] - Deprecated: The authentication algorithm.
+   *
+   * `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead.
+   *
+   * If specified, `authentication_algorithms` must not be specified.
    *
    * Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
    * `aes192gcm16`, or `aes256gcm16`
    *
    * The `md5` and `sha1` algorithms have been deprecated.
-   * @param {string} [params.encryptionAlgorithm] - The encryption algorithm.
+   *
+   * Updating this property will also update the
+   * `authentication_algorithms` field accordingly.
+   * @param {string[]} [params.authenticationAlgorithms] - The authentication algorithms to use for IPsec negotiation.
+   *
+   * If specified, `authentication_algorithm` must not be specified.
+   *
+   * Must be `["disabled"]` when `encryption_algorithms` has only combined-mode algorithms
+   * (`aes128gcm16`, `aes192gcm16`, and `aes256gcm16`).
+   *
+   * The `md5` and `sha1` algorithms have been deprecated.
+   *
+   * The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+   * priority over the one after it.
+   *
+   * Updating this property will also update the
+   * `authentication_algorithm` field accordingly.
+   * @param {string} [params.encryptionAlgorithm] - Deprecated: The encryption algorithm.
+   *
+   * `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead.
+   *
+   * If specified, `encryption_algorithms` must not be specified.
    *
    * The `authentication_algorithm` must be `disabled` if and only if
    * `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`
    *
    * The `triple_des` algorithm has been deprecated.
+   *
+   * Updating this property will also update the
+   * `encryption_algorithms` field accordingly.
+   * @param {string[]} [params.encryptionAlgorithms] - The encryption algorithms to use for IPsec negotiation.
+   *
+   * If specified, `encryption_algorithm` must not be specified.
+   *
+   * If only combined-mode encryption algorithms (`aes128gcm16`, `aes192gcm16`, and
+   * `aes256gcm16`) are to be used, then `authentication_algorithms` must be `["disabled"]`.
+   *
+   * The `triple_des` algorithm has been deprecated.
+   *
+   * The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+   * priority over the one after it.
+   *
+   * Updating this property will also update the `encryption_algorithm` field accordingly.
    * @param {number} [params.keyLifetime] - The key lifetime in seconds.
-   * @param {string} [params.name] - The name for this IPsec policy. The name must not be used by another IPsec policy
-   * in the region.
-   * @param {string} [params.pfs] - The Perfect Forward Secrecy group.
+   * @param {string} [params.name] - The name for this IPsec policy. The name is unique across all IPsec policies in the
+   * region.
+   * @param {string} [params.pfs] - Deprecated: The Perfect Forward Secrecy group.
+   *
+   * `pfs` has been deprecated. Use `pfs_groups` instead.
+   *
+   * If specified, `pfs_groups` must not be specified.
    *
    * Groups `group_2` and `group_5` have been deprecated.
+   *
+   * Updating this property will also update the
+   * `pfs_groups` field accordingly.
+   * @param {string[]} [params.pfsGroups] - The Perfect Forward Secrecy groups to use for IPsec negotiation.
+   *
+   * If specified, `pfs_groups` must not be specified.
+   *
+   * Groups `group_2` and `group_5` have been deprecated.
+   *
+   * The order of the Perfect Forward Secrecy groups in this array indicates their priority for negotiation, with each
+   * Perfect Forward Secrecy group having priority over the one after it.
+   *
+   * Updating this property will also update the `pfs` field accordingly.
    * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
    * @returns {Promise<VpcV1.Response<VpcV1.IPsecPolicy>>}
    */
@@ -29293,7 +29746,7 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.IPsecPolicy>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'authenticationAlgorithm', 'encryptionAlgorithm', 'keyLifetime', 'name', 'pfs', 'signal', 'headers'];
+    const _validParams = ['id', 'authenticationAlgorithm', 'authenticationAlgorithms', 'encryptionAlgorithm', 'encryptionAlgorithms', 'keyLifetime', 'name', 'pfs', 'pfsGroups', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
@@ -29301,10 +29754,13 @@ class VpcV1 extends BaseService {
 
     const body = {
       'authentication_algorithm': _params.authenticationAlgorithm,
+      'authentication_algorithms': _params.authenticationAlgorithms,
       'encryption_algorithm': _params.encryptionAlgorithm,
+      'encryption_algorithms': _params.encryptionAlgorithms,
       'key_lifetime': _params.keyLifetime,
       'name': _params.name,
       'pfs': _params.pfs,
+      'pfs_groups': _params.pfsGroups,
     };
 
     const query = {
@@ -32003,7 +32459,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2025-12-09` and `2026-03-25`.
+     *  `2026-04-07` and `2026-06-23`.
      */
     version: string;
   }
@@ -32583,9 +33039,10 @@ namespace VpcV1 {
      *  keys for the [default
      *  user](https://cloud.ibm.com/docs/vpc?topic=vpc-vsi_is_connecting_linux#determining-default-user-account).
      *
-     *  For Windows images, at least one key must be specified, and one will be selected to encrypt the administrator
-     *  password. Keys are optional for other images, but if no keys are specified, the bare metal server will be
-     *  inaccessible unless the specified image provides another means of access.
+     *  For Windows images, at least one SSH key of type `rsa` must be specified. One of the provided keys is selected
+     *  to encrypt the administrator password. SSH keys are optional for other images; however, if no keys are
+     *  specified, the bare metal server will be inaccessible unless the selected image provides an alternative access
+     *  mechanism.
      */
     keys: KeyIdentity[];
     /** The default trusted profile to be used when initializing the bare metal server.
@@ -32593,7 +33050,9 @@ namespace VpcV1 {
      *  If unspecified, no default trusted profile will be made available.
      */
     defaultTrustedProfile?: BareMetalServerInitializationDefaultTrustedProfilePrototype;
-    /** The user data to be made available when initializing the bare metal server. */
+    /** The [user data](https://cloud.ibm.com/docs/vpc?topic=vpc-user-data) to make available when setting up the
+     *  bare metal server.
+     */
     userData?: string;
   }
 
@@ -33626,6 +34085,7 @@ namespace VpcV1 {
       DEPRECATED = 'deprecated',
       FAILED = 'failed',
       OBSOLETE = 'obsolete',
+      PARTIALLY_AVAILABLE = 'partially_available',
       PENDING = 'pending',
       UNUSABLE = 'unusable',
     }
@@ -34202,6 +34662,10 @@ namespace VpcV1 {
 
   /** Parameters for the `listInstanceProfiles` operation. */
   export interface ListInstanceProfilesParams extends DefaultParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
   }
 
   /** Parameters for the `getInstanceProfile` operation. */
@@ -34358,6 +34822,13 @@ namespace VpcV1 {
      */
     profile?: InstancePatchProfile;
     reservationAffinity?: InstanceReservationAffinityPatch;
+    /** The threads per core to use for this virtual server instance. Must be one of the values in the profile's
+     *  `threads_per_core.values`.
+     *
+     *  For this property to be changed, the virtual server instance `status` must be
+     *  `stopping` or `stopped`.
+     */
+    threadsPerCore?: number;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
      *  increase in this value will result in a corresponding decrease to
      *  `total_network_bandwidth`.
@@ -34717,6 +35188,32 @@ namespace VpcV1 {
     id: string;
   }
 
+  /** Parameters for the `listInstanceSoftwareAttachments` operation. */
+  export interface ListInstanceSoftwareAttachmentsParams extends DefaultParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+  }
+
+  /** Parameters for the `getInstanceSoftwareAttachment` operation. */
+  export interface GetInstanceSoftwareAttachmentParams extends DefaultParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** The instance software attachment identifier. */
+    id: string;
+  }
+
+  /** Parameters for the `updateInstanceSoftwareAttachment` operation. */
+  export interface UpdateInstanceSoftwareAttachmentParams extends DefaultParams {
+    /** The virtual server instance identifier. */
+    instanceId: string;
+    /** The instance software attachment identifier. */
+    id: string;
+    /** The name for this instance software attachment. The name must not be used by another software attachment for
+     *  this instance.
+     */
+    name?: string;
+  }
+
   /** Parameters for the `listInstanceVolumeAttachments` operation. */
   export interface ListInstanceVolumeAttachmentsParams extends DefaultParams {
     /** The virtual server instance identifier. */
@@ -35009,6 +35506,12 @@ namespace VpcV1 {
     acceptProxyProtocol?: boolean;
     /** The certificate instance to use for SSL termination. The listener must have a `protocol` of `https`. */
     certificateInstance?: CertificateInstanceIdentity;
+    /** The client authentication to use for this listener.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The listener must
+     *  have a `protocol` of `https`.
+     */
+    clientAuthentication?: LoadBalancerListenerClientAuthenticationPrototype;
     /** The concurrent connection limit for the listener. If reached, incoming connections may be queued or
      *  rejected.
      *
@@ -35127,6 +35630,14 @@ namespace VpcV1 {
     acceptProxyProtocol?: boolean;
     /** The certificate instance to use for SSL termination. The listener must have a `protocol` of `https`. */
     certificateInstance?: CertificateInstanceIdentity;
+    /** The client authentication to use for this listener.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The listener must
+     *  have a `protocol` of `https`.
+     *
+     *  Specify `null` to remove an existing client authentication.
+     */
+    clientAuthentication?: LoadBalancerListenerClientAuthenticationPatch;
     /** The concurrent connection limit for the listener. If reached, incoming connections may be queued or
      *  rejected.
      *
@@ -35382,6 +35893,7 @@ namespace VpcV1 {
       CONTAINS = 'contains',
       EQUALS = 'equals',
       MATCHES_REGEX = 'matches_regex',
+      STARTS_WITH = 'starts_with',
     }
     /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL - `sni_hostname`: The fully-qualified domain name of the server provided in the "server name indicator" extension during TLS negotiation - For listeners with `protocol` `http` or `https`, any type may be specified. - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified. */
     export enum Type {
@@ -35464,6 +35976,7 @@ namespace VpcV1 {
       CONTAINS = 'contains',
       EQUALS = 'equals',
       MATCHES_REGEX = 'matches_regex',
+      STARTS_WITH = 'starts_with',
     }
     /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL - `sni_hostname`: The fully-qualified domain name of the server provided in the "server name indicator" extension during TLS negotiation - For listeners with `protocol` `http` or `https`, any type may be specified. - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified. */
     export enum Type {
@@ -35509,8 +36022,19 @@ namespace VpcV1 {
     /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and
      *  `udp` (if `udp_supported` is `true`). Load balancers in the
      *  `application` family support `tcp`, `http`, and `https`.
+     *
+     *  **NOTE**: HTTP sends data in plain text, making it vulnerable to eavesdropping and tampering. Additionally, HTTP
+     *  has no built-in mechanism to verify the identity of the server you are connecting to. It is recommended to
+     *  choose `https` instead of `http`. For more details, see:
+     *  https://www.cloudflare.com/learning/ssl/why-is-http-not-secure.
      */
     protocol: CreateLoadBalancerPoolConstants.Protocol | string;
+    /** The client authentication to use for this pool.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The pool must
+     *  have a `protocol` of `https`.
+     */
+    clientAuthentication?: LoadBalancerPoolClientAuthenticationPrototype;
     /** The failsafe policy to use for this pool.
      *
      *  If unspecified, the default failsafe policy action from the profile will be used.
@@ -35532,6 +36056,12 @@ namespace VpcV1 {
      *  For load balancers in the `network` family, this property must be `disabled`.
      */
     proxyProtocol?: CreateLoadBalancerPoolConstants.ProxyProtocol | string;
+    /** The server authentication to use for this pool.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The pool must
+     *  have a `protocol` of `https`.
+     */
+    serverAuthentication?: LoadBalancerPoolServerAuthenticationPrototype;
     /** The session persistence of this pool. If specified, the load balancer must have
      *  `source_ip_session_persistence_supported` set to `true` in its profile.
      *
@@ -35549,7 +36079,7 @@ namespace VpcV1 {
       ROUND_ROBIN = 'round_robin',
       WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
     }
-    /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http`, and `https`. */
+    /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http`, and `https`. **NOTE**: HTTP sends data in plain text, making it vulnerable to eavesdropping and tampering. Additionally, HTTP has no built-in mechanism to verify the identity of the server you are connecting to. It is recommended to choose `https` instead of `http`. For more details, see: https://www.cloudflare.com/learning/ssl/why-is-http-not-secure. */
     export enum Protocol {
       HTTP = 'http',
       HTTPS = 'https',
@@ -35590,6 +36120,14 @@ namespace VpcV1 {
      *  have `availability` with value `subnet` in the profile.
      */
     algorithm?: UpdateLoadBalancerPoolConstants.Algorithm | string;
+    /** The client authentication to use for this pool.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The pool must
+     *  have a `protocol` of `https`.
+     *
+     *  Specify `null` to remove an existing client authentication.
+     */
+    clientAuthentication?: LoadBalancerPoolClientAuthenticationPatch;
     /** The failsafe policy for this load balancer pool. */
     failsafePolicy?: LoadBalancerPoolFailsafePolicyPatch;
     /** The health monitor of this pool.
@@ -35629,8 +36167,20 @@ namespace VpcV1 {
      *  For load balancers in the `network` family, this property must be `disabled`.
      */
     proxyProtocol?: UpdateLoadBalancerPoolConstants.ProxyProtocol | string;
+    /** The server authentication to use for this pool.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The pool must
+     *  have a `protocol` of `https`.
+     *
+     *  Specify `null` to remove an existing server authentication.
+     */
+    serverAuthentication?: LoadBalancerPoolServerAuthenticationPatch;
     /** The session persistence of this pool. */
     sessionPersistence?: LoadBalancerPoolSessionPersistencePatch;
+    /** If present, the request will fail if the specified ETag value does not match the resource's current ETag
+     *  value. Required if the request body includes an array.
+     */
+    ifMatch?: string;
   }
 
   /** Constants for the `updateLoadBalancerPool` operation. */
@@ -36779,6 +37329,8 @@ namespace VpcV1 {
      *    mount target control access to the mount target.
      *  - `vpc`: All clients in the VPC for a mount target have access to the mount target.
      *
+     *  The `vpc` access control mode has been deprecated. Use `security_group` instead.
+     *
      *  For this property to be changed, the share must have no mount targets,
      *  `replication_role` must be `none` and `accessor_binding_role` must not be `accessor`.
      */
@@ -36846,7 +37398,7 @@ namespace VpcV1 {
 
   /** Constants for the `updateShare` operation. */
   export namespace UpdateShareConstants {
-    /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. For this property to be changed, the share must have no mount targets, `replication_role` must be `none` and `accessor_binding_role` must not be `accessor`. */
+    /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. - `vpc`: All clients in the VPC for a mount target have access to the mount target. The `vpc` access control mode has been deprecated. Use `security_group` instead. For this property to be changed, the share must have no mount targets, `replication_role` must be `none` and `accessor_binding_role` must not be `accessor`. */
     export enum AccessControlMode {
       SECURITY_GROUP = 'security_group',
       VPC = 'vpc',
@@ -37073,6 +37625,10 @@ namespace VpcV1 {
      *  identifier.
      */
     backupPolicyPlanId?: string;
+    /** Filters the collection to snapshot consistency groups with a `backup_policy_job.id` property matching the
+     *  specified identifier.
+     */
+    backupPolicyJobId?: string;
   }
 
   /** Constants for the `listSnapshotConsistencyGroups` operation. */
@@ -38700,14 +39256,59 @@ namespace VpcV1 {
 
   /** Parameters for the `createIkePolicy` operation. */
   export interface CreateIkePolicyParams extends DefaultParams {
-    /** The authentication algorithm. */
-    authenticationAlgorithm: CreateIkePolicyConstants.AuthenticationAlgorithm | string;
-    /** The Diffie-Hellman group. */
-    dhGroup: number;
-    /** The encryption algorithm. */
-    encryptionAlgorithm: CreateIkePolicyConstants.EncryptionAlgorithm | string;
     /** The IKE protocol version. */
     ikeVersion: number;
+    /** Deprecated: The authentication algorithm.
+     *
+     *  `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead.
+     *
+     *  If  specified, `authentication_algorithms` must not be specified.
+     */
+    authenticationAlgorithm?: CreateIkePolicyConstants.AuthenticationAlgorithm | string;
+    /** The authentication algorithms to use for IKE Negotiation.
+     *
+     *  If specified, `authentication_algorithm` must not be specified.
+     *
+     *  If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     */
+    authenticationAlgorithms?: CreateIkePolicyConstants.AuthenticationAlgorithms[] | string[];
+    /** Deprecated: The Diffie-Hellman group.
+     *
+     *  `dh_group` has been deprecated. Use `dh_groups` instead.
+     *
+     *  If  specified, `dh_groups` must not be specified.
+     */
+    dhGroup?: number;
+    /** The Diffie-Hellman groups to use for IKE negotiation.
+     *
+     *  If  specified, `dh_group` must not be specified.
+     *
+     *  If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+     *
+     *  The order of the Diffie-Hellman groups in this array indicates their priority for negotiation, with each
+     *  Diffie-Hellman group having priority over the one after it.
+     */
+    dhGroups?: number[];
+    /** Deprecated: The encryption algorithm.
+     *
+     *  `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead.
+     *
+     *  If  specified, `encryption_algorithms` must not be specified.
+     */
+    encryptionAlgorithm?: CreateIkePolicyConstants.EncryptionAlgorithm | string;
+    /** The encryption algorithms to use for IKE Negotiation.
+     *
+     *  If  specified, `encryption_algorithm` must not be specified.
+     *
+     *  If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     */
+    encryptionAlgorithms?: CreateIkePolicyConstants.EncryptionAlgorithms[] | string[];
     /** The key lifetime in seconds. */
     keyLifetime?: number;
     /** The name for this IKE policy. The name must not be used by another IKE policy in the region. If unspecified,
@@ -38722,14 +39323,26 @@ namespace VpcV1 {
 
   /** Constants for the `createIkePolicy` operation. */
   export namespace CreateIkePolicyConstants {
-    /** The authentication algorithm. */
+    /** The authentication algorithm. `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead. If  specified, `authentication_algorithms` must not be specified. */
     export enum AuthenticationAlgorithm {
       SHA256 = 'sha256',
       SHA384 = 'sha384',
       SHA512 = 'sha512',
     }
-    /** The encryption algorithm. */
+    /** AuthenticationAlgorithms */
+    export enum AuthenticationAlgorithms {
+      SHA256 = 'sha256',
+      SHA384 = 'sha384',
+      SHA512 = 'sha512',
+    }
+    /** The encryption algorithm. `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead. If  specified, `encryption_algorithms` must not be specified. */
     export enum EncryptionAlgorithm {
+      AES128 = 'aes128',
+      AES192 = 'aes192',
+      AES256 = 'aes256',
+    }
+    /** EncryptionAlgorithms */
+    export enum EncryptionAlgorithms {
       AES128 = 'aes128',
       AES192 = 'aes192',
       AES256 = 'aes256',
@@ -38752,12 +39365,72 @@ namespace VpcV1 {
   export interface UpdateIkePolicyParams extends DefaultParams {
     /** The IKE policy identifier. */
     id: string;
-    /** The authentication algorithm. */
+    /** Deprecated: The authentication algorithm.
+     *
+     *  `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead.
+     *
+     *  If specified, `authentication_algorithms` must not be specified.
+     *
+     *  Updating this property will also update the
+     *  `authentication_algorithms` field accordingly.
+     */
     authenticationAlgorithm?: UpdateIkePolicyConstants.AuthenticationAlgorithm | string;
-    /** The Diffie-Hellman group. */
+    /** The authentication algorithms to use for IKE Negotiation.
+     *
+     *  If specified, `authentication_algorithm` must not be specified.
+     *
+     *  If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     *
+     *  Updating this property will also update the
+     *  `authentication_algorithm` field accordingly.
+     */
+    authenticationAlgorithms?: UpdateIkePolicyConstants.AuthenticationAlgorithms[] | string[];
+    /** Deprecated: The Diffie-Hellman group.
+     *
+     *  `dh_group` has been deprecated. Use `dh_groups` instead.
+     *
+     *  If specified, `dh_groups` must not be specified.
+     *
+     *  Updating this property will also update the `dh_groups` field accordingly.
+     */
     dhGroup?: number;
-    /** The encryption algorithm. */
+    /** The Diffie-Hellman groups to use for IKE Negotiation.
+     *
+     *  If specified, `dh_group` must not be specified.
+     *
+     *  If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+     *
+     *  The order of the Diffie-Hellman groups in this array indicates their priority for negotiation, with each
+     *  Diffie-Hellman group having priority over the one after it.
+     *
+     *  Updating this property will also update the `dh_group` field accordingly.
+     */
+    dhGroups?: number[];
+    /** Deprecated: The encryption algorithm.
+     *
+     *  `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead.
+     *
+     *  If specified, `encryption_algorithms` must not be specified.
+     *
+     *  Updating this property will also update the
+     *  `encryption_algorithms` field accordingly.
+     */
     encryptionAlgorithm?: UpdateIkePolicyConstants.EncryptionAlgorithm | string;
+    /** The encryption algorithms to use for IKE negotiation.
+     *
+     *  If specified, `encryption_algorithm` must not be specified.
+     *
+     *  If the IKE policy's `ike_version` is `1`, this array must contain exactly one algorithm.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     *
+     *  Updating this property will also update the `encryption_algorithm` field accordingly.
+     */
+    encryptionAlgorithms?: UpdateIkePolicyConstants.EncryptionAlgorithms[] | string[];
     /** The IKE protocol version. */
     ikeVersion?: number;
     /** The key lifetime in seconds. */
@@ -38768,14 +39441,26 @@ namespace VpcV1 {
 
   /** Constants for the `updateIkePolicy` operation. */
   export namespace UpdateIkePolicyConstants {
-    /** The authentication algorithm. */
+    /** The authentication algorithm. `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead. If specified, `authentication_algorithms` must not be specified. Updating this property will also update the `authentication_algorithms` field accordingly. */
     export enum AuthenticationAlgorithm {
       SHA256 = 'sha256',
       SHA384 = 'sha384',
       SHA512 = 'sha512',
     }
-    /** The encryption algorithm. */
+    /** AuthenticationAlgorithms */
+    export enum AuthenticationAlgorithms {
+      SHA256 = 'sha256',
+      SHA384 = 'sha384',
+      SHA512 = 'sha512',
+    }
+    /** The encryption algorithm. `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead. If specified, `encryption_algorithms` must not be specified. Updating this property will also update the `encryption_algorithms` field accordingly. */
     export enum EncryptionAlgorithm {
+      AES128 = 'aes128',
+      AES192 = 'aes192',
+      AES256 = 'aes256',
+    }
+    /** EncryptionAlgorithms */
+    export enum EncryptionAlgorithms {
       AES128 = 'aes128',
       AES192 = 'aes192',
       AES256 = 'aes256',
@@ -38802,33 +39487,81 @@ namespace VpcV1 {
 
   /** Parameters for the `createIpsecPolicy` operation. */
   export interface CreateIpsecPolicyParams extends DefaultParams {
-    /** The authentication algorithm
+    /** Deprecated: The authentication algorithm.
+     *
+     *  `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead.
+     *
+     *  If specified, `authentication_algorithms` must not be specified.
      *
      *  Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
      *  `aes192gcm16`, or `aes256gcm16`
      *
      *  The `md5` and `sha1` algorithms have been deprecated.
      */
-    authenticationAlgorithm: CreateIpsecPolicyConstants.AuthenticationAlgorithm | string;
-    /** The encryption algorithm
+    authenticationAlgorithm?: CreateIpsecPolicyConstants.AuthenticationAlgorithm | string;
+    /** The authentication algorithms to use for IPsec negotiation.
+     *
+     *  If specified, `authentication_algorithm` must not be specified.
+     *
+     *  Must be `["disabled"]` when `encryption_algorithms` has only combined-mode algorithms
+     *  (`aes128gcm16`, `aes192gcm16`, and `aes256gcm16`).
+     *
+     *  The `md5` and `sha1` algorithms have been deprecated.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     */
+    authenticationAlgorithms?: CreateIpsecPolicyConstants.AuthenticationAlgorithms[] | string[];
+    /** Deprecated: The encryption algorithm.
+     *
+     *  `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead.
+     *
+     *  If specified, `encryption_algorithms` must not be specified.
      *
      *  The `authentication_algorithm` must be `disabled` if and only if
      *  `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`
      *
      *  The `triple_des` algorithm has been deprecated.
      */
-    encryptionAlgorithm: CreateIpsecPolicyConstants.EncryptionAlgorithm | string;
-    /** The Perfect Forward Secrecy group.
+    encryptionAlgorithm?: CreateIpsecPolicyConstants.EncryptionAlgorithm | string;
+    /** The encryption algorithms to use for IPsec negotiation.
      *
-     *  Groups `group_2` and `group_5` have been deprecated.
+     *  If specified, `encryption_algorithm` must not be specified.
+     *
+     *  If only combined-mode encryption algorithms (`aes128gcm16`, `aes192gcm16`, and
+     *  `aes256gcm16`) are to be used, then `authentication_algorithms` must be `["disabled"]`.
+     *
+     *  The `triple_des` algorithm has been deprecated.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
      */
-    pfs: CreateIpsecPolicyConstants.Pfs | string;
+    encryptionAlgorithms?: CreateIpsecPolicyConstants.EncryptionAlgorithms[] | string[];
     /** The key lifetime in seconds. */
     keyLifetime?: number;
     /** The name for this IPsec policy. The name must not be used by another IPsec policy in the region. If
      *  unspecified, the name will be a hyphenated list of randomly-selected words.
      */
     name?: string;
+    /** Deprecated: The Perfect Forward Secrecy group.
+     *
+     *  `pfs` has been deprecated. Use `pfs_groups` instead.
+     *
+     *  If specified, `pfs_groups` must not be specified.
+     *
+     *  Groups `group_2` and `group_5` have been deprecated.
+     */
+    pfs?: CreateIpsecPolicyConstants.Pfs | string;
+    /** The Perfect Forward Secrecy groups to use for IPsec negotiation.
+     *
+     *  If specified, `pfs` must not be specified.
+     *
+     *  Groups `group_2` and `group_5` have been deprecated.
+     *
+     *  The order of the Perfect Forward Secrecy groups in this array indicates their priority for negotiation, with
+     *  each Perfect Forward Secrecy group having priority over the one after it.
+     */
+    pfsGroups?: CreateIpsecPolicyConstants.PfsGroups[] | string[];
     /** The resource group to use. If unspecified, the account's [default resource
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
@@ -38837,14 +39570,21 @@ namespace VpcV1 {
 
   /** Constants for the `createIpsecPolicy` operation. */
   export namespace CreateIpsecPolicyConstants {
-    /** The authentication algorithm Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `md5` and `sha1` algorithms have been deprecated. */
+    /** The authentication algorithm. `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead. If specified, `authentication_algorithms` must not be specified. Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `md5` and `sha1` algorithms have been deprecated. */
     export enum AuthenticationAlgorithm {
       DISABLED = 'disabled',
       SHA256 = 'sha256',
       SHA384 = 'sha384',
       SHA512 = 'sha512',
     }
-    /** The encryption algorithm The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `triple_des` algorithm has been deprecated. */
+    /** AuthenticationAlgorithms */
+    export enum AuthenticationAlgorithms {
+      DISABLED = 'disabled',
+      SHA256 = 'sha256',
+      SHA384 = 'sha384',
+      SHA512 = 'sha512',
+    }
+    /** The encryption algorithm. `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead. If specified, `encryption_algorithms` must not be specified. The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `triple_des` algorithm has been deprecated. */
     export enum EncryptionAlgorithm {
       AES128 = 'aes128',
       AES128GCM16 = 'aes128gcm16',
@@ -38853,8 +39593,33 @@ namespace VpcV1 {
       AES256 = 'aes256',
       AES256GCM16 = 'aes256gcm16',
     }
-    /** The Perfect Forward Secrecy group. Groups `group_2` and `group_5` have been deprecated. */
+    /** EncryptionAlgorithms */
+    export enum EncryptionAlgorithms {
+      AES128 = 'aes128',
+      AES128GCM16 = 'aes128gcm16',
+      AES192 = 'aes192',
+      AES192GCM16 = 'aes192gcm16',
+      AES256 = 'aes256',
+      AES256GCM16 = 'aes256gcm16',
+    }
+    /** The Perfect Forward Secrecy group. `pfs` has been deprecated. Use `pfs_groups` instead. If specified, `pfs_groups` must not be specified. Groups `group_2` and `group_5` have been deprecated. */
     export enum Pfs {
+      DISABLED = 'disabled',
+      GROUP_14 = 'group_14',
+      GROUP_15 = 'group_15',
+      GROUP_16 = 'group_16',
+      GROUP_17 = 'group_17',
+      GROUP_18 = 'group_18',
+      GROUP_19 = 'group_19',
+      GROUP_20 = 'group_20',
+      GROUP_21 = 'group_21',
+      GROUP_22 = 'group_22',
+      GROUP_23 = 'group_23',
+      GROUP_24 = 'group_24',
+      GROUP_31 = 'group_31',
+    }
+    /** PfsGroups */
+    export enum PfsGroups {
       DISABLED = 'disabled',
       GROUP_14 = 'group_14',
       GROUP_15 = 'group_15',
@@ -38887,43 +39652,114 @@ namespace VpcV1 {
   export interface UpdateIpsecPolicyParams extends DefaultParams {
     /** The IPsec policy identifier. */
     id: string;
-    /** The authentication algorithm.
+    /** Deprecated: The authentication algorithm.
+     *
+     *  `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead.
+     *
+     *  If specified, `authentication_algorithms` must not be specified.
      *
      *  Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`,
      *  `aes192gcm16`, or `aes256gcm16`
      *
      *  The `md5` and `sha1` algorithms have been deprecated.
+     *
+     *  Updating this property will also update the
+     *  `authentication_algorithms` field accordingly.
      */
     authenticationAlgorithm?: UpdateIpsecPolicyConstants.AuthenticationAlgorithm | string;
-    /** The encryption algorithm.
+    /** The authentication algorithms to use for IPsec negotiation.
+     *
+     *  If specified, `authentication_algorithm` must not be specified.
+     *
+     *  Must be `["disabled"]` when `encryption_algorithms` has only combined-mode algorithms
+     *  (`aes128gcm16`, `aes192gcm16`, and `aes256gcm16`).
+     *
+     *  The `md5` and `sha1` algorithms have been deprecated.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     *
+     *  Updating this property will also update the
+     *  `authentication_algorithm` field accordingly.
+     */
+    authenticationAlgorithms?: UpdateIpsecPolicyConstants.AuthenticationAlgorithms[] | string[];
+    /** Deprecated: The encryption algorithm.
+     *
+     *  `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead.
+     *
+     *  If specified, `encryption_algorithms` must not be specified.
      *
      *  The `authentication_algorithm` must be `disabled` if and only if
      *  `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16`
      *
      *  The `triple_des` algorithm has been deprecated.
+     *
+     *  Updating this property will also update the
+     *  `encryption_algorithms` field accordingly.
      */
     encryptionAlgorithm?: UpdateIpsecPolicyConstants.EncryptionAlgorithm | string;
+    /** The encryption algorithms to use for IPsec negotiation.
+     *
+     *  If specified, `encryption_algorithm` must not be specified.
+     *
+     *  If only combined-mode encryption algorithms (`aes128gcm16`, `aes192gcm16`, and
+     *  `aes256gcm16`) are to be used, then `authentication_algorithms` must be `["disabled"]`.
+     *
+     *  The `triple_des` algorithm has been deprecated.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     *
+     *  Updating this property will also update the `encryption_algorithm` field accordingly.
+     */
+    encryptionAlgorithms?: UpdateIpsecPolicyConstants.EncryptionAlgorithms[] | string[];
     /** The key lifetime in seconds. */
     keyLifetime?: number;
-    /** The name for this IPsec policy. The name must not be used by another IPsec policy in the region. */
+    /** The name for this IPsec policy. The name is unique across all IPsec policies in the region. */
     name?: string;
-    /** The Perfect Forward Secrecy group.
+    /** Deprecated: The Perfect Forward Secrecy group.
+     *
+     *  `pfs` has been deprecated. Use `pfs_groups` instead.
+     *
+     *  If specified, `pfs_groups` must not be specified.
      *
      *  Groups `group_2` and `group_5` have been deprecated.
+     *
+     *  Updating this property will also update the
+     *  `pfs_groups` field accordingly.
      */
     pfs?: UpdateIpsecPolicyConstants.Pfs | string;
+    /** The Perfect Forward Secrecy groups to use for IPsec negotiation.
+     *
+     *  If specified, `pfs_groups` must not be specified.
+     *
+     *  Groups `group_2` and `group_5` have been deprecated.
+     *
+     *  The order of the Perfect Forward Secrecy groups in this array indicates their priority for negotiation, with
+     *  each Perfect Forward Secrecy group having priority over the one after it.
+     *
+     *  Updating this property will also update the `pfs` field accordingly.
+     */
+    pfsGroups?: UpdateIpsecPolicyConstants.PfsGroups[] | string[];
   }
 
   /** Constants for the `updateIpsecPolicy` operation. */
   export namespace UpdateIpsecPolicyConstants {
-    /** The authentication algorithm. Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `md5` and `sha1` algorithms have been deprecated. */
+    /** The authentication algorithm. `authentication_algorithm` has been deprecated. Use `authentication_algorithms` instead. If specified, `authentication_algorithms` must not be specified. Must be `disabled` if and only if the `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `md5` and `sha1` algorithms have been deprecated. Updating this property will also update the `authentication_algorithms` field accordingly. */
     export enum AuthenticationAlgorithm {
       DISABLED = 'disabled',
       SHA256 = 'sha256',
       SHA384 = 'sha384',
       SHA512 = 'sha512',
     }
-    /** The encryption algorithm. The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `triple_des` algorithm has been deprecated. */
+    /** AuthenticationAlgorithms */
+    export enum AuthenticationAlgorithms {
+      DISABLED = 'disabled',
+      SHA256 = 'sha256',
+      SHA384 = 'sha384',
+      SHA512 = 'sha512',
+    }
+    /** The encryption algorithm. `encryption_algorithm` has been deprecated. Use `encryption_algorithms` instead. If specified, `encryption_algorithms` must not be specified. The `authentication_algorithm` must be `disabled` if and only if `encryption_algorithm` is `aes128gcm16`, `aes192gcm16`, or `aes256gcm16` The `triple_des` algorithm has been deprecated. Updating this property will also update the `encryption_algorithms` field accordingly. */
     export enum EncryptionAlgorithm {
       AES128 = 'aes128',
       AES128GCM16 = 'aes128gcm16',
@@ -38932,8 +39768,33 @@ namespace VpcV1 {
       AES256 = 'aes256',
       AES256GCM16 = 'aes256gcm16',
     }
-    /** The Perfect Forward Secrecy group. Groups `group_2` and `group_5` have been deprecated. */
+    /** EncryptionAlgorithms */
+    export enum EncryptionAlgorithms {
+      AES128 = 'aes128',
+      AES128GCM16 = 'aes128gcm16',
+      AES192 = 'aes192',
+      AES192GCM16 = 'aes192gcm16',
+      AES256 = 'aes256',
+      AES256GCM16 = 'aes256gcm16',
+    }
+    /** The Perfect Forward Secrecy group. `pfs` has been deprecated. Use `pfs_groups` instead. If specified, `pfs_groups` must not be specified. Groups `group_2` and `group_5` have been deprecated. Updating this property will also update the `pfs_groups` field accordingly. */
     export enum Pfs {
+      DISABLED = 'disabled',
+      GROUP_14 = 'group_14',
+      GROUP_15 = 'group_15',
+      GROUP_16 = 'group_16',
+      GROUP_17 = 'group_17',
+      GROUP_18 = 'group_18',
+      GROUP_19 = 'group_19',
+      GROUP_20 = 'group_20',
+      GROUP_21 = 'group_21',
+      GROUP_22 = 'group_22',
+      GROUP_23 = 'group_23',
+      GROUP_24 = 'group_24',
+      GROUP_31 = 'group_31',
+    }
+    /** PfsGroups */
+    export enum PfsGroups {
       DISABLED = 'disabled',
       GROUP_14 = 'group_14',
       GROUP_15 = 'group_15',
@@ -39837,6 +40698,30 @@ namespace VpcV1 {
   }
 
   /**
+   * BackupPolicyJobReference.
+   */
+  export interface BackupPolicyJobReference {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this backup policy job. */
+    href: string;
+    /** The unique identifier for this backup policy job. */
+    id: string;
+    /** The resource type. */
+    resource_type: BackupPolicyJobReference.Constants.ResourceType | string;
+  }
+  export namespace BackupPolicyJobReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        BACKUP_POLICY_JOB = 'backup_policy_job',
+      }
+    }
+  }
+
+  /**
    * The source this backup was created from (may be
    * [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
    */
@@ -40596,12 +41481,15 @@ namespace VpcV1 {
      *  keys for the [default
      *  user](https://cloud.ibm.com/docs/vpc?topic=vpc-vsi_is_connecting_linux#determining-default-user-account).
      *
-     *  For Windows images, at least one key must be specified, and one will be selected to encrypt the administrator
-     *  password. Keys are optional for other images, but if no keys are specified, the bare metal server will be
-     *  inaccessible unless the specified image provides another means of access.
+     *  For Windows images, at least one SSH key of type `rsa` must be specified. One of the provided keys is selected
+     *  to encrypt the administrator password. SSH keys are optional for other images; however, if no keys are
+     *  specified, the bare metal server will be inaccessible unless the selected image provides an alternative access
+     *  mechanism.
      */
     keys: KeyIdentity[];
-    /** The user data to be made available when initializing the bare metal server. */
+    /** The [user data](https://cloud.ibm.com/docs/vpc?topic=vpc-user-data) to make available when setting up the
+     *  bare metal server.
+     */
     user_data?: string;
   }
 
@@ -44102,24 +44990,45 @@ namespace VpcV1 {
    * IKEPolicy.
    */
   export interface IKEPolicy {
-    /** The authentication algorithm.
+    /** Deprecated: The authentication algorithm.
      *
      *  The `md5` and `sha1` algorithms have been deprecated.
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     *
+     *  If `multiple`, the policy supports more than one authentication algorithm. Use the `authentication_algorithms`
+     *  property to retrieve all supported algorithms.
      */
     authentication_algorithm: IKEPolicy.Constants.AuthenticationAlgorithm | string;
+    /** The authentication algorithms to use for IKE Negotiation.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     */
+    authentication_algorithms: IKEPolicy.Constants.AuthenticationAlgorithms[] | string[];
     /** The VPN gateway connections that use this IKE policy. */
     connections: VPNGatewayConnectionReference[];
     /** The date and time that this IKE policy was created. */
     created_at: string;
-    /** The Diffie-Hellman group
+    /** Deprecated: The Diffie-Hellman group
      *
      *  Groups `2` and `5` have been deprecated.
+     *
+     *  If `65535`, the policy supports more than one Diffie-Hellman group. Use the `dh_groups` property to retrieve all
+     *  supported Diffie-Hellman groups.
      */
     dh_group: number;
-    /** The encryption algorithm.
+    /** The Diffie-Hellman groups to use for IKE negotiation.
+     *
+     *  The order of the Diffie-Hellman groups in this array indicates their priority for negotiation, with each
+     *  Diffie-Hellman group having priority over the one after it.
+     */
+    dh_groups: number[];
+    /** Deprecated: The encryption algorithm.
+     *
+     *  If `multiple`, the policy supports more than one encryption algorithm. Use the `encryption_algorithms` property
+     *  to retrieve all supported algorithms.
      *
      *  The `triple_des` algorithm has been deprecated.
      *
@@ -44127,6 +45036,12 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     encryption_algorithm: IKEPolicy.Constants.EncryptionAlgorithm | string;
+    /** The encryption algorithms to use for IKE Negotiation.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     */
+    encryption_algorithms: IKEPolicy.Constants.EncryptionAlgorithms[] | string[];
     /** The URL for this IKE policy. */
     href: string;
     /** The unique identifier for this IKE policy. */
@@ -44150,20 +45065,34 @@ namespace VpcV1 {
   }
   export namespace IKEPolicy {
     export namespace Constants {
-      /** The authentication algorithm. The `md5` and `sha1` algorithms have been deprecated. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The authentication algorithm. The `md5` and `sha1` algorithms have been deprecated. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. If `multiple`, the policy supports more than one authentication algorithm. Use the `authentication_algorithms` property to retrieve all supported algorithms. */
       export enum AuthenticationAlgorithm {
         MD5 = 'md5',
+        MULTIPLE = 'multiple',
         SHA1 = 'sha1',
         SHA256 = 'sha256',
         SHA384 = 'sha384',
         SHA512 = 'sha512',
       }
-      /** The encryption algorithm. The `triple_des` algorithm has been deprecated. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The authentication algorithms to use for IKE Negotiation. The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having priority over the one after it. */
+      export enum AuthenticationAlgorithms {
+        SHA256 = 'sha256',
+        SHA384 = 'sha384',
+        SHA512 = 'sha512',
+      }
+      /** The encryption algorithm. If `multiple`, the policy supports more than one encryption algorithm. Use the `encryption_algorithms` property to retrieve all supported algorithms. The `triple_des` algorithm has been deprecated. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum EncryptionAlgorithm {
         AES128 = 'aes128',
         AES192 = 'aes192',
         AES256 = 'aes256',
+        MULTIPLE = 'multiple',
         TRIPLE_DES = 'triple_des',
+      }
+      /** The encryption algorithms to use for IKE Negotiation. The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having priority over the one after it. */
+      export enum EncryptionAlgorithms {
+        AES128 = 'aes128',
+        AES192 = 'aes192',
+        AES256 = 'aes256',
       }
       /** The IKE negotiation mode. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum NegotiationMode {
@@ -44250,7 +45179,10 @@ namespace VpcV1 {
    * IPsecPolicy.
    */
   export interface IPsecPolicy {
-    /** The authentication algorithm
+    /** Deprecated: The authentication algorithms.
+     *
+     *  If `multiple`, the policy supports more than one authentication algorithm. Use the `authentication_algorithms`
+     *  property to retrieve all supported algorithms.
      *
      *  The `md5` and `sha1` algorithms have been deprecated
      *
@@ -44258,6 +45190,12 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     authentication_algorithm: IPsecPolicy.Constants.AuthenticationAlgorithm | string;
+    /** The authentication algorithms to use for IPsec Negotiation.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     */
+    authentication_algorithms: IPsecPolicy.Constants.AuthenticationAlgorithms[] | string[];
     /** The VPN gateway connections that use this IPsec policy. */
     connections: VPNGatewayConnectionReference[];
     /** The date and time that this IPsec policy was created. */
@@ -44268,7 +45206,10 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     encapsulation_mode: IPsecPolicy.Constants.EncapsulationMode | string;
-    /** The encryption algorithm
+    /** Deprecated: The encryption algorithm.
+     *
+     *  If `multiple`, the policy supports more than one encryption algorithm. Use the `encryption_algorithms` property
+     *  to retrieve all supported algorithms.
      *
      *  The `triple_des` algorithm has been deprecated
      *
@@ -44276,6 +45217,12 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     encryption_algorithm: IPsecPolicy.Constants.EncryptionAlgorithm | string;
+    /** The encryption algorithms to use for IKE Negotiation.
+     *
+     *  The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having
+     *  priority over the one after it.
+     */
+    encryption_algorithms: IPsecPolicy.Constants.EncryptionAlgorithms[] | string[];
     /** The URL for this IPsec policy. */
     href: string;
     /** The unique identifier for this IPsec policy. */
@@ -44284,7 +45231,10 @@ namespace VpcV1 {
     key_lifetime: number;
     /** The name for this IPsec policy. The name is unique across all IPsec policies in the region. */
     name: string;
-    /** The Perfect Forward Secrecy group
+    /** Deprecated: The Perfect Forward Secrecy group.
+     *
+     *  If `multiple`, the policy supports more than one PFS group. Use the `pfs_groups` property to retrieve all
+     *  supported PFS groups.
      *
      *  Groups `group_2` and `group_5` have been deprecated
      *
@@ -44292,6 +45242,12 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     pfs: IPsecPolicy.Constants.Pfs | string;
+    /** The Perfect Forward Secrecy groups to use for IPsec negotiation.
+     *
+     *  The order of the Perfect Forward Secrecy groups in this array indicates their priority for negotiation, with
+     *  each Perfect Forward Secrecy group having priority over the one after it.
+     */
+    pfs_groups: IPsecPolicy.Constants.PfsGroups[] | string[];
     /** The resource group for this IPsec policy. */
     resource_group: ResourceGroupReference;
     /** The resource type. */
@@ -44305,11 +45261,17 @@ namespace VpcV1 {
   }
   export namespace IPsecPolicy {
     export namespace Constants {
-      /** The authentication algorithm The `md5` and `sha1` algorithms have been deprecated The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The authentication algorithms. If `multiple`, the policy supports more than one authentication algorithm. Use the `authentication_algorithms` property to retrieve all supported algorithms. The `md5` and `sha1` algorithms have been deprecated The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum AuthenticationAlgorithm {
         DISABLED = 'disabled',
-        MD5 = 'md5',
-        SHA1 = 'sha1',
+        MULTIPLE = 'multiple',
+        SHA256 = 'sha256',
+        SHA384 = 'sha384',
+        SHA512 = 'sha512',
+      }
+      /** The authentication algorithms to use for IPsec Negotiation. The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having priority over the one after it. */
+      export enum AuthenticationAlgorithms {
+        DISABLED = 'disabled',
         SHA256 = 'sha256',
         SHA384 = 'sha384',
         SHA512 = 'sha512',
@@ -44318,7 +45280,7 @@ namespace VpcV1 {
       export enum EncapsulationMode {
         TUNNEL = 'tunnel',
       }
-      /** The encryption algorithm The `triple_des` algorithm has been deprecated The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The encryption algorithm. If `multiple`, the policy supports more than one encryption algorithm. Use the `encryption_algorithms` property to retrieve all supported algorithms. The `triple_des` algorithm has been deprecated The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum EncryptionAlgorithm {
         AES128 = 'aes128',
         AES128GCM16 = 'aes128gcm16',
@@ -44326,9 +45288,19 @@ namespace VpcV1 {
         AES192GCM16 = 'aes192gcm16',
         AES256 = 'aes256',
         AES256GCM16 = 'aes256gcm16',
+        MULTIPLE = 'multiple',
         TRIPLE_DES = 'triple_des',
       }
-      /** The Perfect Forward Secrecy group Groups `group_2` and `group_5` have been deprecated The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The encryption algorithms to use for IKE Negotiation. The order of the algorithms in this array indicates their priority for negotiation, with each algorithm having priority over the one after it. */
+      export enum EncryptionAlgorithms {
+        AES128 = 'aes128',
+        AES128GCM16 = 'aes128gcm16',
+        AES192 = 'aes192',
+        AES192GCM16 = 'aes192gcm16',
+        AES256 = 'aes256',
+        AES256GCM16 = 'aes256gcm16',
+      }
+      /** The Perfect Forward Secrecy group. If `multiple`, the policy supports more than one PFS group. Use the `pfs_groups` property to retrieve all supported PFS groups. Groups `group_2` and `group_5` have been deprecated The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Pfs {
         DISABLED = 'disabled',
         GROUP_14 = 'group_14',
@@ -44345,6 +45317,23 @@ namespace VpcV1 {
         GROUP_24 = 'group_24',
         GROUP_31 = 'group_31',
         GROUP_5 = 'group_5',
+        MULTIPLE = 'multiple',
+      }
+      /** The Perfect Forward Secrecy groups to use for IPsec negotiation. The order of the Perfect Forward Secrecy groups in this array indicates their priority for negotiation, with each Perfect Forward Secrecy group having priority over the one after it. */
+      export enum PfsGroups {
+        DISABLED = 'disabled',
+        GROUP_14 = 'group_14',
+        GROUP_15 = 'group_15',
+        GROUP_16 = 'group_16',
+        GROUP_17 = 'group_17',
+        GROUP_18 = 'group_18',
+        GROUP_19 = 'group_19',
+        GROUP_20 = 'group_20',
+        GROUP_21 = 'group_21',
+        GROUP_22 = 'group_22',
+        GROUP_23 = 'group_23',
+        GROUP_24 = 'group_24',
+        GROUP_31 = 'group_31',
       }
       /** The resource type. */
       export enum ResourceType {
@@ -44475,17 +45464,19 @@ namespace VpcV1 {
      */
     source_volume?: VolumeReference;
     /** The status of this image:
-     *  - available: image can be used to create resources
-     *  - deleting: image is being deleted, and can no longer be used to create
+     *  - `available`: image can be used to create resources
+     *  - `deleting`: image is being deleted, and can no longer be used to create
      *    resources
-     *  - deprecated: image is slated to be deleted, but can still be used to create
+     *  - `deprecated`: image is slated to be deleted, but can still be used to create
      *    resources
-     *  - failed: image was not created successfully, and cannot be used to create
+     *  - `failed`: image was not created successfully, and cannot be used to create
      *    resources
-     *  - obsolete: image is slated to be deleted, and can no longer be used to create
+     *  - `obsolete`: image is slated to be deleted, and can no longer be used to create
      *    resources
-     *  - pending: image is being imported, and cannot yet be used to create resources
-     *  - unusable: image cannot be used (see `status_reasons[]` for possible remediation)
+     *  - `partially_available`: image can be used to create resources in the
+     *    zones listed in the `zones` property.
+     *  - `pending`: image is being imported, and cannot yet be used to create resources
+     *  - `unusable`: image cannot be used (see `status_reasons[]` for possible remediation)
      *
      *  The enumerated values for this property may
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
@@ -44504,6 +45495,15 @@ namespace VpcV1 {
     user_data_format: Image.Constants.UserDataFormat | string;
     /** The visibility of this image. - `private`: Visible only to this account - `public`: Visible to all accounts. */
     visibility: Image.Constants.Visibility | string;
+    /** The zones in which this image is available for use.
+     *
+     *  If the image has a status of `available` or `deprecated`, this will include all zones in the region.
+     *
+     *  If the image has a status of `partially_available`, this will include one or more zones in the region.
+     *
+     *  If the image has a status of `failed`, `obsolete`, `pending`, `unusable`, or `deleting`, this will be empty.
+     */
+    zones: ZoneReference[];
   }
   export namespace Image {
     export namespace Constants {
@@ -44516,13 +45516,14 @@ namespace VpcV1 {
       export enum ResourceType {
         IMAGE = 'image',
       }
-      /** The status of this image: - available: image can be used to create resources - deleting: image is being deleted, and can no longer be used to create resources - deprecated: image is slated to be deleted, but can still be used to create resources - failed: image was not created successfully, and cannot be used to create resources - obsolete: image is slated to be deleted, and can no longer be used to create resources - pending: image is being imported, and cannot yet be used to create resources - unusable: image cannot be used (see `status_reasons[]` for possible remediation) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** The status of this image: - `available`: image can be used to create resources - `deleting`: image is being deleted, and can no longer be used to create resources - `deprecated`: image is slated to be deleted, but can still be used to create resources - `failed`: image was not created successfully, and cannot be used to create resources - `obsolete`: image is slated to be deleted, and can no longer be used to create resources - `partially_available`: image can be used to create resources in the zones listed in the `zones` property. - `pending`: image is being imported, and cannot yet be used to create resources - `unusable`: image cannot be used (see `status_reasons[]` for possible remediation) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Status {
         AVAILABLE = 'available',
         DELETING = 'deleting',
         DEPRECATED = 'deprecated',
         FAILED = 'failed',
         OBSOLETE = 'obsolete',
+        PARTIALLY_AVAILABLE = 'partially_available',
         PENDING = 'pending',
         UNUSABLE = 'unusable',
       }
@@ -44566,7 +45567,11 @@ namespace VpcV1 {
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
-     *  - `gpu.model` (string): The GPU model.
+     *  - `gpu.model` (string): The GPU model
+     *  - `metadata_service.enabled` (boolean): Whether the metadata service is enabled
+     *  - `metadata_service.protocol` (string): The communication protocol used for the
+     *    metadata service endpoint
+     *  - `vcpu.count` (integer): The number of virtual CPUs.
      */
     instance: string;
   }
@@ -44600,7 +45605,11 @@ namespace VpcV1 {
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
-     *  - `gpu.model` (string): The GPU model.
+     *  - `gpu.model` (string): The GPU model
+     *  - `metadata_service.enabled` (boolean): Whether the metadata service is enabled
+     *  - `metadata_service.protocol` (string): The communication protocol used for the
+     *    metadata service endpoint
+     *  - `vcpu.count` (integer): The number of virtual CPUs.
      */
     instance?: string;
   }
@@ -44639,7 +45648,11 @@ namespace VpcV1 {
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
-     *  - `gpu.model` (string): The GPU model.
+     *  - `gpu.model` (string): The GPU model
+     *  - `metadata_service.enabled` (boolean): Whether the metadata service is enabled
+     *  - `metadata_service.protocol` (string): The communication protocol used for the
+     *    metadata service endpoint.
+     *  - `vcpu.count` (integer): The number of virtual CPUs.
      */
     instance?: string;
   }
@@ -45128,6 +46141,8 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: Instance.Constants.ResourceType | string;
+    /** The software attachments for this instance. */
+    software_attachments: InstanceSoftwareAttachmentReference[];
     /** Indicates whether the state of the virtual server instance permits a start request. */
     startable: boolean;
     /** The status of the virtual server instance.
@@ -45138,6 +46153,8 @@ namespace VpcV1 {
     status: Instance.Constants.Status | string;
     /** The reasons for the current status (if any). */
     status_reasons: InstanceStatusReason[];
+    /** The threads per core for this virtual server instance. */
+    threads_per_core: number;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance network attachments or
      *  instance network interfaces.
      */
@@ -46378,6 +47395,7 @@ namespace VpcV1 {
    */
   export interface InstanceLifecycleReason {
     /** A reason code for this lifecycle state:
+     *  - `failed_licensing`: Allocation of one or more software license(s) has failed. Delete
      *  - `failed_registration`: The instance's registration to Resource Controller has
      *    failed. Delete the instance and provision it again. If the problem persists,
      *    contact IBM Support.
@@ -46398,8 +47416,9 @@ namespace VpcV1 {
   }
   export namespace InstanceLifecycleReason {
     export namespace Constants {
-      /** A reason code for this lifecycle state: - `failed_registration`: The instance's registration to Resource Controller has failed. Delete the instance and provision it again. If the problem persists, contact IBM Support. - `internal_error`: Internal error (contact IBM support) - `pending_registration`: The instance's registration to Resource Controller is being processed. - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** A reason code for this lifecycle state: - `failed_licensing`: Allocation of one or more software license(s) has failed. Delete - `failed_registration`: The instance's registration to Resource Controller has failed. Delete the instance and provision it again. If the problem persists, contact IBM Support. - `internal_error`: Internal error (contact IBM support) - `pending_registration`: The instance's registration to Resource Controller is being processed. - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
+        FAILED_LICENSING = 'failed_licensing',
         FAILED_REGISTRATION = 'failed_registration',
         INTERNAL_ERROR = 'internal_error',
         PENDING_REGISTRATION = 'pending_registration',
@@ -46636,10 +47655,12 @@ namespace VpcV1 {
   }
 
   /**
-   * The placement restrictions to use for the virtual server instance.
+   * The placement restrictions to use for the virtual server instance. For the placement restrictions to be changed,
+   * the instance `status` must be `stopping` or
+   * `stopped`.
    *
-   * If specified, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated host or dedicated host
-   * group, the `vcpu.percentage` must be `100` and the instance must have two or more vCPUs.
+   * If set, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated host or dedicated host group,
+   * the `vcpu.percentage` must be `100` and the instance must have two or more vCPUs.
    */
   export interface InstancePlacementTargetPatch {
   }
@@ -46699,6 +47720,9 @@ namespace VpcV1 {
     status: InstanceProfile.Constants.Status | string;
     /** The cluster network profiles that support this instance profile. */
     supported_cluster_network_profiles: ClusterNetworkProfileReference[];
+    /** The supported values for vcpu count for an instance with this profile. */
+    supported_vcpu_count: InstanceProfileSupportedVCPUCountEnum;
+    threads_per_core: InstanceProfileThreadsPerCoreEnum;
     total_volume_bandwidth: InstanceProfileVolumeBandwidth;
     vcpu_architecture: InstanceProfileVCPUArchitecture;
     vcpu_burst_limit: InstanceProfileVCPUBurstLimit;
@@ -46707,6 +47731,8 @@ namespace VpcV1 {
     /** The permitted values for VCPU percentage for an instance with this profile. */
     vcpu_percentage: InstanceProfileVCPUPercentage;
     volume_bandwidth_qos_modes: InstanceProfileVolumeBandwidthQoSModes;
+    /** The zones in this region that support this instance profile. */
+    zones: ZoneReference[];
   }
   export namespace InstanceProfile {
     export namespace Constants {
@@ -46744,8 +47770,16 @@ namespace VpcV1 {
    * InstanceProfileCollection.
    */
   export interface InstanceProfileCollection {
-    /** The virtual server instance profiles. */
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** A page of virtual server instance profiles. */
     profiles: InstanceProfile[];
+    /** The total number of resources across all pages. */
+    total_count: number;
   }
 
   /**
@@ -47015,6 +48049,44 @@ namespace VpcV1 {
   }
 
   /**
+   * The supported values for vcpu count for an instance with this profile.
+   */
+  export interface InstanceProfileSupportedVCPUCountEnum {
+    /** The type for this profile field. */
+    type: InstanceProfileSupportedVCPUCountEnum.Constants.Type | string;
+    /** The permitted values for this profile field. */
+    values: number[];
+  }
+  export namespace InstanceProfileSupportedVCPUCountEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
+  }
+
+  /**
+   * InstanceProfileThreadsPerCoreEnum.
+   */
+  export interface InstanceProfileThreadsPerCoreEnum {
+    /** The default threads per core value for an instance with this profile. */
+    default: number;
+    /** The type for this profile field. */
+    type: InstanceProfileThreadsPerCoreEnum.Constants.Type | string;
+    /** The permitted threads per core values for an instance with this profile. */
+    values: number[];
+  }
+  export namespace InstanceProfileThreadsPerCoreEnum {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        ENUM = 'enum',
+      }
+    }
+  }
+
+  /**
    * InstanceProfileVCPU.
    */
   export interface InstanceProfileVCPU {
@@ -47162,6 +48234,12 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
+    /** The threads per core to use for this virtual server instance. Must be one of the values in the profile's
+     *  `threads_per_core.values`.
+     *
+     *  If unspecified, the default threads per core from the profile will be used.
+     */
+    threads_per_core?: number;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
      *  increase in this value will result in a corresponding decrease to
      *  `total_network_bandwidth`.
@@ -47330,6 +48408,176 @@ namespace VpcV1 {
   }
 
   /**
+   * InstanceSoftwareAttachment.
+   */
+  export interface InstanceSoftwareAttachment {
+    /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
+     *  offering for this instance software attachment. May be absent if
+     *  `software_attachment.lifecycle_state` is not `stable`.
+     */
+    catalog_offering?: InstanceSoftwareAttachmentCatalogOffering;
+    /** The date and time that the instance software attachment was created. */
+    created_at: string;
+    /** The entitlement for the licensed software for this instance software attachment. */
+    entitlement?: InstanceSoftwareAttachmentEntitlement;
+    /** The URL for this instance software attachment. */
+    href: string;
+    /** The unique identifier for this instance software attachment. */
+    id: string;
+    /** The lifecycle reasons for this instance software attachment (if any). */
+    lifecycle_reasons: InstanceSoftwareAttachmentLifecycleReason[];
+    /** The lifecycle state of the instance software attachment. */
+    lifecycle_state: InstanceSoftwareAttachment.Constants.LifecycleState | string;
+    /** The name for this instance software attachment. The name is unique across all instance software attachments
+     *  for the instance.
+     */
+    name: string;
+    offering_instance?: InstanceSoftwareAttachmentOfferingInstance;
+    /** The resource type. */
+    resource_type: InstanceSoftwareAttachment.Constants.ResourceType | string;
+  }
+  export namespace InstanceSoftwareAttachment {
+    export namespace Constants {
+      /** The lifecycle state of the instance software attachment. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_SOFTWARE_ATTACHMENT = 'instance_software_attachment',
+      }
+    }
+  }
+
+  /**
+   * The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering for this instance
+   * software attachment. May be absent if
+   * `software_attachment.lifecycle_state` is not `stable`.
+   */
+  export interface InstanceSoftwareAttachmentCatalogOffering {
+    /** The billing plan for the catalog offering version associated with this instance software
+     *  attachment.
+     *
+     *  If absent, no billing plan is associated with the catalog offering version (free).
+     */
+    plan?: CatalogOfferingVersionPlanReference;
+    /** The catalog offering version associated with this instance software attachment. */
+    version: CatalogOfferingVersionReference;
+  }
+
+  /**
+   * InstanceSoftwareAttachmentCollection.
+   */
+  export interface InstanceSoftwareAttachmentCollection {
+    /** The software attachments for the instance. */
+    software_attachments: InstanceSoftwareAttachment[];
+  }
+
+  /**
+   * The entitlement for the licensed software for this instance software attachment.
+   */
+  export interface InstanceSoftwareAttachmentEntitlement {
+    /** The licensed software for this instance software attachment entitlement. */
+    licensed_software: InstanceSoftwareAttachmentEntitlementLicensedSoftware[];
+  }
+
+  /**
+   * The licensed software for the instance software attachment's entitlement.
+   */
+  export interface InstanceSoftwareAttachmentEntitlementLicensedSoftware {
+    /** The SKU for this licensed software. */
+    sku: string;
+    vendor: InstanceSoftwareAttachmentEntitlementLicensedSoftwareVendor;
+  }
+
+  /**
+   * InstanceSoftwareAttachmentEntitlementLicensedSoftwareVendor.
+   */
+  export interface InstanceSoftwareAttachmentEntitlementLicensedSoftwareVendor {
+    /** The name of the vendor providing this licensed software. */
+    name: string;
+  }
+
+  /**
+   * InstanceSoftwareAttachmentLifecycleReason.
+   */
+  export interface InstanceSoftwareAttachmentLifecycleReason {
+    /** A reason code for this lifecycle state:
+     *  - `failed_licensing`: Allocation of one or more software license(s) has failed. Delete
+     *    the instance and provision it again. If the problem persists, contact IBM Support.
+     *  - `failed_registration`: The software instance's registration to Resource Controller has
+     *    failed. Delete the instance and provision it again. If the problem persists, contact IBM
+     *    Support.
+     *  - `internal_error`: Internal error (contact IBM support)
+     *  - `pending_registration`: The software instance's registration to Resource Controller,
+     *    and the creation of any required software license(s), is being processed.
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    code: InstanceSoftwareAttachmentLifecycleReason.Constants.Code | string;
+    /** An explanation of the reason for this lifecycle state. */
+    message: string;
+    /** A link to documentation about the reason for this lifecycle state. */
+    more_info?: string;
+  }
+  export namespace InstanceSoftwareAttachmentLifecycleReason {
+    export namespace Constants {
+      /** A reason code for this lifecycle state: - `failed_licensing`: Allocation of one or more software license(s) has failed. Delete the instance and provision it again. If the problem persists, contact IBM Support. - `failed_registration`: The software instance's registration to Resource Controller has failed. Delete the instance and provision it again. If the problem persists, contact IBM Support. - `internal_error`: Internal error (contact IBM support) - `pending_registration`: The software instance's registration to Resource Controller, and the creation of any required software license(s), is being processed. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Code {
+        FAILED_LICENSING = 'failed_licensing',
+        FAILED_REGISTRATION = 'failed_registration',
+        INTERNAL_ERROR = 'internal_error',
+        PENDING_REGISTRATION = 'pending_registration',
+      }
+    }
+  }
+
+  /**
+   * InstanceSoftwareAttachmentOfferingInstance.
+   */
+  export interface InstanceSoftwareAttachmentOfferingInstance {
+    /** The CRN for the software offering instance registered with Resource Controller that is associated with the
+     *  instance software attachment.
+     */
+    crn: string;
+  }
+
+  /**
+   * InstanceSoftwareAttachmentReference.
+   */
+  export interface InstanceSoftwareAttachmentReference {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this instance software attachment. */
+    href: string;
+    /** The unique identifier for this instance software attachment. */
+    id: string;
+    /** The name for this instance software attachment. The name is unique across all instance software attachments
+     *  for the instance.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: InstanceSoftwareAttachmentReference.Constants.ResourceType | string;
+  }
+  export namespace InstanceSoftwareAttachmentReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        INSTANCE_SOFTWARE_ATTACHMENT = 'instance_software_attachment',
+      }
+    }
+  }
+
+  /**
    * InstanceStatusReason.
    */
   export interface InstanceStatusReason {
@@ -47442,6 +48690,12 @@ namespace VpcV1 {
     reservation_affinity?: InstanceReservationAffinityPrototype;
     /** The resource group for this instance template. */
     resource_group: ResourceGroupReference;
+    /** The threads per core to use for this virtual server instance. Must be one of the values in the profile's
+     *  `threads_per_core.values`.
+     *
+     *  If unspecified, the default threads per core from the profile will be used.
+     */
+    threads_per_core?: number;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
      *  increase in this value will result in a corresponding decrease to
      *  `total_network_bandwidth`.
@@ -47578,6 +48832,12 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
+    /** The threads per core to use for this virtual server instance. Must be one of the values in the profile's
+     *  `threads_per_core.values`.
+     *
+     *  If unspecified, the default threads per core from the profile will be used.
+     */
+    threads_per_core?: number;
     /** The amount of bandwidth (in megabits per second) allocated exclusively to instance storage volumes. An
      *  increase in this value will result in a corresponding decrease to
      *  `total_network_bandwidth`.
@@ -47851,6 +49111,8 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     access_mode: LoadBalancer.Constants.AccessMode | string;
+    /** Indicates whether this load balancer supports advanced health checks. */
+    advanced_health_checks_supported: boolean;
     /** The load balancer pool members attached to this load balancer. */
     attached_load_balancer_pool_members: LoadBalancerPoolMemberReference[];
     /** The availability of this load balancer:
@@ -47876,6 +49138,8 @@ namespace VpcV1 {
     dns?: LoadBalancerDNS;
     /** The supported `failsafe_policy.action` values for this load balancer's pools. */
     failsafe_policy_actions: LoadBalancer.Constants.FailsafePolicyActions[] | string[];
+    /** Indicates whether this load balancer supports pool members specified by their fully qualified domain names. */
+    fqdn_pool_members_supported: boolean;
     /** The fully qualified domain name assigned to this load balancer. */
     hostname: string;
     /** The URL for this load balancer. */
@@ -47892,6 +49156,8 @@ namespace VpcV1 {
     listeners: LoadBalancerListenerReference[];
     /** The logging configuration for this load balancer. */
     logging: LoadBalancerLogging;
+    /** Indicates whether this load balancer supports mTLS. */
+    mtls_supported: boolean;
     /** The name for this load balancer. The name is unique across all load balancers in the VPC. */
     name: string;
     /** The operating status of this load balancer.
@@ -48096,6 +49362,7 @@ namespace VpcV1 {
      *  If absent, this listener is not using a certificate instance.
      */
     certificate_instance?: CertificateInstanceReference;
+    client_authentication?: LoadBalancerListenerClientAuthentication;
     /** The concurrent connection limit for the listener. If reached, incoming connections may be queued or
      *  rejected.
      *
@@ -48159,6 +49426,72 @@ namespace VpcV1 {
         UPDATE_PENDING = 'update_pending',
       }
     }
+  }
+
+  /**
+   * LoadBalancerListenerClientAuthentication.
+   */
+  export interface LoadBalancerListenerClientAuthentication {
+    /** The certificate instance used for the listener client certificate authority. */
+    certificate_authority: CertificateInstanceReference;
+    /** A [PEM-encoded](https://www.rfc-editor.org/rfc/rfc7468) certificate revocation list
+     *  (CRL) used for the listener.
+     */
+    certificate_revocation_list?: string;
+  }
+
+  /**
+   * The certificate instance to use for the listener client certificate authority.
+   *
+   * Specify `null` to remove an existing certificate authority.
+   */
+  export interface LoadBalancerListenerClientAuthenticationCertificateAuthorityPatch {
+  }
+
+  /**
+   * The client authentication to use for this listener.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The listener must have a `protocol` of `https`.
+   *
+   * Specify `null` to remove an existing client authentication.
+   */
+  export interface LoadBalancerListenerClientAuthenticationPatch {
+    /** The certificate instance to use for the listener client certificate authority.
+     *
+     *  Specify `null` to remove an existing certificate authority.
+     */
+    certificate_authority?: LoadBalancerListenerClientAuthenticationCertificateAuthorityPatch;
+    /** A [PEM-encoded](https://www.rfc-editor.org/rfc/rfc7468) (with the label `X509 CRL`) certificate revocation
+     *  list (CRL) to use for the listener.
+     *
+     *  The CRL must be formatted using the X.509 standard as described in
+     *  [RFC 5280](https://www.rfc-editor.org/rfc/rfc5280).
+     *
+     *  Specify `null` to remove an existing certificate revocation list.
+     */
+    certificate_revocation_list?: string;
+  }
+
+  /**
+   * The client authentication to use for this listener.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The listener must have a `protocol` of `https`.
+   */
+  export interface LoadBalancerListenerClientAuthenticationPrototype {
+    /** The certificate instance to use for the listener client certificate authority.
+     *
+     *  Required if `certificate_revocation_list` is specified.
+     */
+    certificate_authority: CertificateInstanceIdentity;
+    /** A [PEM-encoded](https://www.rfc-editor.org/rfc/rfc7468) (with the label `X509 CRL`) certificate revocation
+     *  list (CRL) to use for the listener.
+     *
+     *  The CRL must be formatted using the X.509 standard as described in
+     *  [RFC 5280](https://www.rfc-editor.org/rfc/rfc5280).
+     *
+     *  If specified, `certificate_authority` must also be specified.
+     */
+    certificate_revocation_list?: string;
   }
 
   /**
@@ -48424,6 +49757,7 @@ namespace VpcV1 {
         CONTAINS = 'contains',
         EQUALS = 'equals',
         MATCHES_REGEX = 'matches_regex',
+        STARTS_WITH = 'starts_with',
       }
       /** The provisioning status of this rule The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum ProvisioningStatus {
@@ -48492,6 +49826,7 @@ namespace VpcV1 {
         CONTAINS = 'contains',
         EQUALS = 'equals',
         MATCHES_REGEX = 'matches_regex',
+        STARTS_WITH = 'starts_with',
       }
       /** The content the rule applies to: - `body`: The UTF-8 form-encoded HTTP request body - `header`: The HTTP header - `hostname`: The fully-qualified domain name of the server specified in the Host HTTP request header - `path`: The path of the HTTP request - `query`: The query of the HTTP request URL - `sni_hostname`: The fully-qualified domain name of the server provided in the "server name indicator" extension during TLS negotiation - For listeners with `protocol` `http` or `https`, any type may be specified. - For listeners with `protocol` `tcp`, only type `sni_hostname` may be specified. */
       export enum Type {
@@ -48570,6 +49905,12 @@ namespace VpcV1 {
     accept_proxy_protocol?: boolean;
     /** The certificate instance to use for SSL termination. The listener must have a `protocol` of `https`. */
     certificate_instance?: CertificateInstanceIdentity;
+    /** The client authentication to use for this listener.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The listener must
+     *  have a `protocol` of `https`.
+     */
+    client_authentication?: LoadBalancerListenerClientAuthenticationPrototype;
     /** The concurrent connection limit for the listener. If reached, incoming connections may be queued or
      *  rejected.
      *
@@ -48736,6 +50077,8 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     algorithm: LoadBalancerPool.Constants.Algorithm | string;
+    /** The client authentication used for this pool. */
+    client_authentication?: LoadBalancerPoolClientAuthentication;
     /** The date and time that this pool was created. */
     created_at: string;
     failsafe_policy: LoadBalancerPoolFailsafePolicy;
@@ -48786,6 +50129,11 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     proxy_protocol: LoadBalancerPool.Constants.ProxyProtocol | string;
+    /** The server authentication used for this pool.
+     *
+     *  This property will be absent if the `pool.protocol` is not `https`.
+     */
+    server_authentication?: LoadBalancerPoolServerAuthentication;
     /** The session persistence of this pool.
      *
      *  If absent, session persistence will be disabled, and traffic will be distributed
@@ -48823,6 +50171,45 @@ namespace VpcV1 {
         V2 = 'v2',
       }
     }
+  }
+
+  /**
+   * The client authentication used for this pool.
+   */
+  export interface LoadBalancerPoolClientAuthentication {
+    certificate_instance: CertificateInstanceReference;
+  }
+
+  /**
+   * The client authentication to use for this pool.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The pool must have a `protocol` of `https`.
+   *
+   * Specify `null` to remove an existing client authentication.
+   */
+  export interface LoadBalancerPoolClientAuthenticationPatch {
+    /** The backend certificate instance to use for client
+     *  certificate verification.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The pool
+     *  must have a `protocol` of `https`.
+     */
+    certificate_instance?: CertificateInstanceIdentity;
+  }
+
+  /**
+   * The client authentication to use for this pool.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The pool must have a `protocol` of `https`.
+   */
+  export interface LoadBalancerPoolClientAuthenticationPrototype {
+    /** The backend certificate instance to use for client
+     *  certificate verification.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The pool
+     *  must have a `protocol` of `https`.
+     */
+    certificate_instance: CertificateInstanceIdentity;
   }
 
   /**
@@ -48893,11 +50280,24 @@ namespace VpcV1 {
      *  - Belong to this load balancer
      *  - Have the same `protocol` as this pool, or have a compatible protocol.
      *    At present, the compatible protocols are `http` and `https`.
-     *  - Not have a `failsafe_policy.action` of `forward` or `bypass`.
+     *
+     *  For load balancers in the `application` family, the failsafe target pool must not
+     *  already be the default pool or a failsafe target pool for the same listener.
+     *
+     *  For load balancers in the `network` family, the pool specified in the URL must not
+     *  be a failsafe target pool for another pool.
      *
      *  If specified, `action` must be `forward`.
      *
      *  Specify `null` to remove an existing failsafe target pool.
+     *
+     *  **For more information, see:**
+     *  - [Creating an application load balancer](
+     *      https://cloud.ibm.com/docs/vpc?topic=vpc-load-balancers&interface=ui)
+     *  - [Working with application load balancer pools](
+     *      https://cloud.ibm.com/docs/vpc?topic=vpc-alb-pools&interface=ui)
+     *  - [Working with network load balancer pools](
+     *      https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-pools&interface=ui).
      */
     target?: LoadBalancerPoolFailsafePolicyTargetPatch;
   }
@@ -48934,9 +50334,22 @@ namespace VpcV1 {
      *  - Belong to this load balancer
      *  - Have the same `protocol` as this pool, or have a compatible protocol.
      *    At present, the compatible protocols are `http` and `https`.
-     *  - Have a `failsafe_policy.action` of `fail` or `drop`
+     *
+     *  For load balancers in the `application` family, the failsafe target pool must not
+     *  already be the default pool or a failsafe target pool for the same listener.
+     *
+     *  For load balancers in the `network` family, the pool specified in the URL must not
+     *  be a failsafe target pool for another pool.
      *
      *  If specified, `action` must be `forward`.
+     *
+     *  **For more information, see:**
+     *  - [Creating an application load balancer](
+     *      https://cloud.ibm.com/docs/vpc?topic=vpc-load-balancers&interface=ui)
+     *  - [Working with application load balancer pools](
+     *      https://cloud.ibm.com/docs/vpc?topic=vpc-alb-pools&interface=ui)
+     *  - [Working with network load balancer pools](
+     *      https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-pools&interface=ui).
      */
     target?: LoadBalancerPoolIdentity;
   }
@@ -48959,11 +50372,24 @@ namespace VpcV1 {
    * - Belong to this load balancer
    * - Have the same `protocol` as this pool, or have a compatible protocol.
    *   At present, the compatible protocols are `http` and `https`.
-   * - Not have a `failsafe_policy.action` of `forward` or `bypass`.
+   *
+   * For load balancers in the `application` family, the failsafe target pool must not already be the default pool or a
+   * failsafe target pool for the same listener.
+   *
+   * For load balancers in the `network` family, the pool specified in the URL must not be a failsafe target pool for
+   * another pool.
    *
    * If specified, `action` must be `forward`.
    *
    * Specify `null` to remove an existing failsafe target pool.
+   *
+   * **For more information, see:**
+   * - [Creating an application load balancer](
+   *     https://cloud.ibm.com/docs/vpc?topic=vpc-load-balancers&interface=ui)
+   * - [Working with application load balancer pools](
+   *     https://cloud.ibm.com/docs/vpc?topic=vpc-alb-pools&interface=ui)
+   * - [Working with network load balancer pools](
+   *     https://cloud.ibm.com/docs/vpc?topic=vpc-nlb-pools&interface=ui).
    */
   export interface LoadBalancerPoolFailsafePolicyTargetPatch {
   }
@@ -49016,6 +50442,10 @@ namespace VpcV1 {
      *  Specify `null` to remove an existing health check port.
      */
     port?: number;
+    /** Supported by load balancers with `advanced_health_checks_supported` set to `true`. */
+    request?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPatch;
+    /** Supported by load balancers with `advanced_health_checks_supported` set to `true`. */
+    response?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSResponsePatch;
     /** The seconds to wait for a response to a health check.  Must be less than `delay`. */
     timeout: number;
     /** The protocol type to use for health checks. */
@@ -49066,6 +50496,148 @@ namespace VpcV1 {
         TCP = 'tcp',
       }
     }
+  }
+
+  /**
+   * LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequest.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequest {
+    /** The HTTP request body used for health checks.
+     *
+     *  If absent, the health checks will ignore the request body.
+     */
+    body?: string;
+    /** The HTTP request headers used for health checks.
+     *
+     *  If empty, the health checks will ignore the request headers.
+     */
+    headers?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestHeader[];
+    /** The HTTP request method used for health checks. */
+    method: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequest.Constants.Method | string;
+  }
+  export namespace LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequest {
+    export namespace Constants {
+      /** The HTTP request method used for health checks. */
+      export enum Method {
+        GET = 'get',
+        POST = 'post',
+      }
+    }
+  }
+
+  /**
+   * An HTTP request header used for health checks.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestHeader {
+    /** The field of an HTTP request header used for health checks. */
+    field: string;
+    /** The value of an HTTP request header used for health checks. */
+    value: string;
+  }
+
+  /**
+   * An HTTP request header to use for health checks.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestHeaderPrototype {
+    /** The field of an HTTP request header to use for health checks. */
+    field: string;
+    /** The value of an HTTP request header to use for health checks. */
+    value: string;
+  }
+
+  /**
+   * Supported by load balancers with `advanced_health_checks_supported` set to `true`.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPatch {
+    /** The HTTP request body to use for health checks. If set, a corresponding `Content-Type` field must be
+     *  included in the `request.headers` array.
+     *
+     *  Specify `null` to remove the request body used for health checks.
+     *
+     *  The body must be formatted in a way that will be understood by the backend server member.
+     */
+    body?: string;
+    /** The HTTP request headers to use for health checks.
+     *
+     *  Specify an empty array to remove the request headers for health checks.
+     *
+     *  Include a `Host` field and its value to enable the `HTTP/1.1` protocol for health checks. If a `Host` header is
+     *  not included, `HTTP/1.0` will be used by default. More than one
+     *  `Host` header is not allowed.
+     *
+     *  Include a `Content-Type` field and its value to indicate the media type of the
+     *  `request.body` (if set).
+     *
+     *  A header must not exceed 1000 characters, and all headers combined must not exceed 4000 characters.
+     */
+    headers?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestHeaderPrototype[];
+    /** The HTTP request method to use for health checks. If updating to `get`, the
+     *  `health_monitor.request.body` property (if set) must be removed.
+     */
+    method?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPatch.Constants.Method | string;
+  }
+  export namespace LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPatch {
+    export namespace Constants {
+      /** The HTTP request method to use for health checks. If updating to `get`, the `health_monitor.request.body` property (if set) must be removed. */
+      export enum Method {
+        GET = 'get',
+        POST = 'post',
+      }
+    }
+  }
+
+  /**
+   * The HTTP request to use for health checks. If unspecified, a `request.method` value of
+   * `get` will be used with no `request.headers`.
+   *
+   * Supported by load balancers with `advanced_health_checks_supported` set to `true`.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototype {
+  }
+
+  /**
+   * LoadBalancerPoolHealthMonitorTypeHTTPHTTPSResponse.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPSResponse {
+    /** The PCRE-flavor regular expression that HTTP response bodies must match for successful health checks.
+     *
+     *  If absent, health checks will ignore any response body.
+     */
+    body_regex?: string;
+    /** The HTTP response codes expected for successful health checks. */
+    codes: string[];
+  }
+
+  /**
+   * Supported by load balancers with `advanced_health_checks_supported` set to `true`.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPSResponsePatch {
+    /** The PCRE-flavor regular expression that HTTP response bodies will be expected to match for successful health
+     *  checks.
+     *
+     *  Specify `null` to remove the response body for successful health checks. If removed, health checks will ignore
+     *  any response body.
+     */
+    body_regex?: string;
+    /** The HTTP response codes to expect for successful health checks. */
+    codes?: string[];
+  }
+
+  /**
+   * The HTTP response to use for health checks. If unspecified, a `response.codes` value of
+   * `["200"]` will be used with no `response.body_regex`.
+   *
+   * Supported by load balancers with `advanced_health_checks_supported` set to `true`.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPSResponsePrototype {
+    /** The PCRE-flavor regular expression that HTTP response bodies will be expected to match for successful health
+     *  checks.
+     *
+     *  If unspecified, health checks will ignore any response body.
+     */
+    body_regex?: string;
+    /** The HTTP response codes to expect for successful health checks. */
+    codes?: string[];
   }
 
   /**
@@ -49223,6 +50795,12 @@ namespace VpcV1 {
      *  have `availability` with value `subnet` in the profile.
      */
     algorithm: LoadBalancerPoolPrototypeLoadBalancerContext.Constants.Algorithm | string;
+    /** The client authentication to use for this pool.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The pool must
+     *  have a `protocol` of `https`.
+     */
+    client_authentication?: LoadBalancerPoolClientAuthenticationPrototype;
     /** The health monitor of this pool.
      *
      *  If this pool has a member targeting a load balancer then:
@@ -49250,6 +50828,11 @@ namespace VpcV1 {
     /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and
      *  `udp` (if `udp_supported` is `true`). Load balancers in the
      *  `application` family support `tcp`, `http`, and `https`.
+     *
+     *  **NOTE**: HTTP sends data in plain text, making it vulnerable to eavesdropping and tampering. Additionally, HTTP
+     *  has no built-in mechanism to verify the identity of the server you are connecting to. It is recommended to
+     *  choose `https` instead of `http`. For more details, see:
+     *  https://www.cloudflare.com/learning/ssl/why-is-http-not-secure.
      */
     protocol: LoadBalancerPoolPrototypeLoadBalancerContext.Constants.Protocol | string;
     /** The PROXY protocol setting for this pool:
@@ -49260,6 +50843,12 @@ namespace VpcV1 {
      *  For load balancers in the `network` family, this property must be `disabled`.
      */
     proxy_protocol?: LoadBalancerPoolPrototypeLoadBalancerContext.Constants.ProxyProtocol | string;
+    /** The server authentication to use for this pool.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The pool must
+     *  have a `protocol` of `https`.
+     */
+    server_authentication?: LoadBalancerPoolServerAuthenticationPrototype;
     /** The session persistence of this pool. If specified, the load balancer must have
      *  `source_ip_session_persistence_supported` set to `true` in its profile.
      *
@@ -49276,7 +50865,7 @@ namespace VpcV1 {
         ROUND_ROBIN = 'round_robin',
         WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
       }
-      /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http`, and `https`. */
+      /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http`, and `https`. **NOTE**: HTTP sends data in plain text, making it vulnerable to eavesdropping and tampering. Additionally, HTTP has no built-in mechanism to verify the identity of the server you are connecting to. It is recommended to choose `https` instead of `http`. For more details, see: https://www.cloudflare.com/learning/ssl/why-is-http-not-secure. */
       export enum Protocol {
         HTTP = 'http',
         HTTPS = 'https',
@@ -49306,6 +50895,70 @@ namespace VpcV1 {
     id: string;
     /** The name for this load balancer pool. The name is unique across all pools for the load balancer. */
     name: string;
+  }
+
+  /**
+   * The server authentication used for this pool.
+   *
+   * This property will be absent if the `pool.protocol` is not `https`.
+   */
+  export interface LoadBalancerPoolServerAuthentication {
+    /** The backend server certificate authority instance used for server certificate verification. */
+    certificate_authority?: CertificateInstanceReference;
+    /** If set to `true`, the backend server certificate is verified. */
+    verify_certificate: boolean;
+  }
+
+  /**
+   * The server authentication to use for this pool.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The pool must have a `protocol` of `https`.
+   *
+   * Specify `null` to remove an existing server authentication.
+   */
+  export interface LoadBalancerPoolServerAuthenticationPatch {
+    /** The backend server certificate authority instance to use for server
+     *  certificate verification.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The pool must
+     *  have a `protocol` of `https`.
+     *
+     *  If specified, `verify_certificate` must be `true`.
+     */
+    certificate_authority?: CertificateInstanceIdentity;
+    /** Indicates whether server certificate verification is enabled.
+     *
+     *  If set to `true`, the backend server certificate is verified by:
+     *  - `certificate_authority`, if specified.
+     *  - the system default certificate authorities, if `certificate_authority`
+     *    is not specified.
+     */
+    verify_certificate?: boolean;
+  }
+
+  /**
+   * The server authentication to use for this pool.
+   *
+   * Supported by load balancers with `mtls_supported` set to `true`. The pool must have a `protocol` of `https`.
+   */
+  export interface LoadBalancerPoolServerAuthenticationPrototype {
+    /** The backend server certificate authority instance to use for server
+     *  certificate verification.
+     *
+     *  Supported by load balancers with `mtls_supported` set to `true`. The pool must
+     *  have a `protocol` of `https`.
+     *
+     *  If specified, `verify_certificate` must be `true`.
+     */
+    certificate_authority?: CertificateInstanceIdentity;
+    /** Indicates whether server certificate verification is enabled.
+     *
+     *  If set to `true`, the backend server certificate is verified by:
+     *  - `certificate_authority`, if specified.
+     *  - the system default certificate authorities, if `certificate_authority`
+     *    is not specified.
+     */
+    verify_certificate?: boolean;
   }
 
   /**
@@ -49391,6 +51044,7 @@ namespace VpcV1 {
    */
   export interface LoadBalancerProfile {
     access_modes: LoadBalancerProfileAccessModes;
+    advanced_health_checks_supported: LoadBalancerProfileAdvancedHealthCheckSupported;
     availability: LoadBalancerProfileAvailability;
     failsafe_policy_actions: LoadBalancerProfileFailsafePolicyActions;
     /** The product family this load balancer profile belongs to.
@@ -49399,11 +51053,13 @@ namespace VpcV1 {
      *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
      */
     family: LoadBalancerProfile.Constants.Family | string;
+    fqdn_pool_members_supported: LoadBalancerProfileFQDNSupported;
     /** The URL for this load balancer profile. */
     href: string;
     instance_groups_supported: LoadBalancerProfileInstanceGroupsSupported;
     /** Indicates which logging type(s) are supported for a load balancer with this profile. */
     logging_supported: LoadBalancerProfileLoggingSupported;
+    mtls_supported: LoadBalancerProfileMtlsSupported;
     /** The globally unique name for this load balancer profile. */
     name: string;
     route_mode_supported: LoadBalancerProfileRouteModeSupported;
@@ -49449,6 +51105,12 @@ namespace VpcV1 {
   }
 
   /**
+   * LoadBalancerProfileAdvancedHealthCheckSupported.
+   */
+  export interface LoadBalancerProfileAdvancedHealthCheckSupported {
+  }
+
+  /**
    * LoadBalancerProfileAvailability.
    */
   export interface LoadBalancerProfileAvailability {
@@ -49468,6 +51130,12 @@ namespace VpcV1 {
     profiles: LoadBalancerProfile[];
     /** The total number of resources across all pages. */
     total_count: number;
+  }
+
+  /**
+   * LoadBalancerProfileFQDNSupported.
+   */
+  export interface LoadBalancerProfileFQDNSupported {
   }
 
   /**
@@ -49504,6 +51172,12 @@ namespace VpcV1 {
         FIXED = 'fixed',
       }
     }
+  }
+
+  /**
+   * LoadBalancerProfileMtlsSupported.
+   */
+  export interface LoadBalancerProfileMtlsSupported {
   }
 
   /**
@@ -55038,7 +56712,11 @@ namespace VpcV1 {
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
-     *  - `gpu.model` (string): The GPU model.
+     *  - `gpu.model` (string): The GPU model
+     *  - `metadata_service.enabled` (boolean): Whether the metadata service is enabled
+     *  - `metadata_service.protocol` (string): The communication protocol used for the
+     *    metadata service endpoint
+     *  - `vcpu.count` (integer): The number of virtual CPUs.
      */
     instance: string;
   }
@@ -55073,7 +56751,11 @@ namespace VpcV1 {
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
-     *  - `gpu.model` (string): The GPU model.
+     *  - `gpu.model` (string): The GPU model
+     *  - `metadata_service.enabled` (boolean): Whether the metadata service is enabled
+     *  - `metadata_service.protocol` (string): The communication protocol used for the
+     *    metadata service endpoint
+     *  - `vcpu.count` (integer): The number of virtual CPUs.
      */
     instance?: string;
   }
@@ -55113,7 +56795,11 @@ namespace VpcV1 {
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
-     *  - `gpu.model` (string): The GPU model.
+     *  - `gpu.model` (string): The GPU model
+     *  - `metadata_service.enabled` (boolean): Whether the metadata service is enabled
+     *  - `metadata_service.protocol` (string): The communication protocol used for the
+     *    metadata service endpoint.
+     *  - `vcpu.count` (integer): The number of virtual CPUs.
      */
     instance?: string;
   }
@@ -55182,6 +56868,11 @@ namespace VpcV1 {
    * SnapshotConsistencyGroup.
    */
   export interface SnapshotConsistencyGroup {
+    /** If present, the backup policy job that created this snapshot consistency group.
+     *  Snapshot consistency groups with the same backup policy job identifier represent
+     *  snapshots of the same instance across different storage generations.
+     */
+    backup_policy_job?: BackupPolicyJobReference;
     /** If present, the backup policy plan which created this snapshot consistency group. */
     backup_policy_plan?: BackupPolicyPlanReference;
     /** The date and time that this snapshot consistency group was created. */
@@ -58115,7 +59806,11 @@ namespace VpcV1 {
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
-     *  - `gpu.model` (string): The GPU model.
+     *  - `gpu.model` (string): The GPU model
+     *  - `metadata_service.enabled` (boolean): Whether the metadata service is enabled
+     *  - `metadata_service.protocol` (string): The communication protocol used for the
+     *    metadata service endpoint
+     *  - `vcpu.count` (integer): The number of virtual CPUs.
      */
     instance: string;
   }
@@ -58150,7 +59845,11 @@ namespace VpcV1 {
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
-     *  - `gpu.model` (string): The GPU model.
+     *  - `gpu.model` (string): The GPU model
+     *  - `metadata_service.enabled` (boolean): Whether the metadata service is enabled
+     *  - `metadata_service.protocol` (string): The communication protocol used for the
+     *    metadata service endpoint
+     *  - `vcpu.count` (integer): The number of virtual CPUs.
      */
     instance?: string;
   }
@@ -58190,7 +59889,11 @@ namespace VpcV1 {
      *  - `gpu.count` (integer): The number of GPUs
      *  - `gpu.manufacturer` (string): The GPU manufacturer
      *  - `gpu.memory` (integer): The overall amount of GPU memory in GiB (gibibytes)
-     *  - `gpu.model` (string): The GPU model.
+     *  - `gpu.model` (string): The GPU model
+     *  - `metadata_service.enabled` (boolean): Whether the metadata service is enabled
+     *  - `metadata_service.protocol` (string): The communication protocol used for the
+     *    metadata service endpoint
+     *  - `vcpu.count` (integer): The number of virtual CPUs.
      */
     instance?: string;
   }
@@ -58262,7 +59965,9 @@ namespace VpcV1 {
   }
 
   /**
-   * VolumeAttachmentDevice.
+   * The configuration for the volume as a device in the instance operating system.
+   *
+   * This property may be absent if the volume attachment's `status` is not `attached`.
    */
   export interface VolumeAttachmentDevice {
     /** A unique identifier for the device which is exposed to the instance operating system. */
@@ -58862,10 +60567,14 @@ namespace VpcV1 {
      */
     bandwidth?: number;
     /** The capacity to use for the volume (in gigabytes). The specified value must be at least the image's
-     *  `minimum_provisioned_size`, at most 250 gigabytes, and within the
-     *  `boot_capacity` range of the volume's profile.
+     *  `minimum_provisioned_size`, at most 250 gigabytes for
+     *  `storage_generation: 1` or at most 32,000 gigabytes for `storage_generation: 2`, and within the `boot_capacity`
+     *  range of the volume's profile.
      *
-     *  If unspecified, the capacity will be the image's `minimum_provisioned_size`.
+     *  If unspecified, the capacity will depend on the image:
+     *  - When using a system-provided image, 100 gigabytes or the `minimum_provisioned_size`
+     *    of the image, whichever is larger.
+     *  - When using a custom image, the `minimum_provisioned_size` of the image.
      */
     capacity?: number;
     /** The root key to use to wrap the data encryption key for the volume.
@@ -58916,8 +60625,9 @@ namespace VpcV1 {
      */
     bandwidth?: number;
     /** The capacity to use for the volume (in gigabytes). The specified value must be at least the snapshot's
-     *  `minimum_capacity`, at most 250 gigabytes, and within the
-     *  `boot_capacity` range of the volume's profile.
+     *  `minimum_capacity`, at most 250 gigabytes for
+     *  `storage_generation: 1` or at most 32,000 gigabytes for `storage_generation: 2`, and within the `boot_capacity`
+     *  range of the volume's profile.
      */
     capacity?: number;
     /** The root key to use to wrap the data encryption key for the volume.
@@ -59360,8 +61070,8 @@ namespace VpcV1 {
     /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching
      *  user tag will be subject to the backup policy.
      *
-     *  A backup policy of type `instance` will create a backup of all volumes with a
-     *  `storage_generation` value of `1` attached to the instance.
+     *  If the targeted instance contains volumes with different `storage_generation` values, a backup policy of type
+     *  `instance` will create separate backups for each `storage_generation` present.
      */
     match_resource_type: BackupPolicyPrototypeBackupPolicyMatchResourceTypeInstancePrototype.Constants.MatchResourceType | string;
   }
@@ -59372,7 +61082,7 @@ namespace VpcV1 {
         BOOT_VOLUME = 'boot_volume',
         DATA_VOLUMES = 'data_volumes',
       }
-      /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. A backup policy of type `instance` will create a backup of all volumes with a `storage_generation` value of `1` attached to the instance. */
+      /** The resource type this backup policy will apply to. Resources that have both a matching type and a matching user tag will be subject to the backup policy. If the targeted instance contains volumes with different `storage_generation` values, a backup policy of type `instance` will create separate backups for each `storage_generation` present. */
       export enum MatchResourceType {
         INSTANCE = 'instance',
       }
@@ -63145,7 +64855,7 @@ namespace VpcV1 {
   }
 
   /**
-   * The VCPU count for an instance with this profile.
+   * The default VCPU count for an instance with this profile.
    */
   export interface InstanceProfileVCPUFixed extends InstanceProfileVCPU {
     /** The type for this profile field. */
@@ -63848,6 +65558,14 @@ namespace VpcV1 {
   }
 
   /**
+   * LoadBalancerListenerClientAuthenticationCertificateAuthorityPatchByCRN.
+   */
+  export interface LoadBalancerListenerClientAuthenticationCertificateAuthorityPatchByCRN extends LoadBalancerListenerClientAuthenticationCertificateAuthorityPatch {
+    /** The CRN for this certificate instance. */
+    crn: string;
+  }
+
+  /**
    * LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityByHref.
    */
   export interface LoadBalancerListenerDefaultPoolPatchLoadBalancerPoolIdentityByHref extends LoadBalancerListenerDefaultPoolPatch {
@@ -64077,6 +65795,18 @@ namespace VpcV1 {
    * LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSPrototype.
    */
   export interface LoadBalancerPoolHealthMonitorPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSPrototype extends LoadBalancerPoolHealthMonitorPrototype {
+    /** The HTTP request to use for health checks. If unspecified, a `request.method` value of
+     *  `get` will be used with no `request.headers`.
+     *
+     *  Supported by load balancers with `advanced_health_checks_supported` set to `true`.
+     */
+    request?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototype;
+    /** The HTTP response to use for health checks. If unspecified, a `response.codes` value of
+     *  `["200"]` will be used with no `response.body_regex`.
+     *
+     *  Supported by load balancers with `advanced_health_checks_supported` set to `true`.
+     */
+    response?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSResponsePrototype;
     /** The protocol type to use for health checks.
      *
      *  Load balancers in the `network` family do not support the `https` protocol.
@@ -64118,6 +65848,8 @@ namespace VpcV1 {
    * LoadBalancerPoolHealthMonitorTypeHTTPHTTPS.
    */
   export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPS extends LoadBalancerPoolHealthMonitor {
+    request: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequest;
+    response: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSResponse;
     /** The protocol type used for health checks. */
     type: LoadBalancerPoolHealthMonitorTypeHTTPHTTPS.Constants.Type | string;
     /** The health check URL path, in the format of an [origin-form request
@@ -64131,6 +65863,67 @@ namespace VpcV1 {
       export enum Type {
         HTTP = 'http',
         HTTPS = 'https',
+      }
+    }
+  }
+
+  /**
+   * LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestGetPrototype.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestGetPrototype extends LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototype {
+    /** The HTTP request headers to use for health checks. If empty, health check HTTP requests will not have
+     *  headers.
+     *
+     *  Include a `Host` field and its value to enable the `HTTP/1.1` protocol for health checks. If a `Host` header is
+     *  not included, `HTTP/1.0` will be used by default. More than one
+     *  `Host` header is not allowed.
+     *
+     *  A header must not exceed 1000 characters, and all headers combined must not exceed 4000 characters.
+     */
+    headers?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestHeaderPrototype[];
+    /** The HTTP request method to use for health checks. */
+    method?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestGetPrototype.Constants.Method | string;
+  }
+  export namespace LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestGetPrototype {
+    export namespace Constants {
+      /** The HTTP request method to use for health checks. */
+      export enum Method {
+        GET = 'get',
+      }
+    }
+  }
+
+  /**
+   * LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPostPrototype.
+   */
+  export interface LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPostPrototype extends LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototype {
+    /** The HTTP request body to use for health checks. If unspecified, health check requests will not have a
+     *  request body.
+     *
+     *  The body must be formatted in a way that is understood by the backend member. If specified, the
+     *  `request.headers` array must include a corresponding `Content-Type` header.
+     */
+    body?: string;
+    /** The HTTP request headers to use for health checks. If empty, health check requests will not have headers.
+     *
+     *  Include a `Host` field and its value to enable the `HTTP/1.1` protocol for health checks. If a `Host` header is
+     *  not included, `HTTP/1.0` will be used by default. More than one
+     *  `Host` header is not allowed.
+     *
+     *  Include a `Content-Type` field and its value to indicate the media type of the
+     *  `request.body` (if set).
+     *
+     *  A header must not exceed 1000 characters, and all headers combined must not exceed 4000 characters.
+     */
+    headers?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestHeaderPrototype[];
+    /** The HTTP request method to use for health checks. */
+    method?: LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPostPrototype.Constants.Method | string;
+  }
+  export namespace LoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPrototypeLoadBalancerPoolHealthMonitorTypeHTTPHTTPSRequestPostPrototype {
+    export namespace Constants {
+      /** The HTTP request method to use for health checks. */
+      export enum Method {
+        POST = 'post',
       }
     }
   }
@@ -64202,6 +65995,14 @@ namespace VpcV1 {
   }
 
   /**
+   * LoadBalancerPoolMemberTargetPrototypeFQDN.
+   */
+  export interface LoadBalancerPoolMemberTargetPrototypeFQDN extends LoadBalancerPoolMemberTargetPrototype {
+    /** A fully qualified domain name for this resource. */
+    fqdn: string;
+  }
+
+  /**
    * LoadBalancerPoolMemberTargetPrototypeIP.
    */
   export interface LoadBalancerPoolMemberTargetPrototypeIP extends LoadBalancerPoolMemberTargetPrototype {
@@ -64229,6 +66030,14 @@ namespace VpcV1 {
    * Identifies a reserved IP by a unique property.
    */
   export interface LoadBalancerPoolMemberTargetPrototypeReservedIPIdentity extends LoadBalancerPoolMemberTargetPrototype {
+  }
+
+  /**
+   * LoadBalancerPoolMemberTargetFQDN.
+   */
+  export interface LoadBalancerPoolMemberTargetFQDN extends LoadBalancerPoolMemberTarget {
+    /** A fully qualified domain name for this resource. */
+    fqdn: string;
   }
 
   /**
@@ -64292,6 +66101,40 @@ namespace VpcV1 {
   }
 
   /**
+   * The advanced health check support for a load balancer with this profile depends on its configuration.
+   */
+  export interface LoadBalancerProfileAdvancedHealthCheckSupportedDependent extends LoadBalancerProfileAdvancedHealthCheckSupported {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileAdvancedHealthCheckSupportedDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileAdvancedHealthCheckSupportedDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /**
+   * The advanced health check support for a load balancer with this profile.
+   */
+  export interface LoadBalancerProfileAdvancedHealthCheckSupportedFixed extends LoadBalancerProfileAdvancedHealthCheckSupported {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileAdvancedHealthCheckSupportedFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: boolean;
+  }
+  export namespace LoadBalancerProfileAdvancedHealthCheckSupportedFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
+  /**
    * The availability mode for a load balancer with this profile depends on its configuration.
    */
   export interface LoadBalancerProfileAvailabilityDependent extends LoadBalancerProfileAvailability {
@@ -64333,6 +66176,40 @@ namespace VpcV1 {
       export enum Value {
         REGION = 'region',
         SUBNET = 'subnet',
+      }
+    }
+  }
+
+  /**
+   * The FQDN support for a load balancer with this profile depends on its configuration.
+   */
+  export interface LoadBalancerProfileFQDNSupportedDependent extends LoadBalancerProfileFQDNSupported {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileFQDNSupportedDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileFQDNSupportedDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /**
+   * The FQDN support for a load balancer with this profile.
+   */
+  export interface LoadBalancerProfileFQDNSupportedFixed extends LoadBalancerProfileFQDNSupported {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileFQDNSupportedFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: boolean;
+  }
+  export namespace LoadBalancerProfileFQDNSupportedFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
       }
     }
   }
@@ -64429,6 +66306,40 @@ namespace VpcV1 {
     value: boolean;
   }
   export namespace LoadBalancerProfileInstanceGroupsSupportedFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
+  /**
+   * The mTLS support for a load balancer with this profile depends on its configuration.
+   */
+  export interface LoadBalancerProfileMtlsSupportedDependent extends LoadBalancerProfileMtlsSupported {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileMtlsSupportedDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileMtlsSupportedDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /**
+   * The mTLS support for a load balancer with this profile.
+   */
+  export interface LoadBalancerProfileMtlsSupportedFixed extends LoadBalancerProfileMtlsSupported {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileMtlsSupportedFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: boolean;
+  }
+  export namespace LoadBalancerProfileMtlsSupportedFixed {
     export namespace Constants {
       /** The type for this profile field. */
       export enum Type {
@@ -64755,8 +66666,8 @@ namespace VpcV1 {
   export interface NetworkACLRuleItemNetworkACLRuleProtocolIndividual extends NetworkACLRuleItem {
     /** The network protocol.
      *
-     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
-     *  protocols are:
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and
+     *  `udp`. Names for well known protocols are:
      *  - `ah`: AH (authentication header, protocol number `51`)
      *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
      *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
@@ -65190,8 +67101,8 @@ namespace VpcV1 {
   export interface NetworkACLRulePrototypeNetworkACLContextNetworkACLRuleProtocolIndividualPrototype extends NetworkACLRulePrototypeNetworkACLContext {
     /** The network protocol.
      *
-     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
-     *  protocols are:
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and
+     *  `udp`. Names for well known protocols are:
      *  - `ah`: AH (authentication header, protocol number `51`)
      *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
      *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
@@ -65641,8 +67552,8 @@ namespace VpcV1 {
   export interface NetworkACLRulePrototypeNetworkACLRuleProtocolIndividualPrototype extends NetworkACLRulePrototype {
     /** The network protocol.
      *
-     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
-     *  protocols are:
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and
+     *  `udp`. Names for well known protocols are:
      *  - `ah`: AH (authentication header, protocol number `51`)
      *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
      *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
@@ -66092,8 +68003,8 @@ namespace VpcV1 {
   export interface NetworkACLRuleNetworkACLRuleProtocolIndividual extends NetworkACLRule {
     /** The network protocol.
      *
-     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
-     *  protocols are:
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and
+     *  `udp`. Names for well known protocols are:
      *  - `ah`: AH (authentication header, protocol number `51`)
      *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
      *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
@@ -67127,8 +69038,8 @@ namespace VpcV1 {
   export interface SecurityGroupRuleProtocolIndividual extends SecurityGroupRule {
     /** The network protocol to allow.
      *
-     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
-     *  protocols are:
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and
+     *  `udp`. Names for well known protocols are:
      *  - `ah`: AH (authentication header, protocol number `51`)
      *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
      *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
@@ -67545,8 +69456,8 @@ namespace VpcV1 {
   export interface SecurityGroupRulePrototypeSecurityGroupRuleProtocolIndividualPrototype extends SecurityGroupRulePrototype {
     /** The network protocol to allow.
      *
-     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and `udp`. Names for well known
-     *  protocols are:
+     *  The value must be the name of an individual protocol, excluding `icmp`, `tcp` and
+     *  `udp`. Names for well known protocols are:
      *  - `ah`: AH (authentication header, protocol number `51`)
      *  - `esp`: ESP (encapsulating security payload, protocol number `50`)
      *  - `gre`: GRE (generic routing encapsulation, protocol number `47`)
@@ -68892,6 +70803,8 @@ namespace VpcV1 {
      *    require a virtual network interface.
      *  - `vpc`: All clients in the VPC for a mount target have access to the mount target.
      *    Mount targets for this share require a VPC.
+     *
+     *  The `vpc` access control mode has been deprecated. Use `security_group` instead.
      */
     access_control_mode?: SharePrototypeShareBySize.Constants.AccessControlMode | string;
     /** The access protocols to allow for this share. If unspecified:
@@ -68958,7 +70871,7 @@ namespace VpcV1 {
         NONE = 'none',
         STUNNEL = 'stunnel',
       }
-      /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. Mount targets for this share require a virtual network interface. - `vpc`: All clients in the VPC for a mount target have access to the mount target. Mount targets for this share require a VPC. */
+      /** The access control mode for the share: - `security_group`: The security groups on the virtual network interface for a mount target control access to the mount target. Mount targets for this share require a virtual network interface. - `vpc`: All clients in the VPC for a mount target have access to the mount target. Mount targets for this share require a VPC. The `vpc` access control mode has been deprecated. Use `security_group` instead. */
       export enum AccessControlMode {
         SECURITY_GROUP = 'security_group',
         VPC = 'vpc',
@@ -69159,9 +71072,9 @@ namespace VpcV1 {
    * SnapshotConsistencyGroupPrototypeSnapshotConsistencyGroupBySnapshots.
    */
   export interface SnapshotConsistencyGroupPrototypeSnapshotConsistencyGroupBySnapshots extends SnapshotConsistencyGroupPrototype {
-    /** The data-consistent member snapshots to create.  Each snapshot must specify a
-     *  `source_volume` attached to the same virtual server instance, and all source volumes must have a
-     *  `storage_generation` value of `1`.
+    /** The data-consistent member snapshots to create. Each snapshot must specify a
+     *  `source_volume` attached to the same virtual server instance, and all source volumes must have the same
+     *  `storage_generation` value.
      */
     snapshots: SnapshotPrototypeSnapshotConsistencyGroupContext[];
   }
@@ -74996,6 +76909,87 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.InstanceGroupMembership[]> {
       const results: InstanceGroupMembership[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * InstanceProfilesPager can be used to simplify the use of listInstanceProfiles().
+   */
+  export class InstanceProfilesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListInstanceProfilesParams;
+
+    /**
+     * Construct a InstanceProfilesPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listInstanceProfiles()
+     * @param {Object} [params] - The parameters to be passed to listInstanceProfiles()
+     * @constructor
+     * @returns {InstanceProfilesPager}
+     */
+    constructor(client: VpcV1, params?: VpcV1.ListInstanceProfilesParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listInstanceProfiles().
+     * @returns {Promise<VpcV1.InstanceProfile[]>}
+     */
+    public async getNext(): Promise<VpcV1.InstanceProfile[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listInstanceProfiles(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.profiles;
+    }
+
+    /**
+     * Returns all results by invoking listInstanceProfiles() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.InstanceProfile[]>}
+     */
+    public async getAll(): Promise<VpcV1.InstanceProfile[]> {
+      const results: InstanceProfile[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
