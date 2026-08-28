@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.114.4-9b56d441-20260612-210048
+ * IBM OpenAPI SDK Code Generator Version: 3.116.0-df613dbc-20260803-154903
  */
 
 /* eslint-disable max-classes-per-file */
@@ -40,7 +40,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: 2026-06-23
+ * API Version: 2026-08-18
  */
 
 class VpcV1 extends BaseService {
@@ -59,6 +59,7 @@ class VpcV1 extends BaseService {
     ['eu-es', 'https://eu-es.iaas.cloud.ibm.com/v1'], // Spain (Madrid)
     ['eu-gb', 'https://eu-gb.iaas.cloud.ibm.com/v1'], // United Kingdom (London)
     ['in-che', 'https://in-che.iaas.cloud.ibm.com/v1'], // India (Chennai)
+    ['in-mum', 'https://in-mum.iaas.cloud.ibm.com/v1'], // India (Mumbai)
     ['jp-osa', 'https://jp-osa.iaas.cloud.ibm.com/v1'], // Japan (Osaka)
     ['jp-tok', 'https://jp-tok.iaas.cloud.ibm.com/v1'], // Japan (Tokyo)
     ['us-east', 'https://us-east.iaas.cloud.ibm.com/v1'], // US East (Washington DC)
@@ -110,7 +111,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2026-04-07` and `2026-06-23`.
+   *  `2026-04-07` and `2026-08-19`.
    */
   version: string;
 
@@ -121,7 +122,7 @@ class VpcV1 extends BaseService {
    * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
    * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2026-04-07` and `2026-06-23`.
+   * specify any date between `2026-04-07` and `2026-08-19`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -141,7 +142,7 @@ class VpcV1 extends BaseService {
     if (!('generation' in options)) {
       this.generation = 2;
     }
-    this.version = options.version || '2026-06-23';
+    this.version = options.version || '2026-08-18';
   }
 
   /*************************
@@ -992,6 +993,68 @@ class VpcV1 extends BaseService {
   /*************************
    * bareMetalServers
    ************************/
+
+  /**
+   * List capacities for bare metal servers.
+   *
+   * This request lists bare metal server capacities in the region.
+   *
+   * @param {Object} [params] - The parameters to send to the service.
+   * @param {string} [params.start] - A server-provided token determining what resource to start the page on.
+   * @param {number} [params.limit] - The number of resources to return on a page.
+   * @param {string} [params.profileName] - Filters the collection to resources with a `profile.name` property matching
+   * the specified profile name.
+   * @param {string} [params.zoneName] - Filters the collection to resources with a `zone.name` property matching the
+   * exact specified name.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.BareMetalServerCapacityCollection>>}
+   */
+  public listBareMetalServerCapacities(
+    params?: VpcV1.ListBareMetalServerCapacitiesParams
+  ): Promise<VpcV1.Response<VpcV1.BareMetalServerCapacityCollection>> {
+    const _params = { ...params };
+    const _requiredParams = [];
+    const _validParams = ['start', 'limit', 'profileName', 'zoneName', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+      'start': _params.start,
+      'limit': _params.limit,
+      'profile.name': _params.profileName,
+      'zone.name': _params.zoneName,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listBareMetalServerCapacities');
+
+    const parameters = {
+      options: {
+        url: '/bare_metal_server/capacities',
+        method: 'GET',
+        qs: query,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
 
   /**
    * List bare metal server profiles.
@@ -11278,6 +11341,76 @@ class VpcV1 extends BaseService {
   }
 
   /**
+   * Reinitialize an instance.
+   *
+   * This request reinitializes an instance with the information in a provided instance reinitialize prototype object.
+   * The instance must be stopped. Upon successful reinitiatilization, the instance will be started automatically.
+   * Capacity may not be available for the instance to become `running`.
+   *
+   * Instances provisioned from a `catalog_offering` cannot be reinitialized.
+   *
+   * This operation cannot be reversed. The previous initialization data will be fully replaced, the current boot volume
+   * will be destroyed and replaced, any local disks will be wiped, and the boot volume attachment identifier will
+   * change.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.id - The instance identifier.
+   * @param {InstanceReinitializePrototype} params.instanceReinitializePrototype - The instance reinitialize prototype
+   * object.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.EmptyObject>>}
+   */
+  public createInstanceReinitialization(
+    params: VpcV1.CreateInstanceReinitializationParams
+  ): Promise<VpcV1.Response<VpcV1.EmptyObject>> {
+    const _params = { ...params };
+    const _requiredParams = ['id', 'instanceReinitializePrototype'];
+    const _validParams = ['id', 'instanceReinitializePrototype', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = _params.instanceReinitializePrototype;
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'createInstanceReinitialization');
+
+    const parameters = {
+      options: {
+        url: '/instances/{id}/reinitialize',
+        method: 'POST',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Content-Type': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
    * Create an instance action.
    *
    * This request creates a new action which will be queued up to run as soon as any pending or running actions have
@@ -15744,8 +15877,19 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
-   * @param {string} params.algorithm - The load balancing algorithm. The `least_connections` algorithm is only
-   * supported for load balancers that have `availability` with value `subnet` in the profile.
+   * @param {string} params.algorithm - The load balancing algorithm.
+   *
+   * - `least_connections`: Routes traffic to the pool member with the least active
+   *   connections. Supported by `application` and `network` family load balancers that
+   *   have `availability` with value `subnet` in the profile.
+   * - `round_robin`: Distributes traffic sequentially across pool members. Supported by
+   *   `application` and `network` family load balancers.
+   * - `weighted_round_robin`: Distributes traffic across pool members proportionally to
+   *   configured member weights. Supported by `application` and `network`
+   *   family load balancers.
+   * - `weighted_forwarding`: Forwards the layer 4 packets across backend pools
+   *   proportionally to configured member weights. Supported by `network` family
+   *   load balancers with an `asymmetric_routing_supported` value of `true`.
    * @param {LoadBalancerPoolHealthMonitorPrototype} params.healthMonitor - The health monitor of this pool.
    *
    * If this pool has a member targeting a load balancer then:
@@ -15993,8 +16137,19 @@ class VpcV1 extends BaseService {
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.loadBalancerId - The load balancer identifier.
    * @param {string} params.id - The pool identifier.
-   * @param {string} [params.algorithm] - The load balancing algorithm. The `least_connections` algorithm is only
-   * supported for load balancers that have `availability` with value `subnet` in the profile.
+   * @param {string} [params.algorithm] - The load balancing algorithm.
+   *
+   * - `least_connections`: Routes traffic to the pool member with the least active
+   *   connections. Supported by `application` and `network` family load balancers that
+   *   have `availability` with value `subnet` in the profile.
+   * - `round_robin`: Distributes traffic sequentially across pool members. Supported by
+   *   `application` and `network` family load balancers.
+   * - `weighted_round_robin`: Distributes traffic across pool members proportionally to
+   *   configured member weights. Supported by `application` and `network`
+   *   family load balancers.
+   * - `weighted_forwarding`: Forwards the layer 4 packets across backend pools
+   *   proportionally to configured member weights. Supported by `network` family
+   *   load balancers with an `asymmetric_routing_supported` value of `true`.
    * @param {LoadBalancerPoolClientAuthenticationPatch} [params.clientAuthentication] - The client authentication to use
    * for this pool.
    *
@@ -32459,7 +32614,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2026-04-07` and `2026-06-23`.
+     *  `2026-04-07` and `2026-08-19`.
      */
     version: string;
   }
@@ -32699,6 +32854,18 @@ namespace VpcV1 {
       BOOT_VOLUME = 'boot_volume',
       DATA_VOLUMES = 'data_volumes',
     }
+  }
+
+  /** Parameters for the `listBareMetalServerCapacities` operation. */
+  export interface ListBareMetalServerCapacitiesParams extends DefaultParams {
+    /** A server-provided token determining what resource to start the page on. */
+    start?: string;
+    /** The number of resources to return on a page. */
+    limit?: number;
+    /** Filters the collection to resources with a `profile.name` property matching the specified profile name. */
+    profileName?: string;
+    /** Filters the collection to resources with a `zone.name` property matching the exact specified name. */
+    zoneName?: string;
   }
 
   /** Parameters for the `listBareMetalServerProfiles` operation. */
@@ -34799,9 +34966,11 @@ namespace VpcV1 {
      *  the region. Changing the name will not affect the system hostname.
      */
     name?: string;
-    /** The placement restrictions to use for the virtual server instance.
+    /** The placement restrictions to use for the virtual server instance. For the
+     *  placement restrictions to be changed, the instance `status` must be `stopping` or
+     *  `stopped`.
      *
-     *  If specified, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated
+     *  If set, `reservation_affinity.policy` must be `disabled`. If specifying a dedicated
      *  host or dedicated host group, the `vcpu.percentage` must be `100` and the instance must
      *  have two or more vCPUs.
      */
@@ -34867,6 +35036,14 @@ namespace VpcV1 {
   export interface GetInstanceInitializationParams extends DefaultParams {
     /** The instance identifier. */
     id: string;
+  }
+
+  /** Parameters for the `createInstanceReinitialization` operation. */
+  export interface CreateInstanceReinitializationParams extends DefaultParams {
+    /** The instance identifier. */
+    id: string;
+    /** The instance reinitialize prototype object. */
+    instanceReinitializePrototype: InstanceReinitializePrototype;
   }
 
   /** Parameters for the `createInstanceAction` operation. */
@@ -35999,8 +36176,19 @@ namespace VpcV1 {
   export interface CreateLoadBalancerPoolParams extends DefaultParams {
     /** The load balancer identifier. */
     loadBalancerId: string;
-    /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that
-     *  have `availability` with value `subnet` in the profile.
+    /** The load balancing algorithm.
+     *
+     *  - `least_connections`: Routes traffic to the pool member with the least active
+     *    connections. Supported by `application` and `network` family load balancers that
+     *    have `availability` with value `subnet` in the profile.
+     *  - `round_robin`: Distributes traffic sequentially across pool members. Supported by
+     *    `application` and `network` family load balancers.
+     *  - `weighted_round_robin`: Distributes traffic across pool members proportionally to
+     *    configured member weights. Supported by `application` and `network`
+     *    family load balancers.
+     *  - `weighted_forwarding`: Forwards the layer 4 packets across backend pools
+     *    proportionally to configured member weights. Supported by `network` family
+     *    load balancers with an `asymmetric_routing_supported` value of `true`.
      */
     algorithm: CreateLoadBalancerPoolConstants.Algorithm | string;
     /** The health monitor of this pool.
@@ -36073,10 +36261,11 @@ namespace VpcV1 {
 
   /** Constants for the `createLoadBalancerPool` operation. */
   export namespace CreateLoadBalancerPoolConstants {
-    /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that have `availability` with value `subnet` in the profile. */
+    /** The load balancing algorithm. - `least_connections`: Routes traffic to the pool member with the least active connections. Supported by `application` and `network` family load balancers that have `availability` with value `subnet` in the profile. - `round_robin`: Distributes traffic sequentially across pool members. Supported by `application` and `network` family load balancers. - `weighted_round_robin`: Distributes traffic across pool members proportionally to configured member weights. Supported by `application` and `network` family load balancers. - `weighted_forwarding`: Forwards the layer 4 packets across backend pools proportionally to configured member weights. Supported by `network` family load balancers with an `asymmetric_routing_supported` value of `true`. */
     export enum Algorithm {
       LEAST_CONNECTIONS = 'least_connections',
       ROUND_ROBIN = 'round_robin',
+      WEIGHTED_FORWARDING = 'weighted_forwarding',
       WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
     }
     /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http`, and `https`. **NOTE**: HTTP sends data in plain text, making it vulnerable to eavesdropping and tampering. Additionally, HTTP has no built-in mechanism to verify the identity of the server you are connecting to. It is recommended to choose `https` instead of `http`. For more details, see: https://www.cloudflare.com/learning/ssl/why-is-http-not-secure. */
@@ -36116,8 +36305,19 @@ namespace VpcV1 {
     loadBalancerId: string;
     /** The pool identifier. */
     id: string;
-    /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that
-     *  have `availability` with value `subnet` in the profile.
+    /** The load balancing algorithm.
+     *
+     *  - `least_connections`: Routes traffic to the pool member with the least active
+     *    connections. Supported by `application` and `network` family load balancers that
+     *    have `availability` with value `subnet` in the profile.
+     *  - `round_robin`: Distributes traffic sequentially across pool members. Supported by
+     *    `application` and `network` family load balancers.
+     *  - `weighted_round_robin`: Distributes traffic across pool members proportionally to
+     *    configured member weights. Supported by `application` and `network`
+     *    family load balancers.
+     *  - `weighted_forwarding`: Forwards the layer 4 packets across backend pools
+     *    proportionally to configured member weights. Supported by `network` family
+     *    load balancers with an `asymmetric_routing_supported` value of `true`.
      */
     algorithm?: UpdateLoadBalancerPoolConstants.Algorithm | string;
     /** The client authentication to use for this pool.
@@ -36185,10 +36385,11 @@ namespace VpcV1 {
 
   /** Constants for the `updateLoadBalancerPool` operation. */
   export namespace UpdateLoadBalancerPoolConstants {
-    /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that have `availability` with value `subnet` in the profile. */
+    /** The load balancing algorithm. - `least_connections`: Routes traffic to the pool member with the least active connections. Supported by `application` and `network` family load balancers that have `availability` with value `subnet` in the profile. - `round_robin`: Distributes traffic sequentially across pool members. Supported by `application` and `network` family load balancers. - `weighted_round_robin`: Distributes traffic across pool members proportionally to configured member weights. Supported by `application` and `network` family load balancers. - `weighted_forwarding`: Forwards the layer 4 packets across backend pools proportionally to configured member weights. Supported by `network` family load balancers with an `asymmetric_routing_supported` value of `true`. */
     export enum Algorithm {
       LEAST_CONNECTIONS = 'least_connections',
       ROUND_ROBIN = 'round_robin',
+      WEIGHTED_FORWARDING = 'weighted_forwarding',
       WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
     }
     /** The protocol for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http` and `https`. If this pool is associated with a load balancer listener or a load balancer failsafe target pool, the specified protocol must match or be compatible with each other's protocol. At present, the compatible protocols are `http` and `https`. */
@@ -41254,6 +41455,32 @@ namespace VpcV1 {
   }
 
   /**
+   * A `zone` that has available bare metal servers with a `profile`.
+   */
+  export interface BareMetalServerCapacity {
+    /** The [profile](https://cloud.ibm.com/docs/vpc?topic=vpc-bare-metal-servers-profile) available in the `zone`. */
+    profile: BareMetalServerProfileReference;
+    /** The zone where one or more bare metal servers of the `profile` are available. */
+    zone: ZoneReference;
+  }
+
+  /**
+   * Available bare metal server capacities.
+   */
+  export interface BareMetalServerCapacityCollection {
+    /** A page of available bare metal server capacities. */
+    capacities: BareMetalServerCapacity[];
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** The total number of resources across all pages. */
+    total_count: number;
+  }
+
+  /**
    * BareMetalServerCollection.
    */
   export interface BareMetalServerCollection {
@@ -42171,6 +42398,8 @@ namespace VpcV1 {
     supported_trusted_platform_module_modes: BareMetalServerProfileSupportedTrustedPlatformModuleModes;
     /** Indicates whether this profile supports virtual network interfaces. */
     virtual_network_interfaces_supported: BareMetalServerProfileVirtualNetworkInterfacesSupported;
+    /** The zones in this region that support this bare metal server profile. */
+    zones: ZoneReference[];
   }
   export namespace BareMetalServerProfile {
     export namespace Constants {
@@ -47396,6 +47625,7 @@ namespace VpcV1 {
   export interface InstanceLifecycleReason {
     /** A reason code for this lifecycle state:
      *  - `failed_licensing`: Allocation of one or more software license(s) has failed. Delete
+     *    the instance and provision it again. If the problem persists, contact IBM Support.
      *  - `failed_registration`: The instance's registration to Resource Controller has
      *    failed. Delete the instance and provision it again. If the problem persists,
      *    contact IBM Support.
@@ -47416,7 +47646,7 @@ namespace VpcV1 {
   }
   export namespace InstanceLifecycleReason {
     export namespace Constants {
-      /** A reason code for this lifecycle state: - `failed_licensing`: Allocation of one or more software license(s) has failed. Delete - `failed_registration`: The instance's registration to Resource Controller has failed. Delete the instance and provision it again. If the problem persists, contact IBM Support. - `internal_error`: Internal error (contact IBM support) - `pending_registration`: The instance's registration to Resource Controller is being processed. - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      /** A reason code for this lifecycle state: - `failed_licensing`: Allocation of one or more software license(s) has failed. Delete the instance and provision it again. If the problem persists, contact IBM Support. - `failed_registration`: The instance's registration to Resource Controller has failed. Delete the instance and provision it again. If the problem persists, contact IBM Support. - `internal_error`: Internal error (contact IBM support) - `pending_registration`: The instance's registration to Resource Controller is being processed. - `resource_suspended_by_provider`: The resource has been suspended (contact IBM support) The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
       export enum Code {
         FAILED_LICENSING = 'failed_licensing',
         FAILED_REGISTRATION = 'failed_registration',
@@ -48178,8 +48408,9 @@ namespace VpcV1 {
     confidential_compute_mode?: InstancePrototype.Constants.ConfidentialComputeMode | string;
     /** The default trusted profile configuration to use for this virtual server instance
      *
-     *  This property's value is used when provisioning the virtual server instance, but not
-     *  subsequently managed. Accordingly, it is reflected as an [instance
+     *  This property's value is used when provisioning the virtual server instance, and
+     *  can only be changed by reinitializing the instance. Accordingly, it is reflected as
+     *  an [instance
      *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization)
      *  property.
      */
@@ -48199,8 +48430,8 @@ namespace VpcV1 {
      *  other images, but if no keys are specified, the instance will be inaccessible unless the specified image
      *  provides another means of access.
      *
-     *  This property's value is used when provisioning the virtual server instance, but not subsequently managed.
-     *  Accordingly, it is reflected as an [instance
+     *  This property's value is used when provisioning the virtual server instance, and can only be changed by
+     *  reinitializing the instance. Accordingly, it is reflected as an [instance
      *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization) property.
      */
     keys?: KeyIdentity[];
@@ -48299,6 +48530,39 @@ namespace VpcV1 {
      *  region.
      */
     name: string;
+  }
+
+  /**
+   * InstanceReinitializePrototype.
+   */
+  export interface InstanceReinitializePrototype {
+    /** The default trusted profile configuration to use for this virtual server instance.
+     *  If not specified, the instance will be reinitialized without a default trusted
+     *  profile.
+     *
+     *  This property's value is used when reinitializing the virtual server instance, and
+     *  can only be changed by reinitializing the instance. Accordingly, it is reflected as
+     *  an [instance
+     *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization)
+     *  property.
+     */
+    default_trusted_profile?: InstanceDefaultTrustedProfilePrototype;
+    /** The public SSH keys for the reinitialized instance. The keys will be made available to the virtual server
+     *  instance as cloud-init vendor data. For cloud-init enabled images, the keys will also be added as SSH authorized
+     *  keys for the [default user]
+     *  (https://cloud.ibm.com/docs/vpc?topic=vpc-vsi_is_connecting_linux#determining-default-user-account).
+     *
+     *  For Windows images, only keys with a `type` value of `rsa` must be specified, and one will be selected to
+     *  encrypt [the administrator password](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization). Keys are
+     *  optional for other images.
+     *
+     *  If no keys are specified, the instance will be reinitialized without a key.
+     */
+    keys?: KeyIdentity[];
+    /** The [user data](https://cloud.ibm.com/docs/vpc?topic=vpc-user-data) to make available when setting up the
+     *  virtual server instance. If not specified, the instance will be reinitialized without user data.
+     */
+    user_data?: string;
   }
 
   /**
@@ -48636,8 +48900,9 @@ namespace VpcV1 {
     crn: string;
     /** The default trusted profile configuration to use for this virtual server instance
      *
-     *  This property's value is used when provisioning the virtual server instance, but not
-     *  subsequently managed. Accordingly, it is reflected as an [instance
+     *  This property's value is used when provisioning the virtual server instance, and
+     *  can only be changed by reinitializing the instance. Accordingly, it is reflected as
+     *  an [instance
      *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization)
      *  property.
      */
@@ -48661,8 +48926,8 @@ namespace VpcV1 {
      *  other images, but if no keys are specified, the instance will be inaccessible unless the specified image
      *  provides another means of access.
      *
-     *  This property's value is used when provisioning the virtual server instance, but not subsequently managed.
-     *  Accordingly, it is reflected as an [instance
+     *  This property's value is used when provisioning the virtual server instance, and can only be changed by
+     *  reinitializing the instance. Accordingly, it is reflected as an [instance
      *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization) property.
      */
     keys?: KeyIdentity[];
@@ -48778,8 +49043,9 @@ namespace VpcV1 {
     confidential_compute_mode?: InstanceTemplatePrototype.Constants.ConfidentialComputeMode | string;
     /** The default trusted profile configuration to use for this virtual server instance
      *
-     *  This property's value is used when provisioning the virtual server instance, but not
-     *  subsequently managed. Accordingly, it is reflected as an [instance
+     *  This property's value is used when provisioning the virtual server instance, and
+     *  can only be changed by reinitializing the instance. Accordingly, it is reflected as
+     *  an [instance
      *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization)
      *  property.
      */
@@ -48799,8 +49065,8 @@ namespace VpcV1 {
      *  other images, but if no keys are specified, the instance will be inaccessible unless the specified image
      *  provides another means of access.
      *
-     *  This property's value is used when provisioning the virtual server instance, but not subsequently managed.
-     *  Accordingly, it is reflected as an [instance
+     *  This property's value is used when provisioning the virtual server instance, and can only be changed by
+     *  reinitializing the instance. Accordingly, it is reflected as an [instance
      *  initialization](https://cloud.ibm.com/apidocs/vpc#get-instance-initialization) property.
      */
     keys?: KeyIdentity[];
@@ -49113,6 +49379,8 @@ namespace VpcV1 {
     access_mode: LoadBalancer.Constants.AccessMode | string;
     /** Indicates whether this load balancer supports advanced health checks. */
     advanced_health_checks_supported: boolean;
+    /** Indicates whether this load balancer supports asymmetric routing. */
+    asymmetric_routing_supported: boolean;
     /** The load balancer pool members attached to this load balancer. */
     attached_load_balancer_pool_members: LoadBalancerPoolMemberReference[];
     /** The availability of this load balancer:
@@ -50147,6 +50415,7 @@ namespace VpcV1 {
       export enum Algorithm {
         LEAST_CONNECTIONS = 'least_connections',
         ROUND_ROBIN = 'round_robin',
+        WEIGHTED_FORWARDING = 'weighted_forwarding',
         WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
       }
       /** The protocol for this load balancer pool. The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
@@ -50791,8 +51060,19 @@ namespace VpcV1 {
    * LoadBalancerPoolPrototypeLoadBalancerContext.
    */
   export interface LoadBalancerPoolPrototypeLoadBalancerContext {
-    /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that
-     *  have `availability` with value `subnet` in the profile.
+    /** The load balancing algorithm.
+     *
+     *  - `least_connections`: Routes traffic to the pool member with the least active
+     *    connections. Supported by `application` and `network` family load balancers that
+     *    have `availability` with value `subnet` in the profile.
+     *  - `round_robin`: Distributes traffic sequentially across pool members. Supported by
+     *    `application` and `network` family load balancers.
+     *  - `weighted_round_robin`: Distributes traffic across pool members proportionally to
+     *    configured member weights. Supported by `application` and `network`
+     *    family load balancers.
+     *  - `weighted_forwarding`: Forwards the layer 4 packets across backend pools
+     *    proportionally to configured member weights. Supported by `network` family
+     *    load balancers with an `asymmetric_routing_supported` value of `true`.
      */
     algorithm: LoadBalancerPoolPrototypeLoadBalancerContext.Constants.Algorithm | string;
     /** The client authentication to use for this pool.
@@ -50859,10 +51139,11 @@ namespace VpcV1 {
   }
   export namespace LoadBalancerPoolPrototypeLoadBalancerContext {
     export namespace Constants {
-      /** The load balancing algorithm. The `least_connections` algorithm is only supported for load balancers that have `availability` with value `subnet` in the profile. */
+      /** The load balancing algorithm. - `least_connections`: Routes traffic to the pool member with the least active connections. Supported by `application` and `network` family load balancers that have `availability` with value `subnet` in the profile. - `round_robin`: Distributes traffic sequentially across pool members. Supported by `application` and `network` family load balancers. - `weighted_round_robin`: Distributes traffic across pool members proportionally to configured member weights. Supported by `application` and `network` family load balancers. - `weighted_forwarding`: Forwards the layer 4 packets across backend pools proportionally to configured member weights. Supported by `network` family load balancers with an `asymmetric_routing_supported` value of `true`. */
       export enum Algorithm {
         LEAST_CONNECTIONS = 'least_connections',
         ROUND_ROBIN = 'round_robin',
+        WEIGHTED_FORWARDING = 'weighted_forwarding',
         WEIGHTED_ROUND_ROBIN = 'weighted_round_robin',
       }
       /** The protocol used for this load balancer pool. Load balancers in the `network` family support `tcp` and `udp` (if `udp_supported` is `true`). Load balancers in the `application` family support `tcp`, `http`, and `https`. **NOTE**: HTTP sends data in plain text, making it vulnerable to eavesdropping and tampering. Additionally, HTTP has no built-in mechanism to verify the identity of the server you are connecting to. It is recommended to choose `https` instead of `http`. For more details, see: https://www.cloudflare.com/learning/ssl/why-is-http-not-secure. */
@@ -51045,6 +51326,7 @@ namespace VpcV1 {
   export interface LoadBalancerProfile {
     access_modes: LoadBalancerProfileAccessModes;
     advanced_health_checks_supported: LoadBalancerProfileAdvancedHealthCheckSupported;
+    asymmetric_routing_supported: LoadBalancerProfileAsymmetricRoutingSupported;
     availability: LoadBalancerProfileAvailability;
     failsafe_policy_actions: LoadBalancerProfileFailsafePolicyActions;
     /** The product family this load balancer profile belongs to.
@@ -51108,6 +51390,12 @@ namespace VpcV1 {
    * LoadBalancerProfileAdvancedHealthCheckSupported.
    */
   export interface LoadBalancerProfileAdvancedHealthCheckSupported {
+  }
+
+  /**
+   * LoadBalancerProfileAsymmetricRoutingSupported.
+   */
+  export interface LoadBalancerProfileAsymmetricRoutingSupported {
   }
 
   /**
@@ -65231,6 +65519,35 @@ namespace VpcV1 {
   }
 
   /**
+   * Reinitialize an instance by using an image. The image must be within the same operating system family as the
+   * current instance image, and must have the same licensing model.
+   */
+  export interface InstanceReinitializePrototypeInstanceReinitializeByImage extends InstanceReinitializePrototype {
+    /** The boot volume attachment for the virtual server instance. If not specified,
+     *  a new boot volume attachment will be created.
+     */
+    boot_volume_attachment?: VolumeAttachmentPrototypeInstanceByImageContext;
+    /** The image to use when reinitializing the virtual server instance. */
+    image: ImageIdentity;
+  }
+
+  /**
+   * Reinitialize an instance by using a snapshot.
+   */
+  export interface InstanceReinitializePrototypeInstanceReinitializeBySnapshot extends InstanceReinitializePrototype {
+    /** The boot volume attachment for the virtual server instance. */
+    boot_volume_attachment: VolumeAttachmentPrototypeInstanceBySourceSnapshotContext;
+  }
+
+  /**
+   * Reinitialize an instance by using a boot volume.
+   */
+  export interface InstanceReinitializePrototypeInstanceReinitializeByVolume extends InstanceReinitializePrototype {
+    /** The boot volume attachment for the virtual server instance. */
+    boot_volume_attachment: VolumeAttachmentPrototypeInstanceByVolumeContext;
+  }
+
+  /**
    * InstanceTemplateIdentityByCRN.
    */
   export interface InstanceTemplateIdentityByCRN extends InstanceTemplateIdentity {
@@ -66126,6 +66443,40 @@ namespace VpcV1 {
     value: boolean;
   }
   export namespace LoadBalancerProfileAdvancedHealthCheckSupportedFixed {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        FIXED = 'fixed',
+      }
+    }
+  }
+
+  /**
+   * The asymmetric routing support for a load balancer with this profile depends on its configuration.
+   */
+  export interface LoadBalancerProfileAsymmetricRoutingSupportedDependent extends LoadBalancerProfileAsymmetricRoutingSupported {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileAsymmetricRoutingSupportedDependent.Constants.Type | string;
+  }
+  export namespace LoadBalancerProfileAsymmetricRoutingSupportedDependent {
+    export namespace Constants {
+      /** The type for this profile field. */
+      export enum Type {
+        DEPENDENT = 'dependent',
+      }
+    }
+  }
+
+  /**
+   * The asymmetric routing support for a load balancer with this profile.
+   */
+  export interface LoadBalancerProfileAsymmetricRoutingSupportedFixed extends LoadBalancerProfileAsymmetricRoutingSupported {
+    /** The type for this profile field. */
+    type: LoadBalancerProfileAsymmetricRoutingSupportedFixed.Constants.Type | string;
+    /** The value for this profile field. */
+    value: boolean;
+  }
+  export namespace LoadBalancerProfileAsymmetricRoutingSupportedFixed {
     export namespace Constants {
       /** The type for this profile field. */
       export enum Type {
@@ -74803,6 +75154,87 @@ namespace VpcV1 {
      */
     public async getAll(): Promise<VpcV1.BackupPolicyJob[]> {
       const results: BackupPolicyJob[] = [];
+      while (this.hasNext()) {
+        const nextPage = await this.getNext();
+        results.push(...nextPage);
+      }
+      return results;
+    }
+  }
+
+  /**
+   * BareMetalServerCapacitiesPager can be used to simplify the use of listBareMetalServerCapacities().
+   */
+  export class BareMetalServerCapacitiesPager {
+    protected _hasNext: boolean;
+
+    protected pageContext: any;
+
+    protected client: VpcV1;
+
+    protected params: VpcV1.ListBareMetalServerCapacitiesParams;
+
+    /**
+     * Construct a BareMetalServerCapacitiesPager object.
+     *
+     * @param {VpcV1}  client - The service client instance used to invoke listBareMetalServerCapacities()
+     * @param {Object} [params] - The parameters to be passed to listBareMetalServerCapacities()
+     * @constructor
+     * @returns {BareMetalServerCapacitiesPager}
+     */
+    constructor(client: VpcV1, params?: VpcV1.ListBareMetalServerCapacitiesParams) {
+      if (params && params.start) {
+        throw new Error(`the params.start field should not be set`);
+      }
+
+      this._hasNext = true;
+      this.pageContext = { next: undefined };
+      this.client = client;
+      this.params = JSON.parse(JSON.stringify(params || {}));
+    }
+
+    /**
+     * Returns true if there are potentially more results to be retrieved by invoking getNext().
+     * @returns {boolean}
+     */
+    public hasNext(): boolean {
+      return this._hasNext;
+    }
+
+    /**
+     * Returns the next page of results by invoking listBareMetalServerCapacities().
+     * @returns {Promise<VpcV1.BareMetalServerCapacity[]>}
+     */
+    public async getNext(): Promise<VpcV1.BareMetalServerCapacity[]> {
+      if (!this.hasNext()) {
+        throw new Error('No more results available');
+      }
+
+      if (this.pageContext.next) {
+        this.params.start = this.pageContext.next;
+      }
+      const response = await this.client.listBareMetalServerCapacities(this.params);
+      const { result } = response;
+
+      let next;
+      if (result && result.next) {
+        if (result.next.href) {
+          next = getQueryParam(result.next.href, 'start');
+        }
+      }
+      this.pageContext.next = next;
+      if (!this.pageContext.next) {
+        this._hasNext = false;
+      }
+      return result.capacities;
+    }
+
+    /**
+     * Returns all results by invoking listBareMetalServerCapacities() repeatedly until all pages of results have been retrieved.
+     * @returns {Promise<VpcV1.BareMetalServerCapacity[]>}
+     */
+    public async getAll(): Promise<VpcV1.BareMetalServerCapacity[]> {
+      const results: BareMetalServerCapacity[] = [];
       while (this.hasNext()) {
         const nextPage = await this.getNext();
         results.push(...nextPage);
