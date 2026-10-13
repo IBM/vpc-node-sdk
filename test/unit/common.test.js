@@ -20,11 +20,14 @@ const { getSdkHeaders } = common;
 
 describe('Tests of Common Library', () => {
   describe('getSdkHeaders', () => {
-    test('should return correct User-Agent header', () => {
+    test('should return correct User-Agent and X-Request-Id headers', () => {
       const headers = getSdkHeaders('service1', 'v1', 'operation1');
       expect(headers).not.toEqual(null);
       expect(headers['User-Agent']).toMatch(/^vpc-node-sdk\/.*/);
       expect(headers['X-Request-Id']).not.toBeNull();
+      expect(headers['X-Request-Id']).toMatch(
+        /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i
+      );
     });
   });
 });
