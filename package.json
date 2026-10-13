@@ -1,10 +1,10 @@
 {
   "name": "ibm-vpc",
-  "version": "0.0.1",
+  "version": "0.32.0",
   "description": "IBM Cloud VPC Node.js SDK",
   "repository": {
     "type": "git",
-    "url": "https://github.ibm.com/ibmcloud/vpc-node-sdk"
+    "url": "https://github.com/IBM/vpc-node-sdk.git"
   },
   "keywords": [
     "ibm"
