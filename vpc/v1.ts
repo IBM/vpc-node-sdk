@@ -15,7 +15,7 @@
  */
 
 /**
- * IBM OpenAPI SDK Code Generator Version: 3.116.0-df613dbc-20260803-154903
+ * IBM OpenAPI SDK Code Generator Version: 3.117.1-c28a0a4f-20260924-094841
  */
 
 /* eslint-disable max-classes-per-file */
@@ -40,7 +40,7 @@ import { getSdkHeaders } from '../lib/common';
  * The IBM Cloud Virtual Private Cloud (VPC) API can be used to programmatically provision and manage virtual server
  * instances, along with subnets, volumes, load balancers, and more.
  *
- * API Version: 2026-08-18
+ * API Version: 2026-10-06
  */
 
 class VpcV1 extends BaseService {
@@ -111,7 +111,7 @@ class VpcV1 extends BaseService {
   generation?: number;
 
   /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-   *  `2026-04-07` and `2026-08-19`.
+   *  `2026-09-01` and `2026-10-07`.
    */
   version: string;
 
@@ -122,7 +122,7 @@ class VpcV1 extends BaseService {
    * @param {number} [options.generation] - The infrastructure generation. For the API behavior documented here, specify
    * `2`.
    * @param {string} options.version - The API version, in format `YYYY-MM-DD`. For the API behavior documented here,
-   * specify any date between `2026-04-07` and `2026-08-19`.
+   * specify any date between `2026-09-01` and `2026-10-07`.
    * @param {string} [options.serviceUrl] - The base URL for the service
    * @param {OutgoingHttpHeaders} [options.headers] - Default headers that shall be included with every request to the service.
    * @param {Authenticator} options.authenticator - The Authenticator object used to authenticate requests to the service
@@ -142,7 +142,7 @@ class VpcV1 extends BaseService {
     if (!('generation' in options)) {
       this.generation = 2;
     }
-    this.version = options.version || '2026-08-18';
+    this.version = options.version || '2026-10-06';
   }
 
   /*************************
@@ -23536,6 +23536,198 @@ class VpcV1 extends BaseService {
 
     return this.createRequest(parameters);
   }
+
+  /**
+   * List snapshot software attachments associated with a snapshot.
+   *
+   * This request lists software attachments associated with a snapshot.
+   *
+   * The snapshot software attachments will be sorted by their `created_at` property values, with newest snapshot
+   * software attachments first. Software attachments with identical
+   * `created_at` property values will in turn be sorted by ascending `name` property values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.snapshotId - The snapshot identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotSoftwareAttachmentCollection>>}
+   */
+  public listSnapshotSoftwareAttachments(
+    params: VpcV1.ListSnapshotSoftwareAttachmentsParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotSoftwareAttachmentCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['snapshotId'];
+    const _validParams = ['snapshotId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'snapshot_id': _params.snapshotId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listSnapshotSoftwareAttachments');
+
+    const parameters = {
+      options: {
+        url: '/snapshots/{snapshot_id}/software_attachments',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a snapshot software attachment.
+   *
+   * This request retrieves a single snapshot software attachment specified by identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.snapshotId - The snapshot identifier.
+   * @param {string} params.id - The snapshot software attachment identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotSoftwareAttachment>>}
+   */
+  public getSnapshotSoftwareAttachment(
+    params: VpcV1.GetSnapshotSoftwareAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotSoftwareAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['snapshotId', 'id'];
+    const _validParams = ['snapshotId', 'id', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'snapshot_id': _params.snapshotId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getSnapshotSoftwareAttachment');
+
+    const parameters = {
+      options: {
+        url: '/snapshots/{snapshot_id}/software_attachments/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a snapshot software attachment.
+   *
+   * This request updates a snapshot software attachment with the information provided in a snapshot software attachment
+   * patch object. The snapshot software attachment patch object is structured in the same way as a retrieved snapshot
+   * software attachment and needs to contain only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.snapshotId - The snapshot identifier.
+   * @param {string} params.id - The snapshot software attachment identifier.
+   * @param {string} [params.name] - The name for this snapshot software attachment. The name must not be used by
+   * another software attachment for this snapshot.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.SnapshotSoftwareAttachment>>}
+   */
+  public updateSnapshotSoftwareAttachment(
+    params: VpcV1.UpdateSnapshotSoftwareAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.SnapshotSoftwareAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['snapshotId', 'id'];
+    const _validParams = ['snapshotId', 'id', 'name', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'snapshot_id': _params.snapshotId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateSnapshotSoftwareAttachment');
+
+    const parameters = {
+      options: {
+        url: '/snapshots/{snapshot_id}/software_attachments/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
   /*************************
    * subnets
    ************************/
@@ -26519,6 +26711,198 @@ class VpcV1 extends BaseService {
           this.baseOptions.headers,
           {
             'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List volume software attachments associated with a volume.
+   *
+   * This request lists software attachments associated with a volume.
+   *
+   * The volume software attachments will be sorted by their `created_at` property values, with newest volume software
+   * attachments first. Software attachments with identical `created_at` property values will in turn be sorted by
+   * ascending `name` property values.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.volumeId - The volume identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VolumeSoftwareAttachmentCollection>>}
+   */
+  public listVolumeSoftwareAttachments(
+    params: VpcV1.ListVolumeSoftwareAttachmentsParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeSoftwareAttachmentCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['volumeId'];
+    const _validParams = ['volumeId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'volume_id': _params.volumeId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVolumeSoftwareAttachments');
+
+    const parameters = {
+      options: {
+        url: '/volumes/{volume_id}/software_attachments',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a volume software attachment.
+   *
+   * This request retrieves a single volume software attachment specified by identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.volumeId - The volume identifier.
+   * @param {string} params.id - The volume software attachment identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VolumeSoftwareAttachment>>}
+   */
+  public getVolumeSoftwareAttachment(
+    params: VpcV1.GetVolumeSoftwareAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeSoftwareAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['volumeId', 'id'];
+    const _validParams = ['volumeId', 'id', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'volume_id': _params.volumeId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVolumeSoftwareAttachment');
+
+    const parameters = {
+      options: {
+        url: '/volumes/{volume_id}/software_attachments/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Update a volume software attachment.
+   *
+   * This request updates a volume software attachment with the information provided in a volume software attachment
+   * patch object. The volume software attachment patch object is structured in the same way as a retrieved volume
+   * software attachment and needs to contain only the information to be updated.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.volumeId - The volume identifier.
+   * @param {string} params.id - The volume software attachment identifier.
+   * @param {string} [params.name] - The name for this volume software attachment. The name must not be used by another
+   * software attachment for this volume.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VolumeSoftwareAttachment>>}
+   */
+  public updateVolumeSoftwareAttachment(
+    params: VpcV1.UpdateVolumeSoftwareAttachmentParams
+  ): Promise<VpcV1.Response<VpcV1.VolumeSoftwareAttachment>> {
+    const _params = { ...params };
+    const _requiredParams = ['volumeId', 'id'];
+    const _validParams = ['volumeId', 'id', 'name', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'name': _params.name,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'volume_id': _params.volumeId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'updateVolumeSoftwareAttachment');
+
+    const parameters = {
+      options: {
+        url: '/volumes/{volume_id}/software_attachments/{id}',
+        method: 'PATCH',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/merge-patch+json',
           },
           _params.headers
         ),
@@ -30266,6 +30650,9 @@ class VpcV1 extends BaseService {
    *
    * @param {Object} params - The parameters to send to the service.
    * @param {string} params.id - The VPN gateway identifier.
+   * @param {string} [params.availabilityMode] - The VPN gateway availability mode. Supported by route mode VPN
+   * gateways. Cannot be updated to `zonal`.
+   * - `regional`: The VPN gateway will allow members in multiple zones in the region.
    * @param {number} [params.localAsn] - The local autonomous system number (ASN) for this VPN gateway and its
    * connections. The ASN values in the
    * [restricted ASN list](
@@ -30281,13 +30668,14 @@ class VpcV1 extends BaseService {
   ): Promise<VpcV1.Response<VpcV1.VPNGateway>> {
     const _params = { ...params };
     const _requiredParams = ['id'];
-    const _validParams = ['id', 'localAsn', 'name', 'signal', 'headers'];
+    const _validParams = ['id', 'availabilityMode', 'localAsn', 'name', 'signal', 'headers'];
     const _validationErrors = validateParams(_params, _requiredParams, _validParams);
     if (_validationErrors) {
       return Promise.reject(_validationErrors);
     }
 
     const body = {
+      'availability_mode': _params.availabilityMode,
       'local_asn': _params.localAsn,
       'name': _params.name,
     };
@@ -30837,9 +31225,15 @@ class VpcV1 extends BaseService {
    * @param {boolean} [params.adminStateUp] - If set to false, the VPN gateway connection is shut down.
    * @param {VPNGatewayConnectionDPDPatch} [params.deadPeerDetection] - The dead peer detection configuration.
    * @param {boolean} [params.distributeTraffic] - Indicates whether the traffic is distributed between the `up` tunnels
-   * of the VPN gateway connection when the VPC route's next hop is a VPN connection. If `false`, the traffic is only
-   * routed through the `up` tunnel with the lower `public_ip` address. Before enabling it on VPN connections to on-prem
-   * private networks, review
+   * of the VPN gateway connection when the VPC route's next hop is a VPN connection.
+   *
+   * For a `zonal` VPN gateway, if `false`, the traffic is only routed through the `up` tunnel with the lower
+   * `public_ip` address.
+   *
+   * For a `regional` VPN gateway, if `true`, traffic is distributed across both VPN members (ECMP mode). If `false`,
+   * only the first member of the VPN gateway handles all the traffic (deterministic mode).
+   *
+   * Before enabling it on VPN connections to on-prem private networks, review
    * [distributing traffic
    * restrictions](https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-limitations#distributing-traffic-restrictions).
    *
@@ -31432,6 +31826,198 @@ class VpcV1 extends BaseService {
           sdkHeaders,
           this.baseOptions.headers,
           {
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * List members of a VPN gateway.
+   *
+   * This request lists members of a VPN gateway.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpnGatewayId - The VPN gateway identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayMemberCollection>>}
+   */
+  public listVpnGatewayMembers(
+    params: VpcV1.ListVpnGatewayMembersParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayMemberCollection>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpnGatewayId'];
+    const _validParams = ['vpnGatewayId', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'listVpnGatewayMembers');
+
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/members',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Retrieve a VPN gateway member.
+   *
+   * This request retrieves a single VPN gateway member specified by the identifier in the URL.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpnGatewayId - The VPN gateway identifier.
+   * @param {string} params.id - The VPN gateway member identifier.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayMember>>}
+   */
+  public getVpnGatewayMember(
+    params: VpcV1.GetVpnGatewayMemberParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayMember>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpnGatewayId', 'id'];
+    const _validParams = ['vpnGatewayId', 'id', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'getVpnGatewayMember');
+
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/members/{id}',
+        method: 'GET',
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+          },
+          _params.headers
+        ),
+        axiosOptions: {
+          signal: _params.signal,
+        },
+      }),
+    };
+
+    return this.createRequest(parameters);
+  }
+
+  /**
+   * Replace a VPN gateway member.
+   *
+   * This request sets the subnet for a VPN gateway member by moving it to a new subnet.
+   *
+   * The existing reserved IP for `private_ip` will be unbound and a new reserved IP will be allocated from the provided
+   * subnet.
+   *
+   * @param {Object} params - The parameters to send to the service.
+   * @param {string} params.vpnGatewayId - The VPN gateway identifier.
+   * @param {string} params.id - The VPN gateway member identifier.
+   * @param {VPNGatewayMemberPrivateIPPrototype} params.privateIp - The identity of the subnet to which the VPN Gateway
+   * member will be relocated.
+   *
+   * A reserved IP will be allocated from the specified `subnet` and assigned to the VPN
+   * gateway member.
+   * @param {OutgoingHttpHeaders} [params.headers] - Custom request headers
+   * @returns {Promise<VpcV1.Response<VpcV1.VPNGatewayMember>>}
+   */
+  public replaceVpnGatewayMember(
+    params: VpcV1.ReplaceVpnGatewayMemberParams
+  ): Promise<VpcV1.Response<VpcV1.VPNGatewayMember>> {
+    const _params = { ...params };
+    const _requiredParams = ['vpnGatewayId', 'id', 'privateIp'];
+    const _validParams = ['vpnGatewayId', 'id', 'privateIp', 'signal', 'headers'];
+    const _validationErrors = validateParams(_params, _requiredParams, _validParams);
+    if (_validationErrors) {
+      return Promise.reject(_validationErrors);
+    }
+
+    const body = {
+      'private_ip': _params.privateIp,
+    };
+
+    const query = {
+      'version': this.version,
+      'generation': this.generation,
+    };
+
+    const path = {
+      'vpn_gateway_id': _params.vpnGatewayId,
+      'id': _params.id,
+    };
+
+    const sdkHeaders = getSdkHeaders(VpcV1.DEFAULT_SERVICE_NAME, 'v1', 'replaceVpnGatewayMember');
+
+    const parameters = {
+      options: {
+        url: '/vpn_gateways/{vpn_gateway_id}/members/{id}',
+        method: 'PUT',
+        body,
+        qs: query,
+        path,
+      },
+      defaultOptions: extend(true, {}, this.baseOptions, {
+        headers: extend(
+          true,
+          sdkHeaders,
+          this.baseOptions.headers,
+          {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
           },
           _params.headers
         ),
@@ -32614,7 +33200,7 @@ namespace VpcV1 {
     /** The infrastructure generation. For the API behavior documented here, specify `2`. */
     generation?: number;
     /** The API version, in format `YYYY-MM-DD`. For the API behavior documented here, specify any date between
-     *  `2026-04-07` and `2026-08-19`.
+     *  `2026-09-01` and `2026-10-07`.
      */
     version: string;
   }
@@ -38055,6 +38641,32 @@ namespace VpcV1 {
     limit?: number;
   }
 
+  /** Parameters for the `listSnapshotSoftwareAttachments` operation. */
+  export interface ListSnapshotSoftwareAttachmentsParams extends DefaultParams {
+    /** The snapshot identifier. */
+    snapshotId: string;
+  }
+
+  /** Parameters for the `getSnapshotSoftwareAttachment` operation. */
+  export interface GetSnapshotSoftwareAttachmentParams extends DefaultParams {
+    /** The snapshot identifier. */
+    snapshotId: string;
+    /** The snapshot software attachment identifier. */
+    id: string;
+  }
+
+  /** Parameters for the `updateSnapshotSoftwareAttachment` operation. */
+  export interface UpdateSnapshotSoftwareAttachmentParams extends DefaultParams {
+    /** The snapshot identifier. */
+    snapshotId: string;
+    /** The snapshot software attachment identifier. */
+    id: string;
+    /** The name for this snapshot software attachment. The name must not be used by another software attachment for
+     *  this snapshot.
+     */
+    name?: string;
+  }
+
   /** Parameters for the `listSubnets` operation. */
   export interface ListSubnetsParams extends DefaultParams {
     /** A server-provided token determining what resource to start the page on. */
@@ -38726,6 +39338,32 @@ namespace VpcV1 {
     volumeId: string;
     /** The volume job identifier. */
     id: string;
+  }
+
+  /** Parameters for the `listVolumeSoftwareAttachments` operation. */
+  export interface ListVolumeSoftwareAttachmentsParams extends DefaultParams {
+    /** The volume identifier. */
+    volumeId: string;
+  }
+
+  /** Parameters for the `getVolumeSoftwareAttachment` operation. */
+  export interface GetVolumeSoftwareAttachmentParams extends DefaultParams {
+    /** The volume identifier. */
+    volumeId: string;
+    /** The volume software attachment identifier. */
+    id: string;
+  }
+
+  /** Parameters for the `updateVolumeSoftwareAttachment` operation. */
+  export interface UpdateVolumeSoftwareAttachmentParams extends DefaultParams {
+    /** The volume identifier. */
+    volumeId: string;
+    /** The volume software attachment identifier. */
+    id: string;
+    /** The name for this volume software attachment. The name must not be used by another software attachment for
+     *  this volume.
+     */
+    name?: string;
   }
 
   /** Parameters for the `listVpcs` operation. */
@@ -40076,6 +40714,10 @@ namespace VpcV1 {
   export interface UpdateVpnGatewayParams extends DefaultParams {
     /** The VPN gateway identifier. */
     id: string;
+    /** The VPN gateway availability mode. Supported by route mode VPN gateways. Cannot be updated to `zonal`.
+     *  - `regional`: The VPN gateway will allow members in multiple zones in the region.
+     */
+    availabilityMode?: UpdateVpnGatewayConstants.AvailabilityMode | string;
     /** The local autonomous system number (ASN) for this VPN gateway and its connections. The ASN values in the
      *  [restricted ASN list](
      *  https://cloud.ibm.com/docs/vpc?topic=vpc-planning-considerations-vpn#dynamic-route-based-considerations) are
@@ -40084,6 +40726,14 @@ namespace VpcV1 {
     localAsn?: number;
     /** The name for this VPN gateway. The name must not be used by another VPN gateway in the VPC. */
     name?: string;
+  }
+
+  /** Constants for the `updateVpnGateway` operation. */
+  export namespace UpdateVpnGatewayConstants {
+    /** The VPN gateway availability mode. Supported by route mode VPN gateways. Cannot be updated to `zonal`. - `regional`: The VPN gateway will allow members in multiple zones in the region. */
+    export enum AvailabilityMode {
+      REGIONAL = 'regional',
+    }
   }
 
   /** Parameters for the `listVpnGatewayAdvertisedCidrs` operation. */
@@ -40176,8 +40826,15 @@ namespace VpcV1 {
     /** The dead peer detection configuration. */
     deadPeerDetection?: VPNGatewayConnectionDPDPatch;
     /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
-     *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
-     *  the lower `public_ip` address. Before enabling it on VPN connections to on-prem private networks, review
+     *  VPC route's next hop is a VPN connection.
+     *
+     *  For a `zonal` VPN gateway, if `false`, the traffic is only routed through the `up` tunnel with the lower
+     *  `public_ip` address.
+     *
+     *  For a `regional` VPN gateway, if `true`, traffic is distributed across both VPN members (ECMP mode). If `false`,
+     *  only the first member of the VPN gateway handles all the traffic (deterministic mode).
+     *
+     *  Before enabling it on VPN connections to on-prem private networks, review
      *  [distributing traffic
      *  restrictions](https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-limitations#distributing-traffic-restrictions).
      *
@@ -40311,6 +40968,34 @@ namespace VpcV1 {
     id: string;
     /** The IP address range in CIDR block notation. */
     cidr: string;
+  }
+
+  /** Parameters for the `listVpnGatewayMembers` operation. */
+  export interface ListVpnGatewayMembersParams extends DefaultParams {
+    /** The VPN gateway identifier. */
+    vpnGatewayId: string;
+  }
+
+  /** Parameters for the `getVpnGatewayMember` operation. */
+  export interface GetVpnGatewayMemberParams extends DefaultParams {
+    /** The VPN gateway identifier. */
+    vpnGatewayId: string;
+    /** The VPN gateway member identifier. */
+    id: string;
+  }
+
+  /** Parameters for the `replaceVpnGatewayMember` operation. */
+  export interface ReplaceVpnGatewayMemberParams extends DefaultParams {
+    /** The VPN gateway identifier. */
+    vpnGatewayId: string;
+    /** The VPN gateway member identifier. */
+    id: string;
+    /** The identity of the subnet to which the VPN Gateway member will be relocated.
+     *
+     *  A reserved IP will be allocated from the specified `subnet` and assigned to the VPN
+     *  gateway member.
+     */
+    privateIp: VPNGatewayMemberPrivateIPPrototype;
   }
 
   /** Parameters for the `listVpnGatewayServiceConnections` operation. */
@@ -45016,7 +45701,7 @@ namespace VpcV1 {
   }
 
   /**
-   * FloatingIPPrototype.
+   * The prototype object for a floating IP to be created.
    */
   export interface FloatingIPPrototype {
     /** The name for this floating IP. The name must not be used by another floating IP in the region. If
@@ -47950,8 +48635,6 @@ namespace VpcV1 {
     status: InstanceProfile.Constants.Status | string;
     /** The cluster network profiles that support this instance profile. */
     supported_cluster_network_profiles: ClusterNetworkProfileReference[];
-    /** The supported values for vcpu count for an instance with this profile. */
-    supported_vcpu_count: InstanceProfileSupportedVCPUCountEnum;
     threads_per_core: InstanceProfileThreadsPerCoreEnum;
     total_volume_bandwidth: InstanceProfileVolumeBandwidth;
     vcpu_architecture: InstanceProfileVCPUArchitecture;
@@ -48270,24 +48953,6 @@ namespace VpcV1 {
     values: boolean[];
   }
   export namespace InstanceProfileSupportedSecureBootModes {
-    export namespace Constants {
-      /** The type for this profile field. */
-      export enum Type {
-        ENUM = 'enum',
-      }
-    }
-  }
-
-  /**
-   * The supported values for vcpu count for an instance with this profile.
-   */
-  export interface InstanceProfileSupportedVCPUCountEnum {
-    /** The type for this profile field. */
-    type: InstanceProfileSupportedVCPUCountEnum.Constants.Type | string;
-    /** The permitted values for this profile field. */
-    values: number[];
-  }
-  export namespace InstanceProfileSupportedVCPUCountEnum {
     export namespace Constants {
       /** The type for this profile field. */
       export enum Type {
@@ -54468,6 +55133,41 @@ namespace VpcV1 {
   }
 
   /**
+   * ReservedIPReferenceVPNGatewayMemberContext.
+   */
+  export interface ReservedIPReferenceVPNGatewayMemberContext {
+    /** The IP address.
+     *
+     *  If the address has not yet been selected, the value will be `0.0.0.0`.
+     *
+     *  This property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) to support IPv6 addresses
+     *  in the future.
+     */
+    address: string;
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this reserved IP. */
+    href: string;
+    /** The unique identifier for this reserved IP. */
+    id: string;
+    /** The name for this reserved IP. The name is unique across all reserved IPs in a subnet. */
+    name: string;
+    /** The resource type. */
+    resource_type: ReservedIPReferenceVPNGatewayMemberContext.Constants.ResourceType | string;
+    subnet: SubnetReference;
+  }
+  export namespace ReservedIPReferenceVPNGatewayMemberContext {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SUBNET_RESERVED_IP = 'subnet_reserved_ip',
+      }
+    }
+  }
+
+  /**
    * The target this reserved IP is bound to.
    *
    * If absent, this reserved IP is provider-owned or unbound.
@@ -56928,6 +57628,8 @@ namespace VpcV1 {
     size: number;
     /** If present, the snapshot consistency group which created this snapshot. */
     snapshot_consistency_group?: SnapshotConsistencyGroupReference;
+    /** The software attachments for this snapshot. */
+    software_attachments: SnapshotSoftwareAttachmentReference[];
     /** If present, the image from which the data on this snapshot was most directly provisioned. */
     source_image?: ImageReference;
     /** If present, the source snapshot this snapshot was created from. */
@@ -57416,6 +58118,118 @@ namespace VpcV1 {
   }
 
   /**
+   * SnapshotSoftwareAttachment.
+   */
+  export interface SnapshotSoftwareAttachment {
+    /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
+     *  offering for this snapshot software attachment. May be absent if
+     *  `software_attachment.lifecycle_state` is not `stable`.
+     */
+    catalog_offering?: SnapshotSoftwareAttachmentCatalogOffering;
+    /** The date and time that the snapshot software attachment was created. */
+    created_at: string;
+    /** The entitlement for the snapshot software attachment's licensable software. */
+    entitlement?: SnapshotSoftwareAttachmentEntitlement;
+    /** The URL for this snapshot software attachment. */
+    href: string;
+    /** The unique identifier for this snapshot software attachment. */
+    id: string;
+    /** The name for this snapshot software attachment. The name is unique across all software attachments for the
+     *  snapshot.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: SnapshotSoftwareAttachment.Constants.ResourceType | string;
+  }
+  export namespace SnapshotSoftwareAttachment {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SNAPSHOT_SOFTWARE_ATTACHMENT = 'snapshot_software_attachment',
+      }
+    }
+  }
+
+  /**
+   * The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering for this snapshot
+   * software attachment. May be absent if
+   * `software_attachment.lifecycle_state` is not `stable`.
+   */
+  export interface SnapshotSoftwareAttachmentCatalogOffering {
+    /** The billing plan for the catalog offering version associated with this snapshot software
+     *  attachment.
+     *
+     *  If absent, no billing plan is associated with the catalog offering version (free).
+     */
+    plan?: CatalogOfferingVersionPlanReference;
+    /** The catalog offering version associated with this snapshot software attachment. */
+    version: CatalogOfferingVersionReference;
+  }
+
+  /**
+   * SnapshotSoftwareAttachmentCollection.
+   */
+  export interface SnapshotSoftwareAttachmentCollection {
+    /** The software attachments for the snapshot. */
+    software_attachments: SnapshotSoftwareAttachment[];
+  }
+
+  /**
+   * The entitlement for the snapshot software attachment's licensable software.
+   */
+  export interface SnapshotSoftwareAttachmentEntitlement {
+    /** The licensable software for this snapshot software attachment entitlement. The software will be licensed
+     *  when an instance is provisioned from this snapshot.
+     */
+    licensable_software: SnapshotSoftwareAttachmentEntitlementLicensableSoftware[];
+  }
+
+  /**
+   * The licensable software for this snapshot software attachment's entitlement.
+   */
+  export interface SnapshotSoftwareAttachmentEntitlementLicensableSoftware {
+    /** The SKU for this licensable software. */
+    sku: string;
+    vendor: SnapshotSoftwareAttachmentEntitlementLicensableSoftwareVendor;
+  }
+
+  /**
+   * SnapshotSoftwareAttachmentEntitlementLicensableSoftwareVendor.
+   */
+  export interface SnapshotSoftwareAttachmentEntitlementLicensableSoftwareVendor {
+    /** The name of the vendor providing this licensable software. */
+    name: string;
+  }
+
+  /**
+   * SnapshotSoftwareAttachmentReference.
+   */
+  export interface SnapshotSoftwareAttachmentReference {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this snapshot software attachment. */
+    href: string;
+    /** The unique identifier for this snapshot software attachment. */
+    id: string;
+    /** The name for this snapshot software attachment. The name is unique across all software attachments for the
+     *  snapshot.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: SnapshotSoftwareAttachmentReference.Constants.ResourceType | string;
+  }
+  export namespace SnapshotSoftwareAttachmentReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        SNAPSHOT_SOFTWARE_ATTACHMENT = 'snapshot_software_attachment',
+      }
+    }
+  }
+
+  /**
    * If present, the source snapshot this snapshot was created from.
    */
   export interface SnapshotSourceSnapshot {
@@ -57634,6 +58448,97 @@ namespace VpcV1 {
       /** The resource type. */
       export enum ResourceType {
         TRUSTED_PROFILE = 'trusted_profile',
+      }
+    }
+  }
+
+  /**
+   * UpdateVpcRouteResponse.
+   */
+  export interface UpdateVpcRouteResponse {
+    /** The action to perform with a packet matching the route:
+     *  - `delegate`: delegate to system-provided routes
+     *  - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes
+     *  - `deliver`: deliver the packet to the specified `next_hop`
+     *  - `drop`: drop the packet
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    action: UpdateVpcRouteResponse.Constants.Action | string;
+    /** Indicates whether this route will be advertised to the ingress sources specified by the
+     *  `advertise_routes_to` routing table property.
+     */
+    advertise: boolean;
+    /** The date and time that the route was created. */
+    created_at: string;
+    /** If present, the resource that created the route. Routes with this property present cannot
+     *  be directly deleted. All routes with an `origin` of `service` will have this property set,
+     *  and future `origin` values may also have this property set.
+     */
+    creator?: RouteCreator;
+    /** The destination CIDR of the route. */
+    destination: string;
+    /** The URL for this route. */
+    href: string;
+    /** The unique identifier for this route. */
+    id: string;
+    /** The lifecycle state of the route. */
+    lifecycle_state: UpdateVpcRouteResponse.Constants.LifecycleState | string;
+    /** The name for this route. The name is unique across all routes in the routing table. */
+    name: string;
+    /** If `action` is `deliver`, the next hop that packets will be delivered to.  For
+     *  other `action` values, its `address` will be `0.0.0.0`.
+     */
+    next_hop: RouteNextHop;
+    /** The origin of this route:
+     *  - `service`: route was directly created by a service
+     *  - `user`: route was directly created by a user
+     *
+     *  The enumerated values for this property may
+     *  [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future.
+     */
+    origin: UpdateVpcRouteResponse.Constants.Origin | string;
+    /** The priority of this route. Smaller values have higher priority.
+     *
+     *  If a routing table contains multiple routes with the same `zone` and `destination`, the route with the highest
+     *  priority (smallest value) is selected. If two routes have the same `destination` and `priority`, traffic is
+     *  distributed between them.
+     */
+    priority: number;
+    /** The zone the route applies to.
+     *
+     *  If subnets are attached to the route's routing table, egress traffic from those
+     *  subnets in this zone will be subject to this route. If this route's routing table
+     *  has any of `route_direct_link_ingress`, `route_internet_ingress`,
+     *  `route_transit_gateway_ingress` or `route_vpc_zone_ingress`  set to`true`, traffic
+     *  from those ingress sources arriving in this zone will be subject to this route.
+     */
+    zone: ZoneReference;
+  }
+  export namespace UpdateVpcRouteResponse {
+    export namespace Constants {
+      /** The action to perform with a packet matching the route: - `delegate`: delegate to system-provided routes - `delegate_vpc`: delegate to system-provided routes, ignoring Internet-bound routes - `deliver`: deliver the packet to the specified `next_hop` - `drop`: drop the packet The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Action {
+        DELEGATE = 'delegate',
+        DELEGATE_VPC = 'delegate_vpc',
+        DELIVER = 'deliver',
+        DROP = 'drop',
+      }
+      /** The lifecycle state of the route. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The origin of this route: - `service`: route was directly created by a service - `user`: route was directly created by a user The enumerated values for this property may [expand](https://cloud.ibm.com/apidocs/vpc#property-value-expansion) in the future. */
+      export enum Origin {
+        SERVICE = 'service',
+        USER = 'user',
       }
     }
   }
@@ -58223,7 +59128,7 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: VPNGateway.Constants.ResourceType | string;
-    subnet: SubnetReference;
+    subnet?: SubnetReference;
     /** The VPC this VPN gateway resides in. */
     vpc: VPCReference;
   }
@@ -59046,6 +59951,10 @@ namespace VpcV1 {
      *     health state of `inapplicable`. A `pending` resource may also have this state.
      */
     health_state: VPNGatewayMember.Constants.HealthState | string;
+    /** The URL for this VPN gateway member. */
+    href?: string;
+    /** The unique identifier for this VPN gateway member. */
+    id?: string;
     /** The reasons for the current `lifecycle_state` (if any). */
     lifecycle_reasons: VPNGatewayMemberLifecycleReason[];
     /** The lifecycle state of the VPN gateway member. */
@@ -59054,7 +59963,7 @@ namespace VpcV1 {
      *
      *  This property will be present only when the VPN gateway status is `available`.
      */
-    private_ip: ReservedIPReference;
+    private_ip: ReservedIPReferenceVPNGatewayMemberContext;
     /** The public IP address assigned to the VPN gateway member. */
     public_ip: IP;
     /** The high availability role assigned to the VPN gateway member.
@@ -59089,6 +59998,22 @@ namespace VpcV1 {
         STANDBY = 'standby',
       }
     }
+  }
+
+  /**
+   * VPNGatewayMemberCollection.
+   */
+  export interface VPNGatewayMemberCollection {
+    /** A link to the first page of resources. */
+    first: PageLink;
+    /** The maximum number of resources that can be returned by the request. */
+    limit: number;
+    /** The members for the VPN gateway. */
+    members: VPNGatewayMember[];
+    /** A link to the next page of resources. This property is present for all pages except the last page. */
+    next?: PageLink;
+    /** The total number of resources across all pages. */
+    total_count: number;
   }
 
   /**
@@ -59148,9 +60073,34 @@ namespace VpcV1 {
   }
 
   /**
+   * VPNGatewayMemberPrivateIPPrototype.
+   */
+  export interface VPNGatewayMemberPrivateIPPrototype {
+  }
+
+  /**
+   * VPNGatewayMemberPrototype.
+   */
+  export interface VPNGatewayMemberPrototype {
+    /** The identity of the subnet the VPN Gateway member will reside in.
+     *
+     *  A reserved IP will be allocated from the specified `subnet` and assigned to the VPN
+     *  gateway member.
+     */
+    private_ip: VPNGatewayMemberPrivateIPPrototype;
+  }
+
+  /**
    * VPNGatewayPrototype.
    */
   export interface VPNGatewayPrototype {
+    /** The availability mode of the VPN gateway:
+     *  - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is
+     *    limited to that zone.
+     *  - `regional`: The VPN gateway is deployed across multiple zones in the region. This mode
+     *    provides zone-level redundancy.
+     */
+    availability_mode?: VPNGatewayPrototype.Constants.AvailabilityMode | string;
     /** The name for this VPN gateway. The name must not be used by another VPN gateway in the VPC. If unspecified,
      *  the name will be a hyphenated list of randomly-selected words.
      */
@@ -59159,8 +60109,15 @@ namespace VpcV1 {
      *  group](https://cloud.ibm.com/apidocs/resource-manager#introduction) will be used.
      */
     resource_group?: ResourceGroupIdentity;
-    /** Identifies a subnet by a unique property. */
-    subnet: SubnetIdentity;
+  }
+  export namespace VPNGatewayPrototype {
+    export namespace Constants {
+      /** The availability mode of the VPN gateway: - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is limited to that zone. - `regional`: The VPN gateway is deployed across multiple zones in the region. This mode provides zone-level redundancy. */
+      export enum AvailabilityMode {
+        REGIONAL = 'regional',
+        ZONAL = 'zonal',
+      }
+    }
   }
 
   /**
@@ -59988,6 +60945,8 @@ namespace VpcV1 {
     resource_group: ResourceGroupReference;
     /** The resource type. */
     resource_type: Volume.Constants.ResourceType | string;
+    /** The software attachments for this volume. */
+    software_attachments: VolumeSoftwareAttachmentReference[];
     /** The image from which this volume was created (this may be
      *  [deleted](https://cloud.ibm.com/apidocs/vpc#deleted-resources)).
      *  If absent, this volume was not created from an image.
@@ -61021,6 +61980,118 @@ namespace VpcV1 {
      *  region, and identifies the native region.
      */
     region?: RegionReference;
+  }
+
+  /**
+   * VolumeSoftwareAttachment.
+   */
+  export interface VolumeSoftwareAttachment {
+    /** The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user)
+     *  offering for this volume software attachment. May be absent if
+     *  `software_attachment.lifecycle_state` is not `stable`.
+     */
+    catalog_offering?: VolumeSoftwareAttachmentCatalogOffering;
+    /** The date and time that the volume software attachment was created. */
+    created_at: string;
+    /** The entitlement for the volume software attachment's licensable software. */
+    entitlement?: VolumeSoftwareAttachmentEntitlement;
+    /** The URL for this volume software attachment. */
+    href: string;
+    /** The unique identifier for this volume software attachment. */
+    id: string;
+    /** The name for this volume software attachment. The name is unique across all software attachments for the
+     *  volume.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: VolumeSoftwareAttachment.Constants.ResourceType | string;
+  }
+  export namespace VolumeSoftwareAttachment {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VOLUME_SOFTWARE_ATTACHMENT = 'volume_software_attachment',
+      }
+    }
+  }
+
+  /**
+   * The [catalog](https://cloud.ibm.com/docs/account?topic=account-restrict-by-user) offering for this volume software
+   * attachment. May be absent if
+   * `software_attachment.lifecycle_state` is not `stable`.
+   */
+  export interface VolumeSoftwareAttachmentCatalogOffering {
+    /** The billing plan for the catalog offering version associated with this volume software
+     *  attachment.
+     *
+     *  If absent, no billing plan is associated with the catalog offering version (free).
+     */
+    plan?: CatalogOfferingVersionPlanReference;
+    /** The catalog offering version associated with this volume software attachment. */
+    version: CatalogOfferingVersionReference;
+  }
+
+  /**
+   * VolumeSoftwareAttachmentCollection.
+   */
+  export interface VolumeSoftwareAttachmentCollection {
+    /** The software attachments for the volume. */
+    software_attachments: VolumeSoftwareAttachment[];
+  }
+
+  /**
+   * The entitlement for the volume software attachment's licensable software.
+   */
+  export interface VolumeSoftwareAttachmentEntitlement {
+    /** The licensable software for this volume software attachment entitlement. The software will be licensed when
+     *  an instance is provisioned from this volume.
+     */
+    licensable_software: VolumeSoftwareAttachmentEntitlementLicensableSoftware[];
+  }
+
+  /**
+   * VolumeSoftwareAttachmentEntitlementLicensableSoftware.
+   */
+  export interface VolumeSoftwareAttachmentEntitlementLicensableSoftware {
+    /** The SKU for this licensable software. */
+    sku: string;
+    vendor: VolumeSoftwareAttachmentEntitlementLicensableSoftwareVendor;
+  }
+
+  /**
+   * VolumeSoftwareAttachmentEntitlementLicensableSoftwareVendor.
+   */
+  export interface VolumeSoftwareAttachmentEntitlementLicensableSoftwareVendor {
+    /** The name of the vendor providing this licensable software. */
+    name: string;
+  }
+
+  /**
+   * VolumeSoftwareAttachmentReference.
+   */
+  export interface VolumeSoftwareAttachmentReference {
+    /** If present, this property indicates the referenced resource has been deleted, and provides
+     *  some supplementary information.
+     */
+    deleted?: Deleted;
+    /** The URL for this volume software attachment. */
+    href: string;
+    /** The unique identifier for this volume software attachment. */
+    id: string;
+    /** The name for this volume software attachment. The name is unique across all software attachments for the
+     *  volume.
+     */
+    name: string;
+    /** The resource type. */
+    resource_type: VolumeSoftwareAttachmentReference.Constants.ResourceType | string;
+  }
+  export namespace VolumeSoftwareAttachmentReference {
+    export namespace Constants {
+      /** The resource type. */
+      export enum ResourceType {
+        VOLUME_SOFTWARE_ATTACHMENT = 'volume_software_attachment',
+      }
+    }
   }
 
   /**
@@ -72155,8 +73226,15 @@ namespace VpcV1 {
    */
   export interface VPNGatewayConnectionPrototypeVPNGatewayConnectionDynamicRouteModePrototype extends VPNGatewayConnectionPrototype {
     /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
-     *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
-     *  the lower `public_ip` address. Before enabling it on VPN connections to on-prem private networks, review
+     *  VPC route's next hop is a VPN connection.
+     *
+     *  For a `zonal` VPN gateway, if `false`, the traffic is only routed through the `up` tunnel with the lower
+     *  `public_ip` address.
+     *
+     *  For a `regional` VPN gateway, if `true`, traffic is distributed across both VPN members (ECMP mode). If `false`,
+     *  only the first member of the VPN gateway handles all the traffic (deterministic mode).
+     *
+     *  Before enabling it on VPN connections to on-prem private networks, review
      *  [distributing traffic
      *  restrictions](https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-limitations#distributing-traffic-restrictions).
      */
@@ -72204,8 +73282,15 @@ namespace VpcV1 {
    */
   export interface VPNGatewayConnectionPrototypeVPNGatewayConnectionStaticRouteModePrototype extends VPNGatewayConnectionPrototype {
     /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
-     *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
-     *  the lower `public_ip` address. Before enabling it on VPN connections to on-prem private networks, review
+     *  VPC route's next hop is a VPN connection.
+     *
+     *  For a `zonal` VPN gateway, if `false`, the traffic is only routed through the `up` tunnel with the lower
+     *  `public_ip` address.
+     *
+     *  For a `regional` VPN gateway, if `true`, traffic is distributed across both VPN members (ECMP mode). If `false`,
+     *  only the first member of the VPN gateway handles all the traffic (deterministic mode).
+     *
+     *  Before enabling it on VPN connections to on-prem private networks, review
      *  [distributing traffic
      *  restrictions](https://cloud.ibm.com/docs/vpc?topic=vpc-vpn-limitations#distributing-traffic-restrictions).
      */
@@ -72313,13 +73398,87 @@ namespace VpcV1 {
   }
 
   /**
-   * VPNGatewayPolicyMode.
+   * VPNGatewayMemberPrivateIPPrototypeReservedIPPrototypeVPNGatewayContext.
    */
-  export interface VPNGatewayPolicyMode extends VPNGateway {
-    /** The mode for this VPN gateway. */
-    mode: VPNGatewayPolicyMode.Constants.Mode | string;
+  export interface VPNGatewayMemberPrivateIPPrototypeReservedIPPrototypeVPNGatewayContext extends VPNGatewayMemberPrivateIPPrototype {
+    /** Identifies a subnet by a unique property. */
+    subnet: SubnetIdentity;
   }
-  export namespace VPNGatewayPolicyMode {
+
+  /**
+   * VPNGatewayPrototypeVPNGatewayRegionalAvailabilityModeByMember.
+   */
+  export interface VPNGatewayPrototypeVPNGatewayRegionalAvailabilityModeByMember extends VPNGatewayPrototype {
+    /** The availability mode of the VPN gateway:
+     *  - `regional`: The VPN gateway is deployed across multiple zones in the region. This mode
+     *    provides zone-level redundancy.
+     */
+    availability_mode: VPNGatewayPrototypeVPNGatewayRegionalAvailabilityModeByMember.Constants.AvailabilityMode | string;
+    /** The members to use for the VPN gateway. */
+    members: VPNGatewayMemberPrototype[];
+  }
+  export namespace VPNGatewayPrototypeVPNGatewayRegionalAvailabilityModeByMember {
+    export namespace Constants {
+      /** The availability mode of the VPN gateway: - `regional`: The VPN gateway is deployed across multiple zones in the region. This mode provides zone-level redundancy. */
+      export enum AvailabilityMode {
+        REGIONAL = 'regional',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMember.
+   */
+  export interface VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMember extends VPNGatewayPrototype {
+    /** The availability mode of the VPN gateway:
+     *  - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is
+     *    limited to that zone.
+     */
+    availability_mode?: VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMember.Constants.AvailabilityMode | string;
+    /** The members to use for the VPN gateway. All members must reside in the same subnet. */
+    members: VPNGatewayMemberPrototype[];
+  }
+  export namespace VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMember {
+    export namespace Constants {
+      /** The availability mode of the VPN gateway: - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is limited to that zone. */
+      export enum AvailabilityMode {
+        ZONAL = 'zonal',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnet.
+   */
+  export interface VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnet extends VPNGatewayPrototype {
+    /** The availability mode of the VPN gateway:
+     *  - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is
+     *    limited to that zone.
+     */
+    availability_mode?: VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnet.Constants.AvailabilityMode | string;
+    /** Identifies a subnet by a unique property. */
+    subnet: SubnetIdentity;
+  }
+  export namespace VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnet {
+    export namespace Constants {
+      /** The availability mode of the VPN gateway: - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is limited to that zone. */
+      export enum AvailabilityMode {
+        ZONAL = 'zonal',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayRegionalAvailabilityMode.
+   */
+  export interface VPNGatewayRegionalAvailabilityMode extends VPNGateway {
+    /** The availability mode of the VPN gateway:
+     *  - `regional`: The VPN gateway is deployed across multiple zones in the region. This mode
+     *    provides zone-level redundancy.
+     */
+    availability_mode: VPNGatewayRegionalAvailabilityMode.Constants.AvailabilityMode | string;
+  }
+  export namespace VPNGatewayRegionalAvailabilityMode {
     export namespace Constants {
       /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
       export enum HealthState {
@@ -72342,94 +73501,9 @@ namespace VpcV1 {
       export enum ResourceType {
         VPN_GATEWAY = 'vpn_gateway',
       }
-      /** The mode for this VPN gateway. */
-      export enum Mode {
-        POLICY = 'policy',
-      }
-    }
-  }
-
-  /**
-   * VPNGatewayPrototypeVPNGatewayPolicyModePrototype.
-   */
-  export interface VPNGatewayPrototypeVPNGatewayPolicyModePrototype extends VPNGatewayPrototype {
-    /** The mode for this VPN gateway. */
-    mode: VPNGatewayPrototypeVPNGatewayPolicyModePrototype.Constants.Mode | string;
-  }
-  export namespace VPNGatewayPrototypeVPNGatewayPolicyModePrototype {
-    export namespace Constants {
-      /** The mode for this VPN gateway. */
-      export enum Mode {
-        POLICY = 'policy',
-      }
-    }
-  }
-
-  /**
-   * VPNGatewayPrototypeVPNGatewayRouteModePrototype.
-   */
-  export interface VPNGatewayPrototypeVPNGatewayRouteModePrototype extends VPNGatewayPrototype {
-    /** The static CIDRs advertised through any enabled routing protocol (for example, BGP). The routing protocol
-     *  will advertise routes with these CIDRs as route destinations.
-     */
-    advertised_cidrs?: string[];
-    /** The local autonomous system number (ASN) for this VPN gateway and its connections. The ASN values in the
-     *  [restricted ASN list](
-     *  https://cloud.ibm.com/docs/vpc?topic=vpc-planning-considerations-vpn#dynamic-route-based-considerations) are
-     *  reserved and unavailable.
-     */
-    local_asn?: number;
-    /** The mode for this VPN gateway. */
-    mode?: VPNGatewayPrototypeVPNGatewayRouteModePrototype.Constants.Mode | string;
-  }
-  export namespace VPNGatewayPrototypeVPNGatewayRouteModePrototype {
-    export namespace Constants {
-      /** The mode for this VPN gateway. */
-      export enum Mode {
-        ROUTE = 'route',
-      }
-    }
-  }
-
-  /**
-   * VPNGatewayRouteMode.
-   */
-  export interface VPNGatewayRouteMode extends VPNGateway {
-    /** The static CIDRs advertised through any enabled routing protocol (for example, BGP). The routing protocol
-     *  will advertise routes with these CIDRs as route destinations.
-     */
-    advertised_cidrs: string[];
-    /** The local autonomous system number (ASN) for this VPN gateway and its connections. */
-    local_asn: number;
-    /** The mode for this VPN gateway. */
-    mode: VPNGatewayRouteMode.Constants.Mode | string;
-  }
-  export namespace VPNGatewayRouteMode {
-    export namespace Constants {
-      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
-      export enum HealthState {
-        DEGRADED = 'degraded',
-        FAULTED = 'faulted',
-        INAPPLICABLE = 'inapplicable',
-        OK = 'ok',
-      }
-      /** The lifecycle state of the VPN gateway. */
-      export enum LifecycleState {
-        DELETING = 'deleting',
-        FAILED = 'failed',
-        PENDING = 'pending',
-        STABLE = 'stable',
-        SUSPENDED = 'suspended',
-        UPDATING = 'updating',
-        WAITING = 'waiting',
-      }
-      /** The resource type. */
-      export enum ResourceType {
-        VPN_GATEWAY = 'vpn_gateway',
-      }
-      /** The mode for this VPN gateway. */
-      export enum Mode {
-        ROUTE = 'route',
+      /** The availability mode of the VPN gateway: - `regional`: The VPN gateway is deployed across multiple zones in the region. This mode provides zone-level redundancy. */
+      export enum AvailabilityMode {
+        REGIONAL = 'regional',
       }
     }
   }
@@ -72450,6 +73524,47 @@ namespace VpcV1 {
       /** The resource type. */
       export enum ResourceType {
         TRANSIT_GATEWAY = 'transit_gateway',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayZonalAvailabilityMode.
+   */
+  export interface VPNGatewayZonalAvailabilityMode extends VPNGateway {
+    /** The availability mode of the VPN gateway:
+     *  - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is
+     *    limited to that zone.
+     */
+    availability_mode: VPNGatewayZonalAvailabilityMode.Constants.AvailabilityMode | string;
+    subnet: SubnetReference;
+  }
+  export namespace VPNGatewayZonalAvailabilityMode {
+    export namespace Constants {
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the VPN gateway. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY = 'vpn_gateway',
+      }
+      /** The availability mode of the VPN gateway: - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is limited to that zone. */
+      export enum AvailabilityMode {
+        ZONAL = 'zonal',
       }
     }
   }
@@ -74802,8 +75917,13 @@ namespace VpcV1 {
    */
   export interface VPNGatewayConnectionRouteModeVPNGatewayConnectionDynamicRouteMode extends VPNGatewayConnectionRouteMode {
     /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
-     *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
-     *  the lower `public_ip` address.
+     *  VPC route's next hop is a VPN connection.
+     *
+     *  For a `zonal` VPN gateway, if `false`, the traffic is only routed through the `up` tunnel with the lower
+     *  `public_ip` address.
+     *
+     *  For a `regional` VPN gateway, if `true`, traffic is distributed across both VPN members (ECMP mode). If `false`,
+     *  only the first member of the VPN gateway handles all the traffic (deterministic mode).
      */
     distribute_traffic: boolean;
     local: VPNGatewayConnectionDynamicRouteModeLocal;
@@ -74850,8 +75970,13 @@ namespace VpcV1 {
    */
   export interface VPNGatewayConnectionRouteModeVPNGatewayConnectionStaticRouteMode extends VPNGatewayConnectionRouteMode {
     /** Indicates whether the traffic is distributed between the `up` tunnels of the VPN gateway connection when the
-     *  VPC route's next hop is a VPN connection. If `false`, the traffic is only routed through the `up` tunnel with
-     *  the lower `public_ip` address.
+     *  VPC route's next hop is a VPN connection.
+     *
+     *  For a `zonal` VPN gateway, if `false`, the traffic is only routed through the `up` tunnel with the lower
+     *  `public_ip` address.
+     *
+     *  For a `regional` VPN gateway, if `true`, traffic is distributed across both VPN members (ECMP mode). If `false`,
+     *  only the first member of the VPN gateway handles all the traffic (deterministic mode).
      */
     distribute_traffic: boolean;
     local: VPNGatewayConnectionStaticRouteModeLocal;
@@ -74889,6 +76014,271 @@ namespace VpcV1 {
       /** The routing protocol for this VPN gateway connection. */
       export enum RoutingProtocol {
         NONE = 'none',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayPrototypeVPNGatewayRegionalAvailabilityModeByMemberVPNGatewayRegionalAvailabilityModeByMemberVPNGatewayRouteModePrototype.
+   */
+  export interface VPNGatewayPrototypeVPNGatewayRegionalAvailabilityModeByMemberVPNGatewayRegionalAvailabilityModeByMemberVPNGatewayRouteModePrototype extends VPNGatewayPrototypeVPNGatewayRegionalAvailabilityModeByMember {
+    /** The static CIDRs advertised through any enabled routing protocol (for example, BGP). The routing protocol
+     *  will advertise routes with these CIDRs as route destinations.
+     */
+    advertised_cidrs?: string[];
+    /** The local autonomous system number (ASN) for this VPN gateway and its connections. The ASN values in the
+     *  [restricted ASN list](
+     *  https://cloud.ibm.com/docs/vpc?topic=vpc-planning-considerations-vpn#dynamic-route-based-considerations) are
+     *  reserved and unavailable.
+     */
+    local_asn?: number;
+    /** The mode for this VPN gateway. */
+    mode?: VPNGatewayPrototypeVPNGatewayRegionalAvailabilityModeByMemberVPNGatewayRegionalAvailabilityModeByMemberVPNGatewayRouteModePrototype.Constants.Mode | string;
+  }
+  export namespace VPNGatewayPrototypeVPNGatewayRegionalAvailabilityModeByMemberVPNGatewayRegionalAvailabilityModeByMemberVPNGatewayRouteModePrototype {
+    export namespace Constants {
+      /** The availability mode of the VPN gateway: - `regional`: The VPN gateway is deployed across multiple zones in the region. This mode provides zone-level redundancy. */
+      export enum AvailabilityMode {
+        REGIONAL = 'regional',
+      }
+      /** The mode for this VPN gateway. */
+      export enum Mode {
+        ROUTE = 'route',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMemberVPNGatewayZonalAvailabilityModeByMemberVPNGatewayPolicyModePrototype.
+   */
+  export interface VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMemberVPNGatewayZonalAvailabilityModeByMemberVPNGatewayPolicyModePrototype extends VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMember {
+    /** The mode for this VPN gateway. */
+    mode: VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMemberVPNGatewayZonalAvailabilityModeByMemberVPNGatewayPolicyModePrototype.Constants.Mode | string;
+  }
+  export namespace VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMemberVPNGatewayZonalAvailabilityModeByMemberVPNGatewayPolicyModePrototype {
+    export namespace Constants {
+      /** The availability mode of the VPN gateway: - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is limited to that zone. */
+      export enum AvailabilityMode {
+        ZONAL = 'zonal',
+      }
+      /** The mode for this VPN gateway. */
+      export enum Mode {
+        POLICY = 'policy',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMemberVPNGatewayZonalAvailabilityModeByMemberVPNGatewayRouteModePrototype.
+   */
+  export interface VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMemberVPNGatewayZonalAvailabilityModeByMemberVPNGatewayRouteModePrototype extends VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMember {
+    /** The static CIDRs advertised through any enabled routing protocol (for example, BGP). The routing protocol
+     *  will advertise routes with these CIDRs as route destinations.
+     */
+    advertised_cidrs?: string[];
+    /** The local autonomous system number (ASN) for this VPN gateway and its connections. The ASN values in the
+     *  [restricted ASN list](
+     *  https://cloud.ibm.com/docs/vpc?topic=vpc-planning-considerations-vpn#dynamic-route-based-considerations) are
+     *  reserved and unavailable.
+     */
+    local_asn?: number;
+    /** The mode for this VPN gateway. */
+    mode?: VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMemberVPNGatewayZonalAvailabilityModeByMemberVPNGatewayRouteModePrototype.Constants.Mode | string;
+  }
+  export namespace VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeByMemberVPNGatewayZonalAvailabilityModeByMemberVPNGatewayRouteModePrototype {
+    export namespace Constants {
+      /** The availability mode of the VPN gateway: - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is limited to that zone. */
+      export enum AvailabilityMode {
+        ZONAL = 'zonal',
+      }
+      /** The mode for this VPN gateway. */
+      export enum Mode {
+        ROUTE = 'route',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayPolicyModePrototype.
+   */
+  export interface VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayPolicyModePrototype extends VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnet {
+    /** The mode for this VPN gateway. */
+    mode: VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayPolicyModePrototype.Constants.Mode | string;
+  }
+  export namespace VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayPolicyModePrototype {
+    export namespace Constants {
+      /** The availability mode of the VPN gateway: - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is limited to that zone. */
+      export enum AvailabilityMode {
+        ZONAL = 'zonal',
+      }
+      /** The mode for this VPN gateway. */
+      export enum Mode {
+        POLICY = 'policy',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayRouteModePrototype.
+   */
+  export interface VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayRouteModePrototype extends VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnet {
+    /** The static CIDRs advertised through any enabled routing protocol (for example, BGP). The routing protocol
+     *  will advertise routes with these CIDRs as route destinations.
+     */
+    advertised_cidrs?: string[];
+    /** The local autonomous system number (ASN) for this VPN gateway and its connections. The ASN values in the
+     *  [restricted ASN list](
+     *  https://cloud.ibm.com/docs/vpc?topic=vpc-planning-considerations-vpn#dynamic-route-based-considerations) are
+     *  reserved and unavailable.
+     */
+    local_asn?: number;
+    /** The mode for this VPN gateway. */
+    mode?: VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayRouteModePrototype.Constants.Mode | string;
+  }
+  export namespace VPNGatewayPrototypeVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayZonalAvailabilityModeBySubnetVPNGatewayRouteModePrototype {
+    export namespace Constants {
+      /** The availability mode of the VPN gateway: - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is limited to that zone. */
+      export enum AvailabilityMode {
+        ZONAL = 'zonal',
+      }
+      /** The mode for this VPN gateway. */
+      export enum Mode {
+        ROUTE = 'route',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayRegionalAvailabilityModeVPNGatewayRouteMode.
+   */
+  export interface VPNGatewayRegionalAvailabilityModeVPNGatewayRouteMode extends VPNGatewayRegionalAvailabilityMode {
+    /** The static CIDRs advertised through any enabled routing protocol (for example, BGP). The routing protocol
+     *  will advertise routes with these CIDRs as route destinations.
+     */
+    advertised_cidrs: string[];
+    /** The local autonomous system number (ASN) for this VPN gateway and its connections. */
+    local_asn: number;
+    /** The mode for this VPN gateway. */
+    mode: VPNGatewayRegionalAvailabilityModeVPNGatewayRouteMode.Constants.Mode | string;
+  }
+  export namespace VPNGatewayRegionalAvailabilityModeVPNGatewayRouteMode {
+    export namespace Constants {
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the VPN gateway. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY = 'vpn_gateway',
+      }
+      /** The availability mode of the VPN gateway: - `regional`: The VPN gateway is deployed across multiple zones in the region. This mode provides zone-level redundancy. */
+      export enum AvailabilityMode {
+        REGIONAL = 'regional',
+      }
+      /** The mode for this VPN gateway. */
+      export enum Mode {
+        ROUTE = 'route',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayZonalAvailabilityModeVPNGatewayPolicyMode.
+   */
+  export interface VPNGatewayZonalAvailabilityModeVPNGatewayPolicyMode extends VPNGatewayZonalAvailabilityMode {
+    /** The mode for this VPN gateway. */
+    mode: VPNGatewayZonalAvailabilityModeVPNGatewayPolicyMode.Constants.Mode | string;
+  }
+  export namespace VPNGatewayZonalAvailabilityModeVPNGatewayPolicyMode {
+    export namespace Constants {
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the VPN gateway. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY = 'vpn_gateway',
+      }
+      /** The availability mode of the VPN gateway: - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is limited to that zone. */
+      export enum AvailabilityMode {
+        ZONAL = 'zonal',
+      }
+      /** The mode for this VPN gateway. */
+      export enum Mode {
+        POLICY = 'policy',
+      }
+    }
+  }
+
+  /**
+   * VPNGatewayZonalAvailabilityModeVPNGatewayRouteMode.
+   */
+  export interface VPNGatewayZonalAvailabilityModeVPNGatewayRouteMode extends VPNGatewayZonalAvailabilityMode {
+    /** The static CIDRs advertised through any enabled routing protocol (for example, BGP). The routing protocol
+     *  will advertise routes with these CIDRs as route destinations.
+     */
+    advertised_cidrs: string[];
+    /** The local autonomous system number (ASN) for this VPN gateway and its connections. */
+    local_asn: number;
+    /** The mode for this VPN gateway. */
+    mode: VPNGatewayZonalAvailabilityModeVPNGatewayRouteMode.Constants.Mode | string;
+  }
+  export namespace VPNGatewayZonalAvailabilityModeVPNGatewayRouteMode {
+    export namespace Constants {
+      /** The health of this resource: - `ok`: No abnormal behavior detected - `degraded`: Experiencing compromised performance, capacity, or connectivity - `faulted`: Completely unreachable, inoperative, or otherwise entirely incapacitated - `inapplicable`: The health state does not apply because of the current lifecycle state. A resource with a lifecycle state of `failed` or `deleting` will have a health state of `inapplicable`. A `pending` resource may also have this state. */
+      export enum HealthState {
+        DEGRADED = 'degraded',
+        FAULTED = 'faulted',
+        INAPPLICABLE = 'inapplicable',
+        OK = 'ok',
+      }
+      /** The lifecycle state of the VPN gateway. */
+      export enum LifecycleState {
+        DELETING = 'deleting',
+        FAILED = 'failed',
+        PENDING = 'pending',
+        STABLE = 'stable',
+        SUSPENDED = 'suspended',
+        UPDATING = 'updating',
+        WAITING = 'waiting',
+      }
+      /** The resource type. */
+      export enum ResourceType {
+        VPN_GATEWAY = 'vpn_gateway',
+      }
+      /** The availability mode of the VPN gateway: - `zonal`: The VPN gateway is deployed in a single zone in the region. Availability is limited to that zone. */
+      export enum AvailabilityMode {
+        ZONAL = 'zonal',
+      }
+      /** The mode for this VPN gateway. */
+      export enum Mode {
+        ROUTE = 'route',
       }
     }
   }
