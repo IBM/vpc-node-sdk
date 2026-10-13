@@ -15,6 +15,7 @@
  */
 
 import os = require('os');
+import crypto = require('crypto');
 
 // tslint:disable-next-line:no-var-requires
 const pkg = require('../package.json');
@@ -47,8 +48,7 @@ export function getSdkHeaders(serviceName: string, serviceVersion: string, opera
   const osName = os.platform();
   const osVersion = os.release();
   const nodeVersion = process.version;
-  const uuid = require('uuid');
-  const x_request_id = uuid.v4();
+  const x_request_id = crypto.randomUUID();
 
   const headers = {
     'X-Request-Id': `${x_request_id}`,
