@@ -6,10 +6,17 @@ on:
   pull_request:
     branches: [master]
 
+permissions:
+  contents: read
+
 jobs:
   build:
     runs-on: ubuntu-latest
     environment: ci
+    permissions:
+      contents: write
+      issues: write
+      pull-requests: write    
     strategy:
       matrix:
         node-version: ['20', '22', '24']
